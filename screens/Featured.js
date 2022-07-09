@@ -169,7 +169,12 @@ const Featured = ({ navigation }) => {
           <McText body5 style={{opacity: 0.5}}> December 21 9:10 PM</McText>
           <McText h1>Explore events</McText>
         </View>
-        <McAvatar source ={images.avatar}/>
+        <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('Interests')
+        }}>
+          <McAvatar source ={images.avatar}/>
+        </TouchableWithoutFeedback>
       </SectionHeader>
       <TouchableOpacity
           onPress={() =>{
