@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "mcrn-event-booking-app",
-    "slug": "mcrn-event-booking-app",
+    "name": "NmeetU",
+    "slug": "NmeetU",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

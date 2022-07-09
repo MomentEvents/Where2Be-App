@@ -15,7 +15,7 @@ const TabIcon = ({ focused, icon }) => {
         source={icon}
         resizeMode="contain"
         style={{
-          tintColor: focused ? COLORS.white : COLORS.gray,
+          tintColor: focused ? COLORS.blue : COLORS.gray,
         }}
       />
     </View>
@@ -40,7 +40,8 @@ const TabLabel = ({ focused, text }) => {
 const Tabs = ({ params }) => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
+      screenOptions={{
+        headerShown: false,
         style: {
           position: 'absolute',
           bottom: 0,
@@ -52,6 +53,12 @@ const Tabs = ({ params }) => {
           borderTopColor: 'transparent',
           height: 111,
           borderRadius: SIZES.radius,
+          "tabBarStyle": [
+            {
+              "display": "flex"
+            },
+            null
+          ],
         },
       }}
     >

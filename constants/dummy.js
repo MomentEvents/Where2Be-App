@@ -9,6 +9,7 @@ export const Events = [
     image: require('../assets/images/event_1.png'),
     description:
       'Non exercitation ullamco reprehenderit incididunt. Officia incididunt id exercitation velit aliqua ut deserunt do non. Aliquip sunt dolor enim occaecat ullamco id consectetur .',
+    categories: ['Concert', 'Organization', 'Music', 'Drinking', 'Lightshow', 'Colorful'],
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const Events = [
     image: require('../assets/images/event_2.png'),
     description:
       'Lorem ipsum dolor sit amet, consectetur elit adipiscing elit. Venenatis pulvinar a amet in, suspendisse vitae, posuere eu tortor et. Und commodo, fermentum, mauris leo eget.',
+    categories: ['Show', 'Organization', 'Performance', 'Fire', 'Circus', 'Thrilling', 'Outdoors'],
   },
 ];
 
@@ -25,7 +27,7 @@ export const Region = {
   latitude: 37.58817,
   longitude: -122.4903973,
   latitudeDelta: 0.005,
-  longitudeDelta: 0.005 * (SIZES.width / SIZES.height),
+  longitudeDelta: parseFloat(0.005 * (SIZES.width / SIZES.height)),
 }
 
 export const MapStyle = [
