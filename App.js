@@ -10,7 +10,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './navigation/Tabs';
-import { Featured, EventDetail, Search } from './screens';
+import { Featured, EventDetail, Search, Interests } from './screens';
 import { customFonts } from './constants';
 
 const Stack = createStackNavigator();
@@ -40,6 +40,7 @@ export default function App() {
         <Stack.Screen name="Featured" component={Tabs} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="Search" component={Search}/>
+        <Stack.Screen name="Interests" component={Interests}/>
       </Stack.Navigator>
     </NavigationContainer>
   ) : (
