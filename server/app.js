@@ -29,7 +29,7 @@ app.post('/log', jsonParser, (req, res) => {
   var inp_type=req.body.user;
   console.log("POST req on", inp_type); 
   session
-  .run('match (n:Event) where n.type contains $name return ID(n),(n) limit 25',
+  .run('match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022" return ID(n), (n), int_list order by n.startingTime desc limit 25',
   {name: inp_type})
   .then(function(result){
     
@@ -38,11 +38,12 @@ app.post('/log', jsonParser, (req, res) => {
       // console.log(record);
       EventArr.push({
         id: record._fields[0].low,
-        title: record._fields[1].properties.title,
-        type: record._fields[1].properties.type,
+        title: record._fields[1].properties.Name,
+        //type: record._fields[1].properties.type,
         startingTime: record._fields[1].properties.startingTime,
-        image: record._fields[1].properties.image,
-        description: record._fields[1].properties.description,
+        image: record._fields[1].properties.Image,
+        description: record._fields[1].properties.Description,
+        taglist: record._fields[2],
       });
       // console.log(record._fields[0].low);
     });
@@ -67,6 +68,7 @@ app.get('/data', function(req,res){
       console.log(record);
       EventArr.push({
         id: record._fields[0].low,
+        key: record._fields[1].properties.ID,
         title: record._fields[1].properties.title,
         type: record._fields[1].properties.type,
         startingTime: record._fields[1].properties.startingTime,
@@ -91,7 +93,7 @@ app.get('/data', function(req,res){
 
 app.get('/search', function(req,res){
   session
-  .run('match (n:Event) return ID(n),(n)')
+  .run('match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022" return ID(n), (n), int_list order by n.startingTime desc limit 25')
   .then(function(result){
     
     var EventArr = [];
@@ -99,16 +101,48 @@ app.get('/search', function(req,res){
       console.log(record);
       EventArr.push({
         id: record._fields[0].low,
-        title: record._fields[1].properties.title,
-        type: record._fields[1].properties.type,
+        title: record._fields[1].properties.Name,
+        //type: record._fields[1].properties.type,
         startingTime: record._fields[1].properties.startingTime,
-        image: record._fields[1].properties.image,
+        image: record._fields[1].properties.Image,
+        description: record._fields[1].properties.Description,
+        taglist: record._fields[2],
+        
         // description: record._fields[1].properties.description,
       });
       console.log(record._fields[0].low);
     });
     res.setHeader('Content-Type', 'text/html');
     res.send(JSON.stringify(EventArr));
+    res.end();
+    // res.render('index', {
+    //   movies: MovieArr
+    // });
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+  // console.log(result);
+  // res.send(result);
+});
+
+app.get('/interests', function(req,res){
+  session
+  .run('match (n:Interest) return distinct(n.category) as group, collect(n.name) as ls')
+  .then(function(result){
+    
+    var InterestArr = [];
+    result.records.forEach(function(record){
+      console.log(record);
+      InterestArr.push({
+        title: record._fields[0],
+        data: record._fields[1]
+      });
+      console.log(record._fields[0].low);
+      console.log(record._fields[2]);
+    });
+    res.setHeader('Content-Type', 'text/html');
+    res.send(JSON.stringify(InterestArr));
     res.end();
     // res.render('index', {
     //   movies: MovieArr

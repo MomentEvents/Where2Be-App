@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     SectionList,
     TouchableOpacity, 
@@ -23,7 +23,7 @@ import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
 
 
-const inTags = ['Basketball', 'Bars', 'Thrift Stores']
+const inTags = ['Basketball', 'Bars']
 var outTags = {}
 
 for (var i = 0; i < inTags.length; i++) {
@@ -46,6 +46,39 @@ function outDict(dict) {
 // outTags = []
 const Interests = ({ navigation, route }) => {
 
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const fetchData = async () => {
+    const resp = await fetch('http://10.0.2.2:3000/interests', {
+        method: 'GET',
+        });
+
+        console.log("here")
+        const data = await resp.json();
+
+        console.log(data);
+
+        
+        setData(data);
+        setLoading(false);
+    };
+
+    // var ab = 0;
+
+    useEffect(() => {
+        fetchData();
+    },[]);
+
+
+    // const data = [
+    //     {title: 'Creativity', data: ['Music', 'Crafts', 'Art', 'Dancing', 'Design', 'Makeup', 'Videography', 'Photography', 'Writing']},
+    //     {title: 'Entertainment', data: ['Bars', 'CafÃ©s', 'Concerts', 'Festivals', 'Karaoke', 'Museums/Galleries', 'Standup', 'Competitions', 'Theatre']},
+    //     {title: 'Hobbies & Activities', data: ['Video Games', 'Sports', 'Nature', 'Anime/Manga', 'Animals', 'Tabletop Games', 'Adventure Sports', 'Music']},
+    //     {title: 'Productivity', data: ['RSOs/Clubs', 'Business', 'Design', 'Entrepreneurship']},
+    //     {title: 'Athletics', data:['Baseball', 'Basketball', 'Football', 'Golf', 'Gymnastics', 'Tennis', 'Track & Field', 'Wrestling', 'Soccer', 'Softball', 'Cross-Country', 'Volleyball', 'Swimming & Diving']},
+    //     {title: 'Science', data:['Computer Engineering/CS', 'Math', 'Technology', 'Physics', 'Chemistry']},
+    //     {title: 'Community', data:['Social', 'Fraternities', 'Sororities', 'Greek Life', 'Philanthropy', 'Service']}
+    // ]
   return (
     <SafeAreaView style={styles.container}>
         <SectionHeader>
@@ -62,14 +95,7 @@ const Interests = ({ navigation, route }) => {
       </SectionHeader>
       <ScrollView>
       <SectionInterests>
-        <SectionList sections={[
-                {title: 'Sports', data: ['Basketball', 'Football', 'Tennis', 'Badminton', 'Gymnastics', 'Swimming']},
-                {title: 'Nightlife', data: ['Bars', 'Nightclubs', 'Concerts', 'Speakeasy']},
-                {title: 'School', data: ['RSOs', 'Frats', 'Sorority', 'Group Study']},
-                {title: 'Shopping', data: ['Malls', 'Designer', 'Decoration', 'Thrift Stores']},
-                {title: 'Recreation', data:['Parks', 'Movies', 'Live Music', 'Theme Parks', 'Theater']},
-                {title: 'Food', data:['Wine Tasting', 'Cafe', 'BBQ', 'Cocktails', 'Grilling', 'Neighborhood Party', 'Seafood', 'Michelin']}
-            ]}
+        <SectionList sections={data}
             renderItem={({item, index}) => {
                 return null;
             }}
@@ -100,9 +126,9 @@ const Interests = ({ navigation, route }) => {
                         console.log(ex)
                         }}
                         style={{
-                            borderRadius: 10,
+                            borderRadius: 8,
                             marginTop:12,
-                            marginRight: 10,
+                            marginRight: 8,
                             backgroundColor: COLORS.gray,
                             justifyContent: 'center',
                             alignItems: 'center'
@@ -135,7 +161,7 @@ const SectionHeader = styled.View`
 `;
 
 const SectionDone = styled.View`
-  padding: 20px ${SIZES.padding};
+  padding: 16px ${SIZES.padding};
   backgroundColor:${COLORS.gray};
   justify-content: center;
   flex-direction: row;
@@ -166,5 +192,3 @@ justifyContent: center;
 
 
 export default Interests;
-
-

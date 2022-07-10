@@ -11,7 +11,7 @@ const TabIcon = ({ focused, icon }) => {
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <McIcon
-        size={focused ? 24 : 32}
+        size={focused ? 28 : 32}
         source={icon}
         resizeMode="contain"
         style={{
@@ -26,7 +26,7 @@ const TabLabel = ({ focused, text }) => {
     <McText
       h4
       style={{
-        marginTop: -25,
+        marginTop: -18,
         paddingBottom: 10,
       }}
     >
@@ -69,9 +69,9 @@ const Tabs = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.tab_1} />
           ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Featured" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <TabLabel focused={focused} text="Featured" />
+          // ),
         }}
       />
       <Tab.Screen
@@ -81,9 +81,9 @@ const Tabs = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.tab_2} />
           ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Schedule" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <TabLabel focused={focused} text="Schedule" />
+          // ),
         }}
       />
       <Tab.Screen
@@ -93,9 +93,9 @@ const Tabs = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.tab_3} />
           ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Tickets" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <TabLabel focused={focused} text="Tickets" />
+          // ),
         }}
       />
       <Tab.Screen
@@ -105,9 +105,9 @@ const Tabs = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.tab_4} />
           ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Mine" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <TabLabel focused={focused} text="Mine" />
+          // ),
         }}
       />
     </Tab.Navigator>

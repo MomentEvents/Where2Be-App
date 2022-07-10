@@ -152,7 +152,7 @@ const EventDetail = ({ navigation, route }) => {
         </ImageBackground>
         {/* buttons group section */}
         <ButtonSection>
-          
+{/*           
           <TouchableOpacity
             style={{
               width: 76,
@@ -177,15 +177,15 @@ const EventDetail = ({ navigation, route }) => {
             }}
           >
             <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>PARTICIPANTS</McText>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
          
-{/*           
+          
           <ScrollView horizontal = {true}>
             {
-              selectedEvent?.categories.map((category)=> 
+              selectedEvent?.taglist.map((taglist)=> 
                 <TouchableOpacity
                   style={{
-                  width: category.length *8 + 15,
+                  width: taglist.length *8 + 15,
                   height: 32,
                   borderRadius: 10,
                   marginRight: 10,
@@ -194,11 +194,11 @@ const EventDetail = ({ navigation, route }) => {
                   alignItems: 'center'
                   }}
                 >
-                  <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{category}</McText>
+                  <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{taglist}</McText>
                 </TouchableOpacity>
               )
             }
-          </ScrollView> */}
+          </ScrollView>
         </ButtonSection>
         {/* description section */}
         <DescriptionSection>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, DateBox, View, StyleSheet, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { Text, DateBox, View, StyleSheet, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback, Image } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -38,7 +38,8 @@ import Fuse from 'fuse.js'
 
   const fuse = new Fuse(data, {
       keys: [
-        'type',
+        'id',
+        'key',
         'title',
         'startingTime',
       ]
@@ -51,7 +52,7 @@ import Fuse from 'fuse.js'
 
     
    return (
-     <View style={styles.container}>
+     <SafeAreaView style={styles.container}>
        {/* <SectionHeader>
         <TouchableOpacity 
           onPress={() =>{
@@ -102,16 +103,46 @@ import Fuse from 'fuse.js'
             sResults.map((res)=>
               <TouchableOpacity
                 style={{
-                width: 80,
-                height: 32,
-                borderRadius: 10,
+                width: SIZES.width -40,
+                height: 50,
+                //borderRadius: 10,
                 marginRight: 10,
-                backgroundColor: COLORS.input,
+                marginLeft: 30,
+                //backgroundColor: COLORS.input,
                 justifyContent: 'center',
-                alignItems: 'center'
+                // alignItems: 'center'
+                }}
+                onPress={()=>{
+                  navigation.navigate('EventDetail', {selectedEvent: res});
                 }}
               >
-                <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{res.title}</McText>
+                <SrchRes>
+                  <Image
+                  source={{uri: res.image}}
+                  style = {{
+                    width:40,
+                    height: 40,
+                    borderRadius: 10,
+                  }}
+                  />
+                  <TxtBox>
+                    <McText h5 
+                    style={{
+                      //opacity: 0.5, 
+                      letterSpacing: 1, 
+                      marginLeft: 10,
+                      //marginTop: 5,
+                    }}
+                    >{res.title}</McText>
+                    <McText body6 
+                    style={{
+                      opacity: 0.5, 
+                      letterSpacing: 1, 
+                      marginLeft: 10,
+                    }}
+                    >{moment(res.startingTime).format('MMMM Do YYYY, h:mm a').toUpperCase()}</McText>
+                  </TxtBox>
+                </SrchRes>
               </TouchableOpacity>
               
             )
@@ -137,7 +168,7 @@ import Fuse from 'fuse.js'
             )
           }
         </ScrollView> */}
-     </View>
+     </SafeAreaView>
    );
  };
  const SectionHeader = styled.View`
@@ -160,6 +191,17 @@ align-items: center;
 margin-left: 9px;
 margin-right: 15px;
 `;
+
+const SrchRes = styled.View`
+flex-direction: row;
+align-items: center;
+height: 40px;
+`
+
+const TxtBox = styled.View`
+
+`
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

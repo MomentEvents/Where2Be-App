@@ -4,7 +4,7 @@ import Schedule from './Schedule';
 import Tickets from './Tickets';
 import Mine from './Mine';
 import Search from './Search'
-import Interests from './Interests'
+import Interests from './Interests';
 
 export {
   Featured,

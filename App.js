@@ -13,6 +13,7 @@ import Tabs from './navigation/Tabs';
 import { Featured, EventDetail, Search, Interests } from './screens';
 import { customFonts } from './constants';
 
+
 const Stack = createStackNavigator();
 
 export default function App() {

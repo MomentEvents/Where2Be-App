@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
+import { LinearGradient } from 'expo-linear-gradient'
 //import { BlurView } from '@react-native-community/blur';
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
@@ -93,7 +94,13 @@ const Featured = ({ navigation }) => {
           marginLeft: index === 0 ? 30: 20,
           marginRight: index === dummyData.Events.length - 1 ? 30 : 0
         }}>
-          <ImageBackground source={{uri: item.image}}
+          <LinearGradient
+                colors = {['#902070', '#DD77EB', '#a2d2ff']}
+                style = {{padding:2, borderRadius: 20 }}>
+            <LinearGradient
+                colors = {['#000000','#000000']}
+                style = {{padding:2.5, borderRadius: 20 }}>
+              <ImageBackground source={{uri: item.image}}
           resizeMode='cover'
           borderRadius= {SIZES.radius}
           style={{
@@ -124,18 +131,22 @@ const Featured = ({ navigation }) => {
               
                 <View style={{
                   marginLeft: 20,
-                  marginBottom: 20,
+                  marginBottom: 10,
                   marginTop: 5,
                   //backgroundColor: COLORS.black
                 }}>
-                  <McText body5 style={{opacity: 0.5}}>{item.type}</McText>
+                  {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
                   <McText h2>{item.title}</McText>
                 </View>
               
             </GrayBox>
           </ImageBackground>
+          </LinearGradient>
+          </LinearGradient>
         </View>
+
       </TouchableWithoutFeedback>
+
     )
   }
 
@@ -166,14 +177,13 @@ const Featured = ({ navigation }) => {
       {/* Header here */}
       <SectionHeader>
         <View>
-          <McText body5 style={{opacity: 0.5}}> December 21 9:10 PM</McText>
           <McText h1>Explore events</McText>
         </View>
         <TouchableWithoutFeedback
         onPress={()=>{
           navigation.navigate('Interests')
         }}>
-          <McAvatar source ={images.avatar}/>
+          <McIcon source ={icons.tab_4} size={28}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
       <TouchableOpacity
@@ -210,9 +220,9 @@ const Featured = ({ navigation }) => {
       {_renderList("FEATURED", data)}
       {_renderList("ABTEST", data2)}
       </ScrollView>
-      <SectionTitle>
+      {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
-      </SectionTitle> 
+      </SectionTitle>  */}
     </SafeAreaView>
   );
 };
@@ -226,6 +236,8 @@ const DateBox = styled.View`
   width: 60px;
   height: 60px;
   border-radius: 15px;
+  border-color: #000000;
+  border-width: 1px;
   background-color: ${COLORS.white};
   align-items: center;
 `;
@@ -237,7 +249,7 @@ const GrayBox = styled.View`
 `;
 const SectionHeader = styled.View`
   background-color: ${COLORS.black};
-  padding: 16px ${SIZES.padding};
+  padding: 8px ${SIZES.padding};
   justify-content: space-between;
   align-items: center;
   flex-direction: row;

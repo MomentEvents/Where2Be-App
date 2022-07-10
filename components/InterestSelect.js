@@ -57,7 +57,7 @@ export default class InterestSelector extends Component {
                         height: 32,
                         borderRadius: 10,
                         marginTop:12,
-                        marginRight: 10,
+                        marginRight: 8,
                         backgroundColor: colorVal,
                         justifyContent: 'center',
                         alignItems: 'center'
@@ -69,7 +69,6 @@ export default class InterestSelector extends Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
