@@ -6,7 +6,7 @@ var neo4j = require('neo4j-driver');
 const { Result } = require('neo4j-driver-core');
 
 var app = express();
-var PORT = 3000;
+var PORT = 3001;
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));

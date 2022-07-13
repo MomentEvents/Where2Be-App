@@ -15,7 +15,7 @@ import Fuse from 'fuse.js'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://10.0.2.2:3000/search', {
+  const resp = await fetch('http://localhost:3001/search', {
       method: 'GET',
     });
 
@@ -49,27 +49,8 @@ import Fuse from 'fuse.js'
     //const [bad, setQuery] = useState('');
     const results = fuse.search(text);
     const sResults = results.map(result => result.item);
-
-    
    return (
      <SafeAreaView style={styles.container}>
-       {/* <SectionHeader>
-        <TouchableOpacity 
-          onPress={() =>{
-            navigation.goBack();
-          }}
-          style={{
-            width: 56,
-            height: 40,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 13,
-          }}
-        >
-          <McIcon source={icons.back_arrow} size={24}/>
-        </TouchableOpacity>
-      </SectionHeader> */}
       <SectionSearch>
         <SearchView>
           <TouchableOpacity
@@ -148,26 +129,7 @@ import Fuse from 'fuse.js'
             )
           }
       </ScrollView>
-        {/* <ScrollView>
-          {
-            sResults.map((res)=>
-              <TouchableOpacity
-                style={{
-                width: 80,
-                height: 32,
-                borderRadius: 10,
-                marginRight: 10,
-                backgroundColor: COLORS.input,
-                justifyContent: 'center',
-                alignItems: 'center'
-                }}
-              >
-                <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{res.title}</McText>
-              </TouchableOpacity>
-              
-            )
-          }
-        </ScrollView> */}
+
      </SafeAreaView>
    );
  };

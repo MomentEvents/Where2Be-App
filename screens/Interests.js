@@ -22,7 +22,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
 
-
 const inTags = ['Basketball', 'Bars']
 var outTags = {}
 
@@ -49,36 +48,79 @@ const Interests = ({ navigation, route }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const fetchData = async () => {
-    const resp = await fetch('http://10.0.2.2:3000/interests', {
+    const resp = await fetch('http://localhost:3001/interests', {
         method: 'GET',
         });
 
-        console.log("here")
         const data = await resp.json();
-
-        console.log(data);
-
         
         setData(data);
         setLoading(false);
     };
 
-    // var ab = 0;
-
     useEffect(() => {
         fetchData();
+        
     },[]);
-
-
     // const data = [
-    //     {title: 'Creativity', data: ['Music', 'Crafts', 'Art', 'Dancing', 'Design', 'Makeup', 'Videography', 'Photography', 'Writing']},
-    //     {title: 'Entertainment', data: ['Bars', 'CafÃ©s', 'Concerts', 'Festivals', 'Karaoke', 'Museums/Galleries', 'Standup', 'Competitions', 'Theatre']},
-    //     {title: 'Hobbies & Activities', data: ['Video Games', 'Sports', 'Nature', 'Anime/Manga', 'Animals', 'Tabletop Games', 'Adventure Sports', 'Music']},
-    //     {title: 'Productivity', data: ['RSOs/Clubs', 'Business', 'Design', 'Entrepreneurship']},
-    //     {title: 'Athletics', data:['Baseball', 'Basketball', 'Football', 'Golf', 'Gymnastics', 'Tennis', 'Track & Field', 'Wrestling', 'Soccer', 'Softball', 'Cross-Country', 'Volleyball', 'Swimming & Diving']},
-    //     {title: 'Science', data:['Computer Engineering/CS', 'Math', 'Technology', 'Physics', 'Chemistry']},
-    //     {title: 'Community', data:['Social', 'Fraternities', 'Sororities', 'Greek Life', 'Philanthropy', 'Service']}
-    // ]
+    //         {title: 'Creativity', data: ['Music', 'Crafts', 'Art', 'Dancing', 'Design', 'Makeup', 'Videography', 'Photography', 'Writing']},
+    //         {title: 'Entertainment', data: ['Bars', 'Cafes', 'Concerts', 'Festivals', 'Karaoke', 'Museums/Galleries', 'Standup', 'Competitions', 'Theatre']},
+    //         {title: 'Hobbies & Activities', data: ['Video Games', 'Sports', 'Nature', 'Anime/Manga', 'Animals', 'Tabletop Games', 'Adventure Sports', 'Music']},
+    //         {title: 'Productivity', data: ['RSOs/Clubs', 'Business', 'Design', 'Entrepreneurship']},
+    //         {title: 'Athletics', data:['Baseball', 'Basketball', 'Football', 'Golf', 'Gymnastics', 'Tennis', 'Track & Field', 'Wrestling', 'Soccer', 'Softball', 'Cross-Country', 'Volleyball', 'Swimming & Diving']},
+    //         {title: 'Science', data:['Computer Engineering/CS', 'Math', 'Technology', 'Physics', 'Chemistry']},
+    //         {title: 'Community', data:['Social', 'Fraternities', 'Sororities', 'Greek Life', 'Philanthropy', 'Service']}
+    //     ]
+        
+    
+    const makeLists = (data) => {
+        // const newData = data.map(dt=>dt.item)
+        // console.log(newData)
+        // var title = data[0]['title']
+        // var datas = data[0]['data']
+        // for (var ii = 0; ii < data.length; ii++) {
+        //     var title = data[ii]['title']
+        //     var datas = data[ii]['data']
+        //     console.log(title, datas)
+        // console.log(title,datas)
+        // console.log('hello')
+        return (
+            <View>
+            {data.map((daata) => 
+            <View>
+                {renderList(daata['title'], daata['data'])}
+                {console.log(daata)}
+            </View>
+
+            )}
+            </View>
+        //     <View>
+        //         {renderList(title, datas)}
+        //     </View>
+        )
+    }
+
+    const renderList = (heading, dataset) => {
+        return (
+          <SafeAreaView>
+              <McText h3>{heading}</McText>
+              
+                <ItemList>
+                    <FlatList data={dataset}
+                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: -25 }}
+                    numColumns={3}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({item, index})=>(
+                        <InterestSelector text={item} wide={item.length} list={inTags} out={outTags}/>
+                        )}
+                        keyExtractor={(item) => `basicListEntry-${item}`}
+                        />
+                </ItemList>
+          </SafeAreaView>
+        )
+      }
+
+
   return (
     <SafeAreaView style={styles.container}>
         <SectionHeader>
@@ -93,32 +135,8 @@ const Interests = ({ navigation, route }) => {
           <McText body2 style={{opacity: 0.2}}>Select the events you enjoy!</McText>
         </View>
       </SectionHeader>
-      <ScrollView>
-      <SectionInterests>
-        <SectionList sections={data}
-            renderItem={({item, index}) => {
-                return null;
-            }}
-            renderSectionHeader={({section}) => (
-                <View>
-                <McText h3>{section.title}</McText>
-                <ItemList>
-                    <FlatList data={section.data}
-                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: -25 }}
-                    numColumns={3}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({item, index})=>(
-                        <InterestSelector text={item} wide={item.length} list={inTags} out={outTags}/>
-                        )}
-                        keyExtractor={(item) => `basicListEntry-${item.data}`}
-                        />
-                    </ItemList>
-            </View>
-            )}
-            keyExtractor={(item) => `basicListEtry-${item.title}`}
-            />
-            </SectionInterests>
-            </ScrollView>
+      <ScrollView>{makeLists(data)}</ScrollView>
+          
             <SectionDone>
                 <TouchableWithoutFeedback onPress={()=>{
                         navigation.navigate('Featured')
