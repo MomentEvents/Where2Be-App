@@ -176,7 +176,7 @@ const Featured = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-                colors = {['#151515', '#000000', '#000000','#652070']}
+                colors = {['#151515', COLORS.black, COLORS.black,'#652070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:2, borderRadius: 20 }}>

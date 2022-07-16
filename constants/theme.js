@@ -9,7 +9,7 @@ export const COLORS = {
   default: '#FFFFFF',
   primary: '#FFFFFF',
   white: '#FFFFFF',
-  black: '#000000',
+  black: '#050505',
   tabBar: '#121212',
   input: '#1D1D1D',
   blue: '#4096FE',
