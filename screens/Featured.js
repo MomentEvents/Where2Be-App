@@ -22,7 +22,7 @@ const Featured = ({ navigation }) => {
   var type2 = "Discord";
 
   const fetchData = async () => {
-    // const resp = await fetch("http://localhost:3000/data");
+    // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json();
 
     const resp = await fetch('http://localhost:3001/log', {
