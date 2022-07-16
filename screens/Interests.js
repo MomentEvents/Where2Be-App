@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient'
 import { 
     SectionList,
     TouchableOpacity, 
@@ -22,12 +23,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
 
-const inTags = ['Basketball', 'Bars']
-var outTags = {}
+// const inTags = ['Basketball', 'Bars']
 
-for (var i = 0; i < inTags.length; i++) {
-    outTags[inTags[i]] = true
-}
 
 function outDict(dict) {
     var outList = []
@@ -46,21 +43,55 @@ function outDict(dict) {
 const Interests = ({ navigation, route }) => {
 
     const [data, setData] = useState([]);
+    const [inTags, setInTags] = useState([]);
     const [loading, setLoading] = useState(true);
+    // var inTags = [];
+    var outTags = {}
+
+    // Ensure fetch data runs first before everything else
+
     const fetchData = async () => {
-    const resp = await fetch('http://localhost:3001/interests', {
-        method: 'GET',
+        const resp = await fetch('http://localhost:3001/interests', {
+            method: 'GET',
         });
 
         const data = await resp.json();
         
-        setData(data);
+        
         setLoading(false);
+
+        const resp2 = await fetch('http://localhost:3001/import_interest_list', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: 'user_1'
+            })
+        });
+        const inTags = await resp2.json();
+
+        setInTags(inTags);
+        setData(data);
+
+        for (var i = 0; i < inTags.length; i++) {
+            outTags[inTags[i]] = true
+        }
+        console.log(outTags)
     };
+        
+    
+    
+    // const resp2 = await fetch('http://localhost:3001/import_interest_list', {
+    //     method: 'POST',
+    // });
+
+
+
 
     useEffect(() => {
-        fetchData();
-        
+        fetchData(); 
     },[]);
     // const data = [
     //         {title: 'Creativity', data: ['Music', 'Crafts', 'Art', 'Dancing', 'Design', 'Makeup', 'Videography', 'Photography', 'Writing']},
@@ -74,41 +105,33 @@ const Interests = ({ navigation, route }) => {
         
     
     const makeLists = (data) => {
-        // const newData = data.map(dt=>dt.item)
-        // console.log(newData)
-        // var title = data[0]['title']
-        // var datas = data[0]['data']
-        // for (var ii = 0; ii < data.length; ii++) {
-        //     var title = data[ii]['title']
-        //     var datas = data[ii]['data']
-        //     console.log(title, datas)
-        // console.log(title,datas)
-        // console.log('hello')
         return (
             <View>
             {data.map((daata) => 
-            <View>
+            <SafeAreaView>
                 {renderList(daata['title'], daata['data'])}
-                {console.log(daata)}
-            </View>
+            </SafeAreaView>
 
             )}
             </View>
-        //     <View>
-        //         {renderList(title, datas)}
-        //     </View>
         )
     }
 
     const renderList = (heading, dataset) => {
+        console.log(outTags)
         return (
-          <SafeAreaView>
-              <McText h3>{heading}</McText>
+          <View>
+              <McText style={{paddingLeft:28}} h3 >{heading}</McText>
               
                 <ItemList>
                     <FlatList data={dataset}
                     columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: -25 }}
                     numColumns={3}
+                    style={{
+                        paddingLeft:26,
+                        paddingRight:8,
+                        backgroundColor: 'transparent',
+                    }}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({item, index})=>(
                         <InterestSelector text={item} wide={item.length} list={inTags} out={outTags}/>
@@ -116,13 +139,18 @@ const Interests = ({ navigation, route }) => {
                         keyExtractor={(item) => `basicListEntry-${item}`}
                         />
                 </ItemList>
-          </SafeAreaView>
+          </View>
         )
       }
 
 
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+                colors = {['#151515', '#000000', '#000000','#652070']}
+                start = {{x: 0, y: 0}}
+                end = {{ x: 1, y: 1}}
+                style = {{padding:2, borderRadius: 20 }}>
         <SectionHeader>
         <View>
         <TouchableWithoutFeedback
@@ -135,40 +163,39 @@ const Interests = ({ navigation, route }) => {
           <McText body2 style={{opacity: 0.2}}>Select the events you enjoy!</McText>
         </View>
       </SectionHeader>
-      <ScrollView>{makeLists(data)}</ScrollView>
-          
-            <SectionDone>
-                <TouchableWithoutFeedback onPress={()=>{
-                        navigation.navigate('Featured')
-                        var ex = outDict(outTags)
-                        console.log(ex)
-                        }}
-                        style={{
-                            borderRadius: 8,
-                            marginTop:12,
-                            marginRight: 8,
-                            backgroundColor: COLORS.gray,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                    >
-                    <McText h2>DONE</McText>
-                </TouchableWithoutFeedback>
-            </SectionDone>
-      </SafeAreaView>
+      <ScrollView>
+      <SectionInterests>
+      
+      {makeLists(data)}
+      </SectionInterests>
+      </ScrollView>
+      <SectionDone>
+          <TouchableWithoutFeedback onPress={()=>{
+                  navigation.navigate('Featured')
+                  var ex = outDict(outTags)
+                  console.log(ex)
+                  }}
+                  style={{
+                      borderRadius: 8,
+                      marginTop:12,
+                      marginRight: 8,
+                      backgroundColor: COLORS.gray,
+                  }}
+              >
+              <McText h2>DONE</McText>
+          </TouchableWithoutFeedback>
+      </SectionDone>
+      </LinearGradient>
+    </SafeAreaView>
       
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#000',
-    // justifyContent: 'top',
-    // alignItems: 'center',
-  },
-  buttonInactive: {
-      
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
@@ -182,15 +209,13 @@ const SectionDone = styled.View`
   padding: 16px ${SIZES.padding};
   backgroundColor:${COLORS.gray};
   justify-content: center;
-  flex-direction: row;
+  alignItems: center;
 `;
 
 
 const SectionInterests = styled.View`
-
-  padding: 5px ${SIZES.padding};
-  justify-content: space-between;
   flex-direction: row;
+  backgroundColor: transparent;
 `;
 
 const ItemList = styled.View`

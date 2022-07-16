@@ -121,8 +121,8 @@ const EventDetail = ({ navigation, route }) => {
                     </McText>
                   </View>
                   <LinearGradient
-                    colors = {['#439DFEE8', '#F687FFE8']}
-                    start = {{x: 0, y: 1}}
+                    colors = {['#902070', '#DD77EB', '#a2d2ff']}
+                    start = {{x: -0.1, y: 1}}
                     end = {{ x: 1, y: 1}}
                     style = {{
                       width: 60, 

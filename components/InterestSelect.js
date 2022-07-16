@@ -17,9 +17,8 @@ import moment from 'moment';
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import events from '../constants/events.json'
-import { InterestSelect, McText, McIcon, McAvatar} from '../components'
+import { McText} from '../components'
 import { ScrollView } from 'react-native-gesture-handler';
-import { TouchableHighlight } from 'react-native-web';
 
 
 
@@ -73,9 +72,9 @@ export default class InterestSelector extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 0,
-      backgroundColor: '#000',
-    //   justifyContent: 'top',
-    //   alignItems: 'center',
+      backgroundColor: 'transparent',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
     }
   });
   

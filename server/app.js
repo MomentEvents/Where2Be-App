@@ -155,6 +155,31 @@ app.get('/interests', function(req,res){
   // res.send(result);
 });
 
+app.post('/import_interest_list', jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var inp_type=req.body.id;
+  console.log("POST req on", inp_type); 
+  session
+  .run('match (n:User {ID: $id})-[:user_interest]->(i: Interest) return  collect(i.name) as Interest_list',
+  {id: inp_type})
+  .then(function(result){
+    var user_int_array = result.records[0]._fields[0];
+    // result.records.forEach(function(record){
+      
+    //   user_int_array.push({
+    //     Interest_list: record._fields[0]
+    //   });
+    // });
+    console.log(user_int_array);
+    res.setHeader('Content-Type', 'text/html');
+    res.send(JSON.stringify(user_int_array));
+    res.end();
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
+
 app.listen(PORT);
 console.log("Server listening on PORT", PORT); 
 

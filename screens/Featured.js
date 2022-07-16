@@ -92,7 +92,6 @@ const Featured = ({ navigation }) => {
       >
         <View style={{
           marginLeft: index === 0 ? 30: 20,
-          marginRight: index === dummyData.Events.length - 1 ? 30 : 0
         }}>
           <LinearGradient
                 colors = {['#902070', '#DD77EB', '#a2d2ff']}
@@ -103,9 +102,11 @@ const Featured = ({ navigation }) => {
               <ImageBackground source={{uri: item.image}}
           resizeMode='cover'
           borderRadius= {SIZES.radius}
+          borderColor={COLORS.gray}
+          borderWidth= '0.2'
           style={{
-            width: SIZES.width/3 + 30,
-            height: SIZES.width/2 + 30,
+            width: SIZES.width/3 + 10,
+            height: SIZES.width/2 + 10,
             justifyContent: 'space-between'
 
           }}
@@ -122,7 +123,7 @@ const Featured = ({ navigation }) => {
                     }}>
                 {moment(item.startingTime).format('MMM').toUpperCase()}
               </McText>
-              <McText h2 color={COLORS.black}>
+              <McText h3 color={COLORS.black}>
                 {moment(item.startingTime).format('DD')}
               </McText>
             </DateBox>
@@ -136,7 +137,7 @@ const Featured = ({ navigation }) => {
                   //backgroundColor: COLORS.black
                 }}>
                   {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                  <McText h2>{item.title}</McText>
+                  <McText h3>{item.title}</McText>
                 </View>
               
             </GrayBox>
@@ -161,7 +162,7 @@ const Featured = ({ navigation }) => {
         <View>
           <FlatList
             horizontal
-            contentContainerStyle={{}}
+
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => 'event_' + item.id}
             //data={dummyData[dataset]}
@@ -174,6 +175,11 @@ const Featured = ({ navigation }) => {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <LinearGradient
+                colors = {['#151515', '#000000', '#000000','#652070']}
+                start = {{x: 0, y: 0}}
+                end = {{ x: 1, y: 1}}
+                style = {{padding:2, borderRadius: 20 }}>
       {/* Header here */}
       <SectionHeader>
         <View>
@@ -219,22 +225,29 @@ const Featured = ({ navigation }) => {
       <ScrollView style={styles.scrollView}>
       {_renderList("FEATURED", data)}
       {_renderList("ABTEST", data2)}
+      {_renderList("ABTEST", data2)}
+      <SectionFooter><McText h1 style={{
+        color:'transparent'
+      }}>hello</McText></SectionFooter>
       </ScrollView>
+      
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
+      </LinearGradient>
     </SafeAreaView>
   );
 };
 
 const SectionTitle = styled.View`
-  margin: 20px ${SIZES.padding};
+  margin: 15px ${SIZES.padding};
+  marginTop: 20px;
   
 `;
 
 const DateBox = styled.View`
-  width: 60px;
-  height: 60px;
+  width: 50;
+  height: 50;
   border-radius: 15px;
   border-color: #000000;
   border-width: 1px;
@@ -243,21 +256,26 @@ const DateBox = styled.View`
 `;
 //background-color: rgba(100,100,100,0.65);
 const GrayBox = styled.View`
-  background-color: rgba(100,100,100,0.65);
+  background-color: rgba(100,100,100,0.8);
   border-radius: ${SIZES.radius};
-  
 `;
 const SectionHeader = styled.View`
-  background-color: ${COLORS.black};
-  padding: 8px ${SIZES.padding};
+  background-color: transparent;
+  padding: 16px ${SIZES.padding};
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
 `;
+const SectionFooter = styled.View`
+  background-color: transparent;
+  padding: 100px ${SIZES.padding};
+  justify-content: space-between;
+`;
 //justify-content: space-between;
 const SectionSearch = styled.View`
-  margin: 4px ${SIZES.padding};
+  margin: 8px ${SIZES.padding};
   height: 50px;
+  marginBottom: 12px;
   background-color: ${COLORS.input};
   border-radius: 15px;
   justify-content: center;
