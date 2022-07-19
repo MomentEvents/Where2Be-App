@@ -15,6 +15,7 @@ import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
 import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 const EventDetail = ({ navigation, route }) => {
@@ -78,7 +79,7 @@ const EventDetail = ({ navigation, route }) => {
                 <TouchableOpacity>
                   <McIcon 
                     source={icons.like} 
-                    size={24}  
+                    size={24}
                     style={{
                       marginLeft: 16, 
                       tinycolor: COLORS.white,
@@ -119,7 +120,11 @@ const EventDetail = ({ navigation, route }) => {
                     <McText body4 style={{opacity: 0.5, letterSpacing: 1.5 }}>
                       STARTING {moment(selectedEvent?.startingTime).format('hh:mm A')}
                     </McText>
+
                   </View>
+                  <View style={{
+                    paddingTop:12
+                  }}>
                   <LinearGradient
                     colors = {['#902070', '#DD77EB', '#a2d2ff']}
                     start = {{x: -0.1, y: 1}}
@@ -129,7 +134,7 @@ const EventDetail = ({ navigation, route }) => {
                       height: 60,
                       borderRadius: 15,
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     
@@ -145,41 +150,16 @@ const EventDetail = ({ navigation, route }) => {
                       }
                     </McText>
                   </LinearGradient>
+                  </View>
                 </FooterContentView>
+                
               </LinearGradient>
             </SectionImageFooter>
           </View>
         </ImageBackground>
         {/* buttons group section */}
+        
         <ButtonSection>
-{/*           
-          <TouchableOpacity
-            style={{
-              width: 76,
-              height: 32,
-              borderRadius: 10,
-              marginRight: 16,
-              backgroundColor: COLORS.white,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <McText h6 style={{color: COLORS.black, letterSpacing: 1}}>ABOUT</McText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 124,
-              height: 32,
-              borderRadius: 10,
-              backgroundColor: COLORS.input,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>PARTICIPANTS</McText>
-          </TouchableOpacity> */}
-         
-          
           <ScrollView horizontal = {true}>
             {
               selectedEvent?.taglist.map((taglist)=> 
@@ -201,6 +181,15 @@ const EventDetail = ({ navigation, route }) => {
           </ScrollView>
         </ButtonSection>
         {/* description section */}
+        <LocationSection>
+          <McText h4 style={{opacity: 0.8, letterSpacing: 1.2 }}>
+            AT </McText>
+            <TouchableWithoutFeedback onPress={()=>{
+                console.log("Chirag's an idiot")
+                }}>
+              <McText h4 style={{opacity: 0.8, letterSpacing: 1 }}>{selectedEvent?.location}</McText>
+              </TouchableWithoutFeedback>
+          </LocationSection>
         <DescriptionSection>
           <View style={{
                   marginLeft: 10,
@@ -211,91 +200,7 @@ const EventDetail = ({ navigation, route }) => {
             <McText body3>{selectedEvent?.description}</McText>
           </View>
         </DescriptionSection>
-        {/* location section */}
-        {/*
-        <LocationSection>
-          <McText h3>LOCATION</McText>
-          <View
-            style={{
-              height: 250
-            }}
-          >
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={{
-                height: 250,
-                borderRadius: 30,
-                marginTop: 20
-              }}
-              minZoomLevel={15}
-              
-              initialRegion={dummyData.Region}
-              customMapStyle={dummyData.MapStyle}
-              style={{
-                height: 250,
-                borderRadius: 30,
-                marginTop: 20
-              }}
-            >
-
-            </MapView>
-          </View>
-          <View style = {{paddingBottom: 150}}></View>
-        </LocationSection>
-        */}
       </ScrollView>
-      {/* fixed bottom bar */}
-      {/*
-      <BottomBarSection>
-        <View style = {{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems : 'center',
-          marginHorizontal: 30
-        }}> 
-          <View>
-            <McText body3 style={{opacity: 0.5, letterSpacing: 1}}>PRICE</McText>
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end'
-            }}>
-              <McText h2>$17.60</McText>
-              <McText h3>/person</McText>
-            </View>
-          </View>
-          <TouchableOpacity>
-          <LinearGradient
-            colors= {COLORS.linear}
-            start = {{x:0, y:1}}
-            end = {{x:1, y:1}}
-            style = {{
-              width: 173,
-              height: 53,
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems : 'center'
-            }}
-          >
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <McText h4>BUY A TICKET</McText>
-              <McIcon 
-                source = {icons.buy_ticket} 
-                size = {24} 
-                style ={{marginLeft: 11}}
-                ></McIcon>
-
-            </View>
-
-          </LinearGradient>
-          </TouchableOpacity>
-        </View>
-      </BottomBarSection>
-    */}
     </View>
   );
 };
@@ -318,14 +223,14 @@ const SectionImageFooter = styled.View`
 //   z-index: -1;
 
 const FooterContentView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0px 30px;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+margin: 0px 30px;
 `;
 
 const ButtonSection = styled.View`
-  margin: 15px 15px;
+  margin: 15px 15px 10px;
   flex-direction: row;
 `;
 
@@ -336,11 +241,16 @@ background-color: ${COLORS.input};
 borderRadius: 10;
 `;
 
-/*
+
 const LocationSection = styled.View`
-  margin: 25px 30px;
+  flex-direction: row;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 20px;
+  borderRadius: 10;
+  align-items: flex-start;
 `;
-*/
+
 /*
 const BottomBarSection = styled.View`
   height: 80px;

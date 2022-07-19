@@ -24,16 +24,42 @@ import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
 
 // const inTags = ['Basketball', 'Bars']
-
+var outTags = {}
 
 function outDict(dict) {
-    var outList = []
-    for (const [key, value] of Object.entries(dict)) {
-        if (value == true) {
-            outList.push(key)
-        }
-    }
-    return outList
+
+  var outList = []
+  for (const [key, value] of Object.entries(dict)) {
+      if (value == true) {
+          outList.push(key)
+      }
+  }
+  return outList
+ }
+
+ function exportTags(outList) {
+  fetch('http://localhost:3001/delete_user_interest', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: 'user_1'
+        })
+    });
+    fetch('http://localhost:3001/export_user_interest', {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          id: 'user_1',
+          interest_list: outList
+      })
+  });
+  console.log(outList)
  }
 
 /*
@@ -46,7 +72,7 @@ const Interests = ({ navigation, route }) => {
     const [inTags, setInTags] = useState([]);
     const [loading, setLoading] = useState(true);
     // var inTags = [];
-    var outTags = {}
+    
 
     // Ensure fetch data runs first before everything else
 
@@ -58,7 +84,7 @@ const Interests = ({ navigation, route }) => {
         const data = await resp.json();
         
         
-        setLoading(false);
+        
 
         const resp2 = await fetch('http://localhost:3001/import_interest_list', {
             method: 'POST',
@@ -72,13 +98,17 @@ const Interests = ({ navigation, route }) => {
         });
         const inTags = await resp2.json();
 
-        setInTags(inTags);
-        setData(data);
+        
+        
 
         for (var i = 0; i < inTags.length; i++) {
             outTags[inTags[i]] = true
         }
-        console.log(outTags)
+
+        setInTags(inTags);
+        setData(data);
+
+        setLoading(false);
     };
         
     
@@ -91,7 +121,7 @@ const Interests = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        fetchData(); 
+        fetchData();
     },[]);
     // const data = [
     //         {title: 'Creativity', data: ['Music', 'Crafts', 'Art', 'Dancing', 'Design', 'Makeup', 'Videography', 'Photography', 'Writing']},
@@ -118,11 +148,10 @@ const Interests = ({ navigation, route }) => {
     }
 
     const renderList = (heading, dataset) => {
-        console.log(outTags)
+
         return (
           <View>
-              <McText style={{paddingLeft:28}} h3 >{heading}</McText>
-              
+              <McText style={{paddingLeft:28, paddingTop:8}} h3 >{heading}</McText>
                 <ItemList>
                     <FlatList data={dataset}
                     columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: -25 }}
@@ -172,8 +201,7 @@ const Interests = ({ navigation, route }) => {
       <SectionDone>
           <TouchableWithoutFeedback onPress={()=>{
                   navigation.navigate('Featured')
-                  var ex = outDict(outTags)
-                  console.log(ex)
+                  exportTags(outDict(outTags));
                   }}
                   style={{
                       borderRadius: 8,

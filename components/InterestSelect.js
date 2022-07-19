@@ -55,14 +55,15 @@ export default class InterestSelector extends Component {
                         width: this.props.wide *8 + 20,
                         height: 32,
                         borderRadius: 10,
-                        marginTop:12,
+                        marginTop:8,
                         marginRight: 8,
                         backgroundColor: colorVal,
+                        opacity:0.9,
                         justifyContent: 'center',
                         alignItems: 'center'
                         }}
                         >
-                            <McText h5 style={{opacity: 0.5, letterSpacing: 0.5}}>{this.props.text}</McText>
+                            <McText h5 style={{letterSpacing: 0.4}}>{this.props.text}</McText>
                         </TouchableOpacity>
             </SafeAreaView>
         )

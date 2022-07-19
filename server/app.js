@@ -32,7 +32,7 @@ app.post('/log', jsonParser, (req, res) => {
   .run('match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022" return ID(n), (n), int_list order by n.startingTime desc limit 25',
   {name: inp_type})
   .then(function(result){
-    
+
     var EventArr = [];
     result.records.forEach(function(record){
       // console.log(record);
@@ -43,9 +43,10 @@ app.post('/log', jsonParser, (req, res) => {
         startingTime: record._fields[1].properties.startingTime,
         image: record._fields[1].properties.Image,
         description: record._fields[1].properties.Description,
+        location: record._fields[1].properties.Location,
         taglist: record._fields[2],
       });
-      // console.log(record._fields[0].low);
+      console.log(record._fields[0].low);
     });
     // console.log(JSON.stringify(EventArr));
     // res.setHeader('Content-Type', 'application/json');
@@ -56,6 +57,7 @@ app.post('/log', jsonParser, (req, res) => {
     console.log(err);
   });
 })
+
 
 app.get('/data', function(req,res){
   session
@@ -179,6 +181,43 @@ app.post('/import_interest_list', jsonParser, (req, res) => {
     console.log(err);
   });
 })
+
+app.post('/delete_user_interest', jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var inp_type=req.body.id;
+  console.log("POST req on", inp_type); 
+  session
+  .run('match (u:User)-[t:user_interest]-(i) where u.ID = $id delete t',
+  {id: inp_type})
+  .then(function(result){
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.end();
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
+
+app.post('/export_user_interest', jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var inp_type=req.body.id;
+  var outTags=req.body.interest_list;
+  console.log(outTags)
+  console.log("POST req on", inp_type); 
+  session
+  .run("match (u:User), (int:Interest) where u.ID = $id int.name in $interest_list create (u)-[r:user_interest]->(int) return r",
+  {id: inp_type, interest_list: outTags})
+  .then(function(result){
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.end();
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
+
 
 app.listen(PORT);
 console.log("Server listening on PORT", PORT); 

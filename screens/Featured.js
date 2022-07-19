@@ -4,7 +4,7 @@ import { Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, Tex
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
-//import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
@@ -35,7 +35,7 @@ const Featured = ({ navigation }) => {
         user: type,
         password: 'testpassword'
       })
-    });
+    }); 
 
     console.log("here")
     const data = await resp.json();
@@ -128,8 +128,9 @@ const Featured = ({ navigation }) => {
               </McText>
             </DateBox>
           </View>
+          
             <GrayBox>
-              
+            {/* <BlurView> */}
                 <View style={{
                   marginLeft: 20,
                   marginBottom: 10,
@@ -137,10 +138,13 @@ const Featured = ({ navigation }) => {
                   //backgroundColor: COLORS.black
                 }}>
                   {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                  <McText h3>{item.title}</McText>
+                  <McText h3 onPress={()=>{
+          console.log("Chirag's an idiot")
+        }}>{item.title}</McText>
                 </View>
-              
+                {/* </BlurView> */}
             </GrayBox>
+            
           </ImageBackground>
           </LinearGradient>
           </LinearGradient>
@@ -301,6 +305,10 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: '#1E2029',
     backgroundColor: COLORS.black,
+  },
+  grabox: {
+    backgroundColor: 'rgba(100,100,100,0.8)',
+    borderRadius: SIZES.radius,
   },
 });
 
