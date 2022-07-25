@@ -178,17 +178,24 @@ const Featured = ({ navigation }) => {
     )
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <LinearGradient
-                colors = {['#151515', COLORS.black, COLORS.black,'#652070']}
+                colors = {['#252525', COLORS.black, COLORS.black,'#652070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:2, borderRadius: 20 }}>
       {/* Header here */}
+      <SafeAreaView>
       <SectionHeader>
         <View>
-          <McText h1>Explore events</McText>
+          <McText h1>Explore Events</McText>
         </View>
+        <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('Search')
+        }}>
+          <McIcon source ={icons.search} size={28}/>
+        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
         onPress={()=>{
           navigation.navigate('Interests')
@@ -196,30 +203,7 @@ const Featured = ({ navigation }) => {
           <McIcon source ={icons.tab_4} size={28}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
-      <TouchableOpacity
-          onPress={() =>{
-            navigation.navigate('Search');
-          }}
-          >
-        <SectionSearch>
-          <SearchView>
-            <McIcon source={icons.search} size={24}/>
-            <Srch>
-              <McText h4 color={COLORS.gray1}>Search</McText>
-            </Srch>
-            {/* <TextInput
-              placeholder='Search'
-              placeholderTextColor={COLORS.gray1}
-              style={{
-                ...FONTS.h4,
-                color: COLORS.white,
-                width: 250
-              }}
-            ></TextInput> */}
-            <McIcon source={icons.filter} style = {{marginLeft : 168}}/>
-          </SearchView>
-        </SectionSearch> 
-      </TouchableOpacity>
+    
       {/* <Button
         onPress={() => {
           navigation.navigate('EventDetail');
@@ -238,13 +222,14 @@ const Featured = ({ navigation }) => {
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
+      </SafeAreaView>
       </LinearGradient>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const SectionTitle = styled.View`
-  margin: 15px ${SIZES.padding};
+  margin: 16px ${SIZES.padding};
   marginTop: 20px;
   
 `;
@@ -272,7 +257,7 @@ const SectionHeader = styled.View`
 `;
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 100px ${SIZES.padding};
+  padding: 160px;
   justify-content: space-between;
 `;
 //justify-content: space-between;

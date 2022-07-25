@@ -106,6 +106,8 @@ app.get('/search', function(req,res){
         title: record._fields[1].properties.Name,
         //type: record._fields[1].properties.type,
         startingTime: record._fields[1].properties.startingTime,
+        visibility: record._fields[1].properties.visibility,
+        location: record._fields[1].properties.Location,
         image: record._fields[1].properties.Image,
         description: record._fields[1].properties.Description,
         taglist: record._fields[2],
@@ -206,7 +208,7 @@ app.post('/export_user_interest', jsonParser, (req, res) => {
   console.log(outTags)
   console.log("POST req on", inp_type); 
   session
-  .run("match (u:User), (int:Interest) where u.ID = $id int.name in $interest_list create (u)-[r:user_interest]->(int) return r",
+  .run("match (u:User), (i:Interest) where u.ID = $id and i.name in $interest_list create (u)-[r:user_interest]->(i)",
   {id: inp_type, interest_list: outTags})
   .then(function(result){
     

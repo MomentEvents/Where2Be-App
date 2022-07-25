@@ -4,7 +4,7 @@
  * 
 
  */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
@@ -20,7 +20,17 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const EventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
-
+  const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+  const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const toggleNumberOfLines = () => { //To toggle the show text or hide it
+      setTextShown(!textShown);
+  }
+  
+  const onTextLayout = useCallback(e =>{
+      setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
+      // console.log(e.nativeEvent);
+  },[]);
+      
   useEffect(()=>{
     let {selectedEvent} = route.params;
     setSelectedEvent(selectedEvent);
@@ -104,10 +114,11 @@ const EventDetail = ({ navigation, route }) => {
                 colors = {['transparent','#000']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 0, y: 1}}
-                stle = {{
+                style = {{
                   width: '100%',
-                  height: 400,
-                  justifyContent: 'flex-end'
+                  height: 120,
+                  justifyContent: 'flex-end',
+
                 }}
               >
                 
@@ -180,26 +191,77 @@ const EventDetail = ({ navigation, route }) => {
             }
           </ScrollView>
         </ButtonSection>
-        {/* description section */}
         <LocationSection>
-          <McText h4 style={{opacity: 0.8, letterSpacing: 1.2 }}>
+        <McIcon source ={icons.location} size={40} style={{
+              margin:-6,
+            }}/>
+          <McText h4 style={{opacity: 0.8, letterSpacing: 1 }}>
             AT </McText>
             <TouchableWithoutFeedback onPress={()=>{
                 console.log("Chirag's an idiot")
                 }}>
-              <McText h4 style={{opacity: 0.8, letterSpacing: 1 }}>{selectedEvent?.location}</McText>
+              <McText h4 style={{
+                opacity: 0.8,
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginTop: -1, 
+                }}>
+                  {selectedEvent?.location}
+              </McText>
               </TouchableWithoutFeedback>
           </LocationSection>
+          <OwnerSection>
+
+            <McIcon source ={icons.tab_4} size={20} style={{
+              margin:4,
+            }}/>
+            <McText h4 numberOfLines={1} style={{
+              opacity: 0.8,
+              letterSpacing: 1,
+              textTransform: 'uppercase' 
+              }}>{selectedEvent?.title}
+            </McText>
+
+        </OwnerSection>
+    
         <DescriptionSection>
           <View style={{
-                  marginLeft: 10,
-                  marginBottom: 10,
-                  marginTop: 5,
+                  marginLeft: 12,
+                  marginBottom: 4,
+                  marginTop: 4,
+                  marginRight: 12,
                   //backgroundColor: COLORS.black
                 }}>
-            <McText body3>{selectedEvent?.description}</McText>
+            <McText 
+              onTextLayout={onTextLayout}
+              numberOfLines={textShown ? undefined : 3} body3>
+                {selectedEvent?.description}
+            </McText>
+              {
+                  lengthMore ? <McText
+                  onPress={toggleNumberOfLines}
+                  style={{ lineHeight: 21, marginTop: 10 }}>
+                    {textShown ? 'Read less...' : 'Read more...'}</McText>
+                  :null
+              }
           </View>
         </DescriptionSection>
+        <VisibilitySec>
+        <McIcon source ={icons.tab_4} size={16} style={{
+              margin:8,
+            }}/>
+        <View>
+          
+          <McText body5 numberOfLines={1} style={{
+              opacity: 0.8,
+              letterSpacing: 1,
+              textTransform: 'uppercase' 
+              }}>
+                {selectedEvent?.visibility}PUBLIC EVENT
+            </McText>
+          </View>
+        </VisibilitySec>
+        
       </ScrollView>
     </View>
   );
@@ -244,13 +306,25 @@ borderRadius: 10;
 
 const LocationSection = styled.View`
   flex-direction: row;
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-bottom: 20px;
+  marginHorizontal: 16px;
+  marginBottom: 8px;
   borderRadius: 10;
-  align-items: flex-start;
+  align-items: center;
 `;
 
+const OwnerSection = styled.View`
+  flex-direction: row;
+  marginHorizontal: 16px;
+  marginBottom: 8px;
+  borderRadius: 10;
+  align-items: center;
+`;
+const VisibilitySec = styled.View`
+  flex-direction: row;
+  margin: 16px;
+  borderRadius: 10;
+  align-items: center;
+`;
 /*
 const BottomBarSection = styled.View`
   height: 80px;

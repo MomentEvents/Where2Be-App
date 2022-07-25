@@ -9,6 +9,7 @@ const tab_1 = require('../assets/icons/tab_1_icon.png');
 const tab_2 = require('../assets/icons/tab_2_icon.png');
 const tab_3 = require('../assets/icons/tab_3_icon.png');
 const tab_4 = require('../assets/icons/tab_4_icon.png');
+const location = require('../assets/icons/location.png')
 
 export default {
   back_arrow,
@@ -22,4 +23,5 @@ export default {
   tab_2,
   tab_3,
   tab_4,
+  location,
 };

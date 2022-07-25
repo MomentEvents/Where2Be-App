@@ -37,8 +37,8 @@ function outDict(dict) {
   return outList
  }
 
- function exportTags(outList) {
-  fetch('http://localhost:3001/delete_user_interest', {
+ async function exportTags(outList) {
+  await fetch('http://localhost:3001/delete_user_interest', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -48,7 +48,7 @@ function outDict(dict) {
             id: 'user_1'
         })
     });
-    fetch('http://localhost:3001/export_user_interest', {
+    await fetch('http://localhost:3001/export_user_interest', {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -174,22 +174,26 @@ const Interests = ({ navigation, route }) => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <LinearGradient
-                colors = {['#151515', '#000000', '#000000','#652070']}
+                colors = {['#252525', COLORS.black, COLORS.black,'#652070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:2, borderRadius: 20 }}>
+        <SafeAreaView>
         <SectionHeader>
         <View>
-        <TouchableWithoutFeedback
-        onPress={()=>{
-          navigation.navigate('Featured')
-        }}>
-          <McIcon source ={icons.back_arrow}/>
-        </TouchableWithoutFeedback>
-          <McText h1>Interests</McText>
-          <McText body2 style={{opacity: 0.2}}>Select the events you enjoy!</McText>
+          <TitleSec>
+            <SecBackButton>
+            <TouchableWithoutFeedback
+              onPress={()=>{
+              navigation.navigate('Featured')
+              }}>
+              <McIcon source ={icons.back_arrow} size={24}/>
+            </TouchableWithoutFeedback></SecBackButton>
+            <McText h1>Interests</McText>
+          </TitleSec>
+          <McText body2 style={{opacity: 0.2, marginLeft: 4}}>Select the events you enjoy!</McText>
         </View>
       </SectionHeader>
       <ScrollView>
@@ -213,8 +217,9 @@ const Interests = ({ navigation, route }) => {
               <McText h2>DONE</McText>
           </TouchableWithoutFeedback>
       </SectionDone>
+      </SafeAreaView>
       </LinearGradient>
-    </SafeAreaView>
+    </View>
       
   );
 };
@@ -230,6 +235,17 @@ const styles = StyleSheet.create({
 const SectionHeader = styled.View`
   padding: 16px ${SIZES.padding};
   justify-content: space-between;
+  flex-direction: row;
+`;
+const TitleSec = styled.View`
+  marginLeft: -28px;
+  alignItems: flex-start;
+  flex-direction: row;
+`;
+
+const SecBackButton = styled.View`
+  padding: 4px;
+  alignItems: flex-start;
   flex-direction: row;
 `;
 
