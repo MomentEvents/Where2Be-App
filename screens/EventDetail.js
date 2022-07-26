@@ -38,12 +38,19 @@ const EventDetail = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+       <LinearGradient
+      colors = {['#252525', COLORS.black,COLORS.black,'#003060']}
+      start = {{x: 0, y: 0}}
+      end = {{ x: 1, y: 1}}
+      style = {{padding:2, borderRadius: 20 }}>
       <ScrollView 
       contentContainerStyle={{
-        backgroundColor: COLORS.black
+        backgroundColor: 'transparent'
       }}
       style={{
-        backgroundColor: COLORS.black
+        backgroundColor: 'transparent',
+        //temp fix for padding
+        paddingBottom: 300,
       }}
       >
         {/*ImageBackground*/}
@@ -230,7 +237,7 @@ const EventDetail = ({ navigation, route }) => {
                   marginBottom: 4,
                   marginTop: 4,
                   marginRight: 12,
-                  //backgroundColor: COLORS.black
+                  // backgroundColor: COLORS.black
                 }}>
             <McText 
               onTextLayout={onTextLayout}
@@ -240,7 +247,7 @@ const EventDetail = ({ navigation, route }) => {
               {
                   lengthMore ? <McText
                   onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 21, marginTop: 10 }}>
+                  style={{ lineHeight: 21, marginTop: 10, opacity: 0.6}}>
                     {textShown ? 'Read less...' : 'Read more...'}</McText>
                   :null
               }
@@ -263,6 +270,7 @@ const EventDetail = ({ navigation, route }) => {
         </VisibilitySec>
         
       </ScrollView>
+      </LinearGradient>
     </View>
   );
 };
@@ -301,6 +309,7 @@ margin-left: 10px;
 margin-right: 10px;
 background-color: ${COLORS.input};
 borderRadius: 10;
+opacity: 0.8;
 `;
 
 

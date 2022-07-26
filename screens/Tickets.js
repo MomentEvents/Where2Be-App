@@ -16,12 +16,12 @@ const Tickets = ({ params }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-      colors = {['#252525', COLORS.black, COLORS.black,'#205070']}
+      colors = {['#252525', COLORS.black,'#350840', COLORS.black,'#006790']}
       start = {{x: 0, y: 0}}
       end = {{ x: 1, y: 1}}
       style = {{padding:2, borderRadius: 20 }}>
     <SafeAreaView>
-      
+    <View style={styles.tempNav}>
       <SectionHeader>
         {/* <Text style={{ color: '#fff', fontSize: 30 }}>Here</Text> */}
         <McText h1>Explore Feed</McText>
@@ -32,7 +32,11 @@ const Tickets = ({ params }) => {
           <McIcon source ={icons.tab_4} size={28}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
-      <ScrollView>
+      </View>
+      <ScrollView style={{
+        //temp fix 
+        paddingBottom: 120,
+      }}>
       <View style = {styles.userBar}>
         <View style = {{flexDirection: "row", alignItems: "center"}}>
           <Image 
@@ -41,7 +45,7 @@ const Tickets = ({ params }) => {
               uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
               }}/>
           {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
-          <McText style={{ color: '#fff', marginLeft:30}} h3>UserAbc with UserXYZ</McText>
+          <McText style={{ color: '#fff', marginLeft:30}} h3>BOB with ALICE</McText>
         </View>
         <View style = {{position: "absolute"}}>
           <Image 
@@ -63,10 +67,14 @@ const Tickets = ({ params }) => {
           }}/>
       </View>
       <View style = {styles.functionalBar}>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
-      <McText style={{ color: '#fff', marginLeft:30}} h3>Some Basketball Game</McText>
-      <McText style={{ color: '#fff', marginLeft:30}} body3>Some nba stadium</McText>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
+        <View style={styles.funcBarText}>
+          <McText style={{ color: '#fff'}} h3>Event</McText>
+          <McText style={{ color: '#fff'}} body3>Location</McText>
+        </View>
+        <View style={{
+          flexDirection: 'column',
+          paddingTop: 20,
+        }}>
         <McIcon 
           source={icons.like} 
           size={24}  
@@ -76,6 +84,7 @@ const Tickets = ({ params }) => {
             // tinycolor: "#000",
           }}
         />
+        </View>
       </View>
       <View style = {styles.userBar}>
         <View style = {{flexDirection: "row", alignItems: "center"}}>
@@ -85,7 +94,7 @@ const Tickets = ({ params }) => {
               uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
               }}/>
           {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
-          <McText style={{ color: '#fff', marginLeft:30}} h3>UserAbc with UserXYZ</McText>
+          <McText style={{ color: '#fff', marginLeft:30}} h3>BOB with ALICE</McText>
         </View>
         <View style = {{position: "absolute"}}>
           <Image 
@@ -107,10 +116,14 @@ const Tickets = ({ params }) => {
           }}/>
       </View>
       <View style = {styles.functionalBar}>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
-      <McText style={{ color: '#fff', marginLeft:30}} h3>Some Basketball Game</McText>
-      <McText style={{ color: '#fff', marginLeft:30}} body3>Some nba stadium</McText>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
+        <View style={styles.funcBarText}>
+          <McText style={{ color: '#fff'}} h3>Event</McText>
+          <McText style={{ color: '#fff'}} body3>Location</McText>
+        </View>
+        <View style={{
+          flexDirection: 'column',
+          paddingTop: 20,
+        }}>
         <McIcon 
           source={icons.like} 
           size={24}  
@@ -120,55 +133,13 @@ const Tickets = ({ params }) => {
             // tinycolor: "#000",
           }}
         />
-      </View>
-      <View style = {styles.userBar}>
-        <View style = {{flexDirection: "row", alignItems: "center"}}>
-          <Image 
-            style={styles.userPic}
-            source={{
-              uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
-              }}/>
-          {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
-          <McText style={{ color: '#fff', marginLeft:30}} h3>UserAbc with UserXYZ</McText>
         </View>
-        <View style = {{position: "absolute"}}>
-          <Image 
-            style={styles.userPic2}
-            source={{
-              uri:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80"
-              }}/>
-        </View>
-        <View>
-          <Text style={{fontSize:30}}>...</Text>
-        </View>
-      </View>
-
-      <View>
-        <Image 
-        style={{ width:SIZES.width, height: SIZES.width*1.1}}
-        source={{
-          uri: imageUri
-          }}/>
-      </View>
-      <View style = {styles.functionalBar}>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
-      <McText style={{ color: '#fff', marginLeft:30}} h3>Some Basketball Game</McText>
-      <McText style={{ color: '#fff', marginLeft:30}} body3>Some nba stadium</McText>
-      {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>Some Basketball Game</Text> */}
-        <McIcon 
-          source={icons.like} 
-          size={24}  
-          style={{
-            color:COLORS.blue,
-            marginLeft: 16, 
-            // tinycolor: "#000",
-          }}
-        />
       </View>
       </ScrollView>
     </SafeAreaView>
     </LinearGradient>
     </View>
+    
   );
 };
 
@@ -182,17 +153,11 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   tempNav: {
-    width: 100+"%", 
-    height:60,
-    backgroundColor: "rgb(10,10,10)",
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "rgb(233,233,233)",
-    justifyContent: "center",
-    alignItems: "center"
+    borderBottomColor: "#282828",
     // borderRadius: 20
   },
   userBar : {
-    marginTop: 16,
     // borderTopLeftRadius:20,
     // borderTopRightRadius:20,
     width: 100+"%",
@@ -203,7 +168,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20
   },
+  funcBarText: {
+    flexDirection: 'column',
+    marginVertical: 8,
+  },
   functionalBar : {
+    marginBottom: 16,
     // borderBottomLeftRadius:20,
     // borderBottomRightRadius:20,
     width: 100+"%",
@@ -211,8 +181,8 @@ const styles = StyleSheet.create({
     padding:10,
     opacity: 0.7,
     backgroundColor: COLORS.input,
-    flexDirection: "column",
-    // justifyContent: "space-between",
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     // alignItems:"center"
   },
@@ -230,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     // marginHorizontal: 10,
     marginLeft: 45,
-    marginTop: 10,
+    marginTop: 15,
     borderWidth: 1,
     borderColor: "#fff"
   }

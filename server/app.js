@@ -58,6 +58,121 @@ app.post('/log', jsonParser, (req, res) => {
   });
 })
 
+app.post('/feat', jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var inp_type=req.body.user;
+  console.log("POST req on", inp_type); 
+  session
+  .run(`Match (m:Interest) 
+  Optional match (m)-[c:user_interest]-(u:User)
+  with m, u,
+  case
+      when (m)-[c]-(u) then 1
+      else 0
+  end as s1
+  with m, s1
+  Optional match (m)-[t:tags]-(:Event)-[:attending]-(u:User)
+  with m, s1, count(t) as s2
+  //Optional match (m)-[t:tags]-(:Event)-[:liked]-(u:User)
+  Optional match (u:User)-[:liked]-(:Event)-[t:tags]-(m)
+  with m, s1, s2, count(t) as s3
+  Optional match (u:User)-[:attending]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+  with m, s1, s2, s3, count(t) as s4
+  Optional match (u:User)-[:liked]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+  with m, s1, s2, s3, s4, count(t) as s5
+  Optional match (u:User)-[c:user_interest]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+  with m, s1, s2, s3, s4, s5, count(t) as s6
+  with m, [m.name, s1*10000+s2*1000+s3*500+s4/5+s5/6+s6/2] as s//, s1, s2, s3, s4, s5, s6
+  order by s[1] desc
+  with collect(m) as mm, apoc.map.fromPairs(collect(s)) as ss, [] as pk
+  
+  call{
+      match(u:User)
+      optional match (u)-[:attending]-(e1:Event)
+      with u, collect(e1) as e1
+      //, collect(id(e1)) as e1id [id(e1), e1, ittlist]
+      optional match (u)-[:liked]-(e2:Event)
+      where not e2 in e1
+      //with u, e1, e2, collect(itt.name) as ittlist
+      with e1+collect(e2) as ee
+      unwind ee as er
+      with er
+      order by er.startingTime desc
+      optional match (er)-[:tags]-(itt:Interest)
+      with er, collect(itt.name) as ittlist
+      return collect([id(er), er, ittlist]) as ee, collect(id(er)) as eeid
+  }
+  
+  with ss, mm, ["Followed", ee] as loe, eeid + pk as pk
+  
+  call{
+      with ss, pk
+      match(e:Event)-[:tags]-(tt:Interest)
+      where e.startingTime contains '2022' AND not id(e) in pk
+      with e, apoc.map.get(ss, tt.name, 0) as intscore, tt
+      with e, reduce (s=0, x in collect(intscore)| s + x) as try, collect(tt.name) as tt
+      order by try desc
+      with e.Name as nme, collect(e)[0] as e, collect(tt)[0] as tt
+      return e, tt
+      limit 10
+  }
+// return e.Name, tt
+    with mm, loe, ["Featured", collect([id(e), e, tt])] as fte, collect(id(e)) + pk as pk
+    
+  unwind mm as m
+  optional match (m)-[:tags]-(e:Event)
+  where e.startingTime contains '2022' AND not id(e) in pk
+  optional match (e)-[:tags]-(tt:Interest)
+  with fte, loe, m, e, collect(tt.name) as ittlist
+  with fte, loe, m, collect([id(e), e, ittlist]) as scrs
+  with fte, loe, [m.name, scrs] as bb
+  where not isEmpty(scrs[1])
+  
+  with fte, loe, collect(bb) as bb
+  with collect(fte) + collect(loe) + bb as bb
+
+  unwind bb as bbb
+  with bbb[0] as name, bbb[1] as events
+  return name, events
+  `
+  // {name: inp_type}
+  )
+  .then(function(result){
+
+    
+    var FinalArr = [];
+    result.records.forEach(function(record){
+      var EventArr = [];
+      record._fields[1].forEach(function(event){
+        //console.log(event)
+        //console.log(record);
+        EventArr.push({
+          //test: event[1].properties.Name
+          id: event[0].low,
+          title: event[1].properties.Name,
+          //type: record._fields[1].properties.type,
+          startingTime: event[1].properties.startingTime,
+          image: event[1].properties.Image,
+          description: event[1].properties.Description,
+          location: event[1].properties.Location,
+          taglist: event[2],
+        });
+        //console.log(record._fields[0].low);
+      });
+      FinalArr.push({
+        header: record._fields[0],
+        data: EventArr
+      })
+    });
+    //console.log(JSON.stringify(FinalArr));
+    //res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(FinalArr));
+    res.end();
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
 
 app.get('/data', function(req,res){
   session

@@ -25,7 +25,7 @@ const Featured = ({ navigation }) => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json();
 
-    const resp = await fetch('http://localhost:3001/log', {
+    const resp = await fetch('http://localhost:3001/feat', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -36,29 +36,9 @@ const Featured = ({ navigation }) => {
         password: 'testpassword'
       })
     }); 
-
-    console.log("here")
     const data = await resp.json();
 
-    console.log(data);
-
-    const resp2 = await fetch('http://localhost:3001/log', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type2,
-        password: 'testpassword'
-      })
-    });
-    console.log("here")
-    const data2 = await resp2.json();
-    console.log(data2);
-
     setData(data);
-    setData2(data2);
     setLoading(false);
   };
 
@@ -186,16 +166,21 @@ const Featured = ({ navigation }) => {
                 style = {{padding:2, borderRadius: 20 }}>
       {/* Header here */}
       <SafeAreaView>
+        <View style={styles.tempNav}>
       <SectionHeader>
         <View>
           <McText h1>Explore Events</McText>
         </View>
-        <TouchableWithoutFeedback
+        <View style={{
+          paddingLeft: 16,
+        }}>
+        <TouchableWithoutFeedback 
         onPress={()=>{
           navigation.navigate('Search')
         }}>
           <McIcon source ={icons.search} size={28}/>
         </TouchableWithoutFeedback>
+        </View>
         <TouchableWithoutFeedback
         onPress={()=>{
           navigation.navigate('Interests')
@@ -203,7 +188,8 @@ const Featured = ({ navigation }) => {
           <McIcon source ={icons.tab_4} size={28}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
-    
+      </View>
+      
       {/* <Button
         onPress={() => {
           navigation.navigate('EventDetail');
@@ -211,10 +197,34 @@ const Featured = ({ navigation }) => {
         title="Go to Event Detail"
       /> */}
       <ScrollView style={styles.scrollView}>
-      {_renderList("FEATURED", data)}
+      {
+          data.map((sdata)=>
+          <View>
+            <SectionTitle>
+              <McText h3>
+                {sdata.header}
+              </McText>
+            </SectionTitle>
+            <View>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={sdata.data}
+                renderItem={_renderItem}
+              ></FlatList>
+            </View>
+          </View>
+          //{_renderList(sdata.header, sdata.data)}
+
+          )
+        }
+      {/* {_renderList("FEATURED", data)}
       {_renderList("ABTEST", data2)}
-      {_renderList("ABTEST", data2)}
+      {_renderList("ABTEST", data2)} */}
       <SectionFooter><McText h1 style={{
+        //temp fix for padding
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
@@ -255,9 +265,10 @@ const SectionHeader = styled.View`
   align-items: center;
   flex-direction: row;
 `;
+//temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 160px;
+  padding: 100px;
   justify-content: space-between;
 `;
 //justify-content: space-between;
@@ -294,6 +305,11 @@ const styles = StyleSheet.create({
   grabox: {
     backgroundColor: 'rgba(100,100,100,0.8)',
     borderRadius: SIZES.radius,
+  },
+  tempNav: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#282828",
+    // borderRadius: 20
   },
 });
 

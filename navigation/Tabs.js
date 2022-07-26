@@ -41,6 +41,7 @@ const Tabs = ({ params }) => {
     tabBarStyle:{
       position: 'absolute',
       backgroundColor: COLORS.tabBar,
+      opacity: 0.98,
       borderTopColor: 'transparent',
       height: 88,
       borderRadius: SIZES.radius,
