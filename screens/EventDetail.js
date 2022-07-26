@@ -178,7 +178,7 @@ const EventDetail = ({ navigation, route }) => {
         {/* buttons group section */}
         
         <ButtonSection>
-          <ScrollView horizontal = {true}>
+          <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {
               selectedEvent?.taglist.map((taglist)=> 
                 <TouchableOpacity
