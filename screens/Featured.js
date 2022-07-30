@@ -10,6 +10,7 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import ipAddress from '../environ';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -25,7 +26,7 @@ const Featured = ({ navigation }) => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json();
 
-    const resp = await fetch('http://localhost:3001/feat', {
+    const resp = await fetch(`http://mighty-chamber-83878.herokuapp.com/feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

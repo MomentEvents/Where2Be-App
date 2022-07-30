@@ -212,7 +212,8 @@ const EventDetail = ({ navigation, route }) => {
                 letterSpacing: 1,
                 textTransform: 'uppercase',
                 marginTop: -1, 
-                }}>
+                }}
+                numberOfLines={1}>
                   {selectedEvent?.location}
               </McText>
               </TouchableWithoutFeedback>

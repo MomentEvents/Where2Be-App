@@ -104,7 +104,7 @@ const Tabs = ({ params }) => {
         component={Tickets}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_3} />
+            <TabIcon focused={focused} icon={icons.filter} />
           ),
           tabBarLabel: ({ focused }) => (
             <TabLabel focused={focused} text="Feed" />

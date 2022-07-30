@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver');
 const { Result } = require('neo4j-driver-core');
 
+
+
 var app = express();
 var PORT = 3001;
 
@@ -114,9 +116,11 @@ app.post('/feat', jsonParser, (req, res) => {
       order by try desc
       with e.Name as nme, collect(e)[0] as e, collect(tt)[0] as tt
       return e, tt
-      limit 10
+      limit 20
   }
 // return e.Name, tt
+    with mm, loe, e, tt, pk
+    order by e.startingTime desc
     with mm, loe, ["Featured", collect([id(e), e, tt])] as fte, collect(id(e)) + pk as pk
     
   unwind mm as m
@@ -124,6 +128,8 @@ app.post('/feat', jsonParser, (req, res) => {
   where e.startingTime contains '2022' AND not id(e) in pk
   optional match (e)-[:tags]-(tt:Interest)
   with fte, loe, m, e, collect(tt.name) as ittlist
+  with fte, loe, m, e, ittlist
+  order by e.startingTime desc
   with fte, loe, m, collect([id(e), e, ittlist]) as scrs
   with fte, loe, [m.name, scrs] as bb
   where not isEmpty(scrs[1])
@@ -210,7 +216,7 @@ app.get('/data', function(req,res){
 
 app.get('/search', function(req,res){
   session
-  .run('match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022" return ID(n), (n), int_list order by n.startingTime desc limit 25')
+  .run('match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022" return ID(n), (n), int_list order by n.startingTime desc limit 100')
   .then(function(result){
     
     var EventArr = [];

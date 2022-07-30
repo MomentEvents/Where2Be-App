@@ -15,7 +15,7 @@ import Fuse from 'fuse.js'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://localhost:3001/search', {
+  const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/search', {
       method: 'GET',
     });
 
@@ -42,6 +42,7 @@ import Fuse from 'fuse.js'
         'key',
         'title',
         'startingTime',
+        'location'
       ]
     });
 

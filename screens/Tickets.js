@@ -12,6 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const Tickets = ({ params }) => {
+  
   const imageUri = "https://img.buzzfeed.com/buzzfeed-static/static/2022-04/12/19/asset/b96d474ef097/sub-buzz-418-1649792177-24.png" //+ "=s"+ (SIZES.width).toString()+ "-c"
   return (
     <View style={styles.container}>
@@ -33,9 +34,60 @@ const Tickets = ({ params }) => {
         </TouchableWithoutFeedback>
       </SectionHeader>
       </View>
-      <ScrollView style={{
-        //temp fix 
-        paddingBottom: 120,
+      <ScrollView>
+      <View>
+      <View style = {styles.userBar}>
+        <View style = {{flexDirection: "row", alignItems: "center"}}>
+          <Image 
+            style={styles.userPic}
+            source={{
+              uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
+              }}/>
+          {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
+          <McText style={{ color: '#fff', marginLeft:30}} h3>Bob with Alice</McText>
+        </View>
+        <View style = {{position: "absolute"}}>
+          <Image 
+            style={styles.userPic2}
+            source={{
+              uri:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80"
+              }}/>
+        </View>
+        <View>
+          <Text style={{fontSize:30}}>...</Text>
+        </View>
+      </View>
+
+      <View>
+        <Image 
+        style={{ width:SIZES.width, height: SIZES.width*1.1}}
+        source={{
+          uri: imageUri
+          }}/>
+      </View>
+      <View style = {styles.functionalBar}>
+        <View style={styles.funcBarText}>
+          <McText style={{ color: '#fff'}} h3>Event</McText>
+          <McText style={{ color: '#fff'}} body3>Location</McText>
+        </View>
+        <View style={{
+          flexDirection: 'column',
+          paddingTop: 20,
+        }}>
+        <McIcon 
+          source={icons.like} 
+          size={24}  
+          style={{
+            color:COLORS.blue,
+            marginLeft: 16, 
+            // tinycolor: "#000",
+          }}
+        />
+        </View>
+      </View>
+      </View>
+      <View style={{
+        paddingBottom:200
       }}>
       <View style = {styles.userBar}>
         <View style = {{flexDirection: "row", alignItems: "center"}}>
@@ -45,7 +97,7 @@ const Tickets = ({ params }) => {
               uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
               }}/>
           {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
-          <McText style={{ color: '#fff', marginLeft:30}} h3>BOB with ALICE</McText>
+          <McText style={{ color: '#fff', marginLeft:30}} h3>Bob with Alice</McText>
         </View>
         <View style = {{position: "absolute"}}>
           <Image 
@@ -86,54 +138,6 @@ const Tickets = ({ params }) => {
         />
         </View>
       </View>
-      <View style = {styles.userBar}>
-        <View style = {{flexDirection: "row", alignItems: "center"}}>
-          <Image 
-            style={styles.userPic}
-            source={{
-              uri:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
-              }}/>
-          {/* <Text style={{ color: '#000', fontSize: 20, marginLeft:30}}>UserAbc with UserXYZ</Text> */}
-          <McText style={{ color: '#fff', marginLeft:30}} h3>BOB with ALICE</McText>
-        </View>
-        <View style = {{position: "absolute"}}>
-          <Image 
-            style={styles.userPic2}
-            source={{
-              uri:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80"
-              }}/>
-        </View>
-        <View>
-          <Text style={{fontSize:30}}>...</Text>
-        </View>
-      </View>
-
-      <View>
-        <Image 
-        style={{ width:SIZES.width, height: SIZES.width*1.1}}
-        source={{
-          uri: imageUri
-          }}/>
-      </View>
-      <View style = {styles.functionalBar}>
-        <View style={styles.funcBarText}>
-          <McText style={{ color: '#fff'}} h3>Event</McText>
-          <McText style={{ color: '#fff'}} body3>Location</McText>
-        </View>
-        <View style={{
-          flexDirection: 'column',
-          paddingTop: 20,
-        }}>
-        <McIcon 
-          source={icons.like} 
-          size={24}  
-          style={{
-            color:COLORS.blue,
-            marginLeft: 16, 
-            // tinycolor: "#000",
-          }}
-        />
-        </View>
       </View>
       </ScrollView>
     </SafeAreaView>

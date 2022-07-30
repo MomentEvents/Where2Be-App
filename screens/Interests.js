@@ -38,7 +38,7 @@ function outDict(dict) {
  }
 
  async function exportTags(outList) {
-  await fetch('http://localhost:3001/delete_user_interest', {
+  await fetch('http://mighty-chamber-83878.herokuapp.com/delete_user_interest', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -48,7 +48,7 @@ function outDict(dict) {
             id: 'user_1'
         })
     });
-    await fetch('http://localhost:3001/export_user_interest', {
+    await fetch('http://mighty-chamber-83878.herokuapp.com/export_user_interest', {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -77,7 +77,7 @@ const Interests = ({ navigation, route }) => {
     // Ensure fetch data runs first before everything else
 
     const fetchData = async () => {
-        const resp = await fetch('http://localhost:3001/interests', {
+        const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/interests', {
             method: 'GET',
         });
 
@@ -86,7 +86,7 @@ const Interests = ({ navigation, route }) => {
         
         
 
-        const resp2 = await fetch('http://localhost:3001/import_interest_list', {
+        const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/import_interest_list', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -113,7 +113,7 @@ const Interests = ({ navigation, route }) => {
         
     
     
-    // const resp2 = await fetch('http://localhost:3001/import_interest_list', {
+    // const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com//import_interest_list', {
     //     method: 'POST',
     // });
 
