@@ -6,7 +6,7 @@ var neo4j = require('neo4j-driver');
 const { Result } = require('neo4j-driver-core');
 
 var app = express();
-var PORT = 3001;
+var PORT = process.env.PORT || 3000;
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -150,6 +150,7 @@ app.post('/feat', jsonParser, (req, res) => {
           //test: event[1].properties.Name
           id: event[0].low,
           title: event[1].properties.Name,
+          userID: event[1].properties.UserID,
           //type: record._fields[1].properties.type,
           startingTime: event[1].properties.startingTime,
           image: event[1].properties.Image,
@@ -292,6 +293,44 @@ app.post('/import_interest_list', jsonParser, (req, res) => {
     console.log(user_int_array);
     res.setHeader('Content-Type', 'text/html');
     res.send(JSON.stringify(user_int_array));
+    res.end();
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
+
+app.post('/organization_events', jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var inp_type=req.body.id;
+  console.log("Org Events POST req on", inp_type); 
+  session
+  .run(`match (org:Organization)-[:Created]->(n:Event)
+        where org.Name contains $id
+        return ID(n),n
+        order by n.startingTime
+        limit 50`,
+  {id: inp_type})
+  .then(function(result){
+
+    var EventArr = [];
+    result.records.forEach(function(record){
+      console.log(record);
+      EventArr.push({
+        id: record._fields[0].low,
+        title: record._fields[1].properties.Name,
+        //type: record._fields[1].properties.type,
+        startingTime: record._fields[1].properties.startingTime,
+        visibility: record._fields[1].properties.visibility,
+        location: record._fields[1].properties.Location,
+        image: record._fields[1].properties.Image,
+        description: record._fields[1].properties.Description,
+        // description: record._fields[1].properties.description,
+      });
+    });
+    console.log(EventArr);
+    // res.setHeader('Content-Type', 'text/html');
+    res.send(JSON.stringify(EventArr));
     res.end();
   })
   .catch(function(err){
