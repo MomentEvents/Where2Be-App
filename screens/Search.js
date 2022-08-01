@@ -59,7 +59,9 @@ import Fuse from 'fuse.js'
             navigation.goBack();
           }}
           >
-          <McIcon source={icons.back_arrow} size={22}/>
+          <McIcon source={icons.back_arrow} size={22} style={{
+            margin: 4
+          }}/>
           </TouchableOpacity>
           <TextInput
             placeholder='Search'
@@ -75,12 +77,9 @@ import Fuse from 'fuse.js'
               marginLeft: 5
             }}
           ></TextInput>
-          <McIcon source={icons.filter}/>
         </SearchView>
       </SectionSearch> 
-      
       <ScrollView>
-        
         {
             sResults.map((res)=>
               <TouchableOpacity

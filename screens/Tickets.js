@@ -30,7 +30,9 @@ const Tickets = ({ params }) => {
         onPress={()=>{
           navigation.navigate('Interests')
         }}>
-          <McIcon source ={icons.tab_4} size={28}/>
+          <McIcon source ={icons.tab_4} size={28} style={{
+            tintColor: COLORS.gray
+          }}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
       </View>

@@ -312,7 +312,7 @@ app.post('/organization_events', jsonParser, (req, res) => {
   console.log("Org Events POST req on", inp_type); 
   session
   .run(`match (org:Organization)-[:Created]->(n:Event)
-        where org.Name contains $id
+        where org.ID contains $id
         return ID(n),n
         order by n.startingTime
         limit 50`,

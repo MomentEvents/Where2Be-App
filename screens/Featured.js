@@ -10,7 +10,6 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import ipAddress from '../environ';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -119,8 +118,8 @@ const Featured = ({ navigation }) => {
                   //backgroundColor: COLORS.black
                 }}>
                   {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                  <McText h3 onPress={()=>{
-          console.log("Chirag's an idiot")
+                  <McText h5 onPress={()=>{
+          console.log("hello")
         }}>{item.title}</McText>
                 </View>
                 {/* </BlurView> */}
@@ -179,14 +178,18 @@ const Featured = ({ navigation }) => {
         onPress={()=>{
           navigation.navigate('Search')
         }}>
-          <McIcon source ={icons.search} size={28}/>
+          <McIcon source ={icons.search} size={28} style={{
+            tintColor:COLORS.gray
+          }}/>
         </TouchableWithoutFeedback>
         </View>
         <TouchableWithoutFeedback
         onPress={()=>{
           navigation.navigate('Interests')
         }}>
-          <McIcon source ={icons.tab_4} size={28}/>
+          <McIcon source={icons.tab_4} size={28} style={{
+            tintColor:COLORS.gray
+          }}/>
         </TouchableWithoutFeedback>
       </SectionHeader>
       </View>

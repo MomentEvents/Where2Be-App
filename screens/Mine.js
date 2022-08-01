@@ -29,7 +29,7 @@ import Fuse from 'fuse.js'
       <SectionButton>
       <TouchableWithoutFeedback onPress={()=>{
         console.log("Chirag's an idiot")
-        navigation.navigate('Featured')
+        navigation.navigate('Interests')
       }}>
         <McText h4> Log In</McText>
       </TouchableWithoutFeedback>
@@ -82,7 +82,7 @@ const TxtBox = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#101010',
     justifyContent: 'center',
     alignItems: 'center',
   },

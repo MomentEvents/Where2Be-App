@@ -5,6 +5,7 @@ import Tickets from './Tickets';
 import Mine from './Mine';
 import Search from './Search'
 import Interests from './Interests';
+import OrganizationDetail from './OrganizationDetail';
 
 export {
   Featured,
@@ -13,5 +14,6 @@ export {
   Tickets,
   Mine,
   Search,
-  Interests
+  Interests,
+  OrganizationDetail,
 }

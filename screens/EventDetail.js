@@ -5,7 +5,7 @@
 
  */
 import React, {useState, useEffect, useCallback} from 'react';
-import { Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
+import { Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
 import styled from 'styled-components';
@@ -16,6 +16,10 @@ import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Dimensions } from "react-native";
+
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height; //full height
 
 
 const EventDetail = ({ navigation, route }) => {
@@ -84,7 +88,6 @@ const EventDetail = ({ navigation, route }) => {
               </TouchableOpacity>
               <View
               style={{
-                width: 96,
                 height: 40,
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 justifyContent: 'space-between',
@@ -95,21 +98,10 @@ const EventDetail = ({ navigation, route }) => {
               >
                 <TouchableOpacity>
                   <McIcon 
-                    source={icons.like} 
-                    size={24}
-                    style={{
-                      marginLeft: 16, 
-                      tinycolor: COLORS.white,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <McIcon 
                     source={icons.share} 
                     size={24} 
                     style={{
-                      marginRight: 16, 
-                      tinycolor: COLORS.white,
+                      margin: 8,
                     }}
                   />
                 </TouchableOpacity>
@@ -134,7 +126,7 @@ const EventDetail = ({ navigation, route }) => {
                     <McText body4 style={{opacity: 0.5, letterSpacing: 2 }}>
                       {selectedEvent?.type}
                       </McText>
-                    <McText h1>{selectedEvent?.title}</McText>
+                    <McText h1 style={{width: width * 0.7}}>{selectedEvent?.title}</McText>
                     <McText body4 style={{opacity: 0.5, letterSpacing: 1.5 }}>
                       STARTING {moment(selectedEvent?.startingTime).format('hh:mm A')}
                     </McText>
@@ -199,19 +191,23 @@ const EventDetail = ({ navigation, route }) => {
           </ScrollView>
         </ButtonSection>
         <LocationSection>
-        <McIcon source ={icons.location} size={40} style={{
-              margin:-6,
+        <McIcon source ={icons.location} size={20} style={{
+              margin:4,
+              tintColor:COLORS.gray,
             }}/>
-          <McText h4 style={{opacity: 0.8, letterSpacing: 1 }}>
-            AT </McText>
             <TouchableWithoutFeedback onPress={()=>{
-                console.log("Chirag's an idiot")
+                var uri = selectedEvent?.location
+                Linking
+                .openURL(uri)
+                .catch(err => console.error('Error', err));
+                console.log(uri + ' Chirag is idiot')
                 }}>
               <McText h4 style={{
                 opacity: 0.8,
                 letterSpacing: 1,
                 textTransform: 'uppercase',
                 marginTop: -1, 
+                width: width * 0.83,
                 }}
                 numberOfLines={1}>
                   {selectedEvent?.location}
@@ -222,11 +218,14 @@ const EventDetail = ({ navigation, route }) => {
 
             <McIcon source ={icons.tab_4} size={20} style={{
               margin:4,
+              tintColor: COLORS.gray1
             }}/>
             <McText h4 numberOfLines={1} style={{
               opacity: 0.8,
               letterSpacing: 1,
               textTransform: 'uppercase' 
+              }} onPress={()=>{
+                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
               }}>{selectedEvent?.title}
             </McText>
 
@@ -257,9 +256,9 @@ const EventDetail = ({ navigation, route }) => {
         <VisibilitySec>
         <McIcon source ={icons.tab_4} size={16} style={{
               margin:8,
+              tintColor: COLORS.gray1
             }}/>
         <View>
-          
           <McText body5 numberOfLines={1} style={{
               opacity: 0.8,
               letterSpacing: 1,
@@ -271,6 +270,61 @@ const EventDetail = ({ navigation, route }) => {
         </VisibilitySec>
         
       </ScrollView>
+        <View style={styles.otherContainer}>
+          <UserOptionsSection>
+              <TouchableOpacity style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      backgroundColor: 'transparent',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: COLORS.gray,
+                      alignItems: 'center'
+                      }}
+                      onPress={()=>{
+                console.log("Chirag's an idiot")
+              }}>
+                <McIcon source={icons.like} size={32} style={{
+              tintColor:COLORS.gray,
+            }}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      marginHorizontal: 30,
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: COLORS.gray,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("Chirag is an idiot")
+              }}>
+                <McIcon source={icons.check} size={48} style={{
+              tintColor:COLORS.gray,
+              marginHorizontal: 44
+            }}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      borderWidth: 1,
+                      borderColor: COLORS.gray,
+                      backgroundColor: 'transparent',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("Chirag may be an idiot")
+              }}>
+                <McIcon source={icons.shoutout} size={32} style={{
+              tintColor:COLORS.gray,
+            }}/>
+            </TouchableOpacity>
+          </UserOptionsSection>
+        </View>
       </LinearGradient>
     </View>
   );
@@ -288,16 +342,17 @@ const SectionImageFooter = styled.View`
   flex: 1;
   justify-content: flex-end;
   position: relative;
+  width: ${width};
   
 `;
 // position: relative;
 //   z-index: -1;
 
 const FooterContentView = styled.View`
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-margin: 0px 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 30px;
 `;
 
 const ButtonSection = styled.View`
@@ -306,12 +361,21 @@ const ButtonSection = styled.View`
 `;
 
 const DescriptionSection = styled.View`
-margin-left: 10px;
-margin-right: 10px;
-background-color: ${COLORS.input};
-borderRadius: 10;
-opacity: 0.8;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: ${COLORS.input};
+  borderRadius: 10;
+  opacity: 0.8;
 `;
+
+const UserOptionsSection = styled.View`
+  flex: 1;
+  margin-horizontal: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  `;
+
 
 
 const LocationSection = styled.View`
@@ -353,6 +417,19 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
     //alignItems: 'center',
   },
+  otherContainer: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 1,
+    width: width,
+    height: 100,
+    paddingBottom: 24,
+    padding: 12,
+    justifyContent: 'center',
+    backgroundColor: COLORS.input,
+    opacity: 0.97,
+    alignSelf: 'stretch'
+  }
 });
 
 export default EventDetail;

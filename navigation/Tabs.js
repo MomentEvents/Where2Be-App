@@ -49,6 +49,7 @@ const Tabs = ({ params }) => {
     tabBarItemStyle:{
       display:'flex',
       paddingTop: 8,
+
     }
   };
 
@@ -76,14 +77,26 @@ const Tabs = ({ params }) => {
       //   },
     >
       <Tab.Screen
+        name="Tickets"
+        component={Tickets}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={icons.home} />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <TabLabel focused={focused} text="Feed" />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Featured"
         component={Featured}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_1} />
+            <TabIcon focused={focused} icon={icons.tab_2} />
           ),
           tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Featured" />
+            <TabLabel focused={focused} text="Events" />
           ),
         }}
       />
@@ -92,25 +105,14 @@ const Tabs = ({ params }) => {
         component={Schedule}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_2} />
+            <TabIcon focused={focused} icon={icons.event} />
           ),
           tabBarLabel: ({ focused }) => (
             <TabLabel focused={focused} text="Schedule" />
           ),
         }}
       />
-      <Tab.Screen
-        name="Tickets"
-        component={Tickets}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.filter} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Feed" />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Mine"
         component={Mine}

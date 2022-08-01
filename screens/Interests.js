@@ -10,7 +10,8 @@ import {
     TextInput, 
     FlatList, 
     ImageBackground, 
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    DevSettings
  } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
@@ -203,20 +204,29 @@ const Interests = ({ navigation, route }) => {
       </SectionInterests>
       </ScrollView>
       <SectionDone>
-          <TouchableWithoutFeedback onPress={()=>{
-                  navigation.navigate('Featured')
+      <TouchableOpacity
+       style={{
+        width: 70,
+        height: 70,
+        borderRadius: 80,
+        borderWidth: 1,
+        borderColor: COLORS.gray,
+        backgroundColor: COLORS.input,
+        justifyContent: 'center',
+        alignItems: 'center'
+        }}
+       onPress={()=>{
+                  navigation.navigate('Featured');
                   exportTags(outDict(outTags));
-                  }}
-                  style={{
-                      borderRadius: 8,
-                      marginTop:12,
-                      marginRight: 8,
-                      backgroundColor: COLORS.gray,
+                  console.log("Chirag's an idiot")
                   }}
               >
-              <McText h2>DONE</McText>
-          </TouchableWithoutFeedback>
+              <McIcon source={icons.check} size={44} style={{
+                tintColor: COLORS.white,
+              }}/>
+          </TouchableOpacity>
       </SectionDone>
+      
       </SafeAreaView>
       </LinearGradient>
     </View>
@@ -226,7 +236,7 @@ const Interests = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
   }
@@ -250,10 +260,12 @@ const SecBackButton = styled.View`
 `;
 
 const SectionDone = styled.View`
-  padding: 16px ${SIZES.padding};
-  backgroundColor:${COLORS.gray};
-  justify-content: center;
-  alignItems: center;
+  flex: 1;
+  position: absolute;
+  bottom: 0;
+  right: 1;
+  backgroundColor: transparent;
+  margin: 32px;
 `;
 
 
