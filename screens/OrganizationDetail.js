@@ -128,7 +128,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                             >
                                 <FooterContentView>
                                     <View>
-                                        <McText h1>{selectedEvent?.title}</McText>
+                                        <McText h1>{selectedEvent?.Name}</McText>
                                     </View>
                                     <View style={{
                                         paddingBottom:15
