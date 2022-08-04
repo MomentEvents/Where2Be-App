@@ -8,7 +8,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import { Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { McIcon, McText } from '../components';
 import { LinearGradient } from 'expo-linear-gradient'
 import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
@@ -43,7 +43,7 @@ const EventDetail = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
        <LinearGradient
-      colors = {['#252525', COLORS.black,COLORS.black,'#003060']}
+      colors = {[ COLORS.black,COLORS.trueBlack,'#003060']}
       start = {{x: 0, y: 0}}
       end = {{ x: 1, y: 1}}
       style = {{padding:2, borderRadius: 20 }}>
@@ -268,6 +268,10 @@ const EventDetail = ({ navigation, route }) => {
             </McText>
           </View>
         </VisibilitySec>
+        <SectionFooter><McText h1 style={{
+        //temp fix for padding
+        color:'transparent'
+      }}>hello</McText></SectionFooter>
         
       </ScrollView>
         <View style={styles.otherContainer}>
@@ -376,7 +380,12 @@ const UserOptionsSection = styled.View`
   justify-content: center;
   `;
 
-
+//temp fix for padding
+const SectionFooter = styled.View`
+  background-color: transparent;
+  padding: 100px;
+  justify-content: space-between;
+`;
 
 const LocationSection = styled.View`
   flex-direction: row;

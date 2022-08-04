@@ -3,7 +3,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import { Text, View, StyleSheet, ScrollView, ImageBackground, Platform, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { McIcon, McText } from '../components';
 import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { Dimensions } from "react-native";
 import moment from 'moment';

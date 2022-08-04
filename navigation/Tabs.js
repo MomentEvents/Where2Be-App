@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Schedule, Tickets, Mine } from '../screens';
+import { Featured, Schedule, SocialFeed, Mine } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 
@@ -77,8 +77,8 @@ const Tabs = ({ params }) => {
       //   },
     >
       <Tab.Screen
-        name="Tickets"
-        component={Tickets}
+        name="Feed"
+        component={SocialFeed}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.home} />

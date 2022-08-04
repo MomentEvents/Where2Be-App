@@ -165,8 +165,8 @@ const Interests = ({ navigation, route }) => {
                     showsHorizontalScrollIndicator={false}
                     renderItem={({item, index})=>(
                         <InterestSelector text={item} wide={item.length} list={inTags} out={outTags}/>
-                        )}
-                        keyExtractor={(item) => `basicListEntry-${item}`}
+                      )}
+                    keyExtractor={(item) => `basicListEntry-${item}`}
                         />
                 </ItemList>
           </View>

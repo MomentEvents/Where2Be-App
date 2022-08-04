@@ -65,13 +65,12 @@ const Featured = ({ navigation }) => {
 
   const _renderItem = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback
-        onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
-        }}
-      >
+      <TouchableWithoutFeedback  onPress={()=>{
+        navigation.navigate('EventDetail', {selectedEvent: item});
+        console.log('haha')
+      }}>
         <View style={{
-          marginLeft: index === 0 ? 30: 20,
+          marginLeft: index === 0 ? 20: 15,
         }}>
           <LinearGradient
                 colors = {['#902070', '#DD77EB', '#a2d2ff']}
@@ -85,16 +84,15 @@ const Featured = ({ navigation }) => {
           borderColor={COLORS.gray}
           borderWidth= '0.2'
           style={{
-            width: SIZES.width/3 + 10,
-            height: SIZES.width/2 + 10,
+            width: SIZES.width/2.7 + 10,
+            height: SIZES.width/2.3 + 10,
             justifyContent: 'space-between'
-
           }}
           >
           <View style={{
               alignItems: 'flex-end',
-              marginHorizontal: 15,
-              marginVertical: 15
+              marginHorizontal: 8,
+              marginVertical: 8
             }}>
             <DateBox>
               <McText body5 color={COLORS.black} 
@@ -109,25 +107,82 @@ const Featured = ({ navigation }) => {
             </DateBox>
           </View>
           
-            <GrayBox>
-            {/* <BlurView> */}
-                <View style={{
-                  marginLeft: 20,
-                  marginBottom: 10,
-                  marginTop: 5,
-                  //backgroundColor: COLORS.black
-                }}>
-                  {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                  <McText h5 onPress={()=>{
-          console.log("hello")
-        }}>{item.title}</McText>
-                </View>
-                {/* </BlurView> */}
-            </GrayBox>
+            {/* <GrayBox> */}
+              <View style={{
+                flexDirection: 'row',
+                marginVertical: 8,
+                // alignItems: 'center',
+                // justifyContent: 'center'
+              }}>
+              <TouchableOpacity style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("like")
+              }}>
+                <McIcon source={icons.like} size={18} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("join")
+              }}>
+                <McIcon source={icons.check} size={20} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("shoutout")
+              }}>
+                <McIcon source={icons.shoutout} size={18} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableOpacity>
+              </View>
+            {/* </GrayBox> */}
             
           </ImageBackground>
           </LinearGradient>
           </LinearGradient>
+          <TouchableWithoutFeedback>
+          <View style={{
+                  marginLeft: 10,
+                  marginTop: 5,
+                  width: SIZES.width/3 +10,
+                  //backgroundColor: COLORS.black
+                }}
+                >
+                  <McText h5 numberOfLines={1}>{item.title}</McText>
+        <McText>{moment(item.startingTime).format('hh:mm A').toUpperCase()}</McText>
+                </View>
+                </TouchableWithoutFeedback>
         </View>
 
       </TouchableWithoutFeedback>
@@ -260,8 +315,10 @@ const DateBox = styled.View`
 //background-color: rgba(100,100,100,0.65);
 const GrayBox = styled.View`
   background-color: rgba(100,100,100,0.8);
-  border-radius: ${SIZES.radius};
-`;
+  borderBottomRightRadius: 20px;
+  borderBottomLeftRadius: 20px;
+`
+
 const SectionHeader = styled.View`
   background-color: transparent;
   padding: 16px ${SIZES.padding};

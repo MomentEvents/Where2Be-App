@@ -11,7 +11,7 @@ import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-const Tickets = ({ params }) => {
+const SocialFeed = ({ params }) => {
   
   const imageUri = "https://img.buzzfeed.com/buzzfeed-static/static/2022-04/12/19/asset/b96d474ef097/sub-buzz-418-1649792177-24.png" //+ "=s"+ (SIZES.width).toString()+ "-c"
   return (
@@ -80,7 +80,7 @@ const Tickets = ({ params }) => {
           source={icons.like} 
           size={24}  
           style={{
-            color:COLORS.blue,
+            tintColor: COLORS.white,
             marginLeft: 16, 
             // tinycolor: "#000",
           }}
@@ -133,7 +133,7 @@ const Tickets = ({ params }) => {
           source={icons.like} 
           size={24}  
           style={{
-            color:COLORS.blue,
+            tintColor: COLORS.white,
             marginLeft: 16, 
             // tinycolor: "#000",
           }}
@@ -220,4 +220,4 @@ const SectionHeader = styled.View`
   flex-direction: row;
 `;
 
-export default Tickets;
+export default SocialFeed;

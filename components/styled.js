@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 
 const McText = styled.Text`
