@@ -1,6 +1,6 @@
 //import React from 'react';
 import React, { useState, useEffect } from 'react';
-import { Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -114,7 +114,7 @@ const Featured = ({ navigation }) => {
                 // alignItems: 'center',
                 // justifyContent: 'center'
               }}>
-              <TouchableOpacity style={{
+              <TouchableHighlight style={{
                       width: 32,
                       height: 32,
                       borderRadius: 80,
@@ -130,8 +130,8 @@ const Featured = ({ navigation }) => {
                 <McIcon source={icons.like} size={18} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
+            </TouchableHighlight>
+            <TouchableHighlight style={{
                       width: 32,
                       height: 32,
                       borderRadius: 80,
@@ -147,8 +147,8 @@ const Featured = ({ navigation }) => {
                 <McIcon source={icons.check} size={20} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
+            </TouchableHighlight>
+            <TouchableHighlight style={{
                       width: 32,
                       height: 32,
                       borderRadius: 80,
@@ -164,7 +164,7 @@ const Featured = ({ navigation }) => {
                 <McIcon source={icons.shoutout} size={18} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableOpacity>
+            </TouchableHighlight>
               </View>
             {/* </GrayBox> */}
             

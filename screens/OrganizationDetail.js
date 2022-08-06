@@ -120,19 +120,25 @@ const OrganizationDetail = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={styles.EventsHeader}>
-                <TouchableWithoutFeedback >
+                <TouchableWithoutFeedback onPress={() =>{
+                            console.log('Upcoming')
+                        }}>
                     <McText h3 style={{
                         marginLeft: 10,
                         padding: 10
                         }}>Upcoming</McText>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() =>{
+                            console.log('Past')
+                        }}>
                     <McText h3 style={{
                     padding: 10,
                     opacity: 0.7
                 }}>Past</McText>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() =>{
+                            console.log('Gallery')
+                        }}>
                     <McText h3 style={{
                     padding: 10,
                     opacity: 0.7

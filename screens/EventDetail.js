@@ -126,7 +126,7 @@ const EventDetail = ({ navigation, route }) => {
                     <McText body4 style={{opacity: 0.5, letterSpacing: 2 }}>
                       {selectedEvent?.type}
                       </McText>
-                    <McText h1 style={{width: width * 0.7}}>{selectedEvent?.title}</McText>
+                    <McText h1 numberOfLines={2} style={{width: width * 0.7}}>{selectedEvent?.title}</McText>
                     <McText body4 style={{opacity: 0.5, letterSpacing: 1.5 }}>
                       STARTING {moment(selectedEvent?.startingTime).format('hh:mm A')}
                     </McText>
@@ -250,7 +250,8 @@ const EventDetail = ({ navigation, route }) => {
                 }}/>
             <McText h4 numberOfLines={1} style={{
               letterSpacing: 1,
-              textTransform: 'uppercase' 
+              textTransform: 'uppercase',
+              width: width/1.25
               }}>{selectedEvent?.title}
             </McText>
             </TouchableWithoutFeedback>
