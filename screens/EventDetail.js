@@ -5,7 +5,7 @@
 
  */
 import React, {useState, useEffect, useCallback} from 'react';
-import { Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
+import { Image, Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
 import styled from 'styled-components/native';
@@ -203,7 +203,6 @@ const EventDetail = ({ navigation, route }) => {
                 console.log(uri + ' Chirag is idiot')
                 }}>
               <McText h4 style={{
-                opacity: 0.8,
                 letterSpacing: 1,
                 textTransform: 'uppercase',
                 marginTop: -1, 
@@ -214,23 +213,6 @@ const EventDetail = ({ navigation, route }) => {
               </McText>
               </TouchableWithoutFeedback>
           </LocationSection>
-          <OwnerSection>
-
-            <McIcon source ={icons.tab_4} size={20} style={{
-              margin:4,
-              tintColor: COLORS.gray1
-            }}/>
-            <McText h4 numberOfLines={1} style={{
-              opacity: 0.8,
-              letterSpacing: 1,
-              textTransform: 'uppercase' 
-              }} onPress={()=>{
-                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
-              }}>{selectedEvent?.title}
-            </McText>
-
-        </OwnerSection>
-    
         <DescriptionSection>
           <View style={{
                   marginLeft: 12,
@@ -253,6 +235,27 @@ const EventDetail = ({ navigation, route }) => {
               }
           </View>
         </DescriptionSection>
+        <OwnerSection>
+          <TouchableWithoutFeedback style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }} onPress={()=>{
+                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
+              }}>
+          <Image
+                style={styles.orgProfilePic}
+                source={{
+                    uri:selectedEvent?.image
+                }}/>
+            <McText h4 numberOfLines={1} style={{
+              letterSpacing: 1,
+              textTransform: 'uppercase' 
+              }}>{selectedEvent?.title}
+            </McText>
+            </TouchableWithoutFeedback>
+        </OwnerSection>
+    
         <VisibilitySec>
         <McIcon source ={icons.tab_4} size={16} style={{
               margin:8,
@@ -287,7 +290,7 @@ const EventDetail = ({ navigation, route }) => {
                       alignItems: 'center'
                       }}
                       onPress={()=>{
-                console.log("Chirag's an idiot")
+                console.log("Like")
               }}>
                 <McIcon source={icons.like} size={32} style={{
               tintColor:COLORS.gray,
@@ -304,7 +307,7 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("Chirag is an idiot")
+                console.log("Interested")
               }}>
                 <McIcon source={icons.check} size={48} style={{
               tintColor:COLORS.gray,
@@ -321,7 +324,7 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("Chirag may be an idiot")
+                console.log("ShoutOut")
               }}>
                 <McIcon source={icons.shoutout} size={32} style={{
               tintColor:COLORS.gray,
@@ -398,7 +401,7 @@ const LocationSection = styled.View`
 const OwnerSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginBottom: 8px;
+  marginTop: 12px;
   borderRadius: 10;
   align-items: center;
 `;
@@ -438,7 +441,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.input,
     opacity: 0.97,
     alignSelf: 'stretch'
-  }
+  },
+  orgProfilePic: {
+    height: 35,
+    width: 35,
+    borderRadius: 30,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: COLORS.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default EventDetail;

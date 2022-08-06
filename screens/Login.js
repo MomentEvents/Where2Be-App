@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Platform, Text, DateBox, View, StyleSheet, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback, Image } from 'react-native';
+import { Text, DateBox, View, StyleSheet, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback, Image } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -9,46 +9,108 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import events from '../constants/events.json'
 import { McText, McIcon, McAvatar} from '../components'
 import Fuse from 'fuse.js'
-import { Dimensions } from "react-native";
 
-var width = Dimensions.get('window').width; //full width
-var height = Dimensions.get('window').height; //full height
+async function userlogin(username, pass) {
+  await fetch('http://localhost:3000/user_login', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: username,
+      password: pass
+    })
+  });
+  return userdata = await resp.json();
+  //return userdata
+}
 
+async function createuser(username, pass, name) {
+  await fetch('http://localhost:3000/create_user', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: username,
+      password: pass,
+      name: name
+    })
+  });
+  
+  return userdata = await resp.json();
+  //return userdata
+}
 
  //datas = events
- const Login = ({ navigation, route }) => {
+  const Login = ({ navigation, route }) => {
+  const [name, setname] = useState('');
+  const [username, setusernm] = useState('');
+  const [password, setpass] = useState('');
+
    return (
-    <View style={styles.container}>
-     <SafeAreaView style={{height:height, width:width}}>
-      <SectionLogin>
-        <View style={{
-          flex: 1,
-          height: height/10,
-          backgroundColor: COLORS.input,
-          borderRadius: 20,
-          justifyContent: 'center',
-        }}>
+     <SafeAreaView style={styles.container}>
+      <SectionSearch>
           <TextInput
-            placeholder='Username'
+            placeholder='Name'
             placeholderTextColor={COLORS.gray1}
-            //onChange={handleOnSearch}
+            onChangeText={newText => setname(newText)}
+            defaultValue={name}
             style={{
               ...FONTS.h4,
               color: COLORS.white,
               marginLeft: 12
             }}
-          />
-        </View>
+          ></TextInput>
+      </SectionSearch>
+      <SectionSearch>
+          <TextInput
+            placeholder='Username'
+            placeholderTextColor={COLORS.gray1}
+            onChangeText={newText => setusernm(newText)}
+            defaultValue={username}
+            style={{
+              ...FONTS.h4,
+              color: COLORS.white,
+              marginLeft: 12
+            }}
+          ></TextInput>
+      </SectionSearch>
+      <SectionSearch>
+          <TextInput
+            placeholder='Password'
+            placeholderTextColor={COLORS.gray1}
+            onChangeText={newText => setpass(newText)}
+            defaultValue={password}
+            secureTextEntry = {true}
+            style={{
+              ...FONTS.h4,
+              color: COLORS.white,
+              marginLeft: 12
+            }}
+          ></TextInput>
+      </SectionSearch>
+      <SectionButton>
       <TouchableWithoutFeedback onPress={()=>{
-        console.log("Chirag's an idiot")
-        navigation.navigate('Interests')
+        console.log("logging in")
+        console.log(userlogin(username, password))
+        //navigation.navigate('Interests')
       }}>
         <McText h4> Log In</McText>
       </TouchableWithoutFeedback>
-      </SectionLogin>
-      
+      </SectionButton>
+      <SectionButton>
+      <TouchableWithoutFeedback onPress={()=>{
+        console.log("creating account")
+        console.log(createuser(username, password, name))
+        //navigation.navigate('Interests')
+      }}>
+        <McText h4> Create Account</McText>
+      </TouchableWithoutFeedback>
+      </SectionButton>
      </SafeAreaView>
-     </View>
    );
  };
  const SectionHeader = styled.View`
@@ -57,17 +119,18 @@ var height = Dimensions.get('window').height; //full height
  margin-top: ${Platform.OS === 'ios'?'40px':'20px'};
  width: 100%
 `;
-const SectionLogin = styled.View`
-  flex: 1
-  margin: 8px;
+const SectionSearch = styled.View`
+  margin: 4px;
   height: 50px;
+  width: 65%;
   background-color: ${COLORS.input};
   border-radius: 15px;
   justify-content: center;
 `;
 
 const SectionButton = styled.View`
-  margin-bottom: 80px;
+  ;
+  margin-top: 10px;
   height: 50px;
   width: 65%;
   background-color: ${COLORS.input};
@@ -95,8 +158,8 @@ const TxtBox = styled.View`
 
 const styles = StyleSheet.create({
   container: {
-    width: width,
-    backgroundColor: COLORS.black,
+    flex: 1,
+    backgroundColor: '#101010',
     justifyContent: 'center',
     alignItems: 'center',
   },

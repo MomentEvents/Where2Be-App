@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+var _ = require('lodash')
 var bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver');
 const { Result } = require('neo4j-driver-core');
@@ -380,6 +381,74 @@ app.post('/export_user_interest', jsonParser, (req, res) => {
   });
 })
 
+app.post('/create_user', jsonParser, (req, res) => {
+  var name0=req.body.name;
+  var userId=req.body.username;
+  var pass=req.body.password;
+  console.log("Create user", userId); 
+  session.run('MATCH (u:User {ID: $userId}) RETURN u',{
+    userId : userId
+  })
+  .then(function(result){
+    if (!_.isEmpty(result.records)) {
+      throw {
+        name0 : 'username already in use',
+        status: 400
+      }
+    }
+    else{
+      session.run('Create (u:User{ID: $userId, name:$name0, password:$pass}) Return u',{
+        userId:userId,
+        name0:name0,
+        pass:pass
+      })
+      .then(function(result){
+        var user = {
+            name : result.records[0].get('u').properties.name,
+            phone: result.records[0].get('u').properties.phone,
+            username : result.records[0].get('u').properties.ID
+        };
+        res.send(JSON.stringify(user));
+        res.end();
+      })
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
+
+app.post('/user_login', jsonParser, (req, res) =>{
+  var userId=req.body.username;
+  var pass=req.body.password;
+  console.log("User login", userId); 
+  session.run('MATCH (u:User {ID: $userId, password:$pass}) RETURN u',{
+    userId : userId,
+    pass : pass
+  })
+  .then(function(result){
+    //console.log(result.records[0].get('u').properties.name)
+    if (_.isEmpty(result.records)) {
+      throw {
+        name0 : 'wrong username or password',
+        status: 400
+      }
+    }
+    else{
+      //console.log(result.records)
+      var user = {
+        name : result.records[0].get('u').properties.name,
+        phone: result.records[0].get('u').properties.phone,
+        username : result.records[0].get('u').properties.ID
+      };
+      res.send(JSON.stringify(user));
+      res.end();
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+})
 
 app.listen(PORT);
 console.log("Server listening on PORT", PORT); 

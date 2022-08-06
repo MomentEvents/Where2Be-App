@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 // import { Text, View, StyleSheet } from 'react-native';
-import { Text, View, StyleSheet, ScrollView, ImageBackground, Platform, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image, ImageBackground, Platform, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { McIcon, McText } from '../components';
 import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
 import styled from 'styled-components/native';
@@ -68,24 +68,88 @@ const OrganizationDetail = ({ navigation, route }) => {
    
   return (
     <View style={styles.container}>
+        <LinearGradient
+      colors = {[ COLORS.black,COLORS.black,'#1060b6']}
+      start = {{x: 0, y: 0}}
+      end = {{ x: 1, y: 1}}
+      style = {{padding:2, borderRadius: 20 }}>
         <SafeAreaView>
-            <LinearGradient
-                colors = {['#252525', COLORS.black,COLORS.black,'#003060']}
-                start = {{x: 0, y: 0}}
-                end = {{ x: 1, y: 1}}
-                style = {{padding:2, borderRadius: 20 }}>
-                <ScrollView 
+
+            <View style={{
+                flexDirection: 'row',
+                width: width,
+                alignItems: 'center',
+                margin: 30,
+            }}>
+                <Image
+                style={styles.userProfilePic}
+                source={{
+                    uri:selectedEvent?.image
+                }}/>
+                <View style={{
+                    flexDirection: 'column',
+                    marginVertical: 8,
+                    marginLeft: 12,
+                    width: width/1.5,
+                    alignItems: 'flex-start',
+                }}>
+                    <View style={{
+                        alignItems: 'center'
+                    }}>
+                    <McText h2 numberOfLines={3} style={{
+                        paddingBottom: 6,
+                        paddingHorizontal: 8,
+                    }}>{selectedEvent?.title}</McText>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginHorizontal: 12,
+                    }}><McText h4 style={{
+                        letterSpacing: 1.2,
+                    }}>XYZ Followers</McText>
+                        <TouchableOpacity style={styles.button}><McText h4 style={{
+                            letterSpacing: 1.2,
+                        }}
+                        onPress={() =>{
+                            console.log('FOLLOW')
+                        }}
+                        >FOLLOW</McText></TouchableOpacity>
+                    </View>
+                    
+                </View>
+            </View>
+            <View style={styles.EventsHeader}>
+                <TouchableWithoutFeedback >
+                    <McText h3 style={{
+                        marginLeft: 10,
+                        padding: 10
+                        }}>Upcoming</McText>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback>
+                    <McText h3 style={{
+                    padding: 10,
+                    opacity: 0.7
+                }}>Past</McText>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback>
+                    <McText h3 style={{
+                    padding: 10,
+                    opacity: 0.7
+                }}>Gallery</McText>
+                </TouchableWithoutFeedback>
+            </View>
+
+            <ScrollView 
                 contentContainerStyle={{
                     backgroundColor: 'transparent'
                 }}
                 style={{
                     backgroundColor: 'transparent',
-                    //temp fix for padding
-                    paddingBottom: 300,
                 }}
                 >
                     {/*ImageBackground*/}
-                    <ImageBackground
+                    {/* <ImageBackground
                     resizeMode='cover'
                     source={{uri:selectedEvent?.image}}
                     style = {{
@@ -136,7 +200,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                             </LinearGradient>
                         </SectionImageFooter>
                         
-                    </ImageBackground> 
+                    </ImageBackground>  */}
                     
                     {
                         data.map((item)=>
@@ -151,13 +215,11 @@ const OrganizationDetail = ({ navigation, route }) => {
                             marginRight: 20,
                             marginTop: 10,
                             marginBottom: 5,
+                            flexDirection: 'row',
+                            backgroundColor: COLORS.input,
+                            borderRadius: 30,
+                            opacity: 0.97,
                             }}>
-                            <LinearGradient
-                                    colors = {['#902070', '#DD77EB', '#a2d2ff']}
-                                    style = {{padding:2, borderRadius: 20 }}>
-                                <LinearGradient
-                                    colors = {['#000000','#000000']}
-                                    style = {{padding:2.5, borderRadius: 20,  flexDirection: 'row'}}>
 
                                 <ImageBackground source={{uri: item.image}}
                             resizeMode='cover'
@@ -165,10 +227,10 @@ const OrganizationDetail = ({ navigation, route }) => {
                             borderColor={COLORS.gray}
                             //borderWidth= '0.2'
                             style={{
-                                width: SIZES.width/2 - 10,
-                                height: SIZES.width/2 + 10,
-                                justifyContent: 'space-between'
-                    
+                                width: SIZES.width/4 - 10,
+                                height: SIZES.width/4 + 10,
+                                margin: 10,
+                                justifyContent: 'space-between',
                             }}
                             ></ImageBackground>   
                             <View style={{
@@ -176,27 +238,12 @@ const OrganizationDetail = ({ navigation, route }) => {
                                 //marginHorizontal: 15,
                                 //marginVertical: 15
                                 }}>
-                                {/* <DateBox>
-                                <McText body5 color={COLORS.black} 
-                                style={{opacity: 0.5,
-                                        letterSpacing: 2
-                                        }}>
-                                    {moment(item.startingTime).format('MMM').toUpperCase()}
-                                </McText>
-                                <McText h3 color={COLORS.black}>
-                                    {moment(item.startingTime).format('DD')}
-                                </McText>
-                                </DateBox> */}
-                            
-                            
-                                
-                                {/* <BlurView> */}
                                     <View style={{
-                                    marginLeft: 5,
-                                    width : 140,
+                                    marginHorizontal: 15,
+                                    width : width/1.7,
                                     marginBottom: 10,
-                                    marginTop: 5,
-                                    alignItems : 'center',
+                                    margin: 15,
+                                    alignItems : 'flex-start',
                                     //backgroundColor: COLORS.black
                                     }}>
                                     {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
@@ -208,37 +255,51 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         {moment(item.startingTime).format('MMM DD YYYY').toUpperCase()}
                                     </McText>
                                     <McText h8
-                                        style={{color: COLORS.gray}}>
+                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
                                         {item.location}
                                     </McText>
+                                    <McText h8 
+                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
+                                            666 Attending
+                                        </McText>
+                                        <McText h8 
+                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
+                                            444 Interested
+                                        </McText>
+                                        <McText h8 
+                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
+                                            90 ShoutOuts
+                                        </McText>
                                     </View>
                                     {/* </BlurView> */}
                                 
                                 </View>
-                            
-                            </LinearGradient>
-                            </LinearGradient>
                             </View>
                     
                         </TouchableWithoutFeedback>
     
                         )
                     }
+                    <SectionFooter><McText h1 style={{
+        //temp fix for padding
+        color:'transparent'
+      }}>hello</McText></SectionFooter>
 
                 </ScrollView>
-            </LinearGradient>
+
+                
         </SafeAreaView>
+        </LinearGradient>
     </View>
   );
 };
 
-const SectionImageHeader = styled.View`
+const SectionEventHeader = styled.View`
   flex-direction: row;
-  justify-content: space-between;
-  margin-top: ${Platform.OS === 'ios'?'40px':'20px'};
+  margin-top: 10px;
   margin-left: 30px;
   margin-right: 30px;
-`;
+`
 const SectionImageFooter = styled.View`
   flex: 1;
   justify-content: flex-end;
@@ -250,6 +311,12 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 margin: 0px 30px;
+`;
+
+const SectionFooter = styled.View`
+  background-color: transparent;
+  padding: 180px;
+  justify-content: space-between;
 `;
 
 const DateBox = styled.View`
@@ -275,9 +342,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  userProfilePic: {
+    height: 100,
+    width: 100,
+    borderRadius: 300,
+    padding: 30,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button: {
+    marginHorizontal: 8,
+    padding: 4,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 20,
+    backgroundColor: COLORS.input,
+    alignItems: 'center',
+  },
+  EventsHeader: {
+    width: width,
+    flexDirection: 'row',
+    marginTop: 10,
+    marginRight: 30,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#282828",
+  }
 });
 
 export default OrganizationDetail;
