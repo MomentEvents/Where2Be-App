@@ -82,7 +82,7 @@ const Featured = ({ navigation }) => {
           resizeMode='cover'
           borderRadius= {SIZES.radius}
           borderColor={COLORS.gray}
-          borderWidth= '0.2'
+          // borderWidth= '0.2'
           style={{
             width: SIZES.width/2.7 + 10,
             height: SIZES.width/2.3 + 10,

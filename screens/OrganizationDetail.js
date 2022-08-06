@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Dimensions } from "react-native";
 import moment from 'moment';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -67,10 +68,7 @@ const OrganizationDetail = ({ navigation, route }) => {
    
   return (
     <View style={styles.container}>
-        <View style={{
-            width: width,
-            height: height
-        }}>
+        <SafeAreaView>
             <LinearGradient
                 colors = {['#252525', COLORS.black,COLORS.black,'#003060']}
                 start = {{x: 0, y: 0}}
@@ -229,7 +227,7 @@ const OrganizationDetail = ({ navigation, route }) => {
 
                 </ScrollView>
             </LinearGradient>
-        </View>
+        </SafeAreaView>
     </View>
   );
 };
