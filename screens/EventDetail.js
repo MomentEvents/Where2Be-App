@@ -18,6 +18,10 @@ import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Dimensions } from "react-native";
 
+import {memo} from "react"
+
+
+
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
@@ -29,6 +33,12 @@ const EventDetail = ({ navigation, route }) => {
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
   }
+
+  // console.log(selectedEvent)
+
+  const [join, setJoin] = useState(false)
+  const  [joindedEvent, setJoindedEvent] = useState(null)
+  // console.log(joindedEvent)
   
   const onTextLayout = useCallback(e =>{
       setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
@@ -73,7 +83,8 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
-                  navigation.goBack();
+                  // navigation.goBack();
+                  navigation.navigate("Featured", {joindedEvent:joindedEvent})
                 }}
                 style={{
                   width: 56,
@@ -229,7 +240,7 @@ const EventDetail = ({ navigation, route }) => {
               {
                   lengthMore ? <McText
                   onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 21, marginTop: 10, opacity: 0.6}}>
+                  style={{ lineHeight: 22, marginTop: 10, opacity: 0.6}}>
                     {textShown ? 'Read less...' : 'Read more...'}</McText>
                   :null
               }
@@ -318,10 +329,18 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                        console.log("Join")
-                      }}>
-                <McIcon source={icons.check} size={46} style={{
-              tintColor:COLORS.gray,
+                          join ? setJoin(false) : setJoin(true)
+                          navigation.navigate('Root', {
+                            screen:'Featured',
+                            params:{user:'nishu'}
+                          })
+                          console.log("Join button clicked")
+                          setJoindedEvent(selectedEvent)
+                          // console.log(selectedEvent)
+                        
+              }}>
+                <McIcon source={icons.check} size={32} style={{
+              tintColor:join ? COLORS.white: COLORS.gray,
               marginHorizontal: 44
             }}/>
             </TouchableOpacity>
@@ -471,4 +490,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventDetail;
+export default memo(EventDetail);

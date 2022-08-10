@@ -9,17 +9,43 @@ import { BlurView } from 'expo-blur';
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { useRoute } from '@react-navigation/native';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
-const Featured = ({ navigation }) => {
+const Featured = ({ navigation, route }) => {
+
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
   var type = "Instagram";
   var type2 = "Discord";
+
+  // const route = useRoute()
+  // const name = route.params.name ? route.params.name : null 
+  // console.log(name)
+
+  // const {name} = route.params
+
+//  useEffect(()=> {
+//   console.log("featured.js")
+//   console.log(navigation.joinedEvent  ? "yes data received" : "not received")
+
+//  },[])
+// useEffect(()=>{
+//   console.log(route.params.name)
+// })
+  //handlleling the joinded event data 
+  // useEffect(()=>{
+  //   if(route.params?.selectedEvent) {
+  //     console.log(route.params?.selectedEvent)
+  //     console.log('selectEvnet')
+  //   }else{
+  //     console.log('not true')
+  //   }
+
+  // },[route.params])
 
   const fetchData = async () => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
@@ -56,6 +82,7 @@ const Featured = ({ navigation }) => {
     // ab = data[0].type;
   }
 
+
   change_names();
   // console.log(ab);
   // for (var i = 0; i < numrows; i++) {
@@ -65,10 +92,12 @@ const Featured = ({ navigation }) => {
 
   const _renderItem = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback  onPress={()=>{
-        navigation.navigate('EventDetail', {selectedEvent: item});
-        console.log('haha')
-      }}>
+      <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('EventDetail', {selectedEvent: item});
+          console.log("clicked the event")
+        }}
+      >
         <View style={{
           marginLeft: index === 0 ? 20: 15,
         }}>
@@ -82,7 +111,7 @@ const Featured = ({ navigation }) => {
           resizeMode='cover'
           borderRadius= {SIZES.radius}
           borderColor={COLORS.gray}
-          // borderWidth= '0.2'
+          borderWidth= {0.2}// string not number typeError
           style={{
             width: SIZES.width/2.7 + 10,
             height: SIZES.width/2.3 + 10,
@@ -190,41 +219,42 @@ const Featured = ({ navigation }) => {
     )
   }
 
-  const _renderList = (heading, dataset) => {
-    return (
-      <View>
-        <SectionTitle>
-          <McText h3>
-            {heading}
-          </McText>
-        </SectionTitle>
-        <View>
-          <FlatList
-            horizontal
+  // const _renderList = (heading, dataset) => {
+  //   return (
+  //     <View>
+  //       <SectionTitle>
+  //         <McText h3>
+  //           {heading}
+  //         </McText>
+  //       </SectionTitle>
+  //       <View>
+  //         <FlatList
+  //           horizontal
 
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => 'event_' + item.id}
-            //data={dummyData[dataset]}
-            data={dataset}
-            renderItem={_renderItem}
-          ></FlatList>
-        </View>
-      </View>
-    )
-  }
+  //           showsHorizontalScrollIndicator={false}
+  //           keyExtractor={(item) => 'event_' + item.id}
+  //           //data={dummyData[dataset]}
+  //           data={dataset}
+  //           renderItem={_renderItem}
+  //         ></FlatList>
+  //       </View>
+  //     </View>
+  //   )
+  // }
   return (
     <View style={styles.container}>
       <LinearGradient
                 colors = {['#252525', COLORS.black, COLORS.black,'#652070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:2, borderRadius: 20 }}>
+                style = {{padding:2 }}>
       {/* Header here */}
       <SafeAreaView>
         <View style={styles.tempNav}>
       <SectionHeader>
         <View>
-          <McText h1>Explore Events</McText>
+          <McText h1>
+            <Text>Explore {name}</Text></McText>
         </View>
         <View style={{
           paddingLeft: 16,
@@ -256,7 +286,7 @@ const Featured = ({ navigation }) => {
         title="Go to Event Detail"
       /> */}
       <ScrollView style={styles.scrollView}>
-      {
+      {data ?
           data.map((sdata)=>
           <View>
             <SectionTitle>
@@ -278,6 +308,7 @@ const Featured = ({ navigation }) => {
           //{_renderList(sdata.header, sdata.data)}
 
           )
+          : <Text>loadd....</Text>
         }
       {/* {_renderList("FEATURED", data)}
       {_renderList("ABTEST", data2)}

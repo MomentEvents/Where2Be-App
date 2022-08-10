@@ -3149,11 +3149,6 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@^2.1.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
-
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -5102,7 +5097,7 @@
   dependencies:
     "warn-once" "^0.1.0"
 
-"react-native-web@>= 0.11", "react-native-web@0.17.1":
+"react-native-web@^0.17.1", "react-native-web@>= 0.11":
   "integrity" "sha512-lUnn+2O8ynQ6/gJKylSxm7DLi2vHw6AujdDV1+LSa8Epe1bYFJNUcJTEhJf0jNYUFGOujzMtuG8Mkz3HdWTkag=="
   "resolved" "https://registry.npmjs.org/react-native-web/-/react-native-web-0.17.1.tgz"
   "version" "0.17.1"

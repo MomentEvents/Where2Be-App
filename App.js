@@ -2,7 +2,7 @@
 // import { StyleSheet, Text, View } from 'react-native';
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Context, createContext } from 'react';
 import * as Font from 'expo-font';
 import {
   StyleSheet,
@@ -23,11 +23,15 @@ import { customFonts } from './constants';
 
 
 import 'react-native-gesture-handler';
+import NewInterest from './New-Screen/NewInterest';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  const event = createContext()
   const [assetsLoaded, setAssetLoaded] = useState(false);
+
+  const [joinEvent, setJoinEvent] = useState([])
 
   /* Loading custom fonts in async */
   const _loadAssetsAsync = async () => {
@@ -38,6 +42,51 @@ export default function App() {
   useEffect(() => {
     _loadAssetsAsync();
   });
+
+
+
+
+//   const fetchData = async () => {
+//     const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/interests', {
+//         method: 'GET',
+//     });
+
+//     const data = await resp.json();
+//     // console.log(data,"resp data")
+    
+    
+    
+
+//     const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/import_interest_list', {
+//         method: 'POST',
+//         headers: {
+//             Accept: 'application/json',
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             id: 'user_1'
+//         })
+//     });
+//     const inTags = await resp2.json();
+//     console.log(inTags, "selected data")
+
+    
+    
+
+//     for (var i = 0; i < inTags.length; i++) {
+//         outTags[inTags[i]] = true
+//     }
+
+//     setInTags(inTags);
+//     setData(data);
+
+//     setLoading(false);
+// };
+
+// useEffect(() => {
+// fetchData()
+// },[])
+   
 
   return assetsLoaded ? (
     <NavigationContainer>
@@ -61,6 +110,8 @@ export default function App() {
     <ActivityIndicator size="small"></ActivityIndicator>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

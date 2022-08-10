@@ -25,7 +25,7 @@ const TabLabel = ({ focused, text }) => {
   return focused ? (
     <McText body6
       style={{
-        marginBottom: -8,
+        marginBottom: 8,
       }}
     >
       {text}
@@ -43,8 +43,9 @@ const Tabs = ({ params }) => {
       backgroundColor: COLORS.tabBar,
       opacity: 0.98,
       borderTopColor: 'transparent',
-      height: 88,
-      borderRadius: SIZES.radius,
+      height: 80,
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
     },
     tabBarItemStyle:{
       display:'flex',

@@ -152,14 +152,14 @@ const Interests = ({ navigation, route }) => {
 
         return (
           <View>
-              <McText style={{paddingLeft:28, paddingTop:8}} h3 >{heading}</McText>
+              <McText style={{paddingLeft:20, paddingTop:8}} h3 >{heading}</McText>
                 <ItemList>
                     <FlatList data={dataset}
-                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: -25 }}
+                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: 25 }}
                     numColumns={3}
                     style={{
-                        paddingLeft:26,
-                        paddingRight:8,
+                        paddingLeft:10,
+                        paddingRight:10,
                         backgroundColor: 'transparent',
                     }}
                     showsHorizontalScrollIndicator={false}
@@ -180,7 +180,7 @@ const Interests = ({ navigation, route }) => {
                 colors = {['#252525', COLORS.black, COLORS.black,'#652070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:2, borderRadius: 20 }}>
+                style = {{padding:2 }}>
         <SafeAreaView>
         <SectionHeader>
         <View>
@@ -206,8 +206,8 @@ const Interests = ({ navigation, route }) => {
       <SectionDone>
       <TouchableOpacity
        style={{
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         borderRadius: 80,
         borderWidth: 1,
         borderColor: COLORS.gray,
@@ -248,7 +248,6 @@ const SectionHeader = styled.View`
   flex-direction: row;
 `;
 const TitleSec = styled.View`
-  marginLeft: -28px;
   alignItems: flex-start;
   flex-direction: row;
 `;
