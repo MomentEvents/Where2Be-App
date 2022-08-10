@@ -43,10 +43,10 @@ const EventDetail = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
        <LinearGradient
-      colors = {[ COLORS.black,COLORS.trueBlack,'#003060']}
-      start = {{x: 0, y: 0}}
-      end = {{ x: 1, y: 1}}
-      style = {{padding:2, borderRadius: 20 }}>
+          colors = {[ COLORS.black,COLORS.trueBlack,'#003060']}
+          start = {{x: 0, y: 0}}
+          end = {{ x: 1, y: 1}}
+          style = {{padding:2, borderRadius: 20 }}>
       <ScrollView 
       contentContainerStyle={{
         backgroundColor: 'transparent'
@@ -258,7 +258,7 @@ const EventDetail = ({ navigation, route }) => {
         </OwnerSection>
     
         <VisibilitySec>
-        <McIcon source ={icons.tab_4} size={16} style={{
+        <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
               tintColor: COLORS.gray1
             }}/>
@@ -280,6 +280,9 @@ const EventDetail = ({ navigation, route }) => {
       </ScrollView>
         <View style={styles.otherContainer}>
           <UserOptionsSection>
+          <View style={{
+              alignItems: 'center'
+            }}>
               <TouchableOpacity style={{
                       width: 60,
                       height: 60,
@@ -291,12 +294,19 @@ const EventDetail = ({ navigation, route }) => {
                       alignItems: 'center'
                       }}
                       onPress={()=>{
-                console.log("Like")
-              }}>
+                        console.log("Like")
+                      }}>
                 <McIcon source={icons.like} size={32} style={{
               tintColor:COLORS.gray,
             }}/>
+            
             </TouchableOpacity>
+            <McText body3>Like
+            </McText>
+            </View>
+            <View style={{
+              alignItems: 'center'
+            }}>
             <TouchableOpacity style={{
                       width: 60,
                       height: 60,
@@ -308,13 +318,19 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("Interested")
-              }}>
-                <McIcon source={icons.check} size={48} style={{
+                        console.log("Join")
+                      }}>
+                <McIcon source={icons.check} size={46} style={{
               tintColor:COLORS.gray,
               marginHorizontal: 44
             }}/>
             </TouchableOpacity>
+            <McText body3>Join
+            </McText>
+            </View>
+            <View style={{
+              alignItems: 'center'
+            }}>
             <TouchableOpacity style={{
                       width: 60,
                       height: 60,
@@ -325,12 +341,14 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("ShoutOut")
-              }}>
+                        console.log("ShoutOut")
+                      }}>
                 <McIcon source={icons.shoutout} size={32} style={{
               tintColor:COLORS.gray,
             }}/>
             </TouchableOpacity>
+            <McText body3> ShoutOut</McText>
+            </View>
           </UserOptionsSection>
         </View>
       </LinearGradient>
@@ -378,7 +396,6 @@ const DescriptionSection = styled.View`
 
 const UserOptionsSection = styled.View`
   flex: 1;
-  margin-horizontal: 10px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -387,7 +404,7 @@ const UserOptionsSection = styled.View`
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 100px;
+  padding: 40px;
   justify-content: space-between;
 `;
 
@@ -435,9 +452,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 1,
     width: width,
-    height: 100,
-    paddingBottom: 24,
-    padding: 12,
+    height: height/7.9,
+    paddingTop: 2,
     justifyContent: 'center',
     backgroundColor: COLORS.input,
     opacity: 0.97,

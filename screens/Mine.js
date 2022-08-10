@@ -74,11 +74,14 @@ var height = Dimensions.get('window').height; //full height
           <TouchableWithoutFeedback onPress={()=>{
                navigation.navigate('Login')
               }}>
-          <McIcon source={icons.settings} style={{
+          {/* <McIcon source={icons.settings} style={{
             margin: 24,
             tintColor: COLORS.white
           }}
-          size={28}/>
+          size={28}/> */}
+          <McText body3 style={{
+            marginRight: 16,
+          }}>Log Out</McText>
           </TouchableWithoutFeedback>
         </SectionHeader>
         <SectionProfilePic>

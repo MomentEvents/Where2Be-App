@@ -125,7 +125,7 @@ const Featured = ({ navigation }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("like")
+                console.log("like " + item.title)
               }}>
                 <McIcon source={icons.like} size={18} style={{
               tintColor:COLORS.white,
@@ -142,7 +142,7 @@ const Featured = ({ navigation }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("join")
+                console.log("join " + item.title)
               }}>
                 <McIcon source={icons.check} size={20} style={{
               tintColor:COLORS.white,
@@ -159,7 +159,7 @@ const Featured = ({ navigation }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                console.log("shoutout")
+                console.log("shoutout " + item.title)
               }}>
                 <McIcon source={icons.shoutout} size={18} style={{
               tintColor:COLORS.white,

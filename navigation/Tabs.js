@@ -100,18 +100,6 @@ const Tabs = ({ params }) => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Schedule"
-        component={Schedule}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.event} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Schedule" />
-          ),
-        }}
-      />
 
       <Tab.Screen
         name="Mine"

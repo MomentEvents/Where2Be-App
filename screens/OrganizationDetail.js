@@ -74,12 +74,28 @@ const OrganizationDetail = ({ navigation, route }) => {
       end = {{ x: 1, y: 1}}
       style = {{padding:2, borderRadius: 20 }}>
         <SafeAreaView>
-
+        <TouchableOpacity 
+                onPress={() =>{
+                  navigation.goBack();
+                }}
+                style={{
+                  width: 56,
+                  height: 40,
+                  marginLeft: 30,
+                  marginBottom: 6,
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 13,
+                }}
+              >
+                <McIcon source={icons.back_arrow} size={24}/>
+                </TouchableOpacity>
             <View style={{
                 flexDirection: 'row',
                 width: width,
                 alignItems: 'center',
-                margin: 30,
+                marginHorizontal: 30,
             }}>
                 <Image
                 style={styles.userProfilePic}
@@ -154,68 +170,12 @@ const OrganizationDetail = ({ navigation, route }) => {
                     backgroundColor: 'transparent',
                 }}
                 >
-                    {/*ImageBackground*/}
-                    {/* <ImageBackground
-                    resizeMode='cover'
-                    source={{uri:selectedEvent?.image}}
-                    style = {{
-                        width: '100%',
-                        height: 
-                        SIZES.height < 700? SIZES.height * 0.4 : SIZES.height * 0.5,
-                    }}
-                    >
-
-                        <SectionImageHeader>
-                        <TouchableOpacity 
-                            onPress={() =>{
-                            navigation.goBack();
-                            }}
-                            style={{
-                            width: 56,
-                            height: 40,
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 13,
-                            }}>
-                            <McIcon source={icons.back_arrow} size={24}/>
-                        </TouchableOpacity>
-                        
-                        </SectionImageHeader>
-                        <SectionImageFooter>
-                            <LinearGradient
-                                colors = {['transparent','#000']}
-                                start = {{x: 0, y: 0}}
-                                end = {{ x: 0, y: 1}}
-                                style = {{
-                                width: '100%',
-                                height: 120,
-                                justifyContent: 'flex-end',
-
-                                }}
-                            >
-                                <FooterContentView>
-                                    <View>
-                                        <McText h1>{selectedEvent?.title}</McText>
-                                    </View>
-                                    <View style={{
-                                        paddingBottom:15
-                                    }}>
-                                    </View>
-                                </FooterContentView>
-                            </LinearGradient>
-                        </SectionImageFooter>
-                        
-                    </ImageBackground>  */}
-                    
-                    {
-                        data.map((item)=>
+                    {data.map((item)=>
                         <TouchableWithoutFeedback
                             onPress={()=>{
-                            console.log(item.startingTime)
-                            navigation.navigate('EventDetail', {selectedEvent: item});
-                            }}
-                        >
+                                console.log(item.startingTime)
+                                navigation.navigate('EventDetail', {selectedEvent: item});
+                            }}>
                             <View style={{
                             marginLeft: 20,
                             marginRight: 20,
@@ -226,19 +186,17 @@ const OrganizationDetail = ({ navigation, route }) => {
                             borderRadius: 30,
                             opacity: 0.97,
                             }}>
-
                                 <ImageBackground source={{uri: item.image}}
-                            resizeMode='cover'
-                            borderRadius= {SIZES.radius}
-                            borderColor={COLORS.gray}
-                            //borderWidth= '0.2'
-                            style={{
-                                width: SIZES.width/4 - 10,
-                                height: SIZES.width/4 + 10,
-                                margin: 10,
-                                justifyContent: 'space-between',
-                            }}
-                            ></ImageBackground>   
+                                    resizeMode='cover'
+                                    borderRadius= {SIZES.radius}
+                                    borderColor={COLORS.gray}
+                                    //borderWidth= '0.2'
+                                    style={{
+                                        width: SIZES.width/4 - 10,
+                                        height: SIZES.width/4 + 10,
+                                        margin: 10,
+                                        justifyContent: 'space-between',
+                                    }}/>  
                             <View style={{
                                 alignItems: 'flex-end',
                                 //marginHorizontal: 15,
@@ -253,18 +211,131 @@ const OrganizationDetail = ({ navigation, route }) => {
                                     //backgroundColor: COLORS.black
                                     }}>
                                     {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                                    <McText h3 onPress={()=>{
-                                    console.log("Chirag's an idiot")
+                                    <McText h3 numberOfLines={2} onPress={()=>{
+                                    console.log(item.title)
                                     }}>{item.title}</McText>
-                                    <McText h8
-                                        style={{color: COLORS.gray}}>
-                                        {moment(item.startingTime).format('MMM DD YYYY').toUpperCase()}
-                                    </McText>
-                                    <McText h8
-                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
-                                        {item.location}
-                                    </McText>
-                                    <McText h8 
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        marginHorizontal: 2,
+                                        marginVertical: 1.5,
+                                    }}>
+                                        <McIcon source={icons.event} size={16} style={{
+                                            tintColor: COLORS.gray,
+                                            marginLeft: -4,
+                                        }}/>
+                                        <McText h8
+                                            style={{color: COLORS.gray}}>
+                                            {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
+                                        </McText>
+                                    </View>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        marginHorizontal: 2,
+                                    }}>
+                                        <McIcon source={icons.location} size={16} style={{
+                                            tintColor: COLORS.gray,
+                                            marginLeft: -4,
+                                        }}/>
+                                        <McText h8
+                                            style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
+                                            {item.location}
+                                        </McText>
+                                    </View>
+                                    <View style={{
+                                        position: 'absolute',
+                                        flexDirection:'column',
+                                        height: height/8.1,
+                                        justifyContent: 'flex-end',
+                                    }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                    }}>
+                                        <View style= {{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                        <TouchableOpacity style={{
+                                            width: 24,
+                                            height: 24,
+                                            borderRadius: 80,
+                                            marginHorizontal: 2,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 1,
+                                            borderColor: COLORS.gray,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                            }} onPress={()=>{
+                                                console.log("Like")
+                                            }}>
+                                            <McIcon source={icons.like} size={16} style={{
+                                                tintColor:COLORS.gray,
+                                                marginHorizontal: 8
+                                                }}/>
+                                        </TouchableOpacity>
+                                        <McText h8 style={{
+                                            marginTop: 2,
+                                            color: COLORS.gray
+                                        }}>666</McText>
+                                        </View>
+                                        <View style= {{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginHorizontal: 4,
+
+                                        }}>
+                                        <TouchableOpacity style={{
+                                            width: 24,
+                                            height: 24,
+                                            borderRadius: 80,
+                                            marginHorizontal: 2,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 1,
+                                            borderColor: COLORS.gray,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                            }} onPress={()=>{
+                                                console.log("Interested")
+                                            }}>
+                                            <McIcon source={icons.check} size={20} style={{
+                                                tintColor:COLORS.gray,
+                                                marginHorizontal: 8
+                                                }}/>
+                                        </TouchableOpacity>
+                                        <McText h8 style={{
+                                            marginTop: 2,
+                                            color: COLORS.gray
+                                        }}>666</McText>
+                                        </View>
+                                        <View style= {{
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
+                                        }}>
+                                        <TouchableOpacity style={{
+                                            width: 24,
+                                            height: 24,
+                                            borderRadius: 80,
+                                            marginHorizontal: 2,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 1,
+                                            borderColor: COLORS.gray,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                            }} onPress={()=>{
+                                                console.log("Shoutout")
+                                            }}>
+                                            <McIcon source={icons.shoutout} size={16} style={{
+                                                tintColor:COLORS.gray,
+                                                marginHorizontal: 8
+                                                }}/>
+                                        </TouchableOpacity>
+                                        <McText h8 style={{
+                                            marginTop: 2,
+                                            color: COLORS.gray
+                                        }}>666</McText>
+                                        </View>
+                                    </View>
+                                    </View>
+                                    {/* <McText h8 
                                         style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
                                             666 Attending
                                         </McText>
@@ -275,7 +346,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         <McText h8 
                                         style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
                                             90 ShoutOuts
-                                        </McText>
+                                        </McText> */}
                                     </View>
                                     {/* </BlurView> */}
                                 
