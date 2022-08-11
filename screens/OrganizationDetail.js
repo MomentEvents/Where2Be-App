@@ -196,7 +196,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         height: SIZES.width/4 + 10,
                                         margin: 10,
                                         justifyContent: 'space-between',
-                                    }}/>  
+                                    }}/>{console.log( item.startingTime + item.image)}
                             <View style={{
                                 alignItems: 'flex-end',
                                 //marginHorizontal: 15,
@@ -272,10 +272,6 @@ const OrganizationDetail = ({ navigation, route }) => {
                                                 marginHorizontal: 8
                                                 }}/>
                                         </TouchableOpacity>
-                                        <McText h8 style={{
-                                            marginTop: 2,
-                                            color: COLORS.gray
-                                        }}>666</McText>
                                         </View>
                                         <View style= {{
                                             flexDirection: 'row',
@@ -301,10 +297,6 @@ const OrganizationDetail = ({ navigation, route }) => {
                                                 marginHorizontal: 8
                                                 }}/>
                                         </TouchableOpacity>
-                                        <McText h8 style={{
-                                            marginTop: 2,
-                                            color: COLORS.gray
-                                        }}>666</McText>
                                         </View>
                                         <View style= {{
                                             flexDirection: 'row',
@@ -328,10 +320,6 @@ const OrganizationDetail = ({ navigation, route }) => {
                                                 marginHorizontal: 8
                                                 }}/>
                                         </TouchableOpacity>
-                                        <McText h8 style={{
-                                            marginTop: 2,
-                                            color: COLORS.gray
-                                        }}>666</McText>
                                         </View>
                                     </View>
                                     </View>

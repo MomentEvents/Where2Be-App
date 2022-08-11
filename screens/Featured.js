@@ -254,7 +254,7 @@ const Featured = ({ navigation, route }) => {
       <SectionHeader>
         <View>
           <McText h1>
-            <Text>Explore {name}</Text></McText>
+            <Text>Explore Events</Text></McText>
         </View>
         <View style={{
           paddingLeft: 16,
