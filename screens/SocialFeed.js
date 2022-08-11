@@ -20,7 +20,7 @@ const SocialFeed = ({ params }) => {
       colors = {['#252525', COLORS.black,'#350840', COLORS.black,'#006790']}
       start = {{x: 0, y: 0}}
       end = {{ x: 1, y: 1}}
-      style = {{padding:2}}>
+      style = {{padding:2, borderRadius: 20 }}>
     <SafeAreaView>
     <View style={styles.tempNav}>
       <SectionHeader>

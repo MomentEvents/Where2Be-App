@@ -16,7 +16,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './navigation/Tabs';
 
-import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login } from './screens';
+import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login, OrgEventDetail } from './screens';
 
 
 import { customFonts } from './constants';
@@ -102,6 +102,7 @@ export default function App() {
         <Stack.Screen name="Featured" component={Tabs} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
+        <Stack.Screen name="OrgEventDetail" component={OrgEventDetail} />
         <Stack.Screen name="Search" component={Search}/>
         
       </Stack.Navigator>

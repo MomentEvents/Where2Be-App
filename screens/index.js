@@ -7,6 +7,7 @@ import Search from './Search'
 import Interests from './Interests';
 import OrganizationDetail from './OrganizationDetail';
 import Login from './Login';
+import OrgEventDetail from './OrgEventDetail';
 
 
 export {
@@ -18,5 +19,6 @@ export {
   Search,
   Interests,
   OrganizationDetail,
-  Login
+  Login,
+  OrgEventDetail
 }

@@ -16,13 +16,17 @@ import {
 import styled from 'styled-components/native';
 import moment from 'moment';
 
-
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import events from '../constants/events.json'
 import { McText, McIcon, McAvatar} from '../components'
 import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect'
+
+import { Dimensions } from "react-native";
+
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height; //full height
 
 const Item  = ({data}) => {
     <View>

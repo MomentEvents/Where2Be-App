@@ -274,7 +274,6 @@ const SectionInterests = styled.View`
 `;
 
 const ItemList = styled.View`
-padding: 5px ${SIZES.padding};
 marginBottom: 5px;
 flex-direction: column;
 justifyContent: center;

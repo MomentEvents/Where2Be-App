@@ -332,6 +332,7 @@ app.post('/organization_events', jsonParser, (req, res) => {
         location: record._fields[1].properties.Location,
         image: record._fields[1].properties.Image,
         description: record._fields[1].properties.Description,
+        taglist: record._fields[2],
         // description: record._fields[1].properties.description,
       });
     });

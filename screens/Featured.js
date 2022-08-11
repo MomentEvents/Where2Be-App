@@ -49,7 +49,7 @@ const Featured = ({ navigation, route }) => {
 
   const fetchData = async () => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
-    // const data = await resp.json();
+    // const data = await resp.json()
 
     const resp = await fetch(`http://mighty-chamber-83878.herokuapp.com/feat`, {
       method: 'POST',
@@ -65,13 +65,28 @@ const Featured = ({ navigation, route }) => {
     const data = await resp.json();
 
     setData(data);
+
+    const resp2 = await fetch(`http://mighty-chamber-83878.herokuapp.com/spotlight`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: type,
+      })
+    }); 
+    const data2 = await resp2.json();
+
+    setData2(data2);
     setLoading(false);
   };
-
+  var spotlight = data2
   // var ab = 0;
 
   useEffect(() => {
     fetchData();
+    console.log(data.event)
   }, [type, type2]);
   
   var type_arr = ["Discord", "Instagram"];
@@ -90,6 +105,122 @@ const Featured = ({ navigation, route }) => {
   // }
   // return tbody(rows);
 
+  const _renderSpotlight = ({item, index}) => {
+  return (
+    <View>
+      <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('EventDetail', {selectedEvent: item});
+          console.log("clicked the event")
+        }}
+      >
+    <ImageBackground source={{uri: item.image} }
+          resizeMode='cover'
+          borderRadius= {SIZES.radius}
+          borderColor={COLORS.gray}
+          borderWidth= {0.3}// string not number typeError
+          style={{
+            width: SIZES.width/1.15,
+            height: SIZES.width/1.6 + 10,
+            justifyContent: 'space-between',
+            margin: 8
+          }}
+          >
+          <View style={{
+              alignItems: 'flex-end',
+              marginHorizontal: 8,
+              marginVertical: 8
+            }}>
+            <DateBox>
+              <McText body5 color={COLORS.black} 
+              style={{opacity: 0.5,
+                      letterSpacing: 2
+                    }}>
+                {moment(item.startingTime).format('MMM').toUpperCase()}
+              </McText>
+              <McText h3 color={COLORS.black}>
+                {moment(item.startingTime).format('DD')}
+              </McText>
+            </DateBox>
+          </View>
+          <LinearGradient
+                colors = {['transparent', COLORS.black]}
+                start = {{x: 1, y: 0}}
+                end = {{ x: 1, y: 1}}
+                style = {{padding:0, marginBottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
+            <View><McText h1 numberOfLines={1} style={{
+              marginHorizontal: 8,
+            }}>{item.title}</McText>
+              <View style={{
+                flexDirection: 'row',
+                marginVertical: 8,
+                // alignItems: 'center',
+                // justifyContent: 'center'
+              }}>
+                <McText h3
+                  style={{color: COLORS.gray, marginHorizontal: 10, letterSpacing: 1.2}}>
+                  {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
+              </McText>
+              {/* <TouchableHighlight style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("like " + item.title)
+              }}>
+                <McIcon source={icons.like} size={18} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableHighlight>
+            <TouchableHighlight style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("join " + item.title)
+              }}>
+                <McIcon source={icons.check} size={20} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableHighlight>
+            <TouchableHighlight style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 80,
+                      marginLeft: 10,
+                      backgroundColor: COLORS.input,
+                      borderWidth: 1,
+                      borderColor: COLORS.white,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }} onPress={()=>{
+                console.log("shoutout " + item.title)
+              }}>
+                <McIcon source={icons.shoutout} size={18} style={{
+              tintColor:COLORS.white,
+            }}/>
+            </TouchableHighlight> */}
+              </View>
+              </View>
+            </LinearGradient>
+            
+          </ImageBackground>
+          </TouchableWithoutFeedback>
+    </View>
+  )}
+
   const _renderItem = ({item, index}) => {
     return (
       <TouchableWithoutFeedback
@@ -101,20 +232,14 @@ const Featured = ({ navigation, route }) => {
         <View style={{
           marginLeft: index === 0 ? 20: 15,
         }}>
-          <LinearGradient
-                colors = {['#902070', '#DD77EB', '#a2d2ff']}
-                style = {{padding:2, borderRadius: 20 }}>
-            <LinearGradient
-                colors = {['#000000','#000000']}
-                style = {{padding:2.5, borderRadius: 20 }}>
               <ImageBackground source={{uri: item.image}}
           resizeMode='cover'
           borderRadius= {SIZES.radius}
           borderColor={COLORS.gray}
           borderWidth= {0.2}// string not number typeError
           style={{
-            width: SIZES.width/2.7 + 10,
-            height: SIZES.width/2.3 + 10,
+            width: SIZES.width/2.5 + 10,
+            height: SIZES.width/2.2 + 10,
             justifyContent: 'space-between'
           }}
           >
@@ -198,8 +323,6 @@ const Featured = ({ navigation, route }) => {
             {/* </GrayBox> */}
             
           </ImageBackground>
-          </LinearGradient>
-          </LinearGradient>
           <TouchableWithoutFeedback>
           <View style={{
                   marginLeft: 10,
@@ -213,34 +336,10 @@ const Featured = ({ navigation, route }) => {
                 </View>
                 </TouchableWithoutFeedback>
         </View>
-
       </TouchableWithoutFeedback>
 
     )
   }
-
-  // const _renderList = (heading, dataset) => {
-  //   return (
-  //     <View>
-  //       <SectionTitle>
-  //         <McText h3>
-  //           {heading}
-  //         </McText>
-  //       </SectionTitle>
-  //       <View>
-  //         <FlatList
-  //           horizontal
-
-  //           showsHorizontalScrollIndicator={false}
-  //           keyExtractor={(item) => 'event_' + item.id}
-  //           //data={dummyData[dataset]}
-  //           data={dataset}
-  //           renderItem={_renderItem}
-  //         ></FlatList>
-  //       </View>
-  //     </View>
-  //   )
-  // }
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -286,6 +385,19 @@ const Featured = ({ navigation, route }) => {
         title="Go to Event Detail"
       /> */}
       <ScrollView style={styles.scrollView}>
+      <View><FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={spotlight}
+                renderItem={_renderSpotlight}
+                style={{
+                  marginTop: 8,
+                  marginBottom: -12,
+                  marginLeft: 6,
+                }}
+              ></FlatList></View>
       {data ?
           data.map((sdata)=>
           <View>
@@ -345,7 +457,7 @@ const DateBox = styled.View`
 `;
 //background-color: rgba(100,100,100,0.65);
 const GrayBox = styled.View`
-  background-color: rgba(100,100,100,0.8);
+  background-color: rgba(100,100,100,0.3);
   borderBottomRightRadius: 20px;
   borderBottomLeftRadius: 20px;
 `

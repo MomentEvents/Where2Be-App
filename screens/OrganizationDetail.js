@@ -19,6 +19,7 @@ const OrganizationDetail = ({ navigation, route }) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [data2, setData2] = useState([]);
     useEffect(()=>{
         let {selectedEvent} = route.params;
         setSelectedEvent(selectedEvent);
@@ -34,6 +35,7 @@ const OrganizationDetail = ({ navigation, route }) => {
     // console.log(iD)
     const fetchData = async () => {
         let data;
+        let data2;
         if(iD !== 'bad') {
             const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_events', {
                     method: 'POST',
@@ -46,14 +48,31 @@ const OrganizationDetail = ({ navigation, route }) => {
                     })
             });
                 
+            
+            const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_details', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: iD
+                    })
+            });
             data = await resp.json();
+            data2 = await resp2.json();
         }
-          else{
-              data = ['help'];
-          }
-          setData(data);
-          setLoading(false);
+        else{
+            data = ['help'];
+            data2 = ['help2']
+        }
+        setData(data);
+        setData2(data2);
+        console.log(data2)
+            
+        setLoading(false);
     };
+    // console.log(iD)
     //console.log('____________________________________________________________________________');
     useEffect(() => {
         fetchData();
@@ -100,7 +119,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                 <Image
                 style={styles.userProfilePic}
                 source={{
-                    uri:selectedEvent?.image
+                    uri:data2.image
                 }}/>
                 <View style={{
                     flexDirection: 'column',
@@ -173,8 +192,8 @@ const OrganizationDetail = ({ navigation, route }) => {
                     {data.map((item)=>
                         <TouchableWithoutFeedback
                             onPress={()=>{
-                                console.log(item.startingTime)
-                                navigation.navigate('EventDetail', {selectedEvent: item});
+                                console.log(item)
+                                navigation.navigate('OrgEventDetail', {selectedEvent: item});
                             }}>
                             <View style={{
                             marginLeft: 20,
@@ -196,7 +215,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         height: SIZES.width/4 + 10,
                                         margin: 10,
                                         justifyContent: 'space-between',
-                                    }}/>{console.log( item.startingTime + item.image)}
+                                    }}/>
                             <View style={{
                                 alignItems: 'flex-end',
                                 //marginHorizontal: 15,
@@ -204,16 +223,14 @@ const OrganizationDetail = ({ navigation, route }) => {
                                 }}>
                                     <View style={{
                                     marginHorizontal: 15,
-                                    width : width/1.7,
+                                    width : width/1.75,
                                     marginBottom: 10,
                                     margin: 15,
                                     alignItems : 'flex-start',
                                     //backgroundColor: COLORS.black
                                     }}>
                                     {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
-                                    <McText h3 numberOfLines={2} onPress={()=>{
-                                    console.log(item.title)
-                                    }}>{item.title}</McText>
+                                    <McText h3 numberOfLines={2}>{item.title}</McText>
                                     <View style={{
                                         flexDirection: 'row',
                                         marginHorizontal: 2,

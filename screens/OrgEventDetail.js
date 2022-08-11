@@ -16,17 +16,17 @@ import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
+import { Dimensions } from "react-native";
 
 import {memo} from "react"
 
-import { Dimensions } from "react-native";
+
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 
-const EventDetail = ({ navigation, route }) => {
+const OrgEventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -58,7 +58,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
         iD = 'bad';
     }
-
+    console.log(iD)
   const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
@@ -86,6 +86,8 @@ const EventDetail = ({ navigation, route }) => {
     useEffect(() => {
         fetchData();
     },[iD]);
+
+
   return (
     <View style={styles.container}>
        <LinearGradient
@@ -119,8 +121,8 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
-                  // navigation.goBack();
-                  navigation.navigate("Featured", {joindedEvent:joindedEvent})
+                  navigation.goBack();
+                  // navigation.navigate("Featured", {joindedEvent:joindedEvent})
                 }}
                 style={{
                   width: 56,
@@ -288,8 +290,8 @@ const EventDetail = ({ navigation, route }) => {
             alignItems: 'center',
             justifyContent: 'center'
           }} onPress={()=>{
-                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
-              }}>
+            navigation.goBack()
+          }}>
           <Image
                 style={styles.orgProfilePic}
                 source={{
@@ -466,7 +468,7 @@ const SectionFooter = styled.View`
 const LocationSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginBottom: 8px;
+  marginVertical: 8px;
   borderRadius: 10;
   align-items: center;
 `;
@@ -526,4 +528,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(EventDetail);
+export default memo(OrgEventDetail);
