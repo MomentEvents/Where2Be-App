@@ -323,7 +323,7 @@ const Featured = ({ navigation, route }) => {
                       <McText h4 numberOfLines={1}>{item.title}</McText>
                       <McText body4 style={{
                         marginTop: -2,
-                      }}>{moment(item.startingTime).format('MMMM DD, h:mm A')}</McText>
+                      }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
                   </View>
             </TouchableWithoutFeedback>
           </LinearGradient>
