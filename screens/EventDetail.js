@@ -33,10 +33,112 @@ const EventDetail = ({ navigation, route }) => {
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
   }
+  const [like, setLike] = useState(false);
+  const [join, setJoin] = useState(false);
+  const [shoutout, setShoutout] = useState(false);
 
+  const handleLike = async () => {
+    if (like) {
+      // console.log(like);
+      setLike(false);
+      console.log("HEREEE2: ", like);
+      console.log("HEREEE");
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_like", {
+        // deleting for true, need to change
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    } else {
+      setLike(true);
+      console.log("HEREEE2: ", like);
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_like", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    }
+  };
+  
+
+  const handleJoin = async () => {
+    if (join) {
+      // console.log(shoutout);
+      setJoin(false);
+      console.log("HEREEE2: ", join);
+      console.log("HEREEE");
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_join", {
+        // deleting for true, need to change
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    } else {
+      setJoin(true);
+      console.log("HEREEE2: ", join);
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_join", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    }
+  };
+  
+
+  const handleShoutout = async () => {
+    if (shoutout) {
+      // console.log(shoutout);
+      setShoutout(false);
+      console.log("HEREEE2: ", shoutout);
+      console.log("HEREEE");
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_shoutOut", {
+        // deleting for true, need to change
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    } else {
+      setShoutout(true);
+      console.log("HEREEE2: ", shoutout);
+      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_shoutOut", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uniqueID: selectedEvent?.uniqueID,
+        }),
+      });
+    }
+  };
   // console.log(selectedEvent)
 
-  const [join, setJoin] = useState(false)
   const  [joindedEvent, setJoindedEvent] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
@@ -237,29 +339,27 @@ const EventDetail = ({ navigation, route }) => {
             }
           </ScrollView>
         </ButtonSection>
-        <LocationSection>
-        <McIcon source ={icons.location} size={20} style={{
-              margin:4,
-              tintColor:COLORS.gray,
-            }}/>
-            <TouchableWithoutFeedback onPress={()=>{
-                var uri = selectedEvent?.location
-                Linking
-                .openURL(uri)
-                .catch(err => console.error('Error', err));
-                console.log(uri + ' Chirag is idiot')
-                }}>
-              <McText h4 style={{
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                marginTop: -1, 
-                width: width * 0.83,
-                }}
-                numberOfLines={1}>
-                  {selectedEvent?.location}
-              </McText>
-              </TouchableWithoutFeedback>
-          </LocationSection>
+        <OwnerSection>
+          <TouchableWithoutFeedback style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }} onPress={()=>{
+                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
+              }}>
+          <Image
+                style={styles.orgProfilePic}
+                source={{
+                    uri:data.image
+                }}/>
+            <McText h4 numberOfLines={1} style={{
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              width: width/1.25
+              }}>{data.name}
+            </McText>
+            </TouchableWithoutFeedback>
+        </OwnerSection>
         <DescriptionSection>
           <View style={{
                   marginLeft: 12,
@@ -282,28 +382,28 @@ const EventDetail = ({ navigation, route }) => {
               }
           </View>
         </DescriptionSection>
-        <OwnerSection>
-          <TouchableWithoutFeedback style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }} onPress={()=>{
-                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
-              }}>
-          <Image
-                style={styles.orgProfilePic}
-                source={{
-                    uri:data.image
-                }}/>
-            <McText h4 numberOfLines={1} style={{
-              letterSpacing: 1,
-              textTransform: 'uppercase',
-              width: width/1.25
-              }}>{selectedEvent?.title}
-            </McText>
-            </TouchableWithoutFeedback>
-        </OwnerSection>
-    
+        <LocationSection>
+        <McIcon source ={icons.location} size={20} style={{
+              margin:4,
+              tintColor:COLORS.gray,
+            }}/>
+            <TouchableWithoutFeedback onPress={()=>{
+                var uri = selectedEvent?.location
+                Linking
+                .openURL(uri)
+                .catch(err => console.log('Error', err));
+                }}>
+              <McText h4 style={{
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginTop: -1, 
+                width: width * 0.83,
+                }}
+                numberOfLines={1}>
+                  {selectedEvent?.location}
+              </McText>
+              </TouchableWithoutFeedback>
+          </LocationSection>
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
@@ -334,7 +434,7 @@ const EventDetail = ({ navigation, route }) => {
                       width: 60,
                       height: 60,
                       borderRadius: 80,
-                      backgroundColor: 'transparent',
+                      backgroundColor:like ? '#a00000':  'transparent',
                       justifyContent: 'center',
                       borderWidth: 1,
                       borderColor: COLORS.gray,
@@ -342,14 +442,14 @@ const EventDetail = ({ navigation, route }) => {
                       }}
                       onPress={()=>{
                         console.log("Like")
+                        handleLike()
                       }}>
-                <McIcon source={icons.like} size={32} style={{
-              tintColor:COLORS.gray,
+                <McIcon source={like ? icons.likeFill: icons.like} size={32} style={{
+              tintColor:like ? COLORS.white: COLORS.gray,
             }}/>
             
             </TouchableOpacity>
-            <McText body3>Like
-            </McText>
+              <McText body3>Like</McText>
             </View>
             <View style={{
               alignItems: 'center'
@@ -359,19 +459,15 @@ const EventDetail = ({ navigation, route }) => {
                       height: 60,
                       borderRadius: 80,
                       marginHorizontal: 30,
-                      backgroundColor: 'transparent',
+                      backgroundColor:join ? '#006099': 'transparent' ,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
                           join ? setJoin(false) : setJoin(true)
-                          navigation.navigate('Root', {
-                            screen:'Featured',
-                            params:{user:'nishu'}
-                          })
                           console.log("Join button clicked")
-                          setJoindedEvent(selectedEvent)
+                          handleJoin()
                           // console.log(selectedEvent)
                         
               }}>
@@ -380,8 +476,7 @@ const EventDetail = ({ navigation, route }) => {
               marginHorizontal: 44
             }}/>
             </TouchableOpacity>
-            <McText body3>Join
-            </McText>
+              <McText body3>Join</McText>
             </View>
             <View style={{
               alignItems: 'center'
@@ -392,17 +487,21 @@ const EventDetail = ({ navigation, route }) => {
                       borderRadius: 80,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
-                      backgroundColor: 'transparent',
+                      backgroundColor: shoutout ? '#651070' : 'transparent',
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                        console.log("ShoutOut")
+                        console.log("ShoutOut");
+                        console.log("HEREEE: ", shoutout);
+                        handleShoutout();
                       }}>
-                <McIcon source={icons.shoutout} size={32} style={{
-              tintColor:COLORS.gray,
-            }}/>
+                <McIcon source={icons.shoutout}
+                  size={32}
+                  style={{
+                    tintColor: shoutout ? COLORS.white : COLORS.gray,
+                  }}/>
             </TouchableOpacity>
-            <McText body3> ShoutOut</McText>
+            <McText body3>ShoutOut</McText>
             </View>
           </UserOptionsSection>
         </View>
@@ -466,7 +565,7 @@ const SectionFooter = styled.View`
 const LocationSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginBottom: 8px;
+  marginTop: 8px;
   borderRadius: 10;
   align-items: center;
 `;
@@ -474,13 +573,14 @@ const LocationSection = styled.View`
 const OwnerSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginTop: 12px;
+  marginBottom: 12px;
   borderRadius: 10;
   align-items: center;
 `;
 const VisibilitySec = styled.View`
   flex-direction: row;
-  margin: 16px;
+  marginBottom: 8px;
+  marginHorizontal: 16px;
   borderRadius: 10;
   align-items: center;
 `;
@@ -507,6 +607,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 1,
     width: width,
+    marginBottom: -1,
+    marginTop: 1,
     height: height/7.9,
     paddingTop: 2,
     justifyContent: 'center',

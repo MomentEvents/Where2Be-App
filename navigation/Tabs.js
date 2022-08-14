@@ -78,7 +78,7 @@ const Tabs = ({ params }) => {
       //     ],
       //   },
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Feed"
         component={SocialFeed}
         options={{
@@ -89,7 +89,7 @@ const Tabs = ({ params }) => {
             <TabLabel focused={focused} text="Feed" />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Featured"
         component={Featured}

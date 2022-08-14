@@ -25,7 +25,6 @@ import Fuse from 'fuse.js'
 
     console.log(data);
 
-    
     setData(data);
     setLoading(false);
   };
@@ -72,13 +71,14 @@ import Fuse from 'fuse.js'
             //value={bad}
             onChangeText={newText => setText(newText)}
             defaultValue={text}
+            autoFocus={true}
             style={{
               ...FONTS.h4,
               color: COLORS.white,
               width: 250,
               marginLeft: 5
             }}
-          ></TextInput>
+          />
         </SearchView>
       </SectionSearch> 
       <ScrollView>

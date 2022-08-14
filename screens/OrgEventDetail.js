@@ -509,6 +509,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 1,
     width: width,
+    marginBottom: -1,
+    marginTop: 1,
     height: height/7.9,
     paddingTop: 2,
     justifyContent: 'center',

@@ -340,24 +340,9 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         </View>
                                     </View>
                                     </View>
-                                    {/* <McText h8 
-                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
-                                            666 Attending
-                                        </McText>
-                                        <McText h8 
-                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
-                                            444 Interested
-                                        </McText>
-                                        <McText h8 
-                                        style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
-                                            90 ShoutOuts
-                                        </McText> */}
                                     </View>
-                                    {/* </BlurView> */}
-                                
                                 </View>
                             </View>
-                    
                         </TouchableWithoutFeedback>
     
                         )

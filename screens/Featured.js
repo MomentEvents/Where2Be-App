@@ -131,7 +131,7 @@ const Featured = ({ navigation, route }) => {
               marginHorizontal: 8,
               marginVertical: 8
             }}>
-            <DateBox>
+            {/* <DateBox>
               <McText body5 color={COLORS.black} 
               style={{opacity: 0.5,
                       letterSpacing: 2
@@ -141,13 +141,13 @@ const Featured = ({ navigation, route }) => {
               <McText h3 color={COLORS.black}>
                 {moment(item.startingTime).format('DD')}
               </McText>
-            </DateBox>
+            </DateBox> */}
           </View>
           <LinearGradient
                 colors = {['transparent', COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
+                style = {{padding:0, marginBottom: 0, borderRadius: 20}}>
             <View><McText h1 numberOfLines={1} style={{
               marginHorizontal: 8,
             }}>{item.title}</McText>
@@ -232,60 +232,44 @@ const Featured = ({ navigation, route }) => {
         <View style={{
           marginLeft: index === 0 ? 20: 15,
         }}>
-              <ImageBackground source={{uri: item.image}}
-          resizeMode='cover'
-          borderRadius= {SIZES.radius}
-          borderColor={COLORS.gray}
-          borderWidth= {0.2}// string not number typeError
-          style={{
-            width: SIZES.width/2.5 + 10,
-            height: SIZES.width/2.2 + 10,
-            justifyContent: 'space-between'
-          }}
-          >
-          <View style={{
-              alignItems: 'flex-end',
-              marginHorizontal: 8,
-              marginVertical: 8
-            }}>
-            <DateBox>
-              <McText body5 color={COLORS.black} 
-              style={{opacity: 0.5,
-                      letterSpacing: 2
-                    }}>
-                {moment(item.startingTime).format('MMM').toUpperCase()}
-              </McText>
-              <McText h3 color={COLORS.black}>
-                {moment(item.startingTime).format('DD')}
-              </McText>
-            </DateBox>
-          </View>
-          
+          <ImageBackground source={{uri: item.image}}
+            resizeMode='cover'
+            borderRadius= {SIZES.radius}
+            borderColor={COLORS.gray}
+            borderWidth= {0.2}// string not number typeError
+            style={{
+              width: SIZES.width/2.5 + 10,
+              height: SIZES.width/1.9 + 10,
+              justifyContent: 'space-between'
+            }}
+            >
             {/* <GrayBox> */}
               <View style={{
-                flexDirection: 'row',
+                flexDirection: 'column',
                 marginVertical: 8,
-                // alignItems: 'center',
-                // justifyContent: 'center'
+                marginHorizontal: 8,
+                alignItems: 'flex-end'
               }}>
+                <View style={{ flexDirection:'column'}}>
               <TouchableHighlight style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 80,
-                      marginLeft: 10,
-                      backgroundColor: COLORS.input,
-                      borderWidth: 1,
-                      borderColor: COLORS.white,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
+                width: 32,
+                height: 32,
+                borderRadius: 80,
+                marginLeft: 10,
+                backgroundColor: COLORS.input,
+                opacity: 0.7,
+                borderWidth: 1,
+                borderColor: COLORS.white,
+                justifyContent: 'center',
+                alignItems: 'center'
+                }} onPress={()=>{
                 console.log("like " + item.title)
               }}>
                 <McIcon source={icons.like} size={18} style={{
               tintColor:COLORS.white,
             }}/>
             </TouchableHighlight>
-            <TouchableHighlight style={{
+            {/* <TouchableHighlight style={{
                       width: 32,
                       height: 32,
                       borderRadius: 80,
@@ -301,7 +285,8 @@ const Featured = ({ navigation, route }) => {
                 <McIcon source={icons.check} size={20} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
+            {/*
             <TouchableHighlight style={{
                       width: 32,
                       height: 32,
@@ -318,23 +303,32 @@ const Featured = ({ navigation, route }) => {
                 <McIcon source={icons.shoutout} size={18} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableHighlight>
-              </View>
+            </TouchableHighlight> */}
+            </View>
+          </View>
             {/* </GrayBox> */}
-            
-          </ImageBackground>
-          <TouchableWithoutFeedback>
-          <View style={{
-                  marginLeft: 10,
-                  marginTop: 5,
-                  width: SIZES.width/3 +10,
-                  //backgroundColor: COLORS.black
-                }}
-                >
-                  <McText h5 numberOfLines={1}>{item.title}</McText>
-        <McText>{moment(item.startingTime).format('hh:mm A').toUpperCase()}</McText>
-                </View>
-                </TouchableWithoutFeedback>
+          <LinearGradient
+                colors = {['transparent', COLORS.trueBlack]}
+                start = {{x: 1, y: 0}}
+                end = {{ x: 1, y: 1}}
+                style = {{padding:0, marginBottom: 0, borderRadius: 20, }}>
+              <TouchableWithoutFeedback>
+                <View style={{
+                      marginLeft: 10,
+                      marginVertical: 5,
+                      width: SIZES.width/3 +10,
+                      //backgroundColor: COLORS.black
+                    }}
+                    >
+                      <McText h4 numberOfLines={1}>{item.title}</McText>
+                      <McText body4 style={{
+                        marginTop: -2,
+                      }}>{moment(item.startingTime).format('MMMM DD, h:mm A')}</McText>
+                  </View>
+            </TouchableWithoutFeedback>
+          </LinearGradient>
+        </ImageBackground>
+          
         </View>
       </TouchableWithoutFeedback>
 
