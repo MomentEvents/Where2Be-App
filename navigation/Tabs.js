@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Schedule, SocialFeed, Mine } from '../screens';
+import { Featured, Interests, SocialFeed, Mine } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 import { Platform } from 'react-native';

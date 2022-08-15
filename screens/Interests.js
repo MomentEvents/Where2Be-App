@@ -188,7 +188,7 @@ const Interests = ({ navigation, route }) => {
             <SecBackButton>
             <TouchableWithoutFeedback
               onPress={()=>{
-              navigation.navigate('Featured')
+                navigation.navigate("Mine");
               }}>
               <McIcon source ={icons.back_arrow} size={24}/>
             </TouchableWithoutFeedback></SecBackButton>
