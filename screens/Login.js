@@ -25,6 +25,7 @@ import { Dimensions } from "react-native";
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
+
 //datas = events
 const Login = ({ navigation, route }) => {
   const [username, setusernm] = useState("");
@@ -36,6 +37,7 @@ const Login = ({ navigation, route }) => {
   const userlogin = async () => {
     setLoading(true);
     seterror(false);
+    let erry = false;
     try {
       const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/user_login", {
         method: "POST",
@@ -48,19 +50,24 @@ const Login = ({ navigation, route }) => {
           password: password,
         }),
       });
-      // if(!resp.ok){
-      //   throw new Error('bad smth');
-      // }
       const result = await resp.json();
       console.log(result);
       setData(result);
     } catch (err) {
       seterror(true);
       console.log("ERRROR");
+      console.log(error);
+      erry = true;
     } finally {
       setLoading(false);
+      trylogin(erry);
     }
     //return userdata
+  };
+  const trylogin = (erry) =>{
+    if(erry == false){
+      navigation.navigate('Interests')
+    }
   };
 
   return (
@@ -109,16 +116,8 @@ const Login = ({ navigation, route }) => {
       </View>
         <TouchableOpacity style={styles.button}
           onPress={() => {
-            navigation.navigate("Featured");
-          }}
-        >
-          <McText h4>Straight to feature lmao</McText>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}
-          onPress={() => {
             console.log("logging in");
             console.log(userlogin());
-            navigation.navigate('Interests')
           }}
         >
           <McText h4>Log In</McText>

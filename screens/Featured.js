@@ -328,10 +328,8 @@ const Featured = ({ navigation, route }) => {
             </TouchableWithoutFeedback>
           </LinearGradient>
         </ImageBackground>
-          
         </View>
       </TouchableWithoutFeedback>
-
     )
   }
   return (
@@ -341,7 +339,6 @@ const Featured = ({ navigation, route }) => {
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:2 }}>
-      {/* Header here */}
       <SafeAreaView>
         <View style={styles.tempNav}>
       <SectionHeader>
@@ -357,18 +354,12 @@ const Featured = ({ navigation, route }) => {
           navigation.navigate('Search')
         }}>
           <McIcon source ={icons.search} size={28} style={{
-            tintColor:COLORS.gray
+            tintColor:COLORS.gray,
+            marginRight: 10,
           }}/>
         </TouchableWithoutFeedback>
         </View>
-        <TouchableWithoutFeedback
-        onPress={()=>{
-          navigation.navigate('Interests')
-        }}>
-          <McIcon source={icons.tab_4} size={28} style={{
-            tintColor:COLORS.gray
-          }}/>
-        </TouchableWithoutFeedback>
+
       </SectionHeader>
       </View>
       
