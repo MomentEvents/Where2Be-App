@@ -43,7 +43,7 @@ const EventDetail = ({ navigation, route }) => {
       setLike(false);
       console.log("HEREEE2: ", like);
       console.log("HEREEE");
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_like", {
+      const resp = await fetch("http://54.226.108.97:8080/delete_like", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -57,7 +57,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setLike(true);
       console.log("HEREEE2: ", like);
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_like", {
+      const resp = await fetch("http://54.226.108.97:8080/create_like", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -77,7 +77,7 @@ const EventDetail = ({ navigation, route }) => {
       setJoin(false);
       console.log("HEREEE2: ", join);
       console.log("HEREEE");
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_join", {
+      const resp = await fetch("http://54.226.108.97:8080/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -91,7 +91,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_join", {
+      const resp = await fetch("http://54.226.108.97:8080/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -111,7 +111,7 @@ const EventDetail = ({ navigation, route }) => {
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/delete_shoutOut", {
+      const resp = await fetch("http://54.226.108.97:8080/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -125,7 +125,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch("http://mighty-chamber-83878.herokuapp.com/create_shoutOut", {
+      const resp = await fetch("http://54.226.108.97:8080/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -164,7 +164,7 @@ const EventDetail = ({ navigation, route }) => {
   const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_details', {
+            const resp = await fetch('http://54.226.108.97:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -245,7 +245,7 @@ const EventDetail = ({ navigation, route }) => {
                 borderRadius: 13,
               }}
               >
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <McIcon 
                     source={icons.share} 
                     size={24} 
@@ -253,7 +253,7 @@ const EventDetail = ({ navigation, route }) => {
                       margin: 8,
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </SectionImageHeader>
             {/* Image Footer*/}
@@ -406,7 +406,7 @@ const EventDetail = ({ navigation, route }) => {
           </LocationSection>
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
-              margin:8,
+              margin:6,
               tintColor: COLORS.gray1
             }}/>
         <View>
@@ -415,7 +415,7 @@ const EventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility}PUBLIC EVENT
+                {selectedEvent?.visibility} EVENT
             </McText>
           </View>
         </VisibilitySec>
@@ -425,7 +425,7 @@ const EventDetail = ({ navigation, route }) => {
       }}>hello</McText></SectionFooter>
         
       </ScrollView>
-        <View style={styles.otherContainer}>
+        {/* <View style={styles.otherContainer}>
           <UserOptionsSection>
           <View style={{
               alignItems: 'center'
@@ -504,7 +504,7 @@ const EventDetail = ({ navigation, route }) => {
             <McText body3>ShoutOut</McText>
             </View>
           </UserOptionsSection>
-        </View>
+        </View> */}
       </LinearGradient>
     </View>
   );

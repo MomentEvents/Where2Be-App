@@ -8,6 +8,7 @@ import Interests from './Interests';
 import OrganizationDetail from './OrganizationDetail';
 import Login from './Login';
 import OrgEventDetail from './OrgEventDetail';
+import NewAccount from './NewAccount'
 
 
 export {
@@ -20,5 +21,6 @@ export {
   Interests,
   OrganizationDetail,
   Login,
-  OrgEventDetail
+  OrgEventDetail,
+  NewAccount
 }

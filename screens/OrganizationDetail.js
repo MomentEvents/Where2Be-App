@@ -37,7 +37,7 @@ const OrganizationDetail = ({ navigation, route }) => {
         let data;
         let data2;
         if(iD !== 'bad') {
-            const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_events', {
+            const resp = await fetch('http://54.226.108.97:8080/organization_events', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -49,7 +49,7 @@ const OrganizationDetail = ({ navigation, route }) => {
             });
                 
             
-            const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_details', {
+            const resp2 = await fetch('http://54.226.108.97:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -136,7 +136,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                         paddingHorizontal: 8,
                     }}>{selectedEvent?.title}</McText>
                     </View>
-                    <View style={{
+                    {/* <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
                         marginHorizontal: 12,
@@ -150,7 +150,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                             console.log('FOLLOW')
                         }}
                         >FOLLOW</McText></TouchableOpacity>
-                    </View>
+                    </View> */}
                     
                 </View>
             </View>
@@ -161,24 +161,24 @@ const OrganizationDetail = ({ navigation, route }) => {
                     <McText h3 style={{
                         marginLeft: 10,
                         padding: 10
-                        }}>Upcoming</McText>
+                        }}>Upcoming Events</McText>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() =>{
+                {/* <TouchableWithoutFeedback onPress={() =>{
                             console.log('Past')
                         }}>
                     <McText h3 style={{
-                    padding: 10,
-                    opacity: 0.7
-                }}>Past</McText>
+                        padding: 10,
+                        opacity: 0.7
+                    }}>Past</McText>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() =>{
                             console.log('Gallery')
                         }}>
                     <McText h3 style={{
-                    padding: 10,
-                    opacity: 0.7
-                }}>Gallery</McText>
-                </TouchableWithoutFeedback>
+                        padding: 10,
+                        opacity: 0.7
+                    }}>Gallery</McText>
+                </TouchableWithoutFeedback> */}
             </View>
 
             <ScrollView 
@@ -189,33 +189,33 @@ const OrganizationDetail = ({ navigation, route }) => {
                     backgroundColor: 'transparent',
                 }}
                 >
-                    {data.map((item)=>
-                        <TouchableWithoutFeedback
-                            onPress={()=>{
-                                console.log(item)
-                                navigation.navigate('OrgEventDetail', {selectedEvent: item});
-                            }}>
-                            <View style={{
-                            marginLeft: 20,
-                            marginRight: 20,
-                            marginTop: 10,
-                            marginBottom: 5,
-                            flexDirection: 'row',
-                            backgroundColor: COLORS.input,
-                            borderRadius: 30,
-                            opacity: 0.97,
-                            }}>
-                                <ImageBackground source={{uri: item.image}}
-                                    resizeMode='cover'
-                                    borderRadius= {SIZES.radius}
-                                    borderColor={COLORS.gray}
-                                    //borderWidth= '0.2'
-                                    style={{
-                                        width: SIZES.width/4 - 10,
-                                        height: SIZES.width/4 + 10,
-                                        margin: 10,
-                                        justifyContent: 'space-between',
-                                    }}/>
+                {data.map((item)=>
+                    <TouchableWithoutFeedback
+                        onPress={()=>{
+                            console.log(item)
+                            navigation.navigate('OrgEventDetail', {selectedEvent: item});
+                        }}>
+                        <View style={{
+                        marginLeft: 20,
+                        marginRight: 20,
+                        marginTop: 10,
+                        marginBottom: 5,
+                        flexDirection: 'row',
+                        backgroundColor: COLORS.input,
+                        borderRadius: 30,
+                        opacity: 0.97,
+                        }}>
+                        <ImageBackground source={{uri: item.image}}
+                            resizeMode='cover'
+                            borderRadius= {SIZES.radius}
+                            borderColor={COLORS.gray}
+                            //borderWidth= '0.2'
+                            style={{
+                                width: SIZES.width/4 - 10,
+                                height: SIZES.width/4 + 10,
+                                margin: 10,
+                                justifyContent: 'space-between',
+                            }}/>
                             <View style={{
                                 alignItems: 'flex-end',
                                 //marginHorizontal: 15,
@@ -258,7 +258,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                             {item.location}
                                         </McText>
                                     </View>
-                                    <View style={{
+                                    {/* <View style={{
                                         position: 'absolute',
                                         flexDirection:'column',
                                         height: height/8.1,
@@ -339,7 +339,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         </TouchableOpacity>
                                         </View>
                                     </View>
-                                    </View>
+                                    </View> */}
                                     </View>
                                 </View>
                             </View>

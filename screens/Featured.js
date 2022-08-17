@@ -51,7 +51,7 @@ const Featured = ({ navigation, route }) => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json()
 
-    const resp = await fetch(`http://mighty-chamber-83878.herokuapp.com/feat`, {
+    const resp = await fetch(`http://54.226.108.97:8080/feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -66,7 +66,7 @@ const Featured = ({ navigation, route }) => {
 
     setData(data);
 
-    const resp2 = await fetch(`http://mighty-chamber-83878.herokuapp.com/spotlight`, {
+    const resp2 = await fetch(`http://54.226.108.97:8080/spotlight`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -77,7 +77,6 @@ const Featured = ({ navigation, route }) => {
       })
     }); 
     const data2 = await resp2.json();
-
     setData2(data2);
     setLoading(false);
   };
@@ -87,6 +86,7 @@ const Featured = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
     console.log(data.event)
+    console.log(data2)
   }, [type, type2]);
   
   var type_arr = ["Discord", "Instagram"];
@@ -144,7 +144,7 @@ const Featured = ({ navigation, route }) => {
             </DateBox> */}
           </View>
           <LinearGradient
-                colors = {['transparent', COLORS.black]}
+                colors = {['transparent',COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:0, marginBottom: 0, borderRadius: 20}}>
@@ -153,13 +153,13 @@ const Featured = ({ navigation, route }) => {
             }}>{item.title}</McText>
               <View style={{
                 flexDirection: 'row',
-                marginVertical: 8,
+                marginBottom: 4,
                 // alignItems: 'center',
                 // justifyContent: 'center'
               }}>
                 <McText h3
                   style={{color: COLORS.gray, marginHorizontal: 10, letterSpacing: 1.2}}>
-                  {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
+                  {moment(item.startingTime).format('MMM DD, h:mm a').toUpperCase()}
               </McText>
               {/* <TouchableHighlight style={{
                       width: 32,
@@ -251,7 +251,7 @@ const Featured = ({ navigation, route }) => {
                 alignItems: 'flex-end'
               }}>
                 <View style={{ flexDirection:'column'}}>
-              <TouchableHighlight style={{
+              {/* <TouchableHighlight style={{
                 width: 32,
                 height: 32,
                 borderRadius: 80,
@@ -268,7 +268,7 @@ const Featured = ({ navigation, route }) => {
                 <McIcon source={icons.like} size={18} style={{
               tintColor:COLORS.white,
             }}/>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             {/* <TouchableHighlight style={{
                       width: 32,
                       height: 32,
@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: '#1E2029',
-    backgroundColor: COLORS.black,
+    backgroundColor: 'black',
   },
   grabox: {
     backgroundColor: 'rgba(100,100,100,0.8)',

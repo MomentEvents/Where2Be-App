@@ -31,7 +31,7 @@ export const SIZES = {
   big: '32px',
 
   // font sizes
-  large: '40px',
+  large: 40,
   small: '24px',
   h1: 30,
   h2: 24,
@@ -52,7 +52,7 @@ export const SIZES = {
   height,
 };
 export const FONTS = {
-  large: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.large, lineHeight: '40px' },
+  f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large, lineHeight: 40 },
   small: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.small, lineHeight: '22px' },
   h1: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h1, lineHeight: 36 },
   h2: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h2, lineHeight: 30 },

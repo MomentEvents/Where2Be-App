@@ -62,7 +62,7 @@ const OrgEventDetail = ({ navigation, route }) => {
   const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/organization_details', {
+            const resp = await fetch('http://54.226.108.97:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -145,7 +145,7 @@ const OrgEventDetail = ({ navigation, route }) => {
                 borderRadius: 13,
               }}
               >
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <McIcon 
                     source={icons.share} 
                     size={24} 
@@ -153,7 +153,7 @@ const OrgEventDetail = ({ navigation, route }) => {
                       margin: 8,
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </SectionImageHeader>
             {/* Image Footer*/}
@@ -317,7 +317,7 @@ const OrgEventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility}PUBLIC EVENT
+                {selectedEvent?.visibility} EVENT
             </McText>
           </View>
         </VisibilitySec>
@@ -327,7 +327,7 @@ const OrgEventDetail = ({ navigation, route }) => {
       }}>hello</McText></SectionFooter>
         
       </ScrollView>
-        <View style={styles.otherContainer}>
+        {/* <View style={styles.otherContainer}>
           <UserOptionsSection>
           <View style={{
               alignItems: 'center'
@@ -407,7 +407,7 @@ const OrgEventDetail = ({ navigation, route }) => {
             <McText body3> ShoutOut</McText>
             </View>
           </UserOptionsSection>
-        </View>
+        </View> */}
       </LinearGradient>
     </View>
   );

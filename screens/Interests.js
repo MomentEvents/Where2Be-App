@@ -39,7 +39,7 @@ function outDict(dict) {
  }
 
  async function exportTags(outList) {
-  await fetch('http://mighty-chamber-83878.herokuapp.com/delete_user_interest', {
+  await fetch('http://54.226.108.97:8080/delete_user_interest', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -49,7 +49,7 @@ function outDict(dict) {
             id: 'user_1'
         })
     });
-    await fetch('http://mighty-chamber-83878.herokuapp.com/export_user_interest', {
+    await fetch('http://54.226.108.97:8080/export_user_interest', {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -78,7 +78,7 @@ const Interests = ({ navigation, route }) => {
     // Ensure fetch data runs first before everything else
 
     const fetchData = async () => {
-        const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/interests', {
+        const resp = await fetch('http://54.226.108.97:8080/interests', {
             method: 'GET',
         });
 
@@ -87,7 +87,7 @@ const Interests = ({ navigation, route }) => {
         
         
 
-        const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/import_interest_list', {
+        const resp2 = await fetch('http://54.226.108.97:8080/import_interest_list', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -114,7 +114,7 @@ const Interests = ({ navigation, route }) => {
         
     
     
-    // const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com//import_interest_list', {
+    // const resp2 = await fetch('http://54.226.108.97:8080//import_interest_list', {
     //     method: 'POST',
     // });
 
@@ -188,7 +188,7 @@ const Interests = ({ navigation, route }) => {
             <SecBackButton>
             <TouchableWithoutFeedback
               onPress={()=>{
-                navigation.navigate("Mine");
+                navigation.goBack()
               }}>
               <McIcon source ={icons.back_arrow} size={24}/>
             </TouchableWithoutFeedback></SecBackButton>

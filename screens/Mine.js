@@ -42,7 +42,7 @@ var height = Dimensions.get('window').height; //full height
     // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json(
 
-    const resp = await fetch(`http://mighty-chamber-83878.herokuapp.com/spotlight`, {
+    const resp = await fetch(`http://54.226.108.97:8080/spotlight`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

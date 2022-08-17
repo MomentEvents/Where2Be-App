@@ -16,7 +16,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './navigation/Tabs';
 
-import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login, OrgEventDetail, Mine } from './screens';
+import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login, OrgEventDetail, Mine, NewAccount } from './screens';
 
 
 import { customFonts } from './constants';
@@ -47,7 +47,7 @@ export default function App() {
 
 
 //   const fetchData = async () => {
-//     const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/interests', {
+//     const resp = await fetch('http://54.226.108.97:8080/interests', {
 //         method: 'GET',
 //     });
 
@@ -57,7 +57,7 @@ export default function App() {
     
     
 
-//     const resp2 = await fetch('http://mighty-chamber-83878.herokuapp.com/import_interest_list', {
+//     const resp2 = await fetch('http://54.226.108.97:8080/import_interest_list', {
 //         method: 'POST',
 //         headers: {
 //             Accept: 'application/json',
@@ -94,12 +94,11 @@ export default function App() {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+        }} navigationOptions={{
+          gesturesEnabled: false
         }}
-        initialRouteName="Login"
-      >
-        
-        
-        <Stack.Screen name="Featured" component={Tabs} />
+        initialRouteName="Featured">
+        <Stack.Screen name="Featured" component={Featured} />
         <Stack.Screen name="Mine" component={Mine}/>
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
@@ -107,7 +106,7 @@ export default function App() {
         <Stack.Screen name="Search" component={Search}/>
         <Stack.Screen name="Interests" component={Interests}/>
         <Stack.Screen name="Login" component={Login}/>
-        
+        <Stack.Screen name="NewAccount" component={NewAccount}/>
       </Stack.Navigator>
     </NavigationContainer>
   ) : (

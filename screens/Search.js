@@ -16,7 +16,7 @@ import Fuse from 'fuse.js'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://mighty-chamber-83878.herokuapp.com/search', {
+  const resp = await fetch('http://54.226.108.97:8080/search', {
       method: 'GET',
     });
 
