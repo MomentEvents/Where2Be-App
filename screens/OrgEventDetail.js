@@ -135,26 +135,6 @@ const OrgEventDetail = ({ navigation, route }) => {
               >
                 <McIcon source={icons.back_arrow} size={24}/>
               </TouchableOpacity>
-              <View
-              style={{
-                height: 40,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-                borderRadius: 13,
-              }}
-              >
-                {/* <TouchableOpacity>
-                  <McIcon 
-                    source={icons.share} 
-                    size={24} 
-                    style={{
-                      margin: 8,
-                    }}
-                  />
-                </TouchableOpacity> */}
-              </View>
             </SectionImageHeader>
             {/* Image Footer*/}
             <SectionImageFooter>
@@ -317,7 +297,7 @@ const OrgEventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility} EVENT
+                {selectedEvent?.visibility}PUBLIC EVENT
             </McText>
           </View>
         </VisibilitySec>

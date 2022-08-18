@@ -14,16 +14,14 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Tabs from './navigation/Tabs';
 
-import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login, OrgEventDetail, Mine, NewAccount } from './screens';
+import { Featured, EventDetail, Search, OrganizationDetail, OrgEventDetail } from './screens';
 
 
 import { customFonts } from './constants';
 
 
 import 'react-native-gesture-handler';
-import NewInterest from './New-Screen/NewInterest';
 
 const Stack = createStackNavigator();
 
@@ -99,14 +97,10 @@ export default function App() {
         }}
         initialRouteName="Featured">
         <Stack.Screen name="Featured" component={Featured} />
-        <Stack.Screen name="Mine" component={Mine}/>
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
         <Stack.Screen name="OrgEventDetail" component={OrgEventDetail} />
         <Stack.Screen name="Search" component={Search}/>
-        <Stack.Screen name="Interests" component={Interests}/>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="NewAccount" component={NewAccount}/>
       </Stack.Navigator>
     </NavigationContainer>
   ) : (

@@ -4,7 +4,6 @@ import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Butt
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
-import { BlurView } from 'expo-blur';
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
@@ -77,6 +76,7 @@ const Featured = ({ navigation, route }) => {
       })
     }); 
     const data2 = await resp2.json();
+
     setData2(data2);
     setLoading(false);
   };
@@ -86,7 +86,6 @@ const Featured = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
     console.log(data.event)
-    console.log(data2)
   }, [type, type2]);
   
   var type_arr = ["Discord", "Instagram"];
@@ -108,7 +107,7 @@ const Featured = ({ navigation, route }) => {
   const _renderSpotlight = ({item, index}) => {
   return (
     <View>
-      <TouchableWithoutFeedback
+      <TouchableHighlight
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
           console.log("clicked the event")
@@ -144,22 +143,22 @@ const Featured = ({ navigation, route }) => {
             </DateBox> */}
           </View>
           <LinearGradient
-                colors = {['transparent',COLORS.black]}
+                colors = {['transparent', COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:0, marginBottom: 0, borderRadius: 20}}>
             <View><McText h1 numberOfLines={1} style={{
-              marginHorizontal: 8,
+              marginHorizontal: 12,
             }}>{item.title}</McText>
               <View style={{
                 flexDirection: 'row',
-                marginBottom: 4,
+                marginBottom: 6,
                 // alignItems: 'center',
                 // justifyContent: 'center'
               }}>
                 <McText h3
-                  style={{color: COLORS.gray, marginHorizontal: 10, letterSpacing: 1.2}}>
-                  {moment(item.startingTime).format('MMM DD, h:mm a').toUpperCase()}
+                  style={{color: COLORS.gray, marginHorizontal: 12, letterSpacing: 1.2}}>
+                  {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
               </McText>
               {/* <TouchableHighlight style={{
                       width: 32,
@@ -217,13 +216,13 @@ const Featured = ({ navigation, route }) => {
             </LinearGradient>
             
           </ImageBackground>
-          </TouchableWithoutFeedback>
+          </TouchableHighlight>
     </View>
   )}
 
   const _renderItem = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback
+      <TouchableHighlight
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
           console.log("clicked the event")
@@ -312,7 +311,6 @@ const Featured = ({ navigation, route }) => {
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:0, marginBottom: 0, borderRadius: 20, }}>
-              <TouchableWithoutFeedback>
                 <View style={{
                       marginLeft: 10,
                       marginVertical: 5,
@@ -325,11 +323,10 @@ const Featured = ({ navigation, route }) => {
                         marginTop: -2,
                       }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
                   </View>
-            </TouchableWithoutFeedback>
           </LinearGradient>
         </ImageBackground>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableHighlight>
     )
   }
   return (

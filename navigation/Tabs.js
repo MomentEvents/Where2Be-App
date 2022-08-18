@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Interests, SocialFeed, Mine } from '../screens';
+import { Featured } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 import { Platform } from 'react-native';
@@ -103,7 +103,7 @@ const Tabs = ({ params }) => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Mine"
         component={Mine}
         options={{
@@ -114,7 +114,7 @@ const Tabs = ({ params }) => {
             <TabLabel focused={focused} text="Mine" />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
