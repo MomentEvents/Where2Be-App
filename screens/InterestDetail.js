@@ -14,70 +14,69 @@ var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 
-const OrganizationDetail = ({ navigation, route }) => {
+const InterestDetail = ({ navigation, route }) => {
 
-    const [OrgID, setOrgID] = useState(null);
+    const [selectedInterest, setSelectedInterest] = useState(null);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [data2, setData2] = useState([]);
     useEffect(()=>{
-        let {OrgID} = route.params;
-        setOrgID(OrgID);
+        let {selectedInterest} = route.params;
+        setSelectedInterest(selectedInterest);
     },[])
 
-    let iD;
-    if (OrgID !== undefined){
-        iD = OrgID;
-    } else {
-        iD = 'bad';
-    }
+    // let iD;
+    // if (selectedEvent?.userID !== undefined){
+    //     iD = selectedEvent?.userID;
+    // } else {
+    //     iD = 'bad';
+    // }
     
-    // console.log(iD)
-    const fetchData = async () => {
-        let data;
-        let data2;
-        if(iD !== 'bad') {
-            const resp = await fetch('http://3.136.67.161:8080/organization_events', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: iD
-                    })
-            });
+    // // console.log(iD)
+    // const fetchData = async () => {
+    //     let data;
+    //     let data2;
+    //     if(iD !== 'bad') {
+    //         const resp = await fetch('http://3.136.67.161:8080/organization_events', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     Accept: 'application/json',
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     id: iD
+    //                 })
+    //         });
                 
             
-            const resp2 = await fetch('http://3.136.67.161:8080/organization_details', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: iD
-                    })
-            });
-            data = await resp.json();
-            data2 = await resp2.json();
-        }
-        else{
-            data = ['help'];
-            data2 = ['help2']
-        }
-        setData(data);
-        setData2(data2);
-        console.log(OrgID)
-        console.log(data2)
+    //         const resp2 = await fetch('http://3.136.67.161:8080/organization_details', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     Accept: 'application/json',
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({
+    //                     id: iD
+    //                 })
+    //         });
+    //         data = await resp.json();
+    //         data2 = await resp2.json();
+    //     }
+    //     else{
+    //         data = ['help'];
+    //         data2 = ['help2']
+    //     }
+    //     setData(data);
+    //     setData2(data2);
+    //     console.log(data2)
             
-        setLoading(false);
-    };
+    //     setLoading(false);
+    // };
     // console.log(iD)
     //console.log('____________________________________________________________________________');
-    useEffect(() => {
-        fetchData();
-    },[iD]);
+    // useEffect(() => {
+    //     fetchData();
+    // },[iD]);
     //console.log(data);
     //console.log('----------------------------------------------------------------------------');
     // 
@@ -89,10 +88,11 @@ const OrganizationDetail = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
         <LinearGradient
-      colors = {[ COLORS.black,COLORS.black,'#1060b6']}
-      start = {{x: 0, y: 0}}
-      end = {{ x: 1, y: 1}}
-      style = {{padding:2, borderRadius: 20 }}>
+        
+            colors = {[ COLORS.black,COLORS.black,'#1060b6']}
+            start = {{x: 0, y: 0}}
+            end = {{ x: 1, y: 1}}
+            style = {{padding:2, borderRadius: 20 }}>
         <SafeAreaView>
         <TouchableOpacity 
                 onPress={() =>{
@@ -117,11 +117,6 @@ const OrganizationDetail = ({ navigation, route }) => {
                 alignItems: 'center',
                 marginHorizontal: 30,
             }}>
-                <Image
-                style={styles.userProfilePic}
-                source={{
-                    uri:data2.image
-                }}/>
                 <View style={{
                     flexDirection: 'column',
                     marginVertical: 8,
@@ -135,7 +130,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     <McText h2 numberOfLines={3} style={{
                         paddingBottom: 6,
                         paddingHorizontal: 8,
-                    }}>{data2?.name}</McText>
+                    }}>{selectedInterest}</McText>
                     </View>
                     {/* <View style={{
                         flexDirection: 'row',
@@ -155,7 +150,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     
                 </View>
             </View>
-            <View style={styles.EventsHeader}>
+          {/* <View style={styles.EventsHeader}>
                 <TouchableWithoutFeedback onPress={() =>{
                             console.log('Upcoming')
                         }}>
@@ -179,8 +174,8 @@ const OrganizationDetail = ({ navigation, route }) => {
                         padding: 10,
                         opacity: 0.7
                     }}>Gallery</McText>
-                </TouchableWithoutFeedback> */}
-            </View>
+                </TouchableWithoutFeedback>
+          </View> 
 
             <ScrollView 
                 contentContainerStyle={{
@@ -230,7 +225,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                     alignItems : 'flex-start',
                                     //backgroundColor: COLORS.black
                                     }}>
-                                    {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText> */}
+                                    {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText>
                                     <McText h3 numberOfLines={2}>{item.title}</McText>
                                     <View style={{
                                         flexDirection: 'row',
@@ -340,7 +335,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                         </TouchableOpacity>
                                         </View>
                                     </View>
-                                    </View> */}
+                                    </View> 
                                     </View>
                                 </View>
                             </View>
@@ -354,7 +349,7 @@ const OrganizationDetail = ({ navigation, route }) => {
       }}>hello</McText></SectionFooter>
 
                 </ScrollView>
-
+*/}
                 
         </SafeAreaView>
         </LinearGradient>
@@ -443,6 +438,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default OrganizationDetail;
+export default InterestDetail;
 // 
     

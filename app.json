@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "NmeetU",
-    "slug": "NmeetU",
-    "version": "1.0.0",
+    "name": "Moment",
+    "slug": "Moment",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

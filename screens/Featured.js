@@ -1,6 +1,6 @@
 //import React from 'react';
 import React, { useState, useEffect } from 'react';
-import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -16,7 +16,9 @@ const Featured = ({ navigation, route }) => {
 
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
   const [loading, setLoading] = useState(true);
+  const tags = ['Social', 'RSOs or Clubs', 'Bars', 'Frats', 'Music', 'Sports', 'hello']
   // const [type, setType] = useState("Instagram");
   var type = "Instagram";
   var type2 = "Discord";
@@ -50,7 +52,7 @@ const Featured = ({ navigation, route }) => {
     // const resp = await fetch("http://10.0.2.2:3000/data");
     // const data = await resp.json()
 
-    const resp = await fetch(`http://54.226.108.97:8080/feat`, {
+    const resp = await fetch(`http://3.136.67.161:8080/feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -65,7 +67,7 @@ const Featured = ({ navigation, route }) => {
 
     setData(data);
 
-    const resp2 = await fetch(`http://54.226.108.97:8080/spotlight`, {
+    const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -77,10 +79,25 @@ const Featured = ({ navigation, route }) => {
     }); 
     const data2 = await resp2.json();
 
+    const resp3 = await fetch(`http://3.136.67.161:8080/feat_orgs`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: type,
+      })
+    }); 
+    const data3 = await resp3.json();
+
     setData2(data2);
+    setData3(data3)
+    console.log(data3)
     setLoading(false);
   };
-  var spotlight = data2
+  const orgs = data3
+  const spotlight = data2
   // var ab = 0;
 
   useEffect(() => {
@@ -103,6 +120,59 @@ const Featured = ({ navigation, route }) => {
   //     rows.push(ObjectRow());
   // }
   // return tbody(rows);
+
+
+
+  const _renderOrgs = ({item, index}) => {
+    return(
+      <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('OrganizationDetail', {OrgID: item.uniqueID});
+          console.log(item.uniqueID)
+        }}
+      >
+        <View style={{
+          marginLeft: index === 0 ? 20: 15,
+          width: SIZES.width/3
+        }}>
+          <View style={styles.org}>
+          <Image source={{uri: item.image}}
+            resizeMode='cover'
+            borderRadius= {SIZES.radius}
+            borderColor={COLORS.gray}
+            borderWidth= {0.2}// string not number typeError
+            style={styles.userProfilePic}
+            />
+            {/* <GrayBox> */}
+            {/* </GrayBox> */}
+            <View style={{
+              marginHorizontal: 10,
+              marginBottom: 10,
+              
+            }}>
+            <McText h4 numberOfLines={1} style={{
+              
+            }}>{item.title}</McText>
+            </View>
+        </View>
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  }
+
+  const _renderCategories = ({item, index}) => {
+    return (
+      <View>
+      <TouchableWithoutFeedback
+        onPress={()=>{
+          navigation.navigate('InterestDetail', {selectedInterest: item})
+          console.log("hello")
+        }}
+      ><View style={styles.category}><McText h3>{item}</McText></View>
+        </TouchableWithoutFeedback>
+    </View>
+    )
+  }
 
   const _renderSpotlight = ({item, index}) => {
   return (
@@ -142,12 +212,16 @@ const Featured = ({ navigation, route }) => {
               </McText>
             </DateBox> */}
           </View>
+          <View>
           <LinearGradient
                 colors = {['transparent', COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderRadius: 20}}>
-            <View><McText h1 numberOfLines={1} style={{
+                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/9}}>
+            <View style={{
+              marginTop: SIZES.height/20,
+              justifyContent: 'flex-end'
+            }}><McText h1 numberOfLines={1} style={{
               marginHorizontal: 12,
             }}>{item.title}</McText>
               <View style={{
@@ -214,6 +288,7 @@ const Featured = ({ navigation, route }) => {
               </View>
               </View>
             </LinearGradient>
+            </View>
             
           </ImageBackground>
           </TouchableHighlight>
@@ -310,9 +385,10 @@ const Featured = ({ navigation, route }) => {
                 colors = {['transparent', COLORS.trueBlack]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderRadius: 20, }}>
+                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/13}}>
                 <View style={{
                       marginLeft: 10,
+                      marginTop: SIZES.height/42,
                       marginVertical: 5,
                       width: SIZES.width/3 +10,
                       //backgroundColor: COLORS.black
@@ -332,7 +408,7 @@ const Featured = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-                colors = {['#252525', COLORS.black, COLORS.black,'#652070']}
+                colors = {['#252525', COLORS.black, COLORS.black,'#650070']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 1, y: 1}}
                 style = {{padding:2 }}>
@@ -380,6 +456,40 @@ const Featured = ({ navigation, route }) => {
                   marginLeft: 6,
                 }}
               ></FlatList></View>
+              <SectionTitle><McText h3 style={{
+                marginVertical: -6,
+              }}>Featured Organizations</McText></SectionTitle>
+      <View><FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={orgs}
+                renderItem={_renderOrgs}
+                style={{
+                  marginTop: 8,
+                  marginBottom: -6,
+                  marginLeft: 6,
+                }}
+              ></FlatList></View>
+      {/* <SectionTitle><McText h3 style={{
+                marginVertical: -6,
+                marginTop: 10,
+              }}>Categories</McText></SectionTitle>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <FlatList
+                numColumns={Math.ceil(tags.length/2)}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={tags}
+                renderItem={_renderCategories}
+                style={{
+                  marginTop: 8,
+                  marginBottom: -12,
+                  marginLeft: 6,
+                }}
+              ></FlatList>
+              </ScrollView> */}
       {data ?
           data.map((sdata)=>
           <View>
@@ -496,7 +606,33 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#282828",
     // borderRadius: 20
-  },
+  }, org: {
+    borderRadius: SIZES.radius,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.gray,
+  }, userProfilePic: {
+    height: 100,
+    width: 100,
+    borderRadius: 300,
+    margin:12,
+    marginBottom: 5,
+    padding: 30,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, category: {
+    width: SIZES.width/2.5,
+    height: SIZES.height/15,
+    backgroundColor: COLORS.input,
+    marginHorizontal: 6,
+    marginBottom: 12,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
 
 export default Featured;

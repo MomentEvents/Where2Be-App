@@ -62,7 +62,7 @@ const OrgEventDetail = ({ navigation, route }) => {
   const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch('http://54.226.108.97:8080/organization_details', {
+            const resp = await fetch('http://3.136.67.161:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -219,29 +219,30 @@ const OrgEventDetail = ({ navigation, route }) => {
             }
           </ScrollView>
         </ButtonSection>
-        <LocationSection>
-        <McIcon source ={icons.location} size={20} style={{
-              margin:4,
-              tintColor:COLORS.gray,
-            }}/>
-            <TouchableWithoutFeedback onPress={()=>{
-                var uri = selectedEvent?.location
-                Linking
-                .openURL(uri)
-                .catch(err => console.error('Error', err));
-                console.log(uri + ' Chirag is idiot')
-                }}>
-              <McText h4 style={{
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                marginTop: -1, 
-                width: width * 0.83,
-                }}
-                numberOfLines={1}>
-                  {selectedEvent?.location}
-              </McText>
-              </TouchableWithoutFeedback>
-          </LocationSection>
+        
+        <OwnerSection>
+          <TouchableWithoutFeedback style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }} onPress={()=>{
+                navigation.navigate('OrganizationDetail', {OrgID: selectedEvent?.userID})
+                console.log(selectedEvent?.userID)
+              }}>
+          <Image
+                style={styles.orgProfilePic}
+                source={{
+                    uri:data.image
+                }}/>
+            <McText h4 numberOfLines={1} style={{
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              width: width/1.25
+              }}>
+                {data.name}
+            </McText>
+            </TouchableWithoutFeedback>
+        </OwnerSection>
         <DescriptionSection>
           <View style={{
                   marginLeft: 12,
@@ -264,28 +265,28 @@ const OrgEventDetail = ({ navigation, route }) => {
               }
           </View>
         </DescriptionSection>
-        <OwnerSection>
-          <TouchableWithoutFeedback style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }} onPress={()=>{
-            navigation.goBack()
-          }}>
-          <Image
-                style={styles.orgProfilePic}
-                source={{
-                    uri:data.image
-                }}/>
-            <McText h4 numberOfLines={1} style={{
-              letterSpacing: 1,
-              textTransform: 'uppercase',
-              width: width/1.25
-              }}>{selectedEvent?.title}
-            </McText>
-            </TouchableWithoutFeedback>
-        </OwnerSection>
-    
+        <LocationSection>
+        <McIcon source ={icons.location} size={20} style={{
+              margin:4,
+              tintColor:COLORS.gray,
+            }}/>
+            <TouchableWithoutFeedback onPress={()=>{
+                var uri = selectedEvent?.location
+                Linking
+                .openURL(uri)
+                .catch(err => console.log('Error', err));
+                }}>
+              <McText h4 style={{
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginTop: -1, 
+                width: width * 0.83,
+                }}
+                numberOfLines={1}>
+                  {selectedEvent?.location}
+              </McText>
+              </TouchableWithoutFeedback>
+          </LocationSection>
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
@@ -297,7 +298,7 @@ const OrgEventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility}PUBLIC EVENT
+                {selectedEvent?.visibility} EVENT
             </McText>
           </View>
         </VisibilitySec>
@@ -448,7 +449,7 @@ const SectionFooter = styled.View`
 const LocationSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginVertical: 8px;
+  marginTop: 8px;
   borderRadius: 10;
   align-items: center;
 `;
@@ -456,7 +457,7 @@ const LocationSection = styled.View`
 const OwnerSection = styled.View`
   flex-direction: row;
   marginHorizontal: 16px;
-  marginTop: 12px;
+  marginBottom: 12px;
   borderRadius: 10;
   align-items: center;
 `;

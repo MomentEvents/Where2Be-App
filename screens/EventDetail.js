@@ -43,7 +43,7 @@ const EventDetail = ({ navigation, route }) => {
       setLike(false);
       console.log("HEREEE2: ", like);
       console.log("HEREEE");
-      const resp = await fetch("http://54.226.108.97:8080/delete_like", {
+      const resp = await fetch("http://3.136.67.161:8080/delete_like", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -57,7 +57,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setLike(true);
       console.log("HEREEE2: ", like);
-      const resp = await fetch("http://54.226.108.97:8080/create_like", {
+      const resp = await fetch("http://3.136.67.161:8080/create_like", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -77,7 +77,7 @@ const EventDetail = ({ navigation, route }) => {
       setJoin(false);
       console.log("HEREEE2: ", join);
       console.log("HEREEE");
-      const resp = await fetch("http://54.226.108.97:8080/delete_join", {
+      const resp = await fetch("http://3.136.67.161:8080/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -91,7 +91,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
-      const resp = await fetch("http://54.226.108.97:8080/create_join", {
+      const resp = await fetch("http://3.136.67.161:8080/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -111,7 +111,7 @@ const EventDetail = ({ navigation, route }) => {
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch("http://54.226.108.97:8080/delete_shoutOut", {
+      const resp = await fetch("http://3.136.67.161:8080/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -125,7 +125,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch("http://54.226.108.97:8080/create_shoutOut", {
+      const resp = await fetch("http://3.136.67.161:8080/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -163,8 +163,9 @@ const EventDetail = ({ navigation, route }) => {
 
   const fetchData = async () => {
         let data;
+        console.log('id:' + iD)
         if(iD !== 'bad') {
-            const resp = await fetch('http://54.226.108.97:8080/organization_details', {
+            const resp = await fetch('http://3.136.67.161:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -311,6 +312,9 @@ const EventDetail = ({ navigation, route }) => {
                   backgroundColor: COLORS.input,
                   justifyContent: 'center',
                   alignItems: 'center'
+                  }} 
+                  onPress={()=>{
+                    navigation.navigate('InterestDetail', {selectedInterest: taglist})
                   }}
                 >
                   <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{taglist}</McText>
@@ -325,7 +329,8 @@ const EventDetail = ({ navigation, route }) => {
             alignItems: 'center',
             justifyContent: 'center'
           }} onPress={()=>{
-                navigation.navigate('OrganizationDetail', {selectedEvent: selectedEvent})
+                navigation.navigate('OrganizationDetail', {OrgID: selectedEvent?.userID})
+                console.log(selectedEvent?.userID)
               }}>
           <Image
                 style={styles.orgProfilePic}
@@ -336,7 +341,8 @@ const EventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase',
               width: width/1.25
-              }}>{data.name}
+              }}>
+                {data.name}
             </McText>
             </TouchableWithoutFeedback>
         </OwnerSection>

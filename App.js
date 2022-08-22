@@ -15,7 +15,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Featured, EventDetail, Search, OrganizationDetail, OrgEventDetail } from './screens';
+import { Featured, EventDetail, Search, OrganizationDetail, OrgEventDetail, InterestDetail } from './screens';
 
 
 import { customFonts } from './constants';
@@ -45,7 +45,7 @@ export default function App() {
 
 
 //   const fetchData = async () => {
-//     const resp = await fetch('http://54.226.108.97:8080/interests', {
+//     const resp = await fetch('http://3.136.67.161:8080/interests', {
 //         method: 'GET',
 //     });
 
@@ -55,7 +55,7 @@ export default function App() {
     
     
 
-//     const resp2 = await fetch('http://54.226.108.97:8080/import_interest_list', {
+//     const resp2 = await fetch('http://3.136.67.161:8080/import_interest_list', {
 //         method: 'POST',
 //         headers: {
 //             Accept: 'application/json',
@@ -97,6 +97,7 @@ export default function App() {
         }}
         initialRouteName="Featured">
         <Stack.Screen name="Featured" component={Featured} />
+        <Stack.Screen name="InterestDetail" component={InterestDetail} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
         <Stack.Screen name="OrgEventDetail" component={OrgEventDetail} />
