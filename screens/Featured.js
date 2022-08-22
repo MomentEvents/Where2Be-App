@@ -472,7 +472,7 @@ const Featured = ({ navigation, route }) => {
                   marginLeft: 6,
                 }}
               ></FlatList></View>
-      {/* <SectionTitle><McText h3 style={{
+      <SectionTitle><McText h3 style={{
                 marginVertical: -6,
                 marginTop: 10,
               }}>Categories</McText></SectionTitle>
@@ -489,7 +489,7 @@ const Featured = ({ navigation, route }) => {
                   marginLeft: 6,
                 }}
               ></FlatList>
-              </ScrollView> */}
+              </ScrollView>
       {data ?
           data.map((sdata)=>
           <View>
