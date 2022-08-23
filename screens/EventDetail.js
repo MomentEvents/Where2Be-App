@@ -232,8 +232,12 @@ const EventDetail = ({ navigation, route }) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 13,
+                  marginLeft: -20,
                 }}>
-                <McIcon source={icons.back_arrow} size={24}/>
+                <McIcon source={icons.back_arrow} style={{
+                  tintColor: COLORS.white,
+                  marginLeft: 8,
+                }} size={24}/>
               </TouchableOpacity>
              
             </SectionImageHeader>
@@ -390,6 +394,28 @@ const EventDetail = ({ navigation, route }) => {
               </McText>
               </TouchableWithoutFeedback>
           </LocationSection>
+          <LinkSection>
+        <McIcon source ={icons.links} size={20} style={{
+              margin:4,
+              tintColor:COLORS.gray,
+            }}/>
+            <TouchableWithoutFeedback onPress={()=>{
+                var uri = selectedEvent?.link
+                Linking
+                .openURL(uri)
+                .catch(err => console.log('Error', err));
+                }}>
+              <McText h4 style={{
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginTop: -1, 
+                width: width * 0.83,
+                }}
+                numberOfLines={1}>
+                  {selectedEvent?.link}
+              </McText>
+              </TouchableWithoutFeedback>
+          </LinkSection>
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
@@ -555,6 +581,15 @@ const LocationSection = styled.View`
   borderRadius: 10;
   align-items: center;
 `;
+
+const LinkSection = styled.View`
+  flex-direction: row;
+  marginHorizontal: 16px;
+  marginTop: 4px;
+  borderRadius: 10;
+  align-items: center;
+`;
+
 
 const OwnerSection = styled.View`
   flex-direction: row;

@@ -9,6 +9,11 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
+import { Dimensions } from "react-native";
+
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height; //full height
+
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -17,8 +22,10 @@ const Featured = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
+  const [category_feat, setcategory_feat] = useState([]);
+
   const [loading, setLoading] = useState(true);
-  const tags = ['Social', 'RSOs or Clubs', 'Bars', 'Frats', 'Music', 'Sports', 'hello']
   // const [type, setType] = useState("Instagram");
   var type = "Instagram";
   var type2 = "Discord";
@@ -49,8 +56,19 @@ const Featured = ({ navigation, route }) => {
   // },[route.params])
 
   const fetchData = async () => {
-    // const resp = await fetch("http://10.0.2.2:3000/data");
-    // const data = await resp.json()
+
+    const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: type,
+      })
+    }); 
+    const data2 = await resp2.json();
+    setData2(data2);
 
     const resp = await fetch(`http://3.136.67.161:8080/feat`, {
       method: 'POST',
@@ -67,17 +85,7 @@ const Featured = ({ navigation, route }) => {
 
     setData(data);
 
-    const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-      })
-    }); 
-    const data2 = await resp2.json();
+    
 
     const resp3 = await fetch(`http://3.136.67.161:8080/feat_orgs`, {
       method: 'POST',
@@ -90,19 +98,44 @@ const Featured = ({ navigation, route }) => {
       })
     }); 
     const data3 = await resp3.json();
-
-    setData2(data2);
     setData3(data3)
-    console.log(data3)
+    
+    const resp4 = await fetch(`http://3.136.67.161:8080/categories`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: type,
+      })
+    }); 
+    const data4 = await resp4.json();
+    setData4(data4)
+
+    const resp5 = await fetch(`http://3.136.67.161:8080/categories_feat`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: type,
+      })
+    }); 
+    const category_feat = await resp5.json();
+    setcategory_feat(category_feat)
+
     setLoading(false);
   };
+  const categories = data4
   const orgs = data3
   const spotlight = data2
+  console.log(categories)
   // var ab = 0;
 
   useEffect(() => {
     fetchData();
-    console.log(data.event)
   }, [type, type2]);
   
   var type_arr = ["Discord", "Instagram"];
@@ -128,7 +161,6 @@ const Featured = ({ navigation, route }) => {
       <TouchableWithoutFeedback
         onPress={()=>{
           navigation.navigate('OrganizationDetail', {OrgID: item.uniqueID});
-          console.log(item.uniqueID)
         }}
       >
         <View style={{
@@ -165,10 +197,16 @@ const Featured = ({ navigation, route }) => {
       <View>
       <TouchableWithoutFeedback
         onPress={()=>{
-          navigation.navigate('InterestDetail', {selectedInterest: item})
-          console.log("hello")
+          navigation.navigate('InterestDetail', {selectedInterest: item.name})
         }}
-      ><View style={styles.category}><McText h3>{item}</McText></View>
+      ><View style={styles.category}><View style={{
+        width: width/3.3,
+        height: height/25,
+        alignItems: 'center',
+      }}><McText h3>{item.name}</McText>
+      <McText body4 style={{
+        opacity: 0.7
+      }}>{item.event_count} Events</McText></View></View>
         </TouchableWithoutFeedback>
     </View>
     )
@@ -180,7 +218,7 @@ const Featured = ({ navigation, route }) => {
       <TouchableHighlight
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
-          console.log("clicked the event")
+
         }}
       >
     <ImageBackground source={{uri: item.image} }
@@ -217,21 +255,18 @@ const Featured = ({ navigation, route }) => {
                 colors = {['transparent', COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/9}}>
+                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/6}}>
             <View style={{
-              marginTop: SIZES.height/20,
-              justifyContent: 'flex-end'
-            }}><McText h1 numberOfLines={1} style={{
-              marginHorizontal: 12,
-            }}>{item.title}</McText>
-              <View style={{
-                flexDirection: 'row',
-                marginBottom: 6,
-                // alignItems: 'center',
-                // justifyContent: 'center'
-              }}>
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                      width: SIZES.width/1.2,
+                      position: 'absolute',
+                      bottom: 8,
+                      left: 12
+                    }}>
+                      <McText h1 numberOfLines={2}>{item.title}</McText>
                 <McText h3
-                  style={{color: COLORS.gray, marginHorizontal: 12, letterSpacing: 1.2}}>
+                  style={{color: COLORS.gray, marginTop: 4,letterSpacing: 1.2}}>
                   {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
               </McText>
               {/* <TouchableHighlight style={{
@@ -286,7 +321,6 @@ const Featured = ({ navigation, route }) => {
             }}/>
             </TouchableHighlight> */}
               </View>
-              </View>
             </LinearGradient>
             </View>
             
@@ -300,7 +334,7 @@ const Featured = ({ navigation, route }) => {
       <TouchableHighlight
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
-          console.log("clicked the event")
+
         }}
       >
         <View style={{
@@ -385,17 +419,17 @@ const Featured = ({ navigation, route }) => {
                 colors = {['transparent', COLORS.trueBlack]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/13}}>
-                <View style={{
-                      marginLeft: 10,
-                      marginTop: SIZES.height/42,
-                      marginVertical: 5,
-                      width: SIZES.width/3 +10,
-                      //backgroundColor: COLORS.black
-                    }}
-                    >
-                      <McText h4 numberOfLines={1}>{item.title}</McText>
-                      <McText body4 style={{
+                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/8}}>
+                  <View style={{
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                      width: SIZES.width/2.7,
+                      position: 'absolute',
+                      bottom: 8,
+                      left: 12
+                    }}>
+                      <McText h3 numberOfLines={2}>{item.title}</McText>
+                      <McText body3 style={{
                         marginTop: -2,
                       }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
                   </View>
@@ -445,7 +479,7 @@ const Featured = ({ navigation, route }) => {
       <ScrollView style={styles.scrollView}>
       <View><FlatList
                 horizontal
-                showsHorizontalScrollIndicator={false}
+
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
                 data={spotlight}
@@ -472,24 +506,6 @@ const Featured = ({ navigation, route }) => {
                   marginLeft: 6,
                 }}
               ></FlatList></View>
-      <SectionTitle><McText h3 style={{
-                marginVertical: -6,
-                marginTop: 10,
-              }}>Categories</McText></SectionTitle>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <FlatList
-                numColumns={Math.ceil(tags.length/2)}
-                keyExtractor={(item) => 'event_' + item.id}
-                //data={dummyData[dataset]}
-                data={tags}
-                renderItem={_renderCategories}
-                style={{
-                  marginTop: 8,
-                  marginBottom: -12,
-                  marginLeft: 6,
-                }}
-              ></FlatList>
-              </ScrollView>
       {data ?
           data.map((sdata)=>
           <View>
@@ -509,14 +525,56 @@ const Featured = ({ navigation, route }) => {
               ></FlatList>
             </View>
           </View>
+          
           //{_renderList(sdata.header, sdata.data)}
 
           )
           : <Text>loadd....</Text>
         }
-      {/* {_renderList("FEATURED", data)}
-      {_renderList("ABTEST", data2)}
-      {_renderList("ABTEST", data2)} */}
+        <SectionTitle><McText h3 style={{
+                marginVertical: -6,
+                marginTop: 10,
+              }}>Categories</McText></SectionTitle>
+      <View>
+        <FlatList
+        horizontal showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={categories}
+                renderItem={_renderCategories}
+                style={{
+                  marginTop: 8,
+                  marginBottom: -12,
+                  marginLeft: 6,
+                }}
+              ></FlatList>
+              </View>
+        {category_feat ?
+          category_feat.map((sdata)=>
+          <View>
+            <SectionTitle>
+              <McText h3>
+                {sdata.header}
+              </McText>
+            </SectionTitle>
+            <View>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => 'event_' + item.id}
+                //data={dummyData[dataset]}
+                data={sdata.data}
+                renderItem={_renderItem}
+              ></FlatList>
+            </View>
+          </View>
+          
+          //{_renderList(sdata.header, sdata.data)}
+
+          )
+          : <Text>loadd....</Text>
+        }
+      
       <SectionFooter><McText h1 style={{
         //temp fix for padding
         color:'transparent'
@@ -613,8 +671,8 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: COLORS.gray,
   }, userProfilePic: {
-    height: 100,
-    width: 100,
+    height: height/10,
+    width: height/10,
     borderRadius: 300,
     margin:12,
     marginBottom: 5,
@@ -624,8 +682,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   }, category: {
-    width: SIZES.width/2.5,
-    height: SIZES.height/15,
+    width: width/2.5,
+    height: height/15,
     backgroundColor: COLORS.input,
     marginHorizontal: 6,
     marginBottom: 12,

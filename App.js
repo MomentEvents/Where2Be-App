@@ -15,7 +15,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Featured, EventDetail, Search, OrganizationDetail, OrgEventDetail, InterestDetail } from './screens';
+import { Featured, EventDetail, Search, OrganizationDetail, OrgEventDetail, InterestEventDetail, InterestDetail } from './screens';
 
 
 import { customFonts } from './constants';
@@ -98,6 +98,7 @@ export default function App() {
         initialRouteName="Featured">
         <Stack.Screen name="Featured" component={Featured} />
         <Stack.Screen name="InterestDetail" component={InterestDetail} />
+        <Stack.Screen name="InterestEventDetail" component={InterestEventDetail} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
         <Stack.Screen name="OrgEventDetail" component={OrgEventDetail} />

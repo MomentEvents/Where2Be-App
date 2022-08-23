@@ -94,28 +94,31 @@ const OrganizationDetail = ({ navigation, route }) => {
       end = {{ x: 1, y: 1}}
       style = {{padding:2, borderRadius: 20 }}>
         <SafeAreaView>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'row',
+                marginTop: 20,
+            }}>
         <TouchableOpacity 
                 onPress={() =>{
                   navigation.goBack();
                 }}
                 style={{
-                  width: 56,
-                  height: 40,
-                  marginLeft: 30,
-                  marginBottom: 6,
-                  backgroundColor: 'rgba(0,0,0,0.5)',
+                    marginTop: 36,
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 13,
                 }}
               >
-                <McIcon source={icons.back_arrow} size={24}/>
+                <McIcon source={icons.back_arrow} style={{
+                  tintColor: COLORS.white,
+                  marginLeft: 8,
+                }} size={24}/>
                 </TouchableOpacity>
             <View style={{
                 flexDirection: 'row',
                 width: width,
                 alignItems: 'center',
-                marginHorizontal: 30,
             }}>
                 <Image
                 style={styles.userProfilePic}
@@ -154,6 +157,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     </View> */}
                     
                 </View>
+            </View>
             </View>
             <View style={styles.EventsHeader}>
                 <TouchableWithoutFeedback onPress={() =>{

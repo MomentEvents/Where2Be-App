@@ -1,14 +1,16 @@
 import React, {useState, useEffect, useCallback} from 'react';
 // import { Text, View, StyleSheet } from 'react-native';
-import { Text, View, StyleSheet, ScrollView, Image, ImageBackground, Platform, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image, ImageBackground, Platform, TouchableHighlight, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { McIcon, McText } from '../components';
 import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient'
-import { Dimensions } from "react-native";
+
 import moment from 'moment';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Dimensions } from "react-native";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -19,64 +21,51 @@ const InterestDetail = ({ navigation, route }) => {
     const [selectedInterest, setSelectedInterest] = useState(null);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
-    const [data2, setData2] = useState([]);
+    // const [data2, setData2] = useState([]);
     useEffect(()=>{
         let {selectedInterest} = route.params;
         setSelectedInterest(selectedInterest);
+        console.log(selectedInterest);
     },[])
-
-    // let iD;
-    // if (selectedEvent?.userID !== undefined){
-    //     iD = selectedEvent?.userID;
-    // } else {
-    //     iD = 'bad';
-    // }
     
-    // // console.log(iD)
-    // const fetchData = async () => {
-    //     let data;
-    //     let data2;
-    //     if(iD !== 'bad') {
-    //         const resp = await fetch('http://3.136.67.161:8080/organization_events', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     Accept: 'application/json',
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({
-    //                     id: iD
-    //                 })
-    //         });
+
+    let iD;
+    if (selectedInterest !== null){
+        console.log('step1');
+        iD = selectedInterest;
+    } else {
+        iD = 'bad';
+    }
+    
+    
+    const fetchData = async () => {
+        let data;
+        if(iD !== 'bad') {
+            const resp = await fetch('http://3.136.67.161:8080/interest_events', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: selectedInterest
+                    })
+            });
                 
-            
-    //         const resp2 = await fetch('http://3.136.67.161:8080/organization_details', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     Accept: 'application/json',
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({
-    //                     id: iD
-    //                 })
-    //         });
-    //         data = await resp.json();
-    //         data2 = await resp2.json();
-    //     }
-    //     else{
-    //         data = ['help'];
-    //         data2 = ['help2']
-    //     }
-    //     setData(data);
-    //     setData2(data2);
-    //     console.log(data2)
-            
-    //     setLoading(false);
-    // };
+            data = await resp.json();
+        }else{
+            data = ['help'];
+        }
+        console.log(data);
+        setData(data);
+        setLoading(false);
+    }; 
     // console.log(iD)
     //console.log('____________________________________________________________________________');
-    // useEffect(() => {
-    //     fetchData();
-    // },[iD]);
+    
+    useEffect(() => {
+        fetchData();
+    },[iD]);
     //console.log(data);
     //console.log('----------------------------------------------------------------------------');
     // 
@@ -84,285 +73,170 @@ const InterestDetail = ({ navigation, route }) => {
     // 
     //get_events(selectedEvent?.userID);
     
-   
+    const _renderItem = ({item, index}) => {
+        return (
+          <TouchableHighlight
+            onPress={()=>{
+              navigation.navigate('InterestEventDetail', {selectedEvent: item});
+    
+            }}
+          >
+            <View style={{
+              marginLeft: 20,
+            }}>
+              <ImageBackground source={{uri: item.image}}
+                resizeMode='cover'
+                borderRadius= {SIZES.radius}
+                borderColor={COLORS.gray}
+                borderWidth= {0.2}// string not number typeError
+                style={{
+                  width: SIZES.width/2.5 + 10,
+                  height: SIZES.width/1.9 + 10,
+                  justifyContent: 'space-between',
+                  marginVertical: 8,
+                }}
+                >
+                {/* <GrayBox> */}
+                  <View style={{
+                    flexDirection: 'column',
+                    marginVertical: 8,
+                    marginHorizontal: 8,
+                    alignItems: 'flex-end'
+                  }}>
+                    <View style={{ flexDirection:'column'}}>
+                  {/* <TouchableHighlight style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 80,
+                    marginLeft: 10,
+                    backgroundColor: COLORS.input,
+                    opacity: 0.7,
+                    borderWidth: 1,
+                    borderColor: COLORS.white,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                    }} onPress={()=>{
+                    console.log("like " + item.title)
+                  }}>
+                    <McIcon source={icons.like} size={18} style={{
+                  tintColor:COLORS.white,
+                }}/>
+                </TouchableHighlight> */}
+                {/* <TouchableHighlight style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 80,
+                          marginLeft: 10,
+                          backgroundColor: COLORS.input,
+                          borderWidth: 1,
+                          borderColor: COLORS.white,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                          }} onPress={()=>{
+                    console.log("join " + item.title)
+                  }}>
+                    <McIcon source={icons.check} size={20} style={{
+                  tintColor:COLORS.white,
+                }}/>
+                </TouchableHighlight> */}
+                {/*
+                <TouchableHighlight style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 80,
+                          marginLeft: 10,
+                          backgroundColor: COLORS.input,
+                          borderWidth: 1,
+                          borderColor: COLORS.white,
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                          }} onPress={()=>{
+                    console.log("shoutout " + item.title)
+                  }}>
+                    <McIcon source={icons.shoutout} size={18} style={{
+                  tintColor:COLORS.white,
+                }}/>
+                </TouchableHighlight> */}
+                </View>
+              </View>
+                {/* </GrayBox> */}
+                <LinearGradient
+                    colors = {['transparent', COLORS.trueBlack]}
+                    start = {{x: 1, y: 0}}
+                    end = {{ x: 1, y: 1}}
+                    style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/8}}>
+                    <View style={{
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end',
+                        width: SIZES.width/2.7,
+                        position: 'absolute',
+                        bottom: 8,
+                        left: 12
+                        }}>
+                        <McText h3 numberOfLines={2}>{item.title}</McText>
+                        <McText body3 style={{
+                            marginTop: -2,
+                        }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
+                    </View>
+          </LinearGradient>
+            </ImageBackground>
+            </View>
+          </TouchableHighlight>
+        )
+    }
   return (
     <View style={styles.container}>
         <LinearGradient
         
-            colors = {[ COLORS.black,COLORS.black,'#1060b6']}
+            colors = {[ COLORS.black,COLORS.black, COLORS.black,'#1060b6']}
             start = {{x: 0, y: 0}}
             end = {{ x: 1, y: 1}}
             style = {{padding:2, borderRadius: 20 }}>
         <SafeAreaView>
+            <View style={styles.tempNav}>
+                <SectionHeader>
         <TouchableOpacity 
                 onPress={() =>{
                   navigation.goBack();
                 }}
                 style={{
-                  width: 56,
-                  height: 40,
-                  marginLeft: 30,
-                  marginBottom: 6,
-                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  width: 20,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  borderRadius: 13,
                 }}
               >
-                <McIcon source={icons.back_arrow} size={24}/>
+                <McIcon source={icons.back_arrow} style={{
+                    tintColor: COLORS.white,
+                    marginBottom: 4,
+                }} size={20}/>
                 </TouchableOpacity>
-            <View style={{
-                flexDirection: 'row',
-                width: width,
-                alignItems: 'center',
-                marginHorizontal: 30,
-            }}>
-                <View style={{
-                    flexDirection: 'column',
-                    marginVertical: 8,
-                    marginLeft: 12,
-                    width: width/1.5,
-                    alignItems: 'flex-start',
-                }}>
-                    <View style={{
-                        alignItems: 'center'
-                    }}>
-                    <McText h2 numberOfLines={3} style={{
-                        paddingBottom: 6,
-                        paddingHorizontal: 8,
+                    <McText h1 style={{
+                        marginLeft: 4,
                     }}>{selectedInterest}</McText>
-                    </View>
-                    {/* <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginHorizontal: 12,
-                    }}><McText h4 style={{
-                        letterSpacing: 1.2,
-                    }}>XYZ Followers</McText>
-                        <TouchableOpacity style={styles.button}><McText h4 style={{
-                            letterSpacing: 1.2,
-                        }}
-                        onPress={() =>{
-                            console.log('FOLLOW')
-                        }}
-                        >FOLLOW</McText></TouchableOpacity>
-                    </View> */}
-                    
+                    </SectionHeader>
                 </View>
-            </View>
-          {/* <View style={styles.EventsHeader}>
-                <TouchableWithoutFeedback onPress={() =>{
-                            console.log('Upcoming')
-                        }}>
-                    <McText h3 style={{
-                        marginLeft: 10,
-                        padding: 10
-                        }}>Upcoming Events</McText>
-                </TouchableWithoutFeedback>
-                {/* <TouchableWithoutFeedback onPress={() =>{
-                            console.log('Past')
-                        }}>
-                    <McText h3 style={{
-                        padding: 10,
-                        opacity: 0.7
-                    }}>Past</McText>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() =>{
-                            console.log('Gallery')
-                        }}>
-                    <McText h3 style={{
-                        padding: 10,
-                        opacity: 0.7
-                    }}>Gallery</McText>
-                </TouchableWithoutFeedback>
-          </View> 
-
-            <ScrollView 
-                contentContainerStyle={{
-                    backgroundColor: 'transparent'
-                }}
-                style={{
-                    backgroundColor: 'transparent',
-                }}
-                >
-                {data.map((item)=>
-                    <TouchableWithoutFeedback
-                        onPress={()=>{
-                            console.log(item)
-                            navigation.navigate('OrgEventDetail', {selectedEvent: item});
-                        }}>
-                        <View style={{
-                        marginLeft: 20,
-                        marginRight: 20,
-                        marginTop: 10,
-                        marginBottom: 5,
-                        flexDirection: 'row',
-                        backgroundColor: COLORS.input,
-                        borderRadius: 30,
-                        opacity: 0.97,
-                        }}>
-                        <ImageBackground source={{uri: item.image}}
-                            resizeMode='cover'
-                            borderRadius= {SIZES.radius}
-                            borderColor={COLORS.gray}
-                            //borderWidth= '0.2'
-                            style={{
-                                width: SIZES.width/4 - 10,
-                                height: SIZES.width/4 + 10,
-                                margin: 10,
-                                justifyContent: 'space-between',
-                            }}/>
-                            <View style={{
-                                alignItems: 'flex-end',
-                                //marginHorizontal: 15,
-                                //marginVertical: 15
-                                }}>
-                                    <View style={{
-                                    marginHorizontal: 15,
-                                    width : width/1.75,
-                                    marginBottom: 10,
-                                    margin: 15,
-                                    alignItems : 'flex-start',
-                                    //backgroundColor: COLORS.black
-                                    }}>
-                                    {/* <McText body5 style={{opacity: 0.5}}>{item.type}</McText>
-                                    <McText h3 numberOfLines={2}>{item.title}</McText>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        marginHorizontal: 2,
-                                        marginVertical: 1.5,
-                                    }}>
-                                        <McIcon source={icons.event} size={16} style={{
-                                            tintColor: COLORS.gray,
-                                            marginLeft: -4,
-                                        }}/>
-                                        <McText h8
-                                            style={{color: COLORS.gray}}>
-                                            {moment(item.startingTime).format('MMM DD YYYY, h:mm a').toUpperCase()}
-                                        </McText>
-                                    </View>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        marginHorizontal: 2,
-                                    }}>
-                                        <McIcon source={icons.location} size={16} style={{
-                                            tintColor: COLORS.gray,
-                                            marginLeft: -4,
-                                        }}/>
-                                        <McText h8
-                                            style={{color: COLORS.gray, width: width/1.8}} numberOfLines={1}>
-                                            {item.location}
-                                        </McText>
-                                    </View>
-                                    {/* <View style={{
-                                        position: 'absolute',
-                                        flexDirection:'column',
-                                        height: height/8.1,
-                                        justifyContent: 'flex-end',
-                                    }}>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                    }}>
-                                        <View style= {{
-                                            flexDirection: 'row',
-                                            alignItems: 'center'
-                                        }}>
-                                        <TouchableOpacity style={{
-                                            width: 24,
-                                            height: 24,
-                                            borderRadius: 80,
-                                            marginHorizontal: 2,
-                                            backgroundColor: 'transparent',
-                                            borderWidth: 1,
-                                            borderColor: COLORS.gray,
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                            }} onPress={()=>{
-                                                console.log("Like")
-                                            }}>
-                                            <McIcon source={icons.like} size={16} style={{
-                                                tintColor:COLORS.gray,
-                                                marginHorizontal: 8
-                                                }}/>
-                                        </TouchableOpacity>
-                                        </View>
-                                        <View style= {{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            marginHorizontal: 4,
-
-                                        }}>
-                                        <TouchableOpacity style={{
-                                            width: 24,
-                                            height: 24,
-                                            borderRadius: 80,
-                                            marginHorizontal: 2,
-                                            backgroundColor: 'transparent',
-                                            borderWidth: 1,
-                                            borderColor: COLORS.gray,
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                            }} onPress={()=>{
-                                                console.log("Interested")
-                                            }}>
-                                            <McIcon source={icons.check} size={20} style={{
-                                                tintColor:COLORS.gray,
-                                                marginHorizontal: 8
-                                                }}/>
-                                        </TouchableOpacity>
-                                        </View>
-                                        <View style= {{
-                                            flexDirection: 'row',
-                                            alignItems: 'center'
-                                        }}>
-                                        <TouchableOpacity style={{
-                                            width: 24,
-                                            height: 24,
-                                            borderRadius: 80,
-                                            marginHorizontal: 2,
-                                            backgroundColor: 'transparent',
-                                            borderWidth: 1,
-                                            borderColor: COLORS.gray,
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                            }} onPress={()=>{
-                                                console.log("Shoutout")
-                                            }}>
-                                            <McIcon source={icons.shoutout} size={16} style={{
-                                                tintColor:COLORS.gray,
-                                                marginHorizontal: 8
-                                                }}/>
-                                        </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    </View> 
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableWithoutFeedback>
-    
-                        )
-                    }
-                    <SectionFooter><McText h1 style={{
-        //temp fix for padding
-        color:'transparent'
-      }}>hello</McText></SectionFooter>
-
-                </ScrollView>
-*/}
-                
-        </SafeAreaView>
+                        <View>
+                        <FlatList
+                            numColumns={2}
+                            keyExtractor={(item) => 'event_' + item.id}
+                            //data={dummyData[dataset]}
+                            data={data}
+                            renderItem={_renderItem}
+                        />
+                        </View> 
+                    </SafeAreaView>
         </LinearGradient>
     </View>
   );
 };
 
-const SectionEventHeader = styled.View`
+const SectionHeader = styled.View`
+  background-color: transparent;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
   flex-direction: row;
-  margin-top: 10px;
-  margin-left: 30px;
-  margin-right: 30px;
-`
+`;
 const SectionImageFooter = styled.View`
   flex: 1;
   justify-content: flex-end;
@@ -378,7 +252,7 @@ margin: 0px 30px;
 
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 180px;
+  padding: 300px;
   justify-content: space-between;
 `;
 
@@ -418,6 +292,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tempNav: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#282828",
+    flexDirection: 'row',
+    marginBottom: 12,
+    // borderRadius: 20
+  },
   button: {
     marginHorizontal: 8,
     padding: 4,
@@ -439,5 +320,3 @@ const styles = StyleSheet.create({
 });
 
 export default InterestDetail;
-// 
-    

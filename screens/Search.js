@@ -53,17 +53,30 @@ import Fuse from 'fuse.js'
     const sResults = results.map(result => result.item);
    return (
      <SafeAreaView style={styles.container}>
-      <SectionSearch>
-        <SearchView>
-          <TouchableOpacity
+      <View style={{
+        flexDirection:'row',
+        justifyContent: 'space-between'
+      }}>
+        <TouchableOpacity
           onPress={() =>{
             navigation.goBack();
           }}
+          style={{
+            marginTop: 16,
+            marginRight: 20,
+          }}
           >
-          <McIcon source={icons.back_arrow} size={22} style={{
-            margin: 4
-          }}/>
+          <McIcon source={icons.back_arrow} style={{
+                  tintColor: COLORS.white,
+                }} size={24}/>
           </TouchableOpacity>
+      <SectionSearch>
+        <SearchView>
+        <McIcon source={icons.search} style={{
+                  tintColor: COLORS.white,
+                  marginRight: 8,
+                  marginLeft: 4
+                }} size={24}/>
           <TextInput
             placeholder='Search'
             placeholderTextColor={COLORS.gray1}
@@ -81,6 +94,7 @@ import Fuse from 'fuse.js'
           />
         </SearchView>
       </SectionSearch> 
+      </View>
       <ScrollView>
         {
             sResults.map((res)=>
@@ -143,6 +157,7 @@ import Fuse from 'fuse.js'
 `;
 const SectionSearch = styled.View`
   margin: 4px ${SIZES.padding};
+  marginLeft: -6;
   height: 50px;
   background-color: ${COLORS.input};
   border-radius: 15px;

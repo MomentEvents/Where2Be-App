@@ -26,7 +26,7 @@ var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 
-const OrgEventDetail = ({ navigation, route }) => {
+const InterestEventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -549,4 +549,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(OrgEventDetail);
+export default memo(InterestEventDetail);

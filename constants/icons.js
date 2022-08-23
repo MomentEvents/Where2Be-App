@@ -16,6 +16,7 @@ const friend_add = require('../assets/icons/friend_add.png')
 const check = require('../assets/icons/check.png')
 const settings = require('../assets/icons/settings.png')
 const visibility = require('../assets/icons/visibility.png')
+const links = require('../assets/icons/link.png')
 
 export default {
   back_arrow,
@@ -35,5 +36,6 @@ export default {
   check,
   friend_add,
   settings,
-  visibility
+  visibility,
+  links
 };
