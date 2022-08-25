@@ -99,7 +99,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                 alignItems: 'row',
                 marginTop: 20,
             }}>
-        <TouchableOpacity 
+        <TouchableOpacity
                 onPress={() =>{
                   navigation.goBack();
                 }}
@@ -198,7 +198,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     <TouchableWithoutFeedback
                         onPress={()=>{
                             console.log(item)
-                            navigation.navigate('OrgEventDetail', {selectedEvent: item});
+                            navigation.push('EventDetail', {selectedEvent: item});
                         }}>
                         <View style={{
                         marginLeft: 20,

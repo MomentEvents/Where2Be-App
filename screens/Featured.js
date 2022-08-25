@@ -228,7 +228,7 @@ const Featured = ({ navigation, route }) => {
           borderWidth= {0.3}// string not number typeError
           style={{
             width: SIZES.width/1.15,
-            height: SIZES.width/1.6 + 10,
+            height: SIZES.width/1.9 + 10,
             justifyContent: 'space-between',
             margin: 8
           }}
@@ -671,8 +671,8 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: COLORS.gray,
   }, userProfilePic: {
-    height: height/10,
-    width: height/10,
+    height: height/11,
+    width: height/11,
     borderRadius: 300,
     margin:12,
     marginBottom: 5,

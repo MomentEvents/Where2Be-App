@@ -98,10 +98,8 @@ export default function App() {
         initialRouteName="Featured">
         <Stack.Screen name="Featured" component={Featured} />
         <Stack.Screen name="InterestDetail" component={InterestDetail} />
-        <Stack.Screen name="InterestEventDetail" component={InterestEventDetail} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
-        <Stack.Screen name="OrgEventDetail" component={OrgEventDetail} />
         <Stack.Screen name="Search" component={Search}/>
       </Stack.Navigator>
     </NavigationContainer>

@@ -30,9 +30,11 @@ const EventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
   }
+  
   const [like, setLike] = useState(false);
   const [join, setJoin] = useState(false);
   const [shoutout, setShoutout] = useState(false);
@@ -222,8 +224,7 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
-                  // navigation.goBack();
-                  navigation.navigate("Featured", {joindedEvent:joindedEvent})
+                  navigation.goBack();
                 }}
                 style={{
                   width: 56,
@@ -318,7 +319,7 @@ const EventDetail = ({ navigation, route }) => {
                   alignItems: 'center'
                   }} 
                   onPress={()=>{
-                    navigation.navigate('InterestDetail', {selectedInterest: taglist})
+                    navigation.push('InterestDetail', {selectedInterest: taglist})
                   }}
                 >
                   <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{taglist}</McText>
@@ -333,8 +334,9 @@ const EventDetail = ({ navigation, route }) => {
             alignItems: 'center',
             justifyContent: 'center'
           }} onPress={()=>{
-                navigation.navigate('OrganizationDetail', {OrgID: selectedEvent?.userID})
-                console.log(selectedEvent?.userID)
+                navigation.push('OrganizationDetail', {OrgID: selectedEvent?.userID})
+                console.log(selectedEvent)
+                console.log('lololololol')
               }}>
           <Image
                 style={styles.orgProfilePic}

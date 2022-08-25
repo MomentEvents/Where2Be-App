@@ -76,9 +76,9 @@ const InterestDetail = ({ navigation, route }) => {
     const _renderItem = ({item, index}) => {
         return (
           <TouchableHighlight
-            onPress={()=>{
-              navigation.navigate('InterestEventDetail', {selectedEvent: item});
-    
+            onPress={() => {
+              console.log('Item', item);
+              navigation.push('EventDetail', {selectedEvent: item});
             }}
           >
             <View style={{
