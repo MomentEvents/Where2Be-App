@@ -2,7 +2,7 @@
   "expo": {
     "name": "Moment",
     "slug": "Moment",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,7 +19,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wunderblu.moment"
+      "bundleIdentifier": "com.wunderblu.moment",
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
