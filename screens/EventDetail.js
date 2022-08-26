@@ -5,7 +5,7 @@
 
  */
 import React, {useState, useEffect, useCallback} from 'react';
-import { Image, Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
+import { Modal, Image, Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
 import styled from 'styled-components/native';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 
 import {memo} from "react"
@@ -209,6 +210,7 @@ const EventDetail = ({ navigation, route }) => {
       }}
       >
         {/*ImageBackground*/}
+        
         <ImageBackground
           resizeMode='cover'
           source={{uri:selectedEvent?.image}}
@@ -239,6 +241,23 @@ const EventDetail = ({ navigation, route }) => {
                   tintColor: COLORS.white,
                   marginLeft: 8,
                 }} size={24}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+              onPress={() =>{
+                navigation.push('ImageScreen', {img: selectedEvent?.image})
+              }}
+              style={{
+                  height: 40,
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 13,
+                  marginRight: -16,
+                }} >
+                <McText body3 style={{
+                  marginHorizontal: 8,
+                }}>View Image</McText>
               </TouchableOpacity>
              
             </SectionImageHeader>
@@ -329,7 +348,7 @@ const EventDetail = ({ navigation, route }) => {
           </ScrollView>
         </ButtonSection>
         <OwnerSection>
-          <TouchableWithoutFeedback style={{
+          <TouchableOpacity style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center'
@@ -350,7 +369,7 @@ const EventDetail = ({ navigation, route }) => {
               }}>
                 {data.name}
             </McText>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </OwnerSection>
         <DescriptionSection>
           <View style={{
@@ -379,7 +398,7 @@ const EventDetail = ({ navigation, route }) => {
               margin:4,
               tintColor:COLORS.gray,
             }}/>
-            <TouchableWithoutFeedback onPress={()=>{
+            <TouchableOpacity onPress={()=>{
                 var uri = selectedEvent?.location
                 Linking
                 .openURL(uri)
@@ -394,14 +413,14 @@ const EventDetail = ({ navigation, route }) => {
                 numberOfLines={1}>
                   {selectedEvent?.location}
               </McText>
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
           </LocationSection>
-          <LinkSection>
+          {/* <LinkSection>
         <McIcon source ={icons.links} size={20} style={{
               margin:4,
               tintColor:COLORS.gray,
             }}/>
-            <TouchableWithoutFeedback onPress={()=>{
+            <TouchableOpacity onPress={()=>{
                 var uri = selectedEvent?.link
                 Linking
                 .openURL(uri)
@@ -416,8 +435,8 @@ const EventDetail = ({ navigation, route }) => {
                 numberOfLines={1}>
                   {selectedEvent?.link}
               </McText>
-              </TouchableWithoutFeedback>
-          </LinkSection>
+              </TouchableOpacity>
+          </LinkSection> */}
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,

@@ -14,6 +14,7 @@ import { Dimensions } from "react-native";
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
+import * as SplashScreen from 'expo-splash-screen';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -131,7 +132,6 @@ const Featured = ({ navigation, route }) => {
   const categories = data4
   const orgs = data3
   const spotlight = data2
-  console.log(categories)
   // var ab = 0;
 
   useEffect(() => {
@@ -154,17 +154,21 @@ const Featured = ({ navigation, route }) => {
   // }
   // return tbody(rows);
 
-
-
   const _renderOrgs = ({item, index}) => {
+    SplashScreen.hideAsync();
     return(
-      <TouchableWithoutFeedback
+      <View style={{
+        marginHorizontal: 6,
+      }}>
+      <TouchableHighlight
         onPress={()=>{
           navigation.navigate('OrganizationDetail', {OrgID: item.uniqueID});
         }}
+        style={{
+          borderRadius:20
+        }}
       >
         <View style={{
-          marginLeft: index === 0 ? 20: 15,
           width: SIZES.width/3
         }}>
           <View style={styles.org}>
@@ -188,37 +192,45 @@ const Featured = ({ navigation, route }) => {
             </View>
         </View>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableHighlight>
+      </View>
     )
   }
 
   const _renderCategories = ({item, index}) => {
     return (
       <View>
-      <TouchableWithoutFeedback
+      <TouchableHighlight
         onPress={()=>{
           navigation.navigate('InterestDetail', {selectedInterest: item.name})
         }}
-      ><View style={styles.category}><View style={{
+        style={styles.category}>
+        <View style={{
         width: width/3.3,
         height: height/25,
         alignItems: 'center',
       }}><McText h3>{item.name}</McText>
       <McText body4 style={{
         opacity: 0.7
-      }}>{item.event_count} Events</McText></View></View>
-        </TouchableWithoutFeedback>
+      }}>{item.event_count} Events</McText></View>
+        </TouchableHighlight>
     </View>
     )
   }
 
   const _renderSpotlight = ({item, index}) => {
   return (
-    <View>
+    <View style={{
+      margin: 16
+    }}>
       <TouchableHighlight
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
+        }}
 
+        style={{
+          borderRadius: 20,
+          margin: -8
         }}
       >
     <ImageBackground source={{uri: item.image} }
@@ -230,7 +242,6 @@ const Featured = ({ navigation, route }) => {
             width: SIZES.width/1.15,
             height: SIZES.width/1.9 + 10,
             justifyContent: 'space-between',
-            margin: 8
           }}
           >
           <View style={{
@@ -323,7 +334,6 @@ const Featured = ({ navigation, route }) => {
               </View>
             </LinearGradient>
             </View>
-            
           </ImageBackground>
           </TouchableHighlight>
     </View>
@@ -331,15 +341,17 @@ const Featured = ({ navigation, route }) => {
 
   const _renderItem = ({item, index}) => {
     return (
-      <TouchableHighlight
-        onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
-
-        }}
-      >
+      
         <View style={{
           marginLeft: index === 0 ? 20: 15,
-        }}>
+        }}><TouchableHighlight
+        onPress={()=>{
+          navigation.navigate('EventDetail', {selectedEvent: item});
+        }}
+        style={{
+          borderRadius: 20,
+        }}
+      >
           <ImageBackground source={{uri: item.image}}
             resizeMode='cover'
             borderRadius= {SIZES.radius}
@@ -435,8 +447,9 @@ const Featured = ({ navigation, route }) => {
                   </View>
           </LinearGradient>
         </ImageBackground>
+        </TouchableHighlight>
         </View>
-      </TouchableHighlight>
+      
     )
   }
   return (
@@ -476,7 +489,7 @@ const Featured = ({ navigation, route }) => {
         }}
         title="Go to Event Detail"
       /> */}
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View><FlatList
                 horizontal
 

@@ -16,7 +16,7 @@ import Fuse from 'fuse.js'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://3.136.67.161:8080/search', {
+  const resp = await fetch('http://3.136.67.161:8080/search_org', {
       method: 'GET',
     });
 
@@ -39,11 +39,7 @@ import Fuse from 'fuse.js'
   const fuse = new Fuse(data, {
       keys: [
         'id',
-        'key',
-        'title',
-        'startingTime',
-        'location',
-        'tagList'
+        'name',
       ]
     });
 
@@ -62,7 +58,7 @@ import Fuse from 'fuse.js'
             navigation.goBack();
           }}
           style={{
-            marginTop: 16,
+            marginTop: 18,
             marginRight: 20,
           }}
           >
@@ -110,34 +106,30 @@ import Fuse from 'fuse.js'
                 // alignItems: 'center'
                 }}
                 onPress={()=>{
-                  navigation.navigate('EventDetail', {selectedEvent: res});
+                  navigation.push('OrganizationDetail', {OrgID: res?.OrgID});
                 }}
               >
                 <SrchRes>
                   <Image
                   source={{uri: res.image}}
-                  style = {{
-                    width:40,
-                    height: 40,
-                    borderRadius: 10,
-                  }}
+                  style = {styles.userProfilePic}
                   />
                   <TxtBox>
-                    <McText h5 
+                    <McText h4
                     style={{
                       //opacity: 0.5, 
                       letterSpacing: 1, 
                       marginLeft: 10,
                       //marginTop: 5,
                     }}
-                    >{res.title}</McText>
-                    <McText body6 
+                    >{res.name}</McText>
+                    {/* <McText body6 
                     style={{
                       opacity: 0.5, 
                       letterSpacing: 1, 
                       marginLeft: 10,
                     }}
-                    >{moment(res.startingTime).format('MMMM Do YYYY, h:mm a').toUpperCase()}</McText>
+                    ></McText> */}
                   </TxtBox>
                 </SrchRes>
               </TouchableOpacity>
@@ -185,6 +177,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.black,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },userProfilePic: {
+    height: 40,
+    width: 40,
+    borderRadius: 300,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
     justifyContent: 'center',
     alignItems: 'center',
   },

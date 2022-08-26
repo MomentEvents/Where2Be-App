@@ -37,6 +37,7 @@ const OrganizationDetail = ({ navigation, route }) => {
         let data;
         let data2;
         if(iD !== 'bad') {
+            console.log('A')
             const resp = await fetch('http://3.136.67.161:8080/organization_events', {
                     method: 'POST',
                     headers: {
@@ -47,6 +48,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                         id: iD
                     })
             });
+            console.log('resp', resp);
                 
             
             const resp2 = await fetch('http://3.136.67.161:8080/organization_details', {
@@ -61,15 +63,17 @@ const OrganizationDetail = ({ navigation, route }) => {
             });
             data = await resp.json();
             data2 = await resp2.json();
+            console.log('data2', data2)
         }
         else{
+            console.log('EEEEEEEE')
             data = ['help'];
             data2 = ['help2']
         }
         setData(data);
         setData2(data2);
         console.log(OrgID)
-        console.log(data2)
+        console.log('hello',data2)
             
         setLoading(false);
     };
@@ -92,29 +96,32 @@ const OrganizationDetail = ({ navigation, route }) => {
       colors = {[ COLORS.black,COLORS.black,'#1060b6']}
       start = {{x: 0, y: 0}}
       end = {{ x: 1, y: 1}}
-      style = {{padding:2, borderRadius: 20 }}>
+      style = {{padding:2, borderRadius: 20, height: height }}>
         <SafeAreaView>
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'row',
-                marginTop: 20,
-            }}>
         <TouchableOpacity
                 onPress={() =>{
                   navigation.goBack();
+                  console.log('hello')
                 }}
                 style={{
-                    marginTop: 36,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 13,
+                    position: 'absolute',
+                    top: 50,
+                    left: 10,
+                    width: 20,
+                    borderRadius: 13,
                 }}
               >
                 <McIcon source={icons.back_arrow} style={{
                   tintColor: COLORS.white,
-                  marginLeft: 8,
+                  marginLeft: 20,
                 }} size={24}/>
                 </TouchableOpacity>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 20,
+                marginLeft: 44,
+            }}>
             <View style={{
                 flexDirection: 'row',
                 width: width,
@@ -129,7 +136,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     flexDirection: 'column',
                     marginVertical: 8,
                     marginLeft: 12,
-                    width: width/1.5,
+                    width: width/1.7,
                     alignItems: 'flex-start',
                 }}>
                     <View style={{
