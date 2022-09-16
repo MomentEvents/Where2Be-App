@@ -2,8 +2,8 @@ import Featured from './Featured';
 import EventDetail from './EventDetail';
 
 
-
 import Search from './Search'
+import Personal from './Personal'
 
 import OrganizationDetail from './OrganizationDetail';
 
@@ -17,6 +17,7 @@ export {
   EventDetail,
   InterestDetail,
   ImageScreen,
+  Personal,
 
   Search,
 

@@ -1,8 +1,11 @@
 {
   "expo": {
     "name": "Moment",
-    "slug": "Moment",
-    "version": "1.1.1",
+    "slug": "momentapp",
+    "version": "1.1.3",
+    "owner": "moment-app",
+    "privacy": "public",
+    "description": "UIUC event app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +15,8 @@
       "backgroundColor": "#000000"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/4b6269e6-4591-4616-b066-70665729efd7"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -30,6 +34,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4b6269e6-4591-4616-b066-70665729efd7"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

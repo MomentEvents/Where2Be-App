@@ -91,13 +91,7 @@ const OrganizationDetail = ({ navigation, route }) => {
     
    
   return (
-    <View style={styles.container}>
-        <LinearGradient
-      colors = {[ COLORS.black,COLORS.black,'#1060b6']}
-      start = {{x: 0, y: 0}}
-      end = {{ x: 1, y: 1}}
-      style = {{padding:2, borderRadius: 20, height: height }}>
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
         <TouchableOpacity
                 onPress={() =>{
                   navigation.goBack();
@@ -119,7 +113,7 @@ const OrganizationDetail = ({ navigation, route }) => {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginTop: 20,
+                marginTop: 40,
                 marginLeft: 44,
             }}>
             <View style={{
@@ -135,37 +129,60 @@ const OrganizationDetail = ({ navigation, route }) => {
                 <View style={{
                     flexDirection: 'column',
                     marginVertical: 8,
-                    marginLeft: 12,
-                    width: width/1.7,
+                    marginHorizontal: 20,
+                    width: width/1.6,
                     alignItems: 'flex-start',
                 }}>
-                    <View style={{
-                        alignItems: 'center'
-                    }}>
-                    <McText h2 numberOfLines={3} style={{
+                    <McText h2 style={{
                         paddingBottom: 6,
-                        paddingHorizontal: 8,
                     }}>{data2?.name}</McText>
                     </View>
-                    {/* <View style={{
-                        flexDirection: 'row',
+            </View>
+            </View>
+            <View style={{
+                alignItems: 'center'
+            }}>
+            <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    }}>
+                        <View style={{
+                            alignItems: 'center',
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                        }}>
+                            <McText h3 style={{
+                                letterSpacing: 1.2,
+                                color: COLORS.purple
+                                }}>666 </McText>
+                            <McText h6 style={{
+                                letterSpacing: 1.2,
+                                color: COLORS.white
+                            }}>Followers</McText>
+                        </View>
+                        <View style={{
                         alignItems: 'center',
-                        marginHorizontal: 12,
-                    }}><McText h4 style={{
-                        letterSpacing: 1.2,
-                    }}>XYZ Followers</McText>
-                        <TouchableOpacity style={styles.button}><McText h4 style={{
+                        paddingHorizontal: 20,
+                        }}>
+                            <McText h3 style={{
+                                letterSpacing: 1.2,
+                                color: COLORS.purple
+                                }}>999 </McText>
+                            <McText h6 style={{
+                                letterSpacing: 1.2,
+                                color: COLORS.white
+                            }}>Events</McText>
+                        </View>
+                        <TouchableOpacity style={styles.button} onPress={() =>{
+                            console.log('FOLLOW')
+                        }}><McText h4 style={{
                             letterSpacing: 1.2,
                         }}
-                        onPress={() =>{
-                            console.log('FOLLOW')
-                        }}
+                        
                         >FOLLOW</McText></TouchableOpacity>
-                    </View> */}
-                    
-                </View>
-            </View>
-            </View>
+                    </View>
+                    </View>
+
             <View style={styles.EventsHeader}>
                 <TouchableWithoutFeedback onPress={() =>{
                             console.log('Upcoming')
@@ -368,8 +385,6 @@ const OrganizationDetail = ({ navigation, route }) => {
 
                 
         </SafeAreaView>
-        </LinearGradient>
-    </View>
   );
 };
 
@@ -420,15 +435,15 @@ const GrayBox = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: COLORS.black,
     // justifyContent: 'center',
     // alignItems: 'center',
   },
   userProfilePic: {
-    height: 100,
-    width: 100,
+    height: 90,
+    width: 90,
     borderRadius: 300,
-    padding: 30,
+    marginLeft: -15,
     borderWidth: 1,
     borderColor: COLORS.gray,
     justifyContent: 'center',
@@ -437,11 +452,15 @@ const styles = StyleSheet.create({
   button: {
     marginHorizontal: 8,
     padding: 4,
+    height: 32,
+    width: 100,
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: COLORS.input,
+    backgroundColor: COLORS.purple,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.white,
     alignItems: 'center',
   },
   EventsHeader: {

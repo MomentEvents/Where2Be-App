@@ -20,6 +20,7 @@ const InterestDetail = ({ navigation, route }) => {
 
     const [selectedInterest, setSelectedInterest] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [like, setLike] = useState(false);
     const [data, setData] = useState([]);
     // const [data2, setData2] = useState([]);
     useEffect(()=>{
@@ -27,6 +28,40 @@ const InterestDetail = ({ navigation, route }) => {
         setSelectedInterest(selectedInterest);
         console.log(selectedInterest);
     },[])
+
+    const handleLike = async () => {
+      if (like) {
+        // console.log(like);
+        setLike(false);
+        console.log("HEREEE2: ", like);
+        console.log("HEREEE");
+        // const resp = await fetch("http://3.136.67.161:8080/delete_like", {
+        //   // deleting for true, need to change
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     uniqueID: selectedEvent?.uniqueID,
+        //   }),
+        // });
+      } else {
+        setLike(true);
+        console.log("HEREEE2: ", like);
+        // const resp = await fetch("http://3.136.67.161:8080/create_like", {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     uniqueID: selectedEvent?.uniqueID,
+        //   }),
+        // });
+      }
+    };
+    
     
 
     let iD;
@@ -80,10 +115,12 @@ const InterestDetail = ({ navigation, route }) => {
               console.log('Item', item);
               navigation.push('EventDetail', {selectedEvent: item});
             }}
-          >
-            <View style={{
+            style={{
+              borderRadius: 20,
               marginLeft: 20,
-            }}>
+              marginVertical: 8,
+            }}
+          >
               <ImageBackground source={{uri: item.image}}
                 resizeMode='cover'
                 borderRadius= {SIZES.radius}
@@ -93,7 +130,6 @@ const InterestDetail = ({ navigation, route }) => {
                   width: SIZES.width/2.5 + 10,
                   height: SIZES.width/1.9 + 10,
                   justifyContent: 'space-between',
-                  marginVertical: 8,
                 }}
                 >
                 {/* <GrayBox> */}
@@ -176,23 +212,15 @@ const InterestDetail = ({ navigation, route }) => {
                         <McText h3 numberOfLines={2}>{item.title}</McText>
                         <McText body3 style={{
                             marginTop: -2,
-                        }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
+                        }}>{moment(item.startingTime).format('MMM DD h:mm A')}</McText>
                     </View>
           </LinearGradient>
             </ImageBackground>
-            </View>
           </TouchableHighlight>
         )
     }
   return (
-    <View style={styles.container}>
-        <LinearGradient
-        
-            colors = {[ COLORS.black,COLORS.black, COLORS.black,'#1060b6']}
-            start = {{x: 0, y: 0}}
-            end = {{ x: 1, y: 1}}
-            style = {{padding:2, borderRadius: 20 }}>
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.tempNav}>
                 <SectionHeader>
         <TouchableOpacity 
@@ -213,20 +241,42 @@ const InterestDetail = ({ navigation, route }) => {
                     <McText h1 style={{
                         marginLeft: 4,
                     }}>{selectedInterest}</McText>
+                    <View style={{
+                      position: 'absolute',
+                      right: -width*0.4,
+                    }}>
+              <TouchableOpacity style={{
+                      borderRadius: 80,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                      }}
+                      onPress={()=>{
+                        console.log("Like")
+                        handleLike()
+                      }}>
+                <McIcon source={like ? icons.likeFill: icons.like} size={24} style={{
+              tintColor:like ? COLORS.purple: COLORS.white
+            }}/>
+            </TouchableOpacity>
+            </View>
                     </SectionHeader>
                 </View>
-                        <View>
+                        <ScrollView>
                         <FlatList
                             numColumns={2}
                             keyExtractor={(item) => 'event_' + item.id}
                             //data={dummyData[dataset]}
                             data={data}
                             renderItem={_renderItem}
-                        />
-                        </View> 
+                            onEndReachedThreshold={0.2}
+                        ></FlatList>
+                        <SectionFooter><McText h1 style={{
+                          //temp fix for padding
+                          color:'transparent'
+                        }}>hello</McText></SectionFooter>
+                        </ScrollView>
+
                     </SafeAreaView>
-        </LinearGradient>
-    </View>
   );
 };
 
@@ -252,7 +302,7 @@ margin: 0px 30px;
 
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 300px;
+  padding: 60px;
   justify-content: space-between;
 `;
 
@@ -278,7 +328,7 @@ const GrayBox = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: COLORS.black,
     // justifyContent: 'center',
     // alignItems: 'center',
   },

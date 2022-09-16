@@ -194,11 +194,6 @@ const EventDetail = ({ navigation, route }) => {
     },[iD]);
   return (
     <View style={styles.container}>
-       <LinearGradient
-          colors = {[ COLORS.black,COLORS.trueBlack,'#003060']}
-          start = {{x: 0, y: 0}}
-          end = {{ x: 1, y: 1}}
-          style = {{padding:2, borderRadius: 20 }}>
       <ScrollView 
       contentContainerStyle={{
         backgroundColor: 'transparent'
@@ -264,7 +259,7 @@ const EventDetail = ({ navigation, route }) => {
             {/* Image Footer*/}
             <SectionImageFooter>
               <LinearGradient
-                colors = {['transparent','#000']}
+                colors = {['transparent',COLORS.black]}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 0, y: 1}}
                 style = {{
@@ -274,46 +269,24 @@ const EventDetail = ({ navigation, route }) => {
 
                 }}
               >
-                
                 <FooterContentView>
                   <View>
-                    <McText body4 style={{opacity: 0.5, letterSpacing: 2 }}>
-                      {selectedEvent?.type}
-                      </McText>
-                    <McText h1 numberOfLines={2} style={{width: width * 0.7}}>{selectedEvent?.title}</McText>
-                    <McText body4 style={{opacity: 0.5, letterSpacing: 1.5 }}>
-                      STARTING {moment(selectedEvent?.startingTime).format('hh:mm A')}
+                    <View style={{
+                      flexDirection: 'row',
+                      alignItems: 'flex-start',
+                      marginHorizontal: -6
+                    }}>
+                      {/* <McIcon source ={icons.event} size={24} style={{
+                          marginTop: 2,
+                          tintColor:COLORS.purple,
+                        }}/> */}
+                      <McText h3 style={{letterSpacing: 1.5, margin: 6, marginRight: 0, color: COLORS.purple, opacity: 0.85 }}>
+                        {moment(selectedEvent?.startingTime).format('MMM DD').toUpperCase()}
                     </McText>
-
-                  </View>
-                  <View style={{
-                    paddingTop:12
-                  }}>
-                  <LinearGradient
-                    colors = {['#902070', '#DD77EB', '#a2d2ff']}
-                    start = {{x: -0.1, y: 1}}
-                    end = {{ x: 1, y: 1}}
-                    style = {{
-                      width: 60, 
-                      height: 60,
-                      borderRadius: 15,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    
-                    <McText body4 style={{letterSpacing: 1}}>
-                      {moment(selectedEvent?.startingTime)
-                        .format('MMM')
-                        .toUpperCase()
-                      }
+                    <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
+                        {moment(selectedEvent?.startingTime).format('h:mm A')}
                     </McText>
-                    <McText h2 style={{}}>
-                      {moment(selectedEvent?.startingTime)
-                        .format('DD')
-                      }
-                    </McText>
-                  </LinearGradient>
+                    </View>
                   </View>
                 </FooterContentView>
                 
@@ -322,18 +295,22 @@ const EventDetail = ({ navigation, route }) => {
           </View>
         </ImageBackground>
         {/* buttons group section */}
-        
+        <McText h1 numberOfLines={2} style={{width: width, marginHorizontal: 15, marginBottom: -5,}}>
+          {selectedEvent?.title}
+          </McText>
         <ButtonSection>
           <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {
               selectedEvent?.taglist.map((taglist)=> 
                 <TouchableOpacity
                   style={{
-                  width: taglist.length *8 + 15,
+                  width: taglist.length *9 + 15,
                   height: 32,
-                  borderRadius: 10,
+                  borderRadius: 14,
                   marginRight: 10,
                   backgroundColor: COLORS.input,
+                  borderWidth: StyleSheet.hairlineWidth,
+                  borderColor: COLORS.purple,
                   justifyContent: 'center',
                   alignItems: 'center'
                   }} 
@@ -341,7 +318,7 @@ const EventDetail = ({ navigation, route }) => {
                     navigation.push('InterestDetail', {selectedInterest: taglist})
                   }}
                 >
-                  <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{taglist}</McText>
+                  <McText h5 style={{ letterSpacing: 1}}>{taglist}</McText>
                 </TouchableOpacity>
               )
             }
@@ -387,16 +364,16 @@ const EventDetail = ({ navigation, route }) => {
               {
                   lengthMore ? <McText
                   onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 22, marginTop: 10, opacity: 0.6}}>
+                  style={{ lineHeight: 22, marginTop: 10, color: COLORS.gray}}>
                     {textShown ? 'Read less...' : 'Read more...'}</McText>
                   :null
               }
           </View>
         </DescriptionSection>
         <LocationSection>
-        <McIcon source ={icons.location} size={20} style={{
+        <McIcon source ={icons.location} size={24} style={{
               margin:4,
-              tintColor:COLORS.gray,
+              tintColor:COLORS.purple,
             }}/>
             <TouchableOpacity onPress={()=>{
                 var uri = selectedEvent?.location
@@ -410,7 +387,7 @@ const EventDetail = ({ navigation, route }) => {
                 marginTop: -1, 
                 width: width * 0.83,
                 }}
-                numberOfLines={1}>
+                >
                   {selectedEvent?.location}
               </McText>
               </TouchableOpacity>
@@ -440,7 +417,7 @@ const EventDetail = ({ navigation, route }) => {
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
-              tintColor: COLORS.gray1
+              tintColor: COLORS.purple
             }}/>
         <View>
           <McText body5 numberOfLines={1} style={{
@@ -448,7 +425,7 @@ const EventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility} EVENT
+                {selectedEvent?.visibility}
             </McText>
           </View>
         </VisibilitySec>
@@ -456,43 +433,18 @@ const EventDetail = ({ navigation, route }) => {
         //temp fix for padding
         color:'transparent'
       }}>hello</McText></SectionFooter>
-        
       </ScrollView>
-        {/* <View style={styles.otherContainer}>
+         <View style={styles.otherContainer}>
           <UserOptionsSection>
-          <View style={{
-              alignItems: 'center'
-            }}>
-              <TouchableOpacity style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                      backgroundColor:like ? '#a00000':  'transparent',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: COLORS.gray,
-                      alignItems: 'center'
-                      }}
-                      onPress={()=>{
-                        console.log("Like")
-                        handleLike()
-                      }}>
-                <McIcon source={like ? icons.likeFill: icons.like} size={32} style={{
-              tintColor:like ? COLORS.white: COLORS.gray,
-            }}/>
-            
-            </TouchableOpacity>
-              <McText body3>Like</McText>
-            </View>
             <View style={{
-              alignItems: 'center'
+              alignItems: 'center',
+              marginRight: 60
             }}>
             <TouchableOpacity style={{
                       width: 60,
                       height: 60,
                       borderRadius: 80,
-                      marginHorizontal: 30,
-                      backgroundColor:join ? '#006099': 'transparent' ,
+                      backgroundColor:join ? COLORS.purple: 'transparent' ,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
                       justifyContent: 'center',
@@ -520,7 +472,7 @@ const EventDetail = ({ navigation, route }) => {
                       borderRadius: 80,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
-                      backgroundColor: shoutout ? '#651070' : 'transparent',
+                      backgroundColor: shoutout ? COLORS.purple : 'transparent',
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
@@ -537,8 +489,7 @@ const EventDetail = ({ navigation, route }) => {
             <McText body3>ShoutOut</McText>
             </View>
           </UserOptionsSection>
-        </View> */}
-      </LinearGradient>
+        </View>
     </View>
   );
 };
@@ -565,7 +516,7 @@ const FooterContentView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0px 30px;
+  marginHorizontal: 15px;
 `;
 
 const ButtonSection = styled.View`
@@ -591,7 +542,7 @@ const UserOptionsSection = styled.View`
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 40px;
+  padding: 20px;
   justify-content: space-between;
 `;
 
@@ -640,7 +591,7 @@ const BottomBarSection = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: COLORS.black
     //justifyContent: 'center',
     //alignItems: 'center',
   },

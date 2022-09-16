@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Tabs from './navigation/Tabs';
 
 import { Featured, EventDetail, Search, OrganizationDetail, InterestDetail, ImageScreen } from './screens';
 
@@ -90,7 +91,7 @@ export default function App() {
           gesturesEnabled: false
         }}
         initialRouteName="Featured">
-        <Stack.Screen name="Featured" component={Featured} />
+        <Stack.Screen name="Featured" component={Tabs} />
         <Stack.Screen name="InterestDetail" component={InterestDetail} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
@@ -103,7 +104,7 @@ export default function App() {
   );
 }
 
-
+SplashScreen.hideAsync();
 
 const styles = StyleSheet.create({
   container: {

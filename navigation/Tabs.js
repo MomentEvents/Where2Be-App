@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured } from '../screens';
+import { Featured, Personal } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 import { Platform } from 'react-native';
@@ -16,7 +16,7 @@ const TabIcon = ({ focused, icon }) => {
         source={icon}
         resizeMode="contain"
         style={{
-          tintColor: focused ? COLORS.lightGray : COLORS.gray,
+          tintColor: focused ? COLORS.purple : COLORS.gray,
         }}
       />
     </View>
@@ -41,7 +41,7 @@ const Tabs = ({ params }) => {
     headerShown:false,
     tabBarStyle:{
       position: 'absolute',
-      backgroundColor: COLORS.tabBar,
+      backgroundColor: COLORS.transparentBlack,
       opacity: 0.98,
       borderTopColor: 'transparent',
       height: 80,
@@ -51,7 +51,6 @@ const Tabs = ({ params }) => {
     tabBarItemStyle:{
       display:'flex',
       paddingTop: 8,
-
     }
   };
 
@@ -103,18 +102,18 @@ const Tabs = ({ params }) => {
         }}
       />
 
-      {/* <Tab.Screen
-        name="Mine"
-        component={Mine}
+      <Tab.Screen
+        name="Personal"
+        component={Personal}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.tab_4} />
           ),
           tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Mine" />
+            <TabLabel focused={focused} text="Personal"/>
           ),
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };
