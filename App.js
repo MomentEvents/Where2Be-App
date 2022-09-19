@@ -14,9 +14,10 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import 'react-native-gesture-handler'
 import Tabs from './navigation/Tabs';
 
-import { Featured, EventDetail, Search, OrganizationDetail, InterestDetail, ImageScreen } from './screens';
+import { Featured, EventDetail, Search, OrganizationDetail, InterestDetail, ImageScreen, CreateEvent } from './screens';
 
 
 import { customFonts } from './constants';
@@ -87,12 +88,11 @@ export default function App() {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-        }} navigationOptions={{
-          gesturesEnabled: false
         }}
         initialRouteName="Featured">
         <Stack.Screen name="Featured" component={Tabs} />
         <Stack.Screen name="InterestDetail" component={InterestDetail} />
+        <Stack.Screen name="CreateEvent" component={CreateEvent} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
         <Stack.Screen name="Search" component={Search}/>

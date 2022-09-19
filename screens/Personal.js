@@ -220,140 +220,171 @@ const Personal = ({ navigation, route }) => {
 
   const _renderItem = ({item, index}) => {
     return (
-      
-        <View style={{
-          marginLeft: index === 0 ? 20: 15,
-        }}><TouchableHighlight
-        onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
-        }}
-        style={{
-          borderRadius: 20,
-        }}
-      >
-          <ImageBackground source={{uri: item.image}}
-            resizeMode='cover'
-            borderRadius= {SIZES.radius}
-            borderColor={COLORS.gray}
-            borderWidth= {0.2}// string not number typeError
-            style={{
-              width: SIZES.width/2.5 + 10,
-              height: SIZES.width/1.9 + 10,
-              justifyContent: 'space-between'
-            }}
-            >
-            {/* <GrayBox> */}
-              <View style={{
-                flexDirection: 'column',
-                marginVertical: 8,
-                marginHorizontal: 8,
-                alignItems: 'flex-end'
-              }}>
-                <View style={{ flexDirection:'column'}}>
-              {/* <TouchableHighlight style={{
-                width: 32,
-                height: 32,
-                borderRadius: 80,
-                marginLeft: 10,
-                backgroundColor: COLORS.input,
-                opacity: 0.7,
-                borderWidth: 1,
-                borderColor: COLORS.white,
-                justifyContent: 'center',
-                alignItems: 'center'
-                }} onPress={()=>{
-                console.log("like " + item.title)
-              }}>
-                <McIcon source={icons.like} size={18} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
+   
+      <View style={{
+        marginLeft: index === 0 ? 20: 15,
+      }}><TouchableHighlight
+      onPress={()=>{
+        navigation.navigate('EventDetail', {selectedEvent: item});
+      }}
+      style={{
+        borderRadius: 20,
+      }}
+    >
+        <ImageBackground source={{uri: item.image}}
+          resizeMode='cover'
+          borderRadius= {SIZES.radius}
+          borderColor={COLORS.gray}
+          borderWidth= {0.3}// string not number typeError
+          style={{
+            width: SIZES.width/2.5 + 10,
+            height: SIZES.width/1.9 + 10,
+            justifyContent: 'space-between'
+          }}
+          >
+          {/* <GrayBox> */}
+            <View style={{
+              flexDirection: 'column',
+              marginVertical: 8,
+              marginHorizontal: 8,
+              alignItems: 'flex-end'
+            }}>
+              <View style={{ flexDirection:'column'}}>
             {/* <TouchableHighlight style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 80,
-                      marginLeft: 10,
-                      backgroundColor: COLORS.input,
-                      borderWidth: 1,
-                      borderColor: COLORS.white,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                console.log("join " + item.title)
-              }}>
-                <McIcon source={icons.check} size={20} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
-            {/*
-            <TouchableHighlight style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 80,
-                      marginLeft: 10,
-                      backgroundColor: COLORS.input,
-                      borderWidth: 1,
-                      borderColor: COLORS.white,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                console.log("shoutout " + item.title)
-              }}>
-                <McIcon source={icons.shoutout} size={18} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
-            </View>
+              width: 32,
+              height: 32,
+              borderRadius: 80,
+              marginLeft: 10,
+              backgroundColor: COLORS.input,
+              opacity: 0.7,
+              borderWidth: 1,
+              borderColor: COLORS.white,
+              justifyContent: 'center',
+              alignItems: 'center'
+              }} onPress={()=>{
+              console.log("like " + item.title)
+            }}>
+              <McIcon source={icons.like} size={18} style={{
+            tintColor:COLORS.white,
+          }}/>
+          </TouchableHighlight> */}
+          {/* <TouchableHighlight style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 80,
+                    marginLeft: 10,
+                    backgroundColor: COLORS.input,
+                    borderWidth: 1,
+                    borderColor: COLORS.white,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                    }} onPress={()=>{
+              console.log("join " + item.title)
+            }}>
+              <McIcon source={icons.check} size={20} style={{
+            tintColor:COLORS.white,
+          }}/>
+          </TouchableHighlight> */}
+          {/*
+          <TouchableHighlight style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 80,
+                    marginLeft: 10,
+                    backgroundColor: COLORS.input,
+                    borderWidth: 1,
+                    borderColor: COLORS.white,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                    }} onPress={()=>{
+              console.log("shoutout " + item.title)
+            }}>
+              <McIcon source={icons.shoutout} size={18} style={{
+            tintColor:COLORS.white,
+          }}/>
+          </TouchableHighlight> */}
           </View>
-            {/* </GrayBox> */}
-          <LinearGradient
-                colors = {['transparent', COLORS.trueBlack]}
-                start = {{x: 1, y: 0}}
-                end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0, borderRadius: 20, height: SIZES.height/8}}>
-                  <View style={{
-                      flexDirection: 'column',
-                      justifyContent: 'flex-end',
-                      width: SIZES.width/2.7,
-                      position: 'absolute',
-                      bottom: 8,
-                      left: 12
-                    }}>
-                      <McText h3 numberOfLines={2}>{item.title}</McText>
-                      <McText body3 style={{
-                        marginTop: -2,
-                      }}>{moment(item.startingTime).format('MMM DD, h:mm A')}</McText>
-                  </View>
-          </LinearGradient>
-        </ImageBackground>
-        </TouchableHighlight>
         </View>
-      
+          {/* </GrayBox> */}
+        <LinearGradient
+              colors = {['transparent', COLORS.trueBlack]}
+              start = {{x: 1, y: 0}}
+              end = {{ x: 1, y: 0.9}}
+              style = {{padding:0, marginBottom: 0.3, borderRadius: 20, height: SIZES.height/7}}>
+                <View style={{
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    width: SIZES.width/2.7,
+                    position: 'absolute',
+                    bottom: 8,
+                    left: 12
+                  }}>
+                    <McText h3 numberOfLines={2}>{item.title}</McText>
+                    <McText body3 style={{
+                      marginTop: -2,
+                      color: COLORS.white,
+                      opacity:0.7,
+                    }}>{moment(item.startingTime).format('MMM DD h:mm A')}</McText>
+                    <View style={{
+                  flexDirection: 'row',
+                  opacity: 0.8
+                }}>
+                  <McIcon source ={icons.shoutout} size={20} style={{
+                      tintColor:COLORS.lightGray,
+                      marginRight: 10,
+                    }}/>
+                    <McText body7 style={{
+                      marginTop: 2,
+                      marginLeft: -7,
+                      marginRight: 10,
+                      color: COLORS.lightGray
+                    }}>12</McText>
+                    <McIcon source ={icons.check} size={20} style={{
+                      tintColor:COLORS.lightGray,
+                      marginRight: 10,
+                    }}/>
+                    <McText body7 style={{
+                      marginTop: 2,
+                      marginLeft: -7,
+                      marginRight: 10,
+                      color: COLORS.lightGray
+                    }}>46</McText>
+                </View>
+                </View>
+                
+        </LinearGradient>
+      </ImageBackground>
+      </TouchableHighlight>
+      </View>
+    
     )
   }
   return (
-    <View style={styles.container}>
-      <LinearGradient
-                colors = {['#252525', COLORS.black, COLORS.black,'#650070']}
-                start = {{x: 0, y: 0}}
-                end = {{ x: 1, y: 1}}
-                style = {{padding:2 }}>
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <View style={styles.tempNav}>
       <SectionHeader>
         <View>
           <McText h1>
-            <Text>Explore Events</Text></McText>
+            <Text>Your Events</Text></McText>
         </View>
         <View style={{
           paddingLeft: 16,
+          flexDirection:'row'
+        }}><TouchableWithoutFeedback 
+        onPress={()=>{
+          navigation.navigate('Search')
         }}>
+          <McIcon source ={icons.filter} size={28} style={{
+            tintColor:COLORS.purple,
+            marginRight: 10,
+          }}/>
+        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback 
         onPress={()=>{
           navigation.navigate('Search')
         }}>
           <McIcon source ={icons.search} size={28} style={{
-            tintColor:COLORS.gray,
+            tintColor:COLORS.purple,
             marginRight: 10,
           }}/>
         </TouchableWithoutFeedback>
@@ -394,50 +425,6 @@ const Personal = ({ navigation, route }) => {
           )
           : <Text>loadd....</Text>
         }
-        <SectionTitle><McText h3 style={{
-                marginVertical: -6,
-                marginTop: 10,
-              }}>Categories</McText></SectionTitle>
-      <View>
-        <FlatList
-        horizontal showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => 'event_' + item.id}
-                //data={dummyData[dataset]}
-                data={categories}
-                renderItem={_renderCategories}
-                style={{
-                  marginTop: 8,
-                  marginBottom: -12,
-                  marginLeft: 6,
-                }}
-              ></FlatList>
-              </View>
-        {category_feat ?
-          category_feat.map((sdata)=>
-          <View>
-            <SectionTitle>
-              <McText h3>
-                {sdata.header}
-              </McText>
-            </SectionTitle>
-            <View>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => 'event_' + item.id}
-                //data={dummyData[dataset]}
-                data={sdata.data}
-                renderItem={_renderItem}
-              ></FlatList>
-            </View>
-          </View>
-          
-          //{_renderList(sdata.header, sdata.data)}
-
-          )
-          : <Text>loadd....</Text>
-        }
-      
       <SectionFooter><McText h1 style={{
         //temp fix for padding
         color:'transparent'
@@ -448,8 +435,6 @@ const Personal = ({ navigation, route }) => {
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
       </SafeAreaView>
-      </LinearGradient>
-    </View>
   );
 };
 
@@ -517,7 +502,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: '#1E2029',
-    backgroundColor: 'black',
+    backgroundColor: COLORS.black,
   },
   grabox: {
     backgroundColor: 'rgba(100,100,100,0.8)',

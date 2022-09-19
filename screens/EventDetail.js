@@ -243,16 +243,16 @@ const EventDetail = ({ navigation, route }) => {
                 navigation.push('ImageScreen', {img: selectedEvent?.image})
               }}
               style={{
+                  width: 40,
                   height: 40,
                   backgroundColor: 'rgba(0,0,0,0.5)',
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 13,
-                  marginRight: -16,
                 }} >
-                <McText body3 style={{
-                  marginHorizontal: 8,
-                }}>View Image</McText>
+                <McIcon source={icons.fullscreen} style={{
+                  tintColor: COLORS.white,
+                }} size={24}/>
               </TouchableOpacity>
              
             </SectionImageHeader>
@@ -295,7 +295,7 @@ const EventDetail = ({ navigation, route }) => {
           </View>
         </ImageBackground>
         {/* buttons group section */}
-        <McText h1 numberOfLines={2} style={{width: width, marginHorizontal: 15, marginBottom: -5,}}>
+        <McText h1 numberOfLines={2} style={{width: width*0.8, marginHorizontal: 15, marginBottom: -5,}}>
           {selectedEvent?.title}
           </McText>
         <ButtonSection>
@@ -542,7 +542,7 @@ const UserOptionsSection = styled.View`
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 20px;
+  padding: 60px;
   justify-content: space-between;
 `;
 

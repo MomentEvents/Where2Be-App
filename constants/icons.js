@@ -18,6 +18,8 @@ const settings = require('../assets/icons/settings.png')
 const visibility = require('../assets/icons/visibility.png')
 const links = require('../assets/icons/link.png')
 const close = require('../assets/icons/close.png')
+const fullscreen = require('../assets/icons/fullscreen.png')
+const plus = require('../assets/icons/plus.png')
 
 export default {
   back_arrow,
@@ -39,5 +41,8 @@ export default {
   settings,
   visibility,
   links,
-  close
+  close,
+  fullscreen,
+  plus,
+  
 };

@@ -9,6 +9,7 @@ import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
 import ImageScreen from './ImageScreen';
+import CreateEvent from './CreateEvent';
 
 
 
@@ -18,6 +19,7 @@ export {
   InterestDetail,
   ImageScreen,
   Personal,
+  CreateEvent,
 
   Search,
 

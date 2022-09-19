@@ -1,10 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Personal } from '../screens';
+import { Featured, Personal, Search } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 import { Platform } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +28,7 @@ const TabLabel = ({ focused, text }) => {
     <McText body6
       style={{
         marginBottom: Platform.OS === 'ios'?-8:8, 
+        color: focused ? COLORS.purple : COLORS.gray,
       }}
     >
       {text}
@@ -101,6 +103,42 @@ const Tabs = ({ params }) => {
           ),
         }}
       />
+
+<Tab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={icons.search} />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <TabLabel focused={focused} text="Search" />
+          ),
+        }}
+      />
+      {/* <Tab.Screen
+        name="Create"
+        component={CreateEvent}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TouchableOpacity style={{
+              height: 50,
+              width: 50,
+              borderRadius: 40,
+              backgroundColor: COLORS.purple,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <McIcon size={40} style={{
+              tintColor: COLORS.white
+            }} source={icons.plus}/>
+            </TouchableOpacity>
+          ),
+          tabBarLabel: ({ focused }) => (
+            <TabLabel text="Create" />
+          ),
+        }}
+      /> */}
 
       <Tab.Screen
         name="Personal"

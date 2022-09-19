@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
 
@@ -275,7 +276,33 @@ const Featured = ({ navigation, route }) => {
               <McText h3
                   style={{color: COLORS.purple, opacity: 0.9, marginTop: 4,letterSpacing: 1.2}}>
                   {moment(item.startingTime).format('hh:mm A').toUpperCase()}
-              </McText></View>
+              </McText>
+              <View style={{
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    right: 0,
+                  }}>
+                    <McIcon source ={icons.shoutout} size={28} style={{
+                        tintColor:COLORS.lightGray,
+                        marginRight: 10,
+                      }}/>
+                      <McText body3 style={{
+                        marginTop: 2,
+                        marginLeft: -7,
+                        marginRight: 10,
+                        color: COLORS.lightGray
+                      }}>12</McText>
+                      <McIcon source ={icons.check} size={28} style={{
+                        tintColor:COLORS.lightGray,
+                        marginRight: 10,
+                      }}/>
+                      <McText body3 style={{
+                        marginTop: 2,
+                        marginLeft: -7,
+                        marginRight: 10,
+                        color: COLORS.lightGray
+                      }}>46</McText>
+                  </View></View>
               {/* <TouchableHighlight style={{
                       width: 32,
                       height: 32,
@@ -366,60 +393,7 @@ const Featured = ({ navigation, route }) => {
                 marginHorizontal: 8,
                 alignItems: 'flex-end'
               }}>
-                <View style={{ flexDirection:'column'}}>
-              {/* <TouchableHighlight style={{
-                width: 32,
-                height: 32,
-                borderRadius: 80,
-                marginLeft: 10,
-                backgroundColor: COLORS.input,
-                opacity: 0.7,
-                borderWidth: 1,
-                borderColor: COLORS.white,
-                justifyContent: 'center',
-                alignItems: 'center'
-                }} onPress={()=>{
-                console.log("like " + item.title)
-              }}>
-                <McIcon source={icons.like} size={18} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
-            {/* <TouchableHighlight style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 80,
-                      marginLeft: 10,
-                      backgroundColor: COLORS.input,
-                      borderWidth: 1,
-                      borderColor: COLORS.white,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                console.log("join " + item.title)
-              }}>
-                <McIcon source={icons.check} size={20} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
-            {/*
-            <TouchableHighlight style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 80,
-                      marginLeft: 10,
-                      backgroundColor: COLORS.input,
-                      borderWidth: 1,
-                      borderColor: COLORS.white,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                console.log("shoutout " + item.title)
-              }}>
-                <McIcon source={icons.shoutout} size={18} style={{
-              tintColor:COLORS.white,
-            }}/>
-            </TouchableHighlight> */}
+                <View style={{ flexDirection:'row'}}>
             </View>
           </View>
             {/* </GrayBox> */}
@@ -440,11 +414,10 @@ const Featured = ({ navigation, route }) => {
                       <McText body3 style={{
                         marginTop: -2,
                         color: COLORS.white,
-                        opacity:0.7,
+                        opacity:0.8,
                       }}>{moment(item.startingTime).format('MMM DD h:mm A')}</McText>
                       <View style={{
                     flexDirection: 'row',
-                    opacity: 0.8
                   }}>
                     <McIcon source ={icons.shoutout} size={20} style={{
                         tintColor:COLORS.lightGray,
@@ -457,18 +430,17 @@ const Featured = ({ navigation, route }) => {
                         color: COLORS.lightGray
                       }}>12</McText>
                       <McIcon source ={icons.check} size={20} style={{
-                        tintColor:COLORS.lightGray,
+                        tintColor:COLORS.purple,
                         marginRight: 10,
                       }}/>
                       <McText body7 style={{
                         marginTop: 2,
                         marginLeft: -7,
                         marginRight: 10,
-                        color: COLORS.lightGray
+                        color: COLORS.purple
                       }}>46</McText>
                   </View>
-                  </View>
-                  
+                </View>
           </LinearGradient>
         </ImageBackground>
         </TouchableHighlight>
@@ -484,7 +456,7 @@ const Featured = ({ navigation, route }) => {
           <McText h1>
             <Text>Explore Events</Text></McText>
         </View>
-        <View style={{
+        {/* <View style={{
           paddingLeft: 16,
         }}>
         <TouchableWithoutFeedback 
@@ -496,7 +468,7 @@ const Featured = ({ navigation, route }) => {
             marginRight: 10,
           }}/>
         </TouchableWithoutFeedback>
-        </View>
+        </View> */}
 
       </SectionHeader>
       </View>
@@ -571,13 +543,34 @@ const Featured = ({ navigation, route }) => {
           )
           : <Text>loadd....</Text>
         }
-      
       <SectionFooter><McText h1 style={{
         //temp fix for padding
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-      
+      <SectionDone>
+          <TouchableOpacity
+          style={{
+            width: 60,
+            height: 60,
+            marginBottom: 60,
+            borderRadius: 80,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            backgroundColor: COLORS.purple,
+            justifyContent: 'center',
+            alignItems: 'center'
+            }}
+          onPress={()=>{
+                      navigation.navigate('CreateEvent');
+                      console.log("Chirag's an idiot")
+                      }}
+                  >
+                  <McIcon source={icons.plus} size={44} style={{
+                    tintColor: COLORS.white,
+                  }}/>
+          </TouchableOpacity>
+      </SectionDone>
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
@@ -614,6 +607,16 @@ const SectionHeader = styled.View`
   align-items: center;
   flex-direction: row;
 `;
+
+const SectionDone = styled.View`
+  flex: 1;
+  position: absolute;
+  bottom: 0;
+  right: 1;
+  backgroundColor: transparent;
+  margin: 32px;
+`;
+
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
