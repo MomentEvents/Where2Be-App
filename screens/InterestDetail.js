@@ -245,7 +245,7 @@ const InterestDetail = ({ navigation, route }) => {
                       position: 'absolute',
                       right: -width*0.4,
                     }}>
-              <TouchableOpacity style={{
+              {/* <TouchableOpacity style={{
                       borderRadius: 80,
                       justifyContent: 'center',
                       alignItems: 'center'
@@ -257,7 +257,7 @@ const InterestDetail = ({ navigation, route }) => {
                 <McIcon source={like ? icons.likeFill: icons.like} size={24} style={{
               tintColor:like ? COLORS.purple: COLORS.white
             }}/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             </View>
                     </SectionHeader>
                 </View>

@@ -20,11 +20,13 @@ const links = require('../assets/icons/link.png')
 const close = require('../assets/icons/close.png')
 const fullscreen = require('../assets/icons/fullscreen.png')
 const plus = require('../assets/icons/plus.png')
+const addphoto = require('../assets/icons/addPhoto.png')
 
 export default {
   back_arrow,
   filter,
   shoutout,
+  addphoto,
   gift,
   like,
   likeFill,

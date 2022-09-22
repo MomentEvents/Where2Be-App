@@ -146,6 +146,7 @@ const Personal = ({ navigation, route }) => {
     // ab = data[0].type;
   }
 
+  
 
   change_names();
   // console.log(ab);
@@ -379,15 +380,6 @@ const Personal = ({ navigation, route }) => {
             marginRight: 10,
           }}/>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback 
-        onPress={()=>{
-          navigation.navigate('Search')
-        }}>
-          <McIcon source ={icons.search} size={28} style={{
-            tintColor:COLORS.purple,
-            marginRight: 10,
-          }}/>
-        </TouchableWithoutFeedback>
         </View>
 
       </SectionHeader>
@@ -430,10 +422,6 @@ const Personal = ({ navigation, route }) => {
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-      
-      {/* <SectionTitle>
-        <McText h5>FOR YOU</McText>
-      </SectionTitle>  */}
       </SafeAreaView>
   );
 };
