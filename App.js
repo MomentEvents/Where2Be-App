@@ -25,7 +25,7 @@ import * as Notifications from 'expo-notifications'
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
-
+//hello
 async function registerForPushNotificationsAsync(){
   let token;
   if(!Constants.isDevice){
