@@ -1,11 +1,8 @@
 {
   "expo": {
     "name": "Moment",
-    "slug": "momentapp",
-    "version": "1.1.3",
-    "owner": "moment-app",
-    "privacy": "public",
-    "description": "UIUC event app",
+    "slug": "Moment",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,16 +12,14 @@
       "backgroundColor": "#000000"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/4b6269e6-4591-4616-b066-70665729efd7"
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wunderblu.moment",
-      "buildNumber": "3"
+      "bundleIdentifier": "com.wunderblu.moment"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,14 +29,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "4b6269e6-4591-4616-b066-70665729efd7"
-      }
-    },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
     }
   }
 }

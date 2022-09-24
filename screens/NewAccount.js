@@ -27,25 +27,29 @@ var height = Dimensions.get('window').height; //full height
 
 
 //datas = events
-const Login = ({ navigation, route }) => {
+const NewAccount = ({ navigation, route }) => {
   const [username, setusernm] = useState("");
   const [password, setpass] = useState("");
+  const [name, setname] = useState("");
+  const [email, setemail] = useState("");
   const [error, seterror] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  const userlogin = async () => {
+  const createAccount = async () => {
     setLoading(true);
     seterror(false);
     let erry = false;
     try {
-      const resp = await fetch("http://54.226.108.97:8080/user_login", {
+      const resp = await fetch("http://54.226.108.97:8080/create_user", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: name,
+          email: email,
           username: username,
           password: password,
         }),
@@ -66,7 +70,7 @@ const Login = ({ navigation, route }) => {
   };
   const trylogin = (erry) =>{
     if(erry == false){
-      navigation.navigate('Featured')
+      navigation.navigate('Interests')
     }
   };
 
@@ -78,6 +82,32 @@ const Login = ({ navigation, route }) => {
         }}>Welcome to</McText>
         <McText f0 style={{...FONTS.f0}}> Moment</McText>
       </SectionHeader>
+      <SectionInput>
+        <TextInput
+          placeholder="Name"
+          placeholderTextColor={COLORS.gray1}
+          onChangeText={(newText) => setname(newText)}
+          defaultValue={name}
+          style={{
+            ...FONTS.h4,
+            color: COLORS.white,
+            marginLeft: 12,
+          }}
+        ></TextInput>
+      </SectionInput>
+      <SectionInput>
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor={COLORS.gray1}
+          onChangeText={(newText) => setemail(newText)}
+          defaultValue={email}
+          style={{
+            ...FONTS.h4,
+            color: COLORS.white,
+            marginLeft: 12,
+          }}
+        ></TextInput>
+      </SectionInput>
       <SectionInput>
         <TextInput
           placeholder="Username"
@@ -113,7 +143,7 @@ const Login = ({ navigation, route }) => {
             }}
           >
             {" "}
-            Wrong Username or Password
+            Username already exists
           </McText>
         )}
       </View>
@@ -123,28 +153,26 @@ const Login = ({ navigation, route }) => {
         justifyContent: 'center',
         marginBottom: 8,
       }}>
-        <McText body4>Don't Have an Account?</McText>
+        <McText body4>Already have an account?</McText>
         <TouchableOpacity style={{
           marginHorizontal: 8,
         }}
           onPress={() => {
-            navigation.navigate("NewAccount");
+            navigation.navigate("Login");
           }}
         >
           <McText body4 style={{
             color: COLORS.blue
-          }}>Sign Up!</McText>
+          }}>Log In!</McText>
         </TouchableOpacity>
       </View>
         <TouchableOpacity style={styles.button}
           onPress={() => {
             console.log("logging in");
-            console.log(userlogin());
-          }}
-        >
-          <McText h4>Log In</McText>
+            console.log(createAccount());
+          }}>
+          <McText h4>Create Account</McText>
         </TouchableOpacity>
-
     </SafeAreaView>
   );
 };
@@ -183,8 +211,6 @@ const SearchView = styled.View`
   margin-right: 9px;
 `;
 
-
-
 const SrchRes = styled.View`
   flex-direction: row;
   align-items: center;
@@ -211,4 +237,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+export default NewAccount;

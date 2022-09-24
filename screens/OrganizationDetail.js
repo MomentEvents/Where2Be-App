@@ -91,7 +91,13 @@ const OrganizationDetail = ({ navigation, route }) => {
     
    
   return (
-        <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+        <LinearGradient
+      colors = {[ COLORS.black,COLORS.black,'#1060b6']}
+      start = {{x: 0, y: 0}}
+      end = {{ x: 1, y: 1}}
+      style = {{padding:2, borderRadius: 20, height: height }}>
+        <SafeAreaView>
         <TouchableOpacity
                 onPress={() =>{
                   navigation.goBack();
@@ -113,7 +119,7 @@ const OrganizationDetail = ({ navigation, route }) => {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginTop: 40,
+                marginTop: 20,
                 marginLeft: 44,
             }}>
             <View style={{
@@ -129,58 +135,37 @@ const OrganizationDetail = ({ navigation, route }) => {
                 <View style={{
                     flexDirection: 'column',
                     marginVertical: 8,
-                    marginHorizontal: 20,
-                    width: width/1.6,
+                    marginLeft: 12,
+                    width: width/1.7,
                     alignItems: 'flex-start',
                 }}>
-                    <McText h2 style={{
+                    <View style={{
+                        alignItems: 'center'
+                    }}>
+                    <McText h2 numberOfLines={3} style={{
                         paddingBottom: 6,
+                        paddingHorizontal: 8,
                     }}>{data2?.name}</McText>
                     </View>
-            </View>
-            </View>
-            <View style={{
-                alignItems: 'center'
-            }}>
-            <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    }}>
-                        <View style={{
-                            alignItems: 'center',
-                            paddingHorizontal: 20,
-                            paddingVertical: 10,
-                        }}>
-                            <McText h3 style={{
-                                letterSpacing: 1.2,
-                                color: COLORS.purple
-                                }}>666</McText>
-                            <McText h6 style={{
-                                letterSpacing: 1.2,
-                                color: COLORS.white
-                            }}>Followers</McText>
-                        </View>
-                        <View style={{
+                    {/* <View style={{
+                        flexDirection: 'row',
                         alignItems: 'center',
-                        paddingHorizontal: 20,
-                        }}>
-                            <McText h3 style={{
-                                letterSpacing: 1.2,
-                                color: COLORS.purple
-                                }}>999</McText>
-                            <McText h6 style={{
-                                letterSpacing: 1.2,
-                                color: COLORS.white
-                            }}>Events</McText>
-                        </View>
-                        <TouchableOpacity style={styles.button} onPress={() =>{
-                            console.log('FOLLOW')
-                        }}><McText h4 style={{
+                        marginHorizontal: 12,
+                    }}><McText h4 style={{
+                        letterSpacing: 1.2,
+                    }}>XYZ Followers</McText>
+                        <TouchableOpacity style={styles.button}><McText h4 style={{
                             letterSpacing: 1.2,
-                        }}>FOLLOW</McText></TouchableOpacity>
-                    </View>
-                    </View>
-
+                        }}
+                        onPress={() =>{
+                            console.log('FOLLOW')
+                        }}
+                        >FOLLOW</McText></TouchableOpacity>
+                    </View> */}
+                    
+                </View>
+            </View>
+            </View>
             <View style={styles.EventsHeader}>
                 <TouchableWithoutFeedback onPress={() =>{
                             console.log('Upcoming')
@@ -207,6 +192,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                     }}>Gallery</McText>
                 </TouchableWithoutFeedback> */}
             </View>
+
             <ScrollView 
                 contentContainerStyle={{
                     backgroundColor: 'transparent'
@@ -284,7 +270,7 @@ const OrganizationDetail = ({ navigation, route }) => {
                                             {item.location}
                                         </McText>
                                     </View>
-                                    <View style={{
+                                    {/* <View style={{
                                         position: 'absolute',
                                         flexDirection:'column',
                                         height: height/8.1,
@@ -295,13 +281,40 @@ const OrganizationDetail = ({ navigation, route }) => {
                                     }}>
                                         <View style= {{
                                             flexDirection: 'row',
-                                            alignItems: 'center',
-                                            marginRight: 4,
+                                            alignItems: 'center'
                                         }}>
                                         <TouchableOpacity style={{
                                             width: 24,
                                             height: 24,
                                             borderRadius: 80,
+                                            marginHorizontal: 2,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 1,
+                                            borderColor: COLORS.gray,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                            }} onPress={()=>{
+                                                console.log("Like")
+                                            }}>
+                                            <McIcon source={icons.like} size={16} style={{
+                                                tintColor:COLORS.gray,
+                                                marginHorizontal: 8
+                                                }}/>
+                                        </TouchableOpacity>
+                                        </View>
+                                        <View style= {{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginHorizontal: 4,
+
+                                        }}>
+                                        <TouchableOpacity style={{
+                                            width: 24,
+                                            height: 24,
+                                            borderRadius: 80,
+                                            marginHorizontal: 2,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 1,
                                             borderColor: COLORS.gray,
                                             justifyContent: 'center',
                                             alignItems: 'center'
@@ -310,11 +323,9 @@ const OrganizationDetail = ({ navigation, route }) => {
                                             }}>
                                             <McIcon source={icons.check} size={20} style={{
                                                 tintColor:COLORS.gray,
+                                                marginHorizontal: 8
                                                 }}/>
                                         </TouchableOpacity>
-                                        <McText body4 style={{
-                                            color:COLORS.gray
-                                        }}>12</McText>
                                         </View>
                                         <View style= {{
                                             flexDirection: 'row',
@@ -324,23 +335,23 @@ const OrganizationDetail = ({ navigation, route }) => {
                                             width: 24,
                                             height: 24,
                                             borderRadius: 80,
+                                            marginHorizontal: 2,
                                             backgroundColor: 'transparent',
+                                            borderWidth: 1,
+                                            borderColor: COLORS.gray,
                                             justifyContent: 'center',
                                             alignItems: 'center'
                                             }} onPress={()=>{
                                                 console.log("Shoutout")
                                             }}>
-                                            <McIcon source={icons.shoutout} size={20} style={{
-                                                tintColor:COLORS.purple,
+                                            <McIcon source={icons.shoutout} size={16} style={{
+                                                tintColor:COLORS.gray,
                                                 marginHorizontal: 8
                                                 }}/>
                                         </TouchableOpacity>
-                                        <McText body4 style={{
-                                            color:COLORS.purple
-                                        }}>46</McText>
                                         </View>
                                     </View>
-                                    </View>
+                                    </View> */}
                                     </View>
                                 </View>
                             </View>
@@ -357,6 +368,8 @@ const OrganizationDetail = ({ navigation, route }) => {
 
                 
         </SafeAreaView>
+        </LinearGradient>
+    </View>
   );
 };
 
@@ -407,15 +420,15 @@ const GrayBox = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: '#000',
     // justifyContent: 'center',
     // alignItems: 'center',
   },
   userProfilePic: {
-    height: 90,
-    width: 90,
+    height: 100,
+    width: 100,
     borderRadius: 300,
-    marginLeft: -15,
+    padding: 30,
     borderWidth: 1,
     borderColor: COLORS.gray,
     justifyContent: 'center',
@@ -423,17 +436,12 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 8,
-    marginBottom: 6,
     padding: 4,
-    height: 32,
-    width: 100,
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 20,
-    backgroundColor: COLORS.purple,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: COLORS.white,
+    backgroundColor: COLORS.input,
     alignItems: 'center',
   },
   EventsHeader: {

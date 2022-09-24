@@ -194,6 +194,11 @@ const EventDetail = ({ navigation, route }) => {
     },[iD]);
   return (
     <View style={styles.container}>
+       <LinearGradient
+          colors = {[ COLORS.black,COLORS.trueBlack,'#003060']}
+          start = {{x: 0, y: 0}}
+          end = {{ x: 1, y: 1}}
+          style = {{padding:2, borderRadius: 20 }}>
       <ScrollView 
       contentContainerStyle={{
         backgroundColor: 'transparent'
@@ -243,23 +248,23 @@ const EventDetail = ({ navigation, route }) => {
                 navigation.push('ImageScreen', {img: selectedEvent?.image})
               }}
               style={{
-                  width: 40,
                   height: 40,
                   backgroundColor: 'rgba(0,0,0,0.5)',
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 13,
+                  marginRight: -16,
                 }} >
-                <McIcon source={icons.fullscreen} style={{
-                  tintColor: COLORS.white,
-                }} size={24}/>
+                <McText body3 style={{
+                  marginHorizontal: 8,
+                }}>View Image</McText>
               </TouchableOpacity>
              
             </SectionImageHeader>
             {/* Image Footer*/}
             <SectionImageFooter>
               <LinearGradient
-                colors = {['transparent',COLORS.black]}
+                colors = {['transparent','#000']}
                 start = {{x: 0, y: 0}}
                 end = {{ x: 0, y: 1}}
                 style = {{
@@ -269,24 +274,46 @@ const EventDetail = ({ navigation, route }) => {
 
                 }}
               >
+                
                 <FooterContentView>
                   <View>
-                    <View style={{
-                      flexDirection: 'row',
-                      alignItems: 'flex-start',
-                      marginHorizontal: -6
-                    }}>
-                      {/* <McIcon source ={icons.event} size={24} style={{
-                          marginTop: 2,
-                          tintColor:COLORS.purple,
-                        }}/> */}
-                      <McText h3 style={{letterSpacing: 1.5, margin: 6, marginRight: 0, color: COLORS.purple, opacity: 0.85 }}>
-                        {moment(selectedEvent?.startingTime).format('MMM DD').toUpperCase()}
+                    <McText body4 style={{opacity: 0.5, letterSpacing: 2 }}>
+                      {selectedEvent?.type}
+                      </McText>
+                    <McText h1 numberOfLines={2} style={{width: width * 0.7}}>{selectedEvent?.title}</McText>
+                    <McText body4 style={{opacity: 0.5, letterSpacing: 1.5 }}>
+                      STARTING {moment(selectedEvent?.startingTime).format('hh:mm A')}
                     </McText>
-                    <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
-                        {moment(selectedEvent?.startingTime).format('h:mm A')}
+
+                  </View>
+                  <View style={{
+                    paddingTop:12
+                  }}>
+                  <LinearGradient
+                    colors = {['#902070', '#DD77EB', '#a2d2ff']}
+                    start = {{x: -0.1, y: 1}}
+                    end = {{ x: 1, y: 1}}
+                    style = {{
+                      width: 60, 
+                      height: 60,
+                      borderRadius: 15,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    
+                    <McText body4 style={{letterSpacing: 1}}>
+                      {moment(selectedEvent?.startingTime)
+                        .format('MMM')
+                        .toUpperCase()
+                      }
                     </McText>
-                    </View>
+                    <McText h2 style={{}}>
+                      {moment(selectedEvent?.startingTime)
+                        .format('DD')
+                      }
+                    </McText>
+                  </LinearGradient>
                   </View>
                 </FooterContentView>
                 
@@ -295,22 +322,18 @@ const EventDetail = ({ navigation, route }) => {
           </View>
         </ImageBackground>
         {/* buttons group section */}
-        <McText h1 numberOfLines={2} style={{width: width*0.8, marginHorizontal: 15, marginBottom: -5,}}>
-          {selectedEvent?.title}
-          </McText>
+        
         <ButtonSection>
           <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {
               selectedEvent?.taglist.map((taglist)=> 
                 <TouchableOpacity
                   style={{
-                  width: taglist.length *9 + 15,
+                  width: taglist.length *8 + 15,
                   height: 32,
-                  borderRadius: 14,
+                  borderRadius: 10,
                   marginRight: 10,
                   backgroundColor: COLORS.input,
-                  borderWidth: StyleSheet.hairlineWidth,
-                  borderColor: COLORS.purple,
                   justifyContent: 'center',
                   alignItems: 'center'
                   }} 
@@ -318,7 +341,7 @@ const EventDetail = ({ navigation, route }) => {
                     navigation.push('InterestDetail', {selectedInterest: taglist})
                   }}
                 >
-                  <McText h5 style={{ letterSpacing: 1}}>{taglist}</McText>
+                  <McText h6 style={{opacity: 0.5, letterSpacing: 1}}>{taglist}</McText>
                 </TouchableOpacity>
               )
             }
@@ -364,16 +387,16 @@ const EventDetail = ({ navigation, route }) => {
               {
                   lengthMore ? <McText
                   onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 22, marginTop: 10, color: COLORS.gray}}>
+                  style={{ lineHeight: 22, marginTop: 10, opacity: 0.6}}>
                     {textShown ? 'Read less...' : 'Read more...'}</McText>
                   :null
               }
           </View>
         </DescriptionSection>
         <LocationSection>
-        <McIcon source ={icons.location} size={24} style={{
+        <McIcon source ={icons.location} size={20} style={{
               margin:4,
-              tintColor:COLORS.purple,
+              tintColor:COLORS.gray,
             }}/>
             <TouchableOpacity onPress={()=>{
                 var uri = selectedEvent?.location
@@ -387,7 +410,7 @@ const EventDetail = ({ navigation, route }) => {
                 marginTop: -1, 
                 width: width * 0.83,
                 }}
-                >
+                numberOfLines={1}>
                   {selectedEvent?.location}
               </McText>
               </TouchableOpacity>
@@ -417,7 +440,7 @@ const EventDetail = ({ navigation, route }) => {
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
-              tintColor: COLORS.purple
+              tintColor: COLORS.gray1
             }}/>
         <View>
           <McText body5 numberOfLines={1} style={{
@@ -425,7 +448,7 @@ const EventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility}
+                {selectedEvent?.visibility} EVENT
             </McText>
           </View>
         </VisibilitySec>
@@ -433,18 +456,43 @@ const EventDetail = ({ navigation, route }) => {
         //temp fix for padding
         color:'transparent'
       }}>hello</McText></SectionFooter>
+        
       </ScrollView>
-         <View style={styles.otherContainer}>
+        {/* <View style={styles.otherContainer}>
           <UserOptionsSection>
+          <View style={{
+              alignItems: 'center'
+            }}>
+              <TouchableOpacity style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      backgroundColor:like ? '#a00000':  'transparent',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: COLORS.gray,
+                      alignItems: 'center'
+                      }}
+                      onPress={()=>{
+                        console.log("Like")
+                        handleLike()
+                      }}>
+                <McIcon source={like ? icons.likeFill: icons.like} size={32} style={{
+              tintColor:like ? COLORS.white: COLORS.gray,
+            }}/>
+            
+            </TouchableOpacity>
+              <McText body3>Like</McText>
+            </View>
             <View style={{
-              alignItems: 'center',
-              marginRight: 60
+              alignItems: 'center'
             }}>
             <TouchableOpacity style={{
                       width: 60,
                       height: 60,
                       borderRadius: 80,
-                      backgroundColor:join ? COLORS.purple: 'transparent' ,
+                      marginHorizontal: 30,
+                      backgroundColor:join ? '#006099': 'transparent' ,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
                       justifyContent: 'center',
@@ -472,7 +520,7 @@ const EventDetail = ({ navigation, route }) => {
                       borderRadius: 80,
                       borderWidth: 1,
                       borderColor: COLORS.gray,
-                      backgroundColor: shoutout ? COLORS.purple : 'transparent',
+                      backgroundColor: shoutout ? '#651070' : 'transparent',
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
@@ -489,7 +537,8 @@ const EventDetail = ({ navigation, route }) => {
             <McText body3>ShoutOut</McText>
             </View>
           </UserOptionsSection>
-        </View>
+        </View> */}
+      </LinearGradient>
     </View>
   );
 };
@@ -516,7 +565,7 @@ const FooterContentView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  marginHorizontal: 15px;
+  margin: 0px 30px;
 `;
 
 const ButtonSection = styled.View`
@@ -542,7 +591,7 @@ const UserOptionsSection = styled.View`
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 60px;
+  padding: 40px;
   justify-content: space-between;
 `;
 
@@ -591,7 +640,7 @@ const BottomBarSection = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black
+    backgroundColor: '#000',
     //justifyContent: 'center',
     //alignItems: 'center',
   },

@@ -16,13 +16,10 @@ export const COLORS = {
   blue: '#4096FE',
   gray: '#878787',
   gray1: '#666666',
-  gray2: '#444444',
   lightGray: '#dedede',
-  purple: '#9e69f5',
   transparentWhite: 'rgba(255, 255, 255, 0.2)',
-  transparentBlack: 'rgba(0, 0, 0, 0.9)',
-  linear: ['transparent', '#F687FFE8'],
-  
+  transparentBlack: 'rgba(0, 0, 0, 0.4)',
+  linear: ['#439DFEE8', '#F687FFE8'],
 };
 export const SIZES = {
   // global sizes
@@ -49,7 +46,6 @@ export const SIZES = {
   body4: '14px',
   body5: '13px',
   body6: '12px',
-  body7: '11px',
 
   // app dimensions
   width,

@@ -1,15 +1,14 @@
 import Featured from './Featured';
 import EventDetail from './EventDetail';
-import Signup from './Signup';
-import Login from './Login'
+
+
+
 import Search from './Search'
-import Personal from './Personal'
 
 import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
 import ImageScreen from './ImageScreen';
-import CreateEvent from './CreateEvent';
 
 
 
@@ -18,11 +17,9 @@ export {
   EventDetail,
   InterestDetail,
   ImageScreen,
-  Personal,
-  CreateEvent,
-  Signup,
+
   Search,
-  Login,
+
   OrganizationDetail,
 
 

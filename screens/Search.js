@@ -51,8 +51,9 @@ import Fuse from 'fuse.js'
      <SafeAreaView style={styles.container}>
       <View style={{
         flexDirection:'row',
+        justifyContent: 'space-between'
       }}>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={() =>{
             navigation.goBack();
           }}
@@ -64,13 +65,13 @@ import Fuse from 'fuse.js'
           <McIcon source={icons.back_arrow} style={{
                   tintColor: COLORS.white,
                 }} size={24}/>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
       <SectionSearch>
         <SearchView>
         <McIcon source={icons.search} style={{
                   tintColor: COLORS.white,
                   marginRight: 8,
-                  marginLeft: 8
+                  marginLeft: 4
                 }} size={24}/>
           <TextInput
             placeholder='Search'
@@ -148,6 +149,7 @@ import Fuse from 'fuse.js'
 `;
 const SectionSearch = styled.View`
   margin: 4px ${SIZES.padding};
+  marginLeft: -6;
   height: 50px;
   background-color: ${COLORS.input};
   border-radius: 15px;

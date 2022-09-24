@@ -41,7 +41,7 @@ export default class InterestSelector extends Component {
     render() {
         this.checkList(this.props.list, this.props.text)
         const {toggle} = this.state
-        const colorVal = toggle?COLORS.purple:COLORS.input
+        const colorVal = toggle?COLORS.gray:COLORS.input
         const inList = toggle?false:true
         
         return (
