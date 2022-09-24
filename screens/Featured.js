@@ -32,33 +32,7 @@ const Featured = ({ navigation, route }) => {
   var type = "Instagram";
   var type2 = "Discord";
 
-  // const route = useRoute()
-  // const name = route.params.name ? route.params.name : null 
-  // console.log(name)
-
-  // const {name} = route.params
-
-//  useEffect(()=> {
-//   console.log("featured.js")
-//   console.log(navigation.joinedEvent  ? "yes data received" : "not received")
-
-//  },[])
-// useEffect(()=>{
-//   console.log(route.params.name)
-// })
-  //handlleling the joinded event data 
-  // useEffect(()=>{
-  //   if(route.params?.selectedEvent) {
-  //     console.log(route.params?.selectedEvent)
-  //     console.log('selectEvnet')
-  //   }else{
-  //     console.log('not true')
-  //   }
-
-  // },[route.params])
-
   const fetchData = async () => {
-
     const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
       method: 'POST',
       headers: {
@@ -130,8 +104,6 @@ const Featured = ({ navigation, route }) => {
 
     setLoading(false);
   };
-  const categories = data4
-  const orgs = data3
   const spotlight = data2
   // var ab = 0;
 
@@ -187,7 +159,6 @@ const Featured = ({ navigation, route }) => {
               
             }}>
             <McText h4 numberOfLines={1} style={{
-              
             }}>{item.title}</McText>
             </View>
         </View>
@@ -228,7 +199,6 @@ const Featured = ({ navigation, route }) => {
         onPress={()=>{
           navigation.navigate('EventDetail', {selectedEvent: item});
         }}
-
         style={{
           borderRadius: 20,
           margin: -8
@@ -384,9 +354,7 @@ const Featured = ({ navigation, route }) => {
               width: SIZES.width/2.5 + 10,
               height: SIZES.width/1.9 + 10,
               justifyContent: 'space-between'
-            }}
-            >
-            {/* <GrayBox> */}
+            }}>
               <View style={{
                 flexDirection: 'column',
                 marginVertical: 8,
@@ -396,7 +364,6 @@ const Featured = ({ navigation, route }) => {
                 <View style={{ flexDirection:'row'}}>
             </View>
           </View>
-            {/* </GrayBox> */}
           <LinearGradient
                 colors = {['transparent', COLORS.trueBlack]}
                 start = {{x: 1, y: 0}}
@@ -445,7 +412,6 @@ const Featured = ({ navigation, route }) => {
         </ImageBackground>
         </TouchableHighlight>
         </View>
-      
     )
   }
   return (
@@ -456,33 +422,11 @@ const Featured = ({ navigation, route }) => {
           <McText h1>
             <Text>Explore Events</Text></McText>
         </View>
-        {/* <View style={{
-          paddingLeft: 16,
-        }}>
-        <TouchableWithoutFeedback 
-        onPress={()=>{
-          navigation.navigate('Search')
-        }}>
-          <McIcon source ={icons.search} size={28} style={{
-            tintColor:COLORS.purple,
-            marginRight: 10,
-          }}/>
-        </TouchableWithoutFeedback>
-        </View> */}
-
       </SectionHeader>
       </View>
-      
-      {/* <Button
-        onPress={() => {
-          navigation.navigate('EventDetail');
-        }}
-        title="Go to Event Detail"
-      /> */}
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View><FlatList
                 horizontal
-
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
                 data={spotlight}

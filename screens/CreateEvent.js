@@ -12,7 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
-import { Svg, Use, SvgUri} from 'react-native-svg'
+import DatePicker from 'react-native-date-picker'
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -25,140 +25,15 @@ const dummyTags = ['Academic',
   'Athletics',
   'Other',
   'Recreation',]
-const inTags = ['Music']
+const inTags = []
 var outTags = []
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const CreateEvent = ({ navigation, route }) => {
 
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
-  const [category_feat, setcategory_feat] = useState([]);
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
 
-  const [loading, setLoading] = useState(true);
-  // const [type, setType] = useState("Instagram");
-  var type = "Instagram";
-  var type2 = "Discord";
-
-  // const route = useRoute()
-  // const name = route.params.name ? route.params.name : null 
-  // console.log(name)
-
-  // const {name} = route.params
-
-//  useEffect(()=> {
-//   console.log("featured.js")
-//   console.log(navigation.joinedEvent  ? "yes data received" : "not received")
-
-//  },[])
-// useEffect(()=>{
-//   console.log(route.params.name)
-// })
-  //handlleling the joinded event data 
-  // useEffect(()=>{
-  //   if(route.params?.selectedEvent) {
-  //     console.log(route.params?.selectedEvent)
-  //     console.log('selectEvnet')
-  //   }else{
-  //     console.log('not true')
-  //   }
-
-  // },[route.params])
-
-  const fetchData = async () => {
-
-    const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-      })
-    }); 
-    const data2 = await resp2.json();
-    setData2(data2);
-
-    const resp = await fetch(`http://3.136.67.161:8080/feat`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-        password: 'testpassword'
-      })
-    }); 
-    const data = await resp.json();
-
-    setData(data);
-
-    
-
-    const resp3 = await fetch(`http://3.136.67.161:8080/feat_orgs`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-      })
-    }); 
-    const data3 = await resp3.json();
-    setData3(data3)
-    
-    const resp4 = await fetch(`http://3.136.67.161:8080/categories`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-      })
-    }); 
-    const data4 = await resp4.json();
-    setData4(data4)
-
-    const resp5 = await fetch(`http://3.136.67.161:8080/categories_feat`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: type,
-      })
-    }); 
-    const category_feat = await resp5.json();
-    setcategory_feat(category_feat)
-
-    setLoading(false);
-  };
-  const categories = data4
-  const orgs = data3
-  const spotlight = data2
-  // var ab = 0;
-
-  useEffect(() => {
-    fetchData();
-  }, [type, type2]);
-  
-  var type_arr = ["Discord", "Instagram"];
-
-  const change_names = () => {
-    type = type_arr[1];
-    //console.log(data[0].id);
-    // ab = data[0].type;
-  }
-
-
-  change_names();
   // console.log(ab);
   // for (var i = 0; i < numrows; i++) {
   //     rows.push(ObjectRow());
@@ -179,13 +54,12 @@ const CreateEvent = ({ navigation, route }) => {
                 }}
                 onPress={() =>{
                   navigation.navigate('Featured');
-                }}
-              >
-                <McIcon source={icons.back_arrow} style={{
+                }}>
+                <McIcon source={icons.close} style={{
                     tintColor: COLORS.white,
                     marginBottom: 4,
                     marginLeft: -8
-                }} size={24}/>
+                }} size={32}/>
                 </TouchableOpacity>
           <McText h1>Create Event</McText>
           <View style={{
@@ -278,20 +152,7 @@ const CreateEvent = ({ navigation, route }) => {
               marginBottom: 8,
               }}>Date</McText>
             <SectionTextIn>
-              <TextInput
-                placeholder='When is your event?'
-                placeholderTextColor={COLORS.gray1}
-                //onChange={handleOnSearch}
-                //value={bad}
-                style={{
-                  ...FONTS.body3,
-                  color: COLORS.white,
-                  width: 250,
-                  marginBottom: 5,
-                  marginLeft: 5,
-                  padding: 4,
-                }}
-              />
+            {/* <DatePicker date={date} mode={'date'} onDateChange={setDate}/> */}
             </SectionTextIn>
           </View>
           <View style={{
