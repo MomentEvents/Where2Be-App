@@ -1,5 +1,5 @@
 //import React from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
@@ -10,6 +10,7 @@ import { McText, McIcon, McAvatar} from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
+import { AuthContext } from '../AuthContext';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -25,6 +26,7 @@ const Personal = ({ navigation, route }) => {
   const [data3, setData3] = useState([]);
   const [data4, setData4] = useState([]);
   const [category_feat, setcategory_feat] = useState([]);
+  const {logoutTok} = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
@@ -373,7 +375,7 @@ const Personal = ({ navigation, route }) => {
           flexDirection:'row'
         }}><TouchableWithoutFeedback 
         onPress={()=>{
-          navigation.navigate('Search')
+          logoutTok()
         }}>
           <McIcon source ={icons.filter} size={28} style={{
             tintColor:COLORS.purple,

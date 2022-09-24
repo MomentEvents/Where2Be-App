@@ -1,7 +1,7 @@
 import Featured from './Featured';
 import EventDetail from './EventDetail';
-
-
+import Signup from './Signup';
+import Login from './Login'
 import Search from './Search'
 import Personal from './Personal'
 
@@ -20,9 +20,9 @@ export {
   ImageScreen,
   Personal,
   CreateEvent,
-
+  Signup,
   Search,
-
+  Login,
   OrganizationDetail,
 
 

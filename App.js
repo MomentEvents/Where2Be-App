@@ -8,24 +8,25 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
   ActivityIndicator,
   StatusBar,
   FlatList,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import 'react-native-gesture-handler'
 import Tabs from './navigation/Tabs';
 
-import { Featured, EventDetail, Search, OrganizationDetail, InterestDetail, ImageScreen, CreateEvent } from './screens';
+import { Featured, EventDetail, Search, Interests, OrganizationDetail, Login, OrgEventDetail, Mine, Signup } from './screens';
 
 
 import { customFonts } from './constants';
-import * as Notifications from 'expo-notifications'
+import AppNav from './navigation/AppNav';
+
 import 'react-native-gesture-handler';
 
-import * as SplashScreen from 'expo-splash-screen';
-//hello
+import { AuthProvider } from './AuthContext';
+
 async function registerForPushNotificationsAsync(){
   let token;
   if(!Constants.isDevice){
@@ -59,60 +60,23 @@ async function registerForPushNotificationsAsync(){
   return token;
 }
 
-const Stack = createStackNavigator();
-SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const event = createContext()
-  const [assetsLoaded, setAssetLoaded] = useState(false);
-
-  const [joinEvent, setJoinEvent] = useState([])
-
-  /* Loading custom fonts in async */
-  const _loadAssetsAsync = async () => {
-    await Font.loadAsync(customFonts);
-    setAssetLoaded(true);
-  };
-
-  useEffect(() => {
-    _loadAssetsAsync();
-  });
-  
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
-   
-  return assetsLoaded ? (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content"></StatusBar>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Featured">
-        <Stack.Screen name="Featured" component={Tabs} />
-        <Stack.Screen name="InterestDetail" component={InterestDetail} />
-        <Stack.Screen name="CreateEvent" component={CreateEvent} />
-        <Stack.Screen name="EventDetail" component={EventDetail} />
-        <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
-        <Stack.Screen name="Search" component={Search}/>
-        <Stack.Screen name="ImageScreen" component={ImageScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  ) : (
-    <ActivityIndicator size="small"></ActivityIndicator>
-  );
+  // Remove font scaling for app
+  Text.defaultProps = Text.defaultProps||{};
+  Text.defaultProps.allowFontScaling = false;
+  TextInput.defaultProps = TextInput.defaultProps||{};
+  TextInput.defaultProps.allowFontScaling = false;
+  return(
+    <AuthProvider>
+      <AppNav/>
+    </AuthProvider>
+  )
+
 }
 
-SplashScreen.hideAsync();
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 
