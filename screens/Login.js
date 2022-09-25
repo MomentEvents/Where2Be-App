@@ -30,9 +30,17 @@ var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 
+function validateEmail(test) {
+  const expression =
+    /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+
+  return expression.test(String(test).toLowerCase());
+}
+
+
 //datas = events
 const Login = ({ navigation, route }) => {
-  const [username, setusernm] = useState("");
+  const [usercred, setusercred] = useState("");
   const [password, setpass] = useState("");
   const [error, seterror] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,47 +50,82 @@ const Login = ({ navigation, route }) => {
   const userlogin = async () => {
     setLoading(true);
     seterror(false);
-    
+    let udata = {};
     let erry = false;
-    if(username == "" || password == ""){
+    let username = ''
+    let email = ''
+    if(usercred == "" || password == ""){
       erry = true;
       setLoading(false);
       seterror(true);
     }
+
     else{
-      try {
-        const resp = await fetch("http://10.0.2.2:3000/user_login", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
-        });
-        const result = await resp.json();
-        console.log(result);
-        setData(result);
-      } catch (err) {
-        seterror(true);
-        console.log("ERRROR");
-        console.log(error);
-        
-        erry = true;
-      } finally {
-        setLoading(false);
-        trylogin(erry);
+      if(validateEmail(usercred)){
+        try {
+          const resp = await fetch("http://10.0.2.2:8080/email_login", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              password: password,
+              email: usercred,
+            }),
+          });
+          const result = await resp.json();
+          console.log(result);
+          udata = result
+          //setData(result);
+        } catch (err) {
+          seterror(true);
+          console.log("ERRROR");
+          console.log(error);
+          
+          erry = true;
+        } finally {
+          setLoading(false);
+          trylogin(erry, udata);
+        }
       }
+      else{
+        try {
+          const resp = await fetch("http://10.0.2.2:8080/user_login", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: usercred,
+              password: password,
+            }),
+          });
+          const result = await resp.json();
+          console.log(result);
+          udata = result
+          //setData(result);
+        } catch (err) {
+          seterror(true);
+          console.log("ERRROR");
+          console.log(error);
+          
+          erry = true;
+        } finally {
+          setLoading(false);
+          trylogin(erry, udata);
+        }
+      }
+      
     } 
   
     //return userdata
   };
-  const trylogin = (erry) =>{
+  const trylogin = (erry, udata) =>{
     if(erry == false){
       //navigation.navigate('Interests')
-      loginTok()
+      loginTok(udata)
     }
   };
 
@@ -99,9 +142,9 @@ const Login = ({ navigation, route }) => {
         <McText h1>Welcome to Moment</McText>
       </SectionHeader>
       <CustomInput
-        value= {username}
-        setValue={setusernm}
-        placeholder ="Username"
+        value= {usercred}
+        setValue={setusercred}
+        placeholder ="Username or Email"
       />
       
       <CustomInput
@@ -118,7 +161,7 @@ const Login = ({ navigation, route }) => {
             }}
           >
             {" "}
-            Wrong Username or Password
+            Wrong Username/Email or Password
           </McText>
         )}
       </View>

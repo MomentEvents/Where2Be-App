@@ -4,7 +4,7 @@
  * 
 
  */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useContext} from 'react';
 import { Modal, Image, Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
@@ -17,6 +17,7 @@ import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { AuthContext } from '../AuthContext';
 
 
 import {memo} from "react"
@@ -31,6 +32,7 @@ const EventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const {UserId} = useContext(AuthContext)
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
@@ -40,38 +42,40 @@ const EventDetail = ({ navigation, route }) => {
   const [join, setJoin] = useState(false);
   const [shoutout, setShoutout] = useState(false);
 
-  const handleLike = async () => {
-    if (like) {
-      // console.log(like);
-      setLike(false);
-      console.log("HEREEE2: ", like);
-      console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_like", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-        }),
-      });
-    } else {
-      setLike(true);
-      console.log("HEREEE2: ", like);
-      const resp = await fetch("http://3.136.67.161:8080/create_like", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-        }),
-      });
-    }
-  };
+  // const handleLike = async () => {
+  //   if (like) {
+  //     // console.log(like);
+  //     setLike(false);
+  //     console.log("HEREEE2: ", like);
+  //     console.log("HEREEE");
+  //     const resp = await fetch("http://10.0.2.2:8080/delete_like", {
+  //       // deleting for true, need to change
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uniqueID: selectedEvent?.uniqueID,
+  //         UserId: UserId,
+  //       }),
+  //     });
+  //   } else {
+  //     setLike(true);
+  //     console.log("HEREEE2: ", like);
+  //     const resp = await fetch("http://10.0.2.2:8080/create_like", {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uniqueID: selectedEvent?.uniqueID,
+  //         UserId: UserId,
+  //       }),
+  //     });
+  //   }
+  // };
   
 
   const handleJoin = async () => {
@@ -80,7 +84,7 @@ const EventDetail = ({ navigation, route }) => {
       setJoin(false);
       console.log("HEREEE2: ", join);
       console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_join", {
+      const resp = await fetch("http://10.0.2.2:8080/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -89,12 +93,13 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
-      const resp = await fetch("http://3.136.67.161:8080/create_join", {
+      const resp = await fetch("http://10.0.2.2:8080/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -102,6 +107,7 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId:UserId,
         }),
       });
     }
@@ -114,7 +120,7 @@ const EventDetail = ({ navigation, route }) => {
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_shoutOut", {
+      const resp = await fetch("http://10.0.2.2:8080/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -123,12 +129,13 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch("http://3.136.67.161:8080/create_shoutOut", {
+      const resp = await fetch("http://10.0.2.2:8080/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -136,6 +143,7 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
     }
@@ -168,7 +176,7 @@ const EventDetail = ({ navigation, route }) => {
         let data;
         console.log('id:' + iD)
         if(iD !== 'bad') {
-            const resp = await fetch('http://3.136.67.161:8080/organization_details', {
+            const resp = await fetch('http://10.0.2.2:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

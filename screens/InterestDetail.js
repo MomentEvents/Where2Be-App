@@ -35,7 +35,7 @@ const InterestDetail = ({ navigation, route }) => {
         setLike(false);
         console.log("HEREEE2: ", like);
         console.log("HEREEE");
-        // const resp = await fetch("http://3.136.67.161:8080/delete_like", {
+        // const resp = await fetch("http://10.0.2.2:8080/delete_like", {
         //   // deleting for true, need to change
         //   method: "POST",
         //   headers: {
@@ -49,7 +49,7 @@ const InterestDetail = ({ navigation, route }) => {
       } else {
         setLike(true);
         console.log("HEREEE2: ", like);
-        // const resp = await fetch("http://3.136.67.161:8080/create_like", {
+        // const resp = await fetch("http://10.0.2.2:8080/create_like", {
         //   method: "POST",
         //   headers: {
         //     Accept: "application/json",
@@ -76,7 +76,7 @@ const InterestDetail = ({ navigation, route }) => {
     const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch('http://3.136.67.161:8080/interest_events', {
+            const resp = await fetch('http://10.0.2.2:8080/interest_events', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

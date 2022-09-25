@@ -38,7 +38,7 @@ const OrganizationDetail = ({ navigation, route }) => {
         let data2;
         if(iD !== 'bad') {
             console.log('A')
-            const resp = await fetch('http://3.136.67.161:8080/organization_events', {
+            const resp = await fetch('http://10.0.2.2:8080/organization_events', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -51,7 +51,7 @@ const OrganizationDetail = ({ navigation, route }) => {
             console.log('resp', resp);
                 
             
-            const resp2 = await fetch('http://3.136.67.161:8080/organization_details', {
+            const resp2 = await fetch('http://10.0.2.2:8080/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

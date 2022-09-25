@@ -20,7 +20,7 @@ SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
 function AppNav(){
     const [assetsLoaded, setAssetLoaded] = useState(false);
-    const {UserToken, loadingToken} = useContext(AuthContext);
+    const {UserId, loadingToken} = useContext(AuthContext);
     
   /* Loading custom fonts in async */
   const _loadAssetsAsync = async () => {
@@ -32,7 +32,7 @@ function AppNav(){
   });
   return ((assetsLoaded && !loadingToken)?
     <NavigationContainer>
-    {UserToken !== null ? <AppStack /> : <AuthStack />}
+    {UserId !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
     :<ActivityIndicator size="small"></ActivityIndicator>
   );

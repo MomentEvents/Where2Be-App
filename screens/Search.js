@@ -16,7 +16,7 @@ import Fuse from 'fuse.js'
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://3.136.67.161:8080/search_org', {
+  const resp = await fetch('http://10.0.2.2:8080/search_org', {
       method: 'GET',
     });
 

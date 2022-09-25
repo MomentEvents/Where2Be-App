@@ -9,7 +9,7 @@ var session = require("express-session"); // need to install
 var bcrypt = require('bcryptjs');
 
 var app = express();
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 3000;
 
 // View Engine
 app.set("views", path.join(__dirname, "views"));
@@ -24,8 +24,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var jsonParser = bodyParser.json();
 
 var driver = neo4j.driver(
-  // process.env.HOST,
-  // neo4j.auth.basic(process.env.USER, process.env.PASSWORD)
   "neo4j+s://bff6d1fc.databases.neo4j.io",
   neo4j.auth.basic("neo4j", "57yuB7Ts5UL1Ajbggx9kVLoovrIiHwAI0NZ1Veu2_I0")
 );
@@ -75,72 +73,37 @@ app.post("/user_login", jsonParser, (req, res) => {
         // }
       } else {
         var hashpass = result.records[0].get("u").properties.password;
-        bcrypt.compare(pass, hashpass).then((passwordCheck) => {
+        bcrypt
+          .compare(pass, hashpass)
+          .then((passwordCheck)=>{
           //console.log(result.records)
-          if (!passwordCheck) {
-            res.end();
-            console.log("Wrong Password");
-            res.write("Please try a different password.");
-            res.end();
-          } else {
-            var user = {
-              name: result.records[0].get("u").properties.name,
-              username: result.records[0].get("u").properties.ID,
-              email: result.records[0].get("u").properties.email,
-              password: result.records[0].get("u").properties.password,
-            };
-            //console.log(user);
-            res.send(JSON.stringify(user));
-            res.end();
-          }
-        });
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-});
+            if(!passwordCheck){
+              res.end();
+              console.log("Wrong Password");
+              res.write("Please try a different password.");
+              res.end();
+            }else{
+              sess = req.session;
 
-app.post("/email_login", jsonParser, (req, res) => {
-  var email = req.body.email;
-  var pass = req.body.password;
-  
-  console.log("User login", email);
-  connection
-    .run("MATCH (u:User {email: $email}) RETURN u", {
-      email: email,
-    })
-    .then(function (result) {
-      //console.log(result.records[0].get('u').properties.name)
-      if (_.isEmpty(result.records)) {
-        res.end();
-        console.log("User Not found here");
-        res.write("Please login first.");
-        res.end();
-        // throw {
-        //   status: 400
-        // }
-      } else {
-        var hashpass = result.records[0].get("u").properties.password;
-        bcrypt.compare(pass, hashpass).then((passwordCheck) => {
-          //console.log(result.records)
-          if (!passwordCheck) {
-            res.end();
-            console.log("Wrong Password");
-            res.write("Please try a different password.");
-            res.end();
-          } else {
-            var user = {
-              name: result.records[0].get("u").properties.name,
-              username: result.records[0].get("u").properties.ID,
-              email: result.records[0].get("u").properties.email,
-              password: result.records[0].get("u").properties.password,
-            };
+              // console.log(sess.email);
 
-            res.send(JSON.stringify(user));
-            res.end();
-          }
-        });
+              if (req.session) {
+                sess.email = result.records[0].get("u").properties.email;
+                sess.name = result.records[0].get("u").properties.name;
+                // sess.phone = result.records[0].get("u").properties.phone;
+                sess.username = result.records[0].get("u").properties.username;
+                // res.write(`<h1>Hello ${sess.email} h1><br>`);
+                var user = {
+                  name: sess.name,
+                  username: sess.username,
+                  email: sess.email,
+                };
+
+                res.send(JSON.stringify(user));
+                res.end();
+              }
+            }
+          });
       }
     })
     .catch(function (err) {
@@ -153,7 +116,6 @@ app.post("/create_user", jsonParser, (req, res) => {
   var username = req.body.username;
   var email = req.body.email;
   var pass = req.body.password;
-  var school = req.body.school;
   console.log("Create user", username);
   connection
     .run("MATCH (u:User {ID: $username}) RETURN u", {
@@ -163,71 +125,44 @@ app.post("/create_user", jsonParser, (req, res) => {
       if (!_.isEmpty(result.records)) {
         res.end();
       } else {
-        bcrypt.hash(pass, 10).then((hashPass) => {
+        bcrypt
+          .hash(pass, 10)
+          .then((hashPass)=>{
           connection
             .run(
-              "Create (u:User {ID: $username, email:$email, name:$name0, password:$pass, school: $school}) Return u",
+              "Create (u:User {ID: $username, username: $username, email:$email, name:$name0, password:$pass}) Return u",
               {
                 username: username,
                 name0: name0,
                 email: email,
                 pass: hashPass,
-                school: school,
               }
             )
             .then(function (result) {
-              var user = {
-                name: name0,
-                username: username,
-                email: email,
-                password: hashPass,
-              };
-              res.send(JSON.stringify(user));
+              sess = req.session;
+              // console.log(sess.email);
+
+              if (req.session) {
+                sess.email = email; //result.records[0].get("u").properties.email;
+                sess.name = name0; //result.records[0].get("u").properties.name;
+                sess.username = username; //result.records[0].get("u").properties.username;
+                // res.write(`<h1>Hello ${sess.email} h1><br>`);
+                var user = {
+                  name: sess.name,
+                  username: sess.username,
+                  email: sess.email,
+                };
+                res.send(JSON.stringify(user));
+              }
               res.end();
             });
-        });
-      }
+          });
+        }
     })
     .catch(function (err) {
       console.log(err);
     });
 });
-
-app.post("/user_test", jsonParser, (req, res) => {
-  var userId = req.body.uid;
-  var pass = req.body.password;
-  console.log("User test", userId);
-  connection
-    .run("MATCH (u:User {ID: $userId, password: $pass}) RETURN u", {
-      userId: userId,
-      pass: pass,
-    })
-    .then(function (result) {
-      //console.log(result.records[0].get('u').properties.name)
-      if (_.isEmpty(result.records)) {
-        res.end();
-        console.log("User Not found here");
-        res.write("Please login first.");
-        res.end();
-        // throw {
-        //   status: 400
-        // }
-      } else {
-        var user = {
-          name: result.records[0].get("u").properties.name,
-          username: result.records[0].get("u").properties.ID,
-          email: result.records[0].get("u").properties.email,
-          password: result.records[0].get("u").properties.password,
-        };
-        res.send(JSON.stringify(user));
-        res.end();
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-});
-
 
 app.post("/log", jsonParser, (req, res) => {
   // res.send("POST Request Called")
@@ -265,29 +200,38 @@ app.post("/log", jsonParser, (req, res) => {
 });
 
 app.post("/feat", jsonParser, (req, res) => {
-  var inp_type = req.body.UserId;
+  // res.send("POST Request Called")
+  // var inp_type = req.body.user;
+
+  // if (req.session) {
+  //   var inp_type = sess.username; // if session
+  // } else {
+  //   var inp_type = "user_1";
+  // }
+
+  var inp_type = "user_1";
 
   console.log("POST req on", inp_type);
   connection
     .run(
       `Match (m:Interest) 
-      Optional match (m)-[c:user_interest]-(u:User {ID : $userid})
+      Optional match (m)-[c:user_interest]-(u:User {ID : 'user_1'})
       with m, u,
       case
           when (m)-[c]-(u) then 1
           else 0
       end as s1
       with m, s1
-      Optional match (m)-[t:tags]-(:Event)-[:attending]-(u:User{ID : $userid})
+      Optional match (m)-[t:tags]-(:Event)-[:attending]-(u:User{ID : 'user_1'})
       with m, s1, count(t) as s2
-      //Optional match (m)-[t:tags]-(:Event)-[:liked]-(u:User{ID : $userid})
-      Optional match (u:User{ID : $userid})-[:liked]-(:Event)-[t:tags]-(m)
+      //Optional match (m)-[t:tags]-(:Event)-[:liked]-(u:User{ID : 'user_1'})
+      Optional match (u:User{ID : 'user_1'})-[:liked]-(:Event)-[t:tags]-(m)
       with m, s1, s2, count(t) as s3
-      Optional match (u:User{ID : $userid})-[:attending]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+      Optional match (u:User{ID : 'user_1'})-[:attending]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
       with m, s1, s2, s3, count(t) as s4
-      Optional match (u:User{ID : $userid})-[:liked]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+      Optional match (u:User{ID : 'user_1'})-[:liked]-(:Event)-[:tags]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
       with m, s1, s2, s3, s4, count(t) as s5
-      Optional match (u:User{ID : $userid})-[c:user_interest]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
+      Optional match (u:User{ID : 'user_1'})-[c:user_interest]-(:Interest)-[:tags]-(:Event)-[t:tags]-(m)
       with m, s1, s2, s3, s4, s5, count(t) as s6
       with m, [m.name, s1*10000+s2*1000+s3*500+s4/5+s5/6+s6/2] as s//, s1, s2, s3, s4, s5, s6
       order by s[1] desc
@@ -310,15 +254,15 @@ app.post("/feat", jsonParser, (req, res) => {
         order by e.startingTime desc
         with mm, e, tt, pk, ss, 
         case 
-            when (e)-[:attending]-(:User{ID : $userid}) then 1
+            when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
             else 0
           end as att,
           case 
-            when (e)-[:liked]-(:User{ID : $userid}) then 1
+            when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
             else 0
           end as lik,
           case 
-            when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+            when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
             else 0
           end as shut
         with mm, ["Past Events", collect([id(e), e, tt, att, lik, shut])] as loe, collect(id(e)) + pk as pk, ss
@@ -339,15 +283,15 @@ app.post("/feat", jsonParser, (req, res) => {
         order by e.startingTime desc
         with mm, loe, e, tt, pk, 
         case 
-            when (e)-[:attending]-(:User{ID : $userid}) then 1
+            when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
             else 0
           end as att,
           case 
-            when (e)-[:liked]-(:User{ID : $userid}) then 1
+            when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
             else 0
           end as lik,
           case 
-            when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+            when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
             else 0
           end as shut
         with mm, loe, ["For You", collect([id(e), e, tt, att, lik, shut])] as fte, collect(id(e)) + pk as pk
@@ -410,7 +354,7 @@ app.post("/categories_feat", jsonParser, (req, res) => {
   //   var inp_type = "user_1";
   // }
 
-  var inp_type = req.body.UserId;
+  var inp_type = "user_1";
 
   console.log("POST req on", inp_type);
   connection
@@ -430,15 +374,15 @@ app.post("/categories_feat", jsonParser, (req, res) => {
             optional match (e)-[:tags]-(tt:Interest)
             with pk, mm, e, collect(tt.name) as ittlist,
             case 
-                  when (e)-[:attending]-(:User{ID : $userid}) then 1
+                  when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as att,
                 case 
-                  when (e)-[:liked]-(:User{ID : $userid}) then 1
+                  when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as lik,
                 case 
-                  when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+                  when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as shut
             with mm, collect([id(e), e, ittlist, att, lik, shut]) as intr1, collect(id(e)) + pk as pk
@@ -453,15 +397,15 @@ app.post("/categories_feat", jsonParser, (req, res) => {
             optional match (e)-[:tags]-(tt:Interest)
             with ret, pk, mm, e, collect(tt.name) as ittlist,
             case 
-                  when (e)-[:attending]-(:User{ID : $userid}) then 1
+                  when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as att,
                 case 
-                  when (e)-[:liked]-(:User{ID : $userid}) then 1
+                  when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as lik,
                 case 
-                  when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+                  when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as shut
             with ret, mm, collect([id(e), e, ittlist, att, lik, shut]) as intr1, collect(id(e)) + pk as pk
@@ -476,15 +420,15 @@ app.post("/categories_feat", jsonParser, (req, res) => {
             optional match (e)-[:tags]-(tt:Interest)
             with ret, pk, mm, e, collect(tt.name) as ittlist,
             case 
-                  when (e)-[:attending]-(:User{ID : $userid}) then 1
+                  when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as att,
                 case 
-                  when (e)-[:liked]-(:User{ID : $userid}) then 1
+                  when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as lik,
                 case 
-                  when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+                  when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as shut
             with ret, mm, collect([id(e), e, ittlist, att, lik, shut]) as intr1, collect(id(e)) + pk as pk
@@ -499,15 +443,15 @@ app.post("/categories_feat", jsonParser, (req, res) => {
             optional match (e)-[:tags]-(tt:Interest)
             with ret, pk, mm, e, collect(tt.name) as ittlist,
             case 
-                  when (e)-[:attending]-(:User{ID : $userid}) then 1
+                  when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as att,
                 case 
-                  when (e)-[:liked]-(:User{ID : $userid}) then 1
+                  when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as lik,
                 case 
-                  when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+                  when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as shut
             with ret, mm, collect([id(e), e, ittlist, att, lik, shut]) as intr1, collect(id(e)) + pk as pk
@@ -522,15 +466,15 @@ app.post("/categories_feat", jsonParser, (req, res) => {
             optional match (e)-[:tags]-(tt:Interest)
             with ret, pk, mm, e, collect(tt.name) as ittlist,
             case 
-                  when (e)-[:attending]-(:User{ID : $userid}) then 1
+                  when (e)-[:attending]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as att,
                 case 
-                  when (e)-[:liked]-(:User{ID : $userid}) then 1
+                  when (e)-[:liked]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as lik,
                 case 
-                  when (e)-[:shoutout]-(:User{ID : $userid}) then 1
+                  when (e)-[:shoutout]-(:User{ID : 'user_1'}) then 1
                   else 0
                 end as shut
             with ret, mm, collect([id(e), e, ittlist, att, lik, shut]) as intr1, collect(id(e)) + pk as pk
@@ -586,9 +530,7 @@ app.post("/categories_feat", jsonParser, (req, res) => {
 
 app.post("/spotlight", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-
-  var inp_type = req.body.UserId;
-
+  var inp_type = "user_1"; //req.body.user;
   console.log("POST req on", inp_type);
   connection
     .run(
@@ -645,7 +587,7 @@ app.post("/spotlight", jsonParser, (req, res) => {
 
 app.post("/feat_orgs", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-  var inp_type = req.body.UserId; //"user_1"; //req.body.user;
+  var inp_type = "user_1"; //req.body.user;
   console.log("POST req on", inp_type);
   connection
     .run("match (org:Organization) return ID(org), org limit 20", {
@@ -675,7 +617,7 @@ app.post("/feat_orgs", jsonParser, (req, res) => {
 
 app.post("/categories", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-  var inp_type = req.body.UserId; //req.body.user;
+  var inp_type = "user_1"; //req.body.user;
   console.log("POST req on", inp_type);
   connection
     .run(
@@ -1028,8 +970,13 @@ app.post("/organization_events", jsonParser, (req, res) => {
 });
 
 app.post("/delete_user_interest", jsonParser, (req, res) => {
-  var inp_type = req.body.UserId;
-
+  // res.send("POST Request Called")
+  // var inp_type = req.body.id;
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Delete int list for user ", inp_type);
   // console.log("POST req on", inp_type);
   connection
@@ -1048,14 +995,11 @@ app.post("/delete_user_interest", jsonParser, (req, res) => {
 app.post("/export_user_interest", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
-  // if (req.session) {
-  //   var inp_type = sess.username; // if session
-  // } else {
-  //   var inp_type = "user_1";
-  // }
-
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Export int list for user ", inp_type);
   var outTags = req.body.interest_list;
   console.log(outTags);
@@ -1078,8 +1022,11 @@ app.post("/get_shoutOut", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Create shoutout for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1111,9 +1058,11 @@ app.post("/create_shoutOut", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Create shoutout for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1122,6 +1071,14 @@ app.post("/create_shoutOut", jsonParser, (req, res) => {
       { id: inp_type, eventID: eventID }
     )
     .then(function (result) {
+      // var user_int_array = result.records[0]._fields[0];
+      // result.records.forEach(function(record){
+
+      //   user_int_array.push({
+      //     Interest_list: record._fields[0]
+      //   });
+      // });
+      // console.log(user_int_array);
       res.setHeader("Content-Type", "text/html");
       // res.send(JSON.stringify(user_int_array));
       res.end();
@@ -1135,8 +1092,11 @@ app.post("/delete_shoutOut", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Delete shoutout for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1145,6 +1105,14 @@ app.post("/delete_shoutOut", jsonParser, (req, res) => {
       { id: inp_type, eventID: eventID }
     )
     .then(function (result) {
+      // var user_int_array = result.records[0]._fields[0];
+      // result.records.forEach(function(record){
+
+      //   user_int_array.push({
+      //     Interest_list: record._fields[0]
+      //   });
+      // });
+      // console.log(user_int_array);
       res.setHeader("Content-Type", "text/html");
       // res.send(JSON.stringify(user_int_array));
       res.end();
@@ -1160,8 +1128,11 @@ app.post("/create_liked", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Create liked for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1170,6 +1141,14 @@ app.post("/create_liked", jsonParser, (req, res) => {
       { id: inp_type, eventID: eventID }
     )
     .then(function (result) {
+      // var user_int_array = result.records[0]._fields[0];
+      // result.records.forEach(function(record){
+
+      //   user_int_array.push({
+      //     Interest_list: record._fields[0]
+      //   });
+      // });
+      // console.log(user_int_array);
       res.setHeader("Content-Type", "text/html");
       // res.send(JSON.stringify(user_int_array));
       res.end();
@@ -1183,8 +1162,11 @@ app.post("/delete_liked", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Delete liked for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1193,6 +1175,14 @@ app.post("/delete_liked", jsonParser, (req, res) => {
       { id: inp_type, eventID: eventID }
     )
     .then(function (result) {
+      // var user_int_array = result.records[0]._fields[0];
+      // result.records.forEach(function(record){
+
+      //   user_int_array.push({
+      //     Interest_list: record._fields[0]
+      //   });
+      // });
+      // console.log(user_int_array);
       res.setHeader("Content-Type", "text/html");
       // res.send(JSON.stringify(user_int_array));
       res.end();
@@ -1205,9 +1195,14 @@ app.post("/delete_liked", jsonParser, (req, res) => {
 /// #### join functionality
 
 app.post("/create_attending", jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Create attending for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
@@ -1216,7 +1211,16 @@ app.post("/create_attending", jsonParser, (req, res) => {
       { id: inp_type, eventID: eventID }
     )
     .then(function (result) {
+      // var user_int_array = result.records[0]._fields[0];
+      // result.records.forEach(function(record){
+
+      //   user_int_array.push({
+      //     Interest_list: record._fields[0]
+      //   });
+      // });
+      // console.log(user_int_array);
       res.setHeader("Content-Type", "text/html");
+      // res.send(JSON.stringify(user_int_array));
       res.end();
     })
     .catch(function (err) {
@@ -1228,9 +1232,11 @@ app.post("/delete_attending", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;
-
-  var inp_type = req.body.UserId;
-
+  if (req.session) {
+    var inp_type = sess.username; // if session
+  } else {
+    var inp_type = "user_1";
+  }
   console.log("Delete attending for user and id: ", inp_type, " ", eventID);
   // console.log("Check int list for user ", inp_type);
   connection
