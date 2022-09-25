@@ -37,6 +37,7 @@
     "react-native": "0.69.5",
     "react-native-cli": "^2.0.1",
     "react-native-date-picker": "^4.2.5",
+    "react-native-datepicker": "^1.7.2",
     "react-native-dropdown-select-list": "^1.0.21",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-image-zoom-viewer": "^3.0.1",
