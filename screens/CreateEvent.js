@@ -50,8 +50,9 @@ const inTags = [];
 var outTags = [];
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
-const CreateEvent = ({ navigation, route }) => {
-  const [date, setDate] = useState(null);
+const CreateEvent = ({ navigation, routenew }) => {
+  const [date, setDate] = useState(new Date());
+  const [didSelectDate, setDidSelectDate] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -63,7 +64,9 @@ const CreateEvent = ({ navigation, route }) => {
     setShowDatePicker(true);
   };
   const onDateChange = (event, selectedDate) => {
-    //setDate(selectedDate);
+   console.log("hi");
+   setDate(selectedDate);
+   setDidSelectDate(true);
   };
 
   const onStartTimeChange = (event, selectedTime) => {
@@ -91,11 +94,12 @@ const CreateEvent = ({ navigation, route }) => {
         {/* <View style={styles.centeredView}> */}
           {/* <View style={styles.modalView}> */}
             <DateTimePicker
-              value={new Date(Date.now())}
+              value={date}
               mode={"date"}
               display={Platform.OS === "ios" ? "spinner" : "default"}
               is24Hour={true}
               onChange={onDateChange}
+              
               style={{flex: 1, backgroundColor: "black"}}
             />
             <TouchableOpacity
@@ -287,7 +291,7 @@ const CreateEvent = ({ navigation, route }) => {
 
             <TouchableOpacity onPress={onSelectDate}>
               <SectionTextIn>
-                {date === null ? (
+                {!didSelectDate ? (
                   <Text
                     style={{
                       ...FONTS.body3,
@@ -301,7 +305,15 @@ const CreateEvent = ({ navigation, route }) => {
                     Enter a date
                   </Text>
                 ) : (
-                  <Text>{date}</Text>
+                  <Text
+                  style={{
+                    ...FONTS.body3,
+                    color: COLORS.white,
+                    marginTop: 4,
+                    marginBottom: 4,
+                    marginLeft: 5,
+                    padding: 4,
+                  }}>{date.toDateString()}</Text>
                 )}
               </SectionTextIn>
             </TouchableOpacity>
