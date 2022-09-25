@@ -68,7 +68,7 @@ const Login = ({ navigation, route }) => {
       } catch (err) {
         seterror(true);
         console.log("ERRROR");
-        console.log(error);
+        console.log(err);
         
         erry = true;
       } finally {

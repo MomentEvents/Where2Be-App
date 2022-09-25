@@ -121,8 +121,8 @@ const Signup = ({ navigation, route }) => {
       } catch (err) {
         seterror(true);
         console.log("ERRROR");
-        console.log(error);
-        
+        console.log(err);
+        console.log(result);
         erry = true;
       } finally {
         trylogin(erry);

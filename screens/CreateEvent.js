@@ -13,6 +13,7 @@ import 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
 import DatePicker from 'react-native-date-picker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -78,7 +79,7 @@ const CreateEvent = ({ navigation, route }) => {
       </SectionHeader>
       </View>
       
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView>
       <SectionInputs>
         <McText h3 style={{
           marginBottom: 16,
@@ -231,7 +232,7 @@ const CreateEvent = ({ navigation, route }) => {
               }}>Tags (select up to 2)</McText>
 
                     <FlatList data={dummyTags}
-                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1 }}
+                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginRight: 10 }}
                     numColumns={4}
                     style={{
                         backgroundColor: 'transparent',
@@ -244,7 +245,7 @@ const CreateEvent = ({ navigation, route }) => {
                         />
           </View>
       </SectionInputs>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
