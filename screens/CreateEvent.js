@@ -18,7 +18,7 @@ import {
   Modal,
   Pressable,
   Appearance,
-  useColorScheme
+  useColorScheme,
 } from "react-native";
 import styled from "styled-components/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -62,16 +62,14 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const theme = useColorScheme();
-  var     backgroundColorStyle = {
+  var backgroundColorStyle = {
     backgroundColor: COLORS.white,
-  }
-  if(theme === 'dark'){
+  };
+  if (theme === "dark") {
     backgroundColorStyle = {
       backgroundColor: COLORS.black,
-    }
+    };
   }
-
-
 
   const onSelectDate = () => {
     console.log("Selected Date Picker");
@@ -80,9 +78,12 @@ const CreateEvent = ({ navigation, routenew }) => {
   const onDateChange = (event, selectedDate) => {
     console.log("hi");
     setDate(selectedDate);
-    setShowDatePicker(false);
     setDidSelectDate(true);
   };
+
+  const closeDatePicker = () => {
+    setShowDatePicker(false);
+  }
 
   const onStartTimeChange = (event, selectedTime) => {
     const currentDate = selectedDate || date;
@@ -106,20 +107,21 @@ const CreateEvent = ({ navigation, routenew }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Modal animationType="fade" transparent={true} visible={showDatePicker}>
-        <DateTimePicker
-          value={date}
-          mode={"date"}
-          display={Platform.OS == 'ios' ? "inline" : "spinner"}
-          is24Hour={true}
-          onChange={onDateChange}
-          style={{ flex: 1, ...backgroundColorStyle}}
-        />
-        {/* <TouchableOpacity
-          style={[styles.button, styles.buttonClose]}
-          onPress={() => setShowDatePicker(false)}
-        >
-          <Text style={styles.textStyle}>Set Date</Text>
-        </TouchableOpacity> */}
+        <View style={{ ...backgroundColorStyle, flex: 1}}>
+          <DateTimePicker
+            value={date}
+            mode={"date"}
+            display={Platform.OS == "ios" ? "inline" : "spinner"}
+            is24Hour={true}
+            onChange={onDateChange}
+          />
+          <TouchableOpacity
+            style={{margin: 20, ...styles.button, ...styles.buttonClose}}
+            onPress={closeDatePicker}
+          >
+            <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
       {/* <Modal
           animationType="fade"
@@ -609,7 +611,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: COLORS.purple,
   },
 });
 
