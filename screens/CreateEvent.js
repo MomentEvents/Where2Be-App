@@ -64,9 +64,10 @@ const CreateEvent = ({ navigation, routenew }) => {
     setShowDatePicker(true);
   };
   const onDateChange = (event, selectedDate) => {
-   console.log("hi");
-   setDate(selectedDate);
-   setDidSelectDate(true);
+    console.log("hi");
+    setDate(selectedDate);
+    setShowDatePicker(false);
+    setDidSelectDate(true);
   };
 
   const onStartTimeChange = (event, selectedTime) => {
@@ -91,25 +92,20 @@ const CreateEvent = ({ navigation, routenew }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Modal animationType="fade" transparent={true} visible={showDatePicker}>
-        {/* <View style={styles.centeredView}> */}
-          {/* <View style={styles.modalView}> */}
-            <DateTimePicker
-              value={date}
-              mode={"date"}
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              is24Hour={true}
-              onChange={onDateChange}
-              
-              style={{flex: 1, backgroundColor: "black"}}
-            />
-            <TouchableOpacity
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setShowDatePicker(false)}
-            >
-              <Text style={styles.textStyle}>Set Date</Text>
-            </TouchableOpacity>
-          {/* </View> */}
-        {/* </View> */}
+        <DateTimePicker
+          value={date}
+          mode={"date"}
+          display={Platform.OS == 'ios' ? "inline" : "spinner"}
+          is24Hour={true}
+          onChange={onDateChange}
+          style={{ flex: 1, backgroundColor: "black" }}
+        />
+        {/* <TouchableOpacity
+          style={[styles.button, styles.buttonClose]}
+          onPress={() => setShowDatePicker(false)}
+        >
+          <Text style={styles.textStyle}>Set Date</Text>
+        </TouchableOpacity> */}
       </Modal>
       {/* <Modal
           animationType="fade"
@@ -239,9 +235,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                   ...FONTS.body3,
                   color: COLORS.white,
                   width: 250,
-                  marginBottom: 5,
                   marginLeft: 5,
                   padding: 4,
+                  marginBottom: 5,
                 }}
               />
             </SectionTextIn>
@@ -268,9 +264,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 style={{
                   ...FONTS.body3,
                   color: COLORS.white,
-                  marginBottom: 5,
                   marginLeft: 5,
                   padding: 4,
+                  marginBottom: 5,
                 }}
               />
             </SectionTextIn>
@@ -296,8 +292,8 @@ const CreateEvent = ({ navigation, routenew }) => {
                     style={{
                       ...FONTS.body3,
                       color: COLORS.gray1,
-                      marginTop: 4,
-                      marginBottom: 4,
+                      marginTop: 3,
+                      marginBottom: 3,
                       marginLeft: 5,
                       padding: 4,
                     }}
@@ -306,14 +302,17 @@ const CreateEvent = ({ navigation, routenew }) => {
                   </Text>
                 ) : (
                   <Text
-                  style={{
-                    ...FONTS.body3,
-                    color: COLORS.white,
-                    marginTop: 4,
-                    marginBottom: 4,
-                    marginLeft: 5,
-                    padding: 4,
-                  }}>{date.toDateString()}</Text>
+                    style={{
+                      ...FONTS.body3,
+                      color: COLORS.white,
+                      marginTop: 4,
+                      marginBottom: 4,
+                      marginLeft: 5,
+                      padding: 4,
+                    }}
+                  >
+                    {date.toDateString()}
+                  </Text>
                 )}
               </SectionTextIn>
             </TouchableOpacity>
