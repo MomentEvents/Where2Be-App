@@ -17,6 +17,8 @@ import {
   Alert,
   Modal,
   Pressable,
+  Appearance,
+  useColorScheme
 } from "react-native";
 import styled from "styled-components/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -37,6 +39,7 @@ var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 import * as SplashScreen from "expo-splash-screen";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -58,6 +61,17 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const theme = useColorScheme();
+  var     backgroundColorStyle = {
+    backgroundColor: COLORS.white,
+  }
+  if(theme === 'dark'){
+    backgroundColorStyle = {
+      backgroundColor: COLORS.black,
+    }
+  }
+
+
 
   const onSelectDate = () => {
     console.log("Selected Date Picker");
@@ -98,7 +112,7 @@ const CreateEvent = ({ navigation, routenew }) => {
           display={Platform.OS == 'ios' ? "inline" : "spinner"}
           is24Hour={true}
           onChange={onDateChange}
-          style={{ flex: 1, backgroundColor: "black" }}
+          style={{ flex: 1, ...backgroundColorStyle}}
         />
         {/* <TouchableOpacity
           style={[styles.button, styles.buttonClose]}
