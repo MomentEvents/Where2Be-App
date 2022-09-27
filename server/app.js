@@ -924,11 +924,7 @@ app.get("/interests", function (req, res) {
 
 app.post("/import_interest_list", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-  if (req.session) {
-    var inp_type = sess.username; // if session
-  } else {
-    var inp_type = "user_1";
-  }
+  var inp_type = req.body.UserId;
   console.log("Check int list for user ", inp_type);
   connection
     .run(
@@ -1204,7 +1200,7 @@ app.post("/delete_liked", jsonParser, (req, res) => {
 
 /// #### join functionality
 
-app.post("/create_attending", jsonParser, (req, res) => {
+app.post("/create_join", jsonParser, (req, res) => {
   var eventID = req.body.uniqueID;
   var inp_type = req.body.UserId;
 
@@ -1224,7 +1220,7 @@ app.post("/create_attending", jsonParser, (req, res) => {
     });
 });
 
-app.post("/delete_attending", jsonParser, (req, res) => {
+app.post("/delete_join", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   // var inp_type = req.body.id;
   var eventID = req.body.uniqueID;

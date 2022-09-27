@@ -163,6 +163,16 @@ const EventDetail = ({ navigation, route }) => {
   useEffect(()=>{
     let {selectedEvent} = route.params;
     setSelectedEvent(selectedEvent);
+    if(selectedEvent.joined == 1){
+      setJoin(true);
+    }
+    if(selectedEvent.shouted == 1){
+      setShoutout(true);
+    }
+    // if(selectedEvent.liked == 1){
+    //   setLike(true);
+    // }
+    console.log(selectedEvent)
   },[])
 
   let iD;

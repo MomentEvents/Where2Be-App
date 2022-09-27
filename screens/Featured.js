@@ -419,10 +419,21 @@ const Featured = ({ navigation, route }) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.tempNav}>
       <SectionHeader>
-        <View>
+        <View >
           <McText h1>
             <Text>Explore Events</Text></McText>
+          
         </View>
+        
+        <TouchableWithoutFeedback
+              onPress={()=>{
+                navigation.navigate('Interests')
+              }}>
+                <McIcon source={icons.tab_4} size={28} style={{
+                  tintColor:COLORS.gray
+                }}/>
+        </TouchableWithoutFeedback>
+        
       </SectionHeader>
       </View>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
