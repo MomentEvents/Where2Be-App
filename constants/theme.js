@@ -64,12 +64,12 @@ export const FONTS = {
   h4: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h4, lineHeight: 22 },
   h5: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h5, lineHeight: 22 },
   h6: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h6, lineHeight: 22 },
-  body1: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body1, lineHeight: '36px', },
-  body2: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body2, lineHeight: '30px', },
+  body1: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body1, lineHeight: 36, },
+  body2: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body2, lineHeight: 30, },
   body3: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body3, lineHeight: 25},
-  body4: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body4, lineHeight: '22px', },
-  body5: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body5, lineHeight: '22px', },
-  body6: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body6, lineHeight: '22px', },
+  body4: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body4, lineHeight: 22, },
+  body5: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body5, lineHeight: 22, },
+  body6: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body6, lineHeight: 22, },
 };
 
 const appTheme = { COLORS, SIZES, FONTS };
