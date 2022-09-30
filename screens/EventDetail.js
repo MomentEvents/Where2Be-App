@@ -32,7 +32,7 @@ const EventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  const {UserId} = useContext(AuthContext)
+  const {UserId, updateData} = useContext(AuthContext)
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
@@ -79,6 +79,7 @@ const EventDetail = ({ navigation, route }) => {
   
 
   const handleJoin = async () => {
+    let selEvent = selectedEvent;
     if (join) {
       // console.log(shoutout);
       setJoin(false);
@@ -96,6 +97,7 @@ const EventDetail = ({ navigation, route }) => {
           UserId: UserId,
         }),
       });
+      selEvent.joined = 0;
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
@@ -110,11 +112,15 @@ const EventDetail = ({ navigation, route }) => {
           UserId:UserId,
         }),
       });
+      selEvent.joined = 1;
     }
+    setSelectedEvent(selEvent);
+    updateData(selEvent);
   };
   
 
   const handleShoutout = async () => {
+    let selEvent = selectedEvent;
     if (shoutout) {
       // console.log(shoutout);
       setShoutout(false);
@@ -132,6 +138,7 @@ const EventDetail = ({ navigation, route }) => {
           UserId: UserId,
         }),
       });
+      selEvent.shouted = 0;
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
@@ -146,7 +153,10 @@ const EventDetail = ({ navigation, route }) => {
           UserId: UserId,
         }),
       });
+      selEvent.shouted = 1;
     }
+    setSelectedEvent(selEvent);
+    updateData(selEvent);
   };
   // console.log(selectedEvent)
 
@@ -162,6 +172,7 @@ const EventDetail = ({ navigation, route }) => {
       
   useEffect(()=>{
     let {selectedEvent} = route.params;
+    // console.log(selectedEvent);
     setSelectedEvent(selectedEvent);
     if(selectedEvent.joined == 1){
       setJoin(true);
@@ -172,7 +183,7 @@ const EventDetail = ({ navigation, route }) => {
     // if(selectedEvent.liked == 1){
     //   setLike(true);
     // }
-    console.log(selectedEvent)
+    // console.log(selectedEvent.id);
   },[])
 
   let iD;
@@ -239,7 +250,9 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
+                  // updateData(selectedEvent)
                   navigation.goBack();
+                  // updateData(selectedEvent);
                 }}
                 style={{
                   width: 56,
