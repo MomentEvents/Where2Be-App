@@ -22,6 +22,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import InterestSelector from "../components/InterestSelect";
@@ -71,6 +72,16 @@ const CreateEvent = ({ navigation, routenew }) => {
     };
   }
 
+  // Component
+
+  // Pass in:
+ /********************************
+  * state variable (both its setter and the variable itself): value
+  * 
+  * 
+  * 
+  */
+
   const onSelectDate = () => {
     console.log("Selected Date Picker");
     setShowDatePicker(true);
@@ -107,20 +118,34 @@ const CreateEvent = ({ navigation, routenew }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Modal animationType="fade" transparent={true} visible={showDatePicker}>
-        <View style={{ ...backgroundColorStyle, flex: 1}}>
-          <DateTimePicker
+        <View style={{ flex: 1}}>
+          {Platform.OS === 'ios' ?           <DateTimePicker
             value={date}
             mode={"date"}
             display={Platform.OS == "ios" ? "inline" : "spinner"}
             is24Hour={true}
             onChange={onDateChange}
+            
+          /> : DateTimePickerAndroid.open({
+            mode: 'date',
+            value: date,
+            })
+          }
+        
+          {/* <DateTimePicker
+            value={date}
+            mode={"date"}
+            display={Platform.OS == "ios" ? "inline" : "spinner"}
+            is24Hour={true}
+            onChange={onDateChange}
+            
           />
           <TouchableOpacity
             style={{margin: 20, ...styles.button, ...styles.buttonClose}}
             onPress={closeDatePicker}
           >
             <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </Modal>
       {/* <Modal
