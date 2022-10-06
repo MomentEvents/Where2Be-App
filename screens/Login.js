@@ -24,6 +24,7 @@ import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import {CustomInput} from "./Signup.js"
 import { AuthContext } from '../AuthContext';
+import UsedServer from "../constants/servercontants";
 
 
 var width = Dimensions.get('window').width; //full width
@@ -63,7 +64,7 @@ const Login = ({ navigation, route }) => {
     else{
       if(validateEmail(usercred)){
         try {
-          const resp = await fetch("http://10.0.2.2:8080/email_login", {
+          const resp = await fetch(UsedServer + "/email_login", {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -81,7 +82,7 @@ const Login = ({ navigation, route }) => {
         } catch (err) {
           seterror(true);
           console.log("ERRROR");
-          console.log(error);
+          console.log(err);
           
           erry = true;
         } finally {
@@ -91,7 +92,7 @@ const Login = ({ navigation, route }) => {
       }
       else{
         try {
-          const resp = await fetch("http://10.0.2.2:8080/user_login", {
+          const resp = await fetch(UsedServer + "/user_login", {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -109,7 +110,7 @@ const Login = ({ navigation, route }) => {
         } catch (err) {
           seterror(true);
           console.log("ERRROR");
-          console.log(error);
+          console.log(err);
           
           erry = true;
         } finally {

@@ -23,6 +23,7 @@ import { McText, McIcon, McAvatar} from '../components'
 import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
+import UsedServer from '../constants/servercontants';
 
 // const inTags = ['Basketball', 'Bars']
 var outTags = {}
@@ -40,7 +41,7 @@ function outDict(dict) {
 
 //  async function exportTags(outList) {
 //   console.log('starting export');
-//   await fetch('http://10.0.2.2:8080/delete_user_interest', {
+//   await fetch(UsedServer + '/delete_user_interest', {
 //         method: 'POST',
 //         headers: {
 //             Accept: 'application/json',
@@ -50,7 +51,7 @@ function outDict(dict) {
 //           UserId: UserId
 //         })
 //     });
-//     await fetch('http://10.0.2.2:8080/export_user_interest', {
+//     await fetch(UsedServer + '/export_user_interest', {
 //       method: 'POST',
 //       headers: {
 //           Accept: 'application/json',
@@ -79,11 +80,11 @@ const Interests = ({ navigation, route }) => {
     // Ensure fetch data runs first before everything else
 
     const fetchData = async () => {
-        const resp = await fetch('http://10.0.2.2:8080/interests', {
+        const resp = await fetch(UsedServer + '/interests', {
             method: 'GET',
         });
         const data = await resp.json();
-        const resp2 = await fetch('http://10.0.2.2:8080/import_interest_list', {
+        const resp2 = await fetch(UsedServer + '/import_interest_list', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -106,7 +107,7 @@ const Interests = ({ navigation, route }) => {
     };
         
     const exportTags = async (outList) =>{
-      await fetch('http://10.0.2.2:8080/delete_user_interest', {
+      await fetch(UsedServer + '/delete_user_interest', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -116,7 +117,7 @@ const Interests = ({ navigation, route }) => {
               UserId: UserId
             })
         });
-        await fetch('http://10.0.2.2:8080/export_user_interest', {
+        await fetch(UsedServer + '/export_user_interest', {
           method: 'POST',
           headers: {
               Accept: 'application/json',
@@ -130,7 +131,7 @@ const Interests = ({ navigation, route }) => {
       console.log(outList)
      }
     
-    // const resp2 = await fetch('http://3.136.67.161:8080//import_interest_list', {
+    // const resp2 = await fetch(UsedServer + '/import_interest_list', {
     //     method: 'POST',
     // });
 

@@ -24,6 +24,7 @@ import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../AuthContext';
+import UsedServer from "../constants/servercontants";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -104,7 +105,7 @@ const Signup = ({ navigation, route }) => {
    //erry = true;
     if(erry == false){
       try {
-        const resp = await fetch("http://10.0.2.2:8080/create_user", {
+        const resp = await fetch(UsedServer + "/create_user", {
           //10.0.2.2:8080
           method: "POST",
           headers: {

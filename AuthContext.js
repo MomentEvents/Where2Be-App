@@ -3,6 +3,7 @@ import React, { useState, useEffect, Context, createContext } from 'react';
 //import * as keychain from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import produce from 'immer';
+import UsedServer from './constants/servercontants';
 
 export const AuthContext = createContext();
 
@@ -183,7 +184,7 @@ export const AuthProvider = ({children}) =>{
       //let usrToken = await keychain.getGenericPassword('helpeg');
       let uid = await AsyncStorage.getItem('uid');
       let pass = await AsyncStorage.getItem('pass');
-      const resp = await fetch("http://10.0.2.2:8080/user_test", {
+      const resp = await fetch(UsedServer + "/user_test", {
         //10.0.2.2:8080
         method: "POST",
         headers: {

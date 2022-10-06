@@ -17,6 +17,7 @@ var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 import * as SplashScreen from 'expo-splash-screen';
+import UsedServer from '../constants/servercontants';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -35,7 +36,7 @@ const Featured = ({ navigation, route }) => {
   var type2 = "Discord";
 
   const fetchData = async () => {
-    const resp2 = await fetch(`http://10.0.2.2:8080/spotlight`, {
+    const resp2 = await fetch(UsedServer + `/spotlight`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -49,7 +50,7 @@ const Featured = ({ navigation, route }) => {
     // setData2(data2);
     setupData([data2], 0);
 
-    const resp = await fetch(`http://10.0.2.2:8080/feat`, {
+    const resp = await fetch(UsedServer + `/feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -67,7 +68,7 @@ const Featured = ({ navigation, route }) => {
 
     
 
-    const resp3 = await fetch(`http://10.0.2.2:8080/feat_orgs`, {
+    const resp3 = await fetch(UsedServer + `/feat_orgs`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -80,7 +81,7 @@ const Featured = ({ navigation, route }) => {
     const data3 = await resp3.json();
     // setData3(data3)
     
-    const resp4 = await fetch(`http://10.0.2.2:8080/categories`, {
+    const resp4 = await fetch(UsedServer + `/categories`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -93,7 +94,7 @@ const Featured = ({ navigation, route }) => {
     const data4 = await resp4.json();
     setData4(data4)
 
-    const resp5 = await fetch(`http://10.0.2.2:8080/categories_feat`, {
+    const resp5 = await fetch(UsedServer + `/categories_feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

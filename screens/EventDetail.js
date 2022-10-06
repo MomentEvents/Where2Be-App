@@ -23,6 +23,7 @@ import { AuthContext } from '../AuthContext';
 import {memo} from "react"
 
 import { Dimensions } from "react-native";
+import UsedServer from '../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -85,7 +86,7 @@ const EventDetail = ({ navigation, route }) => {
       setJoin(false);
       console.log("HEREEE2: ", join);
       console.log("HEREEE");
-      const resp = await fetch("http://10.0.2.2:8080/delete_join", {
+      const resp = await fetch(UsedServer + "/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -101,7 +102,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
-      const resp = await fetch("http://10.0.2.2:8080/create_join", {
+      const resp = await fetch(UsedServer + "/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -126,7 +127,7 @@ const EventDetail = ({ navigation, route }) => {
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch("http://10.0.2.2:8080/delete_shoutOut", {
+      const resp = await fetch(UsedServer + "/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -142,7 +143,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch("http://10.0.2.2:8080/create_shoutOut", {
+      const resp = await fetch(UsedServer + "/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -197,7 +198,7 @@ const EventDetail = ({ navigation, route }) => {
         let data;
         console.log('id:' + iD)
         if(iD !== 'bad') {
-            const resp = await fetch('http://10.0.2.2:8080/organization_details', {
+            const resp = await fetch(UsedServer + '/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
