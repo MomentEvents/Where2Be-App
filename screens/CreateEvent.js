@@ -22,6 +22,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import InterestSelector from "../components/InterestSelect";
@@ -95,6 +96,16 @@ const CreateEvent = ({ navigation, routenew }) => {
       backgroundColor: COLORS.black,
     };
   }
+
+  // Component
+
+  // Pass in:
+ /********************************
+  * state variable (both its setter and the variable itself): value
+  * 
+  * 
+  * 
+  */
 
   const onSelectDate = () => {
     console.log("Selected Date Picker");
