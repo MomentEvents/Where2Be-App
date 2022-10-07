@@ -49,6 +49,29 @@ const dummyTags = [
   "Other",
   "Recreation",
 ];
+
+export const CustInput = ({value, setValue, placeholder}) =>{
+	return(
+    <SectionInput>
+      <TextInput
+        value={value}
+        onChangeText={setValue}
+        //onBlur={onBlur}
+        placeholderTextColor={COLORS.gray1}
+        placeholder = {placeholder}
+        multiline={true}
+        style={{
+            ...FONTS.body3,
+            color: COLORS.white,
+            marginLeft: 5,
+            padding: 4,
+            marginBottom: 5,
+        }}
+      />
+    </SectionInput>	
+  )
+};
+
 const inTags = [];
 var outTags = [];
 // import React from 'react';
@@ -61,6 +84,8 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const theme = useColorScheme();
   var backgroundColorStyle = {
     backgroundColor: COLORS.white,
@@ -99,11 +124,6 @@ const CreateEvent = ({ navigation, routenew }) => {
     setDate(currentDate);
   };
 
-  // console.log(ab);
-  // for (var i = 0; i < numrows; i++) {
-  //     rows.push(ObjectRow());
-  // }
-  // return tbody(rows);
   return (
     <SafeAreaView style={styles.container}>
       <Modal animationType="fade" transparent={true} visible={showDatePicker}>
@@ -111,39 +131,23 @@ const CreateEvent = ({ navigation, routenew }) => {
           <DateTimePicker
             value={date}
             mode={"date"}
-            display={Platform.OS == "ios" ? "inline" : "spinner"}
+            display={Platform.OS == "ios" ? "spinner" : "spinner"}
             is24Hour={true}
             onChange={onDateChange}
+            style={{
+              marginTop: 80,
+            }}
           />
+        </View>
+        <View style={{flex: 1,position: 'absolute', bottom: 0}}>
           <TouchableOpacity
-            style={{margin: 20, ...styles.button, ...styles.buttonClose}}
+            style={{margin: 20, ...styles.button, ...styles.buttonClose,}}
             onPress={closeDatePicker}
           >
             <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
           </TouchableOpacity>
-        </View>
+          </View>
       </Modal>
-      {/* <Modal
-          animationType="fade"
-          transparent={true}
-          visible={showDatePicker}
-          style={styles.modalBackground}
-        >
-          <DateTimePicker
-            value={new Date(Date.now())}
-            mode={"date"}
-            display={Platform.OS === "ios" ? "spinner" : "default"}
-            is24Hour={true}
-            onChange={onDateChange}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setShowDatePicker(false);
-            }}
-          >
-            <Text>Hide me!</Text>
-          </TouchableOpacity>
-        </Modal> */}
       <View style={styles.tempNav}>
         <SectionHeader>
           <TouchableOpacity

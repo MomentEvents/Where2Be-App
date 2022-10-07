@@ -12,5 +12,34 @@ import DateTimePicker from "@react-native-community/datetimepicker";
  */
 
 export default class DateTimeComponent extends Component {
-
+    render() {
+        return (
+            <Modal animationType="fade" transparent={true} visible={showDatePicker}>
+                <View style={{ ...backgroundColorStyle, flex: 1}}>
+                <DateTimePicker
+                    value={date}
+                    mode={"date"}
+                    display={Platform.OS == "ios" ? "inline" : "spinner"}
+                    is24Hour={true}
+                    onChange={onDateChange}
+                />
+                <TouchableOpacity
+                    style={{margin: 20, ...styles.button, ...styles.buttonClose}}
+                    onPress={closeDatePicker}>
+                    <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
+                </TouchableOpacity>
+                </View>
+            </Modal>
+        )
+    }
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 0,
+      backgroundColor: 'transparent',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    }
+  });
+  
