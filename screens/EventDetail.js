@@ -4,7 +4,7 @@
  * 
 
  */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useContext} from 'react';
 import { Modal, Image, Linking, Text, View, StyleSheet, ScrollView, ImageBackground, Platform, TouchableOpacity } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
@@ -17,11 +17,13 @@ import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { AuthContext } from '../AuthContext';
 
 
 import {memo} from "react"
 
 import { Dimensions } from "react-native";
+import UsedServer from '../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -31,6 +33,7 @@ const EventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const {UserId, updateData} = useContext(AuthContext)
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
@@ -40,47 +43,50 @@ const EventDetail = ({ navigation, route }) => {
   const [join, setJoin] = useState(false);
   const [shoutout, setShoutout] = useState(false);
 
-  const handleLike = async () => {
-    if (like) {
-      // console.log(like);
-      setLike(false);
-      console.log("HEREEE2: ", like);
-      console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_like", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-        }),
-      });
-    } else {
-      setLike(true);
-      console.log("HEREEE2: ", like);
-      const resp = await fetch("http://3.136.67.161:8080/create_like", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-        }),
-      });
-    }
-  };
+  // const handleLike = async () => {
+  //   if (like) {
+  //     // console.log(like);
+  //     setLike(false);
+  //     console.log("HEREEE2: ", like);
+  //     console.log("HEREEE");
+  //     const resp = await fetch("http://10.0.2.2:8080/delete_like", {
+  //       // deleting for true, need to change
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uniqueID: selectedEvent?.uniqueID,
+  //         UserId: UserId,
+  //       }),
+  //     });
+  //   } else {
+  //     setLike(true);
+  //     console.log("HEREEE2: ", like);
+  //     const resp = await fetch("http://10.0.2.2:8080/create_like", {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         uniqueID: selectedEvent?.uniqueID,
+  //         UserId: UserId,
+  //       }),
+  //     });
+  //   }
+  // };
   
 
   const handleJoin = async () => {
+    let selEvent = selectedEvent;
     if (join) {
       // console.log(shoutout);
       setJoin(false);
       console.log("HEREEE2: ", join);
       console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_join", {
+      const resp = await fetch(UsedServer + "/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -89,12 +95,14 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
+      selEvent.joined = 0;
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
-      const resp = await fetch("http://3.136.67.161:8080/create_join", {
+      const resp = await fetch(UsedServer + "/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -102,19 +110,24 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId:UserId,
         }),
       });
+      selEvent.joined = 1;
     }
+    setSelectedEvent(selEvent);
+    updateData(selEvent);
   };
   
 
   const handleShoutout = async () => {
+    let selEvent = selectedEvent;
     if (shoutout) {
       // console.log(shoutout);
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch("http://3.136.67.161:8080/delete_shoutOut", {
+      const resp = await fetch(UsedServer + "/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -123,12 +136,14 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
+      selEvent.shouted = 0;
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch("http://3.136.67.161:8080/create_shoutOut", {
+      const resp = await fetch(UsedServer + "/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -136,9 +151,13 @@ const EventDetail = ({ navigation, route }) => {
         },
         body: JSON.stringify({
           uniqueID: selectedEvent?.uniqueID,
+          UserId: UserId,
         }),
       });
+      selEvent.shouted = 1;
     }
+    setSelectedEvent(selEvent);
+    updateData(selEvent);
   };
   // console.log(selectedEvent)
 
@@ -154,7 +173,18 @@ const EventDetail = ({ navigation, route }) => {
       
   useEffect(()=>{
     let {selectedEvent} = route.params;
+    // console.log(selectedEvent);
     setSelectedEvent(selectedEvent);
+    if(selectedEvent.joined == 1){
+      setJoin(true);
+    }
+    if(selectedEvent.shouted == 1){
+      setShoutout(true);
+    }
+    // if(selectedEvent.liked == 1){
+    //   setLike(true);
+    // }
+    // console.log(selectedEvent.id);
   },[])
 
   let iD;
@@ -168,7 +198,7 @@ const EventDetail = ({ navigation, route }) => {
         let data;
         console.log('id:' + iD)
         if(iD !== 'bad') {
-            const resp = await fetch('http://3.136.67.161:8080/organization_details', {
+            const resp = await fetch(UsedServer + '/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -221,7 +251,9 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
+                  // updateData(selectedEvent)
                   navigation.goBack();
+                  // updateData(selectedEvent);
                 }}
                 style={{
                   width: 56,

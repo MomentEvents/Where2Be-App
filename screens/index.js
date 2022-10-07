@@ -4,7 +4,7 @@ import Signup from './Signup';
 import Login from './Login'
 import Search from './Search'
 import Personal from './Personal'
-
+import Interests from './Interests';
 import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
@@ -24,6 +24,6 @@ export {
   Search,
   Login,
   OrganizationDetail,
-
+  Interests,
 
 }

@@ -11,6 +11,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
 import { AuthContext } from '../AuthContext';
+import UsedServer from '../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -26,9 +27,10 @@ const Personal = ({ navigation, route }) => {
   const [data3, setData3] = useState([]);
   const [data4, setData4] = useState([]);
   const [category_feat, setcategory_feat] = useState([]);
-  const {logoutTok} = useContext(AuthContext);
+  const {logoutTok, UserId} = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
+  
   // const [type, setType] = useState("Instagram");
   var type = "Instagram";
   var type2 = "Discord";
@@ -60,28 +62,27 @@ const Personal = ({ navigation, route }) => {
 
   const fetchData = async () => {
 
-    const resp2 = await fetch(`http://3.136.67.161:8080/spotlight`, {
+    const resp2 = await fetch(UsedServer + `/spotlight`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        user: type,
+        UserId: UserId,
       })
     }); 
     const data2 = await resp2.json();
     setData2(data2);
 
-    const resp = await fetch(`http://3.136.67.161:8080/feat`, {
+    const resp = await fetch(UsedServer + `/feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        user: type,
-        password: 'testpassword'
+        UserId: UserId,
       })
     }); 
     const data = await resp.json();
@@ -90,40 +91,40 @@ const Personal = ({ navigation, route }) => {
 
     
 
-    const resp3 = await fetch(`http://3.136.67.161:8080/feat_orgs`, {
+    const resp3 = await fetch(UsedServer + `/feat_orgs`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        user: type,
+        UserId: UserId,
       })
     }); 
     const data3 = await resp3.json();
     setData3(data3)
     
-    const resp4 = await fetch(`http://3.136.67.161:8080/categories`, {
+    const resp4 = await fetch(UsedServer + `/categories`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        user: type,
+        UserId: UserId,
       })
     }); 
     const data4 = await resp4.json();
     setData4(data4)
 
-    const resp5 = await fetch(`http://3.136.67.161:8080/categories_feat`, {
+    const resp5 = await fetch(UsedServer + `/categories_feat`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        user: type,
+        UserId: UserId,
       })
     }); 
     const category_feat = await resp5.json();

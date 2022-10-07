@@ -47,7 +47,7 @@ async function registerForPushNotificationsAsync(){
   }
   token = (await Notifications.getExpoPushTokenAsync()).data;
   console.log(token);
-  const resp = await fetch('http://3.136.67.161:8080/set_push_token', {
+  const resp = await fetch('http://10.0.2.2:8080/set_push_token', {
     method: 'POST',
     headers: {
         Accept: 'application/json',
