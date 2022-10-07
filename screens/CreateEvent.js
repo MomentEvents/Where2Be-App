@@ -26,6 +26,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import InterestSelector from "../components/InterestSelect";
+import { AuthContext } from "../AuthContext";
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McText, McIcon, McAvatar } from "../components";
@@ -41,6 +42,7 @@ var height = Dimensions.get("window").height; //full height
 
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import PreviewEventDetail from "./PreviewEventDetail";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -87,6 +89,7 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const {UserId, updateData} = useContext(AuthContext)
   const theme = useColorScheme();
   var backgroundColorStyle = {
     backgroundColor: COLORS.white,
@@ -196,6 +199,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 marginRight: 15,
                 marginTop: 5,
               }}
+              onPress={() =>{
+                navigation.navigate(PreviewEventDetail);
+              }}
             >
               <McText
                 h3
@@ -203,7 +209,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                   color: COLORS.purple,
                 }}
               >
-                Post
+                Next
               </McText>
             </TouchableOpacity>
           </View>
