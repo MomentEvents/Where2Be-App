@@ -43,9 +43,10 @@ function AppNav(){
       width: '100%',
       height: 
         SIZES.height < 700? SIZES.height * 0.4 : SIZES.height * 0.5,
-      marginBottom: 80,
+      
     }}
   />
+  <ActivityIndicator size="small"/>
   </SafeAreaView>
   );
 
