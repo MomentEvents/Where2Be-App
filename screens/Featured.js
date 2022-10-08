@@ -258,26 +258,26 @@ const Featured = ({ navigation, route }) => {
                     position: 'absolute',
                     right: 0,
                   }}>
-                    <McIcon source ={icons.shoutout} size={28} style={{
-                        tintColor:COLORS.lightGray,
+                    <McIcon source ={icons.check} size={20} style={{
+                        tintColor: item.joined? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
-                      <McText body3 style={{
+                      <McText body7 style={{
                         marginTop: 2,
                         marginLeft: -7,
                         marginRight: 10,
-                        color: COLORS.lightGray
-                      }}>12</McText>
-                      <McIcon source ={icons.check} size={28} style={{
-                        tintColor:COLORS.lightGray,
+                        color: item.joined? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_joins + item.joined}</McText>
+                      <McIcon source ={icons.shoutout} size={20} style={{
+                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
-                      <McText body3 style={{
+                      <McText body7 style={{
                         marginTop: 2,
                         marginLeft: -7,
                         marginRight: 10,
-                        color: COLORS.lightGray
-                      }}>46</McText>
+                        color: item.shouted? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_shouts + item.shouted}</McText>
                   </View></View>
               {/* <TouchableHighlight style={{
                       width: 32,
@@ -392,17 +392,7 @@ const Featured = ({ navigation, route }) => {
                       <View style={{
                     flexDirection: 'row',
                   }}>
-                    <McIcon source ={icons.shoutout} size={20} style={{
-                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
-                        marginRight: 10,
-                      }}/>
-                      <McText body7 style={{
-                        marginTop: 2,
-                        marginLeft: -7,
-                        marginRight: 10,
-                        color: item.shouted? COLORS.purple : COLORS.lightGray
-                      }}>{item.shouted}</McText>
-                      <McIcon source ={icons.check} size={20} style={{
+                    <McIcon source ={icons.check} size={20} style={{
                         tintColor: item.joined? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
@@ -411,7 +401,17 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.joined? COLORS.purple : COLORS.lightGray
-                      }}>{item.joined}</McText>
+                      }}>{item.num_joins + item.joined}</McText>
+                      <McIcon source ={icons.shoutout} size={20} style={{
+                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
+                        marginRight: 10,
+                      }}/>
+                      <McText body7 style={{
+                        marginTop: 2,
+                        marginLeft: -7,
+                        marginRight: 10,
+                        color: item.shouted? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_shouts + item.shouted}</McText>
                       
                   </View>
                 </View>

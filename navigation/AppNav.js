@@ -7,12 +7,14 @@ import {
   ActivityIndicator,
   StatusBar,
   FlatList,
+  Image,
+  SafeAreaView,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
 import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent } from '../screens';
-import { customFonts } from '../constants';
+import { SIZES, COLORS, customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -34,7 +36,17 @@ function AppNav(){
     <NavigationContainer>
     {UserId !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
-    :<ActivityIndicator size="small"></ActivityIndicator>
+    :<SafeAreaView style={styles.container}>
+    <Image
+    source={require('../assets/adaptive-icon.png')}
+    style = {{
+      width: '100%',
+      height: 
+        SIZES.height < 700? SIZES.height * 0.4 : SIZES.height * 0.5,
+      marginBottom: 80,
+    }}
+  />
+  </SafeAreaView>
   );
 
 }
@@ -87,7 +99,7 @@ const AuthStack = () =>{
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: COLORS.black,
       alignItems: 'center',
       justifyContent: 'center',
     },
