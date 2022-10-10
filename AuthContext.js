@@ -155,9 +155,9 @@ export const AuthProvider = ({children}) =>{
     
   }
 
-  const test = () => {
-    console.log(Choice_Dict[8163]);
-  }
+  // const test = () => {
+  //   console.log(Choice_Dict[8163]);
+  // }
 
 
   const loginTok = (udata) =>{
@@ -217,7 +217,7 @@ export const AuthProvider = ({children}) =>{
 
   return(
     <AuthContext.Provider value={{loginTok, logoutTok, UserId, loadingToken, 
-      UserData, updateData, setupData, test, RefreshD, Data, FinImport}}>
+      UserData, updateData, setupData, RefreshD, Data, FinImport}}>
       {children}
     </AuthContext.Provider>
   )

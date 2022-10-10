@@ -529,8 +529,7 @@ const Featured = ({ navigation, route }) => {
             alignItems: 'center'
             }}
           onPress={()=>{
-                      test();
-                      // navigation.navigate('CreateEvent');
+                      navigation.navigate('CreateEvent');
                       console.log("Chirag's an idiot")
                       }}
                   >
