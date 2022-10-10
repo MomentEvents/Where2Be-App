@@ -655,6 +655,7 @@ app.post("/spotlight", jsonParser, (req, res) => {
   // res.send("POST Request Called")
 
   var inp_type = req.body.UserId;
+  // console.log(inp_type);
 
   console.log("POST req on", inp_type);
   connection
@@ -880,18 +881,25 @@ app.get("/data", function (req, res) {
 
 app.post("/set_push_token", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-  var inp_type = req.body.id;
-  console.log("Org Events POST req on", inp_type);
+  var token = req.body.token;
+  var userId = req.body.userId;
+  
+  console.log("Set push token POST req on", userId);
+  // console.log(userId, token)
   connection
     .run(
-      `MERGE (u:User {pushToken: $id} )
+      `MERGE (u:User {ID: $uID} )
       ON CREATE
-        SET u.pushToken = $id
+        SET u.pushToken = $token
       ON MATCH
-        SET u.pushToken = $id`,
-      { id: inp_type }
+        SET u.pushToken = $token
+      return u`,
+      { token: token ,
+        uID : userId}
     )
-    .then(function (result) {})
+    .then(function (result) {
+      // console.log(result)
+    })
     .catch(function (err) {
       console.log(err);
     });

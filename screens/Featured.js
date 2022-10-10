@@ -36,6 +36,7 @@ const Featured = ({ navigation, route }) => {
   var type2 = "Discord";
 
   const fetchData = async () => {
+    console.log('collecting featured data')
     const resp2 = await fetch(UsedServer + `/spotlight`, {
       method: 'POST',
       headers: {
@@ -444,7 +445,7 @@ const Featured = ({ navigation, route }) => {
       </View>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View>
-        {FinImport[1]? <FlatList
+        {FinImport[0]? <FlatList
                 horizontal
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
@@ -464,7 +465,7 @@ const Featured = ({ navigation, route }) => {
           <View>
             <SectionTitle>
               <McText h3>
-                {sdata.header}
+              {sdata === null ? null : sdata.header}
               </McText>
             </SectionTitle>
             <View>
@@ -473,7 +474,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata.data}
+                data={sdata === null ? null : sdata.data}
                 renderItem={_renderItem}
               extraData = {RefreshD[idx + 1]}
               ></FlatList>
@@ -490,7 +491,7 @@ const Featured = ({ navigation, route }) => {
           <View>
             <SectionTitle>
               <McText h3>
-                {sdata.header}
+              {sdata === null ? null : sdata.header}
               </McText>
             </SectionTitle>
             <View>
@@ -499,7 +500,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata.data}
+                data={sdata === null ? null : sdata.data}
                 renderItem={_renderItem}
               ></FlatList>
             </View>

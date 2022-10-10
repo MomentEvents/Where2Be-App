@@ -25,6 +25,7 @@ import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../AuthContext';
 import UsedServer from "../constants/servercontants";
+import registerForPushNotificationsAsync from "../Services/Notifications";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -124,6 +125,7 @@ const Signup = ({ navigation, route }) => {
         udata = result;
         console.log(result);
         setData(result);
+        registerForPushNotificationsAsync(udata.username);
       } catch (err) {
         seterror(true);
         console.log("ERRROR");

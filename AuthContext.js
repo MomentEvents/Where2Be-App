@@ -4,6 +4,7 @@ import React, { useState, useEffect, Context, createContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import produce from 'immer';
 import UsedServer from './constants/servercontants';
+import registerForPushNotificationsAsync from './Services/Notifications';
 
 export const AuthContext = createContext();
 
@@ -61,6 +62,7 @@ export const AuthProvider = ({children}) =>{
     let t= FinImport;
     t[nIn] = true;
     setFinImport(t);
+    // console.log(data)
     // setChoice_Dict(cdict);
     // console.log(cdict[8163].joined);
 
@@ -80,6 +82,20 @@ export const AuthProvider = ({children}) =>{
     array.push(Data7)
     // console.log(array.slice(1,3))
     return array
+  }
+
+  const clearData = () =>{
+    setData0(null);
+    setData1(null);
+    setData2(null);
+    setData3(null);
+    setData4(null);
+    setData5(null);
+    setData6(null);
+    setData7(null);
+    setDict({});
+    setRefreshD([]);
+    setFinImport([false, false, false]);
   }
 
   const setData = (data, n) =>{
@@ -162,11 +178,14 @@ export const AuthProvider = ({children}) =>{
 
   const loginTok = (udata) =>{
     //let Uid = 'helpeg';
+    // registerForPushNotificationsAsync(udata.username);
+    
+    AsyncStorage.setItem('uid', udata.username);
+    AsyncStorage.setItem('pass', udata.password);
     setUserId(udata.username);
     console.log('udata: ', udata);
     setUserData(udata);
-    AsyncStorage.setItem('uid', udata.username);
-    AsyncStorage.setItem('pass', udata.password);
+    
     //keychain.setGenericPassword('helpeg', 'helpeg');
   }
 
@@ -174,6 +193,7 @@ export const AuthProvider = ({children}) =>{
     setUserId(null);
     AsyncStorage.removeItem('uid');
     AsyncStorage.removeItem('pass');
+    clearData();
     //keychain.resetGenericPassword();
   }
   

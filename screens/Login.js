@@ -25,6 +25,7 @@ import { Dimensions } from "react-native";
 import {CustomInput} from "./Signup.js"
 import { AuthContext } from '../AuthContext';
 import UsedServer from "../constants/servercontants";
+import registerForPushNotificationsAsync from "../Services/Notifications";
 
 
 var width = Dimensions.get('window').width; //full width
@@ -106,6 +107,7 @@ const Login = ({ navigation, route }) => {
           const result = await resp.json();
           console.log(result);
           udata = result
+          registerForPushNotificationsAsync(udata.username);
           //setData(result);
         } catch (err) {
           seterror(true);
