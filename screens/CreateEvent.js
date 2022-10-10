@@ -35,6 +35,7 @@ import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from 'react-native-modern-datepicker'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import DateTimePickerPopup from "../components/fluiddatetimepicker";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -340,20 +341,11 @@ const CreateEvent = ({ navigation, routenew }) => {
                 }}>
 
                 </DatePicker> */}
-                <DatePicker
-                onSelectedChange={date => setDate(date)}
-                
-                mode="calendar"
-                options={{
-                  backgroundColor: '#090C08',
-                  textHeaderColor: '#8a34f7',
-                  textDefaultColor: '#7E46C7',
-                  mainColor: '#777777',
-                  textSecondaryColor: "#FFFFFF",
-                  borderColor: '000000'
-                }}>
 
-                </DatePicker>
+              <DateTimePickerPopup
+              >
+
+              </DateTimePickerPopup>
               </SectionTextIn>
           </View>
           <View
