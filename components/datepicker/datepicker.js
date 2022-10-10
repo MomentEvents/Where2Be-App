@@ -11,10 +11,22 @@ import {
   DatePickerIOS,
   Platform,
   Animated,
-  Keyboard
+  Keyboard,
+  useColorScheme,
+  StyleSheet
 } from 'react-native';
 import Style from './style';
 import Moment from 'moment';
+import { COLORS } from '../../constants';
+// const theme = useColorScheme();
+// var backgroundColorStyle = {
+//   themedBackgroundColor: COLORS.white,
+// };
+// if (theme === "dark") {
+//   backgroundColorStyle = {
+//     backgroundColor: COLORS.black,
+//   };
+// }
 
 const FORMATS = {
   'date': 'YYYY-MM-DD',
@@ -364,7 +376,7 @@ class DatePicker extends Component {
                   style={{flex: 1}}
                 >
                   <Animated.View
-                    style={[Style.datePickerCon, {height: this.state.animatedHeight}, customStyles.datePickerCon]}
+                    style={[Style.datePickerCon, {height: this.state.animatedHeight}, {backgroundColor: COLORS.grey}, customStyles.datePickerCon]}
                   >
                     <View pointerEvents={this.state.allowPointerEvents ? 'auto' : 'none'}>
                       <DatePickerIOS

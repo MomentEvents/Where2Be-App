@@ -62,15 +62,6 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const theme = useColorScheme();
-  var backgroundColorStyle = {
-    backgroundColor: COLORS.white,
-  };
-  if (theme === "dark") {
-    backgroundColorStyle = {
-      backgroundColor: COLORS.black,
-    };
-  }
 
   // Component
 
@@ -326,7 +317,6 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-            <TouchableOpacity onPress={onSelectDate}>
               <SectionTextIn>
                 <DatePicker
                 
@@ -334,8 +324,6 @@ const CreateEvent = ({ navigation, routenew }) => {
                 mode="date" //The enum of date, datetime and time
                 placeholder="select date"
                 format="DD-MM-YYYY"
-                minDate="01-01-2016"
-                maxDate="01-01-2019"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
@@ -356,7 +344,6 @@ const CreateEvent = ({ navigation, routenew }) => {
 
                 </DatePicker>
               </SectionTextIn>
-            </TouchableOpacity>
           </View>
           <View
             style={{
