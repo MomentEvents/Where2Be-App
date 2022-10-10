@@ -35,7 +35,8 @@ import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePickerPopup from "../components/fluiddatetimepicker";
+import DateTimePickerPopup from "../components/DateTimePickerPopup";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -121,7 +122,7 @@ const CreateEvent = ({ navigation, routenew }) => {
           >
             Image
           </McText>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               height: SIZES.height / 4,
               width: SIZES.width * 0.75,
@@ -142,7 +143,8 @@ const CreateEvent = ({ navigation, routenew }) => {
                 tintColor: COLORS.purple,
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <ImagePickerComponent></ImagePickerComponent>
           <View
             style={{
               marginVertical: 8,
