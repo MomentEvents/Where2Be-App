@@ -33,7 +33,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import DatePicker from 'react-native-modern-datepicker'
+import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerPopup from "../components/fluiddatetimepicker";
 
@@ -82,7 +82,7 @@ const CreateEvent = ({ navigation, routenew }) => {
 
   const closeDatePicker = () => {
     setShowDatePicker(false);
-  }
+  };
 
   const onStartTimeChange = (event, selectedTime) => {
     const currentDate = selectedDate || date;
@@ -105,58 +105,6 @@ const CreateEvent = ({ navigation, routenew }) => {
   // return tbody(rows);
   return (
     <SafeAreaView style={styles.container}>
-      {/*<Modal animationType="fade" transparent={true} visible={showDatePicker}>
-        <View style={{ flex: 1}}>
-          {Platform.OS === 'ios' ?           <DateTimePicker
-            value={date}
-            mode={"date"}
-            display={Platform.OS == "ios" ? "inline" : "spinner"}
-            is24Hour={true}
-            onChange={onDateChange}
-            
-          /> : DateTimePickerAndroid.open({
-            mode: 'date',
-            value: date,
-            })
-          }
-        
-          {/* <DateTimePicker
-            value={date}
-            mode={"date"}
-            display={Platform.OS == "ios" ? "inline" : "spinner"}
-            is24Hour={true}
-            onChange={onDateChange}
-            
-          />
-          <TouchableOpacity
-            style={{margin: 20, ...styles.button, ...styles.buttonClose}}
-            onPress={closeDatePicker}
-          >
-            <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
-          </TouchableOpacity> */}
-        {/*</View>}
-      </Modal>}
-      {/* <Modal
-          animationType="fade"
-          transparent={true}
-          visible={showDatePicker}
-          style={styles.modalBackground}
-        >
-          <DateTimePicker
-            value={new Date(Date.now())}
-            mode={"date"}
-            display={Platform.OS === "ios" ? "spinner" : "default"}
-            is24Hour={true}
-            onChange={onDateChange}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setShowDatePicker(false);
-            }}
-          >
-            <Text>Hide me!</Text>
-          </TouchableOpacity>
-        </Modal> */}
       <View style={styles.tempNav}>
         <SectionHeader>
           <TouchableOpacity
@@ -258,6 +206,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 placeholder="Enter a short, descriptive title."
                 placeholderTextColor={COLORS.gray1}
                 multiline={true}
+                maxLength={100}
                 //onChange={handleOnSearch}
                 //value={bad}
                 style={{
@@ -288,6 +237,8 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Enter a description for your event."
                 placeholderTextColor={COLORS.gray1}
+                multiline={true}
+                maxLength={1000}
                 //onChange={handleOnSearch}
                 //value={bad}
                 style={{
@@ -314,39 +265,20 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-              <SectionTextIn>
-                {/* <DatePicker
-                
-                date={date} //initial date from state
-                mode="date" //The enum of date, datetime and time
-                placeholder="select date"
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                backgroundColorStyle={backgroundColorStyle}
-                customStyles={{
-                  dateIcon: {
-                    //display: 'none',
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0,
-                  },
-                  dateInput: {
-                    marginLeft: 36,
-                  },
-                }}
-                onDateChange={(date) => {
-                  setDate(date);
-                }}>
-
-                </DatePicker> */}
-
+            <SectionTextIn>
               <DateTimePickerPopup
-              >
-
-              </DateTimePickerPopup>
-              </SectionTextIn>
+                mode="date"
+                placeholderText="Pick a date"
+                customStyles={{
+                  ...FONTS.body3,
+                  color: COLORS.white,
+                  marginTop: 3,
+                  marginBottom: 3,
+                  marginLeft: 5,
+                  padding: 4,
+                }}
+              />
+            </SectionTextIn>
           </View>
           <View
             style={{
@@ -367,12 +299,10 @@ const CreateEvent = ({ navigation, routenew }) => {
               }}
             >
               <SectionTimings>
-                <TextInput
-                  placeholder="Start"
-                  placeholderTextColor={COLORS.gray1}
-                  //onChange={handleOnSearch}
-                  //value={bad}
-                  style={{
+                <DateTimePickerPopup
+                  mode="time"
+                  placeholderText="Start"
+                  customStyles={{
                     ...FONTS.body3,
                     color: COLORS.white,
                     width: 250,
@@ -388,20 +318,18 @@ const CreateEvent = ({ navigation, routenew }) => {
                 }}
               >
                 <SectionTimings>
-                  <TextInput
-                    placeholder="End"
-                    placeholderTextColor={COLORS.gray1}
-                    //onChange={handleOnSearch}
-                    //value={bad}
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.white,
-                      width: 250,
-                      marginBottom: 5,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  />
+                <DateTimePickerPopup
+                  mode="time"
+                  placeholderText="End"
+                  customStyles={{
+                    ...FONTS.body3,
+                    color: COLORS.white,
+                    width: 250,
+                    marginBottom: 5,
+                    marginLeft: 5,
+                    padding: 4,
+                  }}
+                />
                 </SectionTimings>
               </View>
             </View>
@@ -423,6 +351,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Where will your event happen?"
                 placeholderTextColor={COLORS.gray1}
+                maxLength={100}
                 style={{
                   ...FONTS.body3,
                   color: COLORS.white,

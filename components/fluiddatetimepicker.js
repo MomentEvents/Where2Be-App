@@ -44,6 +44,7 @@ class DateTimePickerPopup extends Component {
      *
      * setDate state function
      * style passed in
+     * mode passed in as a string
      *
      * */
     super(props);
@@ -61,20 +62,40 @@ class DateTimePickerPopup extends Component {
           visible={this.state.modalVisible}
         >
           <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#00000077"}}>
-            <DatePicker
+          {this.props.mode === "date" ? <DatePicker
               onSelectedChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
               }}
               mode="calendar"
+              onTimeChange={(newDate) => {
+                this.setState({ modalVisible: false, date: newDate });
+              }}
               options={{
-                backgroundColor: "#090C08",
-                textHeaderColor: "#8221fc",
-                textDefaultColor: "#8221fc",
+                backgroundColor: "#212121",
+                textHeaderColor: "#FFFFFF",
+                textDefaultColor: "#FFFFFF",
                 mainColor: "#777777",
                 textSecondaryColor: "#FFFFFF",
                 borderColor: "000000",
               }}
-            ></DatePicker>
+            ></DatePicker> : 
+            <DatePicker
+              onSelectedChange={(newDate) => {
+                this.setState({ modalVisible: false, date: newDate });
+              }}
+              mode="time"
+              onTimeChange={(newDate) => {
+                this.setState({ modalVisible: false, date: newDate });
+              }}
+              options={{
+                backgroundColor: "#212121",
+                textHeaderColor: "#FFFFFF",
+                textDefaultColor: "#FFFFFF",
+                mainColor: "#777777",
+                textSecondaryColor: "#FFFFFF",
+                borderColor: "000000",
+              }}
+            ></DatePicker>}
           </View>
         </Modal>
         <TouchableOpacity
@@ -83,6 +104,7 @@ class DateTimePickerPopup extends Component {
           }}
         >
 
+            
             {this.state.date === undefined ? (
               <Text
                 style={{
@@ -94,20 +116,12 @@ class DateTimePickerPopup extends Component {
                   padding: 4,
                 }}
               >
-                Pick a date
+                {this.props.placeholderText}
               </Text>
             ) : (
               <Text
-                style={{
-                  ...FONTS.body3,
-                  color: COLORS.gray1,
-                  marginTop: 3,
-                  marginBottom: 3,
-                  marginLeft: 5,
-                  padding: 4,
-                }}
+                style={this.props.customStyles}
               >
-                {" "}
                 {this.state.date}
               </Text>
             )}
