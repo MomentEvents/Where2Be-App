@@ -33,7 +33,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import DatePicker from "../components/datepicker/datepicker";
+import DatePicker from 'react-native-modern-datepicker'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 var width = Dimensions.get("window").width; //full width
@@ -314,7 +314,7 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
 
               <SectionTextIn>
-                <DatePicker
+                {/* <DatePicker
                 
                 date={date} //initial date from state
                 mode="date" //The enum of date, datetime and time
@@ -337,6 +337,20 @@ const CreateEvent = ({ navigation, routenew }) => {
                 }}
                 onDateChange={(date) => {
                   setDate(date);
+                }}>
+
+                </DatePicker> */}
+                <DatePicker
+                onSelectedChange={date => setDate(date)}
+                
+                mode="calendar"
+                options={{
+                  backgroundColor: '#090C08',
+                  textHeaderColor: '#8a34f7',
+                  textDefaultColor: '#7E46C7',
+                  mainColor: '#777777',
+                  textSecondaryColor: "#FFFFFF",
+                  borderColor: '000000'
                 }}>
 
                 </DatePicker>
