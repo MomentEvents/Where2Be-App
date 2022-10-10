@@ -57,52 +57,7 @@ var outTags = [];
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const CreateEvent = ({ navigation, routenew }) => {
-  const [date, setDate] = useState(new Date());
-  const [didSelectDate, setDidSelectDate] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-  const theme = useColorScheme();
-  var backgroundColorStyle = COLORS.white;
-  if (theme === "dark") {
-    backgroundColorStyle = COLORS.black;
-  }
-  const onSelectDate = () => {
-    console.log("Selected Date Picker");
-    setShowDatePicker(true);
-  };
-  const onDateChange = (event, selectedDate) => {
-    console.log("hi");
-    setDate(selectedDate);
-    setDidSelectDate(true);
-  };
-
-  const closeDatePicker = () => {
-    setShowDatePicker(false);
-  };
-
-  const onStartTimeChange = (event, selectedTime) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const onEndTimeChange = (event, selectedTime) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  // console.log(ab);
-  // for (var i = 0; i < numrows; i++) {
-  //     rows.push(ObjectRow());
-  // }
-  // return tbody(rows);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.tempNav}>
@@ -211,11 +166,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 //value={bad}
                 style={{
                   ...FONTS.body3,
+                  marginTop: 2,
                   color: COLORS.white,
-                  width: 250,
-                  marginLeft: 5,
-                  padding: 4,
-                  marginBottom: 5,
+                  padding: 10,
                 }}
               />
             </SectionTextIn>
@@ -243,10 +196,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 //value={bad}
                 style={{
                   ...FONTS.body3,
+                  marginTop: 2,
                   color: COLORS.white,
-                  marginLeft: 5,
-                  padding: 4,
-                  marginBottom: 5,
+                  padding: 10,
                 }}
               />
             </SectionTextIn>
@@ -272,10 +224,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 customStyles={{
                   ...FONTS.body3,
                   color: COLORS.white,
-                  marginTop: 3,
-                  marginBottom: 3,
-                  marginLeft: 5,
-                  padding: 4,
+                  padding: 10,
                 }}
               />
             </SectionTextIn>
@@ -306,9 +255,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                     ...FONTS.body3,
                     color: COLORS.white,
                     width: 250,
-                    marginBottom: 5,
-                    marginLeft: 5,
-                    padding: 4,
+                    padding: 10,
                   }}
                 />
               </SectionTimings>
@@ -325,9 +272,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                     ...FONTS.body3,
                     color: COLORS.white,
                     width: 250,
-                    marginBottom: 5,
-                    marginLeft: 5,
-                    padding: 4,
+                    padding: 10,
                   }}
                 />
                 </SectionTimings>
@@ -354,11 +299,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 maxLength={100}
                 style={{
                   ...FONTS.body3,
+                  padding: 10,
                   color: COLORS.white,
                   width: 250,
-                  marginBottom: 5,
-                  marginLeft: 5,
-                  padding: 4,
                 }}
               />
             </SectionTextIn>
