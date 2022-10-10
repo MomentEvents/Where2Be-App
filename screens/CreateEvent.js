@@ -50,6 +50,7 @@ const dummyTags = [
   "Other",
   "Recreation",
 ];
+
 const inTags = [];
 var outTags = [];
 // import React from 'react';
@@ -63,16 +64,11 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-  // Component
-
-  // Pass in:
- /********************************
-  * state variable (both its setter and the variable itself): value
-  * 
-  * 
-  * 
-  */
-
+  const theme = useColorScheme();
+  var backgroundColorStyle = COLORS.white;
+  if (theme === "dark") {
+    backgroundColorStyle = COLORS.black;
+  }
   const onSelectDate = () => {
     console.log("Selected Date Picker");
     setShowDatePicker(true);
@@ -326,6 +322,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 format="DD-MM-YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
+                backgroundColorStyle={backgroundColorStyle}
                 customStyles={{
                   dateIcon: {
                     //display: 'none',

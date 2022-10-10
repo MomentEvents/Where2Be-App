@@ -37,7 +37,6 @@ let style = StyleSheet.create({
     backgroundColor: '#00000077'
   },
   datePickerCon: {
-    backgroundColor: '#fff',
     height: 0,
     overflow: 'hidden'
   },
