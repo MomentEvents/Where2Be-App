@@ -33,7 +33,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import DatePicker from "react-native-date-picker";
+import DatePicker from "../components/datepicker/datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 var width = Dimensions.get("window").width; //full width
@@ -117,7 +117,7 @@ const CreateEvent = ({ navigation, routenew }) => {
   // return tbody(rows);
   return (
     <SafeAreaView style={styles.container}>
-      <Modal animationType="fade" transparent={true} visible={showDatePicker}>
+      {/*<Modal animationType="fade" transparent={true} visible={showDatePicker}>
         <View style={{ flex: 1}}>
           {Platform.OS === 'ios' ?           <DateTimePicker
             value={date}
@@ -146,8 +146,8 @@ const CreateEvent = ({ navigation, routenew }) => {
           >
             <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
           </TouchableOpacity> */}
-        </View>
-      </Modal>
+        {/*</View>}
+      </Modal>}
       {/* <Modal
           animationType="fade"
           transparent={true}
@@ -328,33 +328,33 @@ const CreateEvent = ({ navigation, routenew }) => {
 
             <TouchableOpacity onPress={onSelectDate}>
               <SectionTextIn>
-                {!didSelectDate ? (
-                  <Text
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.gray1,
-                      marginTop: 3,
-                      marginBottom: 3,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  >
-                    Enter a date
-                  </Text>
-                ) : (
-                  <Text
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.white,
-                      marginTop: 4,
-                      marginBottom: 4,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  >
-                    {date.toDateString()}
-                  </Text>
-                )}
+                <DatePicker
+                
+                date={date} //initial date from state
+                mode="date" //The enum of date, datetime and time
+                placeholder="select date"
+                format="DD-MM-YYYY"
+                minDate="01-01-2016"
+                maxDate="01-01-2019"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    //display: 'none',
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                  },
+                }}
+                onDateChange={(date) => {
+                  setDate(date);
+                }}>
+
+                </DatePicker>
               </SectionTextIn>
             </TouchableOpacity>
           </View>
