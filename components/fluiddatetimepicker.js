@@ -82,7 +82,7 @@ class DateTimePickerPopup extends Component {
             this.setState({ modalVisible: true });
           }}
         >
-          <SectionTextIn>
+
             {this.state.date === undefined ? (
               <Text
                 style={{
@@ -94,7 +94,6 @@ class DateTimePickerPopup extends Component {
                   padding: 4,
                 }}
               >
-                {" "}
                 Pick a date
               </Text>
             ) : (
@@ -112,7 +111,6 @@ class DateTimePickerPopup extends Component {
                 {this.state.date}
               </Text>
             )}
-          </SectionTextIn>
         </TouchableOpacity>
       </View>
     );
