@@ -23,9 +23,10 @@ export const AuthProvider = ({children}) =>{
   const [Data5, setData5] = useState(null);
   const [Data6, setData6] = useState(null);
   const [Data7, setData7] = useState(null);
+  const [PCalendar, setPCalendar] = useState(null);
   const [Dict, setDict] = useState({});
   const [RefreshD, setRefreshD] = useState([]);
-  const [FinImport, setFinImport] = useState([false, false, false]);
+  const [FinImport, setFinImport] = useState([false, false, false, false]);
 
   const setupData = (data, nIn) =>{
     var dict = Dict;
@@ -35,6 +36,9 @@ export const AuthProvider = ({children}) =>{
     let n = nIn;
     if(nIn == 2){
       n = 3
+    }
+    if(nIn == 3){
+      n = 8
     }
     for(var l1 in data){
       // console.log('rows?:', typeof(l1), typeof(n));
@@ -80,6 +84,7 @@ export const AuthProvider = ({children}) =>{
     array.push(Data5)
     array.push(Data6)
     array.push(Data7)
+    array.push(PCalendar)
     // console.log(array.slice(1,3))
     return array
   }
@@ -93,6 +98,7 @@ export const AuthProvider = ({children}) =>{
     setData5(null);
     setData6(null);
     setData7(null);
+    setPCalendar(null);
     setDict({});
     setRefreshD([]);
     setFinImport([false, false, false]);
@@ -108,6 +114,7 @@ export const AuthProvider = ({children}) =>{
     else if(n == 5){setData5(data)}
     else if(n == 6){setData6(data)}
     else if(n == 7){setData7(data)}
+    else if(n == 8){setPCalendar(data)}
   }
 
   const updateData =  (event) =>{
@@ -204,6 +211,7 @@ export const AuthProvider = ({children}) =>{
       //let usrToken = await keychain.getGenericPassword('helpeg');
       let uid = await AsyncStorage.getItem('uid');
       let pass = await AsyncStorage.getItem('pass');
+      console.log('starting loading in', UsedServer)
       const resp = await fetch(UsedServer + "/user_test", {
         //10.0.2.2:8080
         method: "POST",
@@ -221,6 +229,7 @@ export const AuthProvider = ({children}) =>{
       //console.log("usrToken", usrToken);
       setUserData(result);
       setUserId(uid);
+      console.log('done loading in')
     }
     catch(e){
       console.log('isLogged in error', e);

@@ -64,6 +64,7 @@ const Signup = ({ navigation, route }) => {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [error, seterror] = useState(false);
+  const [emailErr, setemailErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [school, setSchool] = useState("");
@@ -77,6 +78,7 @@ const Signup = ({ navigation, route }) => {
   const usersignup = async () => {
     setLoading(true);
     seterror(false);
+    setemailErr(false);
     //seterrors({name:false, username:false, password:false, email:false})
     let temperrors = {name:false, username:false, password:false, email:false, school:false}
     let erry = false;
@@ -124,13 +126,26 @@ const Signup = ({ navigation, route }) => {
         const result = await resp.json();
         udata = result;
         console.log(result);
-        setData(result);
-        registerForPushNotificationsAsync(udata.username);
+        if(udata.error){
+          erry = true;
+          if(udata.error == "userid"){
+            seterror(true);
+          }else if(udata.error == "email"){
+            setemailErr(true);
+          }else{
+            setemailErr(true);
+            seterror(true);
+          }
+        }
+        else{
+          setData(result);
+          registerForPushNotificationsAsync(udata.username);
+        }
+        
       } catch (err) {
         seterror(true);
         console.log("ERRROR");
-        console.log(err);
-        console.log(result);
+        console.log('error is: ',err);
         erry = true;
       } finally {
         trylogin(erry, udata);
@@ -190,7 +205,9 @@ const Signup = ({ navigation, route }) => {
         placeholder ="Email"
       />
       <View>
-        {errors.email && (
+        {emailErr
+        ?<McText style={{color: "#cc0000",}}> {" "} Email already in use, try a different one</McText>
+        :errors.email && (
           <McText style={{color: "#cc0000",}}>
             {" "}
             Please enter a valid email

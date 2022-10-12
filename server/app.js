@@ -149,44 +149,94 @@ app.post("/email_login", jsonParser, (req, res) => {
 });
 
 app.post("/create_user", jsonParser, (req, res) => {
-  var name0 = req.body.name;
+  var name = req.body.name;
   var username = req.body.username;
   var email = req.body.email;
   var pass = req.body.password;
   var school = req.body.school;
-  console.log("Create user", username);
+
+  var email_not_valid = false;
+  var id_not_valid = false;
+
+  console.log("Create user", name);
+  console.log("Create username", username);
+  console.log("Create email", email);
+  console.log("Create pass", pass);
+  console.log("Create school", school);
+
   connection
-    .run("MATCH (u:User {ID: $username}) RETURN u", {
-      username: username,
+    .run("MATCH (u:User {email: $email}) RETURN u", {
+      email: email
     })
     .then(function (result) {
-      if (!_.isEmpty(result.records)) {
-        res.end();
-      } else {
-        bcrypt.hash(pass, 10).then((hashPass) => {
-          connection
-            .run(
-              "Create (u:User {ID: $username, email:$email, name:$name0, password:$pass, school: $school}) Return u",
-              {
-                username: username,
-                name0: name0,
-                email: email,
-                pass: hashPass,
-                school: school,
-              }
-            )
-            .then(function (result) {
-              var user = {
-                name: name0,
-                username: username,
-                email: email,
-                password: hashPass,
-              };
-              res.send(JSON.stringify(user));
-              res.end();
+      connection
+        .run("MATCH (u:User {email: $email}) RETURN u", {
+          email: email
+        })
+        .then(function (result) {
+          if (!_.isEmpty(result.records)) {
+            console.log("Found email", name);
+            email_not_valid = true;
+            // res.send({ error: "email" });
+            // res.end();
+          } 
+
+          console.log("email_not_valid", email_not_valid);
+          console.log("id_not_valid", id_not_valid);
+
+          if (email_not_valid && id_not_valid)
+          {
+            console.log("email_id");
+            res.send({ error: "email_id" });
+            res.end();
+          }
+          else if(email_not_valid)
+          {
+            res.send({ error: "email" });
+            res.end();
+          }
+          else if(id_not_valid)
+          {
+            res.send({ error: "userid" });
+            res.end();
+          }
+          else {
+            bcrypt.hash(pass, 10).then((hashPass) => {
+              connection
+                .run(
+                  "Create (u:User {ID: $username, email:$email, name:$name, password:$pass, school: $school}) Return u",
+                  {
+                    username: username,
+                    name: name,
+                    email: email,
+                    pass: hashPass,
+                    school: school,
+                  }
+                )
+                .then(function (result) {
+                  var user = {
+                    name: name,
+                    username: username,
+                    email: email,
+                    password: hashPass,
+                  };
+                  // console.log("Why am I here, name");
+                  res.send(JSON.stringify(user));
+                  res.end();
+                });
             });
+          }
+
+        })
+        .catch(function (err) {
+          console.log(err);
         });
-      }
+        
+      if (!_.isEmpty(result.records)) {
+        console.log("Found ID", name);
+        id_not_valid = true;
+      } 
+
     })
     .catch(function (err) {
       console.log(err);
@@ -408,6 +458,79 @@ app.post("/feat", jsonParser, (req, res) => {
       //console.log(JSON.stringify(FinalArr));
       //res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(FinalArr));
+      res.end();
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+});
+
+app.post("/personal_cal", jsonParser, (req, res) => {
+  var inp_type = req.body.UserId;
+
+  console.log("Personal Calendar req on", inp_type);
+  connection
+    .run(
+      `match (u:User{ID:$userID})-[]-(e:Event)
+      where date(datetime({epochmillis: apoc.date.parse(e.startingTime, "ms", "yyyy/MM/dd")})) >= date()
+      optional match (e)-[:tags]-(inte:Interest)
+      with e, collect(inte.name) as int_list 
+      order by e.startingTime
+      with e.CreatorID as nme, collect(e)[0] as e, collect(int_list)[0] as tt
+      optional match (e)-[r1:attending]-(:User)
+      with e, tt, count(r1) as atts
+      optional match (e)-[r1:liked]-(:User)
+      with e, tt, atts, count(r1) as liks
+      optional match (e)-[r1:shoutout]-(:User)
+      with e, tt, atts, liks, count(r1) as shuts
+      with e, tt, atts, liks, shuts,
+      case 
+        when (e)-[:attending]-(:User{ID : $userID}) then 1
+        else 0
+      end as att,
+      case 
+        when (e)-[:liked]-(:User{ID : $userID}) then 1
+        else 0
+      end as lik,
+      case 
+        when (e)-[:shoutout]-(:User{ID : $userID}) then 1
+        else 0
+      end as shut
+      return ID(e), e, tt, att, lik, shut, atts, liks, shuts 
+      order by e.startingTime asc
+      limit 20`,
+      { userID: inp_type }
+    )
+    .then(function (result) {
+      var EventArr = [];
+      result.records.forEach(function (record) {
+        // console.log(record);
+        EventArr.push({
+          id: record._fields[0].low,
+          uniqueID: record._fields[1].properties.ID,
+          title: record._fields[1].properties.Name,
+          userID: record._fields[1].properties.CreatorID,
+          //type: record._fields[1].properties.type,
+          startingTime: record._fields[1].properties.startingTime,
+          visibility: record._fields[1].properties.Visibility,
+          image: record._fields[1].properties.Image,
+          description: record._fields[1].properties.Description,
+          location: record._fields[1].properties.Location,
+          taglist: record._fields[2],
+          joined: record._fields[3].low,
+            liked: record._fields[4].low,
+            shouted: record._fields[5].low,
+            num_joins: record._fields[6].low,
+            num_likes: record._fields[7].low,
+            num_shouts: record._fields[8].low,
+
+         
+        });
+        console.log(record._fields[0].low);
+      });
+      // console.log(JSON.stringify(EventArr));
+      // res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(EventArr));
       res.end();
     })
     .catch(function (err) {
@@ -655,7 +778,6 @@ app.post("/spotlight", jsonParser, (req, res) => {
   // res.send("POST Request Called")
 
   var inp_type = req.body.UserId;
-  // console.log(inp_type);
 
   console.log("POST req on", inp_type);
   connection
@@ -673,15 +795,15 @@ app.post("/spotlight", jsonParser, (req, res) => {
       with e, tt, atts, liks, count(r1) as shuts
       with e, tt, atts, liks, shuts,
       case 
-        when (e)-[:attending]-(:User{ID : 'lukas'}) then 1
+        when (e)-[:attending]-(:User{ID : $userID}) then 1
         else 0
       end as att,
       case 
-        when (e)-[:liked]-(:User{ID : 'lukas'}) then 1
+        when (e)-[:liked]-(:User{ID : $userID}) then 1
         else 0
       end as lik,
       case 
-        when (e)-[:shoutout]-(:User{ID : 'lukas'}) then 1
+        when (e)-[:shoutout]-(:User{ID : $userID}) then 1
         else 0
       end as shut
       return ID(e), e, tt, att, lik, shut, atts, liks, shuts 
@@ -712,14 +834,7 @@ app.post("/spotlight", jsonParser, (req, res) => {
             num_likes: record._fields[7].low,
             num_shouts: record._fields[8].low,
 
-          // id: record._fields[0].low,
-          // title: record._fields[1].properties.Name,
-          // //type: record._fields[1].properties.type,
-          // startingTime: record._fields[1].properties.startingTime,
-          // image: record._fields[1].properties.Image,
-          // description: record._fields[1].properties.Description,
-          // location: record._fields[1].properties.Location,
-          // taglist: record._fields[2],
+         
         });
         console.log(record._fields[0].low);
       });
@@ -881,25 +996,18 @@ app.get("/data", function (req, res) {
 
 app.post("/set_push_token", jsonParser, (req, res) => {
   // res.send("POST Request Called")
-  var token = req.body.token;
-  var userId = req.body.userId;
-  
-  console.log("Set push token POST req on", userId);
-  // console.log(userId, token)
+  var inp_type = req.body.id;
+  console.log("Org Events POST req on", inp_type);
   connection
     .run(
-      `MERGE (u:User {ID: $uID} )
+      `MERGE (u:User {pushToken: $id} )
       ON CREATE
-        SET u.pushToken = $token
+        SET u.pushToken = $id
       ON MATCH
-        SET u.pushToken = $token
-      return u`,
-      { token: token ,
-        uID : userId}
+        SET u.pushToken = $id`,
+      { id: inp_type }
     )
-    .then(function (result) {
-      // console.log(result)
-    })
+    .then(function (result) {})
     .catch(function (err) {
       console.log(err);
     });
@@ -1347,6 +1455,39 @@ app.post("/delete_join", jsonParser, (req, res) => {
     .catch(function (err) {
       console.log(err);
     });
+});
+
+app.post("/set_push_token", jsonParser, (req, res) => {
+  // res.send("POST Request Called")
+  var token = req.body.token;
+  var userId = req.body.userId;
+
+  console.log("Set push token POST req on", userId);
+  // console.log(userId, token)
+  connection
+    .run(
+    `MERGE (u:User {ID: $uID} )
+    ON CREATE
+      SET u.pushToken = $token
+    ON MATCH
+      SET u.pushToken = $token
+    return u,
+    { token: token ,
+      uID : userId}
+  )
+  .then(function (result) {
+    // console.log(result)
+  })
+  .catch(function (err) {
+    console.log(err)`,
+    { token: token, uID : userId}
+  )
+  .then(function (result) {
+    // console.log(result)
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
 });
 
 app.listen(PORT);
