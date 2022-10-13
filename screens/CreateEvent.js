@@ -26,7 +26,6 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import InterestSelector from "../components/InterestSelect";
-import { AuthContext } from "../AuthContext";
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McText, McIcon, McAvatar } from "../components";
@@ -89,7 +88,6 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const {UserId, updateData} = useContext(AuthContext)
   const theme = useColorScheme();
   var backgroundColorStyle = {
     backgroundColor: COLORS.white,
@@ -149,7 +147,7 @@ const CreateEvent = ({ navigation, routenew }) => {
             is24Hour={true}
             onChange={onDateChange}
             style={{
-              marginTop: 80,
+              marginTop: height/2.5,
             }}
           />
         </View>
@@ -200,7 +198,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 marginTop: 5,
               }}
               onPress={() =>{
-                navigation.navigate(PreviewEventDetail);
+                navigation.navigate('PreviewEventDetail');
               }}
             >
               <McText

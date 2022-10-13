@@ -17,7 +17,7 @@ import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ImageViewer from 'react-native-image-zoom-viewer';
-// import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../AuthContext';
 
 
 import {memo} from "react"
@@ -28,7 +28,15 @@ import UsedServer from '../constants/servercontants';
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
+const img = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fnewevolutiondesigns.com%2Fcool-4k-wallpapers-for-desktop-ipad-and-iphone&psig=AOvVaw3IboKb7vdlKcS9FUJYEVx3&ust=1665266364697000&source=images&cd=vfe&ved=0CAkQjRxqFwoTCIC6j-OOz_oCFQAAAAAdAAAAABAM"
+
 const dummyData = ["Title", "StartingTime", "Date", "Organizer", "Description", "Location", "Visibility", "Social", "Academic"]
+
+function postEvent(dummyData){
+  console.log(dummyData)
+  var outData = []
+  outData.push("")
+}
 
 const PreviewEventDetail = ({ navigation, route }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -43,125 +51,6 @@ const PreviewEventDetail = ({ navigation, route }) => {
   const [like, setLike] = useState(false);
   const [join, setJoin] = useState(false);
   const [shoutout, setShoutout] = useState(false);
-
-  // const handleLike = async () => {
-  //   if (like) {
-  //     // console.log(like);
-  //     setLike(false);
-  //     console.log("HEREEE2: ", like);
-  //     console.log("HEREEE");
-  //     const resp = await fetch("http://10.0.2.2:8080/delete_like", {
-  //       // deleting for true, need to change
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         uniqueID: selectedEvent?.uniqueID,
-  //         UserId: UserId,
-  //       }),
-  //     });
-  //   } else {
-  //     setLike(true);
-  //     console.log("HEREEE2: ", like);
-  //     const resp = await fetch("http://10.0.2.2:8080/create_like", {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         uniqueID: selectedEvent?.uniqueID,
-  //         UserId: UserId,
-  //       }),
-  //     });
-  //   }
-  // };
-  
-
-  const handleJoin = async () => {
-    let selEvent = selectedEvent;
-    if (join) {
-      // console.log(shoutout);
-      setJoin(false);
-      console.log("HEREEE2: ", join);
-      console.log("HEREEE");
-      const resp = await fetch(UsedServer + "/delete_join", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.joined = 0;
-    } else {
-      setJoin(true);
-      console.log("HEREEE2: ", join);
-      const resp = await fetch(UsedServer + "/create_join", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId:UserId,
-        }),
-      });
-      selEvent.joined = 1;
-    }
-    setSelectedEvent(selEvent);
-    updateData(selEvent);
-  };
-  
-
-  const handleShoutout = async () => {
-    let selEvent = selectedEvent;
-    if (shoutout) {
-      // console.log(shoutout);
-      setShoutout(false);
-      console.log("HEREEE2: ", shoutout);
-      console.log("HEREEE");
-      const resp = await fetch(UsedServer + "/delete_shoutOut", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.shouted = 0;
-    } else {
-      setShoutout(true);
-      console.log("HEREEE2: ", shoutout);
-      const resp = await fetch(UsedServer + "/create_shoutOut", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.shouted = 1;
-    }
-    setSelectedEvent(selEvent);
-    updateData(selEvent);
-  };
-  // console.log(selectedEvent)
-
   const  [joindedEvent, setJoindedEvent] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
@@ -171,58 +60,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
       setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
       // console.log(e.nativeEvent);
   },[]);
-      
-  useEffect(()=>{
-    let {selectedEvent} = route.params;
-    // console.log(selectedEvent);
-    setSelectedEvent(selectedEvent);
-    if(selectedEvent.joined == 1){
-      setJoin(true);
-    }
-    if(selectedEvent.shouted == 1){
-      setShoutout(true);
-    }
-    // if(selectedEvent.liked == 1){
-    //   setLike(true);
-    // }
-    // console.log(selectedEvent.id);
-  },[])
-
-  let iD;
-    if (selectedEvent?.userID !== undefined){
-        iD = selectedEvent?.userID;
-    } else {
-        iD = 'bad';
-    }
-
-  const fetchData = async () => {
-        let data;
-        console.log('id:' + iD)
-        if(iD !== 'bad') {
-            const resp = await fetch(UsedServer + '/organization_details', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: iD
-                    })
-            });
-            data = await resp.json();
-        }
-        else{
-            data = ['help'];
-        }
-        setData(data);
-        console.log(data);
-        setLoading(false);
-    };
-    // console.log(iD)
-    //console.log('____________________________________________________________________________');
-    useEffect(() => {
-        fetchData();
-    },[iD]);
+ 
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -239,7 +77,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
         
         <ImageBackground
           resizeMode='cover'
-          source={{uri:selectedEvent?.image}}
+          source={{uri:img}}
           style = {{
             width: '100%',
             height: 
@@ -273,7 +111,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
 
               <TouchableOpacity
               onPress={() =>{
-                navigation.push('ImageScreen', {img: selectedEvent?.image})
+                navigation.push('ImageScreen', {img: img})
               }}
               style={{
                   width: 40,
@@ -372,7 +210,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
           <Image
                 style={styles.orgProfilePic}
                 source={{
-                    uri:data.image
+                    uri:img
                 }}/>
             <McText h4 numberOfLines={1} style={{
               letterSpacing: 1,
@@ -411,7 +249,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
               tintColor:COLORS.purple,
             }}/>
             <TouchableOpacity onPress={()=>{
-                var uri = selectedEvent?.location
+                var uri = dummyData[5]
                 Linking
                 .openURL(uri)
                 .catch(err => console.log('Error', err));
@@ -427,28 +265,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
               </McText>
               </TouchableOpacity>
           </LocationSection>
-          {/* <LinkSection>
-        <McIcon source ={icons.links} size={20} style={{
-              margin:4,
-              tintColor:COLORS.gray,
-            }}/>
-            <TouchableOpacity onPress={()=>{
-                var uri = selectedEvent?.link
-                Linking
-                .openURL(uri)
-                .catch(err => console.log('Error', err));
-                }}>
-              <McText h4 style={{
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                marginTop: -1, 
-                width: width * 0.83,
-                }}
-                numberOfLines={1}>
-                  {selectedEvent?.link}
-              </McText>
-              </TouchableOpacity>
-          </LinkSection> */}
+          
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
@@ -469,62 +286,27 @@ const PreviewEventDetail = ({ navigation, route }) => {
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-         <View style={styles.otherContainer}>
-          <UserOptionsSection>
-            <View style={{
-              alignItems: 'center',
-              marginRight: 60
-            }}>
-            <TouchableOpacity style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                      backgroundColor:join ? COLORS.purple: 'transparent' ,
-                      borderWidth: 1,
-                      borderColor: COLORS.gray,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                          join ? setJoin(false) : setJoin(true)
-                          console.log("Join button clicked")
-                          handleJoin()
-                          // console.log(selectedEvent)
-                        
-              }}>
-                <McIcon source={icons.check} size={32} style={{
-              tintColor:join ? COLORS.white: COLORS.gray,
-              marginHorizontal: 44
-            }}/>
-            </TouchableOpacity>
-              <McText body3>Join</McText>
-            </View>
-            <View style={{
-              alignItems: 'center'
-            }}>
-            <TouchableOpacity style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                      borderWidth: 1,
-                      borderColor: COLORS.gray,
-                      backgroundColor: shoutout ? COLORS.purple : 'transparent',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                        console.log("ShoutOut");
-                        console.log("HEREEE: ", shoutout);
-                        handleShoutout();
-                      }}>
-                <McIcon source={icons.shoutout}
-                  size={32}
-                  style={{
-                    tintColor: shoutout ? COLORS.white : COLORS.gray,
-                  }}/>
-            </TouchableOpacity>
-            <McText body3>ShoutOut</McText>
-            </View>
-          </UserOptionsSection>
-        </View>
+      <SectionDone>
+          <TouchableOpacity
+          style={{
+            height: 60,
+            marginBottom: 60,
+            borderRadius: 80,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            backgroundColor: COLORS.purple,
+            justifyContent: 'center',
+            alignItems: 'center'
+            }}
+          onPress={()=>{
+                      // test();
+                      // navigation.navigate('Featured');
+                      postEvent(dummyData)
+                      }}
+                  >
+                  <McText h3 style={{margin: 8}}>POST</McText>
+          </TouchableOpacity>
+      </SectionDone>
     </View>
   );
 };
@@ -612,6 +394,16 @@ const VisibilitySec = styled.View`
   borderRadius: 10;
   align-items: center;
 `;
+
+const SectionDone = styled.View`
+  flex: 1;
+  position: absolute;
+  bottom: 0;
+  right: 1;
+  backgroundColor: transparent;
+  marginHorizontal: 32px;
+`;
+
 /*
 const BottomBarSection = styled.View`
   height: 80px;
