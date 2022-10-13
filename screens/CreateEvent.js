@@ -55,10 +55,29 @@ const dummyTags = [
 ];
 
 const inTags = [];
-var outTags = [];
+var outTags = {};
+function outDict(dict) {
+
+  var outList = []
+  for (const [key, value] of Object.entries(dict)) {
+      if (value == true) {
+          outList.push(key)
+      }
+  }
+  return outList
+ }
+
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const CreateEvent = ({ navigation, routenew }) => {
+  const [title,setTitle] = useState('')
+  const [location,setLocation] = useState('')
+  const [image,setImage] = useState(null)
+  var date = null
+  var startTime = null
+  var endTime = null
+  const [desc, setDesc] = useState('')
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,7 +119,16 @@ const CreateEvent = ({ navigation, routenew }) => {
                 marginTop: 5,
               }}
               onPress={() =>{
-                navigation.navigate('PreviewEventDetail');
+                console.log('Title: ' + title)
+                console.log('Date: '+ date)
+                console.log('Start: ' + startTime)
+                console.log('End: ' + endTime)
+                console.log('Desc: ' +desc)
+                console.log('Loc: ' +location)
+                var outList = outDict(outTags)
+                console.log('Tags: ' + outList)
+                const out = {title: title, date: date, start: startTime, end: endTime, desc: desc, loc:location, tags: outList}
+                navigation.navigate('PreviewEventDetail', {createEvent: out});
               }}
             >
               <McText
@@ -148,7 +176,12 @@ const CreateEvent = ({ navigation, routenew }) => {
               }}
             />
           </TouchableOpacity> */}
-          <ImagePickerComponent></ImagePickerComponent>
+          <View style={{alignItems:'center', marginLeft: -50}}>
+          <ImagePickerComponent>
+            image={image}  
+            setImage={setImage}         
+          </ImagePickerComponent>
+          </View>
           <View
             style={{
               marginVertical: 8,
@@ -166,6 +199,8 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Enter a short, descriptive title."
                 placeholderTextColor={COLORS.gray1}
+                value={title}
+                onChangeText={setTitle}
                 multiline={true}
                 maxLength={100}
                 //onChange={handleOnSearch}
@@ -198,6 +233,8 @@ const CreateEvent = ({ navigation, routenew }) => {
                 placeholderTextColor={COLORS.gray1}
                 multiline={true}
                 maxLength={1000}
+                value={desc}
+                onChangeText={setDesc}
                 //onChange={handleOnSearch}
                 //value={bad}
                 style={{
@@ -224,7 +261,7 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
 
             <SectionTextIn>
-              <DateTimePickerPopup
+              <DateTimePickerPopup dateTime={date}
                 mode="date"
                 placeholderText="Pick a date"
                 customStyles={{
@@ -303,6 +340,8 @@ const CreateEvent = ({ navigation, routenew }) => {
                 placeholder="Where will your event happen?"
                 placeholderTextColor={COLORS.gray1}
                 maxLength={100}
+                value={location}
+                onChangeText={setLocation}
                 style={{
                   ...FONTS.body3,
                   padding: 10,

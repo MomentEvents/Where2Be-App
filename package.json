@@ -57,15 +57,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
-<<<<<<< HEAD
-    "@types/react": "~18.0.0",
-    "@types/react-native": "~0.69.1",
-=======
     "@types/react": "^18.0.21",
     "@types/react-native": "^0.70.4",
     "@types/react-native-modern-datepicker": "^1.0.1",
     "@types/styled-components": "^5.1.26",
->>>>>>> 10d0b9dba25a434d85b609d1afb51b1a3c6ebc36
     "react-native-svg-transformer": "^1.0.0",
     "typescript": "^4.6.3"
   },

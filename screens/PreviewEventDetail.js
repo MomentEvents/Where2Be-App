@@ -39,19 +39,26 @@ function postEvent(dummyData){
 }
 
 const PreviewEventDetail = ({ navigation, route }) => {
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [createEvent, setCreateEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  const {UserId, updateData} = useContext(AuthContext)
+  const {UserId, setupData, Data, test, RefreshD, FinImport} = useContext(AuthContext)
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
   }
+
+  useEffect(()=>{
+    let {createEvent} = route.params;
+    // console.log(createEvent);
+    setCreateEvent(createEvent);
+    // console.log(createEvent)
+    // if(createEvent.liked == 1){
+    //   setLike(true);
+    // }
+    // console.log(createEvent.id);
+  },[])
   
-  const [like, setLike] = useState(false);
-  const [join, setJoin] = useState(false);
-  const [shoutout, setShoutout] = useState(false);
-  const  [joindedEvent, setJoindedEvent] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
   // console.log(joindedEvent)
@@ -90,9 +97,9 @@ const PreviewEventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
-                  // updateData(selectedEvent)
+                  // updateData(createEvent)
                   navigation.goBack();
-                  // updateData(selectedEvent);
+                  // updateData(createEvent);
                 }}
                 style={{
                   width: 56,
@@ -152,10 +159,10 @@ const PreviewEventDetail = ({ navigation, route }) => {
                           tintColor:COLORS.purple,
                         }}/> */}
                       <McText h3 style={{letterSpacing: 1.5, margin: 6, marginRight: 0, color: COLORS.purple, opacity: 0.85 }}>
-                        {dummyData[2]}
+                        {createEvent?.date}
                     </McText>
                     <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
-                        {dummyData[1]}
+                        {createEvent?.start}
                     </McText>
                     </View>
                   </View>
@@ -167,12 +174,12 @@ const PreviewEventDetail = ({ navigation, route }) => {
         </ImageBackground>
         {/* buttons group section */}
         <McText h1 numberOfLines={2} style={{width: width*0.8, marginHorizontal: 15, marginBottom: -5,}}>
-          {dummyData[0]}
+          {createEvent?.title}
           </McText>
         <ButtonSection>
           <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {
-              dummyData.slice(7).map((taglist)=> 
+              createEvent?.tags.map((taglist)=> 
                 <TouchableOpacity
                   style={{
                   width: taglist.length *9 + 15,
@@ -202,8 +209,8 @@ const PreviewEventDetail = ({ navigation, route }) => {
             justifyContent: 'center'
           }} 
           // onPress={()=>{
-          //       navigation.push('OrganizationDetail', {OrgID: selectedEvent?.userID})
-          //       console.log(selectedEvent)
+          //       navigation.push('OrganizationDetail', {OrgID: createEvent?.userID})
+          //       console.log(createEvent)
           //       console.log('lololololol')
           //     }}
               >
@@ -217,7 +224,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
               textTransform: 'uppercase',
               width: width/1.25
               }}>
-                {dummyData[3]}
+                {UserId}
             </McText>
             </TouchableOpacity>
         </OwnerSection>
@@ -232,7 +239,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
             <McText 
               onTextLayout={onTextLayout}
               numberOfLines={textShown ? undefined : 3} body3>
-                {dummyData[4]}
+                {createEvent?.desc}
             </McText>
               {
                   lengthMore ? <McText
@@ -249,7 +256,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
               tintColor:COLORS.purple,
             }}/>
             <TouchableOpacity onPress={()=>{
-                var uri = dummyData[5]
+                var uri = createEvent?.loc
                 Linking
                 .openURL(uri)
                 .catch(err => console.log('Error', err));
@@ -261,7 +268,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
                 width: width * 0.83,
                 }}
                 >
-                  {dummyData[5]}
+                  {createEvent?.loc}
               </McText>
               </TouchableOpacity>
           </LocationSection>

@@ -65,6 +65,7 @@ class DateTimePickerPopup extends Component {
           {this.props.mode === "date" ? <DatePicker
               onSelectedChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
+                
               }}
               mode="calendar"
               onTimeChange={(newDate) => {

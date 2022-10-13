@@ -24,9 +24,9 @@ export default function ImagePickerComponent() {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 0, alignItems: 'center', justifyContent: 'center' }}>
+      {image && <Image source={{ uri: image }} style={{ width: 350, height: 250 }} />}
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
     </View>
   );
 }
