@@ -400,7 +400,7 @@ const Personal = ({ navigation, route }) => {
           <View>
             <SectionTitle>
               <McText h3>
-                {sdata.header}
+                {sdata === null ? null : sdata.header}
               </McText>
             </SectionTitle>
             <View>
@@ -409,7 +409,7 @@ const Personal = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata.data}
+                data={sdata === null ? null : sdata.data}
                 renderItem={_renderItem}
               ></FlatList>
             </View>
