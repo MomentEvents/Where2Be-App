@@ -25,17 +25,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import InterestSelector from "./InterestSelect";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
-import { McText, McIcon, McAvatar } from ".";
+import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import DatePicker from "react-native-modern-datepicker";
+import DatePicker from "./src/index";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import FluidDateTimePicker from "./DateTimePickerPopup";
 
 class DateTimePickerPopup extends Component {
   constructor(props) {

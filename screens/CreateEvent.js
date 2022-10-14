@@ -35,7 +35,7 @@ import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePickerPopup from "../components/DateTimePickerPopup";
+import DateTimePickerPopup from "../components/DateTimePickerPopup/DateTimePickerPopup";
 import ImagePickerComponent from "../components/ImagePickerComponent";
 
 var width = Dimensions.get("window").width; //full width
