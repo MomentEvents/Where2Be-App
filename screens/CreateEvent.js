@@ -187,6 +187,7 @@ const CreateEvent = ({ navigation, routenew }) => {
           <View
             style={{
               marginVertical: 8,
+              
             }}
           >
             <McText

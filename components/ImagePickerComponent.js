@@ -28,7 +28,7 @@ class ImagePickerComponent extends Component {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 1,
+      quality: 100,
     });
 
     console.log(result);
@@ -64,8 +64,6 @@ class ImagePickerComponent extends Component {
           }}
           onPress={this.pickImage}
         >
-         {//Chirag's an idiot\
-         }
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
