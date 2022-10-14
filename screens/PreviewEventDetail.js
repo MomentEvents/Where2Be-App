@@ -84,7 +84,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
         
         <ImageBackground
           resizeMode='cover'
-          source={{uri:img}}
+          source={{uri:createEvent?.image}}
           style = {{
             width: '100%',
             height: 
@@ -118,7 +118,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
 
               <TouchableOpacity
               onPress={() =>{
-                navigation.push('ImageScreen', {img: img})
+                navigation.push('ImageScreen', {img: createEvent?.image})
               }}
               style={{
                   width: 40,
@@ -159,10 +159,14 @@ const PreviewEventDetail = ({ navigation, route }) => {
                           tintColor:COLORS.purple,
                         }}/> */}
                       <McText h3 style={{letterSpacing: 1.5, margin: 6, marginRight: 0, color: COLORS.purple, opacity: 0.85 }}>
-                        {createEvent?.date}
+                      {moment(createEvent?.date).format('MMM DD').toUpperCase()}
                     </McText>
                     <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
-                        {createEvent?.start}
+                    {createEvent?.start}
+                    </McText>
+                    <McText h3 style={{letterSpacing: 1.2, marginTop:6, marginHorizontal: -6, color: COLORS.white, opacity: 0.85 }}> to </McText>
+                    <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
+                    {createEvent?.end}
                     </McText>
                     </View>
                   </View>
@@ -217,7 +221,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
           <Image
                 style={styles.orgProfilePic}
                 source={{
-                    uri:img
+                    uri: createEvent?.image
                 }}/>
             <McText h4 numberOfLines={1} style={{
               letterSpacing: 1,
@@ -308,7 +312,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
           onPress={()=>{
                       // test();
                       // navigation.navigate('Featured');
-                      postEvent(dummyData)
+                      console.log(createEvent)
                       }}
                   >
                   <McText h3 style={{margin: 8}}>POST</McText>

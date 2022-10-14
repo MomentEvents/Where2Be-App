@@ -128,8 +128,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 console.log('Loc: ' +location)
                 var outList = outDict(outTags)
                 console.log('Tags: ' + outList)
-                const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList}
-                // navigation.navigate('PreviewEventDetail', {createEvent: out});
+                console.log('Image: ', img)
+                const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
+                navigation.navigate('PreviewEventDetail', {createEvent: out});
               }}
             >
               <McText
@@ -178,7 +179,7 @@ const CreateEvent = ({ navigation, routenew }) => {
             />
           </TouchableOpacity> */}
           <View style={{alignItems:'center', marginLeft: -50}}>
-          <ImagePickerComponent>
+          <ImagePickerComponent setImg={setImg}>
             image={image}  
             setImage={setImage}         
           </ImagePickerComponent>
