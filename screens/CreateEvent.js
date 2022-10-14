@@ -73,10 +73,11 @@ const CreateEvent = ({ navigation, routenew }) => {
   const [title,setTitle] = useState('')
   const [location,setLocation] = useState('')
   const [image,setImage] = useState(null)
-  var date = null
-  var startTime = null
-  var endTime = null
+  const [date,setDate] = useState()
   const [desc, setDesc] = useState('')
+  const [start, setStart] = useState()
+  const [end, setEnd] = useState()
+  const [img, setImg] = useState()
 
 
   return (
@@ -121,14 +122,14 @@ const CreateEvent = ({ navigation, routenew }) => {
               onPress={() =>{
                 console.log('Title: ' + title)
                 console.log('Date: '+ date)
-                console.log('Start: ' + startTime)
-                console.log('End: ' + endTime)
+                console.log('Start: ' + start)
+                console.log('End: ' + end)
                 console.log('Desc: ' +desc)
                 console.log('Loc: ' +location)
                 var outList = outDict(outTags)
                 console.log('Tags: ' + outList)
-                const out = {title: title, date: date, start: startTime, end: endTime, desc: desc, loc:location, tags: outList}
-                navigation.navigate('PreviewEventDetail', {createEvent: out});
+                const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList}
+                // navigation.navigate('PreviewEventDetail', {createEvent: out});
               }}
             >
               <McText
@@ -261,9 +262,9 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
 
             <SectionTextIn>
-              <DateTimePickerPopup dateTime={date}
+              <DateTimePickerPopup setDate={setDate}
                 mode="date"
-                placeholderText="Pick a date"
+                placeholderText="Pick a date."
                 customStyles={{
                   ...FONTS.body3,
                   color: COLORS.white,
@@ -291,7 +292,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               }}
             >
               <SectionTimings>
-                <DateTimePickerPopup
+                <DateTimePickerPopup setDate={setStart}
                   mode="time"
                   placeholderText="Start"
                   customStyles={{
@@ -308,7 +309,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 }}
               >
                 <SectionTimings>
-                <DateTimePickerPopup
+                <DateTimePickerPopup setDate={setEnd}
                   mode="time"
                   placeholderText="End"
                   customStyles={{

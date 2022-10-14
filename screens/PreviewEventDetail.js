@@ -30,7 +30,7 @@ var height = Dimensions.get('window').height; //full height
 
 const img = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fnewevolutiondesigns.com%2Fcool-4k-wallpapers-for-desktop-ipad-and-iphone&psig=AOvVaw3IboKb7vdlKcS9FUJYEVx3&ust=1665266364697000&source=images&cd=vfe&ved=0CAkQjRxqFwoTCIC6j-OOz_oCFQAAAAAdAAAAABAM"
 
-const dummyData = ["Title", "StartingTime", "Date", "Organizer", "Description", "Location", "Visibility", "Social", "Academic"]
+const dummyData = ["Title", "StartingTime", "Date", "Organizer", "Description", "Location", "Public", "Social", "Academic"]
 
 function postEvent(dummyData){
   console.log(dummyData)

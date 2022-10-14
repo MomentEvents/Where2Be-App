@@ -65,11 +65,12 @@ class DateTimePickerPopup extends Component {
           {this.props.mode === "date" ? <DatePicker
               onSelectedChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
-                
+                this.props.setDate(newDate)
               }}
               mode="calendar"
               onTimeChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
+                this.props.setDate(newDate)
               }}
               options={{
                 backgroundColor: "#212121",
@@ -83,10 +84,12 @@ class DateTimePickerPopup extends Component {
             <DatePicker
               onSelectedChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
+                this.props.setDate(newDate)
               }}
               mode="time"
               onTimeChange={(newDate) => {
                 this.setState({ modalVisible: false, date: newDate });
+                this.props.setDate(newDate)
               }}
               options={{
                 backgroundColor: "#212121",
