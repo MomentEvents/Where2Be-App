@@ -70,15 +70,40 @@ function outDict(dict) {
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const CreateEvent = ({ navigation, routenew }) => {
-  const [title,setTitle] = useState('')
-  const [location,setLocation] = useState('')
+  const [title,setTitle] = useState(null)
+  const [location,setLocation] = useState(null)
   const [image,setImage] = useState(null)
   const [date,setDate] = useState()
-  const [desc, setDesc] = useState('')
+  const [desc, setDesc] = useState(null)
   const [start, setStart] = useState()
   const [end, setEnd] = useState()
   const [img, setImg] = useState()
 
+  const handleSubmit = () => {
+    console.log('Title: ' + title)
+    console.log('Date: '+ date)
+    console.log('Start: ' + start)
+    console.log('End: ' + end)
+    console.log('Desc: ' +desc)
+    console.log('Loc: ' +location)
+    var outList = outDict(outTags)
+    console.log('Tags: ' + outList)
+    console.log('Image: ', img)
+    if(!img || !title || !date || !start || !end || !desc || !location){
+      Alert.alert("Error", "Please fill in all the necessary fields.")
+      return;
+    }
+    if(start >= end){
+      Alert.alert("Error", "Please make the start time before the end time.")
+      return;
+    }
+    if(outList.length == 0 || outList.lenghth > 2){
+      Alert.alert("Error", "Please select up to 2 tags")
+      return;
+    }
+    const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
+    navigation.navigate('PreviewEventDetail', {createEvent: out});
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,17 +145,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 marginTop: 5,
               }}
               onPress={() =>{
-                console.log('Title: ' + title)
-                console.log('Date: '+ date)
-                console.log('Start: ' + start)
-                console.log('End: ' + end)
-                console.log('Desc: ' +desc)
-                console.log('Loc: ' +location)
-                var outList = outDict(outTags)
-                console.log('Tags: ' + outList)
-                console.log('Image: ', img)
-                const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
-                navigation.navigate('PreviewEventDetail', {createEvent: out});
+                handleSubmit();
               }}
             >
               <McText
@@ -156,28 +171,6 @@ const CreateEvent = ({ navigation, routenew }) => {
           >
             Image
           </McText>
-          {/* <TouchableOpacity
-            style={{
-              height: SIZES.height / 4,
-              width: SIZES.width * 0.75,
-              backgroundColor: COLORS.black,
-              borderRadius: 10,
-              marginBottom: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 2,
-              borderColor: COLORS.gray,
-            }}
-          >
-            <McIcon
-              source={icons.addphoto}
-              size={60}
-              style={{
-                margin: 4,
-                tintColor: COLORS.purple,
-              }}
-            />
-          </TouchableOpacity> */}
           <View style={{alignItems:'center', marginLeft: -50}}>
           <ImagePickerComponent setImg={setImg}>
             image={image}  
@@ -206,8 +199,6 @@ const CreateEvent = ({ navigation, routenew }) => {
                 onChangeText={setTitle}
                 multiline={true}
                 maxLength={100}
-                //onChange={handleOnSearch}
-                //value={bad}
                 style={{
                   ...FONTS.body3,
                   marginTop: 2,
@@ -263,7 +254,6 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-            <SectionTextIn>
               <DateTimePickerPopup setDate={setDate}
                 mode="date"
                 placeholderText="Pick a date."
@@ -273,7 +263,6 @@ const CreateEvent = ({ navigation, routenew }) => {
                   padding: 10,
                 }}
               />
-            </SectionTextIn>
           </View>
           <View
             style={{
@@ -293,7 +282,6 @@ const CreateEvent = ({ navigation, routenew }) => {
                 flexDirection: "row",
               }}
             >
-              <SectionTimings>
                 <DateTimePickerPopup setDate={setStart}
                   mode="time"
                   placeholderText="Start"
@@ -304,13 +292,11 @@ const CreateEvent = ({ navigation, routenew }) => {
                     padding: 10,
                   }}
                 />
-              </SectionTimings>
               <View
                 style={{
                   paddingLeft: SIZES.width / 10,
                 }}
               >
-                <SectionTimings>
                 <DateTimePickerPopup setDate={setEnd}
                   mode="time"
                   placeholderText="End"
@@ -321,7 +307,6 @@ const CreateEvent = ({ navigation, routenew }) => {
                     padding: 10,
                   }}
                 />
-                </SectionTimings>
               </View>
             </View>
           </View>

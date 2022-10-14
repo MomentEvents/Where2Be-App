@@ -61,54 +61,65 @@ class DateTimePickerPopup extends Component {
           transparent={true}
           visible={this.state.modalVisible}
         >
-          <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#00000077"}}>
-          {this.props.mode === "date" ? <DatePicker
-              onSelectedChange={(newDate) => {
-                this.setState({ modalVisible: false, date: newDate });
-                this.props.setDate(newDate)
-              }}
-              mode="calendar"
-              onTimeChange={(newDate) => {
-                this.setState({ modalVisible: false, date: newDate });
-                this.props.setDate(newDate)
-              }}
-              options={{
-                backgroundColor: "#212121",
-                textHeaderColor: "#FFFFFF",
-                textDefaultColor: "#FFFFFF",
-                mainColor: "#777777",
-                textSecondaryColor: "#FFFFFF",
-                borderColor: "000000",
-              }}
-            ></DatePicker> : 
-            <DatePicker
-              onSelectedChange={(newDate) => {
-                this.setState({ modalVisible: false, date: newDate });
-                this.props.setDate(newDate)
-              }}
-              mode="time"
-              onTimeChange={(newDate) => {
-                this.setState({ modalVisible: false, date: newDate });
-                this.props.setDate(newDate)
-              }}
-              options={{
-                backgroundColor: "#212121",
-                textHeaderColor: "#FFFFFF",
-                textDefaultColor: "#FFFFFF",
-                mainColor: "#777777",
-                textSecondaryColor: "#FFFFFF",
-                borderColor: "000000",
-              }}
-            ></DatePicker>}
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              backgroundColor: "#00000077",
+            }}
+          >
+            {this.props.mode === "date" ? (
+              <DatePicker
+                current={this.state.date}
+                onSelectedChange={(newDate) => {
+                  this.setState({ modalVisible: false, date: newDate });
+                  this.props.setDate(newDate);
+                }}
+                mode="calendar"
+                onTimeChange={(newDate) => {
+                  this.setState({ modalVisible: false, date: newDate });
+                  this.props.setDate(newDate);
+                }}
+                options={{
+                  backgroundColor: "#212121",
+                  textHeaderColor: "#FFFFFF",
+                  textDefaultColor: "#FFFFFF",
+                  mainColor: "#777777",
+                  textSecondaryColor: "#FFFFFF",
+                  borderColor: "000000",
+                }}
+              ></DatePicker>
+            ) : (
+              <DatePicker
+                onSelectedChange={(newDate) => {
+                  this.setState({ modalVisible: false, date: newDate });
+                  this.props.setDate(newDate);
+                }}
+                mode="time"
+                current={this.state.date}
+                onTimeChange={(newDate) => {
+                  this.setState({ modalVisible: false, date: newDate });
+                  this.props.setDate(newDate);
+                }}
+                options={{
+                  backgroundColor: "#212121",
+                  textHeaderColor: "#FFFFFF",
+                  textDefaultColor: "#FFFFFF",
+                  mainColor: "#777777",
+                  textSecondaryColor: "#FFFFFF",
+                  borderColor: "000000",
+                }}
+              ></DatePicker>
+            )}
           </View>
         </Modal>
-        <TouchableOpacity
+        {this.props.mode === "time" ? (
+          <TouchableOpacity
           onPress={() => {
             this.setState({ modalVisible: true });
           }}
         >
-
-            
+          <SectionTimings>
             {this.state.date === undefined ? (
               <Text
                 style={{
@@ -123,13 +134,36 @@ class DateTimePickerPopup extends Component {
                 {this.props.placeholderText}
               </Text>
             ) : (
-              <Text
-                style={this.props.customStyles}
-              >
-                {this.state.date}
-              </Text>
+              <Text style={this.props.customStyles}>{this.state.date}</Text>
             )}
+          </SectionTimings>
         </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ modalVisible: true });
+            }}
+          >
+            <SectionTextIn>
+              {this.state.date === undefined ? (
+                <Text
+                  style={{
+                    ...FONTS.body3,
+                    color: COLORS.gray1,
+                    marginTop: 3,
+                    marginBottom: 3,
+                    marginLeft: 5,
+                    padding: 4,
+                  }}
+                >
+                  {this.props.placeholderText}
+                </Text>
+              ) : (
+                <Text style={this.props.customStyles}>{this.state.date}</Text>
+              )}
+            </SectionTextIn>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -143,6 +177,14 @@ const SectionTextIn = styled.View`
   border: 2px;
   border-color: ${COLORS.gray};
   align-items: flex-start;
+`;
+const SectionTimings = styled.View`
+  background-color: ${COLORS.black};
+  width: ${SIZES.width * 0.33};
+  border-radius: 10;
+  justify-content: center;
+  border: 2px;
+  border-color: ${COLORS.gray};
 `;
 
 export default DateTimePickerPopup;
