@@ -64,6 +64,8 @@ class ImagePickerComponent extends Component {
           }}
           onPress={this.pickImage}
         >
+         {//Chirag's an idiot\
+         }
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
