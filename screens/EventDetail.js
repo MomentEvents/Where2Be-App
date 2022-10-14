@@ -99,6 +99,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.joined = 0;
+      selEvent.num_joins = selEvent.num_joins - 1;
     } else {
       setJoin(true);
       console.log("HEREEE2: ", join);
@@ -114,6 +115,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.joined = 1;
+      selEvent.num_joins = selEvent.num_joins + 1;
     }
     setSelectedEvent(selEvent);
     updateData(selEvent);
@@ -140,6 +142,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.shouted = 0;
+      selEvent.num_shouts = selEvent.num_shouts - 1;
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
@@ -155,6 +158,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.shouted = 1;
+      selEvent.num_shouts = selEvent.num_shouts + 1;
     }
     setSelectedEvent(selEvent);
     updateData(selEvent);

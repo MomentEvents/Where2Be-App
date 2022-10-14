@@ -43,25 +43,41 @@ export const AuthProvider = ({children}) =>{
     for(var l1 in data){
       // console.log('rows?:', typeof(l1), typeof(n));
       let row_num = parseInt(l1) + n
+      // if(nIn == 0){
+      //   console.log(row_num, l1);
+      // }
       // console.log('row_num?:', typeof(row_num))
       newR.push(false);
-      for(var l2 in data[l1].data){
-        let key = data[l1].data[l2].id;
+      let data_row =[]
+      if(data[l1].data){
+        data_row = data[l1].data;
+      }else{
+        data_row = data[l1];
+      }
+      for(var l2 in data_row){
+        let col_num = parseInt(l2)
+        let key = data_row[l2].id;
         // let key = event.id;
         // dict[key] = [l1,l2];
 
         // cdict[key] = {joined : event.joined, shouted : event.shouted}
         if(!(key in dict)){
-          dict[key] = []
+          dict[key] = [];
+          dict[key].push([row_num,col_num]);
+        }else{
+          if(!dict[key].includes([row_num,col_num])){
+            dict[key].push([row_num,col_num]);
+          }
         }
-        dict[key].push([row_num,l2]);
+        // console.log(nIn, row_num, col_num);
+        
         // console.log(l1,l2, data[l1].data[l2].id)
       }
       setData(data[l1], row_num);
     }
     //{/* Choice_Dict[item.id] */}
     setRefreshD(newR);
-    
+    // console.log('dict: ', dict)
     setDict(dict);
     let t= FinImport;
     t[nIn] = true;
@@ -156,6 +172,7 @@ export const AuthProvider = ({children}) =>{
     
     if(event.id in Dict){
       const idxs = Dict[event.id];
+      // console.log(idxs, event.id)
       for(const idx of idxs){
         let r = RefreshD;
         r[idx[0]] = !r[idx[0]];
@@ -164,9 +181,23 @@ export const AuthProvider = ({children}) =>{
         // })
         const newRow = Data()[idx[0]]//.data.slice()
         // // [...Data()[idx[0]]]
-        let eventsData = newRow.data.slice()
-        eventsData[idx[1]] = event
-        setData({header: Data()[idx[0]].header, data: eventsData}, idx[0])
+        let eventsData= [];
+        
+        if(newRow.data){
+          eventsData = newRow.data.slice();
+          if(eventsData[idx[1]].id == event.id){
+            eventsData[idx[1]] = event
+            setData({header: Data()[idx[0]].header, data: eventsData}, idx[0])
+          }
+        }else{
+          eventsData = newRow.slice();
+          if(eventsData[idx[1]].id == event.id){
+            eventsData[idx[1]] = event
+            setData(eventsData, idx[0])
+          }
+        }
+        
+        
         // console.log(r);
         setRefreshD(r);
         // setData1(newArr);
@@ -181,6 +212,23 @@ export const AuthProvider = ({children}) =>{
   const test = () => {
     console.log(Choice_Dict[8163]);
   }
+
+  const refreshFeat = () =>{
+    setDict({})
+  }
+
+  // const refreshPCal = () =>{
+  //   for(var ev in PCalendar){
+  //     let arr = Dict[PCalendar[ev].id];
+  //     var index = arr.indexOf([8, parseInt(ev)]);
+  //     if (index > -1) {
+  //       arr.splice(index, 1);
+  //     }
+  //     setDict({...Dict, 
+  //       [PCalendar[ev].id] : arr
+  //     })
+  //   }
+  // }
 
 
   const loginTok = (udata) =>{
@@ -211,7 +259,7 @@ export const AuthProvider = ({children}) =>{
       //let usrToken = await keychain.getGenericPassword('helpeg');
       let uid = await AsyncStorage.getItem('uid');
       let pass = await AsyncStorage.getItem('pass');
-      console.log('starting loading in', UsedServer)
+      // console.log('starting loading in', UsedServer)
       const resp = await fetch(UsedServer + "/user_test", {
         //10.0.2.2:8080
         method: "POST",
@@ -229,7 +277,7 @@ export const AuthProvider = ({children}) =>{
       //console.log("usrToken", usrToken);
       setUserData(result);
       setUserId(uid);
-      console.log('done loading in')
+      // console.log('done loading in')
     }
     catch(e){
       console.log('isLogged in error', e);
@@ -246,7 +294,7 @@ export const AuthProvider = ({children}) =>{
 
   return(
     <AuthContext.Provider value={{loginTok, logoutTok, UserId, loadingToken, 
-      UserData, updateData, setupData, test, RefreshD, Data, FinImport}}>
+      UserData, updateData, setupData, test, RefreshD, Data, FinImport, refreshFeat}}>
       {children}
     </AuthContext.Provider>
   )

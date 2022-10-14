@@ -47,11 +47,13 @@ const Login = ({ navigation, route }) => {
   const [error, seterror] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [ServerErr, setServerErr] = useState(false);
   const {loginTok} = useContext(AuthContext);
 
   const userlogin = async () => {
     setLoading(true);
     seterror(false);
+    setServerErr(false);
     let udata = {};
     let erry = false;
     let username = ''
@@ -79,9 +81,19 @@ const Login = ({ navigation, route }) => {
           const result = await resp.json();
           console.log(result);
           udata = result
+          if (udata.name){
+            setData(result);
+            registerForPushNotificationsAsync(udata.username);
+          }else if(udata.error){
+            erry = true;
+            seterror(true);
+          }else{
+            erry = true;
+            setServerErr(true);
+          }
           //setData(result);
         } catch (err) {
-          seterror(true);
+          setServerErr(true);
           console.log("ERRROR");
           console.log(err);
           
@@ -107,10 +119,19 @@ const Login = ({ navigation, route }) => {
           const result = await resp.json();
           console.log(result);
           udata = result
-          registerForPushNotificationsAsync(udata.username);
+          if (udata.name){
+            setData(result);
+            registerForPushNotificationsAsync(udata.username);
+          }else if(udata.error){
+            erry = true;
+            seterror(true);
+          }else{
+            erry = true;
+            setServerErr(true);
+          }
           //setData(result);
         } catch (err) {
-          seterror(true);
+          setServerErr(true);
           console.log("ERRROR");
           console.log(err);
           
@@ -144,6 +165,9 @@ const Login = ({ navigation, route }) => {
       <SectionHeader>
         <McText h1>Welcome to Moment</McText>
       </SectionHeader>
+      <View>
+        {ServerErr && <McText style={{color: "#cc0000",}}> {" "} Server is down, please try again later </McText>}
+      </View>
       <CustomInput
         value= {usercred}
         setValue={setusercred}

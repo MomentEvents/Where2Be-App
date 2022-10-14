@@ -66,9 +66,8 @@ app.post("/user_login", jsonParser, (req, res) => {
     .then(function (result) {
       //console.log(result.records[0].get('u').properties.name)
       if (_.isEmpty(result.records)) {
-        res.end();
-        console.log("User Not found here");
-        res.write("Please login first.");
+        console.log("Invalid Username");
+        res.send({ error: "username" });
         res.end();
         // throw {
         //   status: 400
@@ -113,9 +112,8 @@ app.post("/email_login", jsonParser, (req, res) => {
     .then(function (result) {
       //console.log(result.records[0].get('u').properties.name)
       if (_.isEmpty(result.records)) {
-        res.end();
-        console.log("User Not found here");
-        res.write("Please login first.");
+        console.log("Invalid Username");
+        res.send({ error: "email" });
         res.end();
         // throw {
         //   status: 400

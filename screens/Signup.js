@@ -65,6 +65,7 @@ const Signup = ({ navigation, route }) => {
   const [email, setemail] = useState("");
   const [error, seterror] = useState(false);
   const [emailErr, setemailErr] = useState(false);
+  const [ServerErr, setServerErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [school, setSchool] = useState("");
@@ -79,6 +80,7 @@ const Signup = ({ navigation, route }) => {
     setLoading(true);
     seterror(false);
     setemailErr(false);
+    setServerErr(false);
     //seterrors({name:false, username:false, password:false, email:false})
     let temperrors = {name:false, username:false, password:false, email:false, school:false}
     let erry = false;
@@ -137,9 +139,12 @@ const Signup = ({ navigation, route }) => {
             seterror(true);
           }
         }
-        else{
+        else if (udata.name){
           setData(result);
           registerForPushNotificationsAsync(udata.username);
+        }else{
+          erry = true;
+          setServerErr(true);
         }
         
       } catch (err) {
@@ -175,6 +180,9 @@ const Signup = ({ navigation, route }) => {
       <SectionHeader>
         <McText h1>Create Account</McText>
       </SectionHeader>
+      <View>
+        {ServerErr && <McText style={{color: "#cc0000",}}> {" "} Server is down, please try again later </McText>}
+      </View>
       <CustomInput
         value= {name}
         setValue={setname}
@@ -295,7 +303,7 @@ const Signup = ({ navigation, route }) => {
 };
 const SectionHeader = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   margin-top: ${Platform.OS === "ios" ? "40px" : "20px"};
   width: ${width*0.65};
   margin: 20px;

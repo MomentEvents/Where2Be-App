@@ -25,6 +25,7 @@ const Personal = ({ navigation, route }) => {
   const {logoutTok, UserId, Data, setupData, FinImport} = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   
   const fetchData = async () => {
     console.log('userId: ', UserId)
@@ -41,12 +42,16 @@ const Personal = ({ navigation, route }) => {
     const data = await resp2.json();
     setupData([data], 3);
     setLoading(false);
+    setRefreshing(false);
   };
   // var ab = 0;
-
-  useEffect(() => {
+  const handleRefresh = () =>{
     fetchData();
-  }, []);
+  }
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   
   
   const _renderCalendar = ({item, index}) => {
@@ -120,7 +125,7 @@ const Personal = ({ navigation, route }) => {
                           marginLeft: -7,
                           marginRight: 10,
                           color: item.joined? COLORS.purple : COLORS.lightGray
-                        }}>{item.num_joins + item.joined}</McText>
+                        }}>{item.num_joins}</McText>
                         <McIcon source ={icons.shoutout} size={20} style={{
                           tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
                           marginRight: 10,
@@ -130,7 +135,7 @@ const Personal = ({ navigation, route }) => {
                           marginLeft: -7,
                           marginRight: 10,
                           color: item.shouted? COLORS.purple : COLORS.lightGray
-                        }}>{item.num_shouts + item.shouted}</McText>
+                        }}>{item.num_shouts}</McText>
                     </View></View>
                 {/* <TouchableHighlight style={{
                         width: 32,
@@ -222,13 +227,15 @@ const Personal = ({ navigation, route }) => {
         }}
         title="Go to Event Detail"
       /> */}
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      {/* <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}> */}
       {FinImport[3]? <FlatList
                 vertical
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
                 data={Data()[8]}
                 renderItem={_renderCalendar}
+                refreshing = {refreshing}
+                onRefresh = {fetchData}
                 style={{
                   marginTop: 8,
                   marginBottom: -12,
@@ -241,7 +248,7 @@ const Personal = ({ navigation, route }) => {
         //temp fix for padding
         color:'transparent'
       }}>hello</McText></SectionFooter>
-      </ScrollView>
+      {/* </ScrollView> */}
       </SafeAreaView>
   );
 };
@@ -278,7 +285,7 @@ const SectionHeader = styled.View`
 //temp fix for padding
 const SectionFooter = styled.View`
   background-color: transparent;
-  padding: 60px;
+  padding: 28px;
   justify-content: space-between;
 `;
 //justify-content: space-between;

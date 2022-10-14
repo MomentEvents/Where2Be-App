@@ -1,6 +1,6 @@
 //import React from 'react';
 import React, { useState, useEffect, useContext } from 'react';
-import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight , Platform, Text, View, RefreshControl, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -23,12 +23,9 @@ import UsedServer from '../constants/servercontants';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const Featured = ({ navigation, route }) => {
 
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
   const [category_feat, setcategory_feat] = useState([]);
-  const {UserId, setupData, Data, test, RefreshD, FinImport} = useContext(AuthContext)
+  const [refreshing, setRefreshing] = useState(true);
+  const {UserId, setupData, Data, test, RefreshD, FinImport, refreshFeat} = useContext(AuthContext)
 
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
@@ -37,6 +34,7 @@ const Featured = ({ navigation, route }) => {
 
   const fetchData = async () => {
     console.log('collecting featured data')
+    refreshFeat()
     const resp2 = await fetch(UsedServer + `/spotlight`, {
       method: 'POST',
       headers: {
@@ -66,34 +64,35 @@ const Featured = ({ navigation, route }) => {
     // setData(data);
     setupData(data, 1);
     // console.log(data);
+    setRefreshing(false);
 
     
 
-    const resp3 = await fetch(UsedServer + `/feat_orgs`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        UserId: UserId,
-      })
-    }); 
-    const data3 = await resp3.json();
+    // const resp3 = await fetch(UsedServer + `/feat_orgs`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     UserId: UserId,
+    //   })
+    // }); 
+    // const data3 = await resp3.json();
     // setData3(data3)
     
-    const resp4 = await fetch(UsedServer + `/categories`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        UserId: UserId,
-      })
-    }); 
-    const data4 = await resp4.json();
-    setData4(data4)
+    // const resp4 = await fetch(UsedServer + `/categories`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     UserId: UserId,
+    //   })
+    // }); 
+    // const data4 = await resp4.json();
+    // setData4(data4)
 
     const resp5 = await fetch(UsedServer + `/categories_feat`, {
       method: 'POST',
@@ -109,9 +108,23 @@ const Featured = ({ navigation, route }) => {
     // setcategory_feat(category_feat);
     setupData(category_feat, 2);
 
+    const resp6 = await fetch(UsedServer + `/personal_cal`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        UserId: UserId,
+      })
+    }); 
+    const pcal = await resp6.json();
+    setupData([pcal], 3);
+
     setLoading(false);
+    
   };
-  const spotlight = data2
+  
   // var ab = 0;
 
   useEffect(() => {
@@ -268,7 +281,7 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.joined? COLORS.purple : COLORS.lightGray
-                      }}>{item.num_joins + item.joined}</McText>
+                      }}>{item.num_joins}</McText>
                       <McIcon source ={icons.shoutout} size={20} style={{
                         tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
@@ -278,7 +291,7 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.shouted? COLORS.purple : COLORS.lightGray
-                      }}>{item.num_shouts + item.shouted}</McText>
+                      }}>{item.num_shouts}</McText>
                   </View></View>
               {/* <TouchableHighlight style={{
                       width: 32,
@@ -402,7 +415,7 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.joined? COLORS.purple : COLORS.lightGray
-                      }}>{item.num_joins + item.joined}</McText>
+                      }}>{item.num_joins}</McText>
                       <McIcon source ={icons.shoutout} size={20} style={{
                         tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
@@ -412,7 +425,7 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.shouted? COLORS.purple : COLORS.lightGray
-                      }}>{item.num_shouts + item.shouted}</McText>
+                      }}>{item.num_shouts}</McText>
                       
                   </View>
                 </View>
@@ -443,7 +456,12 @@ const Featured = ({ navigation, route }) => {
         
       </SectionHeader>
       </View>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
+        }>
       <View>
         {FinImport[0]? <FlatList
                 horizontal
