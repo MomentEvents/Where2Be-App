@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants';
+import UsedServer from '../constants/servercontants';
 
 
 export default async function registerForPushNotificationsAsync(userId){
@@ -23,7 +24,7 @@ export default async function registerForPushNotificationsAsync(userId){
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
-    const resp = await fetch('http://10.0.2.2:8080/set_push_token', {
+    const resp = await fetch(UsedServer + '/set_push_token', {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -34,6 +35,7 @@ export default async function registerForPushNotificationsAsync(userId){
         userId : userId
       })
     });
+    console.log('ran notification query');
     return token;
   }
   

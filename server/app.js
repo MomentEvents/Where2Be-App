@@ -202,7 +202,10 @@ app.post("/create_user", jsonParser, (req, res) => {
             bcrypt.hash(pass, 10).then((hashPass) => {
               connection
                 .run(
-                  "Create (u:User {ID: $username, email:$email, name:$name, password:$pass, school: $school}) Return u",
+                  `Create (u:User {ID: $username, email:$email, name:$name, password:$pass})
+                  Match(n:University{ID: $school}) 
+                  create (u)-[r:at_univ]->(n)
+                  Return u`,
                   {
                     username: username,
                     name: name,
@@ -989,7 +992,7 @@ app.post("/categories", jsonParser, (req, res) => {
 app.post("/interest_events", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   var inp_type = req.body.id;
-  console.log("Org Events POST req on", inp_type);
+  console.log("Interest Events POST req on", inp_type);
   connection
     .run(
       `match (it:Interest {name :  $id})-[:tags]-(n:Event)
@@ -1068,7 +1071,7 @@ app.get("/data", function (req, res) {
 app.post("/set_push_token", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   var inp_type = req.body.id;
-  console.log("Org Events POST req on", inp_type);
+  console.log("Set Push Token POST req on", inp_type);
   connection
     .run(
       `MERGE (u:User {pushToken: $id} )
@@ -1085,6 +1088,9 @@ app.post("/set_push_token", jsonParser, (req, res) => {
 });
 
 app.post("/search_events", function (req, res) {
+  var inp_type = req.body.UserId;
+
+  console.log("search_events on", inp_type);
   connection
     .run(
       `match (e:Event)-[:tags]->(inte:Interest)
@@ -1111,11 +1117,11 @@ app.post("/search_events", function (req, res) {
             end as shut
       return ID(e), e, tt, att, lik, shut, atts, liks, shuts
        order by e.startingTime asc 
-       limit 1000`)
+       limit 1000`,
+       { userID: inp_type })
     .then(function (result) {
       var EventArr = [];
       result.records.forEach(function (record) {
-        console.log(record);
         EventArr.push({
           id: record._fields[0].low,
           uniqueID: record._fields[1].properties.ID,
@@ -1136,7 +1142,6 @@ app.post("/search_events", function (req, res) {
             num_shouts: record._fields[8].low,
           // description: record._fields[1].properties.description,
         });
-        console.log(record._fields[0].low);
       });
       res.setHeader("Content-Type", "text/html");
       res.send(JSON.stringify(EventArr));
@@ -1246,7 +1251,7 @@ app.post("/import_interest_list", jsonParser, (req, res) => {
 app.post("/organization_details", jsonParser, (req, res) => {
   // res.send("POST Request Called")
   var inp_type = req.body.id;
-  console.log("Org Events POST req on", inp_type);
+  console.log("Org Details POST req on", inp_type);
   if (inp_type !== null) {
     connection
       .run(

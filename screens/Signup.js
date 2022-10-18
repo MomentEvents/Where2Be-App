@@ -122,7 +122,7 @@ const Signup = ({ navigation, route }) => {
             password: password,
             name: name,
             email: email,
-            school: school,
+            school: "univ_"+school,
           }),
         });
         const result = await resp.json();
