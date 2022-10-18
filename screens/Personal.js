@@ -22,14 +22,15 @@ import * as SplashScreen from 'expo-splash-screen';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const Personal = ({ navigation, route }) => {
 
-  const {logoutTok, UserId, Data, setupData, FinImport} = useContext(AuthContext);
+  const {logoutTok, UserId, Data, setupData, FinImport, MData} = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [tab, setTab] = useState(true);
   
   const fetchData = async () => {
     console.log('userId: ', UserId)
-    const resp2 = await fetch(UsedServer + `/personal_cal`, {
+    const resp2 = await fetch(UsedServer + `/personal_cal_future`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -39,8 +40,19 @@ const Personal = ({ navigation, route }) => {
         UserId: UserId,
       })
     }); 
-    const data = await resp2.json();
-    setupData([data], 3);
+    const pcal1 = await resp2.json();
+    const resp3 = await fetch(UsedServer + `/personal_cal_past`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        UserId: UserId,
+      })
+    }); 
+    const pcal2 = await resp3.json();
+    setupData([pcal1, pcal2], 3);
     setLoading(false);
     setRefreshing(false);
   };
@@ -220,29 +232,73 @@ const Personal = ({ navigation, route }) => {
 
       </SectionHeader>
       </View>
-      
-      {/* <Button
-        onPress={() => {
-          navigation.navigate('EventDetail');
+      <ButtonBox>
+        <TouchableOpacity
+          style = {{
+            width: width /2.3,
+            height: 40,
+            backgroundColor: tab ? COLORS.purple : COLORS.gray,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 15,
+            marginLeft: 15
+          }}
+          onPress={() => {
+            setTab(true);
+          }}
+        ><McText h2>Future Events</McText>
+          </TouchableOpacity>
+        <TouchableOpacity
+        style = {{
+          width: width /2.3,
+          height: 40,
+          backgroundColor: tab ? COLORS.gray: COLORS.purple,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 15,
+          marginRight: 15
         }}
-        title="Go to Event Detail"
-      /> */}
+          onPress={() => {
+            setTab(false);
+          }}
+          >
+            <McText h2>Past Events</McText>
+          </TouchableOpacity>
+      </ButtonBox>
       {/* <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}> */}
-      {FinImport[3]? <FlatList
+      { tab?(
+          MData[8]? <FlatList
                 vertical
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={Data()[8]}
+                data={Object.values(MData[8])}
                 renderItem={_renderCalendar}
                 refreshing = {refreshing}
                 onRefresh = {fetchData}
+                initialNumToRender = {4}
                 style={{
                   marginTop: 8,
                   marginBottom: -12,
                   marginLeft: 6,
                 }}
-              ></FlatList>
-              :<Text>loadd....</Text>
+              />
+              :<Text>loadd....</Text>)
+              :(MData[9]?<FlatList
+              vertical
+              keyExtractor={(item) => 'event_' + item.id}
+              //data={dummyData[dataset]}
+              data={Object.values(MData[9])}
+              renderItem={_renderCalendar}
+              refreshing = {refreshing}
+              onRefresh = {fetchData}
+              initialNumToRender = {4}
+              style={{
+                marginTop: 8,
+                marginBottom: -12,
+                marginLeft: 6,
+              }}
+            />
+            :<Text>loadd....</Text>)
           } 
       <SectionFooter><McText h1 style={{
         //temp fix for padding
@@ -259,22 +315,13 @@ const SectionTitle = styled.View`
   
 `;
 
-const DateBox = styled.View`
-  width: 50;
-  height: 50;
-  border-radius: 15px;
-  border-color: #000000;
-  border-width: 1px;
-  background-color: ${COLORS.white};
-  align-items: center;
-`;
-//background-color: rgba(100,100,100,0.65);
-const GrayBox = styled.View`
-  background-color: rgba(100,100,100,0.3);
-  borderBottomRightRadius: 20px;
-  borderBottomLeftRadius: 20px;
-`
 
+const ButtonBox = styled.View`
+background-color: transparent;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+`
 const SectionHeader = styled.View`
   background-color: transparent;
   padding: 16px ${SIZES.padding};

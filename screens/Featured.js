@@ -25,7 +25,7 @@ const Featured = ({ navigation, route }) => {
 
   const [category_feat, setcategory_feat] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
-  const {UserId, setupData, Data, test, RefreshD, FinImport, refreshFeat} = useContext(AuthContext)
+  const {UserId, setupData, Data, test, RefreshD, FinImport, refreshFeat, Headers, MData} = useContext(AuthContext)
 
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
@@ -46,9 +46,10 @@ const Featured = ({ navigation, route }) => {
       })
     }); 
     const data2 = await resp2.json();
+    console.log('got featured data')
     // setData2(data2);
     setupData([data2], 0);
-
+    console.log('got spotlight')
     const resp = await fetch(UsedServer + `/feat`, {
       method: 'POST',
       headers: {
@@ -66,7 +67,7 @@ const Featured = ({ navigation, route }) => {
     // console.log(data);
     setRefreshing(false);
 
-    
+    console.log('got feature')
 
     // const resp3 = await fetch(UsedServer + `/feat_orgs`, {
     //   method: 'POST',
@@ -107,8 +108,8 @@ const Featured = ({ navigation, route }) => {
     const category_feat = await resp5.json();
     // setcategory_feat(category_feat);
     setupData(category_feat, 2);
-
-    const resp6 = await fetch(UsedServer + `/personal_cal`, {
+    console.log('starting 6');
+    const resp6 = await fetch(UsedServer + `/personal_cal_future`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -118,9 +119,22 @@ const Featured = ({ navigation, route }) => {
         UserId: UserId,
       })
     }); 
-    const pcal = await resp6.json();
-    setupData([pcal], 3);
-
+    const pcal1 = await resp6.json();
+    console.log('starting 7');
+    const resp7 = await fetch(UsedServer + `/personal_cal_past`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        UserId: UserId,
+      })
+    }); 
+    const pcal2 = await resp7.json();
+    // console.log(pcal2);
+    setupData([pcal1, pcal2], 3);
+    // console.log(Headers,MData);
     setLoading(false);
     
   };
@@ -463,11 +477,11 @@ const Featured = ({ navigation, route }) => {
           <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
         }>
       <View>
-        {FinImport[0]? <FlatList
+        {MData[0]? <FlatList
                 horizontal
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={Data()[0]}
+                data={Object.values(MData[0])}
                 renderItem={_renderSpotlight}
                 style={{
                   marginTop: 8,
@@ -478,12 +492,12 @@ const Featured = ({ navigation, route }) => {
               :<Text>loadd....</Text>
           } 
         </View>
-      {FinImport[1] ?
-          Data().slice(1,3).map((sdata, idx)=>
+      {MData[1] ?
+          Object.values(MData).slice(1,3).map((sdata, idx)=>
           <View>
             <SectionTitle>
               <McText h3>
-              {sdata === null ? null : sdata.header}
+              {sdata === null ? null : Headers[idx + 1]}
               </McText>
             </SectionTitle>
             <View>
@@ -492,7 +506,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata === null ? null : sdata.data}
+                data={sdata === null ? null : Object.values(sdata)}
                 renderItem={_renderItem}
               extraData = {RefreshD[idx + 1]}
               ></FlatList>
@@ -504,12 +518,12 @@ const Featured = ({ navigation, route }) => {
           )
           : <Text>loadd....</Text>
         }
-        {FinImport[2] ?
-          Data().slice(3,8).map((sdata)=>
+        {MData[3] ?
+          Data().slice(3,8).map((sdata, idx)=>
           <View>
             <SectionTitle>
               <McText h3>
-              {sdata === null ? null : sdata.header}
+              {sdata === null ? null : Headers[idx + 3]}
               </McText>
             </SectionTitle>
             <View>
@@ -518,7 +532,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata === null ? null : sdata.data}
+                data={sdata === null ? null : Object.values(sdata)}
                 renderItem={_renderItem}
               ></FlatList>
             </View>

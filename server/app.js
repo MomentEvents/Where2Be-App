@@ -463,7 +463,8 @@ app.post("/feat", jsonParser, (req, res) => {
     });
 });
 
-app.post("/personal_cal", jsonParser, (req, res) => {
+app.post("/personal_cal_future", jsonParser, (req, res) => {
+  console.log('start pcal1');
   var inp_type = req.body.UserId;
 
   console.log("Personal Calendar req on", inp_type);
@@ -496,6 +497,78 @@ app.post("/personal_cal", jsonParser, (req, res) => {
       end as shut
       return ID(e), e, tt, att, lik, shut, atts, liks, shuts 
       order by e.startingTime asc
+      limit 20`,
+      { userID: inp_type }
+    )
+    .then(function (result) {
+      var EventArr = [];
+      result.records.forEach(function (record) {
+        // console.log(record);
+        EventArr.push({
+          id: record._fields[0].low,
+          uniqueID: record._fields[1].properties.ID,
+          title: record._fields[1].properties.Name,
+          userID: record._fields[1].properties.CreatorID,
+          //type: record._fields[1].properties.type,
+          startingTime: record._fields[1].properties.startingTime,
+          visibility: record._fields[1].properties.Visibility,
+          image: record._fields[1].properties.Image,
+          description: record._fields[1].properties.Description,
+          location: record._fields[1].properties.Location,
+          taglist: record._fields[2],
+          joined: record._fields[3].low,
+            liked: record._fields[4].low,
+            shouted: record._fields[5].low,
+            num_joins: record._fields[6].low,
+            num_likes: record._fields[7].low,
+            num_shouts: record._fields[8].low,
+
+         
+        });
+        console.log(record._fields[0].low);
+      });
+      // console.log(JSON.stringify(EventArr));
+      // res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(EventArr));
+      res.end();
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+});
+app.post("/personal_cal_past", jsonParser, (req, res) => {
+  var inp_type = req.body.UserId;
+
+  console.log("Personal Calendar req on", inp_type);
+  connection
+    .run(
+      `match (u:User{ID:$userID})-[]-(e:Event)
+      where date(datetime({epochmillis: apoc.date.parse(e.startingTime, "ms", "yyyy/MM/dd")})) < date()
+      optional match (e)-[:tags]-(inte:Interest)
+      with e, collect(inte.name) as int_list 
+      order by e.startingTime
+      with e.CreatorID as nme, collect(e)[0] as e, collect(int_list)[0] as tt
+      optional match (e)-[r1:attending]-(:User)
+      with e, tt, count(r1) as atts
+      optional match (e)-[r1:liked]-(:User)
+      with e, tt, atts, count(r1) as liks
+      optional match (e)-[r1:shoutout]-(:User)
+      with e, tt, atts, liks, count(r1) as shuts
+      with e, tt, atts, liks, shuts,
+      case 
+        when (e)-[:attending]-(:User{ID : $userID}) then 1
+        else 0
+      end as att,
+      case 
+        when (e)-[:liked]-(:User{ID : $userID}) then 1
+        else 0
+      end as lik,
+      case 
+        when (e)-[:shoutout]-(:User{ID : $userID}) then 1
+        else 0
+      end as shut
+      return ID(e), e, tt, att, lik, shut, atts, liks, shuts 
+      order by e.startingTime desc
       limit 20`,
       { userID: inp_type }
     )
@@ -1011,26 +1084,39 @@ app.post("/set_push_token", jsonParser, (req, res) => {
     });
 });
 
-app.get("/search", function (req, res) {
+app.post("/search_events", function (req, res) {
   connection
     .run(
-      'match (n:Event)-[:tags]->(inte:Interest)  with n, collect(inte.name) as int_list Where n.startingTime contains "2022/08" or n.startingTime contains "2022/09" or n.startingTime contains "2022/07" or n.startingTime contains "2022/10" or n.startingTime contains "2022/09"  return ID(n), (n), int_list order by n.startingTime desc limit 1000'
-    )
+      `match (e:Event)-[:tags]->(inte:Interest)
+      Where e.startingTime_dt > dateTime() 
+       with e, collect(inte.name) as tt 
+       optional match (e)-[r1:attending]-(:User)
+            with e, tt, count(r1) as atts
+            optional match (e)-[r1:liked]-(:User)
+            with e, tt, atts, count(r1) as liks
+            optional match (e)-[r1:shoutout]-(:User)
+            with e, tt, atts, liks, count(r1) as shuts
+            with e, tt, atts, liks, shuts,
+            case 
+              when (e)-[:attending]-(:User{ID : $userID}) then 1
+              else 0
+            end as att,
+            case 
+              when (e)-[:liked]-(:User{ID : $userID}) then 1
+              else 0
+            end as lik,
+            case 
+              when (e)-[:shoutout]-(:User{ID : $userID}) then 1
+              else 0
+            end as shut
+      return ID(e), e, tt, att, lik, shut, atts, liks, shuts
+       order by e.startingTime asc 
+       limit 1000`)
     .then(function (result) {
       var EventArr = [];
       result.records.forEach(function (record) {
         console.log(record);
         EventArr.push({
-          // id: record._fields[0].low,
-          // title: record._fields[1].properties.Name,
-          // //type: record._fields[1].properties.type,
-          // startingTime: record._fields[1].properties.startingTime,
-          // visibility: record._fields[1].properties.visibility,
-          // location: record._fields[1].properties.Location,
-          // image: record._fields[1].properties.Image,
-          // description: record._fields[1].properties.Description,
-          // taglist: record._fields[2],
-
           id: record._fields[0].low,
           uniqueID: record._fields[1].properties.ID,
           title: record._fields[1].properties.Name,
@@ -1042,7 +1128,12 @@ app.get("/search", function (req, res) {
           description: record._fields[1].properties.Description,
           location: record._fields[1].properties.Location,
           taglist: record._fields[2],
-
+          joined: record._fields[3].low,
+            liked: record._fields[4].low,
+            shouted: record._fields[5].low,
+            num_joins: record._fields[6].low,
+            num_likes: record._fields[7].low,
+            num_shouts: record._fields[8].low,
           // description: record._fields[1].properties.description,
         });
         console.log(record._fields[0].low);
@@ -1074,7 +1165,7 @@ app.get("/search_org", function (req, res) {
     .then(function (result) {
       var EventArr = [];
       result.records.forEach(function (record) {
-        console.log(record);
+        // console.log(record);
         EventArr.push({
           id: record._fields[0].low,
           OrgID: record._fields[1].properties.ID,
@@ -1082,9 +1173,9 @@ app.get("/search_org", function (req, res) {
           image: record._fields[1].properties.Image,
           // description: record._fields[1].properties.description,
         });
-        console.log(record._fields[0].low);
+        // console.log(record._fields[0].low);
       });
-      console.log(EventArr);
+      // console.log(EventArr);
       // res.setHeader('Content-Type', 'text/html');
       res.send(JSON.stringify(EventArr));
       res.end();
@@ -1469,15 +1560,7 @@ app.post("/set_push_token", jsonParser, (req, res) => {
       SET u.pushToken = $token
     ON MATCH
       SET u.pushToken = $token
-    return u,
-    { token: token ,
-      uID : userId}
-  )
-  .then(function (result) {
-    // console.log(result)
-  })
-  .catch(function (err) {
-    console.log(err)`,
+    return u`,
     { token: token, uID : userId}
   )
   .then(function (result) {

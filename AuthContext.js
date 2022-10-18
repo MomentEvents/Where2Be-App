@@ -23,6 +23,8 @@ export const AuthProvider = ({children}) =>{
   const [Data5, setData5] = useState(null);
   const [Data6, setData6] = useState(null);
   const [Data7, setData7] = useState(null);
+  const [MData, setMData] = useState({});
+  const [Headers, setHeaders] = useState({})
   const [PCalendar, setPCalendar] = useState(null);
   const [Dict, setDict] = useState({});
   const [RefreshD, setRefreshD] = useState([]);
@@ -74,6 +76,7 @@ export const AuthProvider = ({children}) =>{
         // console.log(l1,l2, data[l1].data[l2].id)
       }
       setData(data[l1], row_num);
+      
     }
     //{/* Choice_Dict[item.id] */}
     setRefreshD(newR);
@@ -82,39 +85,38 @@ export const AuthProvider = ({children}) =>{
     let t= FinImport;
     t[nIn] = true;
     setFinImport(t);
-    // console.log(data)
-    // setChoice_Dict(cdict);
-    // console.log(cdict[8163].joined);
-
-
-    // sdata.header
+    // console.log(FinImport);
+   
   }
 
   const Data = () =>{
-    let array = []
-    array.push(Data0)
-    array.push(Data1)
-    array.push(Data2)
-    array.push(Data3)
-    array.push(Data4)
-    array.push(Data5)
-    array.push(Data6)
-    array.push(Data7)
-    array.push(PCalendar)
-    // console.log(array.slice(1,3))
-    return array
+    return Object.values(MData)
+  //   let array = []
+  //   array.push(Data0)
+  //   array.push(Data1)
+  //   array.push(Data2)
+  //   array.push(Data3)
+  //   array.push(Data4)
+  //   array.push(Data5)
+  //   array.push(Data6)
+  //   array.push(Data7)
+  //   array.push(PCalendar)
+  //   // console.log(array.slice(1,3))
+  //   return array
   }
 
   const clearData = () =>{
-    setData0(null);
-    setData1(null);
-    setData2(null);
-    setData3(null);
-    setData4(null);
-    setData5(null);
-    setData6(null);
-    setData7(null);
-    setPCalendar(null);
+    // setData0(null);
+    // setData1(null);
+    // setData2(null);
+    // setData3(null);
+    // setData4(null);
+    // setData5(null);
+    // setData6(null);
+    // setData7(null);
+    // setPCalendar(null);
+    setMData({});
+    setHeaders({});
     setDict({});
     setRefreshD([]);
     setFinImport([false, false, false]);
@@ -122,86 +124,78 @@ export const AuthProvider = ({children}) =>{
 
   const setData = (data, n) =>{
     // console.log('setdata: ', n)
-    if(n == 0){setData0(data)}
-    else if(n == 1){setData1(data)}
-    else if(n == 2){setData2(data)}
-    else if(n == 3){setData3(data)}
-    else if(n == 4){setData4(data)}
-    else if(n == 5){setData5(data)}
-    else if(n == 6){setData6(data)}
-    else if(n == 7){setData7(data)}
-    else if(n == 8){setPCalendar(data)}
+    // if(n == 0){setData0(data)}
+    // else if(n == 1){setData1(data)}
+    // else if(n == 2){setData2(data)}
+    // else if(n == 3){setData3(data)}
+    // else if(n == 4){setData4(data)}
+    // else if(n == 5){setData5(data)}
+    // else if(n == 6){setData6(data)}
+    // else if(n == 7){setData7(data)}
+    // else if(n == 8){setPCalendar(data)}
+    // console.log(n);
+    if(data.data){
+      // console.log(n, data.header)
+      setHeaders(prevH => ({...prevH,
+        [n] : data.header}));
+      setMData(prevD =>({...prevD,
+        [n] : {...data.data}}));
+        
+    }else{
+      setHeaders(prevH => ({...prevH,
+        [n] : ''}));
+      setMData(prevD =>({...prevD,
+        [n] : {...data}}));
+    }
+    // console.log(n, Headers);
+    // Object.assign
+    // console.log(Headers); 
   }
 
   const updateData =  (event) =>{
-    // let new_dict = Choice_Dict;
-    // new_dict[event.id] = {joined : event.joined, shouted : event.shouted};
-    // setChoice_Dict(new_dict);
-
-    // console.log(event);
-    // const idx = Dict[event.id];
-    // console.log(idx);
-    // if(idx){
-    //   let r = RefreshD;
-    //   r[idx] = !r[idx];
-    //   let newRow = Data1[idx[0]].data.slice()
-    //   // console.log(newRow[idx[1]]);
-    //   // console.log(event);
-    //   newRow[idx[1]] = event
-    //   // console.log('idx:', idx[0])
-    //   const newArr = Data1.map((c,i)=>{
-    //     // console.log(i)
-    //     if(i == idx[0]){
-
-    //       // console.log(newRow);
-    //       return {header: c.header, data: newRow};
-    //     }else{
-    //       // console.log(c.header)
-    //       return c;
-    //     }
-    //   });
-    //   // console.log(newRow);
-    //   console.log(r);
-    //   setRefreshD(r);
-    //   setData1(newArr);
-    // }
-    // else{
-    //   console.log('index not found');
-    // }
-
     
+    console.log('start');
     if(event.id in Dict){
       const idxs = Dict[event.id];
       // console.log(idxs, event.id)
       for(const idx of idxs){
         let r = RefreshD;
         r[idx[0]] = !r[idx[0]];
-        // const newRow = produce(Data()[idx[0]].data, draft => {
-        //   draft[idx[1]] = event
-        // })
-        const newRow = Data()[idx[0]]//.data.slice()
-        // // [...Data()[idx[0]]]
-        let eventsData= [];
         
-        if(newRow.data){
-          eventsData = newRow.data.slice();
-          if(eventsData[idx[1]].id == event.id){
-            eventsData[idx[1]] = event
-            setData({header: Data()[idx[0]].header, data: eventsData}, idx[0])
-          }
-        }else{
-          eventsData = newRow.slice();
-          if(eventsData[idx[1]].id == event.id){
-            eventsData[idx[1]] = event
-            setData(eventsData, idx[0])
-          }
+        if(MData[idx[0]][idx[1]].id == event.id){
+          setMData({
+            ...MData,
+            [idx[0]] :{
+              ...MData[idx[0]],
+              [idx[1]] : event
+            }
+          })
         }
+
+        // const newRow = Data()[idx[0]]//.data.slice()
+        // // // [...Data()[idx[0]]]
+        // let eventsData= [];
+        
+        // if(newRow.data){
+        //   eventsData = newRow.data.slice();
+        //   if(eventsData[idx[1]].id == event.id){
+        //     eventsData[idx[1]] = event
+        //     setData({header: Data()[idx[0]].header, data: eventsData}, idx[0])
+        //   }
+        // }else{
+        //   eventsData = newRow.slice();
+        //   if(eventsData[idx[1]].id == event.id){
+        //     eventsData[idx[1]] = event
+        //     setData(eventsData, idx[0])
+        //   }
+        // }
         
         
         // console.log(r);
         setRefreshD(r);
         // setData1(newArr);
       }
+      console.log('finish');
     }
     else{
       console.log('index not found');
@@ -293,7 +287,7 @@ export const AuthProvider = ({children}) =>{
     }, []);
 
   return(
-    <AuthContext.Provider value={{loginTok, logoutTok, UserId, loadingToken, 
+    <AuthContext.Provider value={{loginTok, logoutTok, UserId, loadingToken, Headers, MData,
       UserData, updateData, setupData, test, RefreshD, Data, FinImport, refreshFeat}}>
       {children}
     </AuthContext.Provider>
