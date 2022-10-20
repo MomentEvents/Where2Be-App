@@ -59,15 +59,15 @@ class ImagePickerComponent extends Component {
             justifyContent: "center",
             borderWidth: 2,
             borderColor: COLORS.gray,
-            width: 280,
-            height: 280
+            width: SIZES.width*0.75,
+            height: SIZES.width*0.75
           }}
           onPress={this.pickImage}
         >
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
-              style={{ width: 280, height: 280, borderRadius: 10 }}
+              style={{ width: SIZES.width*0.75, height: SIZES.width*0.75, borderRadius: 10 }}
             />
           ) : (
             <McIcon

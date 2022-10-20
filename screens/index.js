@@ -11,6 +11,8 @@ import InterestDetail from './InterestDetail';
 import ImageScreen from './ImageScreen';
 import CreateEvent from './CreateEvent';
 import PreviewEventDetail from './PreviewEventDetail'
+import Profile from './Profile'
+import Settings from './Settings'
 
 
 
@@ -27,5 +29,6 @@ export {
   OrganizationDetail,
   Interests,
   PreviewEventDetail,
-
+  Profile,
+  Settings
 }

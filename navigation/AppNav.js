@@ -11,7 +11,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
-import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent,PreviewEventDetail } from '../screens';
+import { Featured, EventDetail, Interests, Profile, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent,PreviewEventDetail, Settings } from '../screens';
 import { customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -32,7 +32,7 @@ function AppNav(){
   });
   return ((assetsLoaded && !loadingToken)?
     <NavigationContainer>
-    {UserId !== null ? <AppStack /> : <AuthStack />}
+    {true ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
     :<ActivityIndicator size="small"></ActivityIndicator>
   );
@@ -70,6 +70,8 @@ const AuthStack = () =>{
           initialRouteName="Featured"
         >
           <Stack.Screen name="Featured" component={Tabs} />
+          <Stack.Screen name="Profile" component={Profile}/>
+          <Stack.Screen name="Settings" component={Settings}/>
           <Stack.Screen name="EventDetail" component={EventDetail} />
           <Stack.Screen name="OrganizationDetail" component={OrganizationDetail} />
           <Stack.Screen name="Search" component={Search}/>
@@ -79,6 +81,8 @@ const AuthStack = () =>{
           <Stack.Screen name="CreateEvent" component={CreateEvent}/>
           <Stack.Screen name="Interests" component={Interests}/>
           <Stack.Screen name="PreviewEventDetail" component={PreviewEventDetail}/>
+          
+          
         </Stack.Navigator>
     );
   }
