@@ -80,6 +80,7 @@ const Login = ({ navigation, route }) => {
           udata = result
           //setData(result);
         } catch (err) {
+          Alert.alert("Unhandled Error", "" + err);
           seterror(true);
           console.log("ERRROR");
           console.log(err);
@@ -109,6 +110,7 @@ const Login = ({ navigation, route }) => {
           //setData(result);
         } catch (err) {
           seterror(true);
+          Alert.alert("Unhandled Error", "" + err);
           console.log("ERRROR");
           console.log(err);
           
