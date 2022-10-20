@@ -16,15 +16,16 @@ import { AuthContext } from '../AuthContext';
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
-
+ 
  //datas = events
  const Search = ({ navigation, route }) => {
-  const [dataOrg, setDataOrg] = useState([]);
+  const [dataOrg, setDataOrg] = useState([]); 
   const [dataEvent, setDataEvent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState(true);
-  const {UserId} = useContext(AuthContext)
+  const [tab, setTab] = useState(false);
+  const {UserId, UserSchool} = useContext(AuthContext)
   const fetchData = async () => {
+    console.log(UserSchool)
     const resp1 = await fetch(UsedServer + '/search_org', {
       method: 'GET', 
     });
@@ -38,10 +39,11 @@ var height = Dimensions.get('window').height; //full height
       },
       body: JSON.stringify({
         UserId: UserId,
+        school: UserSchool
       })
     });
     const data2 = await resp2.json();
-    console.log('got data events')
+    console.log(UserSchool)
     setDataEvent(data2);
     setLoading(false);
   };
@@ -224,7 +226,7 @@ var height = Dimensions.get('window').height; //full height
           onPress={() => {
             setTab(true);
           }}
-        ><McText h3>Upcoming Events</McText>
+        ><McText h3>Accounts</McText>
           </TouchableOpacity>
         <TouchableOpacity
         style = {{
@@ -241,7 +243,7 @@ var height = Dimensions.get('window').height; //full height
             setTab(false);
           }}
           >
-            <McText h3>Accounts</McText>
+            <McText h3>Upcoming Events</McText>
           </TouchableOpacity>
       </ButtonBox>
       <View >

@@ -13,16 +13,7 @@ export const AuthProvider = ({children}) =>{
   const [loadingToken, setloadingToken] = useState(false);
   const [UserId, setUserId] = useState(null);
   const [UserData, setUserData] = useState(null);
-
-  // const [Choice_Dict, setChoice_Dict] = useState(null);
-  const [Data0, setData0] = useState(null);
-  const [Data1, setData1] = useState(null);
-  const [Data2, setData2] = useState(null);
-  const [Data3, setData3] = useState(null);
-  const [Data4, setData4] = useState(null);
-  const [Data5, setData5] = useState(null);
-  const [Data6, setData6] = useState(null);
-  const [Data7, setData7] = useState(null);
+  const [UserSchool, setUserSchool] = useState(null);
   const [MData, setMData] = useState({});
   const [Headers, setHeaders] = useState({})
   const [PCalendar, setPCalendar] = useState(null);
@@ -232,6 +223,7 @@ export const AuthProvider = ({children}) =>{
     AsyncStorage.setItem('uid', udata.username);
     AsyncStorage.setItem('pass', udata.password);
     setUserId(udata.username);
+    setUserSchool(udata.school);
     console.log('udata: ', udata);
     setUserData(udata);
     
@@ -240,6 +232,8 @@ export const AuthProvider = ({children}) =>{
 
   const logoutTok = () =>{
     setUserId(null);
+    setUserSchool(null);
+    setUserData(null);
     AsyncStorage.removeItem('uid');
     AsyncStorage.removeItem('pass');
     clearData();
@@ -270,6 +264,7 @@ export const AuthProvider = ({children}) =>{
       console.log(result);
       //console.log("usrToken", usrToken);
       setUserData(result);
+      setUserSchool(result.school);
       setUserId(uid);
       // console.log('done loading in')
     }
@@ -288,7 +283,7 @@ export const AuthProvider = ({children}) =>{
 
   return(
     <AuthContext.Provider value={{loginTok, logoutTok, UserId, loadingToken, Headers, MData,
-      UserData, updateData, setupData, test, RefreshD, Data, FinImport, refreshFeat}}>
+      UserData, updateData, setupData, test, RefreshD, Data, FinImport, refreshFeat, UserSchool}}>
       {children}
     </AuthContext.Provider>
   )
