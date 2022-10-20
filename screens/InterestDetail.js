@@ -11,6 +11,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Dimensions } from "react-native";
+import UsedServer from '../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -35,7 +36,7 @@ const InterestDetail = ({ navigation, route }) => {
         setLike(false);
         console.log("HEREEE2: ", like);
         console.log("HEREEE");
-        // const resp = await fetch("http://3.136.67.161:8080/delete_like", {
+        // const resp = await fetch(UsedServer + "/delete_like", {
         //   // deleting for true, need to change
         //   method: "POST",
         //   headers: {
@@ -49,7 +50,7 @@ const InterestDetail = ({ navigation, route }) => {
       } else {
         setLike(true);
         console.log("HEREEE2: ", like);
-        // const resp = await fetch("http://3.136.67.161:8080/create_like", {
+        // const resp = await fetch(UsedServer + "/create_like", {
         //   method: "POST",
         //   headers: {
         //     Accept: "application/json",
@@ -76,7 +77,7 @@ const InterestDetail = ({ navigation, route }) => {
     const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch('http://3.136.67.161:8080/interest_events', {
+            const resp = await fetch(UsedServer + '/interest_events', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

@@ -11,7 +11,7 @@ import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollVie
 import styled from 'styled-components/native';
 import { McIcon, McText } from '../components';
 import { LinearGradient } from 'expo-linear-gradient'
-import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
+import { FONTS, SIZES, COLORS, icons } from '../constants';
 import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
@@ -28,140 +28,37 @@ import UsedServer from '../constants/servercontants';
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
+const img = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fnewevolutiondesigns.com%2Fcool-4k-wallpapers-for-desktop-ipad-and-iphone&psig=AOvVaw3IboKb7vdlKcS9FUJYEVx3&ust=1665266364697000&source=images&cd=vfe&ved=0CAkQjRxqFwoTCIC6j-OOz_oCFQAAAAAdAAAAABAM"
 
-const EventDetail = ({ navigation, route }) => {
-  const [selectedEvent, setSelectedEvent] = useState(null);
+const dummyData = ["Title", "StartingTime", "Date", "Organizer", "Description", "Location", "Public", "Social", "Academic"]
+
+function postEvent(dummyData){
+  console.log(dummyData)
+  var outData = []
+  outData.push("")
+}
+
+const PreviewEventDetail = ({ navigation, route }) => {
+  const [createEvent, setCreateEvent] = useState(null);
   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
   const [lengthMore,setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  const {UserId, updateData} = useContext(AuthContext)
+  const {UserId, setupData, Data, test, RefreshD, FinImport} = useContext(AuthContext)
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
   }
+
+  useEffect(()=>{
+    let {createEvent} = route.params;
+    // console.log(createEvent);
+    setCreateEvent(createEvent);
+    // console.log(createEvent)
+    // if(createEvent.liked == 1){
+    //   setLike(true);
+    // }
+    // console.log(createEvent.id);
+  },[])
   
-  const [like, setLike] = useState(false);
-  const [join, setJoin] = useState(false);
-  const [shoutout, setShoutout] = useState(false);
-
-  // const handleLike = async () => {
-  //   if (like) {
-  //     // console.log(like);
-  //     setLike(false);
-  //     console.log("HEREEE2: ", like);
-  //     console.log("HEREEE");
-  //     const resp = await fetch("http://10.0.2.2:8080/delete_like", {
-  //       // deleting for true, need to change
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         uniqueID: selectedEvent?.uniqueID,
-  //         UserId: UserId,
-  //       }),
-  //     });
-  //   } else {
-  //     setLike(true);
-  //     console.log("HEREEE2: ", like);
-  //     const resp = await fetch("http://10.0.2.2:8080/create_like", {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         uniqueID: selectedEvent?.uniqueID,
-  //         UserId: UserId,
-  //       }),
-  //     });
-  //   }
-  // };
-  
-
-  const handleJoin = async () => {
-    let selEvent = selectedEvent;
-    if (join) {
-      // console.log(shoutout);
-      setJoin(false);
-      console.log("HEREEE2: ", join);
-      console.log("HEREEE");
-      const resp = await fetch(UsedServer + "/delete_join", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.joined = 0;
-    } else {
-      setJoin(true);
-      console.log("HEREEE2: ", join);
-      const resp = await fetch(UsedServer + "/create_join", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId:UserId,
-        }),
-      });
-      selEvent.joined = 1;
-    }
-    setSelectedEvent(selEvent);
-    updateData(selEvent);
-  };
-  
-
-  const handleShoutout = async () => {
-    let selEvent = selectedEvent;
-    if (shoutout) {
-      // console.log(shoutout);
-      setShoutout(false);
-      console.log("HEREEE2: ", shoutout);
-      console.log("HEREEE");
-      const resp = await fetch(UsedServer + "/delete_shoutOut", {
-        // deleting for true, need to change
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.shouted = 0;
-    } else {
-      setShoutout(true);
-      console.log("HEREEE2: ", shoutout);
-      const resp = await fetch(UsedServer + "/create_shoutOut", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueID: selectedEvent?.uniqueID,
-          UserId: UserId,
-        }),
-      });
-      selEvent.shouted = 1;
-    }
-    setSelectedEvent(selEvent);
-    updateData(selEvent);
-  };
-  // console.log(selectedEvent)
-
-  const  [joindedEvent, setJoindedEvent] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
   // console.log(joindedEvent)
@@ -170,58 +67,7 @@ const EventDetail = ({ navigation, route }) => {
       setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
       // console.log(e.nativeEvent);
   },[]);
-      
-  useEffect(()=>{
-    let {selectedEvent} = route.params;
-    // console.log(selectedEvent);
-    setSelectedEvent(selectedEvent);
-    if(selectedEvent.joined == 1){
-      setJoin(true);
-    }
-    if(selectedEvent.shouted == 1){
-      setShoutout(true);
-    }
-    // if(selectedEvent.liked == 1){
-    //   setLike(true);
-    // }
-    // console.log(selectedEvent.id);
-  },[])
-
-  let iD;
-    if (selectedEvent?.userID !== undefined){
-        iD = selectedEvent?.userID;
-    } else {
-        iD = 'bad';
-    }
-
-  const fetchData = async () => {
-        let data;
-        console.log('id:' + iD)
-        if(iD !== 'bad') {
-            const resp = await fetch(UsedServer + '/organization_details', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: iD
-                    })
-            });
-            data = await resp.json();
-        }
-        else{
-            data = ['help'];
-        }
-        setData(data);
-        console.log(data);
-        setLoading(false);
-    };
-    // console.log(iD)
-    //console.log('____________________________________________________________________________');
-    useEffect(() => {
-        fetchData();
-    },[iD]);
+ 
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -238,7 +84,7 @@ const EventDetail = ({ navigation, route }) => {
         
         <ImageBackground
           resizeMode='cover'
-          source={{uri:selectedEvent?.image}}
+          source={{uri:createEvent?.image}}
           style = {{
             width: '100%',
             height: 
@@ -251,9 +97,9 @@ const EventDetail = ({ navigation, route }) => {
             <SectionImageHeader>
               <TouchableOpacity 
                 onPress={() =>{
-                  // updateData(selectedEvent)
+                  // updateData(createEvent)
                   navigation.goBack();
-                  // updateData(selectedEvent);
+                  // updateData(createEvent);
                 }}
                 style={{
                   width: 56,
@@ -272,7 +118,7 @@ const EventDetail = ({ navigation, route }) => {
 
               <TouchableOpacity
               onPress={() =>{
-                navigation.push('ImageScreen', {img: selectedEvent?.image})
+                navigation.push('ImageScreen', {img: createEvent?.image})
               }}
               style={{
                   width: 40,
@@ -313,10 +159,14 @@ const EventDetail = ({ navigation, route }) => {
                           tintColor:COLORS.purple,
                         }}/> */}
                       <McText h3 style={{letterSpacing: 1.5, margin: 6, marginRight: 0, color: COLORS.purple, opacity: 0.85 }}>
-                        {moment(selectedEvent?.startingTime).format('MMM DD').toUpperCase()}
+                      {moment(createEvent?.date).format('MMM DD').toUpperCase()}
                     </McText>
                     <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
-                        {moment(selectedEvent?.startingTime).format('h:mm A')}
+                    {createEvent?.start}
+                    </McText>
+                    <McText h3 style={{letterSpacing: 1.2, marginTop:6, marginHorizontal: -6, color: COLORS.white, opacity: 0.85 }}> to </McText>
+                    <McText h3 style={{letterSpacing: 1.2, margin: 6, color: COLORS.white, opacity: 0.85 }}>
+                    {createEvent?.end}
                     </McText>
                     </View>
                   </View>
@@ -328,12 +178,12 @@ const EventDetail = ({ navigation, route }) => {
         </ImageBackground>
         {/* buttons group section */}
         <McText h1 numberOfLines={2} style={{width: width*0.8, marginHorizontal: 15, marginBottom: -5,}}>
-          {selectedEvent?.title}
+          {createEvent?.title}
           </McText>
         <ButtonSection>
           <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {
-              selectedEvent?.taglist.map((taglist)=> 
+              createEvent?.tags.map((taglist)=> 
                 <TouchableOpacity
                   style={{
                   width: taglist.length *9 + 15,
@@ -361,22 +211,24 @@ const EventDetail = ({ navigation, route }) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center'
-          }} onPress={()=>{
-                navigation.push('OrganizationDetail', {OrgID: selectedEvent?.userID})
-                console.log(selectedEvent)
-                console.log('lololololol')
-              }}>
+          }} 
+          // onPress={()=>{
+          //       navigation.push('OrganizationDetail', {OrgID: createEvent?.userID})
+          //       console.log(createEvent)
+          //       console.log('lololololol')
+          //     }}
+              >
           <Image
                 style={styles.orgProfilePic}
                 source={{
-                    uri:data.image
+                    uri: createEvent?.image
                 }}/>
             <McText h4 numberOfLines={1} style={{
               letterSpacing: 1,
               textTransform: 'uppercase',
               width: width/1.25
               }}>
-                {data.name}
+                {UserId}
             </McText>
             </TouchableOpacity>
         </OwnerSection>
@@ -391,7 +243,7 @@ const EventDetail = ({ navigation, route }) => {
             <McText 
               onTextLayout={onTextLayout}
               numberOfLines={textShown ? undefined : 3} body3>
-                {selectedEvent?.description}
+                {createEvent?.desc}
             </McText>
               {
                   lengthMore ? <McText
@@ -408,7 +260,7 @@ const EventDetail = ({ navigation, route }) => {
               tintColor:COLORS.purple,
             }}/>
             <TouchableOpacity onPress={()=>{
-                var uri = selectedEvent?.location
+                var uri = createEvent?.loc
                 Linking
                 .openURL(uri)
                 .catch(err => console.log('Error', err));
@@ -420,32 +272,11 @@ const EventDetail = ({ navigation, route }) => {
                 width: width * 0.83,
                 }}
                 >
-                  {selectedEvent?.location}
+                  {createEvent?.loc}
               </McText>
               </TouchableOpacity>
           </LocationSection>
-          {/* <LinkSection>
-        <McIcon source ={icons.links} size={20} style={{
-              margin:4,
-              tintColor:COLORS.gray,
-            }}/>
-            <TouchableOpacity onPress={()=>{
-                var uri = selectedEvent?.link
-                Linking
-                .openURL(uri)
-                .catch(err => console.log('Error', err));
-                }}>
-              <McText h4 style={{
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                marginTop: -1, 
-                width: width * 0.83,
-                }}
-                numberOfLines={1}>
-                  {selectedEvent?.link}
-              </McText>
-              </TouchableOpacity>
-          </LinkSection> */}
+          
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,
@@ -457,7 +288,7 @@ const EventDetail = ({ navigation, route }) => {
               letterSpacing: 1,
               textTransform: 'uppercase' 
               }}>
-                {selectedEvent?.visibility}
+                {dummyData[6]}
             </McText>
           </View>
         </VisibilitySec>
@@ -466,62 +297,27 @@ const EventDetail = ({ navigation, route }) => {
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-         <View style={styles.otherContainer}>
-          <UserOptionsSection>
-            <View style={{
-              alignItems: 'center',
-              marginRight: 60
-            }}>
-            <TouchableOpacity style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                      backgroundColor:join ? COLORS.purple: 'transparent' ,
-                      borderWidth: 1,
-                      borderColor: COLORS.gray,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                          join ? setJoin(false) : setJoin(true)
-                          console.log("Join button clicked")
-                          handleJoin()
-                          // console.log(selectedEvent)
-                        
-              }}>
-                <McIcon source={icons.check} size={32} style={{
-              tintColor:join ? COLORS.white: COLORS.gray,
-              marginHorizontal: 44
-            }}/>
-            </TouchableOpacity>
-              <McText body3>Join</McText>
-            </View>
-            <View style={{
-              alignItems: 'center'
-            }}>
-            <TouchableOpacity style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                      borderWidth: 1,
-                      borderColor: COLORS.gray,
-                      backgroundColor: shoutout ? COLORS.purple : 'transparent',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                      }} onPress={()=>{
-                        console.log("ShoutOut");
-                        console.log("HEREEE: ", shoutout);
-                        handleShoutout();
-                      }}>
-                <McIcon source={icons.shoutout}
-                  size={32}
-                  style={{
-                    tintColor: shoutout ? COLORS.white : COLORS.gray,
-                  }}/>
-            </TouchableOpacity>
-            <McText body3>ShoutOut</McText>
-            </View>
-          </UserOptionsSection>
-        </View>
+      <SectionDone>
+          <TouchableOpacity
+          style={{
+            height: 60,
+            marginBottom: 60,
+            borderRadius: 80,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            backgroundColor: COLORS.purple,
+            justifyContent: 'center',
+            alignItems: 'center'
+            }}
+          onPress={()=>{
+                      // test();
+                      // navigation.navigate('Featured');
+                      console.log(createEvent)
+                      }}
+                  >
+                  <McText h3 style={{margin: 8}}>POST</McText>
+          </TouchableOpacity>
+      </SectionDone>
     </View>
   );
 };
@@ -609,6 +405,16 @@ const VisibilitySec = styled.View`
   borderRadius: 10;
   align-items: center;
 `;
+
+const SectionDone = styled.View`
+  flex: 1;
+  position: absolute;
+  bottom: 0;
+  right: 1;
+  backgroundColor: transparent;
+  marginHorizontal: 32px;
+`;
+
 /*
 const BottomBarSection = styled.View`
   height: 80px;
@@ -653,4 +459,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(EventDetail);
+export default memo(PreviewEventDetail);

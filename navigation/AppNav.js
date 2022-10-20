@@ -11,7 +11,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
-import { Featured, EventDetail, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent } from '../screens';
+import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent,PreviewEventDetail } from '../screens';
 import { customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -20,7 +20,7 @@ SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
 function AppNav(){
     const [assetsLoaded, setAssetLoaded] = useState(false);
-    const {UserToken, loadingToken} = useContext(AuthContext);
+    const {UserId, loadingToken} = useContext(AuthContext);
     
   /* Loading custom fonts in async */
   const _loadAssetsAsync = async () => {
@@ -32,7 +32,7 @@ function AppNav(){
   });
   return ((assetsLoaded && !loadingToken)?
     <NavigationContainer>
-    {UserToken !== null ? <AppStack /> : <AuthStack />}
+    {UserId !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
     :<ActivityIndicator size="small"></ActivityIndicator>
   );
@@ -77,7 +77,8 @@ const AuthStack = () =>{
           <Stack.Screen name="InterestDetail" component={InterestDetail}/>
           <Stack.Screen name="ImageScreen" component={ImageScreen}/>
           <Stack.Screen name="CreateEvent" component={CreateEvent}/>
-          
+          <Stack.Screen name="Interests" component={Interests}/>
+          <Stack.Screen name="PreviewEventDetail" component={PreviewEventDetail}/>
         </Stack.Navigator>
     );
   }

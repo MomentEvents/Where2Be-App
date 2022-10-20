@@ -4,19 +4,20 @@ import styled from 'styled-components/native';
 import moment from 'moment';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
+import { dummData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 
 
 import events from '../constants/events.json'
 import { McText, McIcon, McAvatar} from '../components'
 import Fuse from 'fuse.js'
+import UsedServer from '../constants/servercontants';
 
  //datas = events
  const Search = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-  const resp = await fetch('http://3.136.67.161:8080/search_org', {
+  const resp = await fetch(UsedServer + '/search_org', {
       method: 'GET',
     });
 

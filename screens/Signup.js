@@ -24,6 +24,7 @@ import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../AuthContext';
+import UsedServer from "../constants/servercontants";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -68,8 +69,8 @@ const Signup = ({ navigation, route }) => {
   const [errors, seterrors] = useState({name:false, username:false, password:false, email:false, school:false})
   const {loginTok} = useContext(AuthContext);
   const schlist = [
-    {key:'1', value: 'UIUC'},
-    {key:'2', value: 'UCSD'}
+    {key:'UIUC', value: 'UIUC'},
+    {key:'UCSD', value: 'UCSD'}
   ];
 
   const usersignup = async () => {
@@ -78,6 +79,7 @@ const Signup = ({ navigation, route }) => {
     //seterrors({name:false, username:false, password:false, email:false})
     let temperrors = {name:false, username:false, password:false, email:false, school:false}
     let erry = false;
+    let udata = {};
     if(username == "" || username.match(/^[0-9A-Za-z]+$/) === null){
       erry = true;
       temperrors.username=true;
@@ -99,10 +101,12 @@ const Signup = ({ navigation, route }) => {
       temperrors.email=true;
     }
     console.log(temperrors);
+    //console.log('school: ',school);
+   //erry = true;
     if(erry == false){
       try {
-        const resp = await fetch("http://10.0.2.2:3000/create_user", {
-          //3.136.67.161:8080
+        const resp = await fetch(UsedServer + "/create_user", {
+          //10.0.2.2:8080
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -113,19 +117,21 @@ const Signup = ({ navigation, route }) => {
             password: password,
             name: name,
             email: email,
+            school: school,
           }),
         });
         const result = await resp.json();
+        udata = result;
         console.log(result);
         setData(result);
       } catch (err) {
         seterror(true);
         console.log("ERRROR");
-        console.log(error);
-        
+        console.log(err);
+        console.log(result);
         erry = true;
       } finally {
-        trylogin(erry);
+        trylogin(erry, udata);
       }
     } 
     
@@ -133,9 +139,9 @@ const Signup = ({ navigation, route }) => {
     setLoading(false);
     //return userdata
   };
-  const trylogin = (erry) =>{
+  const trylogin = (erry, udata) =>{
     if(erry == false){
-      loginTok()
+      loginTok(udata);
       //navigation.navigate('Interests')
     }
   };
@@ -155,7 +161,7 @@ const Signup = ({ navigation, route }) => {
       <CustomInput
         value= {name}
         setValue={setname}
-        placeholder ="Name"
+        placeholder ="Display Name"
       />
       <View>
         {errors.name && (
