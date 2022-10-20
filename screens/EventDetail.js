@@ -78,14 +78,18 @@ const EventDetail = ({ navigation, route }) => {
   //   }
   // };
   
-
+  
   const handleJoin = async () => {
     let selEvent = selectedEvent;
     if (join) {
       // console.log(shoutout);
       setJoin(false);
+      selEvent.joined = 0;
+      selEvent.num_joins = selEvent.num_joins - 1;
+      console.log('start 0');
+      // updateData(selEvent);
+      // setSelectedEvent(selEvent);
       console.log("HEREEE2: ", join);
-      console.log("HEREEE");
       const resp = await fetch(UsedServer + "/delete_join", {
         // deleting for true, need to change
         method: "POST",
@@ -98,9 +102,13 @@ const EventDetail = ({ navigation, route }) => {
           UserId: UserId,
         }),
       });
-      selEvent.joined = 0;
+      
     } else {
       setJoin(true);
+      selEvent.joined = 1;
+      selEvent.num_joins = selEvent.num_joins + 1;
+      console.log('start 0');
+      
       console.log("HEREEE2: ", join);
       const resp = await fetch(UsedServer + "/create_join", {
         method: "POST",
@@ -113,10 +121,11 @@ const EventDetail = ({ navigation, route }) => {
           UserId:UserId,
         }),
       });
-      selEvent.joined = 1;
+      
     }
-    setSelectedEvent(selEvent);
     updateData(selEvent);
+    setSelectedEvent(selEvent);
+    
   };
   
 
@@ -140,6 +149,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.shouted = 0;
+      selEvent.num_shouts = selEvent.num_shouts - 1;
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
@@ -155,6 +165,7 @@ const EventDetail = ({ navigation, route }) => {
         }),
       });
       selEvent.shouted = 1;
+      selEvent.num_shouts = selEvent.num_shouts + 1;
     }
     setSelectedEvent(selEvent);
     updateData(selEvent);
@@ -481,10 +492,11 @@ const EventDetail = ({ navigation, route }) => {
                       borderColor: COLORS.gray,
                       justifyContent: 'center',
                       alignItems: 'center'
-                      }} onPress={()=>{
-                          join ? setJoin(false) : setJoin(true)
-                          console.log("Join button clicked")
-                          handleJoin()
+                      }} onPressOut={()=>{
+                          join ? setJoin(false) : setJoin(true);
+                          
+                          handleJoin();
+                          
                           // console.log(selectedEvent)
                         
               }}>
@@ -508,8 +520,7 @@ const EventDetail = ({ navigation, route }) => {
                       justifyContent: 'center',
                       alignItems: 'center'
                       }} onPress={()=>{
-                        console.log("ShoutOut");
-                        console.log("HEREEE: ", shoutout);
+                        shoutout ? setShoutout(false) : setShoutout(true);
                         handleShoutout();
                       }}>
                 <McIcon source={icons.shoutout}

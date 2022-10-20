@@ -1,6 +1,6 @@
 //import React from 'react';
 import React, { useState, useEffect, useContext } from 'react';
-import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { TouchableHighlight , Platform, Text, View, RefreshControl, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -23,12 +23,9 @@ import UsedServer from '../constants/servercontants';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const Featured = ({ navigation, route }) => {
 
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
   const [category_feat, setcategory_feat] = useState([]);
-  const {UserId, setupData, Data, test, RefreshD, FinImport} = useContext(AuthContext)
+  const [refreshing, setRefreshing] = useState(true);
+  const {UserId, setupData, Data, test, RefreshD, FinImport, refreshFeat, Headers, MData} = useContext(AuthContext)
 
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
@@ -36,6 +33,8 @@ const Featured = ({ navigation, route }) => {
   var type2 = "Discord";
 
   const fetchData = async () => {
+    console.log('collecting featured data')
+    refreshFeat()
     const resp2 = await fetch(UsedServer + `/spotlight`, {
       method: 'POST',
       headers: {
@@ -47,9 +46,10 @@ const Featured = ({ navigation, route }) => {
       })
     }); 
     const data2 = await resp2.json();
+    console.log('got featured data')
     // setData2(data2);
     setupData([data2], 0);
-
+    console.log('got spotlight')
     const resp = await fetch(UsedServer + `/feat`, {
       method: 'POST',
       headers: {
@@ -65,34 +65,35 @@ const Featured = ({ navigation, route }) => {
     // setData(data);
     setupData(data, 1);
     // console.log(data);
+    setRefreshing(false);
 
-    
+    console.log('got feature')
 
-    const resp3 = await fetch(UsedServer + `/feat_orgs`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        UserId: UserId,
-      })
-    }); 
-    const data3 = await resp3.json();
+    // const resp3 = await fetch(UsedServer + `/feat_orgs`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     UserId: UserId,
+    //   })
+    // }); 
+    // const data3 = await resp3.json();
     // setData3(data3)
     
-    const resp4 = await fetch(UsedServer + `/categories`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        UserId: UserId,
-      })
-    }); 
-    const data4 = await resp4.json();
-    setData4(data4)
+    // const resp4 = await fetch(UsedServer + `/categories`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     UserId: UserId,
+    //   })
+    // }); 
+    // const data4 = await resp4.json();
+    // setData4(data4)
 
     const resp5 = await fetch(UsedServer + `/categories_feat`, {
       method: 'POST',
@@ -107,10 +108,37 @@ const Featured = ({ navigation, route }) => {
     const category_feat = await resp5.json();
     // setcategory_feat(category_feat);
     setupData(category_feat, 2);
-
+    console.log('starting 6');
+    const resp6 = await fetch(UsedServer + `/personal_cal_future`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        UserId: UserId,
+      })
+    }); 
+    const pcal1 = await resp6.json();
+    console.log('starting 7');
+    const resp7 = await fetch(UsedServer + `/personal_cal_past`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        UserId: UserId,
+      })
+    }); 
+    const pcal2 = await resp7.json();
+    // console.log(pcal2);
+    setupData([pcal1, pcal2], 3);
+    // console.log(Headers,MData);
     setLoading(false);
+    
   };
-  const spotlight = data2
+  
   // var ab = 0;
 
   useEffect(() => {
@@ -258,26 +286,26 @@ const Featured = ({ navigation, route }) => {
                     position: 'absolute',
                     right: 0,
                   }}>
-                    <McIcon source ={icons.shoutout} size={28} style={{
-                        tintColor:COLORS.lightGray,
+                    <McIcon source ={icons.check} size={20} style={{
+                        tintColor: item.joined? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
-                      <McText body3 style={{
+                      <McText body7 style={{
                         marginTop: 2,
                         marginLeft: -7,
                         marginRight: 10,
-                        color: COLORS.lightGray
-                      }}>12</McText>
-                      <McIcon source ={icons.check} size={28} style={{
-                        tintColor:COLORS.lightGray,
+                        color: item.joined? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_joins}</McText>
+                      <McIcon source ={icons.shoutout} size={20} style={{
+                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
-                      <McText body3 style={{
+                      <McText body7 style={{
                         marginTop: 2,
                         marginLeft: -7,
                         marginRight: 10,
-                        color: COLORS.lightGray
-                      }}>46</McText>
+                        color: item.shouted? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_shouts}</McText>
                   </View></View>
               {/* <TouchableHighlight style={{
                       width: 32,
@@ -392,17 +420,7 @@ const Featured = ({ navigation, route }) => {
                       <View style={{
                     flexDirection: 'row',
                   }}>
-                    <McIcon source ={icons.shoutout} size={20} style={{
-                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
-                        marginRight: 10,
-                      }}/>
-                      <McText body7 style={{
-                        marginTop: 2,
-                        marginLeft: -7,
-                        marginRight: 10,
-                        color: item.shouted? COLORS.purple : COLORS.lightGray
-                      }}>{item.shouted}</McText>
-                      <McIcon source ={icons.check} size={20} style={{
+                    <McIcon source ={icons.check} size={20} style={{
                         tintColor: item.joined? COLORS.purple: COLORS.lightGray,
                         marginRight: 10,
                       }}/>
@@ -411,7 +429,17 @@ const Featured = ({ navigation, route }) => {
                         marginLeft: -7,
                         marginRight: 10,
                         color: item.joined? COLORS.purple : COLORS.lightGray
-                      }}>{item.joined}</McText>
+                      }}>{item.num_joins}</McText>
+                      <McIcon source ={icons.shoutout} size={20} style={{
+                        tintColor: item.shouted? COLORS.purple: COLORS.lightGray,
+                        marginRight: 10,
+                      }}/>
+                      <McText body7 style={{
+                        marginTop: 2,
+                        marginLeft: -7,
+                        marginRight: 10,
+                        color: item.shouted? COLORS.purple : COLORS.lightGray
+                      }}>{item.num_shouts}</McText>
                       
                   </View>
                 </View>
@@ -442,13 +470,18 @@ const Featured = ({ navigation, route }) => {
         
       </SectionHeader>
       </View>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
+        }>
       <View>
-        {FinImport[1]? <FlatList
+        {MData[0]? <FlatList
                 horizontal
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={Data()[0]}
+                data={Object.values(MData[0])}
                 renderItem={_renderSpotlight}
                 style={{
                   marginTop: 8,
@@ -459,12 +492,12 @@ const Featured = ({ navigation, route }) => {
               :<Text>loadd....</Text>
           } 
         </View>
-      {FinImport[1] ?
-          Data().slice(1,3).map((sdata, idx)=>
+      {MData[1] ?
+          Object.values(MData).slice(1,3).map((sdata, idx)=>
           <View>
             <SectionTitle>
               <McText h3>
-                {sdata === null ? null : sdata.header}
+              {sdata === null ? null : Headers[idx + 1]}
               </McText>
             </SectionTitle>
             <View>
@@ -473,7 +506,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata === null ? null : sdata.data}
+                data={sdata === null ? null : Object.values(sdata)}
                 renderItem={_renderItem}
               extraData = {RefreshD[idx + 1]}
               ></FlatList>
@@ -485,12 +518,12 @@ const Featured = ({ navigation, route }) => {
           )
           : <Text>loadd....</Text>
         }
-        {FinImport[2] ?
-          Data().slice(3,8).map((sdata)=>
+        {MData[3] ?
+          Data().slice(3,8).map((sdata, idx)=>
           <View>
             <SectionTitle>
               <McText h3>
-                {sdata === null ? null : sdata.header}
+              {sdata === null ? null : Headers[idx + 3]}
               </McText>
             </SectionTitle>
             <View>
@@ -499,7 +532,7 @@ const Featured = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => 'event_' + item.id}
                 //data={dummyData[dataset]}
-                data={sdata === null ? null : sdata.data}
+                data={sdata === null ? null : Object.values(sdata)}
                 renderItem={_renderItem}
               ></FlatList>
             </View>
