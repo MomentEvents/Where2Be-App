@@ -25,7 +25,7 @@ const Featured = ({ navigation, route }) => {
 
   const [category_feat, setcategory_feat] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
-  const {UserId, setupData, Data, test, RefreshD, FinImport, refreshFeat, Headers, MData} = useContext(AuthContext)
+  const {UserId, setupData, Data, RefreshD, FinImport, refreshFeat, Headers, MData} = useContext(AuthContext)
 
   const [loading, setLoading] = useState(true);
   // const [type, setType] = useState("Instagram");
