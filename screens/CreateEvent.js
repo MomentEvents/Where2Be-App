@@ -33,14 +33,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import DatePicker from "react-native-date-picker";
+import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import DateTimePickerPopup from "../components/DateTimePickerPopup/DateTimePickerPopup";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import PreviewEventDetail from "./PreviewEventDetail";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -50,125 +53,60 @@ const dummyTags = [
   "Other",
   "Recreation",
 ];
+
 const inTags = [];
-var outTags = [];
+var outTags = {};
+function outDict(dict) {
+
+  var outList = []
+  for (const [key, value] of Object.entries(dict)) {
+      if (value == true) {
+          outList.push(key)
+      }
+  }
+  return outList
+ }
+
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const CreateEvent = ({ navigation, routenew }) => {
-  const [date, setDate] = useState(new Date());
-  const [didSelectDate, setDidSelectDate] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const theme = useColorScheme();
-  var backgroundColorStyle = {
-    backgroundColor: COLORS.white,
-  };
-  if (theme === "dark") {
-    backgroundColorStyle = {
-      backgroundColor: COLORS.black,
-    };
+  const [title,setTitle] = useState(null)
+  const [location,setLocation] = useState(null)
+  const [image,setImage] = useState(null)
+  const [date,setDate] = useState()
+  const [desc, setDesc] = useState(null)
+  const [start, setStart] = useState()
+  const [end, setEnd] = useState()
+  const [img, setImg] = useState()
+
+  const handleSubmit = () => {
+    console.log('Title: ' + title)
+    console.log('Date: '+ date)
+    console.log('Start: ' + start)
+    console.log('End: ' + end)
+    console.log('Desc: ' +desc)
+    console.log('Loc: ' +location)
+    var outList = outDict(outTags)
+    console.log('Tags: ' + outList)
+    console.log('Image: ', img)
+    if(!img || !title || !date || !start || !end || !desc || !location){
+      Alert.alert("Error", "Please fill in all the necessary fields.")
+      return;
+    }
+    if(start >= end){
+      Alert.alert("Error", "Please make the start time before the end time.")
+      return;
+    }
+    if(outList.length == 0 || outList.lenghth > 2){
+      Alert.alert("Error", "Please select up to 2 tags")
+      return;
+    }
+    const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
+    navigation.navigate('PreviewEventDetail', {createEvent: out});
   }
 
-  // Component
-
-  // Pass in:
- /********************************
-  * state variable (both its setter and the variable itself): value
-  * 
-  * 
-  * 
-  */
-
-  const onSelectDate = () => {
-    console.log("Selected Date Picker");
-    setShowDatePicker(true);
-  };
-  const onDateChange = (event, selectedDate) => {
-    console.log("hi");
-    setDate(selectedDate);
-    setDidSelectDate(true);
-  };
-
-  const closeDatePicker = () => {
-    setShowDatePicker(false);
-  }
-
-  const onStartTimeChange = (event, selectedTime) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const onEndTimeChange = (event, selectedTime) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  // console.log(ab);
-  // for (var i = 0; i < numrows; i++) {
-  //     rows.push(ObjectRow());
-  // }
-  // return tbody(rows);
   return (
     <SafeAreaView style={styles.container}>
-      <Modal animationType="fade" transparent={true} visible={showDatePicker}>
-        <View style={{ flex: 1}}>
-          {Platform.OS === 'ios' ?           <DateTimePicker
-            value={date}
-            mode={"date"}
-            display={Platform.OS == "ios" ? "inline" : "spinner"}
-            is24Hour={true}
-            onChange={onDateChange}
-            
-          /> : DateTimePickerAndroid.open({
-            mode: 'date',
-            value: date,
-            })
-          }
-        
-          {/* <DateTimePicker
-            value={date}
-            mode={"date"}
-            display={Platform.OS == "ios" ? "inline" : "spinner"}
-            is24Hour={true}
-            onChange={onDateChange}
-            
-          />
-          <TouchableOpacity
-            style={{margin: 20, ...styles.button, ...styles.buttonClose}}
-            onPress={closeDatePicker}
-          >
-            <Text style={{padding: 5, ...styles.textStyle}}>Close</Text>
-          </TouchableOpacity> */}
-        </View>
-      </Modal>
-      {/* <Modal
-          animationType="fade"
-          transparent={true}
-          visible={showDatePicker}
-          style={styles.modalBackground}
-        >
-          <DateTimePicker
-            value={new Date(Date.now())}
-            mode={"date"}
-            display={Platform.OS === "ios" ? "spinner" : "default"}
-            is24Hour={true}
-            onChange={onDateChange}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setShowDatePicker(false);
-            }}
-          >
-            <Text>Hide me!</Text>
-          </TouchableOpacity>
-        </Modal> */}
       <View style={styles.tempNav}>
         <SectionHeader>
           <TouchableOpacity
@@ -206,6 +144,9 @@ const CreateEvent = ({ navigation, routenew }) => {
                 marginRight: 15,
                 marginTop: 5,
               }}
+              onPress={() =>{
+                handleSubmit();
+              }}
             >
               <McText
                 h3
@@ -213,7 +154,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                   color: COLORS.purple,
                 }}
               >
-                Post
+                Next
               </McText>
             </TouchableOpacity>
           </View>
@@ -230,31 +171,16 @@ const CreateEvent = ({ navigation, routenew }) => {
           >
             Image
           </McText>
-          <TouchableOpacity
-            style={{
-              height: SIZES.height / 4,
-              width: SIZES.width * 0.75,
-              backgroundColor: COLORS.black,
-              borderRadius: 10,
-              marginBottom: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 2,
-              borderColor: COLORS.gray,
-            }}
-          >
-            <McIcon
-              source={icons.addphoto}
-              size={60}
-              style={{
-                margin: 4,
-                tintColor: COLORS.purple,
-              }}
-            />
-          </TouchableOpacity>
+          <View style={{alignItems:'center', marginLeft: -50}}>
+          <ImagePickerComponent setImg={setImg}>
+            image={image}  
+            setImage={setImage}         
+          </ImagePickerComponent>
+          </View>
           <View
             style={{
               marginVertical: 8,
+              
             }}
           >
             <McText
@@ -269,16 +195,15 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Enter a short, descriptive title."
                 placeholderTextColor={COLORS.gray1}
+                value={title}
+                onChangeText={setTitle}
                 multiline={true}
-                //onChange={handleOnSearch}
-                //value={bad}
+                maxLength={100}
                 style={{
                   ...FONTS.body3,
+                  marginTop: 2,
                   color: COLORS.white,
-                  width: 250,
-                  marginLeft: 5,
-                  padding: 4,
-                  marginBottom: 5,
+                  padding: 10,
                 }}
               />
             </SectionTextIn>
@@ -300,14 +225,17 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Enter a description for your event."
                 placeholderTextColor={COLORS.gray1}
+                multiline={true}
+                maxLength={1000}
+                value={desc}
+                onChangeText={setDesc}
                 //onChange={handleOnSearch}
                 //value={bad}
                 style={{
                   ...FONTS.body3,
+                  marginTop: 2,
                   color: COLORS.white,
-                  marginLeft: 5,
-                  padding: 4,
-                  marginBottom: 5,
+                  padding: 10,
                 }}
               />
             </SectionTextIn>
@@ -326,37 +254,15 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-            <TouchableOpacity onPress={onSelectDate}>
-              <SectionTextIn>
-                {!didSelectDate ? (
-                  <Text
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.gray1,
-                      marginTop: 3,
-                      marginBottom: 3,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  >
-                    Enter a date
-                  </Text>
-                ) : (
-                  <Text
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.white,
-                      marginTop: 4,
-                      marginBottom: 4,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  >
-                    {date.toDateString()}
-                  </Text>
-                )}
-              </SectionTextIn>
-            </TouchableOpacity>
+              <DateTimePickerPopup setDate={setDate}
+                mode="date"
+                placeholderText="Pick a date."
+                customStyles={{
+                  ...FONTS.body3,
+                  color: COLORS.white,
+                  padding: 10,
+                }}
+              />
           </View>
           <View
             style={{
@@ -376,43 +282,31 @@ const CreateEvent = ({ navigation, routenew }) => {
                 flexDirection: "row",
               }}
             >
-              <SectionTimings>
-                <TextInput
-                  placeholder="Start"
-                  placeholderTextColor={COLORS.gray1}
-                  //onChange={handleOnSearch}
-                  //value={bad}
-                  style={{
+                <DateTimePickerPopup setDate={setStart}
+                  mode="time"
+                  placeholderText="Start"
+                  customStyles={{
                     ...FONTS.body3,
                     color: COLORS.white,
                     width: 250,
-                    marginBottom: 5,
-                    marginLeft: 5,
-                    padding: 4,
+                    padding: 10,
                   }}
                 />
-              </SectionTimings>
               <View
                 style={{
                   paddingLeft: SIZES.width / 10,
                 }}
               >
-                <SectionTimings>
-                  <TextInput
-                    placeholder="End"
-                    placeholderTextColor={COLORS.gray1}
-                    //onChange={handleOnSearch}
-                    //value={bad}
-                    style={{
-                      ...FONTS.body3,
-                      color: COLORS.white,
-                      width: 250,
-                      marginBottom: 5,
-                      marginLeft: 5,
-                      padding: 4,
-                    }}
-                  />
-                </SectionTimings>
+                <DateTimePickerPopup setDate={setEnd}
+                  mode="time"
+                  placeholderText="End"
+                  customStyles={{
+                    ...FONTS.body3,
+                    color: COLORS.white,
+                    width: 250,
+                    padding: 10,
+                  }}
+                />
               </View>
             </View>
           </View>
@@ -433,13 +327,14 @@ const CreateEvent = ({ navigation, routenew }) => {
               <TextInput
                 placeholder="Where will your event happen?"
                 placeholderTextColor={COLORS.gray1}
+                maxLength={100}
+                value={location}
+                onChangeText={setLocation}
                 style={{
                   ...FONTS.body3,
+                  padding: 10,
                   color: COLORS.white,
                   width: 250,
-                  marginBottom: 5,
-                  marginLeft: 5,
-                  padding: 4,
                 }}
               />
             </SectionTextIn>

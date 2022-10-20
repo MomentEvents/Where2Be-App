@@ -260,7 +260,7 @@ const Featured = ({ navigation, route }) => {
                 colors = {['transparent', COLORS.black]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 1}}
-                style = {{padding:0, marginBottom: 0.3,marginHorizontal:0.3, borderRadius: 20, height: SIZES.height/6}}>
+                style = {{padding:0, borderRadius: 20, height: SIZES.height/6}}>
             <View style={{
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
@@ -402,7 +402,7 @@ const Featured = ({ navigation, route }) => {
                 colors = {['transparent', COLORS.trueBlack]}
                 start = {{x: 1, y: 0}}
                 end = {{ x: 1, y: 0.9}}
-                style = {{padding:0, marginBottom: 0.3, borderRadius: 20, height: SIZES.height/7}}>
+                style = {{padding:0, borderRadius: 20, height: SIZES.height/7}}>
                   <View style={{
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
@@ -541,7 +541,7 @@ const Featured = ({ navigation, route }) => {
           //{_renderList(sdata.header, sdata.data)}
 
           )
-          : <Text>loadd....</Text>
+          : <Text>loading....</Text>
         }
       <SectionFooter><McText h1 style={{
         //temp fix for padding
@@ -562,8 +562,7 @@ const Featured = ({ navigation, route }) => {
             alignItems: 'center'
             }}
           onPress={()=>{
-                      test();
-                      // navigation.navigate('CreateEvent');
+                      navigation.navigate('CreateEvent');
                       console.log("Chirag's an idiot")
                       }}
                   >

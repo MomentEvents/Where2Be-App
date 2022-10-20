@@ -299,7 +299,7 @@ const Personal = ({ navigation, route }) => {
               }}
             />
             :<Text>loadd....</Text>)
-          } 
+          }
       <SectionFooter><McText h1 style={{
         //temp fix for padding
         color:'transparent'

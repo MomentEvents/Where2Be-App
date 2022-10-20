@@ -194,9 +194,9 @@ export const AuthProvider = ({children}) =>{
     
   }
 
-  const test = () => {
-    console.log(Choice_Dict[8163]);
-  }
+  // const test = () => {
+  //   console.log(Choice_Dict[8163]);
+  // }
 
   const refreshFeat = () =>{
     setDict({})

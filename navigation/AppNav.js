@@ -13,7 +13,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
-import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent } from '../screens';
+import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail } from '../screens';
 import { SIZES, COLORS, customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -91,7 +91,7 @@ const AuthStack = () =>{
           <Stack.Screen name="ImageScreen" component={ImageScreen}/>
           <Stack.Screen name="CreateEvent" component={CreateEvent}/>
           <Stack.Screen name="Interests" component={Interests}/>
-          
+          <Stack.Screen name="PreviewEventDetail" component={PreviewEventDetail}/>
         </Stack.Navigator>
     );
   }

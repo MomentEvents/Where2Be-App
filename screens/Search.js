@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import moment from 'moment';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
+import { dummData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 
 
 import events from '../constants/events.json'
