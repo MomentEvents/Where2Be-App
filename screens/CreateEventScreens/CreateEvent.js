@@ -25,25 +25,25 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import InterestSelector from "../components/InterestSelect";
+import InterestSelector from "../../components/InterestSelect";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
-import { McText, McIcon, McAvatar } from "../components";
+import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
+import { McText, McIcon, McAvatar } from "../../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePickerPopup from "../components/DateTimePickerPopup/DateTimePickerPopup";
-import ImagePickerComponent from "../components/ImagePickerComponent";
+import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
+import ImagePickerComponent from "../../components/ImagePickerComponent";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import PreviewEventDetail from "./PreviewEventDetail";
+import PreviewEventDetail from "../PreviewEventDetail";
 const dummyTags = [
   "Academic",
   "Entertainment",
