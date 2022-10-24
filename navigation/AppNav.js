@@ -13,7 +13,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
-import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail } from '../screens';
+import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail, Profile, Settings } from '../screens';
 import { SIZES, COLORS, customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -27,14 +27,15 @@ function AppNav(){
   /* Loading custom fonts in async */
   const _loadAssetsAsync = async () => {
     await Font.loadAsync(customFonts);
-    setAssetLoaded(true);
+    setAssetLoaded(true); 
   };
   useEffect(() => {
     _loadAssetsAsync();
   });
+  //skip login: true ? <AppStack else UserId !== null ? <AppStack
   return ((assetsLoaded && !loadingToken)?
     <NavigationContainer>
-    {true ? <AppStack /> : <AuthStack />}
+    {UserId !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
     :<SafeAreaView style={styles.container}>
     <Image

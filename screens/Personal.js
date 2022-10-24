@@ -216,20 +216,6 @@ const Personal = ({ navigation, route }) => {
           <McText h1>
             <Text>Your Events</Text></McText>
         </View>
-        <View style={{
-          paddingLeft: 16,
-          flexDirection:'row'
-        }}><TouchableWithoutFeedback 
-        onPress={()=>{
-          logoutTok()
-        }}>
-          <McIcon source ={icons.filter} size={28} style={{
-            tintColor:COLORS.purple,
-            marginRight: 10,
-          }}/>
-        </TouchableWithoutFeedback>
-        </View>
-
       </SectionHeader>
       </View>
       <ButtonBox>
@@ -246,7 +232,7 @@ const Personal = ({ navigation, route }) => {
           onPress={() => {
             setTab(true);
           }}
-        ><McText h2>Future Events</McText>
+        ><McText body3>Upcoming</McText>
           </TouchableOpacity>
         <TouchableOpacity
         style = {{
@@ -262,7 +248,7 @@ const Personal = ({ navigation, route }) => {
             setTab(false);
           }}
           >
-            <McText h2>Past Events</McText>
+            <McText body3>Past</McText>
           </TouchableOpacity>
       </ButtonBox>
       {/* <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}> */}
@@ -320,6 +306,7 @@ const ButtonBox = styled.View`
 background-color: transparent;
 flex-direction: row;
 align-items: center;
+margin-top: 10;
 justify-content: space-between;
 `
 const SectionHeader = styled.View`

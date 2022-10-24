@@ -204,7 +204,7 @@ var height = Dimensions.get('window').height; //full height
             style={{
               ...FONTS.h4,
               color: COLORS.white,
-              width: 250,
+              width: width/1.5,
               marginLeft: 5
             }}
           />
@@ -214,36 +214,35 @@ var height = Dimensions.get('window').height; //full height
       <ButtonBox>
         <TouchableOpacity
           style = {{
-            width: width /2.3,
+            width: width/2.8,
             height: 38,
             backgroundColor: tab ? COLORS.purple : COLORS.gray,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 15,
-            marginLeft: 15,
-            marginRight: 7
           }}
           onPress={() => {
             setTab(true);
           }}
-        ><McText h3>Accounts</McText>
+        ><McText body3 style={{
+        }}>Accounts</McText>
           </TouchableOpacity>
         <TouchableOpacity
         style = {{
-          width: width /2.3,
           height: 38,
+          width: width/2.3,
           backgroundColor: tab ? COLORS.gray: COLORS.purple,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 15,
           marginLeft: 7,
-          marginRight: 15
         }}
           onPress={() => {
             setTab(false);
           }}
           >
-            <McText h3>Upcoming Events</McText>
+            <McText body3 style={{
+            }}>Upcoming Events</McText>
           </TouchableOpacity>
       </ButtonBox>
       <View >
@@ -284,10 +283,10 @@ var height = Dimensions.get('window').height; //full height
  };
 
  const ButtonBox = styled.View`
-background-color: transparent;
-flex-direction: row;
-align-items: center;
-justify-content: space-between;
+  background-color: transparent;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5;
 `
  const SectionHeader = styled.View`
  flex-direction: row;

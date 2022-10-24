@@ -4,7 +4,7 @@
  * 
 
  */
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { AuthContext } from '../AuthContext';
 
 
 
@@ -36,6 +37,8 @@ const Settings = ({ navigation, route }) => {
   const [img, setImg] = useState(null);
 
   const [loading, setLoading] = useState(true);
+
+  const {logoutTok, UserId, Data, setupData, FinImport, MData} = useContext(AuthContext);
   // console.log(joindedEvent)
 
   return (
@@ -97,6 +100,16 @@ const Settings = ({ navigation, route }) => {
           }}>
           <View style={styles.category}>
               <McText body2>Setting</McText>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.setting} onPress={()=>{
+          console.log('logout')
+          logoutTok()
+          }}>
+          <View style={styles.category}>
+              <McText body2 style={{
+                color: COLORS.purple
+              }}>Log Out</McText>
           </View>
         </TouchableHighlight>
       </View>
