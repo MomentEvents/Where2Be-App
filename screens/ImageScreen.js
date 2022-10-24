@@ -16,7 +16,7 @@ import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
+import ImageView from 'react-native-image-view';
 
 
 import {memo} from "react"
@@ -74,7 +74,14 @@ const ImageScreen = ({ navigation, route }) => {
                 }} size={36}/>
               </TouchableOpacity>
           </View>
-            <ImageBackground
+          <ImageViewer
+              images={{uri:img}}
+              imageIndex={0}
+              isVisible={true}
+              renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}>
+
+          </ImageViewer>
+            {/* <ImageBackground
           resizeMode='cover'
           source={{uri:img}}
           style = {{
@@ -83,7 +90,7 @@ const ImageScreen = ({ navigation, route }) => {
               SIZES.height < 700? SIZES.height * 0.4 : SIZES.height * 0.5,
             marginBottom: 80,
           }}
-        />
+        /> */}
       </LinearGradient>
     </View>
   );

@@ -25,6 +25,7 @@ import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../AuthContext';
 import UsedServer from "../constants/servercontants";
+import registerForPushNotificationsAsync from "../Services/Notifications";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -63,6 +64,8 @@ const Signup = ({ navigation, route }) => {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [error, seterror] = useState(false);
+  const [emailErr, setemailErr] = useState(false);
+  const [ServerErr, setServerErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [school, setSchool] = useState("");
@@ -76,6 +79,8 @@ const Signup = ({ navigation, route }) => {
   const usersignup = async () => {
     setLoading(true);
     seterror(false);
+    setemailErr(false);
+    setServerErr(false);
     //seterrors({name:false, username:false, password:false, email:false})
     let temperrors = {name:false, username:false, password:false, email:false, school:false}
     let erry = false;
@@ -117,18 +122,35 @@ const Signup = ({ navigation, route }) => {
             password: password,
             name: name,
             email: email,
-            school: school,
+            school: "univ_"+school,
           }),
         });
         const result = await resp.json();
         udata = result;
         console.log(result);
-        setData(result);
+        if(udata.error){
+          erry = true;
+          if(udata.error == "userid"){
+            seterror(true);
+          }else if(udata.error == "email"){
+            setemailErr(true);
+          }else{
+            setemailErr(true);
+            seterror(true);
+          }
+        }
+        else if (udata.name){
+          setData(result);
+          registerForPushNotificationsAsync(udata.username);
+        }else{
+          erry = true;
+          setServerErr(true);
+        }
+        
       } catch (err) {
         seterror(true);
         console.log("ERRROR");
-        console.log(err);
-        console.log(result);
+        console.log('error is: ',err);
         erry = true;
       } finally {
         trylogin(erry, udata);
@@ -158,6 +180,9 @@ const Signup = ({ navigation, route }) => {
       <SectionHeader>
         <McText h1>Create Account</McText>
       </SectionHeader>
+      <View>
+        {ServerErr && <McText style={{color: "#cc0000",}}> {" "} Server is down, please try again later </McText>}
+      </View>
       <CustomInput
         value= {name}
         setValue={setname}
@@ -188,7 +213,9 @@ const Signup = ({ navigation, route }) => {
         placeholder ="Email"
       />
       <View>
-        {errors.email && (
+        {emailErr
+        ?<McText style={{color: "#cc0000",}}> {" "} Email already in use, try a different one</McText>
+        :errors.email && (
           <McText style={{color: "#cc0000",}}>
             {" "}
             Please enter a valid email
@@ -276,7 +303,7 @@ const Signup = ({ navigation, route }) => {
 };
 const SectionHeader = styled.View`
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   margin-top: ${Platform.OS === "ios" ? "40px" : "20px"};
   width: ${width*0.65};
   margin: 20px;
