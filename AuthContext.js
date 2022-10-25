@@ -231,7 +231,9 @@ export const AuthProvider = ({children}) =>{
   }
 
   const logoutTok = () =>{
+    console.log(UserId)
     setUserId(null);
+    console.log(UserId)
     setUserSchool(null);
     setUserData(null);
     AsyncStorage.removeItem('uid');

@@ -401,7 +401,10 @@ const EventDetail = ({ navigation, route }) => {
                 }}>
             <McText 
               onTextLayout={onTextLayout}
-              numberOfLines={textShown ? undefined : 3} body3>
+              numberOfLines={textShown ? undefined : 3} body3
+              selectable={true}
+              >
+
                 {selectedEvent?.description}
             </McText>
               {

@@ -276,10 +276,7 @@ const Signup = ({ navigation, route }) => {
             Please select a school
           </McText>
         )}
-
-      
-      
-      
+        
         <TouchableOpacity style={styles.button}
           onPress={() => {
             console.log("logging in");

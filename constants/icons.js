@@ -21,9 +21,10 @@ const close = require('../assets/icons/close.png')
 const fullscreen = require('../assets/icons/fullscreen.png')
 const plus = require('../assets/icons/plus.png')
 const addphoto = require('../assets/icons/addPhoto.png')
+const tag = require('../assets/icons/tag.png')
 
 export default {
-  back_arrow,
+  back_arrow,tag,
   filter,
   shoutout,
   addphoto,

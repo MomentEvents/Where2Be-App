@@ -21,7 +21,14 @@ import UsedServer from '../constants/servercontants';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
-const Featured = ({ navigation, route }) => {
+const LoginLessHome = ({ navigation, route }) => {
+
+  const schlist = [
+    {key:'UIUC', value: 'UIUC'},
+    {key:'UCSD', value: 'UCSD'}
+  ];
+
+  const [school, setSchool] = useState("");
 
   const [category_feat, setcategory_feat] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
@@ -201,29 +208,6 @@ const Featured = ({ navigation, route }) => {
       </View>
     )
   }
-
-  const _renderCategories = ({item, index}) => {
-    SplashScreen.hideAsync();
-    return (
-      <View>
-      <TouchableHighlight
-        onPress={()=>{
-          navigation.navigate('InterestDetail', {selectedInterest: item.name})
-        }}
-        style={styles.category}>
-        <View style={{
-        width: width/3.3,
-        height: height/25,
-        alignItems: 'center',
-      }}><McText h3>{item.name}</McText>
-      <McText body4 style={{
-        opacity: 0.7
-      }}>{item.event_count} Events</McText></View>
-        </TouchableHighlight>
-    </View>
-    )
-  }
-
   const _renderSpotlight = ({item, index}) => {
   return (
     <View style={{
@@ -231,7 +215,7 @@ const Featured = ({ navigation, route }) => {
     }}>
       <TouchableHighlight
         onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
+          navigation.navigate('Login');
         }}
         style={{
           borderRadius: 20,
@@ -373,7 +357,7 @@ const Featured = ({ navigation, route }) => {
           marginLeft: index === 0 ? 20: 15,
         }}><TouchableHighlight
         onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
+          navigation.navigate('Login');
         }}
         style={{
           borderRadius: 20,
@@ -459,16 +443,6 @@ const Featured = ({ navigation, route }) => {
           
         </View>
         
-        <TouchableWithoutFeedback
-              onPress={()=>{
-                navigation.navigate('Interests')
-              }}>
-                <McIcon source={icons.tag} size={24} style={{
-                  tintColor:COLORS.gray,
-                  marginTop: 1,
-                }}/>
-        </TouchableWithoutFeedback>
-        
       </SectionHeader>
       </View>
       <ScrollView 
@@ -549,29 +523,7 @@ const Featured = ({ navigation, route }) => {
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-      <SectionDone>
-          <TouchableOpacity
-          style={{
-            width: 60,
-            height: 60,
-            marginBottom: 60,
-            borderRadius: 80,
-            borderWidth: 1,
-            borderColor: COLORS.gray,
-            backgroundColor: COLORS.purple,
-            justifyContent: 'center',
-            alignItems: 'center'
-            }}
-          onPress={()=>{
-                      navigation.navigate('CreateEvent');
-                      console.log("Chirag's an idiot")
-                      }}
-                  >
-                  <McIcon source={icons.plus} size={44} style={{
-                    tintColor: COLORS.white,
-                  }}/>
-          </TouchableOpacity>
-      </SectionDone>
+      
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
@@ -691,4 +643,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Featured;
+export default LoginLessHome;

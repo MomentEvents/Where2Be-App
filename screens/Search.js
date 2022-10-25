@@ -22,12 +22,19 @@ var height = Dimensions.get('window').height; //full height
   const [dataOrg, setDataOrg] = useState([]); 
   const [dataEvent, setDataEvent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState(false);
+  const [tab, setTab] = useState(true);
   const {UserId, UserSchool} = useContext(AuthContext)
   const fetchData = async () => {
     console.log(UserSchool)
     const resp1 = await fetch(UsedServer + '/search_org', {
-      method: 'GET', 
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        school: UserSchool
+      }) 
     });
     const data1 = await resp1.json();
     setDataOrg(data1);
@@ -129,7 +136,7 @@ var height = Dimensions.get('window').height; //full height
           //borderRadius: 10,
           marginRight: 10,
           marginLeft: 30,
-          //backgroundColor: COLORS.input,
+          // backgroundColor: COLORS.input,
           justifyContent: 'center',
           // alignItems: 'center'
           }}
@@ -204,7 +211,7 @@ var height = Dimensions.get('window').height; //full height
             style={{
               ...FONTS.h4,
               color: COLORS.white,
-              width: 250,
+              width: width/1.5,
               marginLeft: 5
             }}
           />
@@ -214,43 +221,42 @@ var height = Dimensions.get('window').height; //full height
       <ButtonBox>
         <TouchableOpacity
           style = {{
-            width: width /2.3,
+            width: width/2.8,
             height: 38,
             backgroundColor: tab ? COLORS.purple : COLORS.gray,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 15,
-            marginLeft: 15,
-            marginRight: 7
           }}
           onPress={() => {
             setTab(true);
           }}
-        ><McText h3>Accounts</McText>
+        ><McText body3 style={{
+        }}>Accounts</McText>
           </TouchableOpacity>
         <TouchableOpacity
         style = {{
-          width: width /2.3,
           height: 38,
+          width: width/2.3,
           backgroundColor: tab ? COLORS.gray: COLORS.purple,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 15,
           marginLeft: 7,
-          marginRight: 15
         }}
           onPress={() => {
             setTab(false);
           }}
           >
-            <McText h3>Upcoming Events</McText>
+            <McText body3 style={{
+            }}>Upcoming Events</McText>
           </TouchableOpacity>
       </ButtonBox>
       <View >
-       {tab? <FlatList
+       <FlatList
           vertical
-          data = {sResultsOrg}
-          renderItem = {_renderOrgs}
+          data = {tab? sResultsEvent : sResultsOrg}
+          renderItem = { tab ? _renderEvent: _renderOrgs}
           initialNumToRender = {4}
           style={{
             marginTop: 0,
@@ -259,18 +265,7 @@ var height = Dimensions.get('window').height; //full height
             marginRight: 20,
           }}
         />
-        :<FlatList
-          vertical
-          data = {sResultsEvent}
-          renderItem = {_renderEvent}
-          initialNumToRender = {4}
-          style={{
-            marginTop: 0,
-            marginBottom: 0,
-            marginLeft: 0,
-            marginRight: 20,
-          }}
-        />}
+        
       </View>
       <SectionFooter><McText h1 style={{
         //temp fix for padding
@@ -284,10 +279,10 @@ var height = Dimensions.get('window').height; //full height
  };
 
  const ButtonBox = styled.View`
-background-color: transparent;
-flex-direction: row;
-align-items: center;
-justify-content: space-between;
+  background-color: transparent;
+  flex-direction: row;
+  align-items: center;
+  margin-vertical: 5;
 `
  const SectionHeader = styled.View`
  flex-direction: row;

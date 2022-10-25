@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Personal, Search } from '../screens';
+import { Featured, Personal, Search, Profile } from '../screens';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import { McText, McIcon } from '../components';
 import { Platform } from 'react-native';
@@ -145,10 +145,22 @@ const Tabs = ({ params }) => {
         component={Personal}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_4} />
+            <TabIcon focused={focused} icon={icons.like} />
           ),
           tabBarLabel: ({ focused }) => (
             <TabLabel focused={focused} text="Personal"/>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={icons.tab_4} />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <TabLabel focused={focused} text="Profile"/>
           ),
         }}
       />

@@ -150,14 +150,12 @@ const Interests = ({ navigation, route }) => {
             //     {renderList(daata['title'], daata['data'])}
             // </View>
             <View>
-              <McText style={{paddingLeft:20, paddingTop:8}} h3 >{daata['title']}</McText>
+              <McText style={{paddingLeft:20, paddingTop:8}} h3>{daata['title']}</McText>
                 <ItemList>
                     <FlatList data={daata['data']}
-                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginHorizontal: 25 }}
+                    columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 1, marginLeft: 15, marginRight: 10, }}
                     numColumns={3}
                     style={{
-                        paddingLeft:10,
-                        paddingRight:10,
                         backgroundColor: 'transparent',
                     }}
                     showsHorizontalScrollIndicator={false}
@@ -187,11 +185,14 @@ const Interests = ({ navigation, route }) => {
                 onPress={()=>{
                   navigation.goBack();
                 }}>
-                <McIcon source ={icons.back_arrow} size={24}/>
+                <McIcon source ={icons.back_arrow} style={{
+                  tintColor: COLORS.white,
+                  marginLeft: -12,
+                }} size={24}/>
               </TouchableWithoutFeedback></SecBackButton>
               <McText h1>Interests</McText>
             </TitleSec>
-            <McText body2 style={{opacity: 0.2, marginLeft: 4}}>Select the events you enjoy!</McText>
+            <McText body2 style={{marginLeft: 18, color: COLORS.purple}}>Select the events you enjoy!</McText>
           </View>
         </SectionHeader>
         <ScrollView>
@@ -207,7 +208,7 @@ const Interests = ({ navigation, route }) => {
             borderRadius: 80,
             borderWidth: 1,
             borderColor: COLORS.gray,
-            backgroundColor: COLORS.input,
+            backgroundColor: COLORS.purple,
             justifyContent: 'center',
             alignItems: 'center'
             }}
@@ -265,6 +266,7 @@ const SectionDone = styled.View`
 const SectionInterests = styled.View`
   flex-direction: row;
   backgroundColor: transparent;
+  marginLeft: 32;
 `;
 
 const ItemList = styled.View`

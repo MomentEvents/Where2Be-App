@@ -9,8 +9,11 @@ import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
 import ImageScreen from './ImageScreen';
-import CreateEvent from './CreateEvent';
+import CreateEvent from './CreateEventScreens/CreateEvent';
 import PreviewEventDetail from './PreviewEventDetail'
+import Profile from './Profile'
+import Settings from './Settings'
+import LoginLessHome from './LoginLessHome';
 
 
 
@@ -27,5 +30,7 @@ export {
   OrganizationDetail,
   Interests,
   PreviewEventDetail,
-
+  Profile,
+  Settings,
+  LoginLessHome
 }
