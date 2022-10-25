@@ -13,7 +13,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './Tabs';
-import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail, Profile, Settings } from '../screens';
+import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail, Profile, Settings, LoginLessHome } from '../screens';
 import { SIZES, COLORS, customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -64,8 +64,9 @@ const AuthStack = () =>{
         screenOptions={{
         headerShown: false,
         }}
-        initialRouteName="Login"
+        initialRouteName="LoginLessHome"
     >
+        <Stack.Screen name="LoginLessHome" component={LoginLessHome}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Signup" component={Signup}/>
         

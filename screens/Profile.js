@@ -27,7 +27,7 @@ const Profile = ({ navigation, route }) => {
   const [data3, setData3] = useState([]);
   const [data4, setData4] = useState([]);
   const [category_feat, setcategory_feat] = useState([]);
-  const {logoutTok, UserId} = useContext(AuthContext);
+  const {logoutTok, UserId, UserData} = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   
@@ -361,13 +361,13 @@ const Profile = ({ navigation, route }) => {
                         color: COLORS.purple
                     }}>
                       {/* {data2?.name} */}
-                      Real Name
+                      {UserData.name}
                       </McText>
                       <McText h3 style={{
                         paddingBottom: 6,
                     }}>
                       {/* {data2?.name} */}
-                      @username
+                      @{UserId.toLowerCase()}
                       </McText>
                     </View>
             </View>

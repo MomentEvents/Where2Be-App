@@ -13,6 +13,7 @@ import CreateEvent from './CreateEventScreens/CreateEvent';
 import PreviewEventDetail from './PreviewEventDetail'
 import Profile from './Profile'
 import Settings from './Settings'
+import LoginLessHome from './LoginLessHome';
 
 
 
@@ -30,5 +31,6 @@ export {
   Interests,
   PreviewEventDetail,
   Profile,
-  Settings
+  Settings,
+  LoginLessHome
 }

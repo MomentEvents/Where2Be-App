@@ -198,7 +198,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 value={title}
                 onChangeText={setTitle}
                 multiline={true}
-                maxLength={100}
+                maxLength={40}
                 style={{
                   ...FONTS.body3,
                   marginTop: 2,

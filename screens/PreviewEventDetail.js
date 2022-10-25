@@ -24,6 +24,7 @@ import {memo} from "react"
 
 import { Dimensions } from "react-native";
 import UsedServer from '../constants/servercontants';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -46,6 +47,27 @@ const PreviewEventDetail = ({ navigation, route }) => {
   
   const toggleNumberOfLines = () => { //To toggle the show text or hide it
       setTextShown(!textShown);
+  }
+
+  const postEvent = async () =>{
+    const resp2 = await fetch(UsedServer + `/create_event`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        image: "https://i.pinimg.com/originals/44/d9/8c/44d98cccb725fd3a80c0446b9b2e646d.jpg",
+        title: createEvent?.title, 
+        date: createEvent?.date.toString() + ' ' + createEvent?.start + ' PM',
+        start: createEvent?.start, 
+        end: createEvent?.end, 
+        desc: createEvent?.desc, 
+        loc: createEvent?.loc, 
+        tags: createEvent?.tags,
+        UserId: UserId,
+      })
+    }); 
   }
 
   useEffect(()=>{
@@ -312,7 +334,10 @@ const PreviewEventDetail = ({ navigation, route }) => {
           onPress={()=>{
                       // test();
                       // navigation.navigate('Featured');
-                      console.log(createEvent)
+                      // console.log(createEvent)
+                      postEvent()
+                      navigation.navigate('Featured')
+                      // console.log(createEvent?.date.toString() + ' ' + createEvent?.start + ' PM')
                       }}
                   >
                   <McText h3 style={{margin: 8}}>POST</McText>

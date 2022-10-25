@@ -23,6 +23,13 @@ import UsedServer from '../constants/servercontants';
 // import { Text, View, StyleSheet, Button } from 'react-native';
 const LoginLessHome = ({ navigation, route }) => {
 
+  const schlist = [
+    {key:'UIUC', value: 'UIUC'},
+    {key:'UCSD', value: 'UCSD'}
+  ];
+
+  const [school, setSchool] = useState("");
+
   const [category_feat, setcategory_feat] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const {UserId, setupData, Data, RefreshD, FinImport, refreshFeat, Headers, MData} = useContext(AuthContext)
@@ -201,29 +208,6 @@ const LoginLessHome = ({ navigation, route }) => {
       </View>
     )
   }
-
-  const _renderCategories = ({item, index}) => {
-    SplashScreen.hideAsync();
-    return (
-      <View>
-      <TouchableHighlight
-        onPress={()=>{
-          navigation.navigate('InterestDetail', {selectedInterest: item.name})
-        }}
-        style={styles.category}>
-        <View style={{
-        width: width/3.3,
-        height: height/25,
-        alignItems: 'center',
-      }}><McText h3>{item.name}</McText>
-      <McText body4 style={{
-        opacity: 0.7
-      }}>{item.event_count} Events</McText></View>
-        </TouchableHighlight>
-    </View>
-    )
-  }
-
   const _renderSpotlight = ({item, index}) => {
   return (
     <View style={{
@@ -231,7 +215,7 @@ const LoginLessHome = ({ navigation, route }) => {
     }}>
       <TouchableHighlight
         onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
+          navigation.navigate('Login');
         }}
         style={{
           borderRadius: 20,
@@ -373,7 +357,7 @@ const LoginLessHome = ({ navigation, route }) => {
           marginLeft: index === 0 ? 20: 15,
         }}><TouchableHighlight
         onPress={()=>{
-          navigation.navigate('EventDetail', {selectedEvent: item});
+          navigation.navigate('Login');
         }}
         style={{
           borderRadius: 20,
@@ -539,28 +523,7 @@ const LoginLessHome = ({ navigation, route }) => {
         color:'transparent'
       }}>hello</McText></SectionFooter>
       </ScrollView>
-      <SectionDone>
-          <TouchableOpacity
-          style={{
-            width: 60,
-            height: 60,
-            marginBottom: 60,
-            borderRadius: 80,
-            borderWidth: 1,
-            borderColor: COLORS.gray,
-            backgroundColor: COLORS.purple,
-            justifyContent: 'center',
-            alignItems: 'center'
-            }}
-          onPress={()=>{
-                      navigation.navigate('CreateEvent');
-                      }}
-                  >
-                  <McIcon source={icons.plus} size={44} style={{
-                    tintColor: COLORS.white,
-                  }}/>
-          </TouchableOpacity>
-      </SectionDone>
+      
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}

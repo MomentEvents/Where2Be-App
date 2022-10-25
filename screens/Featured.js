@@ -463,8 +463,9 @@ const Featured = ({ navigation, route }) => {
               onPress={()=>{
                 navigation.navigate('Interests')
               }}>
-                <McIcon source={icons.tab_4} size={28} style={{
-                  tintColor:COLORS.gray
+                <McIcon source={icons.tag} size={24} style={{
+                  tintColor:COLORS.gray,
+                  marginTop: 1,
                 }}/>
         </TouchableWithoutFeedback>
         

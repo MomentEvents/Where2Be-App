@@ -22,12 +22,19 @@ var height = Dimensions.get('window').height; //full height
   const [dataOrg, setDataOrg] = useState([]); 
   const [dataEvent, setDataEvent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState(false);
+  const [tab, setTab] = useState(true);
   const {UserId, UserSchool} = useContext(AuthContext)
   const fetchData = async () => {
     console.log(UserSchool)
     const resp1 = await fetch(UsedServer + '/search_org', {
-      method: 'GET', 
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        school: UserSchool
+      }) 
     });
     const data1 = await resp1.json();
     setDataOrg(data1);
@@ -129,7 +136,7 @@ var height = Dimensions.get('window').height; //full height
           //borderRadius: 10,
           marginRight: 10,
           marginLeft: 30,
-          //backgroundColor: COLORS.input,
+          // backgroundColor: COLORS.input,
           justifyContent: 'center',
           // alignItems: 'center'
           }}
@@ -246,10 +253,10 @@ var height = Dimensions.get('window').height; //full height
           </TouchableOpacity>
       </ButtonBox>
       <View >
-       {tab? <FlatList
+       <FlatList
           vertical
-          data = {sResultsOrg}
-          renderItem = {_renderOrgs}
+          data = {tab? sResultsEvent : sResultsOrg}
+          renderItem = { tab ? _renderEvent: _renderOrgs}
           initialNumToRender = {4}
           style={{
             marginTop: 0,
@@ -258,18 +265,7 @@ var height = Dimensions.get('window').height; //full height
             marginRight: 20,
           }}
         />
-        :<FlatList
-          vertical
-          data = {sResultsEvent}
-          renderItem = {_renderEvent}
-          initialNumToRender = {4}
-          style={{
-            marginTop: 0,
-            marginBottom: 0,
-            marginLeft: 0,
-            marginRight: 20,
-          }}
-        />}
+        
       </View>
       <SectionFooter><McText h1 style={{
         //temp fix for padding
@@ -286,7 +282,7 @@ var height = Dimensions.get('window').height; //full height
   background-color: transparent;
   flex-direction: row;
   align-items: center;
-  margin-top: 5;
+  margin-vertical: 5;
 `
  const SectionHeader = styled.View`
  flex-direction: row;
