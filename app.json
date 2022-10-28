@@ -23,14 +23,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wunderblu.moment",
+      "bundleIdentifier": "com.kylewade.moment",
       "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "com.kylewade.moment"
     },
     "web": {
       "favicon": "./assets/favicon.png"
