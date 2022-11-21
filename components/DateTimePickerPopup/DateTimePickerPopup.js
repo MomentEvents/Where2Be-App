@@ -46,7 +46,7 @@ class DateTimePickerPopup extends Component {
      * */
     super(props);
     this.state = {
-      date: undefined,
+      date: this.props.date,
       modalVisible: false,
     };
   }
