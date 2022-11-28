@@ -25,26 +25,25 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import InterestSelector from "../../components/InterestSelect";
+import InterestSelector from "../components/InterestSelect";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
-import { McText, McIcon, McAvatar } from "../../components";
+import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
+import { McText, McIcon, McAvatar } from "../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
-import ImagePickerComponent from "../../components/ImagePickerComponent";
+import DateTimePickerPopup from "../components/DateTimePickerPopup/DateTimePickerPopup";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import PreviewEventDetail from "../PreviewEventDetail";
-import { Time } from "neo4j-driver";
+import PreviewEventDetail from "./PreviewEventDetail";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -70,16 +69,29 @@ function outDict(dict) {
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
-const CreateEvent = ({ navigation, routenew }) => {
-  const [title,setTitle] = useState(null)
-  const [location,setLocation] = useState(null)
-  const [image,setImage] = useState(null)
-  const [date,setDate] = useState()
-  const [desc, setDesc] = useState(null)
-  const [start, setStart] = useState()
-  const [end, setEnd] = useState()
-  const [img, setImg] = useState()
+const EditEvent = ({ navigation, route }) => {
 
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(()=>{
+    let {selectedEvent} = route.params;
+    // console.log(selectedEvent);
+    setSelectedEvent(selectedEvent);
+    // console.log(selectedEvent?.image)
+    // console.log('coc')
+    // console.log(selectedEvent?.date)
+  },[])
+
+  const [title,setTitle] = useState(selectedEvent?.title)
+  const [location,setLocation] = useState(selectedEvent?.location)
+  const [image,setImage] = useState(selectedEvent?.image)
+  const [date,setDate] = useState(selectedEvent?.date)
+  const [desc, setDesc] = useState(selectedEvent?.description)
+  const [start, setStart] = useState(selectedEvent?.startingTime)
+  const [end, setEnd] = useState()
+  const [img, setImg] = useState(selectedEvent?.image)
+  console.log(title)
+  
   const handleSubmit = () => {
     console.log('Title: ' + title)
     console.log('Date: '+ date)
@@ -90,12 +102,12 @@ const CreateEvent = ({ navigation, routenew }) => {
     var outList = outDict(outTags)
     console.log('Tags: ' + outList)
     console.log('Image: ', img)
-    if(!img || !title || !date || !start || !end || !desc || !location){
-      Alert.alert("Error", "Please fill in all the necessary fields.")
-      return;
-    }
+    // if(!img || !title || !date || !start || !end || !desc || !location){
+    //   Alert.alert("Error", "Please fill in all the necessary fields.")
+    //   return;
+    // }
     if(start >= end){
-      Alert.alert("Error", "Please make the start time before the end time.")
+      Alert.alert("Error", "Start time cannot be after end time.")
       return;
     }
     if(outList.length == 0 || outList.lenghth > 2){
@@ -103,7 +115,8 @@ const CreateEvent = ({ navigation, routenew }) => {
       return;
     }
     const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
-    navigation.navigate('PreviewEventDetail', {createEvent: out});
+    // navigation.navigate('PreviewEventDetail', {createEvent: out});
+    console.log(out)
   }
 
   return (
@@ -120,7 +133,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               marginTop: 4,
             }}
             onPress={() => {
-              navigation.navigate("Featured");
+              navigation.goBack();
             }}
           >
             <McIcon
@@ -133,7 +146,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               size={32}
             />
           </TouchableOpacity>
-          <McText h1>Create Event</McText>
+          <McText h1>Edit Event</McText>
           <View
             style={{
               position: "absolute",
@@ -173,8 +186,8 @@ const CreateEvent = ({ navigation, routenew }) => {
             Image
           </McText>
           <View style={{alignItems:'center', marginLeft: -50}}>
-          <ImagePickerComponent setImg={setImg}>
-            image={image}  
+          <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
+            image={selectedEvent?.image}
             setImage={setImage}         
           </ImagePickerComponent>
           </View>
@@ -194,9 +207,9 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
             <SectionTextIn>
               <TextInput
-                placeholder="Enter a short, descriptive title."
                 placeholderTextColor={COLORS.gray1}
                 value={title}
+                defaultValue={selectedEvent?.title}
                 onChangeText={setTitle}
                 multiline={true}
                 maxLength={40}
@@ -224,8 +237,9 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
             <SectionTextIn>
               <TextInput
-                placeholder="Enter a description for your event."
+                placeholder={selectedEvent?.description}
                 placeholderTextColor={COLORS.gray1}
+                defaultValue={selectedEvent?.description}
                 multiline={true}
                 maxLength={1000}
                 value={desc}
@@ -256,8 +270,9 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
 
               <DateTimePickerPopup setDate={setDate}
+              date={selectedEvent?.date}
                 mode="date"
-                placeholderText="Pick a date."
+                placeholderText={moment(selectedEvent?.date).format('MMM DD YYYY').toUpperCase()}
                 customStyles={{
                   ...FONTS.body3,
                   color: COLORS.white,
@@ -326,8 +341,7 @@ const CreateEvent = ({ navigation, routenew }) => {
             </McText>
             <SectionTextIn>
               <TextInput
-                placeholder="Where will your event happen?"
-                placeholderTextColor={COLORS.gray1}
+                defaultValue={selectedEvent?.location}
                 maxLength={100}
                 value={location}
                 onChangeText={setLocation}
@@ -536,4 +550,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateEvent;
+export default EditEvent;

@@ -24,6 +24,7 @@ import {memo} from "react"
 
 import { Dimensions } from "react-native";
 import UsedServer from '../constants/servercontants';
+import EditEvent from './EditEvent';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -475,6 +476,15 @@ const EventDetail = ({ navigation, route }) => {
             </McText>
           </View>
         </VisibilitySec>
+        <View>
+          <TouchableOpacity style={styles.edit} onPress={() =>{
+                  // updateData(selectedEvent)
+                  navigation.navigate('EditEvent', {selectedEvent: selectedEvent});
+                  // updateData(selectedEvent);
+                }}>
+            <McText h5>Edit this Event</McText>
+          </TouchableOpacity>
+        </View>
         <SectionFooter><McText h1 style={{
         //temp fix for padding
         color:'transparent'
@@ -665,6 +675,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  edit :{
+    marginLeft: width/12,
+    backgroundColor: COLORS.purple,
+    width: width/3.5,
+    borderRadius: 14,
+    alignItems: 'center',
+    height: 35,
+    justifyContent: 'center',
+
+  }
 });
 
 export default memo(EventDetail);

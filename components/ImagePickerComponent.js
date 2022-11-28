@@ -5,6 +5,7 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McText, McIcon, McAvatar } from "../components";
 class ImagePickerComponent extends Component {
   constructor(props) {
+    console.log(props.img)
     /*
      * Props:
      *
@@ -15,7 +16,7 @@ class ImagePickerComponent extends Component {
      * */
     super(props);
     this.state = {
-      image: undefined,
+      image: this.props.img,
     };
   }
 
