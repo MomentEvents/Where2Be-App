@@ -5,19 +5,19 @@ import styled from 'styled-components/native';
 import moment from 'moment';
 import { LinearGradient } from 'expo-linear-gradient'
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
-import { McText, McIcon, McAvatar} from '../components'
+import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../../constants';
+import { McText, McIcon, McAvatar} from '../../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../../AuthContext';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
 
 import * as SplashScreen from 'expo-splash-screen';
-import UsedServer from '../constants/servercontants';
+import UsedServer from '../../constants/servercontants';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';

@@ -6,14 +6,6 @@ import { McText, McIcon, McAvatar } from "../components";
 class ImagePickerComponent extends Component {
   constructor(props) {
     console.log(props.img)
-    /*
-     * Props:
-     *
-     * setDate state function
-     * style passed in
-     * mode passed in as a string
-     *
-     * */
     super(props);
     this.state = {
       image: this.props.img,

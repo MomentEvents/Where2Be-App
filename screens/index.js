@@ -1,7 +1,7 @@
 import Featured from './Featured';
 import EventDetail from './EventDetail';
-import Signup from './Signup';
-import Login from './Login'
+import Signup from './Authentication/Signup';
+import Login from './Authentication/Login'
 import Search from './Search'
 import Personal from './Personal'
 import Interests from './Interests';
@@ -9,11 +9,11 @@ import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
 import ImageScreen from './ImageScreen';
-import CreateEvent from './CreateEventScreens/CreateEvent';
+import CreateEvent from './CreateEvent/CreateEvent';
 import PreviewEventDetail from './PreviewEventDetail'
 import Profile from './Profile'
-import Settings from './SettingsScreens/Settings'
-import LoginLessHome from './LoginLessHome';
+import Settings from './Settings/Settings'
+import LoginLessHome from './Authentication/LoginLessHome';
 import EditEvent from './EditEvent';
 
 

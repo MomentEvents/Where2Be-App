@@ -255,7 +255,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-              <DateTimePickerPopup setDate={setDate}
+              <DateTimePickerPopup date={"2022/11/26"} setDate={setDate}
                 mode="date"
                 placeholderText="Pick a date."
                 customStyles={{

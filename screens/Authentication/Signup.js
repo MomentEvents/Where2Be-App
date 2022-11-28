@@ -16,16 +16,16 @@ import styled from "styled-components/native";
 import moment from "moment";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
+import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
 import ProgressLoader from "rn-progress-loader";
-import events from "../constants/events.json";
-import { McText, McIcon, McAvatar} from "../components";
+import events from "../../constants/events.json";
+import { McText, McIcon, McAvatar} from "../../components";
 import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
-import { AuthContext } from '../AuthContext';
-import UsedServer from "../constants/servercontants";
-import registerForPushNotificationsAsync from "../Services/Notifications";
+import { AuthContext } from '../../AuthContext';
+import UsedServer from "../../constants/servercontants";
+import registerForPushNotificationsAsync from "../../Services/Notifications";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
