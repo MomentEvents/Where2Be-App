@@ -44,6 +44,7 @@ var height = Dimensions.get("window").height; //full height
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import PreviewEventDetail from "../PreviewEventDetail";
+import { Time } from "neo4j-driver";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -254,7 +255,7 @@ const CreateEvent = ({ navigation, routenew }) => {
               Date
             </McText>
 
-              <DateTimePickerPopup date={"2022/11/15"} setDate={setDate}
+              <DateTimePickerPopup setDate={setDate}
                 mode="date"
                 placeholderText="Pick a date."
                 customStyles={{
@@ -297,7 +298,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                   paddingLeft: SIZES.width / 10,
                 }}
               >
-                <DateTimePickerPopup date={"Hello"} setDate={setEnd}
+                <DateTimePickerPopup setDate={setEnd}
                   mode="time"
                   placeholderText="End"
                   customStyles={{

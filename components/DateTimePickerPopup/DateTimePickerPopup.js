@@ -1,4 +1,15 @@
-//import React from 'react';
+/*
+This component contains a text field in which when you select it you can select a time or date.
+
+Props:
+date - What the current date is that we want to have pre-selected
+setDate - The state function we pass down to the component which changes the
+state variable up the component tree
+placeholderText - What the text will be when there is no date or time selected
+mode - takes in either "date" or "time". Changes the mode accordingly.
+Time is in format "HH:MM". Date is in format "YYYY/MM/DD".
+
+*/
 import React, { useState, useEffect, Component } from "react";
 import {
   TouchableHighlight,
@@ -49,6 +60,9 @@ class DateTimePickerPopup extends Component {
       date: this.props.date,
       modalVisible: false,
     };
+    if(this.props.date !== undefined){
+      this.props.setDate(this.props.date);
+    }
   }
   render() {
     return (
@@ -68,6 +82,7 @@ class DateTimePickerPopup extends Component {
             {this.props.mode === "date" ? (
               <DatePicker
                 current={this.state.date}
+                selected={this.state.date}
                 onSelectedChange={(newDate) => {
                   this.setState({ modalVisible: false, date: newDate });
                   this.props.setDate(newDate);
@@ -94,6 +109,7 @@ class DateTimePickerPopup extends Component {
                 }}
                 mode="time"
                 current={this.state.date}
+                selected={this.state.date}
                 onTimeChange={(newDate) => {
                   this.setState({ modalVisible: false, date: newDate });
                   this.props.setDate(newDate);
