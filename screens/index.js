@@ -12,7 +12,7 @@ import ImageScreen from './ImageScreen';
 import CreateEvent from './CreateEventScreens/CreateEvent';
 import PreviewEventDetail from './PreviewEventDetail'
 import Profile from './Profile'
-import Settings from './Settings'
+import Settings from './SettingsScreens/Settings'
 import LoginLessHome from './LoginLessHome';
 import EditEvent from './EditEvent';
 

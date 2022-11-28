@@ -9,14 +9,14 @@ import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Butt
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
 import styled from 'styled-components/native';
-import { McIcon, McText } from '../components';
+import { McIcon, McText } from '../../components';
 import { LinearGradient } from 'expo-linear-gradient'
-import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
+import { dummyData, FONTS, SIZES, COLORS, icons } from '../../constants';
 import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../../AuthContext';
 
 
 
@@ -71,35 +71,35 @@ const Settings = ({ navigation, route }) => {
           console.log('hello')
           }}>
           <View style={styles.category}>
-              <McText body2>Setting</McText>
+              <McText body2>Change Display Name</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
           console.log('hello')
           }}>
           <View style={styles.category}>
-              <McText body2>Setting</McText>
+              <McText body2>Change Profile Picture</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
           console.log('hello')
           }}>
           <View style={styles.category}>
-              <McText body2>Setting</McText>
+              <McText body2>Change Username</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
           console.log('hello')
           }}>
           <View style={styles.category}>
-              <McText body2>Setting</McText>
+              <McText body2>Change Email</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
           console.log('hello')
           }}>
           <View style={styles.category}>
-              <McText body2>Setting</McText>
+              <McText body2>Change Password</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
