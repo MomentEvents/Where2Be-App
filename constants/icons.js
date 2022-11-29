@@ -1,3 +1,4 @@
+import plusbutton from "../assets/icons/plus-circle.svg"
 const back_arrow = require('../assets/icons/back_arrow_icon.png');
 const filter = require('../assets/icons/filter_icon.png');
 const gift = require('../assets/icons/gift_icon.png');
@@ -19,7 +20,7 @@ const visibility = require('../assets/icons/visibility.png')
 const links = require('../assets/icons/link.png')
 const close = require('../assets/icons/close.png')
 const fullscreen = require('../assets/icons/fullscreen.png')
-const plus = require('../assets/icons/plus.png')
+const plus = require('../assets/icons/plus.svg')
 const addphoto = require('../assets/icons/addPhoto.png')
 const tag = require('../assets/icons/tag.png')
 
@@ -47,5 +48,5 @@ export default {
   close,
   fullscreen,
   plus,
-  
+  plusbutton,
 };
