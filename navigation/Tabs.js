@@ -1,23 +1,24 @@
-import React from 'react';
-import { View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Featured, Personal, Search, Profile } from '../screens';
-import { COLORS, SIZES, FONTS, icons } from '../constants';
-import { McText, McIcon } from '../components';
-import { Platform } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from "react";
+import { View } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Featured, Personal, Search, Profile } from "../screens";
+import { COLORS, SIZES, FONTS, icons } from "../constants";
+import { McText, McIcon } from "../components";
+import { Platform } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const Tab = createBottomTabNavigator();
 
 const TabIcon = ({ focused, icon }) => {
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
       <McIcon
         size={focused ? 28 : 32}
         source={icon}
         resizeMode="contain"
         style={{
-          tintColor: focused ? COLORS.purple : COLORS.gray,
+          tintColor: focused ? COLORS.white : COLORS.gray,
         }}
       />
     </View>
@@ -25,10 +26,11 @@ const TabIcon = ({ focused, icon }) => {
 };
 const TabLabel = ({ focused, text }) => {
   return focused ? (
-    <McText body6
+    <McText
+      body6
       style={{
-        marginBottom: Platform.OS === 'ios'?-8:8, 
-        color: focused ? COLORS.purple : COLORS.gray,
+        marginBottom: Platform.OS === "ios" ? -8 : 8,
+        color: focused ? COLORS.white : COLORS.gray,
       }}
     >
       {text}
@@ -40,24 +42,26 @@ const TabLabel = ({ focused, text }) => {
 
 const Tabs = ({ params }) => {
   const screenOptions = {
-    headerShown:false,
-    tabBarStyle:{
-      position: 'absolute',
-      backgroundColor: COLORS.transparentBlack,
-      opacity: 0.98,
-      borderTopColor: 'transparent',
+    headerShown: false,
+    tabBarStyle: {
+      position: "absolute",
+      backgroundColor: COLORS.trueBlack,
+      opacity: 1,
+      borderTopColor: COLORS.gray2,
       height: 80,
-      borderTopRightRadius: 20,
-      borderTopLeftRadius: 20,
+      borderTopRightRadius: 0,
+      borderTopLeftRadius: 0,
     },
-    tabBarItemStyle:{
-      display:'flex',
+    tabBarItemStyle: {
+      display: "flex",
       paddingTop: 8,
-    }
+    },
   };
 
   return (
-    <Tab.Navigator {...{screenOptions}}
+    <Tab.Navigator
+      tabBarOptions={{ showLabel: false }}
+      {...{ screenOptions }}
       // screenOptions={{
       //   headerShown: false,
       //   style: {
@@ -104,7 +108,7 @@ const Tabs = ({ params }) => {
         }}
       />
 
-<Tab.Screen
+      <Tab.Screen
         name="Search"
         component={Search}
         options={{
@@ -115,6 +119,7 @@ const Tabs = ({ params }) => {
             <TabLabel focused={focused} text="Search" />
           ),
         }}
+        
       />
       {/* <Tab.Screen
         name="Create"
@@ -148,7 +153,7 @@ const Tabs = ({ params }) => {
             <TabIcon focused={focused} icon={icons.like} />
           ),
           tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Personal"/>
+            <TabLabel focused={focused} text="Personal" />
           ),
         }}
       />
@@ -160,7 +165,7 @@ const Tabs = ({ params }) => {
             <TabIcon focused={focused} icon={icons.tab_4} />
           ),
           tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Profile"/>
+            <TabLabel focused={focused} text="Profile" />
           ),
         }}
       />
