@@ -527,6 +527,37 @@ const LoginLessHome = ({ navigation, route }) => {
       {/* <SectionTitle>
         <McText h5>FOR YOU</McText>
       </SectionTitle>  */}
+      <SectionDone>
+        {/* <LinearGradient
+          colors={["#B66DFF", "#280292"]}
+          style={{
+            width: 60,
+            height: 60,
+            marginBottom: 60,
+            borderRadius: 80,
+          }}
+        > */}
+          <TouchableOpacity
+            style={{
+              width: 60,
+              height: 60,
+              marginBottom: 30,
+              borderRadius: 80,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              navigation.navigate("Login");
+              console.log("Navigating to login");
+            }}
+          >
+            <icons.loginbutton
+            width={70} height={70}>
+
+            </icons.loginbutton>
+          </TouchableOpacity>
+        {/* </LinearGradient> */}
+      </SectionDone>
       </SafeAreaView>
   );
 };

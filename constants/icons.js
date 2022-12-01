@@ -14,6 +14,8 @@ import activefavorite from "../assets/icons/svgicons/activefavorite.svg"
 import inactiveprofile from "../assets/icons/svgicons/inactiveprofile.svg"
 import activeprofile from "../assets/icons/svgicons/activeprofile.svg"
 
+import loginbutton from "../assets/icons/svgicons/loginbutton.svg"
+
 const back_arrow = require('../assets/icons/back_arrow_icon.png');
 const filter = require('../assets/icons/filter_icon.png');
 const gift = require('../assets/icons/gift_icon.png');
@@ -71,5 +73,6 @@ export default {
   inactiveprofile,
   activeprofile,
   inactivesearch,
-  activesearch
+  activesearch,
+  loginbutton
 };
