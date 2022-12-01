@@ -81,8 +81,6 @@ class DateTimePickerPopup extends Component {
           >
             {this.props.mode === "date" ? (
               <DatePicker
-                current={this.state.date}
-                selected={this.state.date}
                 onSelectedChange={(newDate) => {
                   this.setState({ modalVisible: false, date: newDate });
                   this.props.setDate(newDate);
@@ -108,8 +106,6 @@ class DateTimePickerPopup extends Component {
                   this.props.setDate(newDate);
                 }}
                 mode="time"
-                current={this.state.date}
-                selected={this.state.date}
                 onTimeChange={(newDate) => {
                   this.setState({ modalVisible: false, date: newDate });
                   this.props.setDate(newDate);
@@ -129,7 +125,9 @@ class DateTimePickerPopup extends Component {
         {this.props.mode === "time" ? (
           <TouchableOpacity
           onPress={() => {
-            this.setState({ modalVisible: true });
+            console.log("Tried popup")
+            this.setState({ 
+              modalVisible: true });
           }}
         >
           <SectionTimings>
@@ -154,6 +152,7 @@ class DateTimePickerPopup extends Component {
         ) : (
           <TouchableOpacity
             onPress={() => {
+              console.log("Tried popup")
               this.setState({ modalVisible: true });
             }}
           >

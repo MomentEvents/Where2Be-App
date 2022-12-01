@@ -21,7 +21,6 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { dummyData, FONTS, SIZES, COLORS, icons as Icons, images } from "../constants";
-import Plus from "../assets/icons/plus-circle.svg";
 import { McText, McIcon, McAvatar } from "../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";

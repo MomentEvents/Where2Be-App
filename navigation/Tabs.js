@@ -7,10 +7,60 @@ import { McText, McIcon } from "../components";
 import { Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import reactNativeModernDatepicker from "react-native-modern-datepicker";
+import TestSvgIcon from "../assets/icons/home.svg";
 
 const Tab = createBottomTabNavigator();
 
+// constants used for rendering images
+const EVENTS = "Events";
+const SEARCH = "Search";
+const FAVORITES = "Favorites";
+const PROFILE = "Profile";
+
 const TabIcon = ({ focused, icon }) => {
+  switch (icon) {
+    case EVENTS:
+      return (
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {focused ? (
+            <icons.activehome height={32}></icons.activehome>
+          ) : (
+            <icons.inactivehome height={32}></icons.inactivehome>
+          )}
+        </View>
+      );
+    case SEARCH:
+      return (
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {focused ? (
+            <icons.activesearch height={32}></icons.activesearch>
+          ) : (
+            <icons.inactivesearch height={32}></icons.inactivesearch>
+          )}
+        </View>
+      );
+    case FAVORITES:
+      return (
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {focused ? (
+            <icons.activefavorite height={32}></icons.activefavorite>
+          ) : (
+            <icons.inactivefavorite height={32}></icons.inactivefavorite>
+          )}
+        </View>
+      );
+    case PROFILE:
+      return (
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {focused ? (
+            <icons.activeprofile height={32}></icons.activeprofile>
+          ) : (
+            <icons.inactiveprofile height={32}></icons.inactiveprofile>
+          )}
+        </View>
+      );
+  }
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
       <McIcon
@@ -22,21 +72,6 @@ const TabIcon = ({ focused, icon }) => {
         }}
       />
     </View>
-  );
-};
-const TabLabel = ({ focused, text }) => {
-  return focused ? (
-    <McText
-      body6
-      style={{
-        marginBottom: Platform.OS === "ios" ? -8 : 8,
-        color: focused ? COLORS.white : COLORS.gray,
-      }}
-    >
-      {text}
-    </McText>
-  ) : (
-    <View />
   );
 };
 
@@ -96,14 +131,11 @@ const Tabs = ({ params }) => {
         }}
       /> */}
       <Tab.Screen
-        name="Featured"
+        name="Events"
         component={Featured}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_2} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Events" />
+            <TabIcon focused={focused} icon={EVENTS} />
           ),
         }}
       />
@@ -113,13 +145,9 @@ const Tabs = ({ params }) => {
         component={Search}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.search} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Search" />
+            <TabIcon focused={focused} icon={SEARCH} />
           ),
         }}
-        
       />
       {/* <Tab.Screen
         name="Create"
@@ -150,10 +178,7 @@ const Tabs = ({ params }) => {
         component={Personal}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.like} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Personal" />
+            <TabIcon focused={focused} icon={FAVORITES} />
           ),
         }}
       />
@@ -162,10 +187,7 @@ const Tabs = ({ params }) => {
         component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.tab_4} />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <TabLabel focused={focused} text="Profile" />
+            <TabIcon focused={focused} icon={PROFILE} />
           ),
         }}
       />

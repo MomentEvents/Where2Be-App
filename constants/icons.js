@@ -1,4 +1,19 @@
-import plusbutton from "../assets/icons/plus-circle.svg"
+// These are our SVG imports. In the future we should opt to use svgs, so let's transition over by using these from now on
+
+import plusbutton from "../assets/icons/svgicons/plus-circle.svg"
+
+import inactivehome from "../assets/icons/svgicons/inactivehome.svg"
+import activehome from "../assets/icons/svgicons/activehome.svg"
+
+import inactivesearch from "../assets/icons/svgicons/inactivesearch.svg"
+import activesearch from "../assets/icons/svgicons/activesearch.svg"
+
+import inactivefavorite from "../assets/icons/svgicons/inactivefavorite.svg"
+import activefavorite from "../assets/icons/svgicons/activefavorite.svg"
+
+import inactiveprofile from "../assets/icons/svgicons/inactiveprofile.svg"
+import activeprofile from "../assets/icons/svgicons/activeprofile.svg"
+
 const back_arrow = require('../assets/icons/back_arrow_icon.png');
 const filter = require('../assets/icons/filter_icon.png');
 const gift = require('../assets/icons/gift_icon.png');
@@ -8,7 +23,7 @@ const search = require('../assets/icons/search.png');
 const share = require('../assets/icons/share_icon.png');
 const shoutout = require('../assets/icons/shoutout.png');
 const buy_ticket = require('../assets/icons/buy_ticket_icon.png');
-const tab_2 = require('../assets/icons/upcoming.png');
+import tab_2 from "../assets/icons/home.svg"
 const home = require('../assets/icons/home.png');
 const tab_4 = require('../assets/icons/person.png');
 const location = require('../assets/icons/location.png')
@@ -49,4 +64,12 @@ export default {
   fullscreen,
   plus,
   plusbutton,
+  inactivehome,
+  activehome,
+  inactivefavorite,
+  activefavorite,
+  inactiveprofile,
+  activeprofile,
+  inactivesearch,
+  activesearch
 };
