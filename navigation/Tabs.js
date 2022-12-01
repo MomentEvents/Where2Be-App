@@ -63,14 +63,7 @@ const TabIcon = ({ focused, icon }) => {
   }
   return (
     <View style={{ alignItems: "center", justifyContent: "center" }}>
-      <McIcon
-        size={focused ? 28 : 32}
-        source={icon}
-        resizeMode="contain"
-        style={{
-          tintColor: focused ? COLORS.white : COLORS.gray,
-        }}
-      />
+      {console.log("Error loading icon with parameter" + icon)}
     </View>
   );
 };
