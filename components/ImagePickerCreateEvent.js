@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 import { TouchableOpacity, Button, Image, View, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
-import { McText, McIcon, McAvatar } from "../components";
+import { McText, McIcon, McAvatar } from ".";
 class ImagePickerComponent extends Component {
   constructor(props) {
     console.log(props.img)
@@ -35,16 +35,10 @@ class ImagePickerComponent extends Component {
   render() {
     return (
       <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
-        {/* {this.state.image && (
-          <Image
-            source={{ uri: this.state.image }}
-            style={{ width: 300, height: 300 }}
-          />
-        )} */}
         <TouchableOpacity
           style={{
             height: SIZES.height / 4,
-            width: SIZES.width * 0.75,
+            width: SIZES.width * 0.76,
             backgroundColor: COLORS.black,
             borderRadius: 10,
             marginBottom: 8,
@@ -60,17 +54,10 @@ class ImagePickerComponent extends Component {
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
-              style={{ width: SIZES.width*0.75, height: SIZES.width*0.75, borderRadius: 10 }}
+              style={{ width: SIZES.width*0.76, height: SIZES.width*0.76, borderRadius: 10 }}
             />
           ) : (
-            <McIcon
-              source={icons.addphoto}
-              size={60}
-              style={{
-                margin: 4,
-                tintColor: COLORS.purple,
-              }}
-            />
+            <icons.imagepickeraddimage/>
           )}
         </TouchableOpacity>
       </View>
