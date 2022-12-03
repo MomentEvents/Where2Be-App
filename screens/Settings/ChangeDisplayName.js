@@ -43,25 +43,10 @@ import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
-import ImagePickerComponent from "../../components/ImagePickerComponent";
 import ProgressLoader from "rn-progress-loader";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
-
-import * as SplashScreen from "expo-splash-screen";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import PreviewEventDetail from "../PreviewEventDetail";
-import { Time } from "neo4j-driver";
-const dummyTags = [
-  "Academic",
-  "Entertainment",
-  "Community",
-  "Career Development",
-  "Athletics",
-  "Other",
-  "Recreation",
-];
 
 const CreateEvent = ({ navigation, routenew }) => {
   const [newDisplayName, setNewDisplayName] = useState("");
