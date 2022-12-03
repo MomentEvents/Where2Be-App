@@ -1,20 +1,20 @@
-import Featured from './Featured';
-import EventDetail from './EventDetail';
+import Featured from './ExploreEvents/Featured';
+import EventDetail from './Events/EventDetail';
 import Signup from './Authentication/Signup';
 import Login from './Authentication/Login'
 import Search from './Search'
-import Personal from './Personal'
+import Personal from './PersonalCalendar/Personal'
 import Interests from './Interests';
 import OrganizationDetail from './OrganizationDetail';
 
 import InterestDetail from './InterestDetail';
-import ImageScreen from './ImageScreen';
-import CreateEvent from './CreateEvent/CreateEvent';
-import PreviewEventDetail from './PreviewEventDetail'
-import Profile from './Profile'
+import ImageScreen from './Events/EventImage';
+import CreateEvent from './Events/CreateEvent';
+import PreviewEventDetail from './Events/PreviewEventDetail'
+import Profile from './Profile/Profile'
 import Settings from './Settings/Settings'
 import LoginLessHome from './Authentication/LoginLessHome';
-import EditEvent from './EditEvent';
+import EditEvent from './Events/EditEvent';
 
 
 

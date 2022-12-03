@@ -25,18 +25,25 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import InterestSelector from "../components/InterestSelect";
+import InterestSelector from "../../components/InterestSelect";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
-import { McText, McIcon, McAvatar } from "../components";
+import {
+  dummyData,
+  FONTS,
+  SIZES,
+  COLORS,
+  icons,
+  images,
+} from "../../constants";
+import { McText, McIcon, McAvatar } from "../../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePickerPopup from "../components/DateTimePickerPopup/DateTimePickerPopup";
-import ImagePickerComponent from "../components/ImagePickerCreateEvent";
+import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
+import ImagePickerComponent from "../../components/ImagePickerCreateEvent";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -44,6 +51,7 @@ var height = Dimensions.get("window").height; //full height
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import PreviewEventDetail from "./PreviewEventDetail";
+import { Time } from "neo4j-driver";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -57,67 +65,61 @@ const dummyTags = [
 const inTags = [];
 var outTags = {};
 function outDict(dict) {
-
-  var outList = []
+  var outList = [];
   for (const [key, value] of Object.entries(dict)) {
-      if (value == true) {
-          outList.push(key)
-      }
+    if (value == true) {
+      outList.push(key);
+    }
   }
-  return outList
- }
+  return outList;
+}
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
-const EditEvent = ({ navigation, route }) => {
+const CreateEvent = ({ navigation, routenew }) => {
+  const [title, setTitle] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [image, setImage] = useState(null);
+  const [date, setDate] = useState();
+  const [desc, setDesc] = useState(null);
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
+  const [img, setImg] = useState();
 
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  useEffect(()=>{
-    let {selectedEvent} = route.params;
-    // console.log(selectedEvent);
-    setSelectedEvent(selectedEvent);
-    // console.log(selectedEvent?.image)
-    // console.log('coc')
-    // console.log(selectedEvent?.date)
-  },[])
-
-  const [title,setTitle] = useState(selectedEvent?.title)
-  const [location,setLocation] = useState(selectedEvent?.location)
-  const [image,setImage] = useState(selectedEvent?.image)
-  const [date,setDate] = useState(selectedEvent?.date)
-  const [desc, setDesc] = useState(selectedEvent?.description)
-  const [start, setStart] = useState(selectedEvent?.startingTime)
-  const [end, setEnd] = useState()
-  const [img, setImg] = useState(selectedEvent?.image)
-  console.log(title)
-  
   const handleSubmit = () => {
-    console.log('Title: ' + title)
-    console.log('Date: '+ date)
-    console.log('Start: ' + start)
-    console.log('End: ' + end)
-    console.log('Desc: ' +desc)
-    console.log('Loc: ' +location)
-    var outList = outDict(outTags)
-    console.log('Tags: ' + outList)
-    console.log('Image: ', img)
-    // if(!img || !title || !date || !start || !end || !desc || !location){
-    //   Alert.alert("Error", "Please fill in all the necessary fields.")
-    //   return;
-    // }
-    if(start >= end){
-      Alert.alert("Error", "Start time cannot be after end time.")
+    console.log("Title: " + title);
+    console.log("Date: " + date);
+    console.log("Start: " + start);
+    console.log("End: " + end);
+    console.log("Desc: " + desc);
+    console.log("Loc: " + location);
+    var outList = outDict(outTags);
+    console.log("Tags: " + outList);
+    console.log("Image: ", img);
+    if (!img || !title || !date || !start || !end || !desc || !location) {
+      Alert.alert("Error", "Please fill in all the necessary fields.");
       return;
     }
-    if(outList.length == 0 || outList.lenghth > 2){
-      Alert.alert("Error", "Please select up to 2 tags")
+    if (start >= end) {
+      Alert.alert("Error", "Please make the start time before the end time.");
       return;
     }
-    const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
-    // navigation.navigate('PreviewEventDetail', {createEvent: out});
-    console.log(out)
-  }
+    if (outList.length == 0 || outList.lenghth > 2) {
+      Alert.alert("Error", "Please select up to 2 tags");
+      return;
+    }
+    const out = {
+      title: title,
+      date: date,
+      start: start,
+      end: end,
+      desc: desc,
+      loc: location,
+      tags: outList,
+      image: img,
+    };
+    navigation.navigate("PreviewEventDetail", { createEvent: out });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -133,7 +135,7 @@ const EditEvent = ({ navigation, route }) => {
               marginTop: 4,
             }}
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate("Featured");
             }}
           >
             <McIcon
@@ -146,7 +148,7 @@ const EditEvent = ({ navigation, route }) => {
               size={32}
             />
           </TouchableOpacity>
-          <McText h1>Edit Event</McText>
+          <McText h1>Create Event</McText>
           <View
             style={{
               position: "absolute",
@@ -158,7 +160,7 @@ const EditEvent = ({ navigation, route }) => {
                 marginRight: 15,
                 marginTop: 5,
               }}
-              onPress={() =>{
+              onPress={() => {
                 handleSubmit();
               }}
             >
@@ -177,39 +179,65 @@ const EditEvent = ({ navigation, route }) => {
 
       <KeyboardAwareScrollView>
         <SectionInputs>
-          <McText
-            h3
-            style={{
-              marginBottom: 16,
-            }}
-          >
-            Image
-          </McText>
-          <View style={{alignItems:'center', marginLeft: -50}}>
-          <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
-            image={selectedEvent?.image}
-            setImage={setImage}         
-          </ImagePickerComponent>
-          </View>
           <View
             style={{
               marginVertical: 8,
-              
             }}
           >
-            <McText
-              h3
+            <View
               style={{
-                marginBottom: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
               }}
             >
-              Title
-            </McText>
+              <icons.pickpicture width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Photo
+              </McText>
+            </View>
+            <View style={{
+                alignItems: "flex-start",
+            }}>
+              <ImagePickerComponent setImg={setImg}>
+                image={image}
+                setImage={setImage}
+              </ImagePickerComponent>
+            </View>
+          </View>
+
+          <View
+            style={{
+              marginVertical: 8,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
+              }}
+            >
+              <icons.picktitle width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Title
+              </McText>
+            </View>
             <SectionTextIn>
               <TextInput
+                placeholder="Enter a short, descriptive title."
                 placeholderTextColor={COLORS.gray1}
                 value={title}
-                defaultValue={selectedEvent?.title}
                 onChangeText={setTitle}
                 multiline={true}
                 maxLength={40}
@@ -227,19 +255,27 @@ const EditEvent = ({ navigation, route }) => {
               marginVertical: 8,
             }}
           >
-            <McText
-              h3
+            <View
               style={{
-                marginBottom: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
               }}
             >
-              Description
-            </McText>
+              <icons.pickdescription width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Description
+              </McText>
+            </View>
             <SectionTextIn>
               <TextInput
-                placeholder={selectedEvent?.description}
+                placeholder="Enter a description for your event."
                 placeholderTextColor={COLORS.gray1}
-                defaultValue={selectedEvent?.description}
                 multiline={true}
                 maxLength={1000}
                 value={desc}
@@ -260,60 +296,79 @@ const EditEvent = ({ navigation, route }) => {
               marginVertical: 8,
             }}
           >
-            <McText
-              h3
+            <View
               style={{
-                marginBottom: 8,
+                flexDirection: "row",
               }}
             >
-              Date
-            </McText>
-
-              <DateTimePickerPopup setDate={setDate}
-              date={selectedEvent?.date}
-                mode="date"
-                placeholderText={moment(selectedEvent?.date).format('MMM DD YYYY').toUpperCase()}
-                customStyles={{
-                  ...FONTS.body3,
-                  color: COLORS.white,
-                  padding: 10,
+              <icons.pickdate width={30} />
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                  marginLeft: 4,
                 }}
-              />
+              >
+                Date
+              </McText>
+            </View>
+
+            <DateTimePickerPopup
+              setDate={setDate}
+              mode="date"
+              placeholderText="Pick a date."
+              customStyles={{
+                ...FONTS.body3,
+                color: COLORS.white,
+                padding: 10,
+              }}
+            />
           </View>
           <View
             style={{
               marginVertical: 8,
             }}
           >
-            <McText
-              h3
+            <View
               style={{
+                flexDirection: "row",
+                alignItems: "center",
                 marginBottom: 8,
               }}
             >
-              Time
-            </McText>
+              <icons.picktime width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Time
+              </McText>
+            </View>
             <View
               style={{
                 flexDirection: "row",
               }}
             >
-                <DateTimePickerPopup setDate={setStart}
-                  mode="time"
-                  placeholderText="Start"
-                  customStyles={{
-                    ...FONTS.body3,
-                    color: COLORS.white,
-                    width: 250,
-                    padding: 10,
-                  }}
-                />
+              <DateTimePickerPopup
+                setDate={setStart}
+                mode="time"
+                placeholderText="Start"
+                customStyles={{
+                  ...FONTS.body3,
+                  color: COLORS.white,
+                  width: 250,
+                  padding: 10,
+                }}
+              />
               <View
                 style={{
                   paddingLeft: SIZES.width / 10,
                 }}
               >
-                <DateTimePickerPopup setDate={setEnd}
+                <DateTimePickerPopup
+                  setDate={setEnd}
                   mode="time"
                   placeholderText="End"
                   customStyles={{
@@ -331,17 +386,27 @@ const EditEvent = ({ navigation, route }) => {
               marginVertical: 8,
             }}
           >
-            <McText
-              h3
+            <View
               style={{
+                flexDirection: "row",
+                alignItems: "center",
                 marginBottom: 8,
               }}
             >
-              Location
-            </McText>
+              <icons.picklocation width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Location
+              </McText>
+            </View>
             <SectionTextIn>
               <TextInput
-                defaultValue={selectedEvent?.location}
+                placeholder="Where will your event happen?"
+                placeholderTextColor={COLORS.gray1}
                 maxLength={100}
                 value={location}
                 onChangeText={setLocation}
@@ -355,20 +420,32 @@ const EditEvent = ({ navigation, route }) => {
             </SectionTextIn>
           </View>
           <View
+          width={.76*SIZES.width}>
+                      <View
             style={{
               marginVertical: 8,
             }}
           >
-            <McText
-              h3
+            <View
               style={{
-                marginBottom: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
               }}
             >
-              Tags (select up to 2)
-            </McText>
+              <icons.picktags width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Tags (select up to 2)
+              </McText>
+            </View>
 
             <FlatList
+            
               data={dummyTags}
               columnWrapperStyle={{
                 flexWrap: "wrap",
@@ -392,6 +469,8 @@ const EditEvent = ({ navigation, route }) => {
               keyExtractor={(item) => `basicListEntry-${item}`}
             />
           </View>
+          </View>
+
         </SectionInputs>
       </KeyboardAwareScrollView>
 
@@ -424,7 +503,7 @@ const SectionFooter = styled.View`
 //justify-content: space-between;
 
 const SectionInputs = styled.View`
-  margin-left: 50;
+  align-items: center;
   margin-vertical: 15;
 `;
 const SectionTextIn = styled.View`
@@ -550,4 +629,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditEvent;
+export default CreateEvent;

@@ -9,9 +9,9 @@ import { Animated, Modal, Image, Linking, Text, View, StyleSheet, ScrollView, Im
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from 'react-native/Libraries/Components/ScrollView/ScrollViewContext';
 import styled from 'styled-components/native';
-import { McIcon, McText } from '../components';
+import { McIcon, McText } from '../../components';
 import { LinearGradient } from 'expo-linear-gradient'
-import { dummyData, FONTS, SIZES, COLORS, icons } from '../constants';
+import { dummyData, FONTS, SIZES, COLORS, icons } from '../../constants';
 import moment from 'moment';
 import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
