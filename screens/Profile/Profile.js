@@ -440,7 +440,9 @@ const Profile = ({ navigation, route }) => {
               >
                 {/* {data2?.name} */}@{UserId.toLowerCase()}
               </McText>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                navigation.navigate("EditProfile");
+              }}>
                 {/* On click will have opportunity on one screen to change display name, profile picture, and username*/}
                 <LinearGradient
                   colors={["#B66DFF", "#280292"]}
