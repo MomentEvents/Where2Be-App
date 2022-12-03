@@ -16,8 +16,6 @@ import Tabs from './Tabs';
 
 import { Featured, EventDetail, Interests, Search, ImageScreen, OrganizationDetail, Login, Signup, Personal, InterestDetail, CreateEvent, PreviewEventDetail, Profile, Settings, LoginLessHome, EditEvent } from '../screens';
 import EditProfile from '../screens/Profile/EditProfile';
-
-import ChangeDisplayName from '../screens/Settings/ChangeDisplayName';
 import { SIZES, COLORS, customFonts } from '../constants';
 import { AuthContext } from '../AuthContext';
 import * as SplashScreen from 'expo-splash-screen';
@@ -102,7 +100,6 @@ const AuthStack = () =>{
           <Stack.Screen name="PreviewEventDetail" component={PreviewEventDetail}/>
           <Stack.Screen name="EditEvent" component={EditEvent}/>
           <Stack.Screen name="EditProfile" component={EditProfile}/>
-          <Stack.Screen name="ChangeDisplayName" component={ChangeDisplayName}/>
         </Stack.Navigator>
     );
   }

@@ -221,11 +221,10 @@ const EditProfile = ({ navigation, route }) => {
                 placeholderTextColor={COLORS.gray1}
                 value={displayName}
                 onChangeText={setDisplayName}
-                multiline={true}
+                multiline={false}
                 maxLength={30}
                 style={{
                   ...FONTS.body3,
-                  marginTop: 2,
                   color: COLORS.white,
                   padding: 10,
                 }}
@@ -258,7 +257,7 @@ const EditProfile = ({ navigation, route }) => {
               <TextInput
                 placeholder="Enter a valid username"
                 placeholderTextColor={COLORS.gray1}
-                multiline={true}
+                multiline={false}
                 maxLength={30}
                 value={username}
                 onChangeText={setUsername}
@@ -266,7 +265,6 @@ const EditProfile = ({ navigation, route }) => {
                 //value={bad}
                 style={{
                   ...FONTS.body3,
-                  marginTop: 2,
                   color: COLORS.white,
                   padding: 10,
                 }}

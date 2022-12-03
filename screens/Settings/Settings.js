@@ -73,28 +73,6 @@ const Settings = ({ navigation, route }) => {
         paddingTop: 12,
         }}>
         <TouchableHighlight style={styles.setting} onPress={()=>{
-          navigation.navigate("ChangeDisplayName")
-          }}>
-          <View style={styles.category}>
-              <McText body2>Change Display Name</McText>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.setting} onPress={()=>{
-          console.log('hello')
-          }}>
-          <View style={styles.category}>
-              <McText body2>Change Profile Picture</McText>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.setting} onPress={()=>{
-          console.log('hello')
-          }}>
-          <View style={styles.category}>
-              <McText body2>Change Username</McText>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.setting} onPress={()=>{
-          console.log('hello')
           }}>
           <View style={styles.category}>
               <McText body2>Change Email</McText>
@@ -105,6 +83,20 @@ const Settings = ({ navigation, route }) => {
           }}>
           <View style={styles.category}>
               <McText body2>Change Password</McText>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.setting} onPress={()=>{
+          console.log('hello')
+          }}>
+          <View style={styles.category}>
+              <McText body2>Modify Push Notifications</McText>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.setting} onPress={()=>{
+          console.log('hello')
+          }}>
+          <View style={styles.category}>
+              <McText body2>Contact Us</McText>
           </View>
         </TouchableHighlight>
         <TouchableHighlight style={styles.setting} onPress={()=>{
