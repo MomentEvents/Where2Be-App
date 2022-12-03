@@ -8,7 +8,13 @@
 // ATTENTION: Settings will be changed to have only change email, change password, join our discord, and log out
 // I will need to change this
 
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useContext,
+} from "react";
 import {
   TouchableHighlight,
   Platform,
@@ -22,7 +28,8 @@ import {
   FlatList,
   Image,
   ImageBackground,
-  Alert
+  Alert,
+  Linking,
 } from "react-native";
 //import LinearGradient from 'react-native-linear-gradient';
 import { VERTICAL } from "react-native/Libraries/Components/ScrollView/ScrollViewContext";
@@ -56,7 +63,6 @@ const Settings = ({ navigation, route }) => {
   const { logoutTok, UserId, Data, setupData, FinImport, MData } =
     useContext(AuthContext);
   // console.log(joindedEvent)
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.tempNav}>
@@ -127,7 +133,16 @@ const Settings = ({ navigation, route }) => {
         <TouchableHighlight
           style={styles.setting}
           onPress={() => {
-            console.log("hello");
+              // Checking if the link is supported for links with custom URL scheme.
+              const supported = Linking.canOpenURL("https://discord.gg/dQZ64mGgbP");
+        
+              if (supported) {
+                // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+                // by some browser in the mobile
+                Linking.openURL("https://discord.gg/dQZ64mGgbP");
+              } else {
+                Alert.alert(`Unable to open link: ${"https://discord.gg/dQZ64mGgbP"}`);
+              }
           }}
         >
           <View style={styles.category}>
