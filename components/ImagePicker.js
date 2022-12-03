@@ -5,18 +5,27 @@ import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McText, McIcon, McAvatar } from ".";
 import { relativeTimeThreshold } from "moment";
 class ImagePickerComponent extends Component {
-
   constructor(props) {
     super(props);
-    console.log(this.props.image)
-    this.thisHeight = props.height ? props.height : SIZES.width*0.75;
-    this.thisWidth = props.width ? props.width : SIZES.width*0.75;
-    console.log("Image picker height is " + this.thisHeight + ". props.height is " + props.height)
-    console.log("Image picker height is " + this.thisWidth + ". props.width is " + props.width)
+    console.log("this.props.image is " + this.props.image);
+    this.thisHeight = props.height ? props.height : SIZES.width * 0.75;
+    this.thisWidth = props.width ? props.width : SIZES.width * 0.75;
+    console.log(
+      "Image picker height is " +
+        this.thisHeight +
+        ". props.height is " +
+        props.height
+    );
+    console.log(
+      "Image picker height is " +
+        this.thisWidth +
+        ". props.width is " +
+        props.width
+    );
     this.state = {
       image: this.props.image,
     };
-    console.log(this.state.image)
+    console.log("this.state.image is " + this.state.image);
   }
 
   pickImage = async () => {
@@ -41,7 +50,7 @@ class ImagePickerComponent extends Component {
 
   render() {
     return (
-      <View style={{ flex: 0, justifyContent: "center", alignItems: "center",}}>
+      <View style={{ flex: 0, justifyContent: "center", alignItems: "center" }}>
         <TouchableOpacity
           style={{
             backgroundColor: COLORS.black,
@@ -53,17 +62,34 @@ class ImagePickerComponent extends Component {
             width: this.thisWidth,
             height: this.thisHeight,
           }}
-
           onPress={this.pickImage}
         >
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
-              style={{ width: this.thisWidth, height: this.thisHeight, borderRadius: 10, 
-                borderColor: COLORS.gray, borderWidth: .5 }}
+              style={{
+                width: this.thisWidth,
+                height: this.thisHeight,
+                borderRadius: 10,
+                borderColor: COLORS.gray,
+                borderWidth: 0.5,
+              }}
+            />
+          ) : this.props.image ? (
+            <Image
+              source={{ uri: this.props.image }}
+              style={{
+                width: this.thisWidth,
+                height: this.thisHeight,
+                borderRadius: 10,
+                borderColor: COLORS.gray,
+                borderWidth: 0.5,
+              }}
             />
           ) : (
-            <icons.imagepickeraddimage height={Math.min(this.thisHeight / 3, this.thisWidth / 3)}/>
+            <icons.imagepickeraddimage
+              height={Math.min(this.thisHeight / 3, this.thisWidth / 3)}
+            />
           )}
         </TouchableOpacity>
       </View>

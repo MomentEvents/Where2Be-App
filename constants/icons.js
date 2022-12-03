@@ -18,7 +18,8 @@ import pickdescription from "../assets/icons/svgicons/pickdescription.svg"
 import picktitle from "../assets/icons/svgicons/picktitle.svg"
 import picklocation from "../assets/icons/svgicons/picklocation.svg"
 import imagepickeraddimage from "../assets/icons/svgicons/imagepickeraddimage.svg"
-
+import displayname from "../assets/icons/svgicons/displayname.svg"
+import username from "../assets/icons/svgicons/username.svg"
 
 //_____________________________________________________________________________
 // Deter from using the ones below. We will replace them with the ones up top
@@ -90,5 +91,7 @@ export default {
   pickdescription,
   picktitle,
   picklocation,
-  imagepickeraddimage
+  imagepickeraddimage,
+  displayname,
+  username,
 };

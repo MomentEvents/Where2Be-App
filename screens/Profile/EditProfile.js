@@ -45,16 +45,43 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
 import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "../../components/ImagePicker";
-import defaultimage from "../../assets/images/defaultprofilepicture.png"
+import defaultimage from "../../assets/images/defaultprofilepicture.png";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 const EditProfile = ({ navigation, route }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(null);
 
+  const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
+
+
+  useEffect(() => {
+    pullInformation();
+  }, [])
+
+  const pullInformation = () => {
+    setLoading(true);
+
+    // get image
+
+    setImage(Image.resolveAssetSource(defaultimage).uri);
+
+    // get displayname
+
+    setDisplayName("test");
+
+    // get username
+
+    setUsername("testusername");
+
+    setLoading(false);
+
+  }
   const handleSubmit = () => {};
+
   return (
     <SafeAreaView style={styles.container}>
       <ProgressLoader
@@ -117,21 +144,102 @@ const EditProfile = ({ navigation, route }) => {
           </View>
         </SectionHeader>
       </View>
-
       <KeyboardAwareScrollView>
         <View
           style={{
-            marginTop: 20,
-            marginBottom: 20,
+            marginTop: 40,
           }}
         >
+            {/* For imagepicker, image prop will change to*/}
           <ImagePicker
             height={width * 0.3}
             width={width * 0.3}
             setImg={setImage}
-            image={Image.resolveAssetSource(defaultimage).uri}
-          ></ImagePicker>
+            image={image}
+          />
         </View>
+        <SectionInputs>
+          <View
+            style={{
+              marginVertical: 8,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
+              }}
+            >
+              <icons.displayname width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Name
+              </McText>
+            </View>
+            <SectionTextIn>
+              <TextInput
+                placeholder="Enter a valid display name"
+                placeholderTextColor={COLORS.gray1}
+                value={displayName}
+                onChangeText={setDisplayName}
+                multiline={true}
+                maxLength={30}
+                style={{
+                  ...FONTS.body3,
+                  marginTop: 2,
+                  color: COLORS.white,
+                  padding: 10,
+                }}
+              />
+            </SectionTextIn>
+          </View>
+          <View
+            style={{
+              marginVertical: 8,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 6,
+              }}
+            >
+              <icons.username width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Username
+              </McText>
+            </View>
+            <SectionTextIn>
+              <TextInput
+                placeholder="Enter a valid username"
+                placeholderTextColor={COLORS.gray1}
+                multiline={true}
+                maxLength={30}
+                value={username}
+                onChangeText={setUsername}
+                //onChange={handleOnSearch}
+                //value={bad}
+                style={{
+                  ...FONTS.body3,
+                  marginTop: 2,
+                  color: COLORS.white,
+                  padding: 10,
+                }}
+              />
+            </SectionTextIn>
+          </View>
+        </SectionInputs>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -164,7 +272,7 @@ const SectionInputs = styled.View`
 `;
 const SectionTextIn = styled.View`
   background-color: ${COLORS.black};
-  width: ${SIZES.width * 0.76};
+  width: ${SIZES.width * 0.75};
   border-radius: 10;
   justify-content: center;
   border: 2px;
