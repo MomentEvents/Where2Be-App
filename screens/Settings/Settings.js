@@ -4,6 +4,11 @@
  * 
 
  */
+
+
+// ATTENTION: Settings will be changed to have only change email, change password, join our discord, and log out
+// I will need to change this
+
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import { TouchableHighlight , Platform, Text, View, StyleSheet, ScrollView, Button, SafeAreaView, TextInput, FlatList, Image, ImageBackground } from 'react-native';
 //import LinearGradient from 'react-native-linear-gradient';
