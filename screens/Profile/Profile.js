@@ -26,6 +26,7 @@ import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import { AuthContext } from "../../AuthContext";
 import UsedServer from "../../constants/servercontants";
+import defaultimage from "../../assets/images/defaultprofilepicture.png"
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -409,7 +410,7 @@ const Profile = ({ navigation, route }) => {
               <Image
                 style={styles.userProfilePic}
                 source={{
-                  uri: data2.image,
+                  uri: data2.image ? data2.image : Image.resolveAssetSource(defaultimage).uri,
                 }}
               />
             </View>

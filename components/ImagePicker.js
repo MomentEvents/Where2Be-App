@@ -7,8 +7,8 @@ import { relativeTimeThreshold } from "moment";
 class ImagePickerComponent extends Component {
 
   constructor(props) {
-    console.log(props.img)
     super(props);
+    console.log(this.props.image)
     this.thisHeight = props.height ? props.height : SIZES.width*0.75;
     this.thisWidth = props.width ? props.width : SIZES.width*0.75;
     console.log("Image picker height is " + this.thisHeight + ". props.height is " + props.height)
@@ -16,6 +16,7 @@ class ImagePickerComponent extends Component {
     this.state = {
       image: this.props.image,
     };
+    console.log(this.state.image)
   }
 
   pickImage = async () => {
@@ -30,7 +31,7 @@ class ImagePickerComponent extends Component {
       quality: 100,
     });
 
-    console.log(result);
+    console.log("pick image result is " + result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });

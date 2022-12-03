@@ -45,6 +45,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
 import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "../../components/ImagePicker";
+import defaultimage from "../../assets/images/defaultprofilepicture.png"
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -128,14 +129,10 @@ const EditProfile = ({ navigation, route }) => {
             height={width * 0.3}
             width={width * 0.3}
             setImg={setImage}
-            image={image}
+            image={Image.resolveAssetSource(defaultimage).uri}
           ></ImagePicker>
         </View>
       </KeyboardAwareScrollView>
-
-      {/* <SectionTitle>
-            <McText h5>FOR YOU</McText>
-          </SectionTitle>  */}
     </SafeAreaView>
   );
 };
