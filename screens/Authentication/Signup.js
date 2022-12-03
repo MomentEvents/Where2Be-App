@@ -97,7 +97,7 @@ const Signup = ({ navigation, route }) => {
       erry = true;
       temperrors.school=true;
     }
-    if(name == ""){
+    if(name == "" || name.match(/^[0-9A-Za-z]/) === null){
       erry = true;
       temperrors.name=true;
     }

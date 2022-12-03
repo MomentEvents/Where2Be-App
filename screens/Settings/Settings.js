@@ -73,7 +73,7 @@ const Settings = ({ navigation, route }) => {
         paddingTop: 12,
         }}>
         <TouchableHighlight style={styles.setting} onPress={()=>{
-          console.log('hello')
+          navigation.navigate("ChangeDisplayName")
           }}>
           <View style={styles.category}>
               <McText body2>Change Display Name</McText>
