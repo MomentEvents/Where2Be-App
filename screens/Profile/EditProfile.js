@@ -56,31 +56,65 @@ const EditProfile = ({ navigation, route }) => {
 
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
+  
+//   const [didUpdateImage, setDidUpdateImage] = useState(false)
+//   const [didUpdateDisplayName, setDidUpdateDisplayName] = useState(false)
+//   const [didUpdateUsername, setDidUpdateUsername] = useState(false)
 
 
   useEffect(() => {
     pullInformation();
   }, [])
 
+//   useEffect(() => {
+//     setDidUpdateImage(true);
+//   }, [image])
+
+//   useEffect(() => {
+//     setDidUpdateDisplayName(true);
+//   }, [displayName])
+
+//   useEffect(() => {
+//     setDidUpdateUsername(true)
+//   }, [username])
+
   const pullInformation = () => {
     setLoading(true);
 
-    // get image
+    const pulledImage = Image.resolveAssetSource(defaultimage).uri;
+    setImage(pulledImage);
 
-    setImage(Image.resolveAssetSource(defaultimage).uri);
-
-    // get displayname
-
-    setDisplayName("test");
-
-    // get username
-
-    setUsername("testusername");
+    const pulledDisplayName = "test"
+    setDisplayName(pulledDisplayName);
+    
+    const pulledUsername = "testusername"
+    setUsername(pulledUsername);
 
     setLoading(false);
 
   }
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+
+    if(displayName === "" || displayName.match(/^[0-9A-Za-z]/) === null){
+        Alert.alert("Error", "Please enter a valid display name")
+        return;
+    }
+
+    
+    if(username === "" || username.match(/^[0-9A-Za-z]/) === null){
+        Alert.alert("Error", "Please enter a valid username")
+        return;
+    }
+
+    // Update information
+
+    setLoading(true);
+
+    Alert.alert("Success", "Your information has been updated")
+    setLoading(false);
+
+    navigation.pop();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
