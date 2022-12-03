@@ -44,97 +44,103 @@ import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
 import ProgressLoader from "rn-progress-loader";
-
-
+import ImagePicker from "../../components/ImagePicker";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 const EditProfile = ({ navigation, route }) => {
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
-    const handleSubmit = () => {
-
-    }
-    return (
-        <SafeAreaView style={styles.container}>
-          <ProgressLoader
-            visible={loading}
-            isModal={true}
-            isHUD={true}
-            hudColor={"#000000"}
-            color={"#FFFFFF"}
-          ></ProgressLoader>
-          <View style={styles.tempNav}>
-            <SectionHeader>
-              <TouchableOpacity
-                style={{
-                  width: 40,
-                  height: 40,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: -12,
-                  marginTop: 4,
-                }}
-                onPress={() => {
-                  navigation.navigate("Settings");
-                }}
-              >
-                <McIcon
-                  source={icons.close}
-                  style={{
-                    tintColor: COLORS.white,
-                    marginBottom: 4,
-                    marginLeft: -8,
-                  }}
-                  size={32}
-                />
-              </TouchableOpacity>
+  const handleSubmit = () => {};
+  return (
+    <SafeAreaView style={styles.container}>
+      <ProgressLoader
+        visible={loading}
+        isModal={true}
+        isHUD={true}
+        hudColor={"#000000"}
+        color={"#FFFFFF"}
+      ></ProgressLoader>
+      <View style={styles.tempNav}>
+        <SectionHeader>
+          <TouchableOpacity
+            style={{
+              width: 40,
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: -12,
+              marginTop: 4,
+            }}
+            onPress={() => {
+              navigation.pop();
+            }}
+          >
+            <McIcon
+              source={icons.close}
+              style={{
+                tintColor: COLORS.white,
+                marginBottom: 4,
+                marginLeft: -8,
+              }}
+              size={32}
+            />
+          </TouchableOpacity>
+          <McText h1>Edit Profile</McText>
+          <View
+            style={{
+              position: "absolute",
+              right: 0,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                marginRight: 15,
+                marginTop: 5,
+              }}
+              onPress={() => {
+                handleSubmit();
+              }}
+            >
               <McText
-                h1
-              >
-                Edit Profile
-              </McText>
-              <View
+                h3
                 style={{
-                  position: "absolute",
-                  right: 0,
+                  color: COLORS.purple,
                 }}
               >
-                <TouchableOpacity
-                  style={{
-                    marginRight: 15,
-                    marginTop: 5,
-                  }}
-                  onPress={() => {
-                    handleSubmit();
-                  }}
-                >
-                  <McText
-                    h3
-                    style={{
-                      color: COLORS.purple,
-                    }}
-                  >
-                    Save
-                  </McText>
-                </TouchableOpacity>
-              </View>
-            </SectionHeader>
+                Save
+              </McText>
+            </TouchableOpacity>
           </View>
-    
-          <KeyboardAwareScrollView>
-            
-          </KeyboardAwareScrollView>
-    
-          {/* <SectionTitle>
+        </SectionHeader>
+      </View>
+
+      <KeyboardAwareScrollView>
+        <View
+          style={{
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
+          <ImagePicker
+            height={width * 0.3}
+            width={width * 0.3}
+            setImg={setImage}
+            image={image}
+          ></ImagePicker>
+        </View>
+      </KeyboardAwareScrollView>
+
+      {/* <SectionTitle>
             <McText h5>FOR YOU</McText>
           </SectionTitle>  */}
-        </SafeAreaView>
-      );
-  };
+    </SafeAreaView>
+  );
+};
 
-  const SectionHeader = styled.View`
+const SectionHeader = styled.View`
   background-color: transparent;
   padding: 16px ${SIZES.padding};
   align-items: center;
@@ -282,4 +288,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfile
+export default EditProfile;

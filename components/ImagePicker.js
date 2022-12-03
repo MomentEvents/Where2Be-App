@@ -3,12 +3,18 @@ import { TouchableOpacity, Button, Image, View, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McText, McIcon, McAvatar } from ".";
+import { relativeTimeThreshold } from "moment";
 class ImagePickerComponent extends Component {
+
   constructor(props) {
     console.log(props.img)
     super(props);
+    this.thisHeight = props.height ? props.height : SIZES.width*0.75;
+    this.thisWidth = props.width ? props.width : SIZES.width*0.75;
+    console.log("Image picker height is " + this.thisHeight + ". props.height is " + props.height)
+    console.log("Image picker height is " + this.thisWidth + ". props.width is " + props.width)
     this.state = {
-      image: this.props.img,
+      image: this.props.image,
     };
   }
 
@@ -34,30 +40,29 @@ class ImagePickerComponent extends Component {
 
   render() {
     return (
-      <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 0, justifyContent: "center", alignItems: "center",}}>
         <TouchableOpacity
           style={{
-            height: SIZES.height / 4,
-            width: SIZES.width * 0.76,
             backgroundColor: COLORS.black,
             borderRadius: 10,
-            marginBottom: 8,
             alignItems: "center",
             justifyContent: "center",
             borderWidth: 2,
             borderColor: COLORS.gray,
-            width: SIZES.width*0.75,
-            height: SIZES.width*0.75
+            width: this.thisWidth,
+            height: this.thisHeight,
           }}
+
           onPress={this.pickImage}
         >
           {this.state.image ? (
             <Image
               source={{ uri: this.state.image }}
-              style={{ width: SIZES.width*0.76, height: SIZES.width*0.76, borderRadius: 10 }}
+              style={{ width: this.thisWidth, height: this.thisHeight, borderRadius: 10, 
+                borderColor: COLORS.gray, borderWidth: .5 }}
             />
           ) : (
-            <icons.imagepickeraddimage/>
+            <icons.imagepickeraddimage height={Math.min(this.thisHeight / 3, this.thisWidth / 3)}/>
           )}
         </TouchableOpacity>
       </View>
