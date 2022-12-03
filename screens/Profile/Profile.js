@@ -19,14 +19,21 @@ import styled from "styled-components/native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
+import {
+  dummyData,
+  FONTS,
+  SIZES,
+  COLORS,
+  icons,
+  images,
+} from "../../constants";
 import { McText, McIcon, McAvatar } from "../../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import { AuthContext } from "../../AuthContext";
 import UsedServer from "../../constants/servercontants";
-import defaultimage from "../../assets/images/defaultprofilepicture.png"
+import defaultimage from "../../assets/images/defaultprofilepicture.png";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -357,21 +364,14 @@ const Profile = ({ navigation, route }) => {
               flexDirection: "row",
             }}
           >
-            <TouchableWithoutFeedback
+            <TouchableOpacity
               onPress={() => {
                 navigation.push("Settings");
                 console.log("setting button press");
               }}
             >
-              <McIcon
-                source={icons.settings}
-                size={28}
-                style={{
-                  tintColor: COLORS.purple,
-                  marginRight: 10,
-                }}
-              />
-            </TouchableWithoutFeedback>
+              <icons.settings size={28}></icons.settings>
+            </TouchableOpacity>
           </View>
         </SectionHeader>
       </View>
@@ -410,7 +410,9 @@ const Profile = ({ navigation, route }) => {
               <Image
                 style={styles.userProfilePic}
                 source={{
-                  uri: data2.image ? data2.image : Image.resolveAssetSource(defaultimage).uri,
+                  uri: data2.image
+                    ? data2.image
+                    : Image.resolveAssetSource(defaultimage).uri,
                 }}
               />
             </View>
@@ -441,9 +443,11 @@ const Profile = ({ navigation, route }) => {
               >
                 {/* {data2?.name} */}@{UserId.toLowerCase()}
               </McText>
-              <TouchableOpacity onPress={() => {
-                navigation.navigate("EditProfile");
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("EditProfile");
+                }}
+              >
                 {/* On click will have opportunity on one screen to change display name, profile picture, and username*/}
                 <LinearGradient
                   colors={["#B66DFF", "#280292"]}

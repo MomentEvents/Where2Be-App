@@ -203,7 +203,6 @@ const CreateEvent = ({ navigation, routenew }) => {
             </View>
             <View style={{
                 alignItems: "flex-start",
-                marginTop: 8,
                 marginBottom: 8,
             }}>
               <ImagePicker setImg={setImg}>

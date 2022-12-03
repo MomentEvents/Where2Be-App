@@ -20,6 +20,12 @@ import picklocation from "../assets/icons/svgicons/picklocation.svg"
 import imagepickeraddimage from "../assets/icons/svgicons/imagepickeraddimage.svg"
 import displayname from "../assets/icons/svgicons/displayname.svg"
 import username from "../assets/icons/svgicons/username.svg"
+import contact from "../assets/icons/svgicons/contact.svg"
+import email from "../assets/icons/svgicons/email.svg"
+import logout from "../assets/icons/svgicons/logout.svg"
+import notifications from "../assets/icons/svgicons/notifications.svg"
+import password from "../assets/icons/svgicons/password.svg"
+import settings from "../assets/icons/svgicons/settings.svg"
 
 //_____________________________________________________________________________
 // Deter from using the ones below. We will replace them with the ones up top
@@ -41,7 +47,6 @@ const location = require('../assets/icons/location.png')
 const event = require('../assets/icons/event.png')
 const friend_add = require('../assets/icons/friend_add.png')
 const check = require('../assets/icons/check.png')
-const settings = require('../assets/icons/settings.png')
 const visibility = require('../assets/icons/visibility.png')
 const links = require('../assets/icons/link.png')
 const close = require('../assets/icons/close.png')
@@ -94,4 +99,10 @@ export default {
   imagepickeraddimage,
   displayname,
   username,
+  contact,
+  email,
+  logout,
+  notifications,
+  password,
+  settings,
 };
