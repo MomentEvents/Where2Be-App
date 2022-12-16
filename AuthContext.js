@@ -4,7 +4,7 @@ import React, { useState, useEffect, Context, createContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import produce from 'immer';
 import UsedServer from './constants/servercontants';
-import registerForPushNotificationsAsync from './Services/Notifications';
+import registerForPushNotificationsAsync from './Services/NotificationService';
 
 export const AuthContext = createContext();
 
