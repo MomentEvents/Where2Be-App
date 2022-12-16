@@ -20,9 +20,34 @@ export async function getAllSchoolUsers(): Promise<User[]> {
  * Gets a user by its Id
  * 
  * Parameters: ID to get user
- * Return: List of all users
+ * Return: The user object (if found. Null if not found.)
  */
 export async function getUserById(Id: number): Promise<User> {
+    return null;
+}
+
+/******************************************************
+ * getUserByUsername
+ * 
+ * Gets a user by its username
+ * 
+ * Parameters: username to get user
+ * Return: The user object (if found. Null if not found.)
+ */
+
+export async function getUserByUsername(username: string): Promise<User> {
+    return null;
+}
+
+/******************************************************
+ * getUserByEmail
+ * 
+ * Gets a user by its email
+ * 
+ * Parameters: email to get user
+ * Return: The user object (if found. Null if not found.)
+ */
+export async function getUserByEmail(email: string): Promise<User> {
     return null;
 }
 
@@ -61,6 +86,3 @@ export async function updateCurrUser(updatedUser: User): Promise<boolean> {
 export async function createUser(createdUser: User): Promise<boolean> {
     return null;
 }
-
-
-
