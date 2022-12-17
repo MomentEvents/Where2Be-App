@@ -25,7 +25,7 @@ import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../../AuthContext';
 import UsedServer from "../../constants/servercontants";
-import registerForPushNotificationsAsync from "../../Services/NotificationsService";
+import registerForPushNotificationsAsync from "../../Services/NotificationService";
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
