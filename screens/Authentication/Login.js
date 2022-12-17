@@ -25,7 +25,7 @@ import { Dimensions } from "react-native";
 import {CustomInput} from "./Signup.js"
 import { AuthContext } from '../../AuthContext';
 import UsedServer from "../../constants/servercontants";
-import registerForPushNotificationsAsync from "../../Services/NotificationService";
+import registerForPushNotificationsAsync from "../../Services/Notifications";
 
 
 var width = Dimensions.get('window').width; //full width
