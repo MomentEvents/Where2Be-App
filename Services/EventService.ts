@@ -32,7 +32,8 @@ export async function getEventDetailsById(eventId: number): Promise<Event> {
  * 
  * Creates an event and links it to a school based on what school the currentUser is in
  * 
- * Parameters: A created event to put in the database
+ * Parameters: 
+ *          createdEvent: A created event to put in the database
  * Return: A boolean which is true if it's successfully created and false if there is an error
  */
 export async function createEvent(createdEvent: Event): Promise<boolean> {
@@ -46,10 +47,10 @@ export async function createEvent(createdEvent: Event): Promise<boolean> {
  * 
  * Parameters: 
  *          eventId: The event id to update the event. 
- *          createdEvent: The changed values to update to the event. All null values are ignored.
+ *          updatedEvent: The changed values to update to the event. All null values are ignored.
  * Return: A boolean which is true if it's successfully updated and false if there is an error
  */
-export async function updateEventById(eventId: number, createdEvent: Event): Promise<boolean> {
+export async function updateEventById(eventId: number, updatedEvent: Event): Promise<boolean> {
     return null;
 }
 
