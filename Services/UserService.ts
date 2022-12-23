@@ -41,7 +41,7 @@ export async function getUserById(Id: string): Promise<User> {
  *          email: email to get user
  * Return: The user object (if found. Null if not found.)
  */
-export async function getUserByEmail(email: string): Promise<User> {
+export async function getUserByEmail(email: string): Promise<User | null> {
     return null;
 }
 

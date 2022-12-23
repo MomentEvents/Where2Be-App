@@ -16,31 +16,29 @@ import styled from "styled-components/native";
 import moment from "moment";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
+import {
+  dummyData,
+  FONTS,
+  SIZES,
+  COLORS,
+  icons,
+  images,
+} from "../../constants";
 import ProgressLoader from "rn-progress-loader";
 import events from "../../constants/events.json";
-import { McText, McIcon, McAvatar} from "../../components";
+import { McText, McIcon, McAvatar } from "../../components";
 import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
-import {CustomInput} from "./Signup.js"
-import { AuthContext } from '../../AuthContext';
+import { CustomInput } from "./Signup.js";
+import { AuthContext } from "../../AuthContext";
 import UsedServer from "../../constants/servercontants";
 import registerForPushNotificationsAsync from "../../Services/NotificationService";
-import { login } from '../../Services/AuthService'
-import { User } from "../../Services/UserService";
+import { login } from "../../Services/AuthService";
+import { User, getUserByEmail, getUserById } from "../../Services/UserService";
+import { checkIfStringIsEmail } from "../../helpers/helpers";
 
-
-var width = Dimensions.get('window').width; //full width
-var height = Dimensions.get('window').height; //full height
-
-
-function validateEmail(test) {
-  const expression =
-    /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-
-  return expression.test(String(test).toLowerCase());
-}
-
+var width = Dimensions.get("window").width; //full width
+var height = Dimensions.get("window").height; //full height
 
 //datas = events
 const Login = ({ navigation, route }) => {
@@ -50,21 +48,50 @@ const Login = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [ServerErr, setServerErr] = useState(false);
-  const {loginTok} = useContext(AuthContext);
+  const { loginTok } = useContext(AuthContext);
 
   const userlogin = async () => {
-
+    setLoading(true);
+    if(usercred == "" || password == ""){
+      Alert.alert("Error", "Please enter valid fields")
+      setLoading(false);
+      return
+    }
     const checkUser: User = {
-      id: 'string', // This is also a username
+      id: null,
       picture: null,
       name: null,
       email: null,
       password_hash: null,
       push_token: null,
+    };
+    
+    if(checkIfStringIsEmail(usercred)){
+      checkUser.email = usercred
+      const emailResponse = await getUserByEmail(usercred)
+      if(emailResponse == null){
+        Alert.alert("Error", "No user found with inputted email")
+        setLoading(false)
+        return
+      }
     }
-    checkUser.id = 'hello'
-    console.log("going to service")
-    login(checkUser)
+    else{
+      checkUser.id = usercred
+      const idResponse = await getUserById(usercred)
+      if(idResponse == null){
+        Alert.alert("Error", "No user with inputted username")
+        setLoading(false)
+      }
+    }
+    const loginResponse = await login(checkUser);
+
+    if(loginResponse == null){
+      Alert.alert("Error", "Incorrect password")
+    }
+
+    
+
+    // OLD CODE IS HERE
     // setLoading(true);
     // seterror(false);
     // setServerErr(false);
@@ -110,7 +137,7 @@ const Login = ({ navigation, route }) => {
     //       setServerErr(true);
     //       console.log("ERRROR");
     //       console.log(err);
-          
+
     //       erry = true;
     //     } finally {
     //       setLoading(false);
@@ -148,22 +175,22 @@ const Login = ({ navigation, route }) => {
     //       setServerErr(true);
     //       console.log("ERRROR");
     //       console.log(err);
-          
+
     //       erry = true;
     //     } finally {
     //       setLoading(false);
     //       trylogin(erry, udata);
     //     }
     //   }
-      
-    // } 
-  
+
+    // }
+
     //return userdata
   };
-  const trylogin = (erry, udata) =>{
-    if(erry == false){
+  const trylogin = (erry, udata) => {
+    if (erry == false) {
       //navigation.navigate('Interests')
-      loginTok(udata)
+      loginTok(udata);
     }
   };
 
@@ -180,18 +207,25 @@ const Login = ({ navigation, route }) => {
         <McText h1>Welcome to Moment</McText>
       </SectionHeader>
       <View>
-        {ServerErr && <McText style={{color: "#cc0000",}}> {" "} Server is down, please try again later </McText>}
+        {ServerErr && (
+          <McText style={{ color: "#cc0000" }}>
+            {" "}
+            Server is down, please try again later{" "}
+          </McText>
+        )}
       </View>
       <CustomInput
         value={usercred}
         setValue={setusercred}
-        placeholder="Username or Email" secureTextEntry={undefined}      />
-      
+        placeholder="Username or Email"
+        secureTextEntry={undefined}
+      />
+
       <CustomInput
-        value= {password}
+        value={password}
         setValue={setpass}
-        placeholder ="Password"
-        secureTextEntry 
+        placeholder="Password"
+        secureTextEntry
       />
       <View>
         {error && (
@@ -205,24 +239,26 @@ const Login = ({ navigation, route }) => {
           </McText>
         )}
       </View>
-        <TouchableOpacity style={styles.button}
-          onPress={() => {
-            console.log("logging in");
-            console.log(userlogin());
-          }}
-        >
-          <McText h4>Log In</McText>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          console.log("logging in");
+          console.log(userlogin());
+        }}
+      >
+        <McText h4>Log In</McText>
+      </TouchableOpacity>
       <View>
         <McText h4>Or</McText>
       </View>
-        <TouchableOpacity style={styles.button}
-          onPress={() => {
-            navigation.navigate("Signup");
-          }}
-        >
-          <McText h4>Create A New Account</McText>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("Signup");
+        }}
+      >
+        <McText h4>Create A New Account</McText>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -230,9 +266,8 @@ const SectionHeader = styled.View`
   flex-direction: row;
   justify-content: flex-start;
   margin-top: ${Platform.OS === "ios" ? "40px" : "20px"};
-  width: ${width*0.65};
+  width: ${width * 0.65};
   margin: 20px;
-
 `;
 const SectionInput = styled.View`
   margin: 4px;
@@ -275,16 +310,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#101010",
     justifyContent: "center",
     alignItems: "center",
-  }, button: {
+  },
+  button: {
     height: 50,
-    width: width*0.65,
+    width: width * 0.65,
     backgroundColor: COLORS.input,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 15,
     marginTop: 10,
     marginBottom: 5,
-  }
+  },
 });
 
 export default Login;

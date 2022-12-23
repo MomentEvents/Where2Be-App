@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { User } from "./UserService"
 
 export interface Token{
@@ -13,13 +14,22 @@ export interface Token{
  * 
  * Parameters:
  *          checkUser: The user in which we will check if it exists and does have the same hash
- * Return: A boolean which determines if logging in was successful
+ * Return: The user that is found in the database based on the credentials given
  */
-export async function login(checkUser: User): Promise<boolean> {
-    if(checkUser.email == null){
-        console.log("email is null")
+export async function login(checkUser: User): Promise<User> {
+    try{
+        if(checkUser.email == null){
+            console.log("Doing id login")
+        }
+        else{
+            console.log("Doing email login")
+        }
     }
-    return false;
+    catch (e){
+        Alert.alert("Server error", e)
+        return null;
+    }
+    return null;
 }
 
 /******************************************************
@@ -69,7 +79,7 @@ async function writeToken(newToken: Token): Promise<boolean> {
  * Parameters: None
  * Return: A boolean which determines if updating was successful
  */
-async function updateToken(): Promise<boolean> {
+export async function updateToken(): Promise<boolean> {
     return null;
 }
 
