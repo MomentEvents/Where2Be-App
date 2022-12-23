@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Context, useContext } from "react";
 import {
   Text,
-  DateBox,
   View,
   StyleSheet,
   SafeAreaView,
@@ -11,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Image,
   Alert,
+  Platform,
 } from "react-native";
 import styled from "styled-components/native";
 import moment from "moment";
@@ -26,6 +26,8 @@ import {CustomInput} from "./Signup.js"
 import { AuthContext } from '../../AuthContext';
 import UsedServer from "../../constants/servercontants";
 import registerForPushNotificationsAsync from "../../Services/NotificationService";
+import { login } from '../../Services/AuthService'
+import { User } from "../../Services/UserService";
 
 
 var width = Dimensions.get('window').width; //full width
@@ -51,98 +53,110 @@ const Login = ({ navigation, route }) => {
   const {loginTok} = useContext(AuthContext);
 
   const userlogin = async () => {
-    setLoading(true);
-    seterror(false);
-    setServerErr(false);
-    let udata = {};
-    let erry = false;
-    let username = ''
-    let email = ''
-    if(usercred == "" || password == ""){
-      erry = true;
-      setLoading(false);
-      seterror(true);
-    }
 
-    else{
-      if(validateEmail(usercred)){
-        try {
-          const resp = await fetch(UsedServer + "/email_login", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              password: password,
-              email: usercred,
-            }),
-          });
-          const result = await resp.json();
-          console.log(result);
-          udata = result
-          if (udata.name){
-            setData(result);
-            registerForPushNotificationsAsync(udata.username);
-          }else if(udata.error){
-            erry = true;
-            seterror(true);
-          }else{
-            erry = true;
-            setServerErr(true);
-          }
-          //setData(result);
-        } catch (err) {
-          setServerErr(true);
-          console.log("ERRROR");
-          console.log(err);
+    const checkUser: User = {
+      id: 'string', // This is also a username
+      picture: null,
+      name: null,
+      email: null,
+      password_hash: null,
+      push_token: null,
+    }
+    checkUser.id = 'hello'
+    console.log("going to service")
+    login(checkUser)
+    // setLoading(true);
+    // seterror(false);
+    // setServerErr(false);
+    // let udata = {};
+    // let erry = false;
+    // let username = ''
+    // let email = ''
+    // if(usercred == "" || password == ""){
+    //   erry = true;
+    //   setLoading(false);
+    //   seterror(true);
+    // }
+
+    // else{
+    //   if(validateEmail(usercred)){
+    //     try {
+    //       const resp = await fetch(UsedServer + "/email_login", {
+    //         method: "POST",
+    //         headers: {
+    //           Accept: "application/json",
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({
+    //           password: password,
+    //           email: usercred,
+    //         }),
+    //       });
+    //       const result = await resp.json();
+    //       console.log(result);
+    //       udata = result
+    //       if (udata.name){
+    //         setData(result);
+    //         registerForPushNotificationsAsync(udata.username);
+    //       }else if(udata.error){
+    //         erry = true;
+    //         seterror(true);
+    //       }else{
+    //         erry = true;
+    //         setServerErr(true);
+    //       }
+    //       //setData(result);
+    //     } catch (err) {
+    //       setServerErr(true);
+    //       console.log("ERRROR");
+    //       console.log(err);
           
-          erry = true;
-        } finally {
-          setLoading(false);
-          trylogin(erry, udata);
-        }
-      }
-      else{
-        try {
-          const resp = await fetch(UsedServer + "/user_login", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: usercred,
-              password: password,
-            }),
-          });
-          const result = await resp.json();
-          console.log(result);
-          udata = result
-          if (udata.name){
-            setData(result);
-            registerForPushNotificationsAsync(udata.username);
-          }else if(udata.error){
-            erry = true;
-            seterror(true);
-          }else{
-            erry = true;
-            setServerErr(true);
-          }
-          //setData(result);
-        } catch (err) {
-          setServerErr(true);
-          console.log("ERRROR");
-          console.log(err);
+    //       erry = true;
+    //     } finally {
+    //       setLoading(false);
+    //       trylogin(erry, udata);
+    //     }
+    //   }
+    //   else{
+    //     try {
+    //       const resp = await fetch(UsedServer + "/user_login", {
+    //         method: "POST",
+    //         headers: {
+    //           Accept: "application/json",
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({
+    //           username: usercred,
+    //           password: password,
+    //         }),
+    //       });
+    //       const result = await resp.json();
+    //       console.log(result);
+    //       udata = result
+    //       if (udata.name){
+    //         setData(result);
+    //         registerForPushNotificationsAsync(udata.username);
+    //       }else if(udata.error){
+    //         erry = true;
+    //         seterror(true);
+    //       }else{
+    //         erry = true;
+    //         setServerErr(true);
+    //       }
+    //       //setData(result);
+    //     } catch (err) {
+    //       setServerErr(true);
+    //       console.log("ERRROR");
+    //       console.log(err);
           
-          erry = true;
-        } finally {
-          setLoading(false);
-          trylogin(erry, udata);
-        }
-      }
+    //       erry = true;
+    //     } finally {
+    //       setLoading(false);
+    //       trylogin(erry, udata);
+    //     }
+    //   }
       
-    } 
+    // } 
   
     //return userdata
   };
@@ -169,10 +183,9 @@ const Login = ({ navigation, route }) => {
         {ServerErr && <McText style={{color: "#cc0000",}}> {" "} Server is down, please try again later </McText>}
       </View>
       <CustomInput
-        value= {usercred}
+        value={usercred}
         setValue={setusercred}
-        placeholder ="Username or Email"
-      />
+        placeholder="Username or Email" secureTextEntry={undefined}      />
       
       <CustomInput
         value= {password}

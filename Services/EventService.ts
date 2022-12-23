@@ -1,5 +1,13 @@
 export interface Event{
-    // Event type here
+    id: string,
+    creatorId: string, // username of the creator
+    name: string,
+    description: string,
+    image: string,
+    location: string,
+    startingDateTime: Date,
+    endingDateTime: Date | null, // startingDateTime and endingDateTime will be same date but different times
+    visibility: boolean,
 }
 
 // Constants for category parameter checking in getAllSchoolEventsByCategory

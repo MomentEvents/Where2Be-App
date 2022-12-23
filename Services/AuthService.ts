@@ -16,7 +16,10 @@ export interface Token{
  * Return: A boolean which determines if logging in was successful
  */
 export async function login(checkUser: User): Promise<boolean> {
-    return null;
+    if(checkUser.email == null){
+        console.log("email is null")
+    }
+    return false;
 }
 
 /******************************************************

@@ -1,5 +1,10 @@
 export interface User {
-    // Put user type here
+    id: string | null, // This is also a username
+    picture: string | null,
+    name: string | null,
+    email: string | null,
+    password_hash: string | null,
+    push_token: string[] | null,
 }  
 
 /******************************************************
@@ -17,27 +22,13 @@ export async function getAllSchoolUsers(): Promise<User[]> {
 /******************************************************
  * getUserById
  * 
- * Gets a user by its Id
+ * Gets a user by its Id / username
  * 
  * Parameters: 
  *          Id: ID to get user
  * Return: The user object (if found. Null if not found.)
  */
-export async function getUserById(Id: number): Promise<User> {
-    return null;
-}
-
-/******************************************************
- * getUserByUsername
- * 
- * Gets a user by its username
- * 
- * Parameters: 
- *          username: username to get user
- * Return: The user object (if found. Null if not found.)
- */
-
-export async function getUserByUsername(username: string): Promise<User> {
+export async function getUserById(Id: string): Promise<User> {
     return null;
 }
 
