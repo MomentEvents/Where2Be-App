@@ -1,9 +1,11 @@
+import UsedServer from "../constants/servercontants";
+
 export interface User {
     id: string | null, // This is also a username
     picture: string | null,
     name: string | null,
     email: string | null,
-    password_hash: string | null,
+    // password_hash: string | null,
     push_token: string[] | null,
 }  
 
@@ -15,22 +17,81 @@ export interface User {
  * Parameters: None
  * Return: An array of Users which are in the User's school
  */
-export async function getAllSchoolUsers(): Promise<User[]> {
-    return null;
+export async function getAllSchoolUsers(UserID: string): Promise<User[]>  {
+    const resp = await fetch(UsedServer + "/school_users", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          users: User[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const users = data.users
+        if (users){
+            return users
+        } else{
+            return Promise.reject(new Error("No schools for given user "))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
+
 
 /******************************************************
  * getUserById
  * 
- * Gets a user by its Id / username
+ * Gets a user by its Id
  * 
  * Parameters: 
  *          Id: ID to get user
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUserById(Id: string): Promise<User> {
-    return null;
+    const resp = await fetch(UsedServer + "/get_user_by_id", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            Id: Id,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            user: User
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const user = data.user
+        if (user){
+            return user
+        } else{
+            return Promise.reject(new Error(`Can't find user with ID: "${Id}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
+
+
 
 /******************************************************
  * getUserByEmail
@@ -41,8 +102,36 @@ export async function getUserById(Id: string): Promise<User> {
  *          email: email to get user
  * Return: The user object (if found. Null if not found.)
  */
-export async function getUserByEmail(email: string): Promise<User | null> {
-    return null;
+export async function getUserByEmail(email: string): Promise<User> {
+    const resp = await fetch(UsedServer + "/get_user_by_email", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            email: email,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          user: User
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const user = data.user
+        if (user){
+            return user
+        } else{
+            return Promise.reject(new Error(`Can't find user with email: "${email}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -53,8 +142,36 @@ export async function getUserByEmail(email: string): Promise<User | null> {
  * Parameters: None
  * Return: The current user and its information
  */
-export async function getCurrUser(): Promise<User> {
-    return null;
+export async function getCurrUser(UserID: string): Promise<User> {
+    const resp = await fetch(UsedServer + "/get_curr_user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            user: User
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const user = data.user
+        if (user){
+            return user
+        } else{
+            return Promise.reject(new Error(`Can't find current user`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -67,7 +184,35 @@ export async function getCurrUser(): Promise<User> {
  * Return: If updating the user was successful or not
  */
 export async function updateCurrUser(updatedUser: User): Promise<boolean> {
-    return null;
+    const resp = await fetch(UsedServer + "/update_curr_user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user: updatedUser
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          res: boolean
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const res = data.res
+        if (res){
+            return res
+        } else{
+            return Promise.reject(new Error(`Failed to update current user`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -80,5 +225,33 @@ export async function updateCurrUser(updatedUser: User): Promise<boolean> {
  * Return: If creating the user was successful or not
  */
 export async function createUser(createdUser: User): Promise<boolean> {
-    return null;
+    const resp = await fetch(UsedServer + "/create_user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user: createdUser
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          res: boolean
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const res = data.res
+        if (res){
+            return res
+        } else{
+            return Promise.reject(new Error(`failed to create new user`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }

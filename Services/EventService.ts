@@ -1,3 +1,4 @@
+import UsedServer from "../constants/servercontants";
 export interface Event{
     id: string,
     creatorId: string, // username of the creator
@@ -31,8 +32,36 @@ export const OTHER = "Other"
  * Parameters: An ID number to search up an event
  * Return: An event if it exists. null if it does not.
  */
-export async function getEventDetailsById(eventId: number): Promise<Event> {
-    return null;
+export async function getEventDetailsById(eventId: string): Promise<Event> {
+    const resp = await fetch(UsedServer + "/get_event_by_id", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            eventId: eventId,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't find event with ID: "${eventId}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -45,7 +74,35 @@ export async function getEventDetailsById(eventId: number): Promise<Event> {
  * Return: A boolean which is true if it's successfully created and false if there is an error
  */
 export async function createEvent(createdEvent: Event): Promise<boolean> {
-    return null;
+    const resp = await fetch(UsedServer + "/create_event", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            createdEvent: createdEvent,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          res: boolean
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const res = data.res
+        if (res){
+            return res
+        } else{
+            return Promise.reject(new Error(`failed to create new event`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -58,8 +115,37 @@ export async function createEvent(createdEvent: Event): Promise<boolean> {
  *          updatedEvent: The changed values to update to the event. All null values are ignored.
  * Return: A boolean which is true if it's successfully updated and false if there is an error
  */
-export async function updateEventById(eventId: number, updatedEvent: Event): Promise<boolean> {
-    return null;
+export async function updateEventById(eventId: string, updatedEvent: Event): Promise<boolean> {
+    const resp = await fetch(UsedServer + "/update_event", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            eventId: eventId,
+            updatedEvent: updatedEvent,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          res: boolean
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const res = data.res
+        if (res){
+            return res
+        } else{
+            return Promise.reject(new Error(`failed to update new event`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -71,8 +157,36 @@ export async function updateEventById(eventId: number, updatedEvent: Event): Pro
  * Return: A boolean which is true if it's successfully deleted and false if there is an error
  */
 
-export async function deleteEventById(eventId: number): Promise<boolean> {
-    return null;
+export async function deleteEventById(eventId: string): Promise<boolean> {
+    const resp = await fetch(UsedServer + "/delete_event", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            eventId: eventId,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          res: boolean
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const res = data.res
+        if (res){
+            return res
+        } else{
+            return Promise.reject(new Error(`failed to delete event by id`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -84,8 +198,36 @@ export async function deleteEventById(eventId: number): Promise<boolean> {
  * Return: An Event array which has all of the shouted events of the current user
  */
 
-export async function getCurrUserShoutedEvents(): Promise<Event[]> {
-    return null;
+export async function getCurrUserShoutedEvents(UserID: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_user_shoutouts", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get shoutouts for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -96,8 +238,36 @@ export async function getCurrUserShoutedEvents(): Promise<Event[]> {
  * Parameters: None
  * Return: An Event array which has all of the joined events of the current user
  */
-export async function getCurrUserJoinedEvents(): Promise<Event[]> {
-    return null;
+export async function getCurrUserJoinedEvents(UserID: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_user_joins", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get joins for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -109,12 +279,40 @@ export async function getCurrUserJoinedEvents(): Promise<Event[]> {
  * Return: An Event array which has all of the hosted events of the current user
  */
 
-export async function getCurrUserHostedEvents(): Promise<Event[]> {
-    return null;
+export async function getCurrUserHostedEvents(UserID: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_current_user_hosted_events", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get current hosted events for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
- * getHostedEventsByUserId
+ * getAllUserHostedEvents
  * 
  * Gets all of the hosted events of a user
  * 
@@ -122,8 +320,36 @@ export async function getCurrUserHostedEvents(): Promise<Event[]> {
  *      userId: The user id of the user
  * Return: An Event array which has all of the hosted events of the respective user
  */
-export async function getHostedEventsByUserId(userId: number): Promise<Event[]> {
-    return null;
+export async function getAllUserHostedEvents(UserID: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_all_user_hosted_events", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get all hosted events for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -134,8 +360,36 @@ export async function getHostedEventsByUserId(userId: number): Promise<Event[]> 
  * Parameters: None
  * Return: An Event array which has all of the events of that user's current school
  */
-export async function getAllSchoolEvents(): Promise<Event[]> {
-    return null;
+export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_all_school_events", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get all school events for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -149,7 +403,35 @@ export async function getAllSchoolEvents(): Promise<Event[]> {
  *                    ENTERTAINMENT, RECREATION, or OTHER.
  * Return: An Event array which are based on one of the categories above
  */
-export async function getAllSchoolEventsByCategory(category: string): Promise<Event[]> {
+export async function getAllSchoolEventsByCategory(UserID: string, category: string): Promise<Event[]> {
+    const resp = await fetch(UsedServer + "/get_all_events_by_category", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UserID: UserID,
+            category: category,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+            event: Event[]
+        }
+        errors?: Array<{message: string}>
+      }
 
-    return null;
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const event = data.event
+        if (event){
+            return event
+        } else{
+            return Promise.reject(new Error(`Can't get all events by category for user with ID: "${UserID}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }

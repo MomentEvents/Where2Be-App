@@ -1,8 +1,10 @@
-import { Alert } from "react-native";
 import { User } from "./UserService"
+import UsedServer from "../constants/servercontants";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface Token{
-    // Token interface here
+    id: string,
+    password_hash: string
 }
 
 /******************************************************
@@ -16,20 +18,61 @@ export interface Token{
  *          checkUser: The user in which we will check if it exists and does have the same hash
  * Return: The user that is found in the database based on the credentials given
  */
-export async function login(checkUser: User): Promise<User> {
-    try{
-        if(checkUser.email == null){
-            console.log("Doing id login")
-        }
-        else{
-            console.log("Doing email login")
-        }
+export async function login(usercred: string, password:string, credType:string): Promise<User> {
+    var resp;
+    if(credType == "Username"){
+        resp = await fetch(UsedServer + "/userId_login", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: usercred,
+                password: password
+            }),
+          });
     }
-    catch (e){
-        Alert.alert("Server error", e)
-        return null;
+    else if (credType == "Email"){
+        resp = await fetch(UsedServer + "/email_login", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: usercred,
+                password: password
+            }),
+          });
     }
-    return null;
+    else{
+        return Promise.reject(new Error(`No username or email included`))
+    }
+
+    type JSONResponse = {
+        data?: {
+            user: User,
+            password_hash: string
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const user = data.user
+        const password_hash = data.password_hash
+        if (user){
+            writeToken({id: user.id, password_hash: password_hash})
+            return user
+        } else{
+            return Promise.reject(new Error(`Invalid user credentials for user "${usercred}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
+    
 }
 
 /******************************************************
@@ -42,8 +85,44 @@ export async function login(checkUser: User): Promise<User> {
  *          checkUser: The user in which we will sign up
  * Return: A boolean which determines if signing up was successful
  */
-export async function signup(checkUser: User): Promise<boolean> {
-    return null;
+export async function signup(checkUser: User, password: string): Promise<User> {
+    if(checkUser.id == null || checkUser.email == null || checkUser.name == null){
+        return Promise.reject(new Error(`User Object must include name, username, and email`))
+    }
+    const resp = await fetch(UsedServer + "/create_user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user: checkUser,
+            password: password
+        }),
+      });
+
+    type JSONResponse = {
+        data?: {
+            user: User,
+            password_hash: string
+        }
+        errors?: Array<{message: string}>
+      }
+
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const user = data.user
+        const password_hash = data.password_hash
+        if (user){
+            writeToken({id: user.id, password_hash: password_hash})
+            return user
+        } else{
+            return Promise.reject(new Error(`Failed to create a new user "${checkUser.id}"`))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
 }
 
 /******************************************************
@@ -56,7 +135,8 @@ export async function signup(checkUser: User): Promise<boolean> {
  * Return: A boolean which determines if logging out was successful
  */
 export async function logout(): Promise<boolean> {
-    return null;
+    deleteToken();
+    return true;
 }
 
 /******************************************************
@@ -68,7 +148,9 @@ export async function logout(): Promise<boolean> {
  * Return: A boolean which determines if writing was successful
  */
 async function writeToken(newToken: Token): Promise<boolean> {
-    return null;
+    AsyncStorage.setItem('uid', newToken.id);
+    AsyncStorage.setItem('pass', newToken.password_hash);
+    return true;
 }
 
 /******************************************************
@@ -92,7 +174,10 @@ export async function updateToken(): Promise<boolean> {
  * Return: A Token object. Returns null if not found.
  */
 async function getToken(): Promise<Token> {
-    return null;
+    let uid = await AsyncStorage.getItem('uid')
+    let pass = await AsyncStorage.getItem('pass')
+    const token = {id: uid, password_hash: pass}
+    return token;
 }
 
 /******************************************************
@@ -104,7 +189,9 @@ async function getToken(): Promise<Token> {
  * Return: True if deletion is successful. False if it is not.
  */
 async function deleteToken(): Promise<boolean> {
-    return null;
+    AsyncStorage.removeItem('uid');
+    AsyncStorage.removeItem('pass');
+    return true;
 }
 
 /******************************************************
@@ -120,6 +207,39 @@ async function deleteToken(): Promise<boolean> {
  * Parameters: None
  * Return: True if we have a token after the function call. False if we do not.
  */
-export async function validateToken(): Promise<boolean> {
-    return null;
+export async function validateToken(): Promise<User> {
+    const token = await getToken()
+    if(token.id == null || token.password_hash == null){
+        return Promise.reject(new Error("Failed to get token"))
+    }
+    const resp = await fetch(UsedServer + "/user_test", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: token.id,
+          password: token.password_hash,
+        }),
+      });
+      type JSONResponse = {
+        data?: {
+          users: User
+        }
+        errors?: Array<{message: string}>
+      }
+      const {data, errors}:JSONResponse = await resp.json();
+      if (resp.ok){
+        const users = data.users
+        if (users){
+            return users
+        } else{
+            return Promise.reject(new Error("Invalid token"))
+        }
+      }else{
+        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+        return Promise.reject(error)
+    }
+
 }
