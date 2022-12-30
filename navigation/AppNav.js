@@ -41,7 +41,7 @@ import {
 import EditProfile from "../screens/Profile/EditProfile";
 import NewEventDetailScreen from "../screens/Events/NewEventDetailScreen";
 import { SIZES, COLORS, customFonts } from "../constants";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../Contexts/AuthContext";
 import * as SplashScreen from "expo-splash-screen";
 import { navigationRef } from "./RootNavigation";
 

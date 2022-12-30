@@ -34,7 +34,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height

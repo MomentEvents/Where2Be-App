@@ -18,7 +18,7 @@ type EventCardProps = {
   EventID: string;
   OnClick?: () => {};
   Title: string;
-  StartingTime: Date;
+  StartingDateTime: Date;
   Image: string;
   Likes: number;
   Shoutouts: number;
@@ -30,7 +30,7 @@ const EventCard = ({
   EventID,
   OnClick,
   Title,
-  StartingTime,
+  StartingDateTime,
   Image,
   Likes,
   Shoutouts,
@@ -47,7 +47,7 @@ const EventCard = ({
   // when we exit
   const [title, setTitle] = useState<string>();
   const [image, setImage] = useState<string | null>();
-  const [startingTime, setStartingTime] = useState<Date>();
+  const [startingDateTime, setStartingDateTime] = useState<Date>();
   const [likes, setLikes] = useState<number>();
   const [shoutouts, setShoutouts] = useState<number>();
   const [userLiked, setUserLiked] = useState<boolean>();
@@ -61,7 +61,7 @@ const EventCard = ({
   useEffect(() => {
     setImage(Image);
     setTitle(Title);
-    setStartingTime(StartingTime);
+    setStartingDateTime(StartingDateTime);
     setLikes(Likes);
     setShoutouts(Shoutouts);
     setUserLiked(UserLiked);
@@ -71,13 +71,13 @@ const EventCard = ({
   const NavigateToEvent = () => {
     RootNavigation.navigate("NewEventDetailScreen", {
       EventID: EventID,
-      SetTitle: setTitle,
-      SetImage: setImage,
-      SetStartingTime: setStartingTime,
-      SetLikes: setLikes,
-      SetShoutouts: setShoutouts,
-      SetUserLiked: setUserLiked,
-      SetUserShouted: setUserShouted,
+      SetCardTitle: setTitle,
+      SetCardImage: setImage,
+      SetCardStartingDateTime: setStartingDateTime,
+      SetCardLikes: setLikes,
+      SetCardShoutouts: setShoutouts,
+      SetCardUserLiked: setUserLiked,
+      SetCardUserShouted: setUserShouted,
     });
   };
   return (
@@ -146,7 +146,7 @@ const EventCard = ({
                   opacity: 0.8,
                 }}
               >
-                {moment(startingTime).format("MMM DD h:mm A")}
+                {moment(startingDateTime).format("MMM DD h:mm A")}
               </McText>
               <View
                 style={{

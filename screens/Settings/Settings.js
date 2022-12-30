@@ -41,7 +41,7 @@ import moment from "moment";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { createNavigatorFactory } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 import { memo } from "react";
 

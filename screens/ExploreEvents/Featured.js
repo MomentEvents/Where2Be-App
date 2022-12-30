@@ -27,7 +27,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -592,8 +592,7 @@ const Featured = ({ navigation, route }) => {
         EventID={10}
         Title="No Title Set"
         Image="https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg"
-        StartingTime={new Date()}
-        Date={new Date()}
+        StartingDateTime={new Date()}
         Likes={69}
         Shoutouts={69}
         UserLiked={true}
