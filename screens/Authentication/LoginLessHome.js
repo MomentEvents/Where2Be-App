@@ -19,6 +19,7 @@ import {
 import styled from "styled-components/native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
+import EventCard from "../../components/EventCard";
 
 import {
   dummyData,
@@ -566,17 +567,6 @@ const LoginLessHome = ({ navigation, route }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={{uri: "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg"}}
-                resizeMode='cover'
-                borderRadius= {SIZES.radius}
-                borderColor={COLORS.gray}
-                borderWidth= {0.2}// string not number typeError
-                style={{
-                  width: SIZES.width/2.5 + 10,
-                  height: SIZES.width/1.9 + 10,
-                  justifyContent: 'space-between',
-                }}
-                />
       <View style={styles.tempNav}>
         <SectionHeader>
           <View>
@@ -683,19 +673,7 @@ const LoginLessHome = ({ navigation, route }) => {
         </SectionFooter>
       </ScrollView>
 
-      {/* <SectionTitle>
-        <McText h5>FOR YOU</McText>
-      </SectionTitle>  */}
       <SectionDone>
-        {/* <LinearGradient
-          colors={["#B66DFF", "#280292"]}
-          style={{
-            width: 60,
-            height: 60,
-            marginBottom: 60,
-            borderRadius: 80,
-          }}
-        > */}
         <TouchableOpacity
           style={{
             width: 60,

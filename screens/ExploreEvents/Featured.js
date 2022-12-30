@@ -19,6 +19,7 @@ import {
 import styled from "styled-components/native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
+import EventCard from "../../components/EventCard";
 
 import { dummyData, FONTS, SIZES, COLORS, icons as Icons, images } from "../../constants";
 import { McText, McIcon, McAvatar } from "../../components";
@@ -587,6 +588,17 @@ const Featured = ({ navigation, route }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
+            <EventCard
+        EventID={10}
+        Title="No Title Set"
+        Image="https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg"
+        StartingTime={new Date()}
+        Date={new Date()}
+        Likes={69}
+        Shoutouts={69}
+        UserLiked={true}
+        UserShouted={false}
+      />
       <View style={styles.tempNav}>
         <SectionHeader>
           <View>
