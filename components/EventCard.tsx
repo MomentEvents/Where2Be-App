@@ -13,6 +13,7 @@ import { SIZES, COLORS, icons } from "../constants";
 import { McText, McIcon } from ".";
 import "react-native-gesture-handler";
 import * as RootNavigation from "../navigation/RootNavigation";
+import { Event } from "../Services/EventService";
 
 type EventCardProps = {
   EventID: string;
@@ -57,6 +58,7 @@ const EventCard = ({
   const cardHeight = SIZES.width / 1.9 + 10;
   const cardBorderRadius = 20;
 
+  
   // First time being loaded and rendered
   useEffect(() => {
     setImage(Image);
@@ -71,9 +73,6 @@ const EventCard = ({
   const NavigateToEvent = () => {
     RootNavigation.navigate("NewEventDetailScreen", {
       EventID: EventID,
-      SetCardTitle: setTitle,
-      SetCardImage: setImage,
-      SetCardStartingDateTime: setStartingDateTime,
       SetCardLikes: setLikes,
       SetCardShoutouts: setShoutouts,
       SetCardUserLiked: setUserLiked,

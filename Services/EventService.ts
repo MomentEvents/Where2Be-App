@@ -1,5 +1,13 @@
 export interface Event{
     // Event type here
+    EventID: string,
+    Title: string,
+    Description: string,
+    Picture: string,
+    Location: string,
+    StartDateTime: Date,
+    EndDateTime: Date | null, // startingDateTime and endingDateTime will be same date but different times
+    Visibility: boolean,
 }
 
 // Constants for category parameter checking in getAllSchoolEventsByCategory

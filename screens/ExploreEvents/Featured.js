@@ -594,7 +594,7 @@ const Featured = ({ navigation, route }) => {
         Image="https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg"
         StartingDateTime={new Date()}
         Likes={69}
-        Shoutouts={69}
+        Shoutouts={68}
         UserLiked={true}
         UserShouted={false}
       />

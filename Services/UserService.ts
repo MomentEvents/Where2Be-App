@@ -1,5 +1,10 @@
 export interface User {
     // Put user type here
+    UserID: string,
+    Name: string,
+    Username: string,
+    Email: string,
+    Picture: string,
 }  
 
 /******************************************************

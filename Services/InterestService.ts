@@ -1,5 +1,8 @@
 export interface Interest {
     // Put interest type here
+    InterestID: string,
+    Name: string,
+    Category: string,
 }  
 
 /******************************************************
