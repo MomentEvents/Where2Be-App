@@ -15,7 +15,7 @@ import {
  } from 'react-native';
 import styled from 'styled-components/native';
 import moment from 'moment';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../Contexts/AuthContext';
 
 import { dummyData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import events from '../constants/events.json'

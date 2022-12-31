@@ -17,7 +17,7 @@ import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 import { createNavigatorFactory } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { AuthContext } from '../../AuthContext';
+import { AuthContext } from '../../Contexts/AuthContext';
 
 
 import {memo} from "react"
@@ -439,28 +439,6 @@ const EventDetail = ({ navigation, route }) => {
               </McText>
               </TouchableOpacity>
           </LocationSection>
-          {/* <LinkSection>
-        <McIcon source ={icons.links} size={20} style={{
-              margin:4,
-              tintColor:COLORS.gray,
-            }}/>
-            <TouchableOpacity onPress={()=>{
-                var uri = selectedEvent?.link
-                Linking
-                .openURL(uri)
-                .catch(err => console.log('Error', err));
-                }}>
-              <McText h4 style={{
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                marginTop: -1, 
-                width: width * 0.83,
-                }}
-                numberOfLines={1}>
-                  {selectedEvent?.link}
-              </McText>
-              </TouchableOpacity>
-          </LinkSection> */}
         <VisibilitySec>
         <McIcon source ={icons.visibility} size={16} style={{
               margin:8,

@@ -11,7 +11,7 @@ import events from '../constants/events.json'
 import { McText, McIcon, McAvatar} from '../components'
 import Fuse from 'fuse.js'
 import UsedServer from '../constants/servercontants';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../Contexts/AuthContext';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height

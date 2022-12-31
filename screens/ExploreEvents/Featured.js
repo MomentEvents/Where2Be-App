@@ -19,6 +19,7 @@ import {
 import styled from "styled-components/native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
+import EventCard from "../../components/EventCard";
 
 import { dummyData, FONTS, SIZES, COLORS, icons as Icons, images } from "../../constants";
 import { McText, McIcon, McAvatar } from "../../components";
@@ -26,7 +27,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -587,6 +588,16 @@ const Featured = ({ navigation, route }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
+            <EventCard
+        EventID={10}
+        Title="No Title Set"
+        Image="https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg"
+        StartingDateTime={new Date()}
+        Likes={69}
+        Shoutouts={68}
+        UserLiked={true}
+        UserShouted={false}
+      />
       <View style={styles.tempNav}>
         <SectionHeader>
           <View>

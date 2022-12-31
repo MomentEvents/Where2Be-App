@@ -31,7 +31,7 @@ import { McText, McIcon, McAvatar } from "../../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import { AuthContext } from "../../AuthContext";
+import { AuthContext } from "../../Contexts/AuthContext";
 import UsedServer from "../../constants/servercontants";
 import defaultimage from "../../assets/images/defaultprofilepicture.png";
 
