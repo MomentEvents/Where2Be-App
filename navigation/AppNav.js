@@ -62,7 +62,7 @@ function AppNav() {
   //skip login: true ? <AppStack else UserId !== null ? <AppStack
   return assetsLoaded && !loadingToken ? (
     <NavigationContainer ref={navigationRef}>
-      {UserId !== null ? <AppStack /> : <AuthStack />}
+      {UserId === null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   ) : (
     <SafeAreaView style={styles.container}>
