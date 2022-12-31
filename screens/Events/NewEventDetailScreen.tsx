@@ -45,7 +45,8 @@ const NewEventDetailScreen = ({ route }) => {
   const [userLiked, setUserLiked] = useState<boolean>();
   const [userShouted, setUserShouted] = useState<boolean>();
   const [isHost, setIsHost] = useState<boolean>();
-  const [descriptionExpanded, setDescriptionExpanded] = useState<boolean>(false) // to expand description box
+  const [descriptionExpanded, setDescriptionExpanded] =
+    useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
 
   const addUserLike = () => {};
@@ -62,9 +63,10 @@ const NewEventDetailScreen = ({ route }) => {
     console.log(e.nativeEvent.lines.length);
   }, []);
 
-  const toggleNumberOfLines = () => { //To toggle the show text or hide it
+  const toggleNumberOfLines = () => {
+    //To toggle the show text or hide it
     setDescriptionExpanded(!descriptionExpanded);
-}
+  };
 
   useEffect(() => {
     // Disable the screen
@@ -221,7 +223,7 @@ const NewEventDetailScreen = ({ route }) => {
                   }}
                 >
                   <FooterContentView>
-                    <View>
+                    <View style={styles.scrollcontainer}>
                       <View
                         style={{
                           flexDirection: "row",
@@ -232,7 +234,6 @@ const NewEventDetailScreen = ({ route }) => {
                           h3
                           style={{
                             letterSpacing: 1.5,
-                            marginLeft: 15,
                             color: COLORS.purple,
                             opacity: 0.85,
                           }}
@@ -265,101 +266,127 @@ const NewEventDetailScreen = ({ route }) => {
               </ImageFooterSection>
             </View>
           </ImageBackground>
-          <McText
-            h1
-            style={{
-              width: SIZES.width * 0.8,
-              marginHorizontal: 15,
-              marginTop: 5,
-            }}
-          >
-            {viewedEvent === undefined ? null : viewedEvent.Title}
-          </McText>
-          <InterestSection>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              {tags === undefined
-                ? null
-                : tags.map((taglist) => (
-                    <View
-                      style={{
-                        width: taglist.Name.length * 9 + 15,
-                        height: 32,
-                        borderRadius: 14,
-                        marginRight: 10,
-                        backgroundColor: COLORS.input,
-                        borderWidth: StyleSheet.hairlineWidth,
-                        borderColor: COLORS.purple,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <McText h5 style={{ letterSpacing: 1 }}>
-                        {taglist.Name}
-                      </McText>
-                    </View>
-                  ))}
-            </ScrollView>
-          </InterestSection>
-          <HostSection>
-            <TouchableOpacity
+          <View style={styles.scrollcontainer}>
+            <McText
+              h1
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => {
-                RootNavigation.push("ProfileDetail", {
-                  UserID: host.UserID,
-                });
+                width: SIZES.width * 0.8,
+                marginTop: 5,
               }}
             >
-              <Image
-                style={styles.hostProfilePic}
-                source={{ uri: host === undefined ? null : host.Picture }}
-              ></Image>
+              {viewedEvent === undefined ? null : viewedEvent.Title}
+            </McText>
+            <InterestSection>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {tags === undefined
+                  ? null
+                  : tags.map((taglist) => (
+                      <View
+                        style={{
+                          width: taglist.Name.length * 9 + 15,
+                          height: 32,
+                          borderRadius: 14,
+                          marginRight: 10,
+                          backgroundColor: COLORS.input,
+                          borderWidth: StyleSheet.hairlineWidth,
+                          borderColor: COLORS.purple,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <McText h5 style={{ letterSpacing: 1 }}>
+                          {taglist.Name}
+                        </McText>
+                      </View>
+                    ))}
+              </ScrollView>
+            </InterestSection>
+            <HostSection>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => {
+                  RootNavigation.push("ProfileDetail", {
+                    UserID: host.UserID,
+                  });
+                }}
+              >
+                <Image
+                  style={styles.hostProfilePic}
+                  source={{ uri: host === undefined ? null : host.Picture }}
+                ></Image>
+                <McText
+                  h4
+                  numberOfLines={1}
+                  style={{
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
+                    width: SIZES.width / 1.25,
+                  }}
+                >
+                  {host === undefined ? null : host.Name}
+                </McText>
+              </TouchableOpacity>
+            </HostSection>
+            <DescriptionSection>
+              <View
+                style={{
+                  marginBottom: 4,
+                  marginTop: 4,
+                  marginRight: 12,
+                  marginLeft: 12
+                }}
+              >
+                <McText
+                  onTextLayout={onTextLayout}
+                  numberOfLines={descriptionExpanded ? undefined : 3}
+                  body3
+                  selectable={true}
+                >
+                  {viewedEvent === undefined ? null : viewedEvent.Description}
+                </McText>
+                {lengthMoreText ? (
+                  <McText
+                    onPress={toggleNumberOfLines}
+                    style={{
+                      lineHeight: 22,
+                      marginTop: 10,
+                      color: COLORS.gray,
+                    }}
+                  >
+                    {descriptionExpanded ? "Read less..." : "Read more..."}
+                  </McText>
+                ) : null}
+              </View>
+            </DescriptionSection>
+            <LocationSection>
+              <McIcon
+                source={icons.location}
+                size={24}
+                style={{
+                  margin: 4,
+                  tintColor: COLORS.purple,
+                }}
+              />
               <McText
                 h4
-                numberOfLines={1}
                 style={{
                   letterSpacing: 1,
                   textTransform: "uppercase",
-                  width: SIZES.width / 1.25,
+                  marginTop: -1,
+                  width: SIZES.width * 0.83,
                 }}
               >
-                {host === undefined ? null : host.Name}
+                {viewedEvent === undefined ? null : viewedEvent.Location}
               </McText>
-            </TouchableOpacity>
-          </HostSection>
-          <DescriptionSection>
-            <View
-              style={{
-                marginLeft: 12,
-                marginBottom: 4,
-                marginTop: 4,
-                marginRight: 12,
-              }}
-            >
-              <McText
-                onTextLayout={onTextLayout}
-                numberOfLines={descriptionExpanded ? undefined : 3}
-                body3
-                selectable={true}
-              >
-                {viewedEvent === undefined ? null : viewedEvent.Description}
-              </McText>
-              {lengthMoreText ? (
-                <McText
-                  onPress={toggleNumberOfLines}
-                  style={{ lineHeight: 22, marginTop: 10, color: COLORS.gray }}
-                >
-                  {descriptionExpanded ? "Read less..." : "Read more..."}
-                </McText>
-              ) : null}
-            </View>
-          </DescriptionSection>
+            </LocationSection>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -373,13 +400,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.black,
   },
+  scrollcontainer: {
+    marginLeft: 20,
+    marginRight: 20,
+  },
   hostProfilePic: {
     height: 35,
     width: 35,
     borderRadius: 30,
     marginRight: 10,
-    marginLeft: 15,
-    marginTop: 5,
     borderWidth: 1,
     borderColor: COLORS.white,
     justifyContent: "center",
@@ -409,22 +438,26 @@ const FooterContentView = styled.View`
 `;
 
 const InterestSection = styled.View`
-  margin: 15px 15px 10px;
+  margin: 15px 0px 10px 0px;
   flex-direction: row;
 `;
 
 const HostSection = styled.View`
   flex-direction: row;
-  marginhorizontal: 16px;
-  marginbottom: 12px;
+  margin: 5px 0px 10px 10px;
   align-items: center;
 `;
 
 const DescriptionSection = styled.View`
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top:10px;
   background-color: ${COLORS.input};
   border-radius: 10px;
+  margin: 5px 0px 0px 0px;
   opacity: 0.8;
+`;
+
+const LocationSection = styled.View`
+  flex-direction: row;
+  margin: 5px 0px 0px 0px;
+  border-radius: 10px;
+  align-items: center;
 `;
