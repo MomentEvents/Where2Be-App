@@ -45,7 +45,7 @@ const NewEventDetailScreen = ({ route }) => {
   const [shoutouts, setShoutouts] = useState<number>();
   const [userLiked, setUserLiked] = useState<boolean>();
   const [userShouted, setUserShouted] = useState<boolean>();
-  const [isHost, setIsHost] = useState<boolean>();
+  const [isHost, setIsHost] = useState<boolean>(false);
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
@@ -122,7 +122,7 @@ const NewEventDetailScreen = ({ route }) => {
     const pulledUserShouted: boolean = false;
     setUserShouted(pulledUserShouted);
 
-    // setIsHost(pulledHost.UserID === UserID)
+    setIsHost(true)
 
     // Set previous event card shoutouts
     propsFromEventCard.SetCardLikes !== undefined
@@ -425,39 +425,47 @@ const NewEventDetailScreen = ({ route }) => {
                   </McText>
                 </View>
               </VisibilitySection>
-              <EditOrDeleteEventSection>
-                <TouchableOpacity
-                  style={styles.edit}
-                  onPress={() => {
-                    // updateData(selectedEvent)
-                    RootNavigation.navigate("EditEvent", {
-                      SelectedEvent: viewedEvent,
-                    });
-                    // updateData(selectedEvent);
-                  }}
-                >
-                  <McText h5>Edit this Event</McText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.delete}
-                  onPress={() => {
-                    // updateData(selectedEvent)
-                    RootNavigation.navigate("EditEvent", {
-                      SelectedEvent: viewedEvent,
-                    });
-                    // updateData(selectedEvent);
-                  }}
-                >
-                  <McText h5>Delete this Event</McText>
-                </TouchableOpacity>
-              </EditOrDeleteEventSection>
-              <SectionFooter>
-                <View
-                  style={{
-                    height: 120,
-                  }}
-                ></View>
-              </SectionFooter>
+              { isHost === true ? (
+                <>
+                  <EditOrDeleteEventSection>
+                    <TouchableOpacity
+                      style={styles.edit}
+                      onPress={() => {
+                        RootNavigation.navigate("EditEvent", {
+                          SelectedEvent: viewedEvent,
+                        });
+                      }}
+                    >
+                      <McText h5>Edit this Event</McText>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.delete}
+                      onPress={() => {
+                        RootNavigation.navigate("EditEvent", {
+                          SelectedEvent: viewedEvent,
+                        });
+                      }}
+                    >
+                      <McText h5>Delete this Event</McText>
+                    </TouchableOpacity>
+                  </EditOrDeleteEventSection>
+                  <SectionFooter>
+                    <View
+                      style={{
+                        height: 120,
+                      }}
+                    ></View>
+                  </SectionFooter>
+                </>
+              ) : (
+                <SectionFooter>
+                  <View
+                    style={{
+                      height: 120,
+                    }}
+                  ></View>
+                </SectionFooter>
+              )}
             </View>
           </ScrollView>
           <View style={styles.userControlContainer}>
@@ -553,10 +561,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: SIZES.width,
     height: 100,
-    borderTopWidth: .5,
+    borderTopWidth: 0.5,
     borderColor: COLORS.gray,
     backgroundColor: COLORS.black,
-    opacity: .9,
+    opacity: 0.9,
   },
   hostProfilePic: {
     height: 35,
