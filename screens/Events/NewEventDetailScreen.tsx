@@ -51,15 +51,83 @@ const NewEventDetailScreen = ({ route }) => {
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
-  const addUserLike = () => {};
+  const addUserLike = () => {
+    setLoading(true);
 
-  const addUserShoutout = () => {};
+    // Add like by user in Database
 
-  const removeUserLike = () => {};
+    // Set previous event card likes
+    propsFromEventCard.SetCardLikes !== undefined
+      ? propsFromEventCard.SetCardLikes(likes + 1)
+      : {};
+    propsFromEventCard.SetCardUserLiked !== undefined
+      ? propsFromEventCard.SetCardUserLiked(true)
+      : {};
 
-  const removeUserShoutout = () => {};
+    setUserLiked(true);
+    setLikes(likes + 1);
 
-  // For description expandion
+    setLoading(false);
+  };
+
+  const addUserShoutout = () => {
+    setLoading(true);
+    // Add shoutout by user in Database
+
+    setUserShouted(true);
+
+    // Set previous event card shoutouts
+    propsFromEventCard.SetCardShoutouts !== undefined
+      ? propsFromEventCard.SetCardShoutouts(shoutouts + 1)
+      : {};
+    propsFromEventCard.SetCardUserShouted !== undefined
+      ? propsFromEventCard.SetCardUserShouted(true)
+      : {};
+    setShoutouts(shoutouts + 1);
+
+    console.log("add user shoutout");
+    setLoading(false);
+  };
+
+  const removeUserLike = () => {
+    setLoading(true);
+
+    // Remove like by user in Database
+
+    // Set previous event card likes
+    propsFromEventCard.SetCardLikes !== undefined
+      ? propsFromEventCard.SetCardLikes(likes - 1)
+      : {};
+    propsFromEventCard.SetCardUserLiked !== undefined
+      ? propsFromEventCard.SetCardUserLiked(false)
+      : {};
+
+    setUserLiked(false);
+    setLikes(likes - 1);
+
+    setLoading(false);
+  };
+
+  const removeUserShoutout = () => {
+    setLoading(true);
+
+    // Remove shoutout by user in Database
+
+    // Set previous event card shoutouts
+    propsFromEventCard.SetCardShoutouts !== undefined
+      ? propsFromEventCard.SetCardShoutouts(shoutouts - 1)
+      : {};
+    propsFromEventCard.SetCardUserShouted !== undefined
+      ? propsFromEventCard.SetCardUserShouted(false)
+      : {};
+
+    setUserShouted(false);
+    setShoutouts(shoutouts - 1);
+
+    setLoading(false);
+  };
+
+  // For description expansion
   const onTextLayout = useCallback((e) => {
     setLengthMoreText(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
   }, []);
@@ -122,7 +190,7 @@ const NewEventDetailScreen = ({ route }) => {
     const pulledUserShouted: boolean = false;
     setUserShouted(pulledUserShouted);
 
-    setIsHost(true)
+    setIsHost(true);
 
     // Set previous event card shoutouts
     propsFromEventCard.SetCardLikes !== undefined
@@ -140,6 +208,7 @@ const NewEventDetailScreen = ({ route }) => {
 
     setLoading(false);
   };
+
   useEffect(() => {
     pullData();
   }, []);
@@ -425,7 +494,7 @@ const NewEventDetailScreen = ({ route }) => {
                   </McText>
                 </View>
               </VisibilitySection>
-              { isHost === true ? (
+              {isHost ? (
                 <>
                   <EditOrDeleteEventSection>
                     <TouchableOpacity
@@ -452,7 +521,7 @@ const NewEventDetailScreen = ({ route }) => {
                   <SectionFooter>
                     <View
                       style={{
-                        height: 120,
+                        height: 170,
                       }}
                     ></View>
                   </SectionFooter>
@@ -461,7 +530,7 @@ const NewEventDetailScreen = ({ route }) => {
                 <SectionFooter>
                   <View
                     style={{
-                      height: 120,
+                      height: 170,
                     }}
                   ></View>
                 </SectionFooter>
@@ -481,28 +550,35 @@ const NewEventDetailScreen = ({ route }) => {
                     width: 60,
                     height: 60,
                     borderRadius: 80,
+                    marginBottom: 5,
                     backgroundColor: userLiked ? COLORS.purple : "transparent",
-                    borderWidth: 1,
-                    borderColor: COLORS.gray,
+                    borderWidth: 2,
+                    borderColor: userLiked ? COLORS.white : COLORS.gray,
                     justifyContent: "center",
                     alignItems: "center",
                   }}
                   onPressOut={() => {
                     userLiked ? removeUserLike() : addUserLike();
-
-                    // console.log(selectedEvent)
                   }}
                 >
-                  <McIcon
-                    source={icons.check}
-                    size={32}
-                    style={{
-                      tintColor: userLiked ? COLORS.white : COLORS.gray,
-                      marginHorizontal: 44,
-                    }}
-                  />
+                  {userLiked ? <icons.activecheckmark width={35}/> : <icons.inactivecheckmark width={35}/>}
                 </TouchableOpacity>
-                <McText body3>Join</McText>
+                <McText
+                  body3
+                  style={{
+                    color: userLiked ? COLORS.purple : COLORS.white,
+                  }}
+                >
+                  Join
+                </McText>
+                <McText
+                  body2
+                  style={{
+                    color: userLiked ? COLORS.purple : COLORS.white,
+                  }}
+                >
+                  {likes}
+                </McText>
               </View>
               <View
                 style={{
@@ -514,11 +590,12 @@ const NewEventDetailScreen = ({ route }) => {
                     width: 60,
                     height: 60,
                     borderRadius: 80,
-                    borderWidth: 1,
-                    borderColor: COLORS.gray,
+                    marginBottom: 5,
                     backgroundColor: userShouted
                       ? COLORS.purple
                       : "transparent",
+                    borderWidth: 2,
+                    borderColor: userShouted ? COLORS.white : COLORS.gray,
                     justifyContent: "center",
                     alignItems: "center",
                   }}
@@ -526,15 +603,24 @@ const NewEventDetailScreen = ({ route }) => {
                     userShouted ? removeUserShoutout() : addUserShoutout();
                   }}
                 >
-                  <McIcon
-                    source={icons.shoutout}
-                    size={32}
-                    style={{
-                      tintColor: userShouted ? COLORS.white : COLORS.gray,
-                    }}
-                  />
+                  {userShouted ? <icons.activeshoutout width={35}/> : <icons.inactiveshoutout width={35}/>}
                 </TouchableOpacity>
-                <McText body3>ShoutOut</McText>
+                <McText
+                  body3
+                  style={{
+                    color: userShouted ? COLORS.purple : COLORS.white,
+                  }}
+                >
+                  Shoutout
+                </McText>
+                <McText
+                  body2
+                  style={{
+                    color: userShouted ? COLORS.purple : COLORS.white,
+                  }}
+                >
+                  {shoutouts}
+                </McText>
               </View>
             </UserOptionsSection>
           </View>
@@ -560,7 +646,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: SIZES.width,
-    height: 100,
+    height: 150,
     borderTopWidth: 0.5,
     borderColor: COLORS.gray,
     backgroundColor: COLORS.black,
