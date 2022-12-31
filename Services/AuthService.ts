@@ -1,7 +1,9 @@
 import { User } from "./UserService"
 
 export interface Token{
-    // Token interface here
+    UserID: string,
+    PasswordHash: string,
+    Expiration: Date,
 }
 
 /******************************************************
