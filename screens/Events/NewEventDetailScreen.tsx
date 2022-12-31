@@ -85,7 +85,6 @@ const NewEventDetailScreen = ({ route }) => {
       : {};
     setShoutouts(shoutouts + 1);
 
-    console.log("add user shoutout");
     setLoading(false);
   };
 
@@ -545,24 +544,39 @@ const NewEventDetailScreen = ({ route }) => {
                   marginRight: 60,
                 }}
               >
-                <TouchableOpacity
+                <LinearGradient
+                  colors={["#B66DFF", "#280292"]}
                   style={{
                     width: 60,
                     height: 60,
                     borderRadius: 80,
-                    marginBottom: 5,
-                    backgroundColor: userLiked ? COLORS.purple : "transparent",
-                    borderWidth: 2,
-                    borderColor: userLiked ? COLORS.white : COLORS.gray,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPressOut={() => {
-                    userLiked ? removeUserLike() : addUserLike();
                   }}
                 >
-                  {userLiked ? <icons.activecheckmark width={35}/> : <icons.inactivecheckmark width={35}/>}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      marginBottom: 5,
+                      backgroundColor: userLiked
+                        ? "transparent"
+                        : COLORS.trueBlack,
+                      borderWidth: 2,
+                      borderColor: userLiked ? COLORS.white : COLORS.gray,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPressOut={() => {
+                      userLiked ? removeUserLike() : addUserLike();
+                    }}
+                  >
+                    {userLiked ? (
+                      <icons.activecheckmark width={35} />
+                    ) : (
+                      <icons.inactivecheckmark width={35} />
+                    )}
+                  </TouchableOpacity>
+                </LinearGradient>
                 <McText
                   body3
                   style={{
@@ -585,26 +599,39 @@ const NewEventDetailScreen = ({ route }) => {
                   alignItems: "center",
                 }}
               >
-                <TouchableOpacity
+                <LinearGradient
+                  colors={["#B66DFF", "#280292"]}
                   style={{
                     width: 60,
                     height: 60,
                     borderRadius: 80,
-                    marginBottom: 5,
-                    backgroundColor: userShouted
-                      ? COLORS.purple
-                      : "transparent",
-                    borderWidth: 2,
-                    borderColor: userShouted ? COLORS.white : COLORS.gray,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={() => {
-                    userShouted ? removeUserShoutout() : addUserShoutout();
                   }}
                 >
-                  {userShouted ? <icons.activeshoutout width={35}/> : <icons.inactiveshoutout width={35}/>}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 80,
+                      marginBottom: 5,
+                      backgroundColor: userShouted
+                        ? "transparent"
+                        : COLORS.trueBlack,
+                      borderWidth: 2,
+                      borderColor: userShouted ? COLORS.white : COLORS.gray,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      userShouted ? removeUserShoutout() : addUserShoutout();
+                    }}
+                  >
+                    {userShouted ? (
+                      <icons.activeshoutout width={35} />
+                    ) : (
+                      <icons.inactiveshoutout width={35} />
+                    )}
+                  </TouchableOpacity>
+                </LinearGradient>
                 <McText
                   body3
                   style={{
