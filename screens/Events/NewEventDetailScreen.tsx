@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Alert,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { LoadingContext } from "../../Contexts/LoadingContext";
@@ -32,7 +33,6 @@ import ImageView from "react-native-image-viewing";
  *********************************************/
 
 const NewEventDetailScreen = ({ route }) => {
-
   // Props from previous event card to update
   const propsFromEventCard = route.params;
 
@@ -127,6 +127,48 @@ const NewEventDetailScreen = ({ route }) => {
     setLoading(false);
   };
 
+  const onHostUsernamePressed = () => {
+    if (host !== undefined) {
+      RootNavigation.push("ProfileDetail", {
+        UserID: host.UserID,
+      });
+    }
+  };
+
+  const onEditEventPressed = () => {
+    RootNavigation.navigate("EditEvent", {
+      SelectedEvent: viewedEvent,
+    });
+  };
+
+  const onDeleteEventPressed = () => {
+    Alert.alert(
+      "Delete event",
+      "Are you sure you want to delete your event?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes Pressed");
+
+            // Call query to delete event by ID
+
+            RootNavigation.goBack();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const onBackPressed = () => {
+    RootNavigation.goBack();
+  };
+
   // For description expansion
   const descriptionOnExpand = useCallback((e) => {
     setLengthMoreText(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
@@ -141,6 +183,7 @@ const NewEventDetailScreen = ({ route }) => {
     // Disable the screen
     setLoading(true);
 
+    // Get event by route.params.EventID
     const pulledEvent: Event = {
       EventID: "1373",
       Title: "Wassup this is my title",
@@ -154,6 +197,7 @@ const NewEventDetailScreen = ({ route }) => {
     };
     setViewedEvent(pulledEvent);
 
+    // Get interests by route.params.EventID
     const pulledTags: Interest[] = [
       {
         InterestID: "abcde",
@@ -168,6 +212,7 @@ const NewEventDetailScreen = ({ route }) => {
     ];
     setTags(pulledTags);
 
+    // Get host by route.params.EventID
     const pulledHost: User = {
       UserID: "ABCDE",
       Name: "Kyle Wade",
@@ -212,6 +257,7 @@ const NewEventDetailScreen = ({ route }) => {
   useEffect(() => {
     pullData();
   }, []);
+
   return (
     <View style={styles.container}>
       <ImageView
@@ -247,7 +293,7 @@ const NewEventDetailScreen = ({ route }) => {
                 <ImageHeaderSection>
                   <TouchableOpacity
                     onPress={() => {
-                      RootNavigation.goBack();
+                      onBackPressed();
                     }}
                     style={{
                       width: 56,
@@ -393,9 +439,7 @@ const NewEventDetailScreen = ({ route }) => {
                     justifyContent: "center",
                   }}
                   onPress={() => {
-                    RootNavigation.push("ProfileDetail", {
-                      UserID: host.UserID,
-                    });
+                    onHostUsernamePressed();
                   }}
                 >
                   <Image
@@ -500,9 +544,7 @@ const NewEventDetailScreen = ({ route }) => {
                     <TouchableOpacity
                       style={styles.edit}
                       onPress={() => {
-                        RootNavigation.navigate("EditEvent", {
-                          SelectedEvent: viewedEvent,
-                        });
+                        onEditEventPressed();
                       }}
                     >
                       <McText h5>Edit this Event</McText>
@@ -510,9 +552,7 @@ const NewEventDetailScreen = ({ route }) => {
                     <TouchableOpacity
                       style={styles.delete}
                       onPress={() => {
-                        RootNavigation.navigate("EditEvent", {
-                          SelectedEvent: viewedEvent,
-                        });
+                        onDeleteEventPressed();
                       }}
                     >
                       <McText h5>Delete this Event</McText>

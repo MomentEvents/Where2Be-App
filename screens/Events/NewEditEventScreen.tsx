@@ -27,7 +27,14 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import InterestSelector from "../../components/InterestSelect";
 
-import { dummyData, FONTS, SIZES, COLORS, icons, images } from "../../constants";
+import {
+  dummyData,
+  FONTS,
+  SIZES,
+  COLORS,
+  icons,
+  images,
+} from "../../constants";
 import { McText, McIcon, McAvatar } from "../../components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
@@ -44,6 +51,7 @@ var height = Dimensions.get("window").height; //full height
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import PreviewEventDetail from "./PreviewEventDetail";
+import { Interest } from "../../Services/InterestService";
 const dummyTags = [
   "Academic",
   "Entertainment",
@@ -57,67 +65,82 @@ const dummyTags = [
 const inTags = [];
 var outTags = {};
 function outDict(dict) {
-
-  var outList = []
+  var outList = [];
   for (const [key, value] of Object.entries(dict)) {
-      if (value == true) {
-          outList.push(key)
-      }
+    if (value == true) {
+      outList.push(key);
+    }
   }
-  return outList
- }
+  return outList;
+}
 
-// import React from 'react';
-// import { Text, View, StyleSheet, Button } from 'react-native';
 const EditEvent = ({ navigation, route }) => {
-
+  
+  const passedEvent = route.params.Event
+  const setPassedEvent = route.params.SetEvent
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  useEffect(()=>{
-    let {selectedEvent} = route.params;
+  const [editedEvent, setEditedEvent] = useState<Event>();
+  const [tags, setTags] = useState<Interest[]>(null);
+
+  const onSubmit = () => {
+
+  } 
+
+  useEffect(() => {
+    let { passedEvent } = route.params.passedEvent;
     // console.log(selectedEvent);
-    setSelectedEvent(selectedEvent);
+    setPassedEvent(passedEvent);
     // console.log(selectedEvent?.image)
     // console.log('coc')
     // console.log(selectedEvent?.date)
-  },[])
+  }, []);
 
-  const [title,setTitle] = useState(selectedEvent?.title)
-  const [location,setLocation] = useState(selectedEvent?.location)
-  const [image,setImage] = useState(selectedEvent?.image)
-  const [date,setDate] = useState(selectedEvent?.date)
-  const [desc, setDesc] = useState(selectedEvent?.description)
-  const [start, setStart] = useState(selectedEvent?.startingTime)
-  const [end, setEnd] = useState(selectedEvent?.endingTime)
-  const [img, setImg] = useState(selectedEvent?.image)
-  console.log(title)
-  
+  const [title, setTitle] = useState(selectedEvent?.title);
+  const [location, setLocation] = useState(selectedEvent?.location);
+  const [image, setImage] = useState(selectedEvent?.image);
+  const [date, setDate] = useState(selectedEvent?.date);
+  const [desc, setDesc] = useState(selectedEvent?.description);
+  const [start, setStart] = useState(selectedEvent?.startingTime);
+  const [end, setEnd] = useState(selectedEvent?.endingTime);
+  const [img, setImg] = useState(selectedEvent?.image);
+  console.log(title);
+
   const handleSubmit = () => {
-    console.log('Title: ' + title)
-    console.log('Date: '+ date)
-    console.log('Start: ' + start)
-    console.log('End: ' + end)
-    console.log('Desc: ' +desc)
-    console.log('Loc: ' +location)
-    var outList = outDict(outTags)
-    console.log('Tags: ' + outList)
-    console.log('Image: ', img)
+    console.log("Title: " + title);
+    console.log("Date: " + date);
+    console.log("Start: " + start);
+    console.log("End: " + end);
+    console.log("Desc: " + desc);
+    console.log("Loc: " + location);
+    var outList = outDict(outTags);
+    console.log("Tags: " + outList);
+    console.log("Image: ", img);
     // if(!img || !title || !date || !start || !end || !desc || !location){
     //   Alert.alert("Error", "Please fill in all the necessary fields.")
     //   return;
     // }
-    if(start >= end){
-      Alert.alert("Error", "Start time cannot be after end time.")
+    if (start >= end) {
+      Alert.alert("Error", "Start time cannot be after end time.");
       return;
     }
-    if(outList.length == 0 || outList.length > 2){
-      Alert.alert("Error", "Please select up to 2 tags")
+    if (outList.length == 0 || outList.length > 2) {
+      Alert.alert("Error", "Please select up to 2 tags");
       return;
     }
-    const out = {title: title, date: date, start: start, end: end, desc: desc, loc:location, tags: outList, image: img}
+    const out = {
+      title: title,
+      date: date,
+      start: start,
+      end: end,
+      desc: desc,
+      loc: location,
+      tags: outList,
+      image: img,
+    };
     // navigation.navigate('PreviewEventDetail', {createEvent: out});
-    console.log(out)
-  }
+    console.log(out);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -158,7 +181,7 @@ const EditEvent = ({ navigation, route }) => {
                 marginRight: 15,
                 marginTop: 5,
               }}
-              onPress={() =>{
+              onPress={() => {
                 handleSubmit();
               }}
             >
@@ -185,16 +208,15 @@ const EditEvent = ({ navigation, route }) => {
           >
             Image
           </McText>
-          <View style={{alignItems:'center', marginLeft: -50}}>
-          <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
-            image={selectedEvent?.image}
-            setImage={setImage}         
-          </ImagePickerComponent>
+          <View style={{ alignItems: "center", marginLeft: -50 }}>
+            <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
+              image={selectedEvent?.image}
+              setImage={setImage}
+            </ImagePickerComponent>
           </View>
           <View
             style={{
               marginVertical: 8,
-              
             }}
           >
             <McText
@@ -269,16 +291,19 @@ const EditEvent = ({ navigation, route }) => {
               Date
             </McText>
 
-              <DateTimePickerPopup setDate={setDate}
+            <DateTimePickerPopup
+              setDate={setDate}
               date={selectedEvent?.date}
-                mode="date"
-                placeholderText={moment(selectedEvent?.date).format('MMM DD YYYY').toUpperCase()}
-                customStyles={{
-                  ...FONTS.body3,
-                  color: COLORS.white,
-                  padding: 10,
-                }}
-              />
+              mode="date"
+              placeholderText={moment(selectedEvent?.date)
+                .format("MMM DD YYYY")
+                .toUpperCase()}
+              customStyles={{
+                ...FONTS.body3,
+                color: COLORS.white,
+                padding: 10,
+              }}
+            />
           </View>
           <View
             style={{
@@ -298,22 +323,24 @@ const EditEvent = ({ navigation, route }) => {
                 flexDirection: "row",
               }}
             >
-                <DateTimePickerPopup setDate={setStart}
-                  mode="time"
-                  placeholderText="Start"
-                  customStyles={{
-                    ...FONTS.body3,
-                    color: COLORS.white,
-                    width: 250,
-                    padding: 10,
-                  }}
-                />
+              <DateTimePickerPopup
+                setDate={setStart}
+                mode="time"
+                placeholderText="Start"
+                customStyles={{
+                  ...FONTS.body3,
+                  color: COLORS.white,
+                  width: 250,
+                  padding: 10,
+                }}
+              />
               <View
                 style={{
                   paddingLeft: SIZES.width / 10,
                 }}
               >
-                <DateTimePickerPopup setDate={setEnd}
+                <DateTimePickerPopup
+                  setDate={setEnd}
                   mode="time"
                   placeholderText="End"
                   customStyles={{

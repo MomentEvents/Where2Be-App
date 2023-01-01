@@ -38,11 +38,6 @@ const EventCard = ({
   UserLiked,
   UserShouted,
 }: EventCardProps) => {
-  // going to need service function to check if user liked event
-  // going to need service function to check if user shouted event
-  // going to need service function to check if this is the user's hosted event
-  // service function to add like
-  // service function to add shoutout
 
   // The purpose of these state variables is to make it so when the user clicks on the event details screen, it updates these values automatically
   // when we exit

@@ -2,11 +2,7 @@
  * React Native Event Booking App UI - Event Detail Screnn
  * -> The screen can be seperated 4 sections and 1 fixed bottom bar
  * 
-
  */
-
-// ATTENTION: Settings will be changed to have only change email, change password, join our discord, and log out
-// I will need to change this
 
 import React, {
   useState,
