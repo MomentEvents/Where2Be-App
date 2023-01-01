@@ -136,8 +136,11 @@ const NewEventDetailScreen = ({ route }) => {
   };
 
   const onEditEventPressed = () => {
-    RootNavigation.navigate("EditEvent", {
-      SelectedEvent: viewedEvent,
+    RootNavigation.navigate("NewEditEventScreen", {
+      Event: viewedEvent,
+      SetEvent: setViewedEvent,
+      Tags: tags,
+      SetTags: setTags
     });
   };
 

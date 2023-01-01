@@ -1,5 +1,5 @@
 //import React from 'react';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TouchableHighlight,
   Platform,
@@ -25,7 +25,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import InterestSelector from "../../components/InterestSelect";
+import InterestSelector from "../../components/NewInterestSelect";
 
 import {
   dummyData,
@@ -52,95 +52,105 @@ import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import PreviewEventDetail from "./PreviewEventDetail";
 import { Interest } from "../../Services/InterestService";
-const dummyTags = [
-  "Academic",
-  "Entertainment",
-  "Community",
-  "Career Development",
-  "Athletics",
-  "Other",
-  "Recreation",
-];
+import { Event } from "../../Services/EventService";
+import { LoadingContext } from "../../Contexts/LoadingContext";
+import UsedServer from "../../constants/servercontants";
+import { AuthContext } from "../../Contexts/AuthContext";
 
-const inTags = [];
-var outTags = {};
-function outDict(dict) {
-  var outList = [];
-  for (const [key, value] of Object.entries(dict)) {
-    if (value == true) {
-      outList.push(key);
+const NewEditEventScreen = ({ navigation, route }) => {
+  const { loading, setLoading } = useContext(LoadingContext);
+
+  // Details passed in to Edit Event Screen
+  const passedEvent: Event = route.params.Event;
+  const setPassedEvent = route.params.SetEvent;
+  const passedTags: Interest[] = route.params.Tags; // Type Interest[]
+  const setPassedTags = route.params.SetTags;
+
+  // Map for tags for interestselector
+  const tagIdToSelectedMap: { [tag: string]: boolean } = {};
+  const tagIdToTagMap: { [name: string]: Interest } = {};
+
+  // Tags from database
+  const [allTags, setAllTags] = useState<Interest[]>();
+
+  const [title, setTitle] = useState(passedEvent.Title);
+  const [location, setLocation] = useState(passedEvent.Location);
+  const [image, setImage] = useState(passedEvent.Picture);
+  const [date, setDate] = useState(passedEvent.StartDateTime.getDate());
+  const [desc, setDesc] = useState(passedEvent.Description);
+  const [start, setStart] = useState(passedEvent.StartDateTime);
+  const [end, setEnd] = useState(passedEvent.EndDateTime);
+
+  const onSubmit = () => {};
+
+  function fillOutOutputTags(tags: { [tag: string]: boolean }): Interest[] {
+    var outList: Interest[] = [];
+    for (const [key, value] of Object.entries(tags)) {
+      if (value == true) {
+        outList.push(tagIdToTagMap[key]);
+      }
     }
+    return outList;
   }
-  return outList;
-}
 
-const EditEvent = ({ navigation, route }) => {
-  
-  const passedEvent = route.params.Event
-  const setPassedEvent = route.params.SetEvent
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  // Assumes allTags is filled out and passedTags is passed in properly
+  function fillOutInterestMaps() {
+    if (allTags === undefined) {
+      return;
+    }
+    for (const tag of allTags) {
+      tagIdToTagMap[tag.InterestID] = tag;
+      tagIdToSelectedMap[tag.InterestID] = false;
+    }
+    for (const tag of passedTags) {
+      tagIdToSelectedMap[tag.InterestID] = true;
+    }
+    console.log(tagIdToSelectedMap);
+  }
 
-  const [editedEvent, setEditedEvent] = useState<Event>();
-  const [tags, setTags] = useState<Interest[]>(null);
+  const fillData = () => {
+    // Pull tags from database
 
-  const onSubmit = () => {
+    const pulledTags: Interest[] = [
+      {
+        InterestID: "abcde",
+        Name: "Interest 1",
+        Category: "Interest 1 Category",
+      },
+      {
+        InterestID: "fghijk",
+        Name: "Interest 2",
+        Category: "Interest 2 Category",
+      },
+      {
+        InterestID: "d",
+        Name: "Interest 3",
+        Category: "Interest 2 Category",
+      },
+      {
+        InterestID: "gg",
+        Name: "Interest 3",
+        Category: "Interest 2 Category",
+      },
+    ];
+    setAllTags(pulledTags);
+  };
 
-  } 
+  // For allTags loading. Must be a side effect to fill maps which loop through interests
+  useEffect(() => {
+    setLoading(true);
+    fillOutInterestMaps();
+    setLoading(false);
+  }, [allTags]);
 
   useEffect(() => {
-    let { passedEvent } = route.params.passedEvent;
-    // console.log(selectedEvent);
-    setPassedEvent(passedEvent);
-    // console.log(selectedEvent?.image)
-    // console.log('coc')
-    // console.log(selectedEvent?.date)
+    setLoading(true);
+    console.log(route.params);
+    fillData();
+    setLoading(false);
   }, []);
 
-  const [title, setTitle] = useState(selectedEvent?.title);
-  const [location, setLocation] = useState(selectedEvent?.location);
-  const [image, setImage] = useState(selectedEvent?.image);
-  const [date, setDate] = useState(selectedEvent?.date);
-  const [desc, setDesc] = useState(selectedEvent?.description);
-  const [start, setStart] = useState(selectedEvent?.startingTime);
-  const [end, setEnd] = useState(selectedEvent?.endingTime);
-  const [img, setImg] = useState(selectedEvent?.image);
-  console.log(title);
-
-  const handleSubmit = () => {
-    console.log("Title: " + title);
-    console.log("Date: " + date);
-    console.log("Start: " + start);
-    console.log("End: " + end);
-    console.log("Desc: " + desc);
-    console.log("Loc: " + location);
-    var outList = outDict(outTags);
-    console.log("Tags: " + outList);
-    console.log("Image: ", img);
-    // if(!img || !title || !date || !start || !end || !desc || !location){
-    //   Alert.alert("Error", "Please fill in all the necessary fields.")
-    //   return;
-    // }
-    if (start >= end) {
-      Alert.alert("Error", "Start time cannot be after end time.");
-      return;
-    }
-    if (outList.length == 0 || outList.length > 2) {
-      Alert.alert("Error", "Please select up to 2 tags");
-      return;
-    }
-    const out = {
-      title: title,
-      date: date,
-      start: start,
-      end: end,
-      desc: desc,
-      loc: location,
-      tags: outList,
-      image: img,
-    };
-    // navigation.navigate('PreviewEventDetail', {createEvent: out});
-    console.log(out);
-  };
+  const handleSubmit = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -199,150 +209,133 @@ const EditEvent = ({ navigation, route }) => {
       </View>
 
       <KeyboardAwareScrollView>
-        <SectionInputs>
-          <McText
-            h3
-            style={{
-              marginBottom: 16,
-            }}
-          >
-            Image
-          </McText>
-          <View style={{ alignItems: "center", marginLeft: -50 }}>
-            <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
-              image={selectedEvent?.image}
-              setImage={setImage}
-            </ImagePickerComponent>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
+        {!loading ? (
+          <SectionInputs>
             <McText
               h3
               style={{
-                marginBottom: 8,
+                marginBottom: 16,
               }}
             >
-              Title
+              Image
             </McText>
-            <SectionTextIn>
-              <TextInput
-                placeholderTextColor={COLORS.gray1}
-                value={title}
-                defaultValue={selectedEvent?.title}
-                onChangeText={setTitle}
-                multiline={true}
-                maxLength={40}
-                style={{
-                  ...FONTS.body3,
-                  marginTop: 2,
-                  color: COLORS.white,
-                  padding: 10,
-                }}
-              />
-            </SectionTextIn>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
-            <McText
-              h3
-              style={{
-                marginBottom: 8,
-              }}
-            >
-              Description
-            </McText>
-            <SectionTextIn>
-              <TextInput
-                placeholder={selectedEvent?.description}
-                placeholderTextColor={COLORS.gray1}
-                defaultValue={selectedEvent?.description}
-                multiline={true}
-                maxLength={1000}
-                value={desc}
-                onChangeText={setDesc}
-                //onChange={handleOnSearch}
-                //value={bad}
-                style={{
-                  ...FONTS.body3,
-                  marginTop: 2,
-                  color: COLORS.white,
-                  padding: 10,
-                }}
-              />
-            </SectionTextIn>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
-            <McText
-              h3
-              style={{
-                marginBottom: 8,
-              }}
-            >
-              Date
-            </McText>
-
-            <DateTimePickerPopup
-              setDate={setDate}
-              date={selectedEvent?.date}
-              mode="date"
-              placeholderText={moment(selectedEvent?.date)
-                .format("MMM DD YYYY")
-                .toUpperCase()}
-              customStyles={{
-                ...FONTS.body3,
-                color: COLORS.white,
-                padding: 10,
-              }}
-            />
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
-            <McText
-              h3
-              style={{
-                marginBottom: 8,
-              }}
-            >
-              Time
-            </McText>
+            <View style={{ alignItems: "center", marginLeft: -50 }}>
+              <ImagePickerComponent
+                image={image}
+                setImage={setImage}
+              ></ImagePickerComponent>
+            </View>
             <View
               style={{
-                flexDirection: "row",
+                marginVertical: 8,
               }}
             >
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                }}
+              >
+                Title
+              </McText>
+              <SectionTextIn>
+                <TextInput
+                  placeholderTextColor={COLORS.gray1}
+                  value={title}
+                  defaultValue={"Select a title for your event"}
+                  onChangeText={setTitle}
+                  multiline={true}
+                  maxLength={40}
+                  style={{
+                    ...FONTS.body3,
+                    marginTop: 2,
+                    color: COLORS.white,
+                    padding: 10,
+                  }}
+                />
+              </SectionTextIn>
+            </View>
+            <View
+              style={{
+                marginVertical: 8,
+              }}
+            >
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                }}
+              >
+                Description
+              </McText>
+              <SectionTextIn>
+                <TextInput
+                  placeholder={desc}
+                  placeholderTextColor={COLORS.gray1}
+                  defaultValue={"Set your description"}
+                  multiline={true}
+                  maxLength={1000}
+                  value={desc}
+                  onChangeText={setDesc}
+                  //onChange={handleOnSearch}
+                  //value={bad}
+                  style={{
+                    ...FONTS.body3,
+                    marginTop: 2,
+                    color: COLORS.white,
+                    padding: 10,
+                  }}
+                />
+              </SectionTextIn>
+            </View>
+            <View
+              style={{
+                marginVertical: 8,
+              }}
+            >
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                }}
+              >
+                Date
+              </McText>
+
               <DateTimePickerPopup
-                setDate={setStart}
-                mode="time"
-                placeholderText="Start"
+                setDate={setDate}
+                date={date}
+                mode="date"
+                placeholderText="Select your date"
                 customStyles={{
                   ...FONTS.body3,
                   color: COLORS.white,
-                  width: 250,
                   padding: 10,
                 }}
               />
+            </View>
+            <View
+              style={{
+                marginVertical: 8,
+              }}
+            >
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                }}
+              >
+                Time
+              </McText>
               <View
                 style={{
-                  paddingLeft: SIZES.width / 10,
+                  flexDirection: "row",
                 }}
               >
                 <DateTimePickerPopup
-                  setDate={setEnd}
+                  setDate={setStart}
                   mode="time"
-                  placeholderText="End"
+                  placeholderText="Start"
                   customStyles={{
                     ...FONTS.body3,
                     color: COLORS.white,
@@ -350,81 +343,96 @@ const EditEvent = ({ navigation, route }) => {
                     padding: 10,
                   }}
                 />
+                <View
+                  style={{
+                    paddingLeft: SIZES.width / 10,
+                  }}
+                >
+                  <DateTimePickerPopup
+                    setDate={setEnd}
+                    mode="time"
+                    placeholderText="End"
+                    customStyles={{
+                      ...FONTS.body3,
+                      color: COLORS.white,
+                      width: 250,
+                      padding: 10,
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
-            <McText
-              h3
+            <View
               style={{
-                marginBottom: 8,
+                marginVertical: 8,
               }}
             >
-              Location
-            </McText>
-            <SectionTextIn>
-              <TextInput
-                defaultValue={selectedEvent?.location}
-                maxLength={100}
-                value={location}
-                onChangeText={setLocation}
+              <McText
+                h3
                 style={{
-                  ...FONTS.body3,
-                  padding: 10,
-                  color: COLORS.white,
-                  width: 250,
+                  marginBottom: 8,
                 }}
-              />
-            </SectionTextIn>
-          </View>
-          <View
-            style={{
-              marginVertical: 8,
-            }}
-          >
-            <McText
-              h3
+              >
+                Location
+              </McText>
+              <SectionTextIn>
+                <TextInput
+                  defaultValue={location}
+                  maxLength={100}
+                  value={location}
+                  onChangeText={setLocation}
+                  style={{
+                    ...FONTS.body3,
+                    padding: 10,
+                    color: COLORS.white,
+                    width: 250,
+                  }}
+                />
+              </SectionTextIn>
+            </View>
+            <View
               style={{
-                marginBottom: 8,
+                marginVertical: 8,
               }}
             >
-              Tags (select up to 2)
-            </McText>
+              <McText
+                h3
+                style={{
+                  marginBottom: 8,
+                }}
+              >
+                Tags (select up to 2)
+              </McText>
 
-            <FlatList
-              data={dummyTags}
-              columnWrapperStyle={{
-                flexWrap: "wrap",
-                flex: 1,
-                marginTop: 1,
-                marginRight: 10,
-              }}
-              numColumns={4}
-              style={{
-                backgroundColor: "transparent",
-              }}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => (
-                <InterestSelector
-                  text={item}
-                  wide={item.length}
-                  list={inTags}
-                  out={outTags}
+              {allTags === undefined ? null : (
+                <FlatList
+                  data={allTags}
+                  columnWrapperStyle={{
+                    flexWrap: "wrap",
+                    flex: 1,
+                    marginTop: 1,
+                    marginRight: 10,
+                  }}
+                  numColumns={4}
+                  style={{
+                    backgroundColor: "transparent",
+                  }}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({ item, index }) => (
+                    <InterestSelector
+                      id={item.InterestID}
+                      text={item.Name}
+                      wide={item.Name.length}
+                      interestMap={tagIdToSelectedMap}
+                    />
+                  )}
+                  keyExtractor={(item) => `basicListEntry-${item}`}
                 />
               )}
-              keyExtractor={(item) => `basicListEntry-${item}`}
-            />
-          </View>
-        </SectionInputs>
+            </View>
+          </SectionInputs>
+        ) : null}
       </KeyboardAwareScrollView>
-
-      {/* <SectionTitle>
-        <McText h5>FOR YOU</McText>
-      </SectionTitle>  */}
     </SafeAreaView>
   );
 };
@@ -577,4 +585,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditEvent;
+export default NewEditEventScreen;

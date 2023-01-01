@@ -39,6 +39,7 @@ import {
   EditEvent,
 } from "../screens";
 import EditProfile from "../screens/Profile/EditProfile";
+import NewEditEventScreen from "../screens/Events/NewEditEventScreen";
 import NewEventDetailScreen from "../screens/Events/NewEventDetailScreen";
 import { SIZES, COLORS, customFonts } from "../constants";
 import { AuthContext } from "../Contexts/AuthContext";
@@ -119,6 +120,10 @@ const AppStack = () => {
       <Stack.Screen
         name="NewEventDetailScreen"
         component={NewEventDetailScreen}
+      />
+      <Stack.Screen
+        name="NewEditEventScreen"
+        component={NewEditEventScreen}
       />
     </Stack.Navigator>
   );
