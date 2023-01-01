@@ -67,7 +67,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
   const setPassedTags = route.params.SetTags;
 
   // Map for tags for interestselector
-  const tagIdToSelectedMap: { [tag: string]: boolean } = {};
+  const [tagIdToSelectedMap, setTagIdToSelectedMap] = useState<{ [tag: string]: boolean }>({});
   const tagIdToTagMap: { [name: string]: Interest } = {};
 
   // Tags from database
@@ -76,10 +76,12 @@ const NewEditEventScreen = ({ navigation, route }) => {
   const [title, setTitle] = useState(passedEvent.Title);
   const [location, setLocation] = useState(passedEvent.Location);
   const [image, setImage] = useState(passedEvent.Picture);
-  const [date, setDate] = useState(passedEvent.StartDateTime.getDate());
+  const [date, setDate] = useState<Date>(passedEvent.StartDateTime);
   const [desc, setDesc] = useState(passedEvent.Description);
-  const [start, setStart] = useState(passedEvent.StartDateTime);
-  const [end, setEnd] = useState(passedEvent.EndDateTime);
+  const [start, setStart] = useState<Date>(passedEvent.StartDateTime);
+  const [end, setEnd] = useState<Date>(passedEvent.EndDateTime);
+
+  const [loadTags, setLoadTags] = useState<boolean>(false)
 
   const onSubmit = () => {};
 
@@ -106,6 +108,8 @@ const NewEditEventScreen = ({ navigation, route }) => {
       tagIdToSelectedMap[tag.InterestID] = true;
     }
     console.log(tagIdToSelectedMap);
+    setTagIdToSelectedMap(tagIdToSelectedMap);
+    setLoadTags(true)
   }
 
   const fillData = () => {
@@ -129,7 +133,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
       },
       {
         InterestID: "gg",
-        Name: "Interest 3",
+        Name: "Interest 4",
         Category: "Interest 2 Category",
       },
     ];
@@ -404,7 +408,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
                 Tags (select up to 2)
               </McText>
 
-              {allTags === undefined ? null : (
+              {loadTags === false ? null : (
                 <FlatList
                   data={allTags}
                   columnWrapperStyle={{
