@@ -44,7 +44,7 @@ class ImagePickerComponent extends Component {
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
-      this.props.setImg(result.uri);
+      this.props.setImage(result.uri);
     }
   };
 

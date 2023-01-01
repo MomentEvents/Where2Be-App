@@ -205,7 +205,7 @@ const CreateEvent = ({ navigation, routenew }) => {
                 alignItems: "flex-start",
                 marginBottom: 8,
             }}>
-              <ImagePicker setImg={setImg}>
+              <ImagePicker setImage={setImg}>
                 image={image}
                 setImage={setImage}
               </ImagePicker>

@@ -188,7 +188,7 @@ const EditProfile = ({ navigation, route }) => {
           <ImagePicker
             height={width * 0.3}
             width={width * 0.3}
-            setImg={setImage}
+            setImage={setImage}
             image={image}
           />
         </View>

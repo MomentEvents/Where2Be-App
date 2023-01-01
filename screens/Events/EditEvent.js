@@ -186,7 +186,7 @@ const EditEvent = ({ navigation, route }) => {
             Image
           </McText>
           <View style={{alignItems:'center', marginLeft: -50}}>
-          <ImagePickerComponent setImg={setImg} img={selectedEvent?.image}>
+          <ImagePickerComponent setImage={setImg} img={selectedEvent?.image}>
             image={selectedEvent?.image}
             setImage={setImage}         
           </ImagePickerComponent>
