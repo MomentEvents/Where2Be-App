@@ -24,14 +24,14 @@ export const RECREATION = "Recreation"
 export const OTHER = "Other"
 
 /******************************************************
- * getEventDetailsById
+ * getEventById
  * 
  * Gets an event based on its ID
  * 
  * Parameters: An ID number to search up an event
  * Return: An event if it exists. null if it does not.
  */
-export async function getEventDetailsById(eventId: number): Promise<Event> {
+export async function getEventById(eventId: string, webAccessToken: string): Promise<Event> {
     return null;
 }
 
