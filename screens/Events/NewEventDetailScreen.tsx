@@ -29,9 +29,10 @@ import ImageView from "react-native-image-viewing";
  * SetCardShoutouts?: React.SetStateAction<number>,
  * SetCardUserLiked?: React.SetStateAction<boolean>,
  * SetCardUserShouted?: React.SetStateAction<boolean>
- */
+ *********************************************/
 
 const NewEventDetailScreen = ({ route }) => {
+
   // Props from previous event card to update
   const propsFromEventCard = route.params;
 
@@ -127,11 +128,11 @@ const NewEventDetailScreen = ({ route }) => {
   };
 
   // For description expansion
-  const onTextLayout = useCallback((e) => {
+  const descriptionOnExpand = useCallback((e) => {
     setLengthMoreText(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
   }, []);
 
-  const toggleNumberOfLines = () => {
+  const descriptionToggleNumberOfLines = () => {
     //To toggle the show text or hide it
     setDescriptionExpanded(!descriptionExpanded);
   };
@@ -424,7 +425,7 @@ const NewEventDetailScreen = ({ route }) => {
                   }}
                 >
                   <McText
-                    onTextLayout={onTextLayout}
+                    onTextLayout={descriptionOnExpand}
                     numberOfLines={descriptionExpanded ? undefined : 3}
                     body3
                     selectable={true}
@@ -433,7 +434,7 @@ const NewEventDetailScreen = ({ route }) => {
                   </McText>
                   {lengthMoreText ? (
                     <McText
-                      onPress={toggleNumberOfLines}
+                      onPress={descriptionToggleNumberOfLines}
                       style={{
                         lineHeight: 22,
                         marginTop: 10,
