@@ -76,7 +76,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
   const [title, setTitle] = useState(passedEvent.Title);
   const [location, setLocation] = useState(passedEvent.Location);
   const [image, setImage] = useState(passedEvent.Picture);
-  const [date, setDate] = useState<Date>(passedEvent.StartDateTime);
+  const [date, setDate] = useState(passedEvent.StartDateTime.getDate());
   const [desc, setDesc] = useState(passedEvent.Description);
   const [start, setStart] = useState<Date>(passedEvent.StartDateTime);
   const [end, setEnd] = useState<Date>(passedEvent.EndDateTime);
