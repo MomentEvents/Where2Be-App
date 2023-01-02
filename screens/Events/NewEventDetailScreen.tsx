@@ -52,19 +52,37 @@ const NewEventDetailScreen = ({ route }) => {
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
+  // Update the previous screen event cards
+  useEffect(() => {
+    propsFromEventCard.SetCardLikes !== undefined
+      ? propsFromEventCard.SetCardLikes(likes)
+      : {};
+    propsFromEventCard.SetCardUserLiked !== undefined
+      ? propsFromEventCard.SetCardUserLiked(userLiked)
+      : {};
+    propsFromEventCard.SetCardShoutouts !== undefined
+      ? propsFromEventCard.SetCardShoutouts(shoutouts)
+      : {};
+    propsFromEventCard.SetCardUserShouted !== undefined
+      ? propsFromEventCard.SetCardUserShouted(userShouted)
+      : {};
+    if (viewedEvent !== undefined) {
+      propsFromEventCard.SetCardImage !== undefined
+        ? propsFromEventCard.SetCardImage(viewedEvent.Picture)
+        : {};
+      propsFromEventCard.SetCardTitle !== undefined
+        ? propsFromEventCard.SetCardTitle(viewedEvent.Title)
+        : {};
+      propsFromEventCard.SetCardStartDate !== undefined
+        ? propsFromEventCard.SetCardStartDate(viewedEvent.StartDateTime)
+        : {};
+    }
+  }, [likes, userLiked, shoutouts, userShouted, viewedEvent]);
+
   const addUserLike = () => {
     setLoading(true);
 
-    // Add like by user in Database
-
-    // Set previous event card likes
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(likes + 1)
-      : {};
-    propsFromEventCard.SetCardUserLiked !== undefined
-      ? propsFromEventCard.SetCardUserLiked(true)
-      : {};
-
+    // TODODATABASE Add like by user in Database
     setUserLiked(true);
     setLikes(likes + 1);
 
@@ -73,17 +91,9 @@ const NewEventDetailScreen = ({ route }) => {
 
   const addUserShoutout = () => {
     setLoading(true);
-    // Add shoutout by user in Database
+    // TODODATABASE Add shoutout by user in Database
 
     setUserShouted(true);
-
-    // Set previous event card shoutouts
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(shoutouts + 1)
-      : {};
-    propsFromEventCard.SetCardUserShouted !== undefined
-      ? propsFromEventCard.SetCardUserShouted(true)
-      : {};
     setShoutouts(shoutouts + 1);
 
     setLoading(false);
@@ -92,16 +102,7 @@ const NewEventDetailScreen = ({ route }) => {
   const removeUserLike = () => {
     setLoading(true);
 
-    // Remove like by user in Database
-
-    // Set previous event card likes
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(likes - 1)
-      : {};
-    propsFromEventCard.SetCardUserLiked !== undefined
-      ? propsFromEventCard.SetCardUserLiked(false)
-      : {};
-
+    // TODODATABASE Remove like by user in Database
     setUserLiked(false);
     setLikes(likes - 1);
 
@@ -111,15 +112,7 @@ const NewEventDetailScreen = ({ route }) => {
   const removeUserShoutout = () => {
     setLoading(true);
 
-    // Remove shoutout by user in Database
-
-    // Set previous event card shoutouts
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(shoutouts - 1)
-      : {};
-    propsFromEventCard.SetCardUserShouted !== undefined
-      ? propsFromEventCard.SetCardUserShouted(false)
-      : {};
+    // TODODATABASE Remove shoutout by user in Database
 
     setUserShouted(false);
     setShoutouts(shoutouts - 1);
@@ -140,7 +133,7 @@ const NewEventDetailScreen = ({ route }) => {
       Event: viewedEvent,
       SetEvent: setViewedEvent,
       Tags: tags,
-      SetTags: setTags
+      SetTags: setTags,
     });
   };
 
@@ -158,7 +151,7 @@ const NewEventDetailScreen = ({ route }) => {
           onPress: () => {
             console.log("Yes Pressed");
 
-            // Call query to delete event by ID
+            // TODODATABASE Call query to delete event by ID
 
             RootNavigation.goBack();
           },
@@ -177,8 +170,8 @@ const NewEventDetailScreen = ({ route }) => {
     setLengthMoreText(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
   }, []);
 
+  //To toggle the show text or hide it
   const descriptionToggleNumberOfLines = () => {
-    //To toggle the show text or hide it
     setDescriptionExpanded(!descriptionExpanded);
   };
 
@@ -186,7 +179,7 @@ const NewEventDetailScreen = ({ route }) => {
     // Disable the screen
     setLoading(true);
 
-    // Get event by route.params.EventID
+    // TODODATABASE Get event by route.params.EventID
     const pulledEvent: Event = {
       EventID: "1373",
       Title: "Wassup this is my title",
@@ -201,6 +194,7 @@ const NewEventDetailScreen = ({ route }) => {
     setViewedEvent(pulledEvent);
 
     // Get interests by route.params.EventID
+    // TODODATABASE
     const pulledTags: Interest[] = [
       {
         InterestID: "abcde",
@@ -215,7 +209,7 @@ const NewEventDetailScreen = ({ route }) => {
     ];
     setTags(pulledTags);
 
-    // Get host by route.params.EventID
+    // TODODATABASE Get host by route.params.EventID
     const pulledHost: User = {
       UserID: "ABCDE",
       Name: "Kyle Wade",
@@ -416,7 +410,10 @@ const NewEventDetailScreen = ({ route }) => {
                     : tags.map((taglist) => (
                         <View
                           style={{
-                            width: taglist === undefined ? 20 : taglist.Name.length * 9 + 15,
+                            width:
+                              taglist === undefined
+                                ? 20
+                                : taglist.Name.length * 9 + 15,
                             height: 32,
                             borderRadius: 14,
                             marginRight: 10,
