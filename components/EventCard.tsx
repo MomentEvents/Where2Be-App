@@ -72,6 +72,9 @@ const EventCard = ({
       SetCardShoutouts: setShoutouts,
       SetCardUserLiked: setUserLiked,
       SetCardUserShouted: setUserShouted,
+      SetCardImage: setImage,
+      SetCardTitle: setTitle,
+      SetCardStartDateTime: setStartingDateTime,
     });
   };
   return (

@@ -147,8 +147,8 @@ const NewEditEventScreen = ({ navigation, route }) => {
     setLoadTags(true);
   }
 
-  const fillData = () => {
-    // Pull tags from database
+  const pullData = () => {
+    // TODODATABASE Pull tags from database
 
     const pulledTags: Interest[] = [
       {
@@ -184,7 +184,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setLoading(true);
-    fillData();
+    pullData();
     setLoading(false);
   }, []);
 
