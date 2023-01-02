@@ -44,6 +44,7 @@ import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
 import ImagePickerComponent from "../../components/ImagePicker";
+import * as RootNavigation from "../../navigation/RootNavigation"
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -83,15 +84,42 @@ const NewEditEventScreen = ({ navigation, route }) => {
 
   const [loadTags, setLoadTags] = useState<boolean>(false)
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    if (!loadTags) {
+      return;
+    }
 
-  function fillOutOutputTags(tags: { [tag: string]: boolean }): Interest[] {
+    setLoading(true)
+    const onSubmitInterests: Interest[] = returnSelectedTags();
+
+    const onSubmitEvent: Event = {
+      EventID: passedEvent.EventID,
+      Title: title,
+      Description: desc,
+      Picture: image,
+      Location: location,
+      StartDateTime: start,
+      EndDateTime: end,
+      Visibility: passedEvent.Visibility,
+    };
+    setPassedEvent(onSubmitEvent);
+    setPassedTags(onSubmitInterests);
+
+    setLoading(false)
+
+    RootNavigation.goBack()
+  }
+
+  function returnSelectedTags(): Interest[] {
     var outList: Interest[] = [];
-    for (const [key, value] of Object.entries(tags)) {
+    for (const [key, value] of Object.entries(tagIdToSelectedMap)) {
       if (value == true) {
+        console.log("Key: " + key)
+        console.log("Value " + tagIdToTagMap[key])
         outList.push(tagIdToTagMap[key]);
       }
     }
+    console.log(outList)
     return outList;
   }
 
@@ -107,7 +135,8 @@ const NewEditEventScreen = ({ navigation, route }) => {
     for (const tag of passedTags) {
       tagIdToSelectedMap[tag.InterestID] = true;
     }
-    console.log(tagIdToSelectedMap);
+    
+    console.log(tagIdToTagMap)
     setTagIdToSelectedMap(tagIdToSelectedMap);
     setLoadTags(true)
   }
@@ -149,12 +178,9 @@ const NewEditEventScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setLoading(true);
-    console.log(route.params);
     fillData();
     setLoading(false);
   }, []);
-
-  const handleSubmit = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -196,7 +222,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
                 marginTop: 5,
               }}
               onPress={() => {
-                handleSubmit();
+                onSubmit();
               }}
             >
               <McText
@@ -205,7 +231,7 @@ const NewEditEventScreen = ({ navigation, route }) => {
                   color: COLORS.purple,
                 }}
               >
-                Next
+                Save
               </McText>
             </TouchableOpacity>
           </View>

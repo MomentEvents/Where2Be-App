@@ -416,7 +416,7 @@ const NewEventDetailScreen = ({ route }) => {
                     : tags.map((taglist) => (
                         <View
                           style={{
-                            width: taglist.Name.length * 9 + 15,
+                            width: taglist === undefined ? 20 : taglist.Name.length * 9 + 15,
                             height: 32,
                             borderRadius: 14,
                             marginRight: 10,
@@ -428,7 +428,7 @@ const NewEventDetailScreen = ({ route }) => {
                           }}
                         >
                           <McText h5 style={{ letterSpacing: 1 }}>
-                            {taglist.Name}
+                            {taglist === undefined ? null : taglist.Name}
                           </McText>
                         </View>
                       ))}

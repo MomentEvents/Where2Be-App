@@ -34,7 +34,6 @@ type InterestSelectorState = {
 };
 const InterestSelector = (props: InterestSelectorProps) => {
   const checkList = (list: { [tag: string]: boolean }, id: string) => {
-    console.log("checkList for " + id + " evaluated " + list[id]);
     if (list[id]) {
       return true;
     }
