@@ -10,7 +10,7 @@ export interface Token {
 /******************************************************
  * login
  *
- * Attempts to login a user through checking an inputted User object. It looks
+ * Attempts to login a user through giving a username, . It looks
  * up the user based on the email or username and checks hashed password. Once it validates the user, it
  * writes the token.
  *
@@ -22,10 +22,10 @@ export async function login(
   usercred: string,
   password: string,
   credType: string
-): Promise<boolean> {
+): Promise<Token> {
   var resp;
   if (credType == "Username") {
-    resp = await fetch(UsedServer + "/userId_login", {
+    resp = await fetch(UsedServer + "/authentication/username_login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -37,7 +37,7 @@ export async function login(
       }),
     });
   } else if (credType == "Email") {
-    resp = await fetch(UsedServer + "/email_login", {
+    resp = await fetch(UsedServer + "/authentication/email_login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -65,7 +65,7 @@ export async function login(
     if (userAccessToken) {
       var currentTime = new Date();
       writeToken({ UserAccessToken: userAccessToken, Expiration: currentTime });
-      return true;
+      return userAccessToken;
     } else {
       return Promise.reject(
         new Error(`Invalid user credentials for user "${usercred}"`)
@@ -87,12 +87,12 @@ export async function login(
  *
  * Parameters:
  *          checkUser: The user in which we will sign up
- * Return: A boolean which determines if signing up was successful
+ * Return: A user access token.
  */
 export async function signup(
   checkUser: User,
   password: string
-): Promise<boolean> {
+): Promise<string> {
   if (
     checkUser.UserID == null ||
     checkUser.Email == null ||
@@ -116,7 +116,7 @@ export async function signup(
 
   type JSONResponse = {
     data?: {
-        userAccessToken: string;
+      userAccessToken: string;
     };
     errors?: Array<{ message: string }>;
   };
@@ -127,7 +127,7 @@ export async function signup(
     if (userAccessToken) {
       var currentTime = new Date();
       writeToken({ UserAccessToken: userAccessToken, Expiration: currentTime });
-      return true;
+      return userAccessToken;
     } else {
       return Promise.reject(
         new Error(`Failed to create a new user "${checkUser.UserID}"`)
@@ -178,9 +178,8 @@ async function writeToken(newToken: Token): Promise<boolean> {
  * Return: A boolean which determines if updating was successful
  */
 export async function updateToken(): Promise<boolean> {
-  let timestamp = new Date(await AsyncStorage.getItem("Expiration"));
   var increment = 15; //this is the amount you want to increment the timestamp in minutes
-  var newtimestamp = new Date(timestamp.getTime() + increment * 60000);
+  var newtimestamp = new Date(Date.now() + increment * 60000);
   AsyncStorage.setItem("Expiration", JSON.stringify(newtimestamp));
   return null;
 }
@@ -230,51 +229,53 @@ async function deleteToken(): Promise<boolean> {
  * Parameters: None
  * Return: True if we have a token after the function call. False if we do not.
  */
-export async function validateToken(): Promise<boolean> {
-  const token = await getToken();
-  if (token == null) {
+export async function validateToken(): Promise<Token> {
+  const oldToken = await getToken();
+  if (oldToken == null) {
     return Promise.reject(new Error("Failed to get token"));
   }
-  const min = 0;
-  const hours = 0;
-  const days = 1;
+    const min = 15;
+    const hours = 0;
+    const days = 0;
   const difference = days * 86400000 + hours * 3600000 + min * 60000;
   let currentTime = new Date();
-  if (token.Expiration.getTime() + difference >= currentTime.getTime()) {
+  if (oldToken.Expiration.getTime() >= currentTime.getTime()) {
     //token is not expired, return true
-    return true;
-  } else {
-    const resp = await fetch(UsedServer + "/user_test", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userAccessToken: token.UserAccessToken,
-      }),
-    });
-    type JSONResponse = {
-      data?: {
-        users: User;
-      };
-      errors?: Array<{ message: string }>;
+    return oldToken;
+  }
+  const resp = await fetch(UsedServer + "/user_test", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userAccessToken: oldToken.UserAccessToken,
+    }),
+  });
+  type JSONResponse = {
+    data?: {
+      userAccessToken: string;
     };
-    const { data, errors }: JSONResponse = await resp.json();
-    if (resp.ok) {
-      const users = data.users;
-      if (users) {
-        updateToken();
-        return true;
-      } else {
-        deleteToken();
-        return Promise.reject(new Error("Invalid token"));
-      }
+    errors?: Array<{ message: string }>;
+  };
+  const { data, errors }: JSONResponse = await resp.json();
+  if (resp.ok) {
+    const userAccessToken = data.userAccessToken;
+    if (userAccessToken) {
+      updateToken();
+      return {
+        UserAccessToken: userAccessToken,
+        Expiration: new Date(oldToken.Expiration.getMilliseconds() + difference),
+      };
     } else {
-      const error = new Error(
-        errors?.map((e) => e.message).join("\n") ?? "unknown"
-      );
-      return Promise.reject(error);
+      deleteToken();
+      return Promise.reject(new Error("Invalid token"));
     }
+  } else {
+    const error = new Error(
+      errors?.map((e) => e.message).join("\n") ?? "unknown"
+    );
+    return Promise.reject(error);
   }
 }
