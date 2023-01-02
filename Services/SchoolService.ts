@@ -4,7 +4,7 @@ export interface School {
     // Put school type here
     UniversityID:string,
     Name:string,
-    Name_Abbr:string
+    Abbreviation:string
 }  
 
 /******************************************************
