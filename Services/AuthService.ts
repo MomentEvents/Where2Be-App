@@ -116,14 +116,14 @@ export async function signup(
 
   type JSONResponse = {
     data?: {
-      UserAccessToken: string;
+        userAccessToken: string;
     };
     errors?: Array<{ message: string }>;
   };
 
   const { data, errors }: JSONResponse = await resp.json();
   if (resp.ok) {
-    const userAccessToken = data.UserAccessToken;
+    const userAccessToken = data.userAccessToken;
     if (userAccessToken) {
       var currentTime = new Date();
       writeToken({ UserAccessToken: userAccessToken, Expiration: currentTime });
