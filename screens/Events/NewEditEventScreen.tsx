@@ -44,7 +44,7 @@ import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerPopup from "../../components/DateTimePickerPopup/DateTimePickerPopup";
 import ImagePickerComponent from "../../components/ImagePicker";
-import * as RootNavigation from "../../navigation/RootNavigation"
+import * as RootNavigation from "../../navigation/RootNavigation";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -68,8 +68,12 @@ const NewEditEventScreen = ({ navigation, route }) => {
   const setPassedTags = route.params.SetTags;
 
   // Map for tags for interestselector
-  const [tagIdToSelectedMap, setTagIdToSelectedMap] = useState<{ [tag: string]: boolean }>({});
-  const tagIdToTagMap: { [name: string]: Interest } = {};
+  const [tagIdToSelectedMap, setTagIdToSelectedMap] = useState<{
+    [tag: string]: boolean;
+  }>({});
+  const [tagIdToTagMap, setTagIdToTagMap] = useState<{
+    [name: string]: Interest;
+  }>({});
 
   // Tags from database
   const [allTags, setAllTags] = useState<Interest[]>();
@@ -82,14 +86,15 @@ const NewEditEventScreen = ({ navigation, route }) => {
   const [start, setStart] = useState<Date>(passedEvent.StartDateTime);
   const [end, setEnd] = useState<Date>(passedEvent.EndDateTime);
 
-  const [loadTags, setLoadTags] = useState<boolean>(false)
+  const [loadTags, setLoadTags] = useState<boolean>(false);
 
   const onSubmit = () => {
+    console.log(tagIdToTagMap);
     if (!loadTags) {
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     const onSubmitInterests: Interest[] = returnSelectedTags();
 
     const onSubmitEvent: Event = {
@@ -105,21 +110,21 @@ const NewEditEventScreen = ({ navigation, route }) => {
     setPassedEvent(onSubmitEvent);
     setPassedTags(onSubmitInterests);
 
-    setLoading(false)
+    setLoading(false);
 
-    RootNavigation.goBack()
-  }
+    RootNavigation.goBack();
+  };
 
   function returnSelectedTags(): Interest[] {
     var outList: Interest[] = [];
     for (const [key, value] of Object.entries(tagIdToSelectedMap)) {
       if (value == true) {
-        console.log("Key: " + key)
-        console.log("Value " + tagIdToTagMap[key])
+        console.log("Key: " + key);
+        console.log("Value " + tagIdToTagMap[key]);
         outList.push(tagIdToTagMap[key]);
       }
     }
-    console.log(outList)
+    console.log(outList);
     return outList;
   }
 
@@ -135,10 +140,11 @@ const NewEditEventScreen = ({ navigation, route }) => {
     for (const tag of passedTags) {
       tagIdToSelectedMap[tag.InterestID] = true;
     }
-    
-    console.log(tagIdToTagMap)
+
+    console.log(tagIdToTagMap);
     setTagIdToSelectedMap(tagIdToSelectedMap);
-    setLoadTags(true)
+    setTagIdToTagMap(tagIdToTagMap)
+    setLoadTags(true);
   }
 
   const fillData = () => {
