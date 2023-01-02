@@ -1,14 +1,13 @@
 import UsedServer from "../constants/servercontants";
 export interface Event{
-    id: string,
-    creatorId: string, // username of the creator
-    name: string,
-    description: string,
-    image: string,
-    location: string,
-    startingDateTime: Date,
-    endingDateTime: Date | null, // startingDateTime and endingDateTime will be same date but different times
-    visibility: boolean,
+    EventID: string,
+    Title: string,
+    Description: string,
+    Picture: string,
+    Location: string,
+    StartDateTime: Date,
+    EndDateTime: Date | null, // startingDateTime and endingDateTime will be same date but different times
+    Visibility: boolean,
 }
 
 // Constants for category parameter checking in getAllSchoolEventsByCategory
@@ -32,7 +31,7 @@ export const OTHER = "Other"
  * Parameters: An ID number to search up an event
  * Return: An event if it exists. null if it does not.
  */
-export async function getEventDetailsById(eventId: string): Promise<Event> {
+export async function getEventDetailsById(EventID: string): Promise<Event> {
     const resp = await fetch(UsedServer + "/get_event_by_id", {
         method: "POST",
         headers: {
@@ -40,7 +39,7 @@ export async function getEventDetailsById(eventId: string): Promise<Event> {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            eventId: eventId,
+            EventID: EventID,
         }),
       });
       type JSONResponse = {
@@ -56,7 +55,7 @@ export async function getEventDetailsById(eventId: string): Promise<Event> {
         if (event){
             return event
         } else{
-            return Promise.reject(new Error(`Can't find event with ID: "${eventId}"`))
+            return Promise.reject(new Error(`Can't find event with ID: "${EventID}"`))
         }
       }else{
         const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
@@ -111,11 +110,11 @@ export async function createEvent(createdEvent: Event): Promise<boolean> {
  * Updates an event by its id
  * 
  * Parameters: 
- *          eventId: The event id to update the event. 
+ *          EventID: The event id to update the event. 
  *          updatedEvent: The changed values to update to the event. All null values are ignored.
  * Return: A boolean which is true if it's successfully updated and false if there is an error
  */
-export async function updateEventById(eventId: string, updatedEvent: Event): Promise<boolean> {
+export async function updateEventById(EventID: string, updatedEvent: Event): Promise<boolean> {
     const resp = await fetch(UsedServer + "/update_event", {
         method: "POST",
         headers: {
@@ -123,7 +122,7 @@ export async function updateEventById(eventId: string, updatedEvent: Event): Pro
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            eventId: eventId,
+            EventID: EventID,
             updatedEvent: updatedEvent,
         }),
       });
@@ -157,7 +156,7 @@ export async function updateEventById(eventId: string, updatedEvent: Event): Pro
  * Return: A boolean which is true if it's successfully deleted and false if there is an error
  */
 
-export async function deleteEventById(eventId: string): Promise<boolean> {
+export async function deleteEventById(EventID: string): Promise<boolean> {
     const resp = await fetch(UsedServer + "/delete_event", {
         method: "POST",
         headers: {
@@ -165,7 +164,7 @@ export async function deleteEventById(eventId: string): Promise<boolean> {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            eventId: eventId,
+            EventID: EventID,
         }),
       });
       type JSONResponse = {

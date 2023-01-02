@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface Token{
     id: string,
-    password_hash: string
+    password_hash: string,
+    timestamp: Date
 }
 
 /******************************************************
@@ -63,7 +64,8 @@ export async function login(usercred: string, password:string, credType:string):
         const user = data.user
         const password_hash = data.password_hash
         if (user){
-            writeToken({id: user.id, password_hash: password_hash})
+            var currentTime = new Date()
+            writeToken({id: user.UserID, password_hash: password_hash, timestamp: currentTime})
             return user
         } else{
             return Promise.reject(new Error(`Invalid user credentials for user "${usercred}"`))
@@ -86,7 +88,7 @@ export async function login(usercred: string, password:string, credType:string):
  * Return: A boolean which determines if signing up was successful
  */
 export async function signup(checkUser: User, password: string): Promise<User> {
-    if(checkUser.id == null || checkUser.email == null || checkUser.name == null){
+    if(checkUser.UserID == null || checkUser.Email == null || checkUser.Name == null){
         return Promise.reject(new Error(`User Object must include name, username, and email`))
     }
     const resp = await fetch(UsedServer + "/create_user", {
@@ -114,10 +116,11 @@ export async function signup(checkUser: User, password: string): Promise<User> {
         const user = data.user
         const password_hash = data.password_hash
         if (user){
-            writeToken({id: user.id, password_hash: password_hash})
+            var currentTime = new Date()
+            writeToken({id: user.UserID, password_hash: password_hash, timestamp: currentTime})
             return user
         } else{
-            return Promise.reject(new Error(`Failed to create a new user "${checkUser.id}"`))
+            return Promise.reject(new Error(`Failed to create a new user "${checkUser.UserID}"`))
         }
       }else{
         const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
@@ -150,6 +153,7 @@ export async function logout(): Promise<boolean> {
 async function writeToken(newToken: Token): Promise<boolean> {
     AsyncStorage.setItem('uid', newToken.id);
     AsyncStorage.setItem('pass', newToken.password_hash);
+    AsyncStorage.setItem('time', JSON.stringify(newToken.timestamp))
     return true;
 }
 
@@ -162,6 +166,10 @@ async function writeToken(newToken: Token): Promise<boolean> {
  * Return: A boolean which determines if updating was successful
  */
 export async function updateToken(): Promise<boolean> {
+    let timestamp = new Date(await AsyncStorage.getItem('time'))
+    var increment = 15; //this is the amount you want to increment the timestamp in minutes
+    var newtimestamp = new Date(timestamp.getTime() + increment * 60000)
+    AsyncStorage.setItem('time', JSON.stringify(newtimestamp))
     return null;
 }
 
@@ -176,7 +184,11 @@ export async function updateToken(): Promise<boolean> {
 async function getToken(): Promise<Token> {
     let uid = await AsyncStorage.getItem('uid')
     let pass = await AsyncStorage.getItem('pass')
-    const token = {id: uid, password_hash: pass}
+    let timestamp = new Date(await AsyncStorage.getItem('time'))
+    if(uid == null || pass == null || timestamp == null){
+        return null
+    }
+    const token = {id: uid, password_hash: pass, timestamp: timestamp}
     return token;
 }
 
@@ -191,6 +203,7 @@ async function getToken(): Promise<Token> {
 async function deleteToken(): Promise<boolean> {
     AsyncStorage.removeItem('uid');
     AsyncStorage.removeItem('pass');
+    AsyncStorage.removeItem('time');
     return true;
 }
 
@@ -207,39 +220,52 @@ async function deleteToken(): Promise<boolean> {
  * Parameters: None
  * Return: True if we have a token after the function call. False if we do not.
  */
-export async function validateToken(): Promise<User> {
+export async function validateToken(): Promise<boolean> {
     const token = await getToken()
-    if(token.id == null || token.password_hash == null){
+    if(token == null){
         return Promise.reject(new Error("Failed to get token"))
     }
-    const resp = await fetch(UsedServer + "/user_test", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: token.id,
-          password: token.password_hash,
-        }),
-      });
-      type JSONResponse = {
-        data?: {
-          users: User
+    const min = 0
+    const hours = 0
+    const days = 1
+    const difference = days * 86400000 + hours *3600000 + min * 60000
+    let currentTime = new Date()
+    if(token.timestamp.getTime() + difference >= currentTime.getTime() ){
+        //token is not expired, return true
+        return true
+    }
+    else{
+        const resp = await fetch(UsedServer + "/user_test", {
+            method: "POST",
+            headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            uid: token.id,
+            password: token.password_hash,
+            }),
+        });
+        type JSONResponse = {
+            data?: {
+            users: User
+            }
+            errors?: Array<{message: string}>
         }
-        errors?: Array<{message: string}>
-      }
-      const {data, errors}:JSONResponse = await resp.json();
-      if (resp.ok){
-        const users = data.users
-        if (users){
-            return users
-        } else{
-            return Promise.reject(new Error("Invalid token"))
+        const {data, errors}:JSONResponse = await resp.json();
+        if (resp.ok){
+            const users = data.users
+            if (users){
+                updateToken()
+                return true
+            } else{
+                deleteToken()
+                return Promise.reject(new Error("Invalid token"))
+            }
+        }else{
+            const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
+            return Promise.reject(error)
         }
-      }else{
-        const error = new Error(errors?.map(e=>e.message).join('\n') ?? 'unknown')
-        return Promise.reject(error)
     }
 
 }

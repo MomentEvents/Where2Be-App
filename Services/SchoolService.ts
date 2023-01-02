@@ -2,9 +2,9 @@ import UsedServer from "../constants/servercontants";
 
 export interface School {
     // Put school type here
-    id:string,
-    name?:string,
-    name_abbr?:string
+    UniversityID:string,
+    Name:string,
+    Name_Abbr:string
 }  
 
 /******************************************************
@@ -87,14 +87,14 @@ export async function getSchoolById(Id: string): Promise<School> {
 }
 
 /******************************************************
- * getSchoolById
+ * getSchoolByUserId
  * 
  * Gets the current user's school
  * 
  * Parameters: None
  * Return: The school that the current user is in
  */
-export async function getCurrUserSchool(UserID: string): Promise<School> {
+export async function getSchoolByUserId(UserID: string): Promise<School> {
     const resp = await fetch(UsedServer + "/get_curr_school", {
         method: "POST",
         headers: {

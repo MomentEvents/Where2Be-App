@@ -1,9 +1,9 @@
 import UsedServer from "../constants/servercontants";
 export interface Interest {
     // Put interest type here
-    ID?:number;
-    category?:string;
-    name:string;
+    InterestID: string,
+    Name: string,
+    Category: string,
 }  
 
 /******************************************************
@@ -11,7 +11,7 @@ export interface Interest {
  * 
  * Gets a list of interests in the database
  * 
- * Parameters: None
+ * Parameters: None 
  * Return: List of all interests
  */
 export async function getAllInterests(): Promise<Interest[]> {
@@ -46,14 +46,14 @@ export async function getAllInterests(): Promise<Interest[]> {
 }
 
 /******************************************************
- * getCurrUserInterests
+ * getInterestsByUserId
  * 
  * Gets a list of interests linked to the current user
  * 
  * Parameters: None
  * Return: List of all interests relating to the user
  */
-export async function getCurrUserInterests(UserID: string): Promise<Interest[]> {
+export async function getInterestsByUserId(UserID: string): Promise<Interest[]> {
     const resp = await fetch(UsedServer + "/get_user_interests", {
         method: "POST",
         headers: {
@@ -86,14 +86,14 @@ export async function getCurrUserInterests(UserID: string): Promise<Interest[]> 
 }
 
 /******************************************************
- * updateCurrUserInterests
+ * updateInterestsByUserId
  * 
  * Updates a list of interests linked to the current user
  * 
  * Parameters: The updated interests of the user. These interests will replace the current interests of the user.
  * Return: A boolean which determines if the update was successful
  */
-export async function updateCurrUserInterests(UserID: string, updatedInterests: Interest[]): Promise<boolean> {
+export async function updateInterestsByUserId(UserID: string, updatedInterests: Interest[]): Promise<boolean> {
     const resp = await fetch(UsedServer + "/update_user_interests", {
         method: "POST",
         headers: {
@@ -135,7 +135,7 @@ export async function updateCurrUserInterests(UserID: string, updatedInterests: 
  * Return: List of all interests relating to that event
  */
 export async function getEventInterestsByEventId(eventId: number): Promise<Interest[]> {
-    const resp = await fetch(UsedServer + "/get_user_interests", {
+    const resp = await fetch(UsedServer + "/get_event_interests", {
         method: "POST",
         headers: {
           Accept: "application/json",
