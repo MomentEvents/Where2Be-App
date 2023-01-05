@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Alert,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { LoadingContext } from "../../Contexts/LoadingContext";
@@ -29,7 +30,7 @@ import ImageView from "react-native-image-viewing";
  * SetCardShoutouts?: React.SetStateAction<number>,
  * SetCardUserLiked?: React.SetStateAction<boolean>,
  * SetCardUserShouted?: React.SetStateAction<boolean>
- */
+ *********************************************/
 
 const NewEventDetailScreen = ({ route }) => {
   // Props from previous event card to update
@@ -51,19 +52,37 @@ const NewEventDetailScreen = ({ route }) => {
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
+  // Update the previous screen event cards
+  useEffect(() => {
+    propsFromEventCard.SetCardLikes !== undefined
+      ? propsFromEventCard.SetCardLikes(likes)
+      : {};
+    propsFromEventCard.SetCardUserLiked !== undefined
+      ? propsFromEventCard.SetCardUserLiked(userLiked)
+      : {};
+    propsFromEventCard.SetCardShoutouts !== undefined
+      ? propsFromEventCard.SetCardShoutouts(shoutouts)
+      : {};
+    propsFromEventCard.SetCardUserShouted !== undefined
+      ? propsFromEventCard.SetCardUserShouted(userShouted)
+      : {};
+    if (viewedEvent !== undefined) {
+      propsFromEventCard.SetCardImage !== undefined
+        ? propsFromEventCard.SetCardImage(viewedEvent.Picture)
+        : {};
+      propsFromEventCard.SetCardTitle !== undefined
+        ? propsFromEventCard.SetCardTitle(viewedEvent.Title)
+        : {};
+      propsFromEventCard.SetCardStartDate !== undefined
+        ? propsFromEventCard.SetCardStartDate(viewedEvent.StartDateTime)
+        : {};
+    }
+  }, [likes, userLiked, shoutouts, userShouted, viewedEvent]);
+
   const addUserLike = () => {
     setLoading(true);
 
-    // Add like by user in Database
-
-    // Set previous event card likes
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(likes + 1)
-      : {};
-    propsFromEventCard.SetCardUserLiked !== undefined
-      ? propsFromEventCard.SetCardUserLiked(true)
-      : {};
-
+    // TODODATABASE Add like by user in Database
     setUserLiked(true);
     setLikes(likes + 1);
 
@@ -72,17 +91,9 @@ const NewEventDetailScreen = ({ route }) => {
 
   const addUserShoutout = () => {
     setLoading(true);
-    // Add shoutout by user in Database
+    // TODODATABASE Add shoutout by user in Database
 
     setUserShouted(true);
-
-    // Set previous event card shoutouts
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(shoutouts + 1)
-      : {};
-    propsFromEventCard.SetCardUserShouted !== undefined
-      ? propsFromEventCard.SetCardUserShouted(true)
-      : {};
     setShoutouts(shoutouts + 1);
 
     setLoading(false);
@@ -91,16 +102,7 @@ const NewEventDetailScreen = ({ route }) => {
   const removeUserLike = () => {
     setLoading(true);
 
-    // Remove like by user in Database
-
-    // Set previous event card likes
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(likes - 1)
-      : {};
-    propsFromEventCard.SetCardUserLiked !== undefined
-      ? propsFromEventCard.SetCardUserLiked(false)
-      : {};
-
+    // TODODATABASE Remove like by user in Database
     setUserLiked(false);
     setLikes(likes - 1);
 
@@ -110,15 +112,7 @@ const NewEventDetailScreen = ({ route }) => {
   const removeUserShoutout = () => {
     setLoading(true);
 
-    // Remove shoutout by user in Database
-
-    // Set previous event card shoutouts
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(shoutouts - 1)
-      : {};
-    propsFromEventCard.SetCardUserShouted !== undefined
-      ? propsFromEventCard.SetCardUserShouted(false)
-      : {};
+    // TODODATABASE Remove shoutout by user in Database
 
     setUserShouted(false);
     setShoutouts(shoutouts - 1);
@@ -126,13 +120,58 @@ const NewEventDetailScreen = ({ route }) => {
     setLoading(false);
   };
 
+  const onHostUsernamePressed = () => {
+    if (host !== undefined) {
+      RootNavigation.push("ProfileDetail", {
+        UserID: host.UserID,
+      });
+    }
+  };
+
+  const onEditEventPressed = () => {
+    RootNavigation.navigate("NewEditEventScreen", {
+      Event: viewedEvent,
+      SetEvent: setViewedEvent,
+      Tags: tags,
+      SetTags: setTags,
+    });
+  };
+
+  const onDeleteEventPressed = () => {
+    Alert.alert(
+      "Delete event",
+      "Are you sure you want to delete your event?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes Pressed");
+
+            // TODODATABASE Call query to delete event by ID
+
+            RootNavigation.goBack();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const onBackPressed = () => {
+    RootNavigation.goBack();
+  };
+
   // For description expansion
-  const onTextLayout = useCallback((e) => {
+  const descriptionOnExpand = useCallback((e) => {
     setLengthMoreText(e.nativeEvent.lines.length > 2); //to check the text is more than 4 lines or not
   }, []);
 
-  const toggleNumberOfLines = () => {
-    //To toggle the show text or hide it
+  //To toggle the show text or hide it
+  const descriptionToggleNumberOfLines = () => {
     setDescriptionExpanded(!descriptionExpanded);
   };
 
@@ -140,6 +179,7 @@ const NewEventDetailScreen = ({ route }) => {
     // Disable the screen
     setLoading(true);
 
+    // TODODATABASE Get event by route.params.EventID
     const pulledEvent: Event = {
       EventID: "1373",
       Title: "Wassup this is my title",
@@ -153,6 +193,8 @@ const NewEventDetailScreen = ({ route }) => {
     };
     setViewedEvent(pulledEvent);
 
+    // Get interests by route.params.EventID
+    // TODODATABASE
     const pulledTags: Interest[] = [
       {
         InterestID: "abcde",
@@ -167,6 +209,7 @@ const NewEventDetailScreen = ({ route }) => {
     ];
     setTags(pulledTags);
 
+    // TODODATABASE Get host by route.params.EventID
     const pulledHost: User = {
       UserID: "ABCDE",
       Name: "Kyle Wade",
@@ -211,6 +254,7 @@ const NewEventDetailScreen = ({ route }) => {
   useEffect(() => {
     pullData();
   }, []);
+
   return (
     <View style={styles.container}>
       <ImageView
@@ -246,7 +290,7 @@ const NewEventDetailScreen = ({ route }) => {
                 <ImageHeaderSection>
                   <TouchableOpacity
                     onPress={() => {
-                      RootNavigation.goBack();
+                      onBackPressed();
                     }}
                     style={{
                       width: 56,
@@ -366,7 +410,10 @@ const NewEventDetailScreen = ({ route }) => {
                     : tags.map((taglist) => (
                         <View
                           style={{
-                            width: taglist.Name.length * 9 + 15,
+                            width:
+                              taglist === undefined
+                                ? 20
+                                : taglist.Name.length * 9 + 15,
                             height: 32,
                             borderRadius: 14,
                             marginRight: 10,
@@ -378,7 +425,7 @@ const NewEventDetailScreen = ({ route }) => {
                           }}
                         >
                           <McText h5 style={{ letterSpacing: 1 }}>
-                            {taglist.Name}
+                            {taglist === undefined ? null : taglist.Name}
                           </McText>
                         </View>
                       ))}
@@ -392,9 +439,7 @@ const NewEventDetailScreen = ({ route }) => {
                     justifyContent: "center",
                   }}
                   onPress={() => {
-                    RootNavigation.push("ProfileDetail", {
-                      UserID: host.UserID,
-                    });
+                    onHostUsernamePressed();
                   }}
                 >
                   <Image
@@ -424,7 +469,7 @@ const NewEventDetailScreen = ({ route }) => {
                   }}
                 >
                   <McText
-                    onTextLayout={onTextLayout}
+                    onTextLayout={descriptionOnExpand}
                     numberOfLines={descriptionExpanded ? undefined : 3}
                     body3
                     selectable={true}
@@ -433,7 +478,7 @@ const NewEventDetailScreen = ({ route }) => {
                   </McText>
                   {lengthMoreText ? (
                     <McText
-                      onPress={toggleNumberOfLines}
+                      onPress={descriptionToggleNumberOfLines}
                       style={{
                         lineHeight: 22,
                         marginTop: 10,
@@ -499,9 +544,7 @@ const NewEventDetailScreen = ({ route }) => {
                     <TouchableOpacity
                       style={styles.edit}
                       onPress={() => {
-                        RootNavigation.navigate("EditEvent", {
-                          SelectedEvent: viewedEvent,
-                        });
+                        onEditEventPressed();
                       }}
                     >
                       <McText h5>Edit this Event</McText>
@@ -509,9 +552,7 @@ const NewEventDetailScreen = ({ route }) => {
                     <TouchableOpacity
                       style={styles.delete}
                       onPress={() => {
-                        RootNavigation.navigate("EditEvent", {
-                          SelectedEvent: viewedEvent,
-                        });
+                        onDeleteEventPressed();
                       }}
                     >
                       <McText h5>Delete this Event</McText>
