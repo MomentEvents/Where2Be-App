@@ -1,44 +1,43 @@
 import { User } from "./UserService";
 import momentAPI from "../constants/servercontants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  checkIfStringIsEmail,
+  checkIfStringIsAlphanumeric,
+} from "../helpers/helpers";
 
 export interface Token {
   UserAccessToken: string;
   Expiration: Date;
 }
 
+const USERACCESSTOKEN_STORAGE = "UserAccessToken";
+const EXPIRATION_STORAGE = "Expiration";
+
 /******************************************************
  * login
  *
- * Attempts to login a user through giving a username, . It looks
- * up the user based on the email or username and checks hashed password. Once it validates the user, it
- * writes the token.
+ * Attempts to login a user through giving a usercredential
+ * and password. credType can be either "email" or "username",
+ * which is checked by checking if usercred is formatted by an
+ * email or a username
  *
- * Parameters:
- *          checkUser: The user in which we will check if it exists and does have the same hash
- * Return: The user that is found in the database based on the credentials given
+ * Parameters -
+ * usercred: either an email or a username string
+ * Return -
+ * a token which contains the UserAccessToken and valid expiration
  */
 export async function login(
   usercred: string,
-  password: string,
-  credType: string
+  password: string
 ): Promise<Token> {
-  var resp;
-  if (credType == "Username") {
-    resp = await fetch(momentAPI + "/authentication/username_login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: usercred,
-        password: password,
-      }),
-    });
-  } else if (credType == "Email") {
-    resp = await fetch(momentAPI + "/authentication/email_login", {
-      method: "POST",
+  usercred = usercred.toLowerCase();
+
+  const isEmail: boolean = checkIfStringIsEmail(usercred);
+
+  if (isEmail) {
+    const resp = await fetch(momentAPI + "/authentication/login/email", {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -48,97 +47,101 @@ export async function login(
         password: password,
       }),
     });
+
+    // Return values here
+
+    // Errors should be Promise.reject
+
+    const createdToken: Token = null;
+    return Promise.resolve(createdToken);
   } else {
-    return Promise.reject(new Error(`No username or email included`));
-  }
-
-  type JSONResponse = {
-    data?: {
-      userAccessToken: string;
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const userAccessToken: string = data.userAccessToken;
-    if (userAccessToken) {
-      var currentTime = new Date();
-      writeToken({ UserAccessToken: userAccessToken, Expiration: currentTime });
-      return userAccessToken;
-    } else {
-      return Promise.reject(
-        new Error(`Invalid user credentials for user "${usercred}"`)
-      );
+    if (checkIfStringIsAlphanumeric(usercred)) {
+      return Promise.reject("Username is not alphanumeric");
     }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
+    const resp = await fetch(momentAPI + "/authentication/login/username", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: usercred,
+        password: password,
+      }),
+    });
+
+    // Return values here
+
+    // Errors should be Promise.reject
+
+    const createdToken: Token = null;
+    return Promise.resolve(createdToken);
   }
 }
 
 /******************************************************
  * signup
  *
- * Attempts to signup a user through creating an inputted User object into DB by calling UserService createUser. Once it creates the user,
- * it writes the token through calling writeToken.
+ * Attempts to signup a user through giving a username, displayName,
+ * email, password, and universityID. Returns a valid token if a valid
+ * response occurs or rejects the promise and gives an error. The function
+ * already has validation checks, so no need to check if valid input is occurring
  *
- * Parameters:
- *          checkUser: The user in which we will sign up
- * Return: A user access token.
+ * Parameters -
+ * username: the username of the user
+ * displayName: the display name of the user
+ * email: the email of the user
+ * password: the password of the user
+ * universityID: the university id of the user
+ *
+ * Return -
+ * a token which contains the UserAccessToken and valid expiration
  */
 export async function signup(
-  checkUser: User,
-  password: string
-): Promise<string> {
+  username: string,
+  displayName: string,
+  email: string,
+  password: string,
+  universityID: string
+): Promise<Token> {
   if (
-    checkUser.UserID == null ||
-    checkUser.Email == null ||
-    checkUser.Name == null
+    username === "" ||
+    username === null ||
+    displayName === "" ||
+    displayName === null ||
+    email === "" ||
+    email === null ||
+    password === "" ||
+    password === null
   ) {
-    return Promise.reject(
-      new Error(`User Object must include name, username, and email`)
-    );
+    return Promise.reject("Please enter non-empty values before signing up");
   }
-  const resp = await fetch(momentAPI + "/create_user", {
+  if (checkIfStringIsAlphanumeric(username)) {
+    return Promise.reject("Please enter an alphanumeric username");
+  }
+  if (checkIfStringIsEmail(email)) {
+    return Promise.reject("Please enter a valid email");
+  }
+  if (universityID === "" || universityID === null) {
+    return Promise.reject("Please enter a valid university");
+  }
+  const resp = await fetch(momentAPI + "/authentication/signup", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      user: checkUser,
+      username: username,
+      display_name: displayName,
+      email: email,
       password: password,
+      university_id: universityID,
     }),
   });
 
-  type JSONResponse = {
-    data?: {
-      userAccessToken: string;
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const userAccessToken = data.userAccessToken;
-    if (userAccessToken) {
-      var currentTime = new Date();
-      writeToken({ UserAccessToken: userAccessToken, Expiration: currentTime });
-      return userAccessToken;
-    } else {
-      return Promise.reject(
-        new Error(`Failed to create a new user "${checkUser.UserID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  const createdToken: Token = null;
+  return Promise.resolve(createdToken);
 }
 
 /******************************************************
@@ -152,21 +155,21 @@ export async function signup(
  */
 export async function logout(): Promise<boolean> {
   deleteToken();
-  return true;
+  return Promise.resolve(true);
 }
 
 /******************************************************
  * writeToken
  *
- * Attempts to write a token into the storage. It writes the email and hashed password with expiration date (15 minutes after writing)
+ * Attempts to write a token into the storage. It writes the user access token and expiration
  *
  * Parameters: The token we want to write
  * Return: A boolean which determines if writing was successful
  */
 async function writeToken(newToken: Token): Promise<boolean> {
-  AsyncStorage.setItem("UserAccessToken", newToken.UserAccessToken);
-  AsyncStorage.setItem("Expiration", JSON.stringify(newToken.Expiration));
-  return true;
+  AsyncStorage.setItem(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
+  AsyncStorage.setItem(EXPIRATION_STORAGE, JSON.stringify(newToken.Expiration));
+  return Promise.resolve(true);
 }
 
 /******************************************************
@@ -229,14 +232,14 @@ async function deleteToken(): Promise<boolean> {
  * Parameters: None
  * Return: True if we have a token after the function call. False if we do not.
  */
-export async function validateToken(): Promise<Token> {
+export async function validateAndUpdateToken(): Promise<Token> {
   const oldToken = await getToken();
   if (oldToken == null) {
     return Promise.reject(new Error("Failed to get token"));
   }
-    const min = 15;
-    const hours = 0;
-    const days = 0;
+  const min = 15;
+  const hours = 0;
+  const days = 0;
   const difference = days * 86400000 + hours * 3600000 + min * 60000;
   let currentTime = new Date();
   if (oldToken.Expiration.getTime() >= currentTime.getTime()) {
@@ -266,7 +269,9 @@ export async function validateToken(): Promise<Token> {
       updateToken();
       return {
         UserAccessToken: userAccessToken,
-        Expiration: new Date(oldToken.Expiration.getMilliseconds() + difference),
+        Expiration: new Date(
+          oldToken.Expiration.getMilliseconds() + difference
+        ),
       };
     } else {
       deleteToken();
