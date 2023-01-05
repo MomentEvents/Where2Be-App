@@ -1,5 +1,5 @@
 import { User } from "./UserService";
-import UsedServer from "../constants/servercontants";
+import momentAPI from "../constants/servercontants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface Token {
@@ -25,7 +25,7 @@ export async function login(
 ): Promise<Token> {
   var resp;
   if (credType == "Username") {
-    resp = await fetch(UsedServer + "/authentication/username_login", {
+    resp = await fetch(momentAPI + "/authentication/username_login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -37,7 +37,7 @@ export async function login(
       }),
     });
   } else if (credType == "Email") {
-    resp = await fetch(UsedServer + "/authentication/email_login", {
+    resp = await fetch(momentAPI + "/authentication/email_login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -102,7 +102,7 @@ export async function signup(
       new Error(`User Object must include name, username, and email`)
     );
   }
-  const resp = await fetch(UsedServer + "/create_user", {
+  const resp = await fetch(momentAPI + "/create_user", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -243,7 +243,7 @@ export async function validateToken(): Promise<Token> {
     //token is not expired, return true
     return oldToken;
   }
-  const resp = await fetch(UsedServer + "/user_test", {
+  const resp = await fetch(momentAPI + "/user_test", {
     method: "POST",
     headers: {
       Accept: "application/json",

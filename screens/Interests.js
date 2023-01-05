@@ -23,7 +23,7 @@ import { McText, McIcon, McAvatar} from '../components'
 import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableHighlight } from 'react-native-web';
 import InterestSelector from '../components/InterestSelect';
-import UsedServer from '../constants/servercontants';
+import momentAPI from '../constants/servercontants';
 
 // const inTags = ['Basketball', 'Bars']
 var outTags = {}
@@ -80,11 +80,11 @@ const Interests = ({ navigation, route }) => {
     // Ensure fetch data runs first before everything else
 
     const fetchData = async () => {
-        const resp = await fetch(UsedServer + '/interests', {
+        const resp = await fetch(momentAPI + '/interests', {
             method: 'GET',
         });
         const data = await resp.json();
-        const resp2 = await fetch(UsedServer + '/import_interest_list', {
+        const resp2 = await fetch(momentAPI + '/import_interest_list', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -107,7 +107,7 @@ const Interests = ({ navigation, route }) => {
     };
         
     const exportTags = async (outList) =>{
-      await fetch(UsedServer + '/delete_user_interest', {
+      await fetch(momentAPI + '/delete_user_interest', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -117,7 +117,7 @@ const Interests = ({ navigation, route }) => {
               UserId: UserId
             })
         });
-        await fetch(UsedServer + '/export_user_interest', {
+        await fetch(momentAPI + '/export_user_interest', {
           method: 'POST',
           headers: {
               Accept: 'application/json',

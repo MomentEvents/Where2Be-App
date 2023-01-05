@@ -1,4 +1,4 @@
-import UsedServer from "../constants/servercontants";
+import momentAPI from "../constants/servercontants";
 export interface Event{
     EventID: string,
     Title: string,
@@ -32,7 +32,7 @@ export const OTHER = "Other"
  * Return: An event if it exists. null if it does not.
  */
 export async function getEventDetailsById(EventID: string): Promise<Event> {
-    const resp = await fetch(UsedServer + "/get_event_by_id", {
+    const resp = await fetch(momentAPI + "/get_event_by_id", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -73,7 +73,7 @@ export async function getEventDetailsById(EventID: string): Promise<Event> {
  * Return: A boolean which is true if it's successfully created and false if there is an error
  */
 export async function createEvent(createdEvent: Event): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/create_event", {
+    const resp = await fetch(momentAPI + "/create_event", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -115,7 +115,7 @@ export async function createEvent(createdEvent: Event): Promise<boolean> {
  * Return: A boolean which is true if it's successfully updated and false if there is an error
  */
 export async function updateEventById(EventID: string, updatedEvent: Event): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/update_event", {
+    const resp = await fetch(momentAPI + "/update_event", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -157,7 +157,7 @@ export async function updateEventById(EventID: string, updatedEvent: Event): Pro
  */
 
 export async function deleteEventById(EventID: string): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/delete_event", {
+    const resp = await fetch(momentAPI + "/delete_event", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -198,7 +198,7 @@ export async function deleteEventById(EventID: string): Promise<boolean> {
  */
 
 export async function getCurrUserShoutedEvents(UserID: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_user_shoutouts", {
+    const resp = await fetch(momentAPI + "/get_user_shoutouts", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -238,7 +238,7 @@ export async function getCurrUserShoutedEvents(UserID: string): Promise<Event[]>
  * Return: An Event array which has all of the joined events of the current user
  */
 export async function getCurrUserJoinedEvents(UserID: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_user_joins", {
+    const resp = await fetch(momentAPI + "/get_user_joins", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -279,7 +279,7 @@ export async function getCurrUserJoinedEvents(UserID: string): Promise<Event[]> 
  */
 
 export async function getCurrUserHostedEvents(UserID: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_current_user_hosted_events", {
+    const resp = await fetch(momentAPI + "/get_current_user_hosted_events", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -320,7 +320,7 @@ export async function getCurrUserHostedEvents(UserID: string): Promise<Event[]> 
  * Return: An Event array which has all of the hosted events of the respective user
  */
 export async function getAllUserHostedEvents(UserID: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_all_user_hosted_events", {
+    const resp = await fetch(momentAPI + "/get_all_user_hosted_events", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -360,7 +360,7 @@ export async function getAllUserHostedEvents(UserID: string): Promise<Event[]> {
  * Return: An Event array which has all of the events of that user's current school
  */
 export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_all_school_events", {
+    const resp = await fetch(momentAPI + "/get_all_school_events", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -403,7 +403,7 @@ export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
  * Return: An Event array which are based on one of the categories above
  */
 export async function getAllSchoolEventsByCategory(UserID: string, category: string): Promise<Event[]> {
-    const resp = await fetch(UsedServer + "/get_all_events_by_category", {
+    const resp = await fetch(momentAPI + "/get_all_events_by_category", {
         method: "POST",
         headers: {
           Accept: "application/json",

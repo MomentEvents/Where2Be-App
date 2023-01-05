@@ -1,4 +1,4 @@
-import UsedServer from "../constants/servercontants";
+import momentAPI from "../constants/servercontants";
 
 export interface User {
     UserID: string,
@@ -17,7 +17,7 @@ export interface User {
  * Return: An array of Users which are in the User's school
  */
 export async function getAllSchoolUsers(UserID: string): Promise<User[]>  {
-    const resp = await fetch(UsedServer + "/school_users", {
+    const resp = await fetch(momentAPI + "/school_users", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -59,7 +59,7 @@ export async function getAllSchoolUsers(UserID: string): Promise<User[]>  {
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUserById(UserID: string): Promise<User> {
-    const resp = await fetch(UsedServer + "/get_user_by_id", {
+    const resp = await fetch(momentAPI + "/get_user_by_id", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -100,7 +100,7 @@ export async function getUserById(UserID: string): Promise<User> {
  * Return: The user object (if found. Null if not found.)
  */
  export async function getUsgetUserByUsernameerById(username: string): Promise<User> {
-    const resp = await fetch(UsedServer + "/get_user_by_username", {
+    const resp = await fetch(momentAPI + "/get_user_by_username", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -143,7 +143,7 @@ export async function getUserById(UserID: string): Promise<User> {
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUserByEmail(email: string): Promise<User> {
-    const resp = await fetch(UsedServer + "/get_user_by_email", {
+    const resp = await fetch(momentAPI + "/get_user_by_email", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -186,7 +186,7 @@ export async function getUserByEmail(email: string): Promise<User> {
  * Return: If updating the user was successful or not
  */
 export async function updateUserById(updatedUser: User): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/update_curr_user", {
+    const resp = await fetch(momentAPI + "/update_curr_user", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -227,7 +227,7 @@ export async function updateUserById(updatedUser: User): Promise<boolean> {
  * Return: If creating the user was successful or not
  */
 export async function createUser(createdUser: User): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/create_user", {
+    const resp = await fetch(momentAPI + "/create_user", {
         method: "POST",
         headers: {
           Accept: "application/json",

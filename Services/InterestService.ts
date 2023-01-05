@@ -1,4 +1,4 @@
-import UsedServer from "../constants/servercontants";
+import momentAPI from "../constants/servercontants";
 export interface Interest {
     // Put interest type here
     InterestID: string,
@@ -15,7 +15,7 @@ export interface Interest {
  * Return: List of all interests
  */
 export async function getAllInterests(): Promise<Interest[]> {
-    const resp = await fetch(UsedServer + "/get_interests", {
+    const resp = await fetch(momentAPI + "/get_interests", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -54,7 +54,7 @@ export async function getAllInterests(): Promise<Interest[]> {
  * Return: List of all interests relating to the user
  */
 export async function getInterestsByUserId(UserID: string): Promise<Interest[]> {
-    const resp = await fetch(UsedServer + "/get_user_interests", {
+    const resp = await fetch(momentAPI + "/get_user_interests", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -94,7 +94,7 @@ export async function getInterestsByUserId(UserID: string): Promise<Interest[]> 
  * Return: A boolean which determines if the update was successful
  */
 export async function updateInterestsByUserId(UserID: string, updatedInterests: Interest[]): Promise<boolean> {
-    const resp = await fetch(UsedServer + "/update_user_interests", {
+    const resp = await fetch(momentAPI + "/update_user_interests", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -135,7 +135,7 @@ export async function updateInterestsByUserId(UserID: string, updatedInterests: 
  * Return: List of all interests relating to that event
  */
 export async function getEventInterestsByEventId(eventId: number): Promise<Interest[]> {
-    const resp = await fetch(UsedServer + "/get_event_interests", {
+    const resp = await fetch(momentAPI + "/get_event_interests", {
         method: "POST",
         headers: {
           Accept: "application/json",

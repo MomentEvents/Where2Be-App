@@ -1,4 +1,4 @@
-import UsedServer from "../constants/servercontants";
+import momentAPI from "../constants/servercontants";
 
 export interface School {
     // Put school type here
@@ -16,7 +16,7 @@ export interface School {
  * Return: List of all schools with type School
  */
 export async function getAllSchools(): Promise<School[]> {
-    const resp = await fetch(UsedServer + "/get_schools", {
+    const resp = await fetch(momentAPI + "/get_schools", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -55,7 +55,7 @@ export async function getAllSchools(): Promise<School[]> {
  * Return: The school with the matching id
  */
 export async function getSchoolById(Id: string): Promise<School> {
-    const resp = await fetch(UsedServer + "/get_school_by_id", {
+    const resp = await fetch(momentAPI + "/get_school_by_id", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -95,7 +95,7 @@ export async function getSchoolById(Id: string): Promise<School> {
  * Return: The school that the current user is in
  */
 export async function getSchoolByUserId(UserID: string): Promise<School> {
-    const resp = await fetch(UsedServer + "/get_curr_school", {
+    const resp = await fetch(momentAPI + "/get_curr_school", {
         method: "POST",
         headers: {
           Accept: "application/json",

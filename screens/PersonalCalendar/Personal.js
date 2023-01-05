@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { Dimensions } from "react-native";
 import { AuthContext } from '../../AuthContext';
-import UsedServer from '../../constants/servercontants';
+import momentAPI from '../../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -30,7 +30,7 @@ const Personal = ({ navigation, route }) => {
   
   const fetchData = async () => {
     console.log('userId: ', UserId)
-    const resp2 = await fetch(UsedServer + `/personal_cal_future`, {
+    const resp2 = await fetch(momentAPI + `/personal_cal_future`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -41,7 +41,7 @@ const Personal = ({ navigation, route }) => {
       })
     }); 
     const pcal1 = await resp2.json();
-    const resp3 = await fetch(UsedServer + `/personal_cal_past`, {
+    const resp3 = await fetch(momentAPI + `/personal_cal_past`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

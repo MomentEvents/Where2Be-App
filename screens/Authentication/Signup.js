@@ -24,7 +24,7 @@ import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import SelectList from 'react-native-dropdown-select-list';
 import { AuthContext } from '../../AuthContext';
-import UsedServer from "../../constants/servercontants";
+import momentAPI from "../../constants/servercontants";
 import registerForPushNotificationsAsync from "../../Services/NotificationService";
 
 var width = Dimensions.get('window').width; //full width
@@ -110,7 +110,7 @@ const Signup = ({ navigation, route }) => {
    //erry = true;
     if(erry == false){
       try {
-        const resp = await fetch(UsedServer + "/create_user", {
+        const resp = await fetch(momentAPI + "/create_user", {
           //10.0.2.2:8080
           method: "POST",
           headers: {

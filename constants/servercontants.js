@@ -1,7 +1,7 @@
-const testserver = "http://54.201.227.203:8080";
-const localhost = "localhost:8080";
-const androidhost = "http://10.0.2.2:8080";
+const testserver = "http://54.201.227.203:8080/";
+const productionserver = "";
+const version = "api_ver_1.0.0/"
 
-const UsedServer = testserver;
+const momentAPI = testserver + version;
 
-export default UsedServer;
+export default momentAPI;

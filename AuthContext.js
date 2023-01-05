@@ -3,7 +3,7 @@ import React, { useState, useEffect, Context, createContext } from 'react';
 //import * as keychain from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import produce from 'immer';
-import UsedServer from './constants/servercontants';
+import momentAPI from './constants/servercontants';
 import registerForPushNotificationsAsync from './Services/NotificationService';
 
 export const AuthContext = createContext();
@@ -250,7 +250,7 @@ export const AuthProvider = ({children}) =>{
       let uid = await AsyncStorage.getItem('uid');
       let pass = await AsyncStorage.getItem('pass');
       // console.log('starting loading in', UsedServer)
-      const resp = await fetch(UsedServer + "/user_test", {
+      const resp = await fetch(momentAPI + "/user_test", {
         //10.0.2.2:8080
         method: "POST",
         headers: {

@@ -32,7 +32,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import { AuthContext } from "../../AuthContext";
-import UsedServer from "../../constants/servercontants";
+import momentAPI from "../../constants/servercontants";
 import defaultimage from "../../assets/images/defaultprofilepicture.png";
 
 var width = Dimensions.get("window").width; //full width
@@ -82,7 +82,7 @@ const Profile = ({ navigation, route }) => {
   // },[route.params])
 
   const fetchData = async () => {
-    const resp2 = await fetch(UsedServer + `/spotlight`, {
+    const resp2 = await fetch(momentAPI + `/spotlight`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -95,7 +95,7 @@ const Profile = ({ navigation, route }) => {
     const data2 = await resp2.json();
     setData2(data2);
 
-    const resp = await fetch(UsedServer + `/feat`, {
+    const resp = await fetch(momentAPI + `/feat`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -109,7 +109,7 @@ const Profile = ({ navigation, route }) => {
 
     setData(data);
 
-    const resp3 = await fetch(UsedServer + `/feat_orgs`, {
+    const resp3 = await fetch(momentAPI + `/feat_orgs`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -122,7 +122,7 @@ const Profile = ({ navigation, route }) => {
     const data3 = await resp3.json();
     setData3(data3);
 
-    const resp4 = await fetch(UsedServer + `/categories`, {
+    const resp4 = await fetch(momentAPI + `/categories`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -135,7 +135,7 @@ const Profile = ({ navigation, route }) => {
     const data4 = await resp4.json();
     setData4(data4);
 
-    const resp5 = await fetch(UsedServer + `/categories_feat`, {
+    const resp5 = await fetch(momentAPI + `/categories_feat`, {
       method: "POST",
       headers: {
         Accept: "application/json",

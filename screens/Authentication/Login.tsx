@@ -31,7 +31,7 @@ import Fuse from "fuse.js";
 import { Dimensions } from "react-native";
 import { CustomInput } from "./Signup.js";
 import { AuthContext } from "../../AuthContext";
-import UsedServer from "../../constants/servercontants";
+import momentAPI from "../../constants/servercontants";
 import registerForPushNotificationsAsync from "../../Services/NotificationService";
 import { login } from "../../Services/AuthService";
 import { User, getUserByEmail, getUserById } from "../../Services/UserService";
