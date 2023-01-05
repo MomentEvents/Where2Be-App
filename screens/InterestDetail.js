@@ -11,7 +11,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Dimensions } from "react-native";
-import UsedServer from '../constants/servercontants';
+import momentAPI from '../constants/servercontants';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -77,7 +77,7 @@ const InterestDetail = ({ navigation, route }) => {
     const fetchData = async () => {
         let data;
         if(iD !== 'bad') {
-            const resp = await fetch(UsedServer + '/interest_events', {
+            const resp = await fetch(momentAPI + '/interest_events', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

@@ -23,7 +23,7 @@ import { AuthContext } from '../../Contexts/AuthContext';
 import {memo} from "react"
 
 import { Dimensions } from "react-native";
-import UsedServer from '../../constants/servercontants';
+import momentAPI from '../../constants/servercontants';
 import EditEvent from './EditEvent';
 
 var width = Dimensions.get('window').width; //full width
@@ -91,7 +91,7 @@ const EventDetail = ({ navigation, route }) => {
       // updateData(selEvent);
       // setSelectedEvent(selEvent);
       console.log("HEREEE2: ", join);
-      const resp = await fetch(UsedServer + "/delete_join", {
+      const resp = await fetch(momentAPI + "/delete_join", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -111,7 +111,7 @@ const EventDetail = ({ navigation, route }) => {
       console.log('start 0');
       
       console.log("HEREEE2: ", join);
-      const resp = await fetch(UsedServer + "/create_join", {
+      const resp = await fetch(momentAPI + "/create_join", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -137,7 +137,7 @@ const EventDetail = ({ navigation, route }) => {
       setShoutout(false);
       console.log("HEREEE2: ", shoutout);
       console.log("HEREEE");
-      const resp = await fetch(UsedServer + "/delete_shoutOut", {
+      const resp = await fetch(momentAPI + "/delete_shoutOut", {
         // deleting for true, need to change
         method: "POST",
         headers: {
@@ -154,7 +154,7 @@ const EventDetail = ({ navigation, route }) => {
     } else {
       setShoutout(true);
       console.log("HEREEE2: ", shoutout);
-      const resp = await fetch(UsedServer + "/create_shoutOut", {
+      const resp = await fetch(momentAPI + "/create_shoutOut", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -210,7 +210,7 @@ const EventDetail = ({ navigation, route }) => {
         let data;
         console.log('id:' + iD)
         if(iD !== 'bad') {
-            const resp = await fetch(UsedServer + '/organization_details', {
+            const resp = await fetch(momentAPI + '/organization_details', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

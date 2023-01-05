@@ -39,8 +39,8 @@ import { AuthContext } from "../../Contexts/AuthContext";
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
-import * as SplashScreen from "expo-splash-screen";
-import UsedServer from "../../constants/servercontants";
+import * as SplashScreen from 'expo-splash-screen';
+import momentAPI from '../../constants/servercontants';
 
 // import React from 'react';
 // import { Text, View, StyleSheet, Button } from 'react-native';
@@ -71,10 +71,10 @@ const LoginLessHome = ({ navigation, route }) => {
   var type2 = "Discord";
 
   const fetchData = async () => {
-    console.log("collecting featured data");
-    refreshFeat();
-    const resp2 = await fetch(UsedServer + `/spotlight`, {
-      method: "POST",
+    console.log('collecting featured data')
+    refreshFeat()
+    const resp2 = await fetch(momentAPI + `/spotlight`, {
+      method: 'POST',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -87,9 +87,9 @@ const LoginLessHome = ({ navigation, route }) => {
     console.log("got featured data");
     // setData2(data2);
     setupData([data2], 0);
-    console.log("got spotlight");
-    const resp = await fetch(UsedServer + `/feat`, {
-      method: "POST",
+    console.log('got spotlight')
+    const resp = await fetch(momentAPI + `/feat`, {
+      method: 'POST',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -133,8 +133,8 @@ const LoginLessHome = ({ navigation, route }) => {
     // const data4 = await resp4.json();
     // setData4(data4)
 
-    const resp5 = await fetch(UsedServer + `/categories_feat`, {
-      method: "POST",
+    const resp5 = await fetch(momentAPI + `/categories_feat`, {
+      method: 'POST',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -146,9 +146,9 @@ const LoginLessHome = ({ navigation, route }) => {
     const category_feat = await resp5.json();
     // setcategory_feat(category_feat);
     setupData(category_feat, 2);
-    console.log("starting 6");
-    const resp6 = await fetch(UsedServer + `/personal_cal_future`, {
-      method: "POST",
+    console.log('starting 6');
+    const resp6 = await fetch(momentAPI + `/personal_cal_future`, {
+      method: 'POST',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -158,9 +158,9 @@ const LoginLessHome = ({ navigation, route }) => {
       }),
     });
     const pcal1 = await resp6.json();
-    console.log("starting 7");
-    const resp7 = await fetch(UsedServer + `/personal_cal_past`, {
-      method: "POST",
+    console.log('starting 7');
+    const resp7 = await fetch(momentAPI + `/personal_cal_past`, {
+      method: 'POST',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

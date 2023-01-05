@@ -23,7 +23,7 @@ import { AuthContext } from '../../Contexts/AuthContext';
 import {memo} from "react"
 
 import { Dimensions } from "react-native";
-import UsedServer from '../../constants/servercontants';
+import momentAPI from '../../constants/servercontants';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 var width = Dimensions.get('window').width; //full width
@@ -50,7 +50,7 @@ const PreviewEventDetail = ({ navigation, route }) => {
   }
 
   const postEvent = async () =>{
-    const resp2 = await fetch(UsedServer + `/create_event`, {
+    const resp2 = await fetch(momentAPI + `/create_event`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

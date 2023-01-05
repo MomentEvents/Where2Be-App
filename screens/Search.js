@@ -10,8 +10,8 @@ import { dummData, FONTS, SIZES, COLORS, icons, images} from '../constants';
 import events from '../constants/events.json'
 import { McText, McIcon, McAvatar} from '../components'
 import Fuse from 'fuse.js'
-import UsedServer from '../constants/servercontants';
-import { AuthContext } from '../Contexts/AuthContext';
+import momentAPI from '../constants/servercontants';
+import { AuthContext } from '../AuthContext';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -26,7 +26,7 @@ var height = Dimensions.get('window').height; //full height
   const {UserId, UserSchool} = useContext(AuthContext)
   const fetchData = async () => {
     console.log(UserSchool)
-    const resp1 = await fetch(UsedServer + '/search_org', {
+    const resp1 = await fetch(momentAPI + '/search_org', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -38,7 +38,7 @@ var height = Dimensions.get('window').height; //full height
     });
     const data1 = await resp1.json();
     setDataOrg(data1);
-    const resp2 = await fetch(UsedServer + '/search_events', {
+    const resp2 = await fetch(momentAPI + '/search_events', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
