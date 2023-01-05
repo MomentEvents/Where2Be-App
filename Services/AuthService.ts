@@ -36,7 +36,7 @@ export async function login(
   const isEmail: boolean = checkIfStringIsEmail(usercred);
 
   if (isEmail) {
-    const resp = await fetch(momentAPI + "/authentication/login/email", {
+    const authResp = await fetch(momentAPI + "/authentication/login/email", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -58,7 +58,7 @@ export async function login(
     if (checkIfStringIsAlphanumeric(usercred)) {
       return Promise.reject("Username is not alphanumeric");
     }
-    const resp = await fetch(momentAPI + "/authentication/login/username", {
+    const authResp = await fetch(momentAPI + "/authentication/login/username", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -125,7 +125,7 @@ export async function signup(
   if (universityID === "" || universityID === null) {
     return Promise.reject("Please enter a valid university");
   }
-  const resp = await fetch(momentAPI + "/authentication/signup", {
+  const authResp = await fetch(momentAPI + "/authentication/signup", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -148,7 +148,8 @@ export async function signup(
  * logout
  *
  * Attempts to logout a user through removing the token
- * from the device by calling deleteToken.
+ * from the device by calling deleteToken. This is just a duplicate
+ * of deleteToken()
  *
  * Parameters: None
  * Return: A boolean which determines if logging out was successful
@@ -167,8 +168,16 @@ export async function logout(): Promise<boolean> {
  * Return: A boolean which determines if writing was successful
  */
 async function writeToken(newToken: Token): Promise<boolean> {
-  AsyncStorage.setItem(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
-  AsyncStorage.setItem(EXPIRATION_STORAGE, JSON.stringify(newToken.Expiration));
+  try {
+    AsyncStorage.setItem(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
+    AsyncStorage.setItem(
+      EXPIRATION_STORAGE,
+      JSON.stringify(newToken.Expiration)
+    );
+  } catch (error) {
+    return Promise.reject(error);
+  }
+
   return Promise.resolve(true);
 }
 
@@ -183,8 +192,12 @@ async function writeToken(newToken: Token): Promise<boolean> {
 export async function updateToken(): Promise<boolean> {
   var increment = 15; //this is the amount you want to increment the timestamp in minutes
   var newtimestamp = new Date(Date.now() + increment * 60000);
-  AsyncStorage.setItem("Expiration", JSON.stringify(newtimestamp));
-  return null;
+  try {
+    AsyncStorage.setItem(EXPIRATION_STORAGE, JSON.stringify(newtimestamp));
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return Promise.resolve(true);
 }
 
 /******************************************************
@@ -196,13 +209,17 @@ export async function updateToken(): Promise<boolean> {
  * Return: A Token object. Returns null if not found.
  */
 async function getToken(): Promise<Token> {
-  let userAccessToken: string = await AsyncStorage.getItem("UserAccessToken");
-  let expiration: Date = new Date(await AsyncStorage.getItem("Expiration"));
+  let userAccessToken: string = await AsyncStorage.getItem(
+    USERACCESSTOKEN_STORAGE
+  );
+  let expiration: Date = new Date(
+    await AsyncStorage.getItem(EXPIRATION_STORAGE)
+  );
   if (userAccessToken == null || expiration == null) {
-    return null;
+    return Promise.resolve(null);
   }
   const token = { UserAccessToken: userAccessToken, Expiration: expiration };
-  return token;
+  return Promise.resolve(token);
 }
 
 /******************************************************
@@ -213,14 +230,14 @@ async function getToken(): Promise<Token> {
  * Parameters: None
  * Return: True if deletion is successful. False if it is not.
  */
-async function deleteToken(): Promise<boolean> {
-  AsyncStorage.removeItem("UserAccessToken");
-  AsyncStorage.removeItem("Expiration");
-  return true;
+export async function deleteToken(): Promise<boolean> {
+  AsyncStorage.removeItem(USERACCESSTOKEN_STORAGE);
+  AsyncStorage.removeItem(EXPIRATION_STORAGE);
+  return Promise.resolve(true);
 }
 
 /******************************************************
- * validateToken
+ * checkTokenExpirationAndUpdate
  *
  * Checks if a token is there. If not there, return false.
  * If it is there, check if it is expired.
@@ -229,13 +246,16 @@ async function deleteToken(): Promise<boolean> {
  * If so, call updateToken and return true
  * If not, call logout and return false
  *
- * Parameters: None
- * Return: True if we have a token after the function call. False if we do not.
+ * Parameters -
+ * none
+ * 
+ * Return -
+ * null if there is no token. a token if there is one
  */
-export async function validateAndUpdateToken(): Promise<Token> {
+export async function checkTokenExpirationAndUpdate(): Promise<Token> {
   const oldToken = await getToken();
   if (oldToken == null) {
-    return Promise.reject(new Error("Failed to get token"));
+    return Promise.resolve(undefined);
   }
   const min = 15;
   const hours = 0;
@@ -244,18 +264,18 @@ export async function validateAndUpdateToken(): Promise<Token> {
   let currentTime = new Date();
   if (oldToken.Expiration.getTime() >= currentTime.getTime()) {
     //token is not expired, return true
-    return oldToken;
+    return Promise.resolve(oldToken)
   }
-  const resp = await fetch(momentAPI + "/user_test", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userAccessToken: oldToken.UserAccessToken,
-    }),
-  });
+  const resp = await fetch(
+    momentAPI + "/user/user_access_token/" + oldToken.UserAccessToken,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
   type JSONResponse = {
     data?: {
       userAccessToken: string;
