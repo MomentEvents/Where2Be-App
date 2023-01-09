@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 40,
     bottom: 60,
-    borderRadius: 90,
+    borderRadius: 10,
   },
   hoverButtonIconContainer: {
     position: "absolute",

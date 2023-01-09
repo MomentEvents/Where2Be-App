@@ -55,7 +55,7 @@ const BigEventCard = ({
 
   const cardWidth = Width;
   const cardHeight = Height;
-  const cardBorderRadius = 20;
+  const cardBorderRadius = 10;
 
   // First time being loaded and rendered
   useEffect(() => {
