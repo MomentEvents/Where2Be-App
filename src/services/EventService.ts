@@ -621,7 +621,7 @@ export async function getAllSchoolEventsByCategory(
         },
       ];
 
-      return pulledCommunityEvents;
+      throw formatError("err", "err");
 
     case ENTERTAINMENT:
       const pulledEntertainmentEvents: Event[] = [

@@ -55,6 +55,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   const [otherEvents, setOtherEvents] = useState<Event[]>(null);
 
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
@@ -94,6 +95,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
 
   const onRefresh = async () => {
     setLoadingEvents(true);
+    setIsRefreshing(true);
     setFeaturedEvents(null);
     setStartingSoonEvents(null);
     setOngoingEvents(null);
@@ -105,6 +107,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     setRecreationEvents(null);
     setOtherEvents(null);
     pullEvents();
+    setIsRefreshing(false);
   };
 
   const navigateToLogin = (): void => {
@@ -221,10 +224,9 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={loadingEvents} onRefresh={onRefresh} />
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         >
-          <ActivityIndicator animating={loadingEvents} />
           {featuredEvents !== null && featuredEvents.length !== 0 ? (
             <View>
               <FlatList
@@ -383,6 +385,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           ) : (
             <View />
           )}
+          <ActivityIndicator animating={loadingEvents} />
         </ScrollView>
         <TouchableOpacity
           style={{
