@@ -301,7 +301,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
                 keyExtractor={(item) => item.EventID}
                 data={Object.values(startingSoonEvents)}
                 renderItem={_renderSmallEventCards}
-                
                 style={styles.flatlistContainer}
               ></FlatList>
             </View>
@@ -440,27 +439,10 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           <ActivityIndicator animating={loadingEvents} />
         </ScrollView>
         <TouchableOpacity
-          style={{
-            flex: 1,
-            position: "absolute",
-            right: 40,
-            bottom: 60,
-            borderRadius: 90,
-          }}
+          style={styles.hoverButtonContainer}
           onPress={navigateToLogin}
         >
-          <GradientButton
-            style={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              height: 70,
-              width: 70,
-              borderRadius: 90,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <GradientButton style={styles.hoverButtonIconContainer}>
             <icons.login height="60%" width="60%"></icons.login>
           </GradientButton>
         </TouchableOpacity>
@@ -481,6 +463,23 @@ const styles = StyleSheet.create({
   flatlistContainer: {
     marginTop: 15,
     marginBottom: 20,
+  },
+  hoverButtonContainer: {
+    flex: 1,
+    position: "absolute",
+    right: 40,
+    bottom: 60,
+    borderRadius: 90,
+  },
+  hoverButtonIconContainer: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    height: 70,
+    width: 70,
+    borderRadius: 90,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
