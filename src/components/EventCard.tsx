@@ -103,8 +103,22 @@ const EventCard = ({
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
+            borderWidth: 2,
+            borderColor: COLORS.white,
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: cardHeight,
+            width: cardWidth,
+            borderRadius: cardBorderRadius,
             borderWidth: 1,
             borderColor: COLORS.white,
+            backgroundColor: 'rgba(0,0,0,.5)',
           }}
         />
         <View

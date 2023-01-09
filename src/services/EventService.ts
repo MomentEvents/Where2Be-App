@@ -486,13 +486,13 @@ export async function getAllSchoolEventsByCategory(
       const pulledFeaturedEvents: Event[] = [
         {
           EventID: "Featured1",
-          Title: "FeaturedEvent " + schoolID,
+          Title: "Bonfire at La Jolla shores! All are welcome to join",
           Description: "Description for Event",
           Picture:
-            "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png?20060513000852",
+            "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
           Location: "Featured Location",
           StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+          EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
           Visibility: true,
         },
         {
@@ -524,11 +524,22 @@ export async function getAllSchoolEventsByCategory(
           Visibility: true,
         },
         {
+          EventID: "StartingSoon3",
+          Title: "AcademicEvent " + schoolID,
+          Description: "Description for Event",
+          Picture:
+            "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          Location: "Featured Location",
+          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+          Visibility: true,
+        },
+        {
           EventID: "StartingSoon2",
           Title: "AcademicEvent " + schoolID,
           Description: "Description for Event",
           Picture:
-            "https://upload.wikimedia.org/wikipedia/commons/d/d2/Solid_white.png?20060513000852",
+            "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
           Location: "Featured Location",
           StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
           EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
@@ -562,7 +573,7 @@ export async function getAllSchoolEventsByCategory(
           Title: "AcademicEvent " + schoolID,
           Description: "Description for Event",
           Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+            "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
           Location: "Featured Location",
           StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
           EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
@@ -621,7 +632,7 @@ export async function getAllSchoolEventsByCategory(
         },
       ];
 
-      return pulledCommunityEvents
+      return pulledCommunityEvents;
 
     case ENTERTAINMENT:
       const pulledEntertainmentEvents: Event[] = [
