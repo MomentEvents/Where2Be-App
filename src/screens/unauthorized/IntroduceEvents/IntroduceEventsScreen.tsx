@@ -60,37 +60,88 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
     // events on the header
+    var errorThrown: boolean = false;
     await getAllSchoolEventsByCategory(school.SchoolID, FEATURED)
       .then((events: Event[]) => setFeaturedEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
 
     getAllSchoolEventsByCategory(school.SchoolID, STARTING_SOON)
       .then((events: Event[]) => setStartingSoonEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, ONGOING)
       .then((events: Event[]) => setOngoingEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, ACADEMIC)
       .then((events: Event[]) => setAcademicEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, ATHLETICS)
       .then((events: Event[]) => setAthleticsEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, CAREER_DEVELOPMENT)
       .then((events: Event[]) => setCareerDevelopmentEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, COMMUNITY)
       .then((events: Event[]) => setCommunityEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, ENTERTAINMENT)
       .then((events: Event[]) => setEntertainmentEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, RECREATION)
       .then((events: Event[]) => setRecreationEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
     getAllSchoolEventsByCategory(school.SchoolID, OTHER)
       .then((events: Event[]) => setOtherEvents(events))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => {
+        if (!errorThrown) {
+          displayError(error);
+          errorThrown = true;
+        }
+      });
   };
 
   const onRefresh = async () => {
@@ -250,6 +301,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
                 keyExtractor={(item) => item.EventID}
                 data={Object.values(startingSoonEvents)}
                 renderItem={_renderSmallEventCards}
+                
                 style={styles.flatlistContainer}
               ></FlatList>
             </View>
@@ -427,17 +479,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   flatlistContainer: {
-    marginTop: 8,
-    marginBottom: 6,
+    marginTop: 15,
+    marginBottom: 20,
   },
 });
-
-const SectionHead = styled.View`
-  paddinghorizontal: 30px;
-  paddingvertical: 6px;
-  align-items: center;
-  flex-direction: row;
-`;
 
 const SectionHeader = ({ children }) => {
   return (
