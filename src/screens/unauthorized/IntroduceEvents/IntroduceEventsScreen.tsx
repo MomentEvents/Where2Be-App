@@ -38,7 +38,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   var loadedEventsMap: { [eventID: string]: boolean } = {};
 
   const [featuredEvents, setFeaturedEvents] = useState<Event[]>(null);
-  const [ongoingEvents, setOngoingEvents] = useState<Event[]>(null);
   const [interestToEventMap, setInterestToEventMap] = useState<{
     [key: string]: Event[];
   }>(null);
@@ -59,16 +58,16 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         }
       });
 
-    getAllSchoolOngoingEvents(school.SchoolID)
-      .then((events: Event[]) => setOngoingEvents(events))
+    var interestToEventMapTemp: { [key: string]: Event[] } = {};
+
+    await getAllSchoolOngoingEvents(school.SchoolID)
+      .then((events: Event[]) => interestToEventMapTemp["Ongoing"] = events)
       .catch((error: Error) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
         }
       });
-
-    var interestToEventMapTemp: { [key: string]: Event[] } = {};
 
     const allSchoolInterests: Interest[] = await getAllInterests(
       school.SchoolID
@@ -87,7 +86,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         });
     }
 
-    console.log(interestToEventMapTemp)
+    console.log(interestToEventMapTemp);
 
     setInterestToEventMap(interestToEventMapTemp);
   };
@@ -96,7 +95,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     setLoadingEvents(true);
     setIsRefreshing(true);
     setFeaturedEvents(null);
-    setOngoingEvents(null);
     setInterestToEventMap(null);
     pullEvents();
     setIsRefreshing(false);
@@ -131,9 +129,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   const _renderSmallEventCards = ({ item, index }) => {
-
-    console.log("Putting key")
-    console.log(item)
+    console.log("Putting key");
+    console.log(item);
     if (loadedEventsMap[item.EventID] === true) {
       return <></>;
     }
@@ -161,10 +158,9 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     console.log("Going into use effect");
     setLoadingEvents(
       featuredEvents === null ||
-        ongoingEvents === null ||
         interestToEventMap === null
     );
-  }, [featuredEvents, interestToEventMap, ongoingEvents]);
+  }, [featuredEvents, interestToEventMap]);
 
   useEffect(() => {
     pullEvents();
@@ -208,22 +204,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
                 keyExtractor={(item) => item.EventID}
                 data={Object.values(featuredEvents)}
                 renderItem={_renderBigEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {ongoingEvents !== null && ongoingEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Ongoing
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(ongoingEvents)}
-                renderItem={_renderSmallEventCards}
                 style={styles.flatlistContainer}
               ></FlatList>
             </View>
