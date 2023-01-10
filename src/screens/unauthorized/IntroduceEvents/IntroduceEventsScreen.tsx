@@ -234,7 +234,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
             <></>
           ) : (
             Object.keys(interestToEventMap).map((key, index) => (
-              <View>
+              <View key={key + index}>
                 <McText h2 style={styles.categoryTitle}>
                   {key}
                 </McText>
