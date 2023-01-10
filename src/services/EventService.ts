@@ -452,6 +452,74 @@ export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
   }
 }
 
+export async function getAllSchoolFeaturedEvents(schoolID: string): Promise<Event[]>{
+  const pulledFeaturedEvents: Event[] = [
+    {
+      EventID: "Featured1",
+      Title: "Bonfire at La Jolla shores! All are welcome to join",
+      Description: "Description for Event",
+      Picture:
+        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      Visibility: true,
+    },
+    {
+      EventID: "Featured2",
+      Title: "Another Featured Event " + schoolID,
+      Description: "Description for Event",
+      Picture:
+        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+  ];
+
+  return pulledFeaturedEvents;
+}
+
+export async function getAllSchoolOngoingEvents(schoolID: string): Promise<Event[]>{
+  const ongoingEvents: Event[] = [
+    {
+      EventID: "StartingSoon1",
+      Title: "StartingSoonEvent " + schoolID,
+      Description: "Description for Event",
+      Picture:
+        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+    {
+      EventID: "StartingSoon3",
+      Title: "AcademicEvent " + schoolID,
+      Description: "Description for Event",
+      Picture:
+        "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+    {
+      EventID: "StartingSoon2",
+      Title: "AcademicEvent " + schoolID,
+      Description: "Description for Event",
+      Picture:
+        "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+  ];
+
+  return ongoingEvents
+}
 /******************************************************
  * getAllSchoolEventsByCategory
  *
@@ -463,9 +531,9 @@ export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
  *                    ENTERTAINMENT, RECREATION, or OTHER.
  * Return: An Event array which are based on one of the categories above
  */
-export async function getAllSchoolEventsByCategory(
+export async function getAllSchoolEventsByInterest(
   schoolID: string,
-  category: string
+  interestID: string
 ): Promise<Event[]> {
   if (schoolID === null) {
     throw formatError(
@@ -475,90 +543,7 @@ export async function getAllSchoolEventsByCategory(
   }
 
   console.log("SchoolID in category is " + schoolID);
-  switch (category) {
-    case FEATURED:
-      const pulledFeaturedEvents: Event[] = [
-        {
-          EventID: "Featured1",
-          Title: "Bonfire at La Jolla shores! All are welcome to join",
-          Description: "Description for Event",
-          Picture:
-            "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          Visibility: true,
-        },
-        {
-          EventID: "Featured2",
-          Title: "Another Featured Event " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledFeaturedEvents;
-
-    case STARTING_SOON:
-      const pulledStartingSoonEvents: Event[] = [
-        {
-          EventID: "StartingSoon1",
-          Title: "StartingSoonEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-        {
-          EventID: "StartingSoon3",
-          Title: "AcademicEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-        {
-          EventID: "StartingSoon2",
-          Title: "AcademicEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledStartingSoonEvents;
-
-    case ONGOING:
-      const pulledOngoingEvents: Event[] = [
-        // {
-        //   EventID: "Ongoing1",
-        //   Title: "OngoingEvent " + schoolID,
-        //   Description: "Description for Event",
-        //   Picture:
-        //     "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-        //   Location: "Featured Location",
-        //   StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-        //   EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-        //   Visibility: true,
-        // },
-      ];
-
-      return pulledOngoingEvents;
+  switch (interestID) {
 
     case ACADEMIC:
       const pulledAcademicEvents: Event[] = [
@@ -631,7 +616,7 @@ export async function getAllSchoolEventsByCategory(
     default:
       throw formatError(
         "Development Error in getAllSchoolEventsByCategory",
-        "Invalid category " + category + " passed in"
+        "Invalid category " + interestID + " passed in"
       );
   }
 }

@@ -17,7 +17,6 @@ export interface Event {
 export interface Interest {
   InterestID: string;
   Name: string;
-  Category: string;
 }
 
 export interface School {

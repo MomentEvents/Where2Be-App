@@ -10,19 +10,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS, SIZES, School, icons } from "../../../constants";
+import { COLORS, Interest, SIZES, School, icons } from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import {
   FEATURED,
-  STARTING_SOON,
   ONGOING,
-  ACADEMIC,
-  ATHLETICS,
-  PROFESSIONAL,
-  SOCIAL,
-  getAllSchoolEventsByCategory,
+  getAllSchoolOngoingEvents,
+  getAllSchoolFeaturedEvents,
+  getAllSchoolEventsByInterest,
 } from "../../../services/EventService";
+import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
 import EventCard from "../../../components/EventCard";
 import { McIcon, McText } from "../../../components/Styled";
@@ -40,12 +38,10 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   var loadedEventsMap: { [eventID: string]: boolean } = {};
 
   const [featuredEvents, setFeaturedEvents] = useState<Event[]>(null);
-  const [startingSoonEvents, setStartingSoonEvents] = useState<Event[]>(null);
   const [ongoingEvents, setOngoingEvents] = useState<Event[]>(null);
-  const [academicEvents, setAcademicEvents] = useState<Event[]>(null);
-  const [athleticsEvents, setAthleticsEvents] = useState<Event[]>(null);
-  const [professionalEvents, setProfessionalEvents] = useState<Event[]>(null);
-  const [socialEvents, setSocialEvents] = useState<Event[]>(null);
+  const [interestToEventMap, setInterestToEventMap] = useState<{
+    [key: string]: Event[];
+  }>(null);
 
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -54,7 +50,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     // We will await getting featured first to load the more important
     // events on the header
     var errorThrown: boolean = false;
-    await getAllSchoolEventsByCategory(school.SchoolID, FEATURED)
+    getAllSchoolFeaturedEvents(school.SchoolID)
       .then((events: Event[]) => setFeaturedEvents(events))
       .catch((error: Error) => {
         if (!errorThrown) {
@@ -63,15 +59,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         }
       });
 
-    getAllSchoolEventsByCategory(school.SchoolID, STARTING_SOON)
-      .then((events: Event[]) => setStartingSoonEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, ONGOING)
+    getAllSchoolOngoingEvents(school.SchoolID)
       .then((events: Event[]) => setOngoingEvents(events))
       .catch((error: Error) => {
         if (!errorThrown) {
@@ -79,50 +67,37 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           errorThrown = true;
         }
       });
-    getAllSchoolEventsByCategory(school.SchoolID, ACADEMIC)
-      .then((events: Event[]) => setAcademicEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, ATHLETICS)
-      .then((events: Event[]) => setAthleticsEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, PROFESSIONAL)
-      .then((events: Event[]) => setProfessionalEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, SOCIAL)
-      .then((events: Event[]) => setSocialEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
+
+    var interestToEventMapTemp: { [key: string]: Event[] } = {};
+
+    const allSchoolInterests: Interest[] = await getAllInterests(
+      school.SchoolID
+    );
+
+    for (const interest of allSchoolInterests) {
+      await getAllSchoolEventsByInterest(school.SchoolID, interest.InterestID)
+        .then((events: Event[]) => {
+          interestToEventMapTemp[interest.Name] = events;
+        })
+        .catch((error: Error) => {
+          if (!errorThrown) {
+            displayError(error);
+            errorThrown = true;
+          }
+        });
+    }
+
+    console.log(interestToEventMapTemp)
+
+    setInterestToEventMap(interestToEventMapTemp);
   };
 
   const onRefresh = async () => {
     setLoadingEvents(true);
     setIsRefreshing(true);
     setFeaturedEvents(null);
-    setStartingSoonEvents(null);
     setOngoingEvents(null);
-    setAcademicEvents(null);
-    setAthleticsEvents(null);
-    setProfessionalEvents(null);
-    setSocialEvents(null);
+    setInterestToEventMap(null);
     pullEvents();
     setIsRefreshing(false);
   };
@@ -132,10 +107,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   const _renderBigEventCards = ({ item, index }) => {
-    if (loadedEventsMap[item.EventID] === true) {
-      return <></>;
-    }
-    loadedEventsMap[item.EventID] = true;
     return (
       <View
         style={{
@@ -160,6 +131,9 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   const _renderSmallEventCards = ({ item, index }) => {
+
+    console.log("Putting key")
+    console.log(item)
     if (loadedEventsMap[item.EventID] === true) {
       return <></>;
     }
@@ -187,26 +161,15 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     console.log("Going into use effect");
     setLoadingEvents(
       featuredEvents === null ||
-        startingSoonEvents === null ||
         ongoingEvents === null ||
-        academicEvents === null ||
-        athleticsEvents === null ||
-        professionalEvents === null ||
-        socialEvents === null
+        interestToEventMap === null
     );
-  }, [
-    featuredEvents,
-    startingSoonEvents,
-    ongoingEvents,
-    academicEvents,
-    athleticsEvents,
-    professionalEvents,
-    socialEvents,
-  ]);
+  }, [featuredEvents, interestToEventMap, ongoingEvents]);
 
   useEffect(() => {
     pullEvents();
   }, []);
+
   return (
     <GradientBackground>
       <SafeAreaView style={styles.container}>
@@ -251,22 +214,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           ) : (
             <View />
           )}
-          {startingSoonEvents !== null && startingSoonEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Starting Soon
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(startingSoonEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
           {ongoingEvents !== null && ongoingEvents.length !== 0 ? (
             <View>
               <McText h2 style={styles.categoryTitle}>
@@ -283,69 +230,22 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           ) : (
             <View />
           )}
-          {academicEvents !== null && academicEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Academic
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(academicEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
+          {interestToEventMap === null ? (
+            <></>
           ) : (
-            <View />
-          )}
-          {athleticsEvents !== null && athleticsEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Athletics
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(athleticsEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {professionalEvents !== null && professionalEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Professional
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(professionalEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {socialEvents !== null && socialEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Social
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(socialEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
+            Object.keys(interestToEventMap).map((key, index) => (
+              <View>
+                <McText h2 style={styles.categoryTitle}>
+                  {key}
+                </McText>
+                <FlatList
+                  horizontal
+                  data={Object.values(interestToEventMap[key])}
+                  renderItem={_renderSmallEventCards}
+                  style={styles.flatlistContainer}
+                ></FlatList>
+              </View>
+            ))
           )}
           <ActivityIndicator animating={loadingEvents} />
         </ScrollView>
