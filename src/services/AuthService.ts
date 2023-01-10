@@ -34,8 +34,15 @@ export async function login(
 
   // DO LOGIN HERE
 
+  if(usercred === null || usercred === ""){
+    throw formatError("Input error", "Please enter a valid username or email")
+  }
 
-  const createdToken: Token = createTokenFromUserAccessToken("TestTest123");
+  if(password === null || password === ""){
+    throw formatError("Input error", "Please enter a valid password")
+  }
+
+  const createdToken: Token = createTokenFromUserAccessToken(usercred);
   writeToken(createdToken);
 
   return Promise.resolve(createdToken);
