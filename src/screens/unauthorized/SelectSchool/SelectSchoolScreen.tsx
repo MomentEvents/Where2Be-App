@@ -14,6 +14,7 @@ import {
   SIZES,
   images,
   School,
+  SCREENS,
 } from "../../../constants";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { McText } from "../../../components/Styled";
@@ -29,7 +30,7 @@ const SelectSchoolScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (school != null) {
       console.log("School selected is " + school.Name);
-      Navigator.navigate("IntroduceEventsScreen", { school: school });
+      Navigator.navigate(SCREENS.IntroduceEvents, { school: school });
     }
   }, [school]);
 

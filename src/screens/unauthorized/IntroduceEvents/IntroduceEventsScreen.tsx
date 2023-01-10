@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS, Interest, SIZES, School, icons } from "../../../constants";
+import { COLORS, Interest, SCREENS, SIZES, School, icons } from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import {
@@ -101,7 +101,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   const navigateToLogin = (): void => {
-    Navigator.navigate("LoginScreen");
+    Navigator.navigate(SCREENS.Login);
   };
 
   const _renderBigEventCards = ({ item, index }) => {

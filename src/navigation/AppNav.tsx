@@ -7,7 +7,8 @@ import SelectSchoolScreen from "../screens/unauthorized/SelectSchool/SelectSchoo
 import IntroduceEventsScreen from "../screens/unauthorized/IntroduceEvents/IntroduceEventsScreen";
 import LoginScreen from "../screens/unauthorized/Login/LoginScreen"
 import TabNavigator from "./TabNavigator";
-import { Button, View } from "react-native";
+import SignupScreen from "../screens/unauthorized/Signup/SignupScreen";
+import { SCREENS } from "../constants";
 
 const Stack = createStackNavigator();
 
@@ -27,11 +28,12 @@ const AuthStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="SelectSchoolScreen"
+      initialRouteName={SCREENS.SelectSchool}
     >
-      <Stack.Screen name="SelectSchoolScreen" component={SelectSchoolScreen} />
-      <Stack.Screen name="IntroduceEventsScreen" component={IntroduceEventsScreen} />
-      <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+      <Stack.Screen name={SCREENS.SelectSchool} component={SelectSchoolScreen} />
+      <Stack.Screen name={SCREENS.IntroduceEvents} component={IntroduceEventsScreen} />
+      <Stack.Screen name={SCREENS.Login} component={LoginScreen}/>
+      <Stack.Screen name={SCREENS.Signup} component={SignupScreen}/>
     </Stack.Navigator>
   );
 };
@@ -42,9 +44,9 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="TabNavigator"
+      initialRouteName={SCREENS.TabNavigator}
     >
-      <Stack.Screen name="TabNavigator" component={TabNavigator} />
+      <Stack.Screen name={SCREENS.TabNavigator} component={TabNavigator} />
     </Stack.Navigator>
   );
 };

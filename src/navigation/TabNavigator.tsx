@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { COLORS, icons } from "../constants";
+import { COLORS, SCREENS, icons } from "../constants";
 import MyCalendarScreen from "../screens/authorized/MyCalendar/MyCalendarScreen";
 import ExploreEventsScreen from "../screens/authorized/ExploreEvents/ExploreEventsScreen";
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
@@ -109,7 +109,7 @@ const TabNavigator = ({ params }) => {
       }}
     >
       <Tab.Screen
-        name="ExploreEventScreen"
+        name={SCREENS.ExploreEvents}
         component={ExploreEventsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -119,7 +119,7 @@ const TabNavigator = ({ params }) => {
       />
 
       <Tab.Screen
-        name="SearchScreen"
+        name={SCREENS.Search}
         component={SearchScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -129,7 +129,7 @@ const TabNavigator = ({ params }) => {
       />
 
       <Tab.Screen
-        name="MyCalendar"
+        name={SCREENS.MyCalendar}
         component={MyCalendarScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -138,7 +138,7 @@ const TabNavigator = ({ params }) => {
         }}
       />
       <Tab.Screen
-        name="MyProfile"
+        name={SCREENS.MyProfile}
         component={MyProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (

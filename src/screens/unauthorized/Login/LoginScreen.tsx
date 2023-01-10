@@ -13,10 +13,11 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { McText } from "../../../components/Styled";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { COLORS, FONTS, SIZES } from "../../../constants";
+import { COLORS, FONTS, SCREENS, SIZES } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { displayError } from "../../../helpers/helpers";
+import * as Navigator from "../../../navigation/Navigator"
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -34,6 +35,11 @@ const LoginScreen = () => {
         setLoading(false);
       });
   };
+
+  const onNavigateSignup = () => {
+    Navigator.navigate(SCREENS.Signup)
+  }
+
   return (
     <GradientBackground>
       <ScrollView
@@ -70,7 +76,7 @@ const LoginScreen = () => {
                 </McText>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onNavigateSignup}>
               <McText b3>Don't have an account? Create one here!</McText>
             </TouchableOpacity>
           </SafeAreaView>
