@@ -19,11 +19,8 @@ import {
   ONGOING,
   ACADEMIC,
   ATHLETICS,
-  CAREER_DEVELOPMENT,
-  COMMUNITY,
-  ENTERTAINMENT,
-  RECREATION,
-  OTHER,
+  PROFESSIONAL,
+  SOCIAL,
   getAllSchoolEventsByCategory,
 } from "../../../services/EventService";
 import { displayError } from "../../../helpers/helpers";
@@ -47,12 +44,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   const [ongoingEvents, setOngoingEvents] = useState<Event[]>(null);
   const [academicEvents, setAcademicEvents] = useState<Event[]>(null);
   const [athleticsEvents, setAthleticsEvents] = useState<Event[]>(null);
-  const [careerDevelopmentEvents, setCareerDevelopmentEvents] =
-    useState<Event[]>(null);
-  const [communityEvents, setCommunityEvents] = useState<Event[]>(null);
-  const [entertainmentEvents, setEntertainmentEvents] = useState<Event[]>(null);
-  const [recreationEvents, setRecreationEvents] = useState<Event[]>(null);
-  const [otherEvents, setOtherEvents] = useState<Event[]>(null);
+  const [professionalEvents, setProfessionalEvents] = useState<Event[]>(null);
+  const [socialEvents, setSocialEvents] = useState<Event[]>(null);
 
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -102,40 +95,16 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           errorThrown = true;
         }
       });
-    getAllSchoolEventsByCategory(school.SchoolID, CAREER_DEVELOPMENT)
-      .then((events: Event[]) => setCareerDevelopmentEvents(events))
+    getAllSchoolEventsByCategory(school.SchoolID, PROFESSIONAL)
+      .then((events: Event[]) => setProfessionalEvents(events))
       .catch((error: Error) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
         }
       });
-    getAllSchoolEventsByCategory(school.SchoolID, COMMUNITY)
-      .then((events: Event[]) => setCommunityEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, ENTERTAINMENT)
-      .then((events: Event[]) => setEntertainmentEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, RECREATION)
-      .then((events: Event[]) => setRecreationEvents(events))
-      .catch((error: Error) => {
-        if (!errorThrown) {
-          displayError(error);
-          errorThrown = true;
-        }
-      });
-    getAllSchoolEventsByCategory(school.SchoolID, OTHER)
-      .then((events: Event[]) => setOtherEvents(events))
+    getAllSchoolEventsByCategory(school.SchoolID, SOCIAL)
+      .then((events: Event[]) => setSocialEvents(events))
       .catch((error: Error) => {
         if (!errorThrown) {
           displayError(error);
@@ -152,11 +121,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     setOngoingEvents(null);
     setAcademicEvents(null);
     setAthleticsEvents(null);
-    setCareerDevelopmentEvents(null);
-    setCommunityEvents(null);
-    setEntertainmentEvents(null);
-    setRecreationEvents(null);
-    setOtherEvents(null);
+    setProfessionalEvents(null);
+    setSocialEvents(null);
     pullEvents();
     setIsRefreshing(false);
   };
@@ -225,11 +191,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         ongoingEvents === null ||
         academicEvents === null ||
         athleticsEvents === null ||
-        careerDevelopmentEvents === null ||
-        communityEvents === null ||
-        entertainmentEvents === null ||
-        recreationEvents === null ||
-        otherEvents === null
+        professionalEvents === null ||
+        socialEvents === null
     );
   }, [
     featuredEvents,
@@ -237,11 +200,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     ongoingEvents,
     academicEvents,
     athleticsEvents,
-    careerDevelopmentEvents,
-    communityEvents,
-    entertainmentEvents,
-    recreationEvents,
-    otherEvents,
+    professionalEvents,
+    socialEvents,
   ]);
 
   useEffect(() => {
@@ -355,16 +315,15 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           ) : (
             <View />
           )}
-          {careerDevelopmentEvents !== null &&
-          careerDevelopmentEvents.length !== 0 ? (
+          {professionalEvents !== null && professionalEvents.length !== 0 ? (
             <View>
               <McText h2 style={styles.categoryTitle}>
-                Career Development
+                Professional
               </McText>
               <FlatList
                 horizontal
                 keyExtractor={(item) => item.EventID}
-                data={Object.values(careerDevelopmentEvents)}
+                data={Object.values(professionalEvents)}
                 renderItem={_renderSmallEventCards}
                 style={styles.flatlistContainer}
               ></FlatList>
@@ -372,63 +331,15 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           ) : (
             <View />
           )}
-          {communityEvents !== null && communityEvents.length !== 0 ? (
+          {socialEvents !== null && socialEvents.length !== 0 ? (
             <View>
               <McText h2 style={styles.categoryTitle}>
-                Community
+                Social
               </McText>
               <FlatList
                 horizontal
                 keyExtractor={(item) => item.EventID}
-                data={Object.values(communityEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {entertainmentEvents !== null && entertainmentEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Entertainment
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(entertainmentEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {recreationEvents !== null && recreationEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Recreation
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(recreationEvents)}
-                renderItem={_renderSmallEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {otherEvents !== null && otherEvents.length !== 0 ? (
-            <View>
-              <McText h2 style={styles.categoryTitle}>
-                Other
-              </McText>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(otherEvents)}
+                data={Object.values(socialEvents)}
                 renderItem={_renderSmallEventCards}
                 style={styles.flatlistContainer}
               ></FlatList>

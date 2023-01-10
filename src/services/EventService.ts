@@ -25,16 +25,13 @@ import { formatError } from "../helpers/helpers";
 // getEventsByCategory
 
 // Constants for category parameter checking in getAllSchoolEventsByCategory
-export const FEATURED = "Featured";
-export const STARTING_SOON = "Starting Soon";
-export const ONGOING = "Ongoing";
-export const ACADEMIC = "Academic";
-export const ATHLETICS = "Athletics";
-export const CAREER_DEVELOPMENT = "Career Development";
-export const COMMUNITY = "Community";
-export const ENTERTAINMENT = "Entertainment";
-export const RECREATION = "Recreation";
-export const OTHER = "Other";
+export const FEATURED = "featured";
+export const STARTING_SOON = "starting_soon";
+export const ONGOING = "ongoing";
+export const ACADEMIC = "academic";
+export const ATHLETICS = "athletics";
+export const PROFESSIONAL = "entertainment";
+export const SOCIAL = "social";
 
 // Create constant to interest_id dictionary
 
@@ -43,11 +40,8 @@ const categoryToInterestIdMap: {
 } = {};
 categoryToInterestIdMap[ACADEMIC] = "TODO";
 categoryToInterestIdMap[ATHLETICS] = "TODO";
-categoryToInterestIdMap[CAREER_DEVELOPMENT] = "TODO";
-categoryToInterestIdMap[COMMUNITY] = "TODO";
-categoryToInterestIdMap[ENTERTAINMENT] = "TODO";
-categoryToInterestIdMap[RECREATION] = "TODO";
-categoryToInterestIdMap[OTHER] = "TODO";
+categoryToInterestIdMap[PROFESSIONAL] = "TODO";
+categoryToInterestIdMap[SOCIAL] = "TODO";
 
 /******************************************************
  * getEventById
@@ -600,42 +594,8 @@ export async function getAllSchoolEventsByCategory(
 
       return pulledAthleticsEvents;
 
-    case CAREER_DEVELOPMENT:
-      const pulledCareerDevelopmentEvent: Event[] = [
-        {
-          EventID: "CareerDevelopment1",
-          Title: "CareerDevelopmentEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledCareerDevelopmentEvent;
-
-    case COMMUNITY:
-      const pulledCommunityEvents: Event[] = [
-        {
-          EventID: "Community1",
-          Title: "CommunityEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledCommunityEvents;
-
-    case ENTERTAINMENT:
-      const pulledEntertainmentEvents: Event[] = [
+    case PROFESSIONAL:
+      const pulledProfessionalEvents: Event[] = [
         {
           EventID: "Entertainment1",
           Title: "EntertainmentEvent " + schoolID,
@@ -649,10 +609,10 @@ export async function getAllSchoolEventsByCategory(
         },
       ];
 
-      return pulledEntertainmentEvents;
+      return pulledProfessionalEvents;
 
-    case RECREATION:
-      const pulledRecreationEvents: Event[] = [
+    case SOCIAL:
+      const pulledSocialEvents: Event[] = [
         {
           EventID: "Recreation1",
           Title: "RecreationEvent " + schoolID,
@@ -666,24 +626,7 @@ export async function getAllSchoolEventsByCategory(
         },
       ];
 
-      return pulledRecreationEvents;
-
-    case OTHER:
-      const pulledOtherEvents: Event[] = [
-        {
-          EventID: "Other1",
-          Title: "OtherEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledOtherEvents;
+      return pulledSocialEvents;
 
     default:
       throw formatError(
