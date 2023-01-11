@@ -16,6 +16,8 @@ const SEARCH = "Search";
 const FAVORITES = "Favorites";
 const PROFILE = "Profile";
 
+export const TAB_BAR_HEIGHT = 80;
+
 const TabIcon = ({ focused, icon }) => {
   switch (icon) {
     case EVENTS:
@@ -80,7 +82,7 @@ const TabNavigator = ({ params }) => {
           opacity: 1,
           borderTopColor: COLORS.gray2,
           borderTopWidth: 1,
-          height: 80,
+          height: TAB_BAR_HEIGHT,
           borderTopRightRadius: 0,
           borderTopLeftRadius: 0,
         },

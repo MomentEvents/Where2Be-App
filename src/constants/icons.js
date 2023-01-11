@@ -32,6 +32,7 @@ import inactiveshoutout from "../../assets/icons/svgicons/inactiveshoutout.svg";
 import activeshoutout from "../../assets/icons/svgicons/activeshoutout.svg"
 import moment from "../../assets/icons/svgicons/moment.svg"
 import backarrow from "../../assets/icons/svgicons/backarrow.svg"
+import plus from "../../assets/icons/svgicons/plus.svg"
 
 //_____________________________________________________________________________
 // Deter from using the ones below. We will replace them with the ones up top
@@ -56,7 +57,6 @@ const visibility = require("../../assets/icons/visibility.png");
 const links = require("../../assets/icons/link.png");
 const close = require("../../assets/icons/close.png");
 const fullscreen = require("../../assets/icons/fullscreen.png");
-const plus = require("../../assets/icons/plus.svg");
 const addphoto = require("../../assets/icons/addPhoto.png");
 const tag = require("../../assets/icons/tag.png");
 
@@ -83,7 +83,6 @@ export default {
   links,
   close,
   fullscreen,
-  plus,
   plusbutton,
   inactivehome,
   activehome,
@@ -115,5 +114,6 @@ export default {
   inactiveshoutout,
   activeshoutout,
   moment,
-  backarrow
+  backarrow,
+  plus
 };

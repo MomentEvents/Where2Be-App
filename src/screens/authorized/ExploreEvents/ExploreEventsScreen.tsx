@@ -10,7 +10,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { COLORS, Interest, SCREENS, SIZES, School, icons } from "../../../constants";
+import {
+  COLORS,
+  Interest,
+  SCREENS,
+  SIZES,
+  School,
+  icons,
+} from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import {
@@ -31,13 +38,14 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
+import { TAB_BAR_HEIGHT } from "../../../navigation/TabNavigator";
 type RouteParams = {
   school: School;
 };
 const ExploreEvents = ({ navigation, route }) => {
-  const { currentSchool } = useContext(UserContext)
+  const { currentSchool } = useContext(UserContext);
   var loadedEventsMap: { [eventID: string]: boolean } = {};
-  
+
   const [featuredEvents, setFeaturedEvents] = useState<Event[]>(null);
   const [interestToEventMap, setInterestToEventMap] = useState<{
     [key: string]: Event[];
@@ -62,7 +70,7 @@ const ExploreEvents = ({ navigation, route }) => {
     var interestToEventMapTemp: { [key: string]: Event[] } = {};
 
     await getAllSchoolOngoingEvents(currentSchool.SchoolID)
-      .then((events: Event[]) => interestToEventMapTemp["Ongoing"] = events)
+      .then((events: Event[]) => (interestToEventMapTemp["Ongoing"] = events))
       .catch((error: Error) => {
         if (!errorThrown) {
           displayError(error);
@@ -75,7 +83,10 @@ const ExploreEvents = ({ navigation, route }) => {
     );
 
     for (const interest of allSchoolInterests) {
-      await getAllSchoolEventsByInterest(currentSchool.SchoolID, interest.InterestID)
+      await getAllSchoolEventsByInterest(
+        currentSchool.SchoolID,
+        interest.InterestID
+      )
         .then((events: Event[]) => {
           interestToEventMapTemp[interest.Name] = events;
         })
@@ -157,10 +168,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
   useEffect(() => {
     console.log("Going into use effect");
-    setLoadingEvents(
-      featuredEvents === null ||
-        interestToEventMap === null
-    );
+    setLoadingEvents(featuredEvents === null || interestToEventMap === null);
   }, [featuredEvents, interestToEventMap]);
 
   useEffect(() => {
@@ -229,13 +237,15 @@ const ExploreEvents = ({ navigation, route }) => {
             ))
           )}
           <ActivityIndicator animating={loadingEvents} />
+
+          <View style={{ height: TAB_BAR_HEIGHT }} />
         </ScrollView>
         <TouchableOpacity
           style={styles.hoverButtonContainer}
           onPress={navigateToLogin}
         >
           <GradientButton style={styles.hoverButtonIconContainer}>
-            <icons.login height="60%" width="60%"></icons.login>
+            <icons.plus height="60%" width="60%"></icons.plus>
           </GradientButton>
         </TouchableOpacity>
       </SafeAreaView>
@@ -260,15 +270,15 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     right: 40,
-    bottom: 60,
+    bottom: 20 + TAB_BAR_HEIGHT,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {
     position: "absolute",
     bottom: 0,
     right: 0,
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     borderRadius: 90,
     alignItems: "center",
     justifyContent: "center",
