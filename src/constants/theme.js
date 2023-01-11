@@ -56,6 +56,7 @@ export const SIZES = {
   // app dimensions
   width,
   height,
+  tab_bar_height: 80,
 };
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},

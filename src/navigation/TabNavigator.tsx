@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { COLORS, SCREENS, icons } from "../constants";
+import { COLORS, SCREENS, SIZES, icons } from "../constants";
 import MyCalendarScreen from "../screens/authorized/MyCalendar/MyCalendarScreen";
 import ExploreEventsScreen from "../screens/authorized/ExploreEvents/ExploreEventsScreen";
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
@@ -15,8 +15,6 @@ const EVENTS = "Events";
 const SEARCH = "Search";
 const FAVORITES = "Favorites";
 const PROFILE = "Profile";
-
-export const TAB_BAR_HEIGHT = 80;
 
 const TabIcon = ({ focused, icon }) => {
   switch (icon) {
@@ -82,7 +80,7 @@ const TabNavigator = ({ params }) => {
           opacity: 1,
           borderTopColor: COLORS.gray2,
           borderTopWidth: 1,
-          height: TAB_BAR_HEIGHT,
+          height: SIZES.tab_bar_height,
           borderTopRightRadius: 0,
           borderTopLeftRadius: 0,
         },

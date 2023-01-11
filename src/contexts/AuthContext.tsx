@@ -8,7 +8,6 @@ type AuthContextType = {
   userSignup: (
     username: string,
     displayName: string,
-    email: string,
     password: string,
     schoolID: string
   ) => Promise<void>;
@@ -23,8 +22,9 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }) => {
   const { setContextVarsBasedOnToken } = useContext(UserContext);
+
   const userLogin = async (usercred: string, password: string) => {
-    setContextVarsBasedOnToken(
+    await setContextVarsBasedOnToken(
       await login(usercred, password).catch((error: Error) => {
         throw error;
       })
@@ -37,12 +37,11 @@ export const AuthProvider = ({ children }) => {
   const userSignup = async (
     username: string,
     displayName: string,
-    email: string,
     password: string,
     schoolID: string
   ) => {
-    setContextVarsBasedOnToken(
-      await signup(username, displayName, email, password, schoolID).catch(
+    await setContextVarsBasedOnToken(
+      await signup(username, displayName, password, schoolID).catch(
         (error) => {
           throw error;
         }

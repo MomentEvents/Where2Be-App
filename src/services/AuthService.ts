@@ -31,74 +31,80 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-  console.log("\n\nLogin call")
+  console.log("\n\nLogin call");
 
   // DO LOGIN HERE
 
-  if(usercred === null || usercred === ""){
-    throw formatError("Input error", "Please enter a valid username or email")
+  if (usercred === null || usercred === "") {
+    throw formatError("Input error", "Please enter a valid username or email");
   }
 
-  if(password === null || password === ""){
-    throw formatError("Input error", "Please enter a valid password")
+  if (password === null || password === "") {
+    throw formatError("Input error", "Please enter a valid password");
+  }
+
+  usercred = usercred.toLowerCase();
+
+  if (checkIfStringIsEmail(usercred)) {
+    throw formatError("Input error", "Email login is not supported yet");
+  }
+
+  if (!checkIfStringIsAlphanumeric(usercred)) {
+    throw formatError("Input Error", "Username is not alphanumeric");
   }
 
   const createdToken: Token = createTokenFromUserAccessToken(usercred);
   writeToken(createdToken);
 
-  return Promise.resolve(createdToken);
-
-  usercred = usercred.toLowerCase();
-
-  const isEmail: boolean = checkIfStringIsEmail(usercred);
+  return Promise.resolve(createdToken)
 
   var pulledUserAccessToken: string = null;
 
-  if (isEmail) {
-    const authResp = await fetch(momentAPI + "/authentication/login/email", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: usercred,
-        password: password,
-      }),
-    }).catch(() => {
-      throw formatError("Fetch Error", "Could not login with email");
-    });
+  // if (isEmail) {
+  //   const authResp = await fetch(momentAPI + "/authentication/login/email", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       email: usercred,
+  //       password: password,
+  //     }),
+  //   }).catch(() => {
+  //     throw formatError("Fetch Error", "Could not login with email");
+  //   });
 
-    if (!authResp.ok) {
-      throw formatError("Error " + authResp.status, authResp.statusText);
-    }
+  //   if (!authResp.ok) {
+  //     throw formatError("Error " + authResp.status, authResp.statusText);
+  //   }
 
-    pulledUserAccessToken = "TestTest123";
-  } else {
-    if (checkIfStringIsAlphanumeric(usercred)) {
-      throw formatError("Input Error", "Username is not alphanumeric");
-    }
+  //   pulledUserAccessToken = "TestTest123";
+  // } else {
+  //   if (checkIfStringIsAlphanumeric(usercred)) {
+  //     throw formatError("Input Error", "Username is not alphanumeric");
+  //   }
 
-    const authResp = await fetch(momentAPI + "/authentication/login/username", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: usercred,
-        password: password,
-      }),
-    }).catch(() => {
-      throw formatError("Fetch Error", "Could not login with username");
-    });
+  //   const authResp = await fetch(momentAPI + "/authentication/login/username", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       username: usercred,
+  //       password: password,
+  //     }),
+  //   }).catch(() => {
+  //     throw formatError("Fetch Error", "Could not login with username");
+  //   });
 
-    if (!authResp.ok) {
-      throw formatError("Error " + authResp.status, authResp.statusText);
-    }
+  //   if (!authResp.ok) {
+  //     throw formatError("Error " + authResp.status, authResp.statusText);
+  //   }
 
-    pulledUserAccessToken = "TestTest123";
-  }
+  //   pulledUserAccessToken = "TestTest123";
+  // }
 }
 
 /******************************************************
@@ -122,22 +128,19 @@ export async function login(
 export async function signup(
   username: string,
   displayName: string,
-  email: string,
   password: string,
   schoolID: string
 ): Promise<Token> {
-  console.log("\n\nsignup() call")
+  console.log("\n\nsignup() call");
 
-  if(!isDisplayNameFormatted(displayName)){
-    throw formatError("Input error", "Please enter a readable display name")
+  if (!isDisplayNameFormatted(displayName)) {
+    throw formatError("Input error", "Please enter a readable display name");
   }
   if (
     username === "" ||
     username === null ||
     displayName === "" ||
     displayName === null ||
-    email === "" ||
-    email === null ||
     password === "" ||
     password === null
   ) {
@@ -149,15 +152,11 @@ export async function signup(
   if (!checkIfStringIsAlphanumeric(username)) {
     throw formatError("Input error", "Please enter an alphanumeric username");
   }
-  if (!checkIfStringIsEmail(email)) {
-    throw formatError("Input error", "Please enter a valid email");
-  }
   if (schoolID === "" || schoolID === null) {
     throw formatError("Input error", "Please enter a valid school");
   }
 
   // DO SIGNUP HERE
-
 
   const createdToken: Token = createTokenFromUserAccessToken("TestTest123");
   writeToken(createdToken);
@@ -172,7 +171,6 @@ export async function signup(
     body: JSON.stringify({
       username: username,
       display_name: displayName,
-      email: email,
       password: password,
       school_id: schoolID,
     }),
@@ -198,7 +196,7 @@ export async function signup(
  * None
  */
 export async function logout(): Promise<void> {
-  console.log("\n\nlogout() call")
+  console.log("\n\nlogout() call");
   if ((await getToken()) !== null) {
     deleteToken();
   }
@@ -274,7 +272,10 @@ async function getToken(): Promise<Token> {
   if (userAccessToken == null || expirationString == null) {
     return Promise.resolve(null);
   }
-  const token = { UserAccessToken: userAccessToken, Expiration: new Date(expirationString) };
+  const token = {
+    UserAccessToken: userAccessToken,
+    Expiration: new Date(expirationString),
+  };
   return Promise.resolve(token);
 }
 
@@ -357,6 +358,6 @@ export async function validateTokenExpirationAndUpdate(): Promise<Token> {
  * none
  */
 export async function getServerStatus(): Promise<void> {
-  return Promise.resolve()
-  throw formatError("Unable to connect to server", "Please try again later")
+  return Promise.resolve();
+  throw formatError("Unable to connect to server", "Please try again later");
 }

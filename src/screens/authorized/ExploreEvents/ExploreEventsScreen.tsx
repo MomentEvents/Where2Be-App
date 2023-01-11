@@ -38,7 +38,6 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
-import { TAB_BAR_HEIGHT } from "../../../navigation/TabNavigator";
 type RouteParams = {
   school: School;
 };
@@ -238,7 +237,7 @@ const ExploreEvents = ({ navigation, route }) => {
           )}
           <ActivityIndicator animating={loadingEvents} />
 
-          <View style={{ height: TAB_BAR_HEIGHT }} />
+          <View style={{ height: SIZES.tab_bar_height }} />
         </ScrollView>
         <TouchableOpacity
           style={styles.hoverButtonContainer}
@@ -270,7 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     right: 40,
-    bottom: 20 + TAB_BAR_HEIGHT,
+    bottom: 20 + SIZES.tab_bar_height,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

@@ -25,7 +25,6 @@ const SignupScreen = () => {
   const { setLoading } = useContext(ScreenContext);
 
   const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
   const [displayName, setDisplayName] = useState<string>("");
   const [selectedSchool, setSelectedSchool] = useState<School>(null);
   const [password, setPassword] = useState<string>("");
@@ -36,7 +35,7 @@ const SignupScreen = () => {
       return;
     }
     setLoading(true);
-    userSignup(username, displayName, email, password, selectedSchool.SchoolID)
+    userSignup(username, displayName, password, selectedSchool.SchoolID)
       .then(() => setLoading(false))
       .catch((error) => {
         displayError(error);
@@ -72,12 +71,6 @@ const SignupScreen = () => {
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
-            />
-            <TextInput
-              placeholder={"email"}
-              placeholderTextColor={COLORS.gray}
-              style={styles.textInputContainer}
-              onChangeText={(newText) => setEmail(newText)}
             />
             <TextInput
               placeholder={"password"}
