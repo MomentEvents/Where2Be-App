@@ -66,24 +66,6 @@ const TabIcon = ({ focused, icon }) => {
 };
 
 const TabNavigator = ({ params }) => {
-  const screenOptions = {
-    headerShown: false,
-    tabBarStyle: {
-      position: "absolute",
-      backgroundColor: COLORS.trueBlack,
-      opacity: 1,
-      borderTopColor: COLORS.gray2,
-      height: 80,
-      borderTopRightRadius: 0,
-      borderTopLeftRadius: 0,
-    },
-    tabBarItemStyle: {
-      display: "flex",
-      paddingTop: 8,
-    },
-    
-  };
-
   return (
     <Tab.Navigator
       //tabBarOptions={{ showLabel: false }}

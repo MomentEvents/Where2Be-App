@@ -48,8 +48,8 @@ const LoginScreen = () => {
       >
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <SafeAreaView style={styles.container}>
-            <View>
-              <McText h1>Welcome to Moment!</McText>
+            <View style={styles.welcomeTextContainer}>
+              <McText h1 style={styles.welcomeText}>Welcome to Moment!</McText>
             </View>
             <TextInput
               placeholder={"username / email"}
@@ -72,7 +72,7 @@ const LoginScreen = () => {
                     color: COLORS.black,
                   }}
                 >
-                  Login
+                  login
                 </McText>
               </View>
             </TouchableOpacity>
@@ -93,6 +93,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  welcomeTextContainer: {
+    marginBottom: 40,
+  },
+  welcomeText: { 
+    textAlign: "center" 
   },
   textInputContainer: {
     width: SIZES.width / 1.3,

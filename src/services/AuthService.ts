@@ -5,6 +5,7 @@ import {
   checkIfStringIsEmail,
   checkIfStringIsAlphanumeric,
   formatError,
+  isDisplayNameFormatted,
 } from "../helpers/helpers";
 import { Token, User } from "../constants";
 
@@ -126,6 +127,10 @@ export async function signup(
   schoolID: string
 ): Promise<Token> {
   console.log("\n\nsignup() call")
+
+  if(!isDisplayNameFormatted(displayName)){
+    throw formatError("Input error", "Please enter a readable display name")
+  }
   if (
     username === "" ||
     username === null ||
@@ -144,7 +149,7 @@ export async function signup(
   if (!checkIfStringIsAlphanumeric(username)) {
     throw formatError("Input error", "Please enter an alphanumeric username");
   }
-  if (checkIfStringIsEmail(email)) {
+  if (!checkIfStringIsEmail(email)) {
     throw formatError("Input error", "Please enter a valid email");
   }
   if (schoolID === "" || schoolID === null) {

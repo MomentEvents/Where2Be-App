@@ -68,6 +68,10 @@ export function displayError(error: Error): boolean {
   return true
 }
 
+export function isDisplayNameFormatted(test: string): boolean {
+  return /^[a-zA-Z].*[\s\.]*$/.test(test)
+}
+
 export async function HELPME() {
   for(var i = 0; i < 9999999; i++){
     if(i % 10000 === 0){

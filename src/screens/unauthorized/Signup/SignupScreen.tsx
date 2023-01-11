@@ -31,9 +31,9 @@ const SignupScreen = () => {
   const [password, setPassword] = useState<string>("");
 
   const onSignup = () => {
-    if(selectedSchool === null){
-        displayError(formatError("Input error", "Please select a valid school"))
-        return;
+    if (selectedSchool === null) {
+      displayError(formatError("Input error", "Please select a valid school"));
+      return;
     }
     setLoading(true);
     userSignup(username, displayName, email, password, selectedSchool.SchoolID)
@@ -56,8 +56,10 @@ const SignupScreen = () => {
       >
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <SafeAreaView style={styles.container}>
-            <View>
-              <McText h1>Welcome to Moment!</McText>
+            <View style={styles.welcomeTextContainer}>
+              <McText h1 style={styles.welcomeText}>
+                Welcome to Moment!
+              </McText>
             </View>
             <TextInput
               placeholder={"name"}
@@ -84,8 +86,8 @@ const SignupScreen = () => {
               onChangeText={(newText) => setPassword(newText)}
               secureTextEntry={true}
             />
-            <View style={styles.textInputContainer} >
-              <SchoolSelector setSelectedSchool={setSelectedSchool}/>
+            <View style={styles.textInputContainer}>
+              <SchoolSelector setSelectedSchool={setSelectedSchool} />
             </View>
             <TouchableOpacity onPress={onSignup}>
               <View style={styles.submitButton}>
@@ -95,7 +97,7 @@ const SignupScreen = () => {
                     color: COLORS.black,
                   }}
                 >
-                  Signup
+                  signup
                 </McText>
               </View>
             </TouchableOpacity>
@@ -116,6 +118,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  welcomeTextContainer: {
+    marginBottom: 40,
+  },
+  welcomeText: { 
+    textAlign: "center" 
   },
   textInputContainer: {
     width: SIZES.width / 1.3,
