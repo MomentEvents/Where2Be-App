@@ -42,7 +42,7 @@ import { displayError } from "../../../helpers/helpers";
 
 type routeParametersType = {
   EventID: string;
-  PassedEvent?: Event;
+  getCardEvent: () => Event;
   updateCardValues?: (
     updatedEvent: Event,
     userJoined: boolean,
@@ -61,7 +61,9 @@ const EventDetailsScreen = ({ route }) => {
   const { setLoading } = useContext(ScreenContext);
 
   const [viewedEvent, setViewedEvent] = useState<Event>(
-    propsFromEventCard.PassedEvent
+    propsFromEventCard.getCardEvent === undefined
+      ? undefined
+      : propsFromEventCard.getCardEvent
   );
   const [host, setHost] = useState<User>(null);
   const [tags, setTags] = useState<Interest[]>(null);
@@ -100,7 +102,7 @@ const EventDetailsScreen = ({ route }) => {
 
   const addUserJoin = async () => {
     setLoading(true);
-    addUserJoinEvent(
+    await addUserJoinEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
       viewedEvent.EventID
@@ -126,7 +128,7 @@ const EventDetailsScreen = ({ route }) => {
     )
       .then(() => {
         setUserShouted(true);
-        setShoutouts(joins + 1);
+        setShoutouts(shoutouts + 1);
 
         setLoading(false);
       })
@@ -156,7 +158,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const removeUserShoutout = () => {
-    setLoading(true)
+    setLoading(true);
     removeUserShoutoutEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
@@ -170,7 +172,7 @@ const EventDetailsScreen = ({ route }) => {
       })
       .catch((error: Error) => {
         displayError(error);
-        setLoading(false)
+        setLoading(false);
       });
   };
 
@@ -230,8 +232,6 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const pullData = () => {
-
-
     // TODODATABASE Get event by route.params.EventID
     const pulledEvent: Event = {
       EventID: "1373",
@@ -335,7 +335,7 @@ const EventDetailsScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <icons.backarrow width={24}/>
+                    <icons.backarrow width={24} />
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -436,7 +436,7 @@ const EventDetailsScreen = ({ route }) => {
                     ? null
                     : tags.map((taglist) => (
                         <View
-                        key={taglist.InterestID}
+                          key={taglist.InterestID}
                           style={{
                             width:
                               taglist === undefined

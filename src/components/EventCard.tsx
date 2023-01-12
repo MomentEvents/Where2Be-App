@@ -54,7 +54,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
       return;
     }
 
-    Navigator.navigate(SCREENS.EventDetails, {EventID: selectedEvent.EventID, PassedEvent: selectedEvent, updateCardValues: updateCardValues})
+    Navigator.navigate(SCREENS.EventDetails, {EventID: selectedEvent.EventID, getCardEvent: getCardEvent, updateCardValues: updateCardValues})
     // Navigate to event details page
   };
 
@@ -65,12 +65,18 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     numJoins: number,
     numShoutouts: number
   ) => {
+    console.log("updating card values")
+    console.log(updatedEvent)
     setSelectedEvent(updatedEvent);
     setUserJoined(userJoined);
     setJoins(numJoins);
     setUserShouted(userShouted);
     setShoutouts(numShoutouts);
   };
+
+  const getCardEvent = (): Event => {
+    return selectedEvent
+  }
 
   const pullJoinAndShoutoutData = async () => {
     setJoins(await getEventNumJoins(selectedEvent.EventID));
@@ -313,6 +319,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
       </TouchableHighlight>
     );
   }
+
+  // Small card
+
   return (
     <TouchableHighlight
       onPress={onPressCard}
@@ -328,7 +337,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         }}
       >
         <Image
-          source={{ uri: event.Picture }}
+          source={{ uri: selectedEvent.Picture }}
           blurRadius={3}
           style={{
             height: cardHeight,
@@ -382,7 +391,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             }}
           >
             <McText h4 numberOfLines={2}>
-              {event.Title}
+              {selectedEvent.Title}
             </McText>
             <McText
               body3
@@ -391,7 +400,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                 opacity: 0.8,
               }}
             >
-              {moment(event.StartDateTime).format("MMM DD h:mm A")}
+              {moment(selectedEvent.StartDateTime).format("MMM DD h:mm A")}
             </McText>
             <View
               style={{

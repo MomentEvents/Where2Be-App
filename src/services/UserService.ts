@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import momentAPI from "../constants/server";
-import { formatError } from "../helpers/helpers";
+import { HELPME, formatError } from "../helpers/helpers";
 import { User } from "../constants";
 
 /******************************************************
@@ -89,7 +89,9 @@ export async function addUserJoinEvent(
   userID: string,
 
   eventID: string
-): Promise<void> {}
+): Promise<void> {
+
+}
 
 export async function removeUserJoinEvent(
   userAccessToken: string,
@@ -124,5 +126,5 @@ export async function removeUserShoutoutEvent(
 
   eventID: string
 ): Promise<void> {
-
+  
 }
