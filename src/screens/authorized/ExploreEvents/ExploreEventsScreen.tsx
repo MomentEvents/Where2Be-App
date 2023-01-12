@@ -21,8 +21,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import {
-  FEATURED,
-  ONGOING,
   getAllSchoolOngoingEvents,
   getAllSchoolFeaturedEvents,
   getAllSchoolEventsByInterest,
@@ -122,19 +120,7 @@ const ExploreEvents = ({ navigation, route }) => {
           marginLeft: 10,
         }}
       >
-        <BigEventCard
-          EventID={item.EventID}
-          Title={item.Title}
-          StartingDateTime={item.StartDateTime}
-          Picture={item.Picture}
-          Likes={35}
-          Shoutouts={35}
-          UserLiked={false}
-          UserShouted={false}
-          Width={SIZES.width - 20}
-          Height={SIZES.height / 3}
-          OnClick={navigateToLogin}
-        />
+        <EventCard event={item} isBigCard={true} onClick={() => {}} />
       </View>
     );
   };
@@ -148,19 +134,7 @@ const ExploreEvents = ({ navigation, route }) => {
     loadedEventsMap[item.EventID] = true;
     return (
       <View style={styles.categoryTitle}>
-        <EventCard
-          EventID={item.EventID}
-          Title={item.Title}
-          StartingDateTime={item.StartDateTime}
-          Picture={item.Picture}
-          Likes={35}
-          Shoutouts={35}
-          UserLiked={false}
-          UserShouted={false}
-          Width={160}
-          Height={230}
-          OnClick={navigateToLogin}
-        />
+        <EventCard event={item} isBigCard={false} onClick={() => {}} />
       </View>
     );
   };

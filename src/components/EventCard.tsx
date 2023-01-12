@@ -16,68 +16,269 @@ import "react-native-gesture-handler";
 import * as Navigator from "../navigation/Navigator";
 import { Event } from "../constants";
 import { UserContext } from "../contexts/UserContext";
+import {
+  getEventNumJoins,
+  getEventNumShoutouts,
+} from "../services/EventService";
+import {
+  getUserJoinEvent,
+  getUserShoutoutEvent,
+} from "../services/UserService";
+import { displayError } from "../helpers/helpers";
 
 type EventCardProps = {
-  OnClick?: () => void;
-  Event: Event;
-  Width: number;
-  Height: number;
+  onClick: () => void;
+  event: Event;
+  isBigCard: boolean;
 };
 
-const EventCard = ({
-  OnClick,
-  Event,
-  Width,
-  Height
-}: EventCardProps) => {
+const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
+  const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
 
-  const { userToken, currentUser, isLoggedIn } = useContext(UserContext)
-
-  const [event, setEvent ] = useState<Event>(Event);
-  const [likes, setLikes] = useState<number>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event>(event);
+  const [joins, setJoins] = useState<number>(null);
   const [shoutouts, setShoutouts] = useState<number>(null);
-  const [userLiked, setUserLiked] = useState<boolean>(null);
+  const [userJoined, setUserJoined] = useState<boolean>(null);
   const [userShouted, setUserShouted] = useState<boolean>(null);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = Width;
-  const cardHeight = Height;
+  const cardWidth = isBigCard ? SIZES.width - 20 : 160;
+  const cardHeight = isBigCard ? SIZES.height / 3 : 230;
   const cardBorderRadius = 10;
+
+  const pullJoinAndShoutoutData = async () => {
+    setJoins(await getEventNumJoins(selectedEvent.EventID));
+    setShoutouts(await getEventNumShoutouts(selectedEvent.EventID));
+    if (isLoggedIn) {
+      setUserJoined(
+        await getUserJoinEvent(
+          userToken.UserAccessToken,
+          currentUser.UserID,
+          selectedEvent.EventID
+        ).catch((error: Error) => {
+          console.log(error);
+          return null;
+        })
+      );
+      setUserShouted(
+        await getUserShoutoutEvent(
+          userToken.UserAccessToken,
+          currentUser.UserID,
+          selectedEvent.EventID
+        ).catch((error: Error) => {
+          console.log(error);
+          return null;
+        })
+      );
+    } else {
+      setUserJoined(false);
+      setUserShouted(false);
+    }
+  };
 
   // First time being loaded and rendered
   useEffect(() => {
-
-    
-    setLikes(await );
-    setShoutouts(Shoutouts);
-    if(isLoggedIn){
-      setUserLiked(await )
-    }
-    else{
-      setUserLiked
-    }
-    setUserLiked(UserLiked);
-    setUserShouted(UserShouted);
+    pullJoinAndShoutoutData();
   }, []);
 
-  const NavigateToEvent = () => {
-    // Navigator.navigate("NewEventDetailScreen", {
-    //   EventID: EventID,
-    //   SetCardLikes: setLikes,
-    //   SetCardShoutouts: setShoutouts,
-    //   SetCardUserLiked: setUserLiked,
-    //   SetCardUserShouted: setUserShouted,
-    //   SetCardImage: setImage,
-    //   SetCardTitle: setTitle,
-    //   SetCardStartDateTime: setStartingDateTime,
-    // });
-  };
+  useEffect(() => {
+    setIsLoaded(
+      joins !== null &&
+        shoutouts !== null &&
+        userJoined !== null &&
+        userShouted !== null
+    );
+  }, [joins, shoutouts, userJoined, userShouted]);
+
+  if (!isLoaded) {
+    console.log("Card is not loaded yet");
+    return (
+      <View
+        style={{
+          height: cardHeight,
+          width: cardWidth,
+          borderRadius: cardBorderRadius,
+        }}
+      >
+        <Image
+        
+          style={{
+            height: cardHeight,
+            width: cardWidth,
+            borderRadius: cardBorderRadius,
+            borderWidth: 2,
+            borderColor: COLORS.white,
+            overlayColor: COLORS.trueBlack
+          }}
+        />
+      </View>
+    );
+  }
+
+  console.log("Card is loaded");
+  if (isBigCard) {
+    return (
+      <TouchableHighlight
+        onPress={onClick}
+        style={{
+          borderRadius: cardBorderRadius,
+          borderColor: COLORS.gray,
+        }}
+      >
+        <View
+          style={{
+            height: cardHeight,
+            width: cardWidth,
+            borderRadius: cardBorderRadius,
+          }}
+        >
+          <Image
+            source={{ uri: selectedEvent.Picture }}
+            blurRadius={3}
+            style={{
+              height: cardHeight,
+              width: cardWidth,
+              borderRadius: cardBorderRadius,
+              borderWidth: 2,
+              borderColor: COLORS.white,
+            }}
+          />
+          <View
+            style={{
+              flex: 1,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: cardHeight,
+              width: cardWidth,
+              borderRadius: cardBorderRadius,
+              borderWidth: 2,
+              borderColor: COLORS.white,
+              backgroundColor: "rgba(0,0,0,.5)",
+            }}
+          />
+          <View
+            style={{
+              flex: 1,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: cardWidth,
+              height: cardHeight,
+            }}
+          >
+            <LinearGradient
+              colors={["transparent", COLORS.trueBlack]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 0.9 }}
+              style={{ borderRadius: cardBorderRadius - 2, height: "100%" }}
+            ></LinearGradient>
+
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                position: "absolute",
+                marginHorizontal: 15,
+                marginVertical: 15,
+                bottom: 0,
+                left: 0,
+                width: cardWidth - 30,
+              }}
+            >
+              <McText h1 numberOfLines={2}>
+                {selectedEvent.Title}
+              </McText>
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <McText
+                  h3
+                  style={{
+                    color: COLORS.white,
+                    opacity: 0.8,
+                    marginTop: 4,
+                    letterSpacing: 1.2,
+                    marginRight: 4,
+                  }}
+                >
+                  {moment(selectedEvent.StartDateTime)
+                    .format("MMM DD")
+                    .toUpperCase()}
+                </McText>
+                <McText
+                  h3
+                  style={{
+                    color: COLORS.purple,
+                    opacity: 0.9,
+                    marginTop: 4,
+                    letterSpacing: 1.2,
+                  }}
+                >
+                  {moment(selectedEvent.StartDateTime)
+                    .format("hh:mm A")
+                    .toUpperCase()}
+                </McText>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    position: "absolute",
+                    right: 0,
+                    bottom: 0,
+                  }}
+                >
+                  <McIcon
+                    source={icons.check}
+                    size={20}
+                    style={{
+                      tintColor: userJoined ? COLORS.purple : COLORS.lightGray,
+                      marginRight: 10,
+                    }}
+                  />
+                  <McText
+                    body7
+                    style={{
+                      marginTop: 2,
+                      marginLeft: -7,
+                      marginRight: 10,
+                      color: userJoined ? COLORS.purple : COLORS.lightGray,
+                    }}
+                  >
+                    {joins}
+                  </McText>
+                  <McIcon
+                    source={icons.shoutout}
+                    size={20}
+                    style={{
+                      tintColor: userShouted ? COLORS.purple : COLORS.lightGray,
+                      marginRight: 10,
+                    }}
+                  />
+                  <McText
+                    body7
+                    style={{
+                      marginTop: 2,
+                      marginLeft: -7,
+                      marginRight: 10,
+                      color: userShouted ? COLORS.purple : COLORS.lightGray,
+                    }}
+                  >
+                    {shoutouts}
+                  </McText>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  }
   return (
     <TouchableHighlight
-      onPress={() => {
-        OnClick === undefined ? NavigateToEvent() : OnClick();
-      }}
+      onPress={onClick}
       style={{
         borderRadius: cardBorderRadius,
       }}
@@ -111,7 +312,7 @@ const EventCard = ({
             borderRadius: cardBorderRadius,
             borderWidth: 1,
             borderColor: COLORS.white,
-            backgroundColor: 'rgba(0,0,0,.5)',
+            backgroundColor: "rgba(0,0,0,.5)",
           }}
         />
         <View
@@ -140,7 +341,7 @@ const EventCard = ({
               marginVertical: 10,
               bottom: 0,
               left: 0,
-              width: Width - 20
+              width: cardWidth - 20,
             }}
           >
             <McText h4 numberOfLines={2}>
@@ -164,7 +365,7 @@ const EventCard = ({
                 source={icons.check}
                 size={20}
                 style={{
-                  tintColor: userLiked ? COLORS.purple : COLORS.lightGray,
+                  tintColor: userJoined ? COLORS.purple : COLORS.lightGray,
                   marginRight: 10,
                 }}
               />
@@ -174,10 +375,10 @@ const EventCard = ({
                   marginTop: 2,
                   marginLeft: -7,
                   marginRight: 10,
-                  color: userLiked ? COLORS.purple : COLORS.lightGray,
+                  color: userJoined ? COLORS.purple : COLORS.lightGray,
                 }}
               >
-                {likes}
+                {joins}
               </McText>
               <McIcon
                 source={icons.shoutout}

@@ -22,9 +22,9 @@ type EventCardProps = {
   Title: string;
   StartingDateTime: Date;
   Picture: string;
-  Likes: number;
+  Joins: number;
   Shoutouts: number;
-  UserLiked: boolean;
+  UserJoined: boolean;
   UserShouted: boolean;
   Width: number;
   Height: number;
@@ -36,9 +36,9 @@ const BigEventCard = ({
   Title,
   StartingDateTime,
   Picture,
-  Likes,
+  Joins: Likes,
   Shoutouts,
-  UserLiked,
+  UserJoined: UserLiked,
   UserShouted,
   Width,
   Height,

@@ -10,12 +10,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS, Interest, SCREENS, SIZES, School, icons } from "../../../constants";
+import {
+  COLORS,
+  Interest,
+  SCREENS,
+  SIZES,
+  School,
+  icons,
+} from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import {
-  FEATURED,
-  ONGOING,
   getAllSchoolOngoingEvents,
   getAllSchoolFeaturedEvents,
   getAllSchoolEventsByInterest,
@@ -61,7 +66,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     var interestToEventMapTemp: { [key: string]: Event[] } = {};
 
     await getAllSchoolOngoingEvents(school.SchoolID)
-      .then((events: Event[]) => interestToEventMapTemp["Ongoing"] = events)
+      .then((events: Event[]) => (interestToEventMapTemp["Ongoing"] = events))
       .catch((error: Error) => {
         if (!errorThrown) {
           displayError(error);
@@ -111,19 +116,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           marginLeft: 10,
         }}
       >
-        <BigEventCard
-          EventID={item.EventID}
-          Title={item.Title}
-          StartingDateTime={item.StartDateTime}
-          Picture={item.Picture}
-          Likes={35}
-          Shoutouts={35}
-          UserLiked={false}
-          UserShouted={false}
-          Width={SIZES.width - 20}
-          Height={SIZES.height / 3}
-          OnClick={navigateToLogin}
-        />
+        <EventCard event={item} isBigCard={true} onClick={navigateToLogin} />
       </View>
     );
   };
@@ -137,29 +130,14 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     loadedEventsMap[item.EventID] = true;
     return (
       <View style={styles.categoryTitle}>
-        <EventCard
-          EventID={item.EventID}
-          Title={item.Title}
-          StartingDateTime={item.StartDateTime}
-          Picture={item.Picture}
-          Likes={35}
-          Shoutouts={35}
-          UserLiked={false}
-          UserShouted={false}
-          Width={160}
-          Height={230}
-          OnClick={navigateToLogin}
-        />
+        <EventCard event={item} isBigCard={false} onClick={navigateToLogin} />
       </View>
     );
   };
 
   useEffect(() => {
     console.log("Going into use effect");
-    setLoadingEvents(
-      featuredEvents === null ||
-        interestToEventMap === null
-    );
+    setLoadingEvents(featuredEvents === null || interestToEventMap === null);
   }, [featuredEvents, interestToEventMap]);
 
   useEffect(() => {
