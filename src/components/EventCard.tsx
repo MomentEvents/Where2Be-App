@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -92,7 +93,6 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   }, [joins, shoutouts, userJoined, userShouted]);
 
   if (!isLoaded) {
-    console.log("Card is not loaded yet");
     return (
       <View
         style={{
@@ -112,6 +112,20 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             overlayColor: COLORS.trueBlack
           }}
         />
+        <ActivityIndicator
+            style={{
+              flex: 1,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: cardHeight,
+              width: cardWidth,
+              borderRadius: cardBorderRadius,
+              borderWidth: 2,
+              borderColor: COLORS.white,
+              backgroundColor: "rgba(0,0,0,.5)",
+            }}
+          />
       </View>
     );
   }
@@ -162,17 +176,17 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             style={{
               flex: 1,
               position: "absolute",
-              top: 0,
-              left: 0,
-              width: cardWidth,
-              height: cardHeight,
+              top: 2,
+              left: 2,
+              width: cardWidth - 4,
+              height: cardHeight - 4,
             }}
           >
             <LinearGradient
               colors={["transparent", COLORS.trueBlack]}
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 0.9 }}
-              style={{ borderRadius: cardBorderRadius - 2, height: "100%" }}
+              style={{ borderRadius: cardBorderRadius, height: "100%" }}
             ></LinearGradient>
 
             <View
@@ -310,7 +324,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 1,
+            borderWidth: 2,
             borderColor: COLORS.white,
             backgroundColor: "rgba(0,0,0,.5)",
           }}
@@ -319,10 +333,10 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
           style={{
             flex: 1,
             position: "absolute",
-            top: 0,
-            left: 0,
-            width: cardWidth,
-            height: cardHeight,
+            top: 2,
+            left: 2,
+            width: cardWidth - 4,
+            height: cardHeight - 4,
           }}
         >
           <LinearGradient

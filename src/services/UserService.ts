@@ -82,7 +82,7 @@ export async function getUserJoinEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return null
+  return true
 }
 
 export async function addUserJoinEvent(
@@ -107,7 +107,7 @@ export async function getUserShoutoutEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return null
+  return true
 }
 
 export async function addUserShoutoutEvent(
