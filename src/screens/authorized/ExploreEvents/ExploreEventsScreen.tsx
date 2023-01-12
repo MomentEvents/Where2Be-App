@@ -152,18 +152,6 @@ const ExploreEvents = ({ navigation, route }) => {
     <GradientBackground>
       <SafeAreaView style={styles.container}>
         <SectionHeader>
-          <TouchableOpacity
-            onPress={() => {
-              Navigator.goBack();
-            }}
-            style={{
-              width: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <icons.backarrow />
-          </TouchableOpacity>
           <McText
             h1
             style={{

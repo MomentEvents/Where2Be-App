@@ -107,7 +107,7 @@ export async function getUserShoutoutEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return true
+  return false
 }
 
 export async function addUserShoutoutEvent(
