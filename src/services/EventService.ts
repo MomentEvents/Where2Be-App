@@ -2,46 +2,29 @@ import momentAPI from "../constants/server";
 import { Event } from "../constants";
 import { formatError } from "../helpers/helpers";
 
-// createEvent
+// createEvent DONE
 
-// getEventByEventId
+// getEvent DONE
 
-// updateEventByEventId
+// updateEvent DONE
 
-// deleteEventByEventId
+// deleteEvent DONE
 
-// getFutureHostedEventsByUserId
+// getFutureHostedEventsByUserId DONE
 
-// getCurrUserFutureHostedEvents
+// getPastHostedEventsByUserId DONE
 
-// getPastHostedEventsByUserId
+// getCurrUserFutureJoinedEvents DONE
 
-// getCurrUserPastHostedEvents
+// getCurrUserPastJoinedEvents DONE
 
-// getCurrUserFutureJoinedEvents
-
-// getCurrUserPastJoinedEvents
-
-// getEventsByCategory
+// getEventsByCategory DONE
 
 // Constants for category parameter checking in getAllSchoolEventsByCategory
-export const FEATURED = "featured";
-export const STARTING_SOON = "starting_soon";
-export const ONGOING = "ongoing";
 export const ACADEMIC = "academic";
 export const ATHLETICS = "athletics";
-export const PROFESSIONAL = "entertainment";
+export const PROFESSIONAL = "professional";
 export const SOCIAL = "social";
-
-// Create constant to interest_id dictionary
-
-const categoryToInterestIdMap: {
-  [category: string]: string;
-} = {};
-categoryToInterestIdMap[ACADEMIC] = "TODO";
-categoryToInterestIdMap[ATHLETICS] = "TODO";
-categoryToInterestIdMap[PROFESSIONAL] = "TODO";
-categoryToInterestIdMap[SOCIAL] = "TODO";
 
 /******************************************************
  * getEventById
@@ -51,40 +34,8 @@ categoryToInterestIdMap[SOCIAL] = "TODO";
  * Parameters: An ID number to search up an event
  * Return: An event if it exists. null if it does not.
  */
-export async function getEventDetailsById(EventID: string): Promise<Event> {
-  const resp = await fetch(momentAPI + "/get_event_by_id", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      EventID: EventID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event;
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(`Can't find event with ID: "${EventID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+export async function getEvent(eventID: string): Promise<Event> {
+  return null;
 }
 
 /******************************************************
@@ -96,38 +47,11 @@ export async function getEventDetailsById(EventID: string): Promise<Event> {
  *          createdEvent: A created event to put in the database
  * Return: A boolean which is true if it's successfully created and false if there is an error
  */
-export async function createEvent(createdEvent: Event): Promise<boolean> {
-  const resp = await fetch(momentAPI + "/create_event", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      createdEvent: createdEvent,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      res: boolean;
-    };
-    errors?: Array<{ message: string }>;
-  };
+export async function createEvent(
+  userAccessToken: string,
 
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const res = data.res;
-    if (res) {
-      return res;
-    } else {
-      return Promise.reject(new Error(`failed to create new event`));
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  createdEvent: Event): Promise<boolean> {
+  return null;
 }
 
 /******************************************************
@@ -140,42 +64,12 @@ export async function createEvent(createdEvent: Event): Promise<boolean> {
  *          updatedEvent: The changed values to update to the event. All null values are ignored.
  * Return: A boolean which is true if it's successfully updated and false if there is an error
  */
-export async function updateEventById(
-  EventID: string,
-  updatedEvent: Event
-): Promise<boolean> {
-  const resp = await fetch(momentAPI + "/update_event", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      EventID: EventID,
-      updatedEvent: updatedEvent,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      res: boolean;
-    };
-    errors?: Array<{ message: string }>;
-  };
+export async function updateEvent(
+  userAccessToken: string,
 
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const res = data.res;
-    if (res) {
-      return res;
-    } else {
-      return Promise.reject(new Error(`failed to update new event`));
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  updatedEvent: Event,
+): Promise<boolean> {
+  return null;
 }
 
 /******************************************************
@@ -187,85 +81,36 @@ export async function updateEventById(
  * Return: A boolean which is true if it's successfully deleted and false if there is an error
  */
 
-export async function deleteEventById(EventID: string): Promise<boolean> {
-  const resp = await fetch(momentAPI + "/delete_event", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      EventID: EventID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      res: boolean;
-    };
-    errors?: Array<{ message: string }>;
-  };
+export async function deleteEvent(
+  userAccessToken: string,
+  
+  eventID: string): Promise<boolean> {
+  return null;
+}
 
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const res = data.res;
-    if (res) {
-      return res;
-    } else {
-      return Promise.reject(new Error(`failed to delete event by id`));
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+export async function getEventNumJoins(eventID: string): Promise<number>{
+
+  return 7;
+}
+
+export async function getEventNumShoutouts(eventID: string): Promise<number>{
+
+  return 7;
 }
 
 /******************************************************
- * getCurrUserShoutedEvents
+ * getCurrUserJoinedFutureEvents
  *
- * Gets all of the events the user has shouted out
+ * Gets all of the events the user has joined
  *
  * Parameters: None
- * Return: An Event array which has all of the shouted events of the current user
+ * Return: An Event array which has all of the joined events of the current user
  */
-
-export async function getCurrUserShoutedEvents(
-  UserID: string
+export async function getUserJoinedFutureEvents(
+  userID: string,
+  userAccessToken: string,
 ): Promise<Event[]> {
-  const resp = await fetch(momentAPI + "/get_user_shoutouts", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      UserID: UserID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event[];
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(`Can't get shoutouts for user with ID: "${UserID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  return null
 }
 
 /******************************************************
@@ -276,46 +121,15 @@ export async function getCurrUserShoutedEvents(
  * Parameters: None
  * Return: An Event array which has all of the joined events of the current user
  */
-export async function getCurrUserJoinedEvents(
-  UserID: string
+export async function getUserJoinedPastEvents(
+  userID: string,
+  userAccessToken: string,
 ): Promise<Event[]> {
-  const resp = await fetch(momentAPI + "/get_user_joins", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      UserID: UserID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event[];
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(`Can't get joins for user with ID: "${UserID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  return null
 }
 
 /******************************************************
- * getCurrUserHostedEvents
+ * getCurrUserHostedPastEvents
  *
  * Gets all of the events the user has hosted
  *
@@ -323,135 +137,40 @@ export async function getCurrUserJoinedEvents(
  * Return: An Event array which has all of the hosted events of the current user
  */
 
-export async function getCurrUserHostedEvents(
-  UserID: string
+export async function getUserHostedFutureEvents(
+  userID: string,
+  userAccessToken: string,
 ): Promise<Event[]> {
-  const resp = await fetch(momentAPI + "/get_current_user_hosted_events", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      UserID: UserID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event[];
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(
-          `Can't get current hosted events for user with ID: "${UserID}"`
-        )
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+  return null;
 }
 
 /******************************************************
- * getAllUserHostedEvents
+ * getCurrUserHostedFutureEvents
  *
- * Gets all of the hosted events of a user
- *
- * Parameters:
- *      userId: The user id of the user
- * Return: An Event array which has all of the hosted events of the respective user
- */
-export async function getAllUserHostedEvents(UserID: string): Promise<Event[]> {
-  const resp = await fetch(momentAPI + "/get_all_user_hosted_events", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      UserID: UserID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event[];
-    };
-    errors?: Array<{ message: string }>;
-  };
-
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(`Can't get all hosted events for user with ID: "${UserID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
-}
-
-/******************************************************
- * getAllSchoolEvents
- *
- * Gets all of the events within the current user's school
+ * Gets all of the events the user has hosted
  *
  * Parameters: None
- * Return: An Event array which has all of the events of that user's current school
+ * Return: An Event array which has all of the hosted events of the current user
  */
-export async function getAllSchoolEvents(UserID: string): Promise<Event[]> {
-  const resp = await fetch(momentAPI + "/get_all_school_events", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      UserID: UserID,
-    }),
-  });
-  type JSONResponse = {
-    data?: {
-      event: Event[];
-    };
-    errors?: Array<{ message: string }>;
-  };
 
-  const { data, errors }: JSONResponse = await resp.json();
-  if (resp.ok) {
-    const event = data.event;
-    if (event) {
-      return event;
-    } else {
-      return Promise.reject(
-        new Error(`Can't get all school events for user with ID: "${UserID}"`)
-      );
-    }
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
+export async function getUserHostedPastEvents(
+  userID: string,
+  userAccessToken: string,
+): Promise<Event[]> {
+  return null;
 }
 
+/*******************************************************
+ * getAllSchoolFeaturedEvents
+ * 
+ * Gets all of the featured events from a school
+ * 
+ * Parameters:
+ * schoolID: the schoolID
+ * 
+ * Return:
+ * An array of events which are labeled as featured
+ */
 export async function getAllSchoolFeaturedEvents(schoolID: string): Promise<Event[]>{
   const pulledFeaturedEvents: Event[] = [
     {
@@ -481,6 +200,17 @@ export async function getAllSchoolFeaturedEvents(schoolID: string): Promise<Even
   return pulledFeaturedEvents;
 }
 
+/*******************************************************
+ * getAllSchoolOngoingEvents
+ * 
+ * Gets all of the ongoing events from a school
+ * 
+ * Parameters:
+ * schoolID: the schoolID
+ * 
+ * Return:
+ * An array of events which are labeled as ongoing
+ */
 export async function getAllSchoolOngoingEvents(schoolID: string): Promise<Event[]>{
   const ongoingEvents: Event[] = [
     {

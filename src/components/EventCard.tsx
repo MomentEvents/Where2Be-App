@@ -15,43 +15,31 @@ import { McText, McIcon } from "./Styled";
 import "react-native-gesture-handler";
 import * as Navigator from "../navigation/Navigator";
 import { Event } from "../constants";
+import { UserContext } from "../contexts/UserContext";
 
 type EventCardProps = {
-  EventID: string;
   OnClick?: () => void;
-  Title: string;
-  StartingDateTime: Date;
-  Picture: string;
-  Likes: number;
-  Shoutouts: number;
-  UserLiked: boolean;
-  UserShouted: boolean;
+  Event: Event;
   Width: number;
   Height: number;
 };
 
 const EventCard = ({
-  EventID,
   OnClick,
-  Title,
-  StartingDateTime,
-  Picture,
-  Likes,
-  Shoutouts,
-  UserLiked,
-  UserShouted,
+  Event,
   Width,
   Height
 }: EventCardProps) => {
-  // The purpose of these state variables is to make it so when the user clicks on the event details screen, it updates these values automatically
-  // when we exit
-  const [title, setTitle] = useState<string>();
-  const [image, setImage] = useState<string | null>();
-  const [startingDateTime, setStartingDateTime] = useState<Date>();
-  const [likes, setLikes] = useState<number>();
-  const [shoutouts, setShoutouts] = useState<number>();
-  const [userLiked, setUserLiked] = useState<boolean>();
-  const [userShouted, setUserShouted] = useState<boolean>();
+
+  const { userToken, currentUser, isLoggedIn } = useContext(UserContext)
+
+  const [event, setEvent ] = useState<Event>(Event);
+  const [likes, setLikes] = useState<number>(null);
+  const [shoutouts, setShoutouts] = useState<number>(null);
+  const [userLiked, setUserLiked] = useState<boolean>(null);
+  const [userShouted, setUserShouted] = useState<boolean>(null);
+
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const cardWidth = Width;
   const cardHeight = Height;
@@ -59,11 +47,16 @@ const EventCard = ({
 
   // First time being loaded and rendered
   useEffect(() => {
-    setImage(Picture);
-    setTitle(Title);
-    setStartingDateTime(StartingDateTime);
-    setLikes(Likes);
+
+    
+    setLikes(await );
     setShoutouts(Shoutouts);
+    if(isLoggedIn){
+      setUserLiked(await )
+    }
+    else{
+      setUserLiked
+    }
     setUserLiked(UserLiked);
     setUserShouted(UserShouted);
   }, []);
@@ -97,7 +90,7 @@ const EventCard = ({
         }}
       >
         <Image
-          source={{ uri: Picture }}
+          source={{ uri: event.Picture }}
           blurRadius={3}
           style={{
             height: cardHeight,
@@ -151,7 +144,7 @@ const EventCard = ({
             }}
           >
             <McText h4 numberOfLines={2}>
-              {title}
+              {event.Title}
             </McText>
             <McText
               body3
@@ -160,7 +153,7 @@ const EventCard = ({
                 opacity: 0.8,
               }}
             >
-              {moment(startingDateTime).format("MMM DD h:mm A")}
+              {moment(event.StartDateTime).format("MMM DD h:mm A")}
             </McText>
             <View
               style={{
