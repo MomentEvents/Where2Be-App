@@ -11,7 +11,7 @@ import {
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { SIZES, COLORS, icons } from "../constants";
+import { SIZES, COLORS, icons, SCREENS } from "../constants";
 import { McText, McIcon } from "./Styled";
 import "react-native-gesture-handler";
 import * as Navigator from "../navigation/Navigator";
@@ -28,14 +28,13 @@ import {
 import { displayError } from "../helpers/helpers";
 
 type EventCardProps = {
-  onClick: () => void;
+  onClick?: () => void;
   event: Event;
   isBigCard: boolean;
 };
 
 const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
-
   const [selectedEvent, setSelectedEvent] = useState<Event>(event);
   const [joins, setJoins] = useState<number>(null);
   const [shoutouts, setShoutouts] = useState<number>(null);
@@ -47,6 +46,31 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   const cardWidth = isBigCard ? SIZES.width - 20 : 160;
   const cardHeight = isBigCard ? SIZES.height / 3 : 230;
   const cardBorderRadius = 10;
+
+  const onPressCard = () => {
+    console.log(isBigCard)
+    if (onClick !== undefined) {
+      onClick();
+      return;
+    }
+
+    Navigator.navigate(SCREENS.EventDetails, {EventID: selectedEvent.EventID, PassedEvent: selectedEvent, updateCardValues: updateCardValues})
+    // Navigate to event details page
+  };
+
+  const updateCardValues = (
+    updatedEvent: Event,
+    userJoined: boolean,
+    userShouted: boolean,
+    numJoins: number,
+    numShoutouts: number
+  ) => {
+    setSelectedEvent(updatedEvent);
+    setUserJoined(userJoined);
+    setJoins(numJoins);
+    setUserShouted(userShouted);
+    setShoutouts(numShoutouts);
+  };
 
   const pullJoinAndShoutoutData = async () => {
     setJoins(await getEventNumJoins(selectedEvent.EventID));
@@ -102,30 +126,29 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         }}
       >
         <Image
-        
           style={{
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
             borderWidth: 2,
             borderColor: COLORS.white,
-            overlayColor: COLORS.trueBlack
+            overlayColor: COLORS.trueBlack,
           }}
         />
         <ActivityIndicator
-            style={{
-              flex: 1,
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: cardHeight,
-              width: cardWidth,
-              borderRadius: cardBorderRadius,
-              borderWidth: 2,
-              borderColor: COLORS.white,
-              backgroundColor: "rgba(0,0,0,.5)",
-            }}
-          />
+          style={{
+            flex: 1,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: cardHeight,
+            width: cardWidth,
+            borderRadius: cardBorderRadius,
+            borderWidth: 2,
+            borderColor: COLORS.white,
+            backgroundColor: "rgba(0,0,0,.5)",
+          }}
+        />
       </View>
     );
   }
@@ -134,7 +157,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   if (isBigCard) {
     return (
       <TouchableHighlight
-        onPress={onClick}
+        onPress={onPressCard}
         style={{
           borderRadius: cardBorderRadius,
           borderColor: COLORS.gray,
@@ -292,7 +315,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   }
   return (
     <TouchableHighlight
-      onPress={onClick}
+      onPress={onPressCard}
       style={{
         borderRadius: cardBorderRadius,
       }}

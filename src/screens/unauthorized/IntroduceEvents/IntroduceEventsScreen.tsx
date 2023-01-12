@@ -29,7 +29,6 @@ import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
 import EventCard from "../../../components/EventCard";
 import { McIcon, McText } from "../../../components/Styled";
-import BigEventCard from "../../../components/BigEventCard";
 import styled from "styled-components/native";
 import * as Navigator from "../../../navigation/Navigator";
 import GradientBackground from "../../../components/Styled/GradientBackground";

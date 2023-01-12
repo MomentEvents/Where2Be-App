@@ -29,6 +29,5 @@ export interface User {
   UserID: string;
   Name: string;
   Username: string;
-  Email: string;
   Picture: string;
 }

@@ -7,5 +7,6 @@ export const SCREENS = {
     ExploreEvents: "ExploreEventsScreen",
     Search: "SearchScreen",
     MyCalendar: "MyCalendarScreen",
-    MyProfile: "MyProfileScreen"
+    MyProfile: "MyProfileScreen",
+    EventDetails: "EventDetailsScreen"
 }

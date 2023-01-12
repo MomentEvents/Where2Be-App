@@ -33,7 +33,6 @@ export async function getUserByUserAccessToken(
     UserID: "test123",
     Name: "Kyle",
     Username: "kyle1373",
-    Email: "kwade@ucsd.edu",
     Picture:
       "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
   };

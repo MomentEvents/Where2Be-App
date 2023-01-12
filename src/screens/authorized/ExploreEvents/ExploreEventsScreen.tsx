@@ -29,7 +29,6 @@ import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
 import EventCard from "../../../components/EventCard";
 import { McIcon, McText } from "../../../components/Styled";
-import BigEventCard from "../../../components/BigEventCard";
 import styled from "styled-components/native";
 import * as Navigator from "../../../navigation/Navigator";
 import GradientBackground from "../../../components/Styled/GradientBackground";
@@ -109,10 +108,6 @@ const ExploreEvents = ({ navigation, route }) => {
     setIsRefreshing(false);
   };
 
-  const navigateToLogin = (): void => {
-    Navigator.navigate(SCREENS.Login);
-  };
-
   const _renderBigEventCards = ({ item, index }) => {
     return (
       <View
@@ -120,7 +115,7 @@ const ExploreEvents = ({ navigation, route }) => {
           marginLeft: 10,
         }}
       >
-        <EventCard event={item} isBigCard={true} onClick={() => {}} />
+        <EventCard event={item} isBigCard={true} />
       </View>
     );
   };
@@ -134,7 +129,7 @@ const ExploreEvents = ({ navigation, route }) => {
     loadedEventsMap[item.EventID] = true;
     return (
       <View style={styles.categoryTitle}>
-        <EventCard event={item} isBigCard={false} onClick={() => {}} />
+        <EventCard event={item} isBigCard={false} />
       </View>
     );
   };
@@ -203,7 +198,6 @@ const ExploreEvents = ({ navigation, route }) => {
         </ScrollView>
         <TouchableOpacity
           style={styles.hoverButtonContainer}
-          onPress={navigateToLogin}
         >
           <GradientButton style={styles.hoverButtonIconContainer}>
             <icons.plus height="60%" width="60%"></icons.plus>

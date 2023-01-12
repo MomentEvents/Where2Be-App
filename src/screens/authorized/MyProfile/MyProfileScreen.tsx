@@ -8,7 +8,7 @@ const MyProfileScreen = () => {
   const { currentUser } = useContext(UserContext)
   return (
     <View>
-      <Text>Logged in as {currentUser.Name}. {currentUser.Email}</Text>
+      <Text>Logged in as {currentUser.Name}. {currentUser.Username}</Text>
       <Button title="Logout" onPress={() => userLogout()}></Button>
     </View>
   )

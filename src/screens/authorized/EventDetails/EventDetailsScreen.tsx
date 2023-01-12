@@ -9,18 +9,26 @@ import {
   Alert,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { ScreenContext } from "../../../contexts/ScreenContext"
-import { COLORS, SIZES, icons } from "../../constants";
-import { Event } from "../../Services/EventService";
-import { User } from "../../Services/UserService";
-import { Interest } from "../../Services/InterestService";
+import { ScreenContext } from "../../../contexts/ScreenContext";
+import { COLORS, SIZES, icons } from "../../../constants";
+import { Event } from "../../../constants/types";
+import { User } from "../../../constants/types";
+import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
-import * as RootNavigation from "../../navigation/RootNavigation";
-import { McIcon, McText } from "../../components";
+import * as RootNavigation from "../../../navigation/Navigator";
+import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
+import {
+  addUserJoinEvent,
+  addUserShoutoutEvent,
+  removeUserJoinEvent,
+  removeUserShoutoutEvent,
+} from "../../../services/UserService";
+import { UserContext } from "../../../contexts/UserContext";
+import { displayError } from "../../../helpers/helpers";
 
 /*********************************************
  * route parameters:
@@ -32,101 +40,138 @@ import ImageView from "react-native-image-viewing";
  * SetCardUserShouted?: React.SetStateAction<boolean>
  *********************************************/
 
+type routeParametersType = {
+  EventID: string;
+  PassedEvent?: Event;
+  updateCardValues?: (
+    updatedEvent: Event,
+    userJoined: boolean,
+    userShouted: boolean,
+    numJoins: number,
+    numShoutouts: number
+  ) => {};
+};
+const EventDetailsScreen = ({ route }) => {
+  const { userToken, currentUser } = useContext(UserContext);
 
-type routeParametersType ={
-  EventID: string,
-  PassedEvent?: Event,
-  SetCardLikes?: React.SetStateAction<number>,
-  SetCardShoutouts?: React.SetStateAction<number>,
-  SetCardUserLiked?: React.SetStateAction<boolean>,
-  SetCardUserShouted?: React.SetStateAction<boolean>
-}
-const NewEventDetailScreen = ({ route }) => {
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
 
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
 
-  const [viewedEvent, setViewedEvent] = useState<Event>(propsFromEventCard.PassedEvent);
+  const [viewedEvent, setViewedEvent] = useState<Event>(
+    propsFromEventCard.PassedEvent
+  );
   const [host, setHost] = useState<User>(null);
   const [tags, setTags] = useState<Interest[]>(null);
-  const [likes, setLikes] = useState<number>();
+  const [joins, setJoins] = useState<number>(null);
   const [shoutouts, setShoutouts] = useState<number>(null);
-  const [userLiked, setUserLiked] = useState<boolean>(null);
-  const [userShouted, setUserShouted] = useState<boolean>();
+  const [userJoined, setUserJoined] = useState<boolean>(null);
+  const [userShouted, setUserShouted] = useState<boolean>(null);
   const [isHost, setIsHost] = useState<boolean>(false);
+
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
+
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   // Update the previous screen event cards
   useEffect(() => {
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(likes)
-      : {};
-    propsFromEventCard.SetCardUserLiked !== undefined
-      ? propsFromEventCard.SetCardUserLiked(userLiked)
-      : {};
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(shoutouts)
-      : {};
-    propsFromEventCard.SetCardUserShouted !== undefined
-      ? propsFromEventCard.SetCardUserShouted(userShouted)
-      : {};
-    if (viewedEvent !== undefined) {
-      propsFromEventCard.SetCardImage !== undefined
-        ? propsFromEventCard.SetCardImage(viewedEvent.Picture)
-        : {};
-      propsFromEventCard.SetCardTitle !== undefined
-        ? propsFromEventCard.SetCardTitle(viewedEvent.Title)
-        : {};
-      propsFromEventCard.SetCardStartDate !== undefined
-        ? propsFromEventCard.SetCardStartDate(viewedEvent.StartDateTime)
-        : {};
+    if (
+      viewedEvent === undefined ||
+      tags === null ||
+      joins === null ||
+      shoutouts === null ||
+      userJoined === null ||
+      userShouted === null
+    ) {
+      return;
     }
-  }, [likes, userLiked, shoutouts, userShouted, viewedEvent]);
+    propsFromEventCard.updateCardValues(
+      viewedEvent,
+      userJoined,
+      userShouted,
+      joins,
+      shoutouts
+    );
+  }, [viewedEvent, joins, userJoined, shoutouts, userShouted, viewedEvent]);
 
-  const addUserLike = () => {
+  const addUserJoin = async () => {
     setLoading(true);
+    addUserJoinEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      viewedEvent.EventID
+    )
+      .then(() => {
+        setUserJoined(true);
+        setJoins(joins + 1);
 
-    // TODODATABASE Add like by user in Database
-    setUserLiked(true);
-    setLikes(likes + 1);
-
-    setLoading(false);
+        setLoading(false);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false);
+      });
   };
 
   const addUserShoutout = () => {
     setLoading(true);
-    // TODODATABASE Add shoutout by user in Database
+    addUserShoutoutEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      viewedEvent.EventID
+    )
+      .then(() => {
+        setUserShouted(true);
+        setShoutouts(joins + 1);
 
-    setUserShouted(true);
-    setShoutouts(shoutouts + 1);
-
-    setLoading(false);
+        setLoading(false);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false);
+      });
   };
 
-  const removeUserLike = () => {
+  const removeUserJoin = () => {
     setLoading(true);
+    removeUserJoinEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      viewedEvent.EventID
+    )
+      .then(() => {
+        setUserJoined(false);
+        setJoins(joins - 1);
 
-    // TODODATABASE Remove like by user in Database
-    setUserLiked(false);
-    setLikes(likes - 1);
-
-    setLoading(false);
+        setLoading(false);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false);
+      });
   };
 
   const removeUserShoutout = () => {
-    setLoading(true);
+    setLoading(true)
+    removeUserShoutoutEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      viewedEvent.EventID
+    )
+      .then(() => {
+        setUserShouted(false);
+        setShoutouts(shoutouts - 1);
 
-    // TODODATABASE Remove shoutout by user in Database
-
-    setUserShouted(false);
-    setShoutouts(shoutouts - 1);
-
-    setLoading(false);
+        setLoading(false);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false)
+      });
   };
 
   const onHostUsernamePressed = () => {
@@ -185,8 +230,7 @@ const NewEventDetailScreen = ({ route }) => {
   };
 
   const pullData = () => {
-    // Disable the screen
-    setLoading(true);
+
 
     // TODODATABASE Get event by route.params.EventID
     const pulledEvent: Event = {
@@ -208,12 +252,10 @@ const NewEventDetailScreen = ({ route }) => {
       {
         InterestID: "abcde",
         Name: "Interest 1",
-        Category: "Interest 1 Category",
       },
       {
         InterestID: "fghijk",
         Name: "Interest 2",
-        Category: "Interest 2 Category",
       },
     ];
     setTags(pulledTags);
@@ -223,41 +265,24 @@ const NewEventDetailScreen = ({ route }) => {
       UserID: "ABCDE",
       Name: "Kyle Wade",
       Username: "kyle1373",
-      Email: "kwade@ucsd.edu",
       Picture:
         "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
     };
     setHost(pulledHost);
 
     const pulledLikes: number = 20;
-    setLikes(pulledLikes);
+    setJoins(pulledLikes);
 
     const pulledShoutouts: number = 21;
     setShoutouts(pulledShoutouts);
 
     const pulledUserLiked: boolean = false;
-    setUserLiked(pulledUserLiked);
+    setUserJoined(pulledUserLiked);
 
     const pulledUserShouted: boolean = false;
     setUserShouted(pulledUserShouted);
 
     setIsHost(true);
-
-    // Set previous event card shoutouts
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardLikes(pulledLikes)
-      : {};
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardUserLiked(pulledUserLiked)
-      : {};
-    propsFromEventCard.SetCardShoutouts !== undefined
-      ? propsFromEventCard.SetCardShoutouts(pulledShoutouts)
-      : {};
-    propsFromEventCard.SetCardLikes !== undefined
-      ? propsFromEventCard.SetCardUserShouted(pulledUserShouted)
-      : {};
-
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -310,14 +335,7 @@ const NewEventDetailScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <McIcon
-                      source={icons.back_arrow}
-                      style={{
-                        tintColor: COLORS.white,
-                        marginLeft: 8,
-                      }}
-                      size={24}
-                    />
+                    <icons.backarrow width={24}/>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -414,10 +432,11 @@ const NewEventDetailScreen = ({ route }) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {tags === undefined
+                  {tags === null
                     ? null
                     : tags.map((taglist) => (
                         <View
+                        key={taglist.InterestID}
                           style={{
                             width:
                               taglist === undefined
@@ -453,7 +472,7 @@ const NewEventDetailScreen = ({ route }) => {
                 >
                   <Image
                     style={styles.hostProfilePic}
-                    source={{ uri: host === undefined ? null : host.Picture }}
+                    source={{ uri: host === null ? null : host.Picture }}
                   ></Image>
                   <McText
                     h4
@@ -464,7 +483,7 @@ const NewEventDetailScreen = ({ route }) => {
                       width: SIZES.width / 1.25,
                     }}
                   >
-                    {host === undefined ? null : host.Name}
+                    {host === null ? null : host.Name}
                   </McText>
                 </TouchableOpacity>
               </HostSection>
@@ -608,19 +627,19 @@ const NewEventDetailScreen = ({ route }) => {
                       height: 60,
                       borderRadius: 80,
                       marginBottom: 5,
-                      backgroundColor: userLiked
+                      backgroundColor: userJoined
                         ? "transparent"
                         : COLORS.trueBlack,
                       borderWidth: 2,
-                      borderColor: userLiked ? COLORS.white : COLORS.gray,
+                      borderColor: userJoined ? COLORS.white : COLORS.gray,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                     onPressOut={() => {
-                      userLiked ? removeUserLike() : addUserLike();
+                      userJoined ? removeUserJoin() : addUserJoin();
                     }}
                   >
-                    {userLiked ? (
+                    {userJoined ? (
                       <icons.activecheckmark width={35} />
                     ) : (
                       <icons.inactivecheckmark width={35} />
@@ -630,7 +649,7 @@ const NewEventDetailScreen = ({ route }) => {
                 <McText
                   body3
                   style={{
-                    color: userLiked ? COLORS.purple : COLORS.white,
+                    color: userJoined ? COLORS.purple : COLORS.white,
                   }}
                 >
                   Join
@@ -638,10 +657,10 @@ const NewEventDetailScreen = ({ route }) => {
                 <McText
                   body2
                   style={{
-                    color: userLiked ? COLORS.purple : COLORS.white,
+                    color: userJoined ? COLORS.purple : COLORS.white,
                   }}
                 >
-                  {likes}
+                  {joins}
                 </McText>
               </View>
               <View
@@ -707,7 +726,7 @@ const NewEventDetailScreen = ({ route }) => {
   );
 };
 
-export default NewEventDetailScreen;
+export default EventDetailsScreen;
 
 const styles = StyleSheet.create({
   container: {
