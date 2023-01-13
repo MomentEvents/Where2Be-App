@@ -51,12 +51,12 @@ const ExploreEvents = ({ navigation, route }) => {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const [errorThrown, setErrorThrown] = useState<boolean>(false)
+  const [errorThrown, setErrorThrown] = useState<boolean>(false);
 
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
     // events on the header
-    setErrorThrown(false)
+    setErrorThrown(false);
     var errorThrown: boolean = false;
     getAllSchoolFeaturedEvents(currentSchool.SchoolID)
       .then((events: Event[]) => setFeaturedEvents(events))
@@ -64,7 +64,7 @@ const ExploreEvents = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -76,7 +76,7 @@ const ExploreEvents = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -96,7 +96,7 @@ const ExploreEvents = ({ navigation, route }) => {
           if (!errorThrown) {
             displayError(error);
             errorThrown = true;
-            setErrorThrown(true)
+            setErrorThrown(true);
           }
         });
     }
@@ -115,11 +115,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
   const _renderBigEventCards = ({ item, index }) => {
     return (
-      <View
-        style={{
-          marginLeft: 10,
-        }}
-      >
+      <View style={{paddingHorizontal: 5}}>
         <EventCard event={item} isBigCard={true} />
       </View>
     );
@@ -131,7 +127,7 @@ const ExploreEvents = ({ navigation, route }) => {
     }
     loadedEventsMap[item.EventID] = true;
     return (
-      <View style={styles.categoryTitle}>
+      <View style={{paddingHorizontal: 5}}>
         <EventCard event={item} isBigCard={false} />
       </View>
     );
@@ -165,7 +161,7 @@ const ExploreEvents = ({ navigation, route }) => {
           }
         >
           {featuredEvents !== null && featuredEvents.length !== 0 ? (
-            <View>
+            <View style={{paddingHorizontal: 5}}>
               <FlatList
                 horizontal
                 keyExtractor={(item) => item.EventID}
@@ -180,19 +176,21 @@ const ExploreEvents = ({ navigation, route }) => {
           {interestToEventMap === null ? (
             <></>
           ) : (
-            Object.keys(interestToEventMap).map((key, index) => (
-              <View key={key + index}>
-                <McText h2 style={styles.categoryTitle}>
-                  {key}
-                </McText>
-                <FlatList
-                  horizontal
-                  data={Object.values(interestToEventMap[key])}
-                  renderItem={_renderSmallEventCards}
-                  style={styles.flatlistContainer}
-                ></FlatList>
-              </View>
-            ))
+            <View style={{paddingHorizontal: 5}}>
+              {Object.keys(interestToEventMap).map((key, index) => (
+                <View key={key + index}>
+                  <McText h2 style={styles.categoryTitle}>
+                    {key}
+                  </McText>
+                  <FlatList
+                    horizontal
+                    data={Object.values(interestToEventMap[key])}
+                    renderItem={_renderSmallEventCards}
+                    style={styles.flatlistContainer}
+                  ></FlatList>
+                </View>
+              ))}
+            </View>
           )}
           <ActivityIndicator animating={loadingEvents || errorThrown} />
 
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   categoryTitle: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
   flatlistContainer: {
     marginTop: 15,

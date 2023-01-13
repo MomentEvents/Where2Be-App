@@ -219,6 +219,7 @@ const EventDetailsScreen = ({ route }) => {
               }
             );
 
+            updateEventIDToEvent({id: eventID, event: undefined})
             RootNavigation.goBack();
           },
         },

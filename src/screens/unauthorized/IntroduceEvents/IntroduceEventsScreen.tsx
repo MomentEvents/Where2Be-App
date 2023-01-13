@@ -49,7 +49,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const [errorThrown, setErrorThrown] = useState<boolean>(false)
+  const [errorThrown, setErrorThrown] = useState<boolean>(false);
 
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
@@ -62,7 +62,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -74,7 +74,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -91,7 +91,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           if (!errorThrown) {
             displayError(error);
             errorThrown = true;
-            setErrorThrown(true)
+            setErrorThrown(true);
           }
         });
     }
@@ -116,7 +116,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     return (
       <View
         style={{
-          marginLeft: 10,
+          paddingHorizontal: 5,
         }}
       >
         <EventCard event={item} isBigCard={true} onClick={navigateToLogin} />
@@ -130,7 +130,11 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     }
     loadedEventsMap[item.EventID] = true;
     return (
-      <View style={styles.categoryTitle}>
+      <View
+        style={{
+          paddingHorizontal: 5,
+        }}
+      >
         <EventCard event={item} isBigCard={false} onClick={navigateToLogin} />
       </View>
     );
@@ -176,7 +180,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           }
         >
           {featuredEvents !== null && featuredEvents.length !== 0 ? (
-            <View>
+            <View style={{paddingHorizontal: 5}}>
               <FlatList
                 horizontal
                 keyExtractor={(item) => item.EventID}
@@ -191,19 +195,21 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           {interestToEventMap === null ? (
             <></>
           ) : (
-            Object.keys(interestToEventMap).map((key, index) => (
-              <View key={key + index}>
-                <McText h2 style={styles.categoryTitle}>
-                  {key}
-                </McText>
-                <FlatList
-                  horizontal
-                  data={Object.values(interestToEventMap[key])}
-                  renderItem={_renderSmallEventCards}
-                  style={styles.flatlistContainer}
-                ></FlatList>
-              </View>
-            ))
+            <View style={{paddingHorizontal: 5}}>
+              {Object.keys(interestToEventMap).map((key, index) => (
+                <View key={key + index}>
+                  <McText h2 style={styles.categoryTitle}>
+                    {key}
+                  </McText>
+                  <FlatList
+                    horizontal
+                    data={Object.values(interestToEventMap[key])}
+                    renderItem={_renderSmallEventCards}
+                    style={styles.flatlistContainer}
+                  ></FlatList>
+                </View>
+              ))}
+            </View>
           )}
           <ActivityIndicator animating={loadingEvents || errorThrown} />
         </ScrollView>
@@ -227,7 +233,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   categoryTitle: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
   flatlistContainer: {
     marginTop: 15,
