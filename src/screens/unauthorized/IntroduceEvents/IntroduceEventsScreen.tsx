@@ -225,6 +225,7 @@ export default IntroduceEventsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 10,
   },
   categoryTitle: {
     marginLeft: 10,
@@ -236,8 +237,8 @@ const styles = StyleSheet.create({
   hoverButtonContainer: {
     flex: 1,
     position: "absolute",
-    right: 40,
-    bottom: 60,
+    right: 30,
+    bottom: 40,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {
@@ -256,8 +257,8 @@ const SectionHeader = ({ children }) => {
   return (
     <View
       style={{
-        paddingHorizontal: 20,
-        paddingVertical: 6,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
         alignItems: "center",
         flexDirection: "row",
         borderBottomWidth: 1,

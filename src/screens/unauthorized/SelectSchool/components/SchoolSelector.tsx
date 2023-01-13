@@ -78,11 +78,11 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               props.setSelectedSchool(schoolMap[option.key]);
             }}
             selectTextStyle={{
-              color: COLORS.white,
+              color: COLORS.purple,
               fontFamily: CUSTOMFONT_BOLD,
             }}
             initValueTextStyle={{
-              color: COLORS.white,
+              color: COLORS.purple,
               fontFamily: CUSTOMFONT_BOLD,
             }}
             optionContainerStyle={{
