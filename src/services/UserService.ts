@@ -30,14 +30,13 @@ export async function getUserByUserAccessToken(
   userAccessToken: string
 ): Promise<User> {
   const pulledUser: User = {
-    UserID: "test123",
+    UserID: "kyle1373",
     Name: "Kyle",
     Username: "kyle1373",
     Picture:
       "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
   };
   return Promise.resolve(pulledUser);
-
 }
 
 /******************************************************
@@ -72,7 +71,15 @@ export async function getEventHostByEventId(
 
   eventID: string
 ): Promise<User> {
-  return null;
+  const pulledUser: User = {
+    UserID: "kyle1373",
+    Name: "Kyle Wade",
+    Username: "kyle1373",
+    Picture:
+      "https://images.unsplash.com/photo-1671433002028-f72f14b56b7a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+  };
+
+  return pulledUser
 }
 
 export async function getUserJoinEvent(
@@ -81,7 +88,7 @@ export async function getUserJoinEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return true
+  return true;
 }
 
 export async function addUserJoinEvent(
@@ -89,18 +96,14 @@ export async function addUserJoinEvent(
   userID: string,
 
   eventID: string
-): Promise<void> {
-
-}
+): Promise<void> {}
 
 export async function removeUserJoinEvent(
   userAccessToken: string,
   userID: string,
 
   eventID: string
-): Promise<void> {
-
-}
+): Promise<void> {}
 
 export async function getUserShoutoutEvent(
   userAccessToken: string,
@@ -108,7 +111,7 @@ export async function getUserShoutoutEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return false
+  return false;
 }
 
 export async function addUserShoutoutEvent(
@@ -116,15 +119,11 @@ export async function addUserShoutoutEvent(
   userID: string,
 
   eventID: string
-): Promise<void> {
-
-}
+): Promise<void> {}
 
 export async function removeUserShoutoutEvent(
   userAccessToken: string,
   userID: string,
 
   eventID: string
-): Promise<void> {
-  
-}
+): Promise<void> {}

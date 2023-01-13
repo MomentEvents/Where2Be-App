@@ -35,7 +35,19 @@ export const SOCIAL = "social";
  * Return: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
-  return null;
+  
+  const pulledEvent: Event =     {
+    EventID: eventID,
+    Title: "I am a pulled Event",
+    Description: "Description for Event",
+    Picture:
+      "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    Location: "Featured Location",
+    StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+    EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+    Visibility: true,
+  }
+  return pulledEvent;
 }
 
 /******************************************************

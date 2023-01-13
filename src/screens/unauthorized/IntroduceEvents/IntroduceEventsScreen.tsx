@@ -49,9 +49,12 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
+  const [errorThrown, setErrorThrown] = useState<boolean>(false)
+
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
     // events on the header
+    setErrorThrown(false);
     var errorThrown: boolean = false;
     getAllSchoolFeaturedEvents(school.SchoolID)
       .then((events: Event[]) => setFeaturedEvents(events))
@@ -59,6 +62,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
+          setErrorThrown(true)
         }
       });
 
@@ -70,6 +74,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
+          setErrorThrown(true)
         }
       });
 
@@ -86,6 +91,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           if (!errorThrown) {
             displayError(error);
             errorThrown = true;
+            setErrorThrown(true)
           }
         });
     }
@@ -98,7 +104,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
     setIsRefreshing(true);
     setFeaturedEvents(null);
     setInterestToEventMap(null);
-    pullEvents();
+    await pullEvents();
     setIsRefreshing(false);
   };
 
@@ -199,7 +205,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
               </View>
             ))
           )}
-          <ActivityIndicator animating={loadingEvents} />
+          <ActivityIndicator animating={loadingEvents || errorThrown} />
         </ScrollView>
         <TouchableOpacity
           style={styles.hoverButtonContainer}

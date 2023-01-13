@@ -7,6 +7,8 @@ import {
   View,
   Image,
   Alert,
+  RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
@@ -24,12 +26,21 @@ import ImageView from "react-native-image-viewing";
 import {
   addUserJoinEvent,
   addUserShoutoutEvent,
+  getEventHostByEventId,
+  getUserJoinEvent,
+  getUserShoutoutEvent,
   removeUserJoinEvent,
   removeUserShoutoutEvent,
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
+import {
+  deleteEvent,
+  getEvent,
+  getEventNumJoins,
+  getEventNumShoutouts,
+} from "../../../services/EventService";
 
 /*********************************************
  * route parameters:
@@ -45,7 +56,7 @@ type routeParametersType = {
   eventID: string;
 };
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, currentUser } = useContext(UserContext);
+  const { isLoggedIn, userToken, currentUser } = useContext(UserContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -67,6 +78,7 @@ const EventDetailsScreen = ({ route }) => {
   } = useContext(EventContext);
 
   const { eventID } = propsFromEventCard;
+
   const [host, setHost] = useState<User>(null);
   const [tags, setTags] = useState<Interest[]>(null);
 
@@ -75,6 +87,13 @@ const EventDetailsScreen = ({ route }) => {
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
+
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const [loadedJoins, setLoadedJoins] = useState(false);
+  const [loadedShoutouts, setLoadedShoutouts] = useState(false);
+  const [loadedUserJoined, setLoadedUserJoined] = useState(false);
+  const [loadedUserShouted, setLoadedUserShouted] = useState(false);
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
@@ -88,8 +107,11 @@ const EventDetailsScreen = ({ route }) => {
       eventID
     )
       .then(() => {
-        updateEventIDToDidJoin({id: eventID, didJoin: true})
-        updateEventIDToJoins({id: eventID, joins: eventIDToJoins[eventID] + 1})
+        updateEventIDToDidJoin({ id: eventID, didJoin: true });
+        updateEventIDToJoins({
+          id: eventID,
+          joins: eventIDToJoins[eventID] + 1,
+        });
 
         setLoading(false);
       })
@@ -101,14 +123,13 @@ const EventDetailsScreen = ({ route }) => {
 
   const addUserShoutout = () => {
     setLoading(true);
-    addUserShoutoutEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    )
+    addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
       .then(() => {
-        updateEventIDToDidShoutout({id: eventID, didShoutout: true})
-        updateEventIDToShoutouts({id: eventID, shoutouts: eventIDToShoutouts[eventID] + 1})
+        updateEventIDToDidShoutout({ id: eventID, didShoutout: true });
+        updateEventIDToShoutouts({
+          id: eventID,
+          shoutouts: eventIDToShoutouts[eventID] + 1,
+        });
 
         setLoading(false);
       })
@@ -120,14 +141,13 @@ const EventDetailsScreen = ({ route }) => {
 
   const removeUserJoin = () => {
     setLoading(true);
-    removeUserJoinEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    )
+    removeUserJoinEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
       .then(() => {
-        updateEventIDToDidJoin({id: eventID, didJoin: false})
-        updateEventIDToJoins({id: eventID, joins: eventIDToJoins[eventID] - 1})
+        updateEventIDToDidJoin({ id: eventID, didJoin: false });
+        updateEventIDToJoins({
+          id: eventID,
+          joins: eventIDToJoins[eventID] - 1,
+        });
 
         setLoading(false);
       })
@@ -145,8 +165,11 @@ const EventDetailsScreen = ({ route }) => {
       eventID
     )
       .then(() => {
-        updateEventIDToDidShoutout({id: eventID, didShoutout: false})
-        updateEventIDToShoutouts({id: eventID, shoutouts: eventIDToShoutouts[eventID] - 1})
+        updateEventIDToDidShoutout({ id: eventID, didShoutout: false });
+        updateEventIDToShoutouts({
+          id: eventID,
+          shoutouts: eventIDToShoutouts[eventID] - 1,
+        });
 
         setLoading(false);
       })
@@ -157,7 +180,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onHostUsernamePressed = () => {
-    if (host !== undefined) {
+    if (host !== null) {
       RootNavigation.push("ProfileDetail", {
         UserID: host.UserID,
       });
@@ -165,8 +188,8 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onEditEventPressed = () => {
-    if(!eventIDToEvent[eventID]){
-      return
+    if (!eventIDToEvent[eventID]) {
+      return;
     }
     RootNavigation.navigate("NewEditEventScreen", {
       Event: eventIDToEvent,
@@ -186,10 +209,14 @@ const EventDetailsScreen = ({ route }) => {
         },
         {
           text: "Yes",
-          onPress: () => {
+          onPress: async () => {
             console.log("Yes Pressed");
 
-            // TODODATABASE Call query to delete event by ID
+            await deleteEvent(userToken.UserAccessToken, eventID).catch(
+              (error: Error) => {
+                displayError(error);
+              }
+            );
 
             RootNavigation.goBack();
           },
@@ -213,21 +240,74 @@ const EventDetailsScreen = ({ route }) => {
     setDescriptionExpanded(!descriptionExpanded);
   };
 
-  
-  const pullData = () => {
-    // TODODATABASE Get event by route.params.EventID
-    const pulledEvent: Event = {
-      EventID: eventID,
-      Title: "Wassup this is my title",
-      Description: "This is our description\nh\nh\nh\nh\n\n\n Hi",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-      Location: "Hi",
-      StartDateTime: new Date(),
-      EndDateTime: undefined,
-      Visibility: false,
-    };
-    updateEventIDToEvent({id: eventID, event: pulledEvent})
+  const pullData = async () => {
+    var gotError = false;
+    getEvent(eventID)
+      .then((pulledEvent: Event) => {
+        updateEventIDToEvent({ id: eventID, event: pulledEvent });
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
+
+    getEventNumJoins(eventID)
+      .then((pulledJoins: number) => {
+        updateEventIDToJoins({ id: eventID, joins: pulledJoins });
+        setLoadedJoins(true);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
+
+    getEventNumShoutouts(eventID)
+      .then((pulledShoutouts: number) => {
+        updateEventIDToShoutouts({ id: eventID, shoutouts: pulledShoutouts });
+        setLoadedShoutouts(true);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
+
+    getUserJoinEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
+      .then((pulledUserJoined: boolean) => {
+        updateEventIDToDidJoin({ id: eventID, didJoin: pulledUserJoined });
+        setLoadedUserJoined(true);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
+
+    getUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
+      .then((pulledUserShouted: boolean) => {
+        updateEventIDToDidShoutout({
+          id: eventID,
+          didShoutout: pulledUserShouted,
+        });
+        setLoadedUserShouted(true);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
 
     // Get interests by route.params.EventID
     // TODODATABASE
@@ -243,40 +323,58 @@ const EventDetailsScreen = ({ route }) => {
     ];
     setTags(pulledTags);
 
-    // TODODATABASE Get host by route.params.EventID
-    const pulledHost: User = {
-      UserID: "ABCDE",
-      Name: "Kyle Wade",
-      Username: "kyle1373",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-    };
-    setHost(pulledHost);
+    getEventHostByEventId(userToken.UserAccessToken, eventID)
+      .then((pulledHost: User) => {
+        setHost(pulledHost);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
+  };
 
-    const pulledJoins: number = 20;
-    updateEventIDToJoins({id: eventID, joins: pulledJoins});
-
-    const pulledShoutouts: number = 21;
-    updateEventIDToShoutouts({id: eventID, shoutouts: pulledShoutouts});
-
-    const pulledUserJoined: boolean = false;
-    updateEventIDToDidJoin({id: eventID, didJoin: pulledUserJoined});
-
-    const pulledUserShouted: boolean = false;
-    updateEventIDToDidShoutout({id: eventID, didShoutout: pulledUserShouted});
-
-    setIsHost(true);
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    setLoadedJoins(false)
+    setLoadedShoutouts(false)
+    setLoadedUserJoined(false)
+    setLoadedUserShouted(false)
+    await pullData();
+    setIsRefreshing(false);
   };
 
   useEffect(() => {
     pullData();
   }, []);
 
+  useEffect(() => {
+    console.log("going into host use effect")
+    if (host === null) {
+      return;
+    }
+    console.log("Host UserID is " + host.UserID)
+    console.log("Current user UserID is " + currentUser.UserID)
+    if (host.UserID == currentUser.UserID) {
+      setIsHost(true);
+    } else {
+      console.log("bitch is false")
+      setIsHost(false);
+    }
+  }, [host]);
+
   return (
     <View style={styles.container}>
       <ImageView
         images={[
-          { uri: eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Picture },
+          {
+            uri:
+              eventIDToEvent[eventID] === undefined
+                ? null
+                : eventIDToEvent[eventID].Picture,
+          },
         ]}
         imageIndex={0}
         visible={imageViewVisible}
@@ -291,11 +389,17 @@ const EventDetailsScreen = ({ route }) => {
             style={{
               backgroundColor: "transparent",
             }}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
           >
             <ImageBackground
               resizeMode="cover"
               source={{
-                uri: eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Picture,
+                uri:
+                  eventIDToEvent[eventID] === undefined
+                    ? null
+                    : eventIDToEvent[eventID].Picture,
               }}
               style={{
                 width: "100%",
@@ -387,9 +491,9 @@ const EventDetailsScreen = ({ route }) => {
                           >
                             {eventIDToEvent[eventID] === undefined
                               ? null
-                              : moment(eventIDToEvent[eventID].StartDateTime).format(
-                                  "h:mm A"
-                                )}
+                              : moment(
+                                  eventIDToEvent[eventID].StartDateTime
+                                ).format("h:mm A")}
                           </McText>
                         </View>
                       </View>
@@ -407,7 +511,9 @@ const EventDetailsScreen = ({ route }) => {
                     marginTop: 5,
                   }}
                 >
-                  {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Title}
+                  {eventIDToEvent[eventID] === undefined
+                    ? null
+                    : eventIDToEvent[eventID].Title}
                 </McText>
               </TitleSection>
               <InterestSection>
@@ -442,6 +548,7 @@ const EventDetailsScreen = ({ route }) => {
                       ))}
                 </ScrollView>
               </InterestSection>
+
               <HostSection>
                 <TouchableOpacity
                   style={{
@@ -466,10 +573,15 @@ const EventDetailsScreen = ({ route }) => {
                       width: SIZES.width / 1.25,
                     }}
                   >
-                    {host === null ? null : host.Name}
+                    {host === null ? (
+                      <ActivityIndicator style={{ marginLeft: 10 }} />
+                    ) : (
+                      host.Name
+                    )}
                   </McText>
                 </TouchableOpacity>
               </HostSection>
+
               <DescriptionSection>
                 <View
                   style={{
@@ -485,7 +597,9 @@ const EventDetailsScreen = ({ route }) => {
                     body3
                     selectable={true}
                   >
-                    {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Description}
+                    {eventIDToEvent[eventID] === undefined
+                      ? null
+                      : eventIDToEvent[eventID].Description}
                   </McText>
                   {lengthMoreText ? (
                     <McText
@@ -519,7 +633,9 @@ const EventDetailsScreen = ({ route }) => {
                     width: SIZES.width * 0.83,
                   }}
                 >
-                  {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Location}
+                  {eventIDToEvent[eventID] === undefined
+                    ? null
+                    : eventIDToEvent[eventID].Location}
                 </McText>
               </LocationSection>
               <VisibilitySection>
@@ -589,119 +705,142 @@ const EventDetailsScreen = ({ route }) => {
             </View>
           </ScrollView>
           <View style={styles.userControlContainer}>
-            <UserOptionsSection>
-              <View
-                style={{
-                  alignItems: "center",
-                  marginRight: 60,
-                }}
-              >
-                <LinearGradient
-                  colors={["#B66DFF", "#280292"]}
+            {loadedJoins &&
+            loadedShoutouts &&
+            loadedUserJoined &&
+            loadedUserShouted ? (
+              <UserOptionsSection>
+                <View
                   style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 80,
+                    alignItems: "center",
+                    marginRight: 60,
                   }}
                 >
-                  <TouchableOpacity
+                  <LinearGradient
+                    colors={["#B66DFF", "#280292"]}
                     style={{
                       width: 60,
                       height: 60,
                       borderRadius: 80,
-                      marginBottom: 5,
-                      backgroundColor: eventIDToDidJoin[eventID]
-                        ? "transparent"
-                        : COLORS.trueBlack,
-                      borderWidth: 2,
-                      borderColor: eventIDToDidJoin[eventID] ? COLORS.white : COLORS.gray,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    onPressOut={() => {
-                      eventIDToDidJoin[eventID] ? removeUserJoin() : addUserJoin();
                     }}
                   >
-                    {eventIDToDidJoin[eventID] ? (
-                      <icons.activecheckmark width={35} />
-                    ) : (
-                      <icons.inactivecheckmark width={35} />
-                    )}
-                  </TouchableOpacity>
-                </LinearGradient>
-                <McText
-                  body3
+                    <TouchableOpacity
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 80,
+                        marginBottom: 5,
+                        backgroundColor: eventIDToDidJoin[eventID]
+                          ? "transparent"
+                          : COLORS.trueBlack,
+                        borderWidth: 2,
+                        borderColor: eventIDToDidJoin[eventID]
+                          ? COLORS.white
+                          : COLORS.gray,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      onPressOut={() => {
+                        eventIDToDidJoin[eventID]
+                          ? removeUserJoin()
+                          : addUserJoin();
+                      }}
+                    >
+                      {eventIDToDidJoin[eventID] ? (
+                        <icons.activecheckmark width={35} />
+                      ) : (
+                        <icons.inactivecheckmark width={35} />
+                      )}
+                    </TouchableOpacity>
+                  </LinearGradient>
+                  <McText
+                    body3
+                    style={{
+                      color: eventIDToDidJoin[eventID]
+                        ? COLORS.purple
+                        : COLORS.white,
+                    }}
+                  >
+                    Join
+                  </McText>
+                  <McText
+                    body2
+                    style={{
+                      color: eventIDToDidJoin[eventID]
+                        ? COLORS.purple
+                        : COLORS.white,
+                    }}
+                  >
+                    {eventIDToJoins[eventID]}
+                  </McText>
+                </View>
+                <View
                   style={{
-                    color: eventIDToDidJoin[eventID] ? COLORS.purple : COLORS.white,
+                    alignItems: "center",
                   }}
                 >
-                  Join
-                </McText>
-                <McText
-                  body2
-                  style={{
-                    color: eventIDToDidJoin[eventID] ? COLORS.purple : COLORS.white,
-                  }}
-                >
-                  {eventIDToJoins[eventID]}
-                </McText>
-              </View>
-              <View
-                style={{
-                  alignItems: "center",
-                }}
-              >
-                <LinearGradient
-                  colors={["#B66DFF", "#280292"]}
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 80,
-                  }}
-                >
-                  <TouchableOpacity
+                  <LinearGradient
+                    colors={["#B66DFF", "#280292"]}
                     style={{
                       width: 60,
                       height: 60,
                       borderRadius: 80,
-                      marginBottom: 5,
-                      backgroundColor: eventIDToDidShoutout[eventID]
-                        ? "transparent"
-                        : COLORS.trueBlack,
-                      borderWidth: 2,
-                      borderColor: eventIDToDidShoutout[eventID] ? COLORS.white : COLORS.gray,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    onPress={() => {
-                      eventIDToDidShoutout[eventID] ? removeUserShoutout() : addUserShoutout();
                     }}
                   >
-                    {eventIDToDidShoutout[eventID] ? (
-                      <icons.activeshoutout width={35} />
-                    ) : (
-                      <icons.inactiveshoutout width={35} />
-                    )}
-                  </TouchableOpacity>
-                </LinearGradient>
-                <McText
-                  body3
-                  style={{
-                    color: eventIDToDidShoutout[eventID] ? COLORS.purple : COLORS.white,
-                  }}
-                >
-                  Shoutout
-                </McText>
-                <McText
-                  body2
-                  style={{
-                    color: eventIDToDidShoutout[eventID] ? COLORS.purple : COLORS.white,
-                  }}
-                >
-                  {eventIDToShoutouts[eventID]}
-                </McText>
-              </View>
-            </UserOptionsSection>
+                    <TouchableOpacity
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 80,
+                        marginBottom: 5,
+                        backgroundColor: eventIDToDidShoutout[eventID]
+                          ? "transparent"
+                          : COLORS.trueBlack,
+                        borderWidth: 2,
+                        borderColor: eventIDToDidShoutout[eventID]
+                          ? COLORS.white
+                          : COLORS.gray,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      onPress={() => {
+                        eventIDToDidShoutout[eventID]
+                          ? removeUserShoutout()
+                          : addUserShoutout();
+                      }}
+                    >
+                      {eventIDToDidShoutout[eventID] ? (
+                        <icons.activeshoutout width={35} />
+                      ) : (
+                        <icons.inactiveshoutout width={35} />
+                      )}
+                    </TouchableOpacity>
+                  </LinearGradient>
+                  <McText
+                    body3
+                    style={{
+                      color: eventIDToDidShoutout[eventID]
+                        ? COLORS.purple
+                        : COLORS.white,
+                    }}
+                  >
+                    Shoutout
+                  </McText>
+                  <McText
+                    body2
+                    style={{
+                      color: eventIDToDidShoutout[eventID]
+                        ? COLORS.purple
+                        : COLORS.white,
+                    }}
+                  >
+                    {eventIDToShoutouts[eventID]}
+                  </McText>
+                </View>
+              </UserOptionsSection>
+            ) : (
+              <ActivityIndicator style={{ marginTop: 20 }} />
+            )}
           </View>
         </View>
       </SafeAreaView>

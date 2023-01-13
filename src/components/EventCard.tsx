@@ -141,21 +141,6 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "USE EFFECT with " +
-        event.Title +
-        " and eventIDToEvent is " +
-        eventIDToEvent[event.EventID] +
-        ".\n It is " +
-        eventIDToJoins[event.EventID] +
-        " joins and " +
-        eventIDToShoutouts[event.EventID] +
-        " shoutouts\n Its didJoin is " +
-        eventIDToDidJoin[event.EventID] +
-        " and didShoutout is " +
-        eventIDToDidShoutout[event.EventID] +
-        "\n\n"
-    );
     setIsLoaded(
       fetchedJoins &&
         fetchedDidUserJoin &&
