@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { COLORS, SIZES } from "../constants/theme";
-import { McText } from "./Styled";
-import icons from "../constants/icons";
+import { COLORS, SIZES } from "../../constants/theme";
+import { McText } from ".";
+import icons from "../../constants/icons";
 
 type sectionHeaderProps = {
   leftButtonSVG?: any;

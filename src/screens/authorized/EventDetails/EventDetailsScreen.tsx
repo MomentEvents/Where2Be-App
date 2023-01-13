@@ -77,12 +77,13 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToDidShoutout,
     eventIDToShoutouts,
     updateEventIDToShoutouts,
+    eventIDToInterests,
+    updateEventIDToInterests
   } = useContext(EventContext);
 
   const { eventID } = propsFromEventCard;
 
   const [host, setHost] = useState<User>(null);
-  const [tags, setTags] = useState<Interest[]>(null);
 
   const [isHost, setIsHost] = useState<boolean>(false);
 
@@ -194,9 +195,7 @@ const EventDetailsScreen = ({ route }) => {
       return;
     }
     RootNavigation.navigate("NewEditEventScreen", {
-      Event: eventIDToEvent,
-      Tags: tags,
-      SetTags: setTags,
+      eventID: eventID
     });
   };
 
@@ -317,7 +316,7 @@ const EventDetailsScreen = ({ route }) => {
 
     getEventInterestsByEventId(eventID)
       .then((tags: Interest[]) => {
-        setTags(tags);
+        updateEventIDToInterests({id: eventID, interests: tags})
       })
       .catch((error: Error) => {
         if (!gotError) {
@@ -525,9 +524,7 @@ const EventDetailsScreen = ({ route }) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {tags === null
-                    ? null
-                    : tags.map((taglist) => (
+                  {eventIDToInterests[eventID] ? eventIDToInterests[eventID].map((taglist) => (
                         <View
                           key={taglist.InterestID}
                           style={{
@@ -549,7 +546,7 @@ const EventDetailsScreen = ({ route }) => {
                             {taglist === undefined ? null : taglist.Name}
                           </McText>
                         </View>
-                      ))}
+                      )) : null}
                 </ScrollView>
               </InterestSection>
 
@@ -670,8 +667,8 @@ const EventDetailsScreen = ({ route }) => {
                 </View>
               </VisibilitySection>
               {isHost &&
-              tags !== null &&
-              eventIDToEvent[eventID] !== undefined ? (
+              eventIDToInterests[eventID] &&
+              eventIDToEvent[eventID] ? (
                 <>
                   <EditOrDeleteEventSection>
                     <TouchableOpacity

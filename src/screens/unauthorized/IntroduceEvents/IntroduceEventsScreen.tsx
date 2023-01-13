@@ -34,7 +34,7 @@ import * as Navigator from "../../../navigation/Navigator";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
-import SectionHeader from "../../../components/SectionHeader";
+import SectionHeader from "../../../components/Styled/SectionHeader";
 type RouteParams = {
   school: School;
 };
@@ -200,7 +200,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           onPress={navigateToLogin}
         >
           <GradientButton style={styles.hoverButtonIconContainer}>
-            <icons.login height="60%" width="60%"></icons.login>
+            <icons.login height="50%" width="50%"></icons.login>
           </GradientButton>
         </TouchableOpacity>
       </SafeAreaView>

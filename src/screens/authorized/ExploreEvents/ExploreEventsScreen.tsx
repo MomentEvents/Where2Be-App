@@ -36,7 +36,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
 import { EventContext } from "../../../contexts/EventContext";
-import SectionHeader from "../../../components/SectionHeader";
+import SectionHeader from "../../../components/Styled/SectionHeader";
 type RouteParams = {
   school: School;
 };
