@@ -29,6 +29,7 @@ import {
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
+import { EventContext } from "../../../contexts/EventContext";
 
 /*********************************************
  * route parameters:
@@ -41,15 +42,7 @@ import { displayError } from "../../../helpers/helpers";
  *********************************************/
 
 type routeParametersType = {
-  EventID: string;
-  getCardEvent: () => Event;
-  updateCardValues?: (
-    updatedEvent: Event,
-    userJoined: boolean,
-    userShouted: boolean,
-    numJoins: number,
-    numShoutouts: number
-  ) => {};
+  eventID: string;
 };
 const EventDetailsScreen = ({ route }) => {
   const { userToken, currentUser } = useContext(UserContext);
@@ -60,17 +53,23 @@ const EventDetailsScreen = ({ route }) => {
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
 
-  const [viewedEvent, setViewedEvent] = useState<Event>(
-    propsFromEventCard.getCardEvent === undefined
-      ? undefined
-      : propsFromEventCard.getCardEvent
-  );
+  const {
+    eventIDToEvent,
+    updateEventIDToEvent,
+    eventIDToDidJoin,
+    updateEventIDToDidJoin,
+    eventIDToJoins,
+    updateEventIDToJoins,
+    eventIDToDidShoutout,
+    updateEventIDToDidShoutout,
+    eventIDToShoutouts,
+    updateEventIDToShoutouts,
+  } = useContext(EventContext);
+
+  const { eventID } = propsFromEventCard;
   const [host, setHost] = useState<User>(null);
   const [tags, setTags] = useState<Interest[]>(null);
-  const [joins, setJoins] = useState<number>(null);
-  const [shoutouts, setShoutouts] = useState<number>(null);
-  const [userJoined, setUserJoined] = useState<boolean>(null);
-  const [userShouted, setUserShouted] = useState<boolean>(null);
+
   const [isHost, setIsHost] = useState<boolean>(false);
 
   const [descriptionExpanded, setDescriptionExpanded] =
@@ -80,36 +79,17 @@ const EventDetailsScreen = ({ route }) => {
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   // Update the previous screen event cards
-  useEffect(() => {
-    if (
-      viewedEvent === undefined ||
-      tags === null ||
-      joins === null ||
-      shoutouts === null ||
-      userJoined === null ||
-      userShouted === null
-    ) {
-      return;
-    }
-    propsFromEventCard.updateCardValues(
-      viewedEvent,
-      userJoined,
-      userShouted,
-      joins,
-      shoutouts
-    );
-  }, [viewedEvent, joins, userJoined, shoutouts, userShouted, viewedEvent]);
 
   const addUserJoin = async () => {
     setLoading(true);
     await addUserJoinEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
-      viewedEvent.EventID
+      eventID
     )
       .then(() => {
-        setUserJoined(true);
-        setJoins(joins + 1);
+        updateEventIDToDidJoin({id: eventID, didJoin: true})
+        updateEventIDToJoins({id: eventID, joins: eventIDToJoins[eventID] + 1})
 
         setLoading(false);
       })
@@ -124,11 +104,11 @@ const EventDetailsScreen = ({ route }) => {
     addUserShoutoutEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
-      viewedEvent.EventID
+      eventID
     )
       .then(() => {
-        setUserShouted(true);
-        setShoutouts(shoutouts + 1);
+        updateEventIDToDidShoutout({id: eventID, didShoutout: true})
+        updateEventIDToShoutouts({id: eventID, shoutouts: eventIDToShoutouts[eventID] + 1})
 
         setLoading(false);
       })
@@ -143,11 +123,11 @@ const EventDetailsScreen = ({ route }) => {
     removeUserJoinEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
-      viewedEvent.EventID
+      eventID
     )
       .then(() => {
-        setUserJoined(false);
-        setJoins(joins - 1);
+        updateEventIDToDidJoin({id: eventID, didJoin: false})
+        updateEventIDToJoins({id: eventID, joins: eventIDToJoins[eventID] - 1})
 
         setLoading(false);
       })
@@ -162,11 +142,11 @@ const EventDetailsScreen = ({ route }) => {
     removeUserShoutoutEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
-      viewedEvent.EventID
+      eventID
     )
       .then(() => {
-        setUserShouted(false);
-        setShoutouts(shoutouts - 1);
+        updateEventIDToDidShoutout({id: eventID, didShoutout: false})
+        updateEventIDToShoutouts({id: eventID, shoutouts: eventIDToShoutouts[eventID] - 1})
 
         setLoading(false);
       })
@@ -185,9 +165,11 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onEditEventPressed = () => {
+    if(!eventIDToEvent[eventID]){
+      return
+    }
     RootNavigation.navigate("NewEditEventScreen", {
-      Event: viewedEvent,
-      SetEvent: setViewedEvent,
+      Event: eventIDToEvent,
       Tags: tags,
       SetTags: setTags,
     });
@@ -231,10 +213,11 @@ const EventDetailsScreen = ({ route }) => {
     setDescriptionExpanded(!descriptionExpanded);
   };
 
+  
   const pullData = () => {
     // TODODATABASE Get event by route.params.EventID
     const pulledEvent: Event = {
-      EventID: "1373",
+      EventID: eventID,
       Title: "Wassup this is my title",
       Description: "This is our description\nh\nh\nh\nh\n\n\n Hi",
       Picture:
@@ -244,7 +227,7 @@ const EventDetailsScreen = ({ route }) => {
       EndDateTime: undefined,
       Visibility: false,
     };
-    setViewedEvent(pulledEvent);
+    updateEventIDToEvent({id: eventID, event: pulledEvent})
 
     // Get interests by route.params.EventID
     // TODODATABASE
@@ -270,17 +253,17 @@ const EventDetailsScreen = ({ route }) => {
     };
     setHost(pulledHost);
 
-    const pulledLikes: number = 20;
-    setJoins(pulledLikes);
+    const pulledJoins: number = 20;
+    updateEventIDToJoins({id: eventID, joins: pulledJoins});
 
     const pulledShoutouts: number = 21;
-    setShoutouts(pulledShoutouts);
+    updateEventIDToShoutouts({id: eventID, shoutouts: pulledShoutouts});
 
-    const pulledUserLiked: boolean = false;
-    setUserJoined(pulledUserLiked);
+    const pulledUserJoined: boolean = false;
+    updateEventIDToDidJoin({id: eventID, didJoin: pulledUserJoined});
 
     const pulledUserShouted: boolean = false;
-    setUserShouted(pulledUserShouted);
+    updateEventIDToDidShoutout({id: eventID, didShoutout: pulledUserShouted});
 
     setIsHost(true);
   };
@@ -293,7 +276,7 @@ const EventDetailsScreen = ({ route }) => {
     <View style={styles.container}>
       <ImageView
         images={[
-          { uri: viewedEvent === undefined ? null : viewedEvent.Picture },
+          { uri: eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Picture },
         ]}
         imageIndex={0}
         visible={imageViewVisible}
@@ -312,7 +295,7 @@ const EventDetailsScreen = ({ route }) => {
             <ImageBackground
               resizeMode="cover"
               source={{
-                uri: viewedEvent === undefined ? null : viewedEvent.Picture,
+                uri: eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Picture,
               }}
               style={{
                 width: "100%",
@@ -387,9 +370,9 @@ const EventDetailsScreen = ({ route }) => {
                               opacity: 0.85,
                             }}
                           >
-                            {viewedEvent === undefined
+                            {eventIDToEvent[eventID] === undefined
                               ? null
-                              : moment(viewedEvent.StartDateTime)
+                              : moment(eventIDToEvent[eventID].StartDateTime)
                                   .format("MMM DD")
                                   .toUpperCase()}
                           </McText>
@@ -402,9 +385,9 @@ const EventDetailsScreen = ({ route }) => {
                               opacity: 0.85,
                             }}
                           >
-                            {viewedEvent === undefined
+                            {eventIDToEvent[eventID] === undefined
                               ? null
-                              : moment(viewedEvent.StartDateTime).format(
+                              : moment(eventIDToEvent[eventID].StartDateTime).format(
                                   "h:mm A"
                                 )}
                           </McText>
@@ -424,7 +407,7 @@ const EventDetailsScreen = ({ route }) => {
                     marginTop: 5,
                   }}
                 >
-                  {viewedEvent === undefined ? null : viewedEvent.Title}
+                  {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Title}
                 </McText>
               </TitleSection>
               <InterestSection>
@@ -502,7 +485,7 @@ const EventDetailsScreen = ({ route }) => {
                     body3
                     selectable={true}
                   >
-                    {viewedEvent === undefined ? null : viewedEvent.Description}
+                    {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Description}
                   </McText>
                   {lengthMoreText ? (
                     <McText
@@ -536,7 +519,7 @@ const EventDetailsScreen = ({ route }) => {
                     width: SIZES.width * 0.83,
                   }}
                 >
-                  {viewedEvent === undefined ? null : viewedEvent.Location}
+                  {eventIDToEvent[eventID] === undefined ? null : eventIDToEvent[eventID].Location}
                 </McText>
               </LocationSection>
               <VisibilitySection>
@@ -558,9 +541,9 @@ const EventDetailsScreen = ({ route }) => {
                       textTransform: "uppercase",
                     }}
                   >
-                    {viewedEvent === undefined
+                    {eventIDToEvent[eventID] === undefined
                       ? null
-                      : viewedEvent.Visibility
+                      : eventIDToEvent[eventID].Visibility
                       ? "Public"
                       : "Private"}
                   </McText>
@@ -627,19 +610,19 @@ const EventDetailsScreen = ({ route }) => {
                       height: 60,
                       borderRadius: 80,
                       marginBottom: 5,
-                      backgroundColor: userJoined
+                      backgroundColor: eventIDToDidJoin[eventID]
                         ? "transparent"
                         : COLORS.trueBlack,
                       borderWidth: 2,
-                      borderColor: userJoined ? COLORS.white : COLORS.gray,
+                      borderColor: eventIDToDidJoin[eventID] ? COLORS.white : COLORS.gray,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                     onPressOut={() => {
-                      userJoined ? removeUserJoin() : addUserJoin();
+                      eventIDToDidJoin[eventID] ? removeUserJoin() : addUserJoin();
                     }}
                   >
-                    {userJoined ? (
+                    {eventIDToDidJoin[eventID] ? (
                       <icons.activecheckmark width={35} />
                     ) : (
                       <icons.inactivecheckmark width={35} />
@@ -649,7 +632,7 @@ const EventDetailsScreen = ({ route }) => {
                 <McText
                   body3
                   style={{
-                    color: userJoined ? COLORS.purple : COLORS.white,
+                    color: eventIDToDidJoin[eventID] ? COLORS.purple : COLORS.white,
                   }}
                 >
                   Join
@@ -657,10 +640,10 @@ const EventDetailsScreen = ({ route }) => {
                 <McText
                   body2
                   style={{
-                    color: userJoined ? COLORS.purple : COLORS.white,
+                    color: eventIDToDidJoin[eventID] ? COLORS.purple : COLORS.white,
                   }}
                 >
-                  {joins}
+                  {eventIDToJoins[eventID]}
                 </McText>
               </View>
               <View
@@ -682,19 +665,19 @@ const EventDetailsScreen = ({ route }) => {
                       height: 60,
                       borderRadius: 80,
                       marginBottom: 5,
-                      backgroundColor: userShouted
+                      backgroundColor: eventIDToDidShoutout[eventID]
                         ? "transparent"
                         : COLORS.trueBlack,
                       borderWidth: 2,
-                      borderColor: userShouted ? COLORS.white : COLORS.gray,
+                      borderColor: eventIDToDidShoutout[eventID] ? COLORS.white : COLORS.gray,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                     onPress={() => {
-                      userShouted ? removeUserShoutout() : addUserShoutout();
+                      eventIDToDidShoutout[eventID] ? removeUserShoutout() : addUserShoutout();
                     }}
                   >
-                    {userShouted ? (
+                    {eventIDToDidShoutout[eventID] ? (
                       <icons.activeshoutout width={35} />
                     ) : (
                       <icons.inactiveshoutout width={35} />
@@ -704,7 +687,7 @@ const EventDetailsScreen = ({ route }) => {
                 <McText
                   body3
                   style={{
-                    color: userShouted ? COLORS.purple : COLORS.white,
+                    color: eventIDToDidShoutout[eventID] ? COLORS.purple : COLORS.white,
                   }}
                 >
                   Shoutout
@@ -712,10 +695,10 @@ const EventDetailsScreen = ({ route }) => {
                 <McText
                   body2
                   style={{
-                    color: userShouted ? COLORS.purple : COLORS.white,
+                    color: eventIDToDidShoutout[eventID] ? COLORS.purple : COLORS.white,
                   }}
                 >
-                  {shoutouts}
+                  {eventIDToShoutouts[eventID]}
                 </McText>
               </View>
             </UserOptionsSection>

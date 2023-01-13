@@ -13,7 +13,7 @@ type EventContextType = {
     id: string;
     didJoin: boolean;
   }>;
-  eventIDToJoins:{ [key: string]: number };
+  eventIDToJoins: { [key: string]: number };
   updateEventIDToJoins: React.Dispatch<{
     id: string;
     joins: number;
@@ -31,22 +31,28 @@ type EventContextType = {
 };
 
 export const EventContext = createContext<EventContextType>({
-    eventIDToEvent: null,
-    updateEventIDToEvent: null,
-    eventIDToDidJoin: null,
-    updateEventIDToDidJoin: null,
-    eventIDToJoins: null,
-    updateEventIDToJoins: null,
-    eventIDToDidShoutout: null,
-    updateEventIDToDidShoutout: null,
-    eventIDToShoutouts: null,
-    updateEventIDToShoutouts: null
+  eventIDToEvent: null,
+  updateEventIDToEvent: null,
+  eventIDToDidJoin: null,
+  updateEventIDToDidJoin: null,
+  eventIDToJoins: null,
+  updateEventIDToJoins: null,
+  eventIDToDidShoutout: null,
+  updateEventIDToDidShoutout: null,
+  eventIDToShoutouts: null,
+  updateEventIDToShoutouts: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
   const [eventIDToJoins, updateEventIDToJoins] = useReducer(setJoinsMap, {});
-  const [eventIDToDidJoin, updateEventIDToDidJoin] = useReducer(setDidJoinMap, {});
-  const [eventIDToShoutouts, updateEventIDToShoutouts] = useReducer(setShoutoutsMap, {})
+  const [eventIDToDidJoin, updateEventIDToDidJoin] = useReducer(
+    setDidJoinMap,
+    {}
+  );
+  const [eventIDToShoutouts, updateEventIDToShoutouts] = useReducer(
+    setShoutoutsMap,
+    {}
+  );
   const [eventIDToDidShoutout, updateEventIDToDidShoutout] = useReducer(
     setDidShoutoutMap,
     {}
@@ -54,10 +60,10 @@ export const EventProvider = ({ children }) => {
 
   function setEventMap(
     map: { [key: string]: Event },
-    action: {id: string, 
-      event: Event }
+    action: { id: string; event: Event }
   ) {
     map[action.id] = action.event;
+    map = {...map}
     return map;
   }
 
@@ -66,6 +72,7 @@ export const EventProvider = ({ children }) => {
     action: { id: string; didJoin: boolean }
   ) {
     map[action.id] = action.didJoin;
+    map = {...map}
     return map;
   }
 
@@ -74,6 +81,7 @@ export const EventProvider = ({ children }) => {
     action: { id: string; joins: number }
   ) {
     map[action.id] = action.joins;
+    map = {...map}
     return map;
   }
 
@@ -82,6 +90,7 @@ export const EventProvider = ({ children }) => {
     action: { id: string; didShoutout: boolean }
   ) {
     map[action.id] = action.didShoutout;
+    map = {...map}
     return map;
   }
 
@@ -90,19 +99,26 @@ export const EventProvider = ({ children }) => {
     action: { id: string; shoutouts: number }
   ) {
     map[action.id] = action.shoutouts;
+    map = {...map}
     return map;
   }
 
-  return <EventContext.Provider value={{
-    eventIDToEvent,
-    updateEventIDToEvent,
-    eventIDToDidJoin,
-    updateEventIDToDidJoin,
-    eventIDToJoins,
-    updateEventIDToJoins,
-    eventIDToDidShoutout,
-    updateEventIDToDidShoutout,
-    eventIDToShoutouts,
-    updateEventIDToShoutouts,
-  }}>{children}</EventContext.Provider>;
+  return (
+    <EventContext.Provider
+      value={{
+        eventIDToEvent,
+        updateEventIDToEvent,
+        eventIDToDidJoin,
+        updateEventIDToDidJoin,
+        eventIDToJoins,
+        updateEventIDToJoins,
+        eventIDToDidShoutout,
+        updateEventIDToDidShoutout,
+        eventIDToShoutouts,
+        updateEventIDToShoutouts,
+      }}
+    >
+      {children}
+    </EventContext.Provider>
+  );
 };

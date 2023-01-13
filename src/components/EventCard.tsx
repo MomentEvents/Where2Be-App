@@ -68,40 +68,19 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     }
 
     Navigator.navigate(SCREENS.EventDetails, {
-      EventID: event.EventID,
-      getCardEvent: getCardEvent,
-      updateCardValues: updateCardValues,
+      eventID: event.EventID,
     });
     // Navigate to event details page
   };
 
-  const updateCardValues = (
-    updatedEvent: Event,
-    userJoined: boolean,
-    userShouted: boolean,
-    numJoins: number,
-    numShoutouts: number
-  ) => {
-    console.log(updatedEvent);
-    // setSelectedEvent(updatedEvent);
-    // setUserJoined(userJoined);
-    // setJoins(numJoins);
-    // setUserShouted(userShouted);
-    // setShoutouts(numShoutouts);
-  };
-
-  const getCardEvent = (): Event => {
-    return event;
-  };
-
   const pullData = async () => {
     updateEventIDToEvent({ id: event.EventID, event: event });
-    setFetchedEvent(true)
+    setFetchedEvent(true);
 
     await getEventNumJoins(event.EventID)
       .then((joins: number) => {
         updateEventIDToJoins({ id: event.EventID, joins: joins });
-        setFetchedJoins(true)
+        setFetchedJoins(true);
       })
       .catch((error: Error) => {
         console.log(error);
@@ -110,7 +89,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     await getEventNumShoutouts(event.EventID)
       .then((shoutouts: number) => {
         updateEventIDToShoutouts({ id: event.EventID, shoutouts: shoutouts });
-        setFetchedShoutouts(true)
+        setFetchedShoutouts(true);
       })
       .catch((error: Error) => {
         console.log(error);
@@ -127,7 +106,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         .then((didJoin: boolean) => {
           console.log("updated didJoin for " + event.Title);
           updateEventIDToDidJoin({ id: event.EventID, didJoin: didJoin });
-          setFetchedDidUserJoin(true)
+          setFetchedDidUserJoin(true);
         })
         .catch((error: Error) => {
           console.log(error);
@@ -142,7 +121,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             id: event.EventID,
             didShoutout: didShoutout,
           });
-          setFetchedDidUserShoutout(true)
+          setFetchedDidUserShoutout(true);
         })
         .catch((error: Error) => {
           console.log("updated didShoutout for " + event.Title);
@@ -150,9 +129,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         });
     } else {
       updateEventIDToDidJoin({ id: event.EventID, didJoin: false });
-      setFetchedDidUserJoin(true)
+      setFetchedDidUserJoin(true);
       updateEventIDToDidShoutout({ id: event.EventID, didShoutout: false });
-      setFetchedDidUserShoutout(true)
+      setFetchedDidUserShoutout(true);
     }
   };
 
@@ -192,7 +171,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     fetchedEvent,
   ]);
 
-  if (!isLoaded) {
+  if (
+    !isLoaded
+  ) {
     return (
       <View
         style={{
@@ -229,15 +210,6 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     );
   }
 
-  console.log(
-    "Card with " +
-      eventIDToEvent[event.EventID].Title +
-      " is loaded.\n It is " +
-      eventIDToJoins[event.EventID] +
-      " joins and " +
-      eventIDToShoutouts[event.EventID] +
-      " shoutouts\n"
-  );
   if (isBigCard) {
     return (
       <TouchableHighlight
