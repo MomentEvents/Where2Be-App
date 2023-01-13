@@ -147,9 +147,6 @@ const ExploreEvents = ({ navigation, route }) => {
         <SectionHeader>
           <McText
             h1
-            style={{
-              marginLeft: 10,
-            }}
           >
             Explore Events
           </McText>
