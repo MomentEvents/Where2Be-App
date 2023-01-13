@@ -31,10 +31,12 @@ import { EventContext } from "../contexts/EventContext";
 type EventCardProps = {
   onClick?: () => void;
   event: Event;
-  isBigCard: boolean;
+  isBigCard?: boolean;
+  width?: number;
+  height?: number;
 };
 
-const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
+const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const {
     eventIDToEvent,
@@ -57,9 +59,12 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = isBigCard ? SIZES.width - 20 : 160;
-  const cardHeight = isBigCard ? SIZES.height / 3 : 230;
-  const cardBorderRadius = 10;
+  const cardWidth = isBigCard ? SIZES.width - 60 : width ? width : 160;
+  const cardHeight = isBigCard ? SIZES.height / 3.4 : height ? height : 220;
+
+  const cardBorderRadius = 7;
+  const cardBorderWidth = 1;
+  const cardBorderColor = COLORS.gray;
 
   const onPressCard = () => {
     if (onClick !== undefined) {
@@ -172,8 +177,8 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 2,
-            borderColor: COLORS.white,
+            borderWidth: cardBorderWidth,
+            borderColor: cardBorderColor,
             overlayColor: COLORS.trueBlack,
           }}
         />
@@ -186,8 +191,8 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 2,
-            borderColor: COLORS.white,
+            borderWidth: cardBorderWidth,
+            borderColor: cardBorderColor,
             backgroundColor: "rgba(0,0,0,.5)",
           }}
         />
@@ -201,7 +206,6 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         onPress={onPressCard}
         style={{
           borderRadius: cardBorderRadius,
-          borderColor: COLORS.gray,
         }}
       >
         <View
@@ -213,13 +217,13 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         >
           <Image
             source={{ uri: eventIDToEvent[event.EventID].Picture }}
-            blurRadius={3}
+            blurRadius={1}
             style={{
               height: cardHeight,
               width: cardWidth,
               borderRadius: cardBorderRadius,
-              borderWidth: 2,
-              borderColor: COLORS.white,
+              borderWidth: cardBorderWidth,
+              borderColor: cardBorderColor,
             }}
           />
           <View
@@ -231,19 +235,18 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
               height: cardHeight,
               width: cardWidth,
               borderRadius: cardBorderRadius,
-              borderWidth: 2,
-              borderColor: COLORS.white,
-              backgroundColor: "rgba(0,0,0,.5)",
+              borderWidth: cardBorderWidth,
+              borderColor: cardBorderColor,
             }}
           />
           <View
             style={{
               flex: 1,
               position: "absolute",
-              top: 2,
-              left: 2,
-              width: cardWidth - 4,
-              height: cardHeight - 4,
+              top: cardBorderWidth,
+              left: cardBorderWidth,
+              width: cardWidth - cardBorderWidth * 2,
+              height: cardHeight - cardBorderWidth * 2,
             }}
           >
             <LinearGradient
@@ -290,7 +293,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                 <McText
                   h3
                   style={{
-                    color: COLORS.purple,
+                    color: COLORS.white,
                     opacity: 0.9,
                     marginTop: 4,
                     letterSpacing: 1.2,
@@ -386,8 +389,8 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 2,
-            borderColor: COLORS.white,
+            borderWidth: cardBorderWidth,
+            borderColor: cardBorderColor,
           }}
         />
         <View
@@ -399,26 +402,25 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 2,
-            borderColor: COLORS.white,
-            backgroundColor: "rgba(0,0,0,.5)",
+            borderWidth: cardBorderWidth,
+            borderColor: cardBorderColor,
           }}
         />
         <View
           style={{
             flex: 1,
             position: "absolute",
-            top: 2,
-            left: 2,
-            width: cardWidth - 4,
-            height: cardHeight - 4,
+            top: cardBorderWidth,
+            left: cardBorderWidth,
+            width: cardWidth - cardBorderWidth * 2,
+            height: cardHeight - cardBorderWidth * 2,
           }}
         >
           <LinearGradient
             colors={["transparent", COLORS.trueBlack]}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 0.9 }}
-            style={{ borderRadius: cardBorderRadius - 2, height: "100%" }}
+            style={{ borderRadius: cardBorderRadius, height: "100%" }}
           ></LinearGradient>
 
           <View
