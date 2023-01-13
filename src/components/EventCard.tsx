@@ -26,6 +26,7 @@ import {
   getUserShoutoutEvent,
 } from "../services/UserService";
 import { displayError } from "../helpers/helpers";
+import { EventContext } from "../contexts/EventContext";
 
 type EventCardProps = {
   onClick?: () => void;
@@ -35,11 +36,24 @@ type EventCardProps = {
 
 const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
-  const [selectedEvent, setSelectedEvent] = useState<Event>(event);
-  const [joins, setJoins] = useState<number>(null);
-  const [shoutouts, setShoutouts] = useState<number>(null);
-  const [userJoined, setUserJoined] = useState<boolean>(null);
-  const [userShouted, setUserShouted] = useState<boolean>(null);
+  const {
+    eventIDToEvent,
+    updateEventIDToEvent,
+    eventIDToDidJoin,
+    updateEventIDToDidJoin,
+    eventIDToJoins,
+    updateEventIDToJoins,
+    eventIDToDidShoutout,
+    updateEventIDToDidShoutout,
+    eventIDToShoutouts,
+    updateEventIDToShoutouts,
+  } = useContext(EventContext);
+
+  const [fetchedEvent, setFetchedEvent] = useState(false);
+  const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
+  const [fetchedDidUserJoin, setFetchedDidUserJoin] = useState(false);
+  const [fetchedShoutouts, setFetchedShoutouts] = useState(false);
+  const [fetchedJoins, setFetchedJoins] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -48,13 +62,16 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
   const cardBorderRadius = 10;
 
   const onPressCard = () => {
-    console.log(isBigCard)
     if (onClick !== undefined) {
       onClick();
       return;
     }
 
-    Navigator.navigate(SCREENS.EventDetails, {EventID: selectedEvent.EventID, getCardEvent: getCardEvent, updateCardValues: updateCardValues})
+    Navigator.navigate(SCREENS.EventDetails, {
+      EventID: event.EventID,
+      getCardEvent: getCardEvent,
+      updateCardValues: updateCardValues,
+    });
     // Navigate to event details page
   };
 
@@ -65,62 +82,115 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     numJoins: number,
     numShoutouts: number
   ) => {
-    console.log("updating card values")
-    console.log(updatedEvent)
-    setSelectedEvent(updatedEvent);
-    setUserJoined(userJoined);
-    setJoins(numJoins);
-    setUserShouted(userShouted);
-    setShoutouts(numShoutouts);
+    console.log(updatedEvent);
+    // setSelectedEvent(updatedEvent);
+    // setUserJoined(userJoined);
+    // setJoins(numJoins);
+    // setUserShouted(userShouted);
+    // setShoutouts(numShoutouts);
   };
 
   const getCardEvent = (): Event => {
-    return selectedEvent
-  }
+    return event;
+  };
 
-  const pullJoinAndShoutoutData = async () => {
-    setJoins(await getEventNumJoins(selectedEvent.EventID));
-    setShoutouts(await getEventNumShoutouts(selectedEvent.EventID));
+  const pullData = async () => {
+    updateEventIDToEvent({ id: event.EventID, event: event });
+    setFetchedEvent(true)
+
+    await getEventNumJoins(event.EventID)
+      .then((joins: number) => {
+        updateEventIDToJoins({ id: event.EventID, joins: joins });
+        setFetchedJoins(true)
+      })
+      .catch((error: Error) => {
+        console.log(error);
+      });
+
+    await getEventNumShoutouts(event.EventID)
+      .then((shoutouts: number) => {
+        updateEventIDToShoutouts({ id: event.EventID, shoutouts: shoutouts });
+        setFetchedShoutouts(true)
+      })
+      .catch((error: Error) => {
+        console.log(error);
+      });
+
     if (isLoggedIn) {
-      setUserJoined(
-        await getUserJoinEvent(
-          userToken.UserAccessToken,
-          currentUser.UserID,
-          selectedEvent.EventID
-        ).catch((error: Error) => {
-          console.log(error);
-          return null;
+      console.log("Going to is logged in");
+
+      getUserJoinEvent(
+        userToken.UserAccessToken,
+        currentUser.UserID,
+        event.EventID
+      )
+        .then((didJoin: boolean) => {
+          console.log("updated didJoin for " + event.Title);
+          updateEventIDToDidJoin({ id: event.EventID, didJoin: didJoin });
+          setFetchedDidUserJoin(true)
         })
-      );
-      setUserShouted(
-        await getUserShoutoutEvent(
-          userToken.UserAccessToken,
-          currentUser.UserID,
-          selectedEvent.EventID
-        ).catch((error: Error) => {
+        .catch((error: Error) => {
           console.log(error);
-          return null;
+        });
+      getUserShoutoutEvent(
+        userToken.UserAccessToken,
+        currentUser.UserID,
+        event.EventID
+      )
+        .then((didShoutout: boolean) => {
+          updateEventIDToDidShoutout({
+            id: event.EventID,
+            didShoutout: didShoutout,
+          });
+          setFetchedDidUserShoutout(true)
         })
-      );
+        .catch((error: Error) => {
+          console.log("updated didShoutout for " + event.Title);
+          console.log(error);
+        });
     } else {
-      setUserJoined(false);
-      setUserShouted(false);
+      updateEventIDToDidJoin({ id: event.EventID, didJoin: false });
+      setFetchedDidUserJoin(true)
+      updateEventIDToDidShoutout({ id: event.EventID, didShoutout: false });
+      setFetchedDidUserShoutout(true)
     }
   };
 
   // First time being loaded and rendered
   useEffect(() => {
-    pullJoinAndShoutoutData();
+    pullData();
   }, []);
 
   useEffect(() => {
-    setIsLoaded(
-      joins !== null &&
-        shoutouts !== null &&
-        userJoined !== null &&
-        userShouted !== null
+    console.log(
+      "USE EFFECT with " +
+        event.Title +
+        " and eventIDToEvent is " +
+        eventIDToEvent[event.EventID] +
+        ".\n It is " +
+        eventIDToJoins[event.EventID] +
+        " joins and " +
+        eventIDToShoutouts[event.EventID] +
+        " shoutouts\n Its didJoin is " +
+        eventIDToDidJoin[event.EventID] +
+        " and didShoutout is " +
+        eventIDToDidShoutout[event.EventID] +
+        "\n\n"
     );
-  }, [joins, shoutouts, userJoined, userShouted]);
+    setIsLoaded(
+      fetchedJoins &&
+        fetchedDidUserJoin &&
+        fetchedShoutouts &&
+        fetchedDidUserShoutout &&
+        fetchedEvent
+    );
+  }, [
+    fetchedJoins,
+    fetchedDidUserJoin,
+    fetchedShoutouts,
+    fetchedDidUserShoutout,
+    fetchedEvent,
+  ]);
 
   if (!isLoaded) {
     return (
@@ -159,7 +229,15 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     );
   }
 
-  console.log("Card is loaded");
+  console.log(
+    "Card with " +
+      eventIDToEvent[event.EventID].Title +
+      " is loaded.\n It is " +
+      eventIDToJoins[event.EventID] +
+      " joins and " +
+      eventIDToShoutouts[event.EventID] +
+      " shoutouts\n"
+  );
   if (isBigCard) {
     return (
       <TouchableHighlight
@@ -177,7 +255,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
           }}
         >
           <Image
-            source={{ uri: selectedEvent.Picture }}
+            source={{ uri: eventIDToEvent[event.EventID].Picture }}
             blurRadius={3}
             style={{
               height: cardHeight,
@@ -231,7 +309,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
               }}
             >
               <McText h1 numberOfLines={2}>
-                {selectedEvent.Title}
+                {eventIDToEvent[event.EventID].Title}
               </McText>
               <View
                 style={{
@@ -248,7 +326,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                     marginRight: 4,
                   }}
                 >
-                  {moment(selectedEvent.StartDateTime)
+                  {moment(eventIDToEvent[event.EventID].StartDateTime)
                     .format("MMM DD")
                     .toUpperCase()}
                 </McText>
@@ -261,7 +339,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                     letterSpacing: 1.2,
                   }}
                 >
-                  {moment(selectedEvent.StartDateTime)
+                  {moment(eventIDToEvent[event.EventID].StartDateTime)
                     .format("hh:mm A")
                     .toUpperCase()}
                 </McText>
@@ -277,7 +355,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                     source={icons.check}
                     size={20}
                     style={{
-                      tintColor: userJoined ? COLORS.purple : COLORS.lightGray,
+                      tintColor: eventIDToDidJoin[event.EventID]
+                        ? COLORS.purple
+                        : COLORS.lightGray,
                       marginRight: 10,
                     }}
                   />
@@ -287,16 +367,20 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                       marginTop: 2,
                       marginLeft: -7,
                       marginRight: 10,
-                      color: userJoined ? COLORS.purple : COLORS.lightGray,
+                      color: eventIDToDidJoin[event.EventID]
+                        ? COLORS.purple
+                        : COLORS.lightGray,
                     }}
                   >
-                    {joins}
+                    {eventIDToJoins[event.EventID]}
                   </McText>
                   <McIcon
                     source={icons.shoutout}
                     size={20}
                     style={{
-                      tintColor: userShouted ? COLORS.purple : COLORS.lightGray,
+                      tintColor: eventIDToDidShoutout[event.EventID]
+                        ? COLORS.purple
+                        : COLORS.lightGray,
                       marginRight: 10,
                     }}
                   />
@@ -306,10 +390,12 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                       marginTop: 2,
                       marginLeft: -7,
                       marginRight: 10,
-                      color: userShouted ? COLORS.purple : COLORS.lightGray,
+                      color: eventIDToDidShoutout[event.EventID]
+                        ? COLORS.purple
+                        : COLORS.lightGray,
                     }}
                   >
-                    {shoutouts}
+                    {eventIDToShoutouts[event.EventID]}
                   </McText>
                 </View>
               </View>
@@ -337,7 +423,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         }}
       >
         <Image
-          source={{ uri: selectedEvent.Picture }}
+          source={{ uri: eventIDToEvent[event.EventID].Picture }}
           blurRadius={3}
           style={{
             height: cardHeight,
@@ -391,7 +477,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             }}
           >
             <McText h4 numberOfLines={2}>
-              {selectedEvent.Title}
+              {eventIDToEvent[event.EventID].Title}
             </McText>
             <McText
               body3
@@ -400,7 +486,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                 opacity: 0.8,
               }}
             >
-              {moment(selectedEvent.StartDateTime).format("MMM DD h:mm A")}
+              {moment(eventIDToEvent[event.EventID].StartDateTime).format(
+                "MMM DD h:mm A"
+              )}
             </McText>
             <View
               style={{
@@ -411,7 +499,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                 source={icons.check}
                 size={20}
                 style={{
-                  tintColor: userJoined ? COLORS.purple : COLORS.lightGray,
+                  tintColor: eventIDToDidJoin[event.EventID]
+                    ? COLORS.purple
+                    : COLORS.lightGray,
                   marginRight: 10,
                 }}
               />
@@ -421,16 +511,20 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                   marginTop: 2,
                   marginLeft: -7,
                   marginRight: 10,
-                  color: userJoined ? COLORS.purple : COLORS.lightGray,
+                  color: eventIDToDidJoin[event.EventID]
+                    ? COLORS.purple
+                    : COLORS.lightGray,
                 }}
               >
-                {joins}
+                {eventIDToJoins[event.EventID]}
               </McText>
               <McIcon
                 source={icons.shoutout}
                 size={20}
                 style={{
-                  tintColor: userShouted ? COLORS.purple : COLORS.lightGray,
+                  tintColor: eventIDToDidShoutout[event.EventID]
+                    ? COLORS.purple
+                    : COLORS.lightGray,
                   marginRight: 10,
                 }}
               />
@@ -440,10 +534,12 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
                   marginTop: 2,
                   marginLeft: -7,
                   marginRight: 10,
-                  color: userShouted ? COLORS.purple : COLORS.lightGray,
+                  color: eventIDToDidShoutout[event.EventID]
+                    ? COLORS.purple
+                    : COLORS.lightGray,
                 }}
               >
-                {shoutouts}
+                {eventIDToShoutouts[event.EventID]}
               </McText>
             </View>
           </View>

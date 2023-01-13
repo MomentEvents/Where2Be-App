@@ -31,7 +31,6 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-  console.log("\n\nLogin call");
 
   // DO LOGIN HERE
 
@@ -131,7 +130,6 @@ export async function signup(
   password: string,
   schoolID: string
 ): Promise<Token> {
-  console.log("\n\nsignup() call");
 
   if (!isDisplayNameFormatted(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
@@ -196,7 +194,6 @@ export async function signup(
  * None
  */
 export async function logout(): Promise<void> {
-  console.log("\n\nlogout() call");
   if ((await getToken()) !== null) {
     deleteToken();
   }

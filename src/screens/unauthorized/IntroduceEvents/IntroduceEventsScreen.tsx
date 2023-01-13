@@ -90,8 +90,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         });
     }
 
-    console.log(interestToEventMapTemp);
-
     setInterestToEventMap(interestToEventMapTemp);
   };
 
@@ -121,8 +119,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   const _renderSmallEventCards = ({ item, index }) => {
-    console.log("Putting key");
-    console.log(item);
     if (loadedEventsMap[item.EventID] === true) {
       return <></>;
     }
@@ -135,7 +131,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    console.log("Going into use effect");
     setLoadingEvents(featuredEvents === null || interestToEventMap === null);
   }, [featuredEvents, interestToEventMap]);
 

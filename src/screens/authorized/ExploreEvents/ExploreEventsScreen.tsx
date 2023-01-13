@@ -35,6 +35,7 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
+import { EventContext } from "../../../contexts/EventContext";
 type RouteParams = {
   school: School;
 };
@@ -49,7 +50,6 @@ const ExploreEvents = ({ navigation, route }) => {
 
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
     // events on the header
@@ -94,8 +94,6 @@ const ExploreEvents = ({ navigation, route }) => {
         });
     }
 
-    console.log(interestToEventMapTemp);
-
     setInterestToEventMap(interestToEventMapTemp);
   };
 
@@ -121,8 +119,6 @@ const ExploreEvents = ({ navigation, route }) => {
   };
 
   const _renderSmallEventCards = ({ item, index }) => {
-    console.log("Putting key");
-    console.log(item);
     if (loadedEventsMap[item.EventID] === true) {
       return <></>;
     }
@@ -135,7 +131,6 @@ const ExploreEvents = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    console.log("Going into use effect");
     setLoadingEvents(featuredEvents === null || interestToEventMap === null);
   }, [featuredEvents, interestToEventMap]);
 
@@ -196,9 +191,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
           <View style={{ height: SIZES.tab_bar_height }} />
         </ScrollView>
-        <TouchableOpacity
-          style={styles.hoverButtonContainer}
-        >
+        <TouchableOpacity style={styles.hoverButtonContainer}>
           <GradientButton style={styles.hoverButtonIconContainer}>
             <icons.plus height="60%" width="60%"></icons.plus>
           </GradientButton>

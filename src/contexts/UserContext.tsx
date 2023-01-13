@@ -107,7 +107,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const setContextVarsBasedOnToken = async (token: Token): Promise<void> => {
-    console.log("Syncing context token");
     if (token === null) {
       setIsLoggedIn(false);
       setUserToken(null);
@@ -117,11 +116,9 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    console.log("getting pulled user");
     const pulledUser: User = await getUserByUserAccessToken(
       token.UserAccessToken
     ).catch((error: Error) => {
-      console.log("got error. returning");
       throw error;
     });
 
@@ -138,8 +135,6 @@ export const UserProvider = ({ children }) => {
         "Cannot pull " + pulledUser.Username + " school"
       );
     });
-
-    console.log("Started setting context variables");
     setUserToken(token);
     setCurrentUser(pulledUser);
     setCurrentSchool(pulledSchool);

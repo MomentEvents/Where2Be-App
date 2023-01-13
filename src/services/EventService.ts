@@ -271,8 +271,6 @@ export async function getAllSchoolEventsByInterest(
       "SchoolID is null"
     );
   }
-
-  console.log("SchoolID in category is " + schoolID);
   switch (interestID) {
 
     case ACADEMIC:
