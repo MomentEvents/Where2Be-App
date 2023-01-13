@@ -42,6 +42,7 @@ import {
   getEventNumShoutouts,
 } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
+import GradientButton from "../../../components/Styled/GradientButton";
 
 /*********************************************
  * route parameters:
@@ -219,7 +220,7 @@ const EventDetailsScreen = ({ route }) => {
               }
             );
 
-            updateEventIDToEvent({id: eventID, event: undefined})
+            updateEventIDToEvent({ id: eventID, event: undefined });
             RootNavigation.goBack();
           },
         },
@@ -668,7 +669,9 @@ const EventDetailsScreen = ({ route }) => {
                   </McText>
                 </View>
               </VisibilitySection>
-              {isHost && tags !== null && eventIDToEvent[eventID] !== undefined ? (
+              {isHost &&
+              tags !== null &&
+              eventIDToEvent[eventID] !== undefined ? (
                 <>
                   <EditOrDeleteEventSection>
                     <TouchableOpacity
@@ -719,13 +722,8 @@ const EventDetailsScreen = ({ route }) => {
                     marginRight: 60,
                   }}
                 >
-                  <LinearGradient
-                    colors={["#B66DFF", "#280292"]}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                    }}
+                  <GradientButton
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
@@ -755,7 +753,7 @@ const EventDetailsScreen = ({ route }) => {
                         <icons.inactivecheckmark width={35} />
                       )}
                     </TouchableOpacity>
-                  </LinearGradient>
+                  </GradientButton>
                   <McText
                     body3
                     style={{
@@ -782,13 +780,8 @@ const EventDetailsScreen = ({ route }) => {
                     alignItems: "center",
                   }}
                 >
-                  <LinearGradient
-                    colors={["#B66DFF", "#280292"]}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                    }}
+                  <GradientButton
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
@@ -818,7 +811,7 @@ const EventDetailsScreen = ({ route }) => {
                         <icons.inactiveshoutout width={35} />
                       )}
                     </TouchableOpacity>
-                  </LinearGradient>
+                  </GradientButton>
                   <McText
                     body3
                     style={{

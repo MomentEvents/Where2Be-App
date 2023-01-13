@@ -34,6 +34,7 @@ import * as Navigator from "../../../navigation/Navigator";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
+import SectionHeader from "../../../components/SectionHeader";
 type RouteParams = {
   school: School;
 };
@@ -117,6 +118,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
       <View
         style={{
           paddingHorizontal: 5,
+          marginLeft: index === 0 ? 15 : 0
         }}
       >
         <EventCard event={item} isBigCard={true} onClick={navigateToLogin} />
@@ -133,6 +135,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
       <View
         style={{
           paddingHorizontal: 5,
+          marginLeft: index === 0 ? 15 : 0
         }}
       >
         <EventCard event={item} isBigCard={false} onClick={navigateToLogin} />
@@ -149,30 +152,8 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
   }, []);
 
   return (
-    <GradientBackground>
       <SafeAreaView style={styles.container}>
-        <SectionHeader>
-          <TouchableOpacity
-            onPress={() => {
-              Navigator.goBack();
-            }}
-            style={{
-              width: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <icons.backarrow />
-          </TouchableOpacity>
-          <McText
-            h1
-            style={{
-              marginLeft: 10,
-            }}
-          >
-            Explore Events
-          </McText>
-        </SectionHeader>
+        <SectionHeader title={"Explore Events"} leftButtonSVG={<icons.backarrow/>} leftButtonOnClick={() => {Navigator.goBack()}}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -180,7 +161,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           }
         >
           {featuredEvents !== null && featuredEvents.length !== 0 ? (
-            <View style={{paddingHorizontal: 5}}>
+
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -188,15 +169,14 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
                 data={Object.values(featuredEvents)}
                 renderItem={_renderBigEventCards}
                 style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
+              />
           ) : (
             <View />
           )}
           {interestToEventMap === null ? (
             <></>
           ) : (
-            <View style={{paddingHorizontal: 5}}>
+            <View>
               {Object.keys(interestToEventMap).map((key, index) => (
                 <View key={key + index}>
                   <McText h2 style={styles.categoryTitle}>
@@ -224,7 +204,6 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
           </GradientButton>
         </TouchableOpacity>
       </SafeAreaView>
-    </GradientBackground>
   );
 };
 
@@ -233,9 +212,10 @@ export default IntroduceEventsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.black
   },
   categoryTitle: {
-    marginLeft: 5,
+    marginLeft: 20,
   },
   flatlistContainer: {
     marginTop: 15,
@@ -259,21 +239,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-const SectionHeader = ({ children }) => {
-  return (
-    <View
-      style={{
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        alignItems: "center",
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderColor: COLORS.gray,
-        backgroundColor: COLORS.trueBlack,
-      }}
-    >
-      {children}
-    </View>
-  );
-};

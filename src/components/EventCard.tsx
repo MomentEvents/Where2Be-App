@@ -59,8 +59,8 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = isBigCard ? 300 : width ? width : 160;
-  const cardHeight = isBigCard ? 240 : height ? height : 220;
+  const cardWidth = isBigCard ? 310 : width ? width : 150;
+  const cardHeight = isBigCard ? 240 : height ? height : 210;
 
   const cardBorderRadius = 7;
   const cardBorderWidth = 1;
