@@ -57,7 +57,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = isBigCard ? SIZES.width - 50 : 160;
+  const cardWidth = isBigCard ? SIZES.width - 20 : 160;
   const cardHeight = isBigCard ? SIZES.height / 3 : 230;
   const cardBorderRadius = 10;
 
@@ -201,7 +201,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
         onPress={onPressCard}
         style={{
           borderRadius: cardBorderRadius,
-          borderColor: COLORS.purple,
+          borderColor: COLORS.gray,
         }}
       >
         <View
@@ -231,7 +231,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
               height: cardHeight,
               width: cardWidth,
               borderRadius: cardBorderRadius,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: COLORS.white,
               backgroundColor: "rgba(0,0,0,.5)",
             }}
@@ -399,7 +399,7 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
-            borderWidth: 1,
+            borderWidth: 2,
             borderColor: COLORS.white,
             backgroundColor: "rgba(0,0,0,.5)",
           }}
@@ -436,21 +436,6 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
             <McText h4 numberOfLines={2}>
               {eventIDToEvent[event.EventID].Title}
             </McText>
-            <View style={{
-              flexDirection:'row'
-            }}>
-            <McText
-              body3
-              style={{
-                color: COLORS.purple,
-
-                marginRight: 3,
-              }}
-            >
-              {moment(eventIDToEvent[event.EventID].StartDateTime).format(
-                "MMM DD"
-              )}
-            </McText>
             <McText
               body3
               style={{
@@ -459,10 +444,9 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
               }}
             >
               {moment(eventIDToEvent[event.EventID].StartDateTime).format(
-                "h:mm A"
+                "MMM DD h:mm A"
               )}
             </McText>
-            </View>
             <View
               style={{
                 flexDirection: "row",
