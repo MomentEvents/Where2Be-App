@@ -161,6 +161,7 @@ const ExploreEvents = ({ navigation, route }) => {
             <View style={{paddingHorizontal: 5}}>
               <FlatList
                 horizontal
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => item.EventID}
                 data={Object.values(featuredEvents)}
                 renderItem={_renderBigEventCards}
@@ -181,6 +182,7 @@ const ExploreEvents = ({ navigation, route }) => {
                   </McText>
                   <FlatList
                     horizontal
+                    showsHorizontalScrollIndicator={false}
                     data={Object.values(interestToEventMap[key])}
                     renderItem={_renderSmallEventCards}
                     style={styles.flatlistContainer}
@@ -239,7 +241,7 @@ const SectionHeader = ({ children }) => {
   return (
     <View
       style={{
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         paddingVertical: 6,
         alignItems: "center",
         flexDirection: "row",

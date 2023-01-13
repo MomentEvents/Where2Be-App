@@ -59,8 +59,8 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = isBigCard ? SIZES.width - 60 : width ? width : 160;
-  const cardHeight = isBigCard ? SIZES.height / 3.4 : height ? height : 220;
+  const cardWidth = isBigCard ? 300 : width ? width : 160;
+  const cardHeight = isBigCard ? 240 : height ? height : 220;
 
   const cardBorderRadius = 7;
   const cardBorderWidth = 1;
@@ -294,7 +294,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
                   h3
                   style={{
                     color: COLORS.white,
-                    opacity: 0.9,
+                    opacity: 0.8,
                     marginTop: 4,
                     letterSpacing: 1.2,
                   }}
