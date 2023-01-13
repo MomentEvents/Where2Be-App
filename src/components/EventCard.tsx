@@ -156,12 +156,8 @@ const EventCard = ({ onClick, event, isBigCard }: EventCardProps) => {
     fetchedEvent,
   ]);
 
-  if(eventIDToEvent[event.EventID] === undefined){
-    return <></>
-  }
-
   if (
-    !isLoaded
+    !isLoaded || eventIDToEvent[event.EventID] === undefined
   ) {
     return (
       <View
