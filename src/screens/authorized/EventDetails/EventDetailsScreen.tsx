@@ -41,6 +41,7 @@ import {
   getEventNumJoins,
   getEventNumShoutouts,
 } from "../../../services/EventService";
+import { getEventInterestsByEventId } from "../../../services/InterestService";
 
 /*********************************************
  * route parameters:
@@ -311,17 +312,18 @@ const EventDetailsScreen = ({ route }) => {
 
     // Get interests by route.params.EventID
     // TODODATABASE
-    const pulledTags: Interest[] = [
-      {
-        InterestID: "abcde",
-        Name: "Interest 1",
-      },
-      {
-        InterestID: "fghijk",
-        Name: "Interest 2",
-      },
-    ];
-    setTags(pulledTags);
+
+    getEventInterestsByEventId(eventID)
+      .then((tags: Interest[]) => {
+        setTags(tags);
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
 
     getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
@@ -338,10 +340,10 @@ const EventDetailsScreen = ({ route }) => {
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    setLoadedJoins(false)
-    setLoadedShoutouts(false)
-    setLoadedUserJoined(false)
-    setLoadedUserShouted(false)
+    setLoadedJoins(false);
+    setLoadedShoutouts(false);
+    setLoadedUserJoined(false);
+    setLoadedUserShouted(false);
     await pullData();
     setIsRefreshing(false);
   };
@@ -351,16 +353,16 @@ const EventDetailsScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    console.log("going into host use effect")
+    console.log("going into host use effect");
     if (host === null) {
       return;
     }
-    console.log("Host UserID is " + host.UserID)
-    console.log("Current user UserID is " + currentUser.UserID)
+    console.log("Host UserID is " + host.UserID);
+    console.log("Current user UserID is " + currentUser.UserID);
     if (host.UserID == currentUser.UserID) {
       setIsHost(true);
     } else {
-      console.log("bitch is false")
+      console.log("bitch is false");
       setIsHost(false);
     }
   }, [host]);
@@ -665,7 +667,7 @@ const EventDetailsScreen = ({ route }) => {
                   </McText>
                 </View>
               </VisibilitySection>
-              {isHost ? (
+              {isHost && tags !== null && eventIDToEvent[eventID] !== undefined ? (
                 <>
                   <EditOrDeleteEventSection>
                     <TouchableOpacity

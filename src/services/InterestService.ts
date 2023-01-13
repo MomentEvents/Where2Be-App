@@ -1,6 +1,7 @@
 import momentAPI from "../constants/server";
 import { Interest } from "../constants";
 import { ACADEMIC, ATHLETICS, PROFESSIONAL, SOCIAL } from "./EventService";
+import { formatError } from "../helpers/helpers";
 
 // getAllInterests
 
@@ -51,7 +52,18 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
  * Return: List of all interests relating to that event
  */
 export async function getEventInterestsByEventId(
-  eventID: number
+  eventID: string
 ): Promise<Interest[]> {
-  return null;
+  const pulledInterests: Interest[] = [
+    {
+      InterestID: PROFESSIONAL,
+      Name: "Professional",
+    },
+    {
+      InterestID: SOCIAL,
+      Name: "Social",
+    },
+  ];
+
+  return pulledInterests
 }
