@@ -28,7 +28,6 @@ const InterestButton = (props: InterestButtonProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
       <TouchableOpacity
         onPress={() => {
           _onPress();
@@ -37,7 +36,7 @@ const InterestButton = (props: InterestButtonProps) => {
           width: props.tag.Name.length * 8 + 20,
           height: 32,
           borderRadius: 10,
-          marginTop: 8,
+          marginVertical: 4,
           marginHorizontal: 4,
           backgroundColor: toggle
             ? COLORS.purple
@@ -51,7 +50,6 @@ const InterestButton = (props: InterestButtonProps) => {
           {props.tag.Name}
         </McText>
       </TouchableOpacity>
-    </SafeAreaView>
   );
 };
 

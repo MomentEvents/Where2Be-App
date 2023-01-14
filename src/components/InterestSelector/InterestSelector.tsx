@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { COLORS, Interest } from "../../constants";
+import { COLORS, Interest, SIZES } from "../../constants";
 import {
   getAllInterests,
   getEventInterestsByEventId,
@@ -25,7 +25,9 @@ type InterestSelectorProps = {
 };
 
 const InterestSelector = (props: InterestSelectorProps) => {
-  const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{[key: string]: Interest}>(null);
+  const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{
+    [key: string]: Interest;
+  }>(null);
   const { currentSchool } = useContext(UserContext);
 
   const pullData = async () => {
@@ -44,10 +46,10 @@ const InterestSelector = (props: InterestSelectorProps) => {
           }
         });
 
-        console.log(selectedInterestsTemp)
+        console.log(selectedInterestsTemp);
 
-        props.setSelectedInterests(selectedInterestsTemp)
-        setInterestIDToInterestMap(interestIDToInterestMapTemp)
+        props.setSelectedInterests(selectedInterestsTemp);
+        setInterestIDToInterestMap(interestIDToInterestMapTemp);
       })
       .catch((error: Error) => {
         displayError(error);
@@ -59,29 +61,18 @@ const InterestSelector = (props: InterestSelectorProps) => {
   }, []);
 
   return (
-    <View>
+    //style={{ flexWrap: 'wrap', flexDirection: "row", alignSelf: "baseline"}}
+    <View style={{flexWrap: 'wrap', flexDirection: "row", alignSelf: "baseline"}}>
       {interestIDToInterestMap ? (
-        <FlatList
-          data={Object.values(interestIDToInterestMap)}
-          columnWrapperStyle={{
-            flexWrap: "wrap",
-            flex: 1,
-            marginTop: 1,
-            marginRight: 10,
-          }}
-          numColumns={4}
-          style={{
-            backgroundColor: "transparent",
-          }}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
+        Object.keys(interestIDToInterestMap).map((key, index) => (
+
             <InterestButton
-              tag={item}
+              tag={interestIDToInterestMap[key]}
               selectedInterests={props.selectedInterests}
               setSelectedInterests={props.setSelectedInterests}
+              key={key + index}
             />
-          )}
-        />
+        ))
       ) : (
         <ActivityIndicator />
       )}

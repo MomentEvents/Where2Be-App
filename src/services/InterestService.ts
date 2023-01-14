@@ -67,3 +67,11 @@ export async function getEventInterestsByEventId(
 
   return pulledInterests
 }
+
+export async function updateEventInterestsByEventId(userAccessToken: string,
+  
+  interests: Interest[],
+  eventID: string): Promise<void>
+  {
+    return Promise.resolve()
+  }
