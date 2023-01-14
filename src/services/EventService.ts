@@ -39,7 +39,7 @@ export async function getEvent(eventID: string): Promise<Event> {
   const pulledEvent: Event =     {
     EventID: eventID,
     Title: "I am a pulled Event",
-    Description: "Description for Event",
+    Description: "Description for Event\n\n\n\n\n\n\n\n yo\n expand me",
     Picture:
       "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     Location: "Featured Location",

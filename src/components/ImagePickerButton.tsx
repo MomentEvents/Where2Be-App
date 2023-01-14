@@ -10,6 +10,7 @@ type ImagePickerButtonProps = {
   width?: number;
   height?: number;
   setImageURI: React.Dispatch<React.SetStateAction<string>>;
+  style?: any;
 };
 
 const ImagePickerButton = (props: ImagePickerButtonProps) => {
@@ -17,11 +18,12 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
     props.originalImageURI
   );
 
-  const defaultWidthHeight = SIZES.width < SIZES.height ? SIZES.width - 80 : SIZES.height - 80
-  const width = props.width ? props.width : defaultWidthHeight
-  const height = props.height ? props.height : defaultWidthHeight
+  const defaultWidthHeight =
+    SIZES.width < SIZES.height ? SIZES.width - 80 : SIZES.height - 80;
+  const width = props.width ? props.width : defaultWidthHeight;
+  const height = props.height ? props.height : defaultWidthHeight;
 
-  console.log("Original image URI is " + currentImageURI)
+  console.log("Original image URI is " + currentImageURI);
 
   const pickImage = async () => {
     // // No permissions request is necessary for launching the image library
@@ -51,53 +53,41 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       const { uri } = result as ImageInfo;
       setCurrentImageURI(uri);
       props.setImageURI(uri);
-      console.log("Done");
     }
   };
 
   return (
-    <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
-      {/* {this.state.image && (
-          <Image
-            source={{ uri: this.state.image }}
-            style={{ width: 300, height: 300 }}
+    <TouchableOpacity
+      style={{
+        backgroundColor: COLORS.black,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 1,
+        borderColor: COLORS.white,
+        width: width,
+        height: height,
+        ...props.style,
+      }}
+      onPress={pickImage}
+    >
+      {currentImageURI ? (
+        <Image
+          source={{ uri: currentImageURI }}
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: 4,
+          }}
+        />
+      ) : (
+        <View style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center", borderRadius: 5 }}>
+          <icons.imagepickeraddimage
+            height={Math.min(height / 3, width / 3)}
           />
-        )} */}
-      <TouchableOpacity
-        style={{
-          height: height,
-          width: width,
-          backgroundColor: COLORS.black,
-          borderRadius: 5,
-          marginBottom: 8,
-          alignItems: "center",
-          justifyContent: "center",
-          borderWidth: 2,
-          borderColor: COLORS.gray,
-        }}
-        onPress={pickImage}
-      >
-        {currentImageURI ? (
-          <Image
-            source={{ uri: currentImageURI }}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: 5,
-            }}
-          />
-        ) : (
-          <McIcon
-            source={icons.addphoto}
-            size={props.width}
-            style={{
-              margin: 4,
-              tintColor: COLORS.purple,
-            }}
-          />
-        )}
-      </TouchableOpacity>
-    </View>
+        </View>
+      )}
+    </TouchableOpacity>
   );
 };
 

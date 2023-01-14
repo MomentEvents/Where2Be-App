@@ -877,7 +877,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.purple,
     width: SIZES.width / 3,
     padding: 8,
-    borderRadius: 8,
+    borderRadius: 5,
     alignItems: "center",
     height: 35,
     marginRight: 10,
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.red,
     width: SIZES.width / 2.5,
     padding: 8,
-    borderRadius: 8,
+    borderRadius: 5,
     height: 35,
     alignItems: "center",
     justifyContent: "center",
@@ -905,7 +905,7 @@ const ImageFooterSection = styled.View`
   flex: 1;
   justify-content: flex-end;
   position: relative;
-  width: ${SIZES.width};
+  width: ${SIZES.width}px;
 `;
 
 const FooterContentView = styled.View`

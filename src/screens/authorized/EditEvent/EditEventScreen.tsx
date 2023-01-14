@@ -23,7 +23,8 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import { McText } from "../../../components/Styled";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
-import ImagePickerButton from "../../../components/ImagePicker";
+import ImagePickerButton from "../../../components/ImagePickerButton";
+import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -71,25 +72,42 @@ const EditEventScreen = ({ navigation, route }) => {
       />
       <KeyboardAwareScrollView style={styles.scrollViewContainer}>
         <SectionInputs>
-          <McText
-            h3
-            style={{
-              marginBottom: 16,
-            }}
-          >
-            Image
-          </McText>
-          <View style={{ alignItems: "center", marginLeft: -50 }}>
-            <ImagePickerButton
-              originalImageURI={image}
-              setImageURI={setImage}
-            ></ImagePickerButton>
+          <View style={styles.titleContainer}>
+            <icons.pickpicture width={30} />
+            <McText h3>Image</McText>
+          </View>
+
+          <ImagePickerButton
+            originalImageURI={image}
+            setImageURI={setImage}
+            width={Math.min(SIZES.height, SIZES.width) - 40}
+            height={Math.min(SIZES.height, SIZES.width) - 40}
+          />
+
+          <View style={styles.titleContainer}>
+            <icons.picktitle style={styles.iconsContainer} width={30} />
+            <McText h3>Title</McText>
+          </View>
+
+          <TextInput
+            placeholder={"enter your title"}
+            placeholderTextColor={COLORS.gray}
+            style={styles.textInputContainer}
+            onChangeText={(newText) => setTitle(newText)}
+          />
+
+          <View style={styles.titleContainer}>
+            <icons.picktags style={styles.iconsContainer} width={30} />
+            <McText h3>Tags (select up to 1)</McText>
+          </View>
+
+          <View>
+            <InterestSelector
+              selectedInterests={selectedInterests}
+              setSelectedInterests={setSelectedInterests}
+            />
           </View>
         </SectionInputs>
-        <InterestSelector
-          selectedInterests={selectedInterests}
-          setSelectedInterests={setSelectedInterests}
-        />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -98,13 +116,13 @@ const EditEventScreen = ({ navigation, route }) => {
 export default EditEventScreen;
 
 const SectionInputs = styled.View`
-  margin-left: 50;
-  margin-vertical: 15;
+  margin-horizontal: 10px;
+  margin-vertical: 15px;
 `;
 const SectionTextIn = styled.View`
   background-color: ${COLORS.black};
   width: ${SIZES.width * 0.76};
-  border-radius: 10;
+  border-radius: 5px;
   justify-content: center;
   border: 2px;
   border-color: ${COLORS.gray};
@@ -113,7 +131,7 @@ const SectionTextIn = styled.View`
 const SectionTimings = styled.View`
   background-color: ${COLORS.black};
   width: ${SIZES.width * 0.33};
-  border-radius: 10;
+  border-radius: 5px;
   justify-content: center;
   border: 2px;
   border-color: ${COLORS.gray};
@@ -125,6 +143,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
   },
   scrollViewContainer: {
-    padding: 10,
+    marginHorizontal: 10,
   },
+  titleContainer: {
+    marginTop: 20,
+    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textInputContainer: {
+    borderColor: COLORS.white,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingVertical: 10,
+  },
+  iconsContainer: {
+    marginRight: 10,
+  }
+
 });

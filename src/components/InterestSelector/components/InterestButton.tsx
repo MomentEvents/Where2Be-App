@@ -35,7 +35,7 @@ const InterestButton = (props: InterestButtonProps) => {
         style={{
           width: props.tag.Name.length * 8 + 20,
           height: 32,
-          borderRadius: 10,
+          borderRadius: 5,
           marginVertical: 4,
           marginHorizontal: 4,
           backgroundColor: toggle
