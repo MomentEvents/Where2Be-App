@@ -1,9 +1,9 @@
 import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { COLORS, Event, Interest, icons } from "../../../constants";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { EventContext } from "../../../contexts/EventContext";
-import InterestSelector from "../../../components/InterestSelector";
+import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 
 type EditEventScreenParams = {
@@ -33,12 +33,16 @@ const EditEventScreen = ({ navigation, route }) => {
   );
   const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
 
-  const [tags, setTags] = useState<Interest[]>(eventIDToInterests[eventID]);
+  const [interestIDToInterest, setInterestIDToInterest ] = useState(null)
+  const [interestIDToSelected, setInterestIDToSelected ] = useState(null)
 
+  useEffect(() => {
+
+  }, [])
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader title={"Edit Event"} leftButtonOnClick={() => {}} leftButtonSVG={<icons.backarrow/>}/>
-      <InterestSelector selectedTags={tags} setSelectedTags={setTags} />
+      <InterestSelector interestIDToInterest={interestIDToInterest} interestIDToSelected={interestIDToSelected} setInterestIDToSelected={setInterestIDToSelected}/>
       <Button title={" Test"} onPress={() => {
         console.log(tags)
       }}/>
