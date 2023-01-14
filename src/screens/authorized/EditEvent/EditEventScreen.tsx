@@ -33,19 +33,30 @@ const EditEventScreen = ({ navigation, route }) => {
   );
   const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
 
-  const [interestIDToInterest, setInterestIDToInterest ] = useState(null)
-  const [interestIDToSelected, setInterestIDToSelected ] = useState(null)
+  const [selectedInterests, setSelectedInterests] = useState(
+    new Set<Interest>(eventIDToInterests[eventID]))
 
   useEffect(() => {
-
-  }, [])
+    //selectedInterests.has(eventIDToInterests[eventID][2])
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <SectionHeader title={"Edit Event"} leftButtonOnClick={() => {}} leftButtonSVG={<icons.backarrow/>}/>
-      <InterestSelector interestIDToInterest={interestIDToInterest} interestIDToSelected={interestIDToSelected} setInterestIDToSelected={setInterestIDToSelected}/>
-      <Button title={" Test"} onPress={() => {
-        console.log(tags)
-      }}/>
+      <SectionHeader
+        title={"Edit Event"}
+        leftButtonOnClick={() => {}}
+        leftButtonSVG={<icons.backarrow />}
+      />
+      <InterestSelector
+        selectedInterests={selectedInterests}
+        setSelectedInterests={setSelectedInterests}
+      />
+      <Button
+        title={"Test"}
+        onPress={() => {
+          updateEventIDToInterests({id: eventID, interests: Array.from(selectedInterests)})
+          console.log(selectedInterests);
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -55,6 +66,6 @@ export default EditEventScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black
-  }
+    backgroundColor: COLORS.black,
+  },
 });

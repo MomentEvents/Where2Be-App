@@ -17,21 +17,15 @@ import { displayError } from "../../helpers/helpers";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import InterestButton from "./components/InterestButton";
+import { GestureObjects } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gestureObjects";
 
 type InterestSelectorProps = {
-  selectedTags: Interest[];
-  setSelectedTags: React.Dispatch<React.SetStateAction<Interest[]>>;
+  selectedInterests: Set<Interest>;
+  setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>;
 };
 
 const InterestSelector = (props: InterestSelectorProps) => {
-  const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{
-    [key: string]: Interest;
-  }>(null);
-
-  const [selectedTagsMap, setSelectedTagsMap] = useState<{
-    [key: string]: boolean;
-  }>(null);
-  const [loadedTags, setLoadedTags] = useState(false);
+  const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{[key: string]: Interest}>(null);
   const { currentSchool } = useContext(UserContext);
 
   const pullData = async () => {
@@ -41,35 +35,32 @@ const InterestSelector = (props: InterestSelectorProps) => {
         tags.forEach((element) => {
           interestIDToInterestMapTemp[element.InterestID] = element;
         });
-        setInterestIDToInterestMap(interestIDToInterestMapTemp);
+        var selectedInterestsTemp = new Set<Interest>();
+        props.selectedInterests.forEach((element) => {
+          if (interestIDToInterestMapTemp[element.InterestID]) {
+            selectedInterestsTemp.add(
+              interestIDToInterestMapTemp[element.InterestID]
+            );
+          }
+        });
+
+        console.log(selectedInterestsTemp)
+
+        props.setSelectedInterests(selectedInterestsTemp)
+        setInterestIDToInterestMap(interestIDToInterestMapTemp)
       })
       .catch((error: Error) => {
         displayError(error);
       });
-
-    var selectedTagsMapTemp = {};
-
-    props.selectedTags.forEach((tag) => {
-      selectedTagsMapTemp[tag.InterestID] = true;
-    });
-    setSelectedTagsMap(selectedTagsMapTemp);
   };
 
   useEffect(() => {
     pullData();
   }, []);
 
-  useEffect(() => {
-    if (!interestIDToInterestMap || !selectedTagsMap) {
-      setLoadedTags(false);
-      return;
-    }
-    setLoadedTags(true);
-  }, [interestIDToInterestMap, selectedTagsMap]);
-
   return (
     <View>
-      {loadedTags ? (
+      {interestIDToInterestMap ? (
         <FlatList
           data={Object.values(interestIDToInterestMap)}
           columnWrapperStyle={{
@@ -86,17 +77,14 @@ const InterestSelector = (props: InterestSelectorProps) => {
           renderItem={({ item, index }) => (
             <InterestButton
               tag={item}
-              interestMap={selectedTagsMap}
-              setInterestMap={setSelectedTagsMap}
-              selectedTags={props.selectedTags}
-              setSelectedTags={props.setSelectedTags}
+              selectedInterests={props.selectedInterests}
+              setSelectedInterests={props.setSelectedInterests}
             />
           )}
         />
       ) : (
         <ActivityIndicator />
       )}
-          <Button title={"Test here"} onPress={() => console.log(selectedTagsMap)}/>
     </View>
   );
 };

@@ -6,53 +6,25 @@ import { displayError, formatError } from "../../../helpers/helpers";
 
 type InterestButtonProps = {
   tag: Interest;
-  interestMap: {
-    [tag: string]: boolean;
-  };
-  setInterestMap: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: boolean;
-    }>
-  >;
-  selectedTags: Interest[],
-  setSelectedTags: React.Dispatch<
-  React.SetStateAction<Interest[]>
->;
+  selectedInterests: Set<Interest>;
+  setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>;
 };
 const InterestButton = (props: InterestButtonProps) => {
-  const checkList = (list: { [tag: string]: boolean }, id: string) => {
-    if (list[id]) {
-      return true;
-    }
-  };
 
   const [toggle, setToggle] = useState<boolean>(
-    checkList(props.interestMap, props.tag.InterestID)
+    props.selectedInterests.has(props.tag)
   );
 
   const _onPress = () => {
-    const index = props.selectedTags.indexOf(props.tag)
     if(toggle){
         // We are removing an item
-        if(index == -1){
-            // We are removing an item that isn't there. Just return
-            throw formatError("Error", "You are clicking too fast! You are removing an item that is not there")
-        }
-
-        props.selectedTags.splice(index, 1)
+        props.selectedInterests.delete(props.tag)
     }
     else{
         // We are adding an item
-        if(index > -1){
-            // We are adding an item that is already there. Just return
-            throw formatError("Error", "You are clicking too fast! You are adding an item that is already there")
-        }
-        props.selectedTags.push(props.tag)
+        props.selectedInterests.add(props.tag)
     }
     setToggle(!toggle);
-    props.interestMap[props.tag.InterestID] = !props.interestMap[props.tag.InterestID];
-    props.setInterestMap(props.interestMap);
-
   };
 
   return (
@@ -66,7 +38,7 @@ const InterestButton = (props: InterestButtonProps) => {
           height: 32,
           borderRadius: 10,
           marginTop: 8,
-          marginRight: 8,
+          marginHorizontal: 4,
           backgroundColor: toggle
             ? COLORS.purple
             : COLORS.input,
