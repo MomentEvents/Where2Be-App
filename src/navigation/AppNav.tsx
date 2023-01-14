@@ -10,6 +10,7 @@ import TabNavigator from "./TabNavigator";
 import SignupScreen from "../screens/unauthorized/Signup/SignupScreen";
 import { SCREENS } from "../constants";
 import EventDetailsScreen from "../screens/authorized/EventDetails/EventDetailsScreen";
+import EditEventScreen from "../screens/authorized/EditEvent/EditEventScreen";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,7 @@ const AppStack = () => {
     >
       <Stack.Screen name={SCREENS.TabNavigator} component={TabNavigator} />
       <Stack.Screen name={SCREENS.EventDetails} component={EventDetailsScreen}/>
+      <Stack.Screen name={SCREENS.EditEvent} component={EditEventScreen}/>
     </Stack.Navigator>
   );
 };

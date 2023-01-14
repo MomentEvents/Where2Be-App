@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
-import { COLORS, SIZES, icons } from "../../../constants";
+import { COLORS, SCREENS, SIZES, icons } from "../../../constants";
 import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
@@ -194,7 +194,7 @@ const EventDetailsScreen = ({ route }) => {
     if (!eventIDToEvent[eventID]) {
       return;
     }
-    RootNavigation.navigate("NewEditEventScreen", {
+    RootNavigation.navigate(SCREENS.EditEvent, {
       eventID: eventID
     });
   };
