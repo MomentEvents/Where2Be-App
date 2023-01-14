@@ -8,5 +8,6 @@ export const SCREENS = {
     Search: "SearchScreen",
     MyCalendar: "MyCalendarScreen",
     MyProfile: "MyProfileScreen",
-    EventDetails: "EventDetailsScreen"
+    EventDetails: "EventDetailsScreen",
+    EditEvent: "EditEventScreen"
 }

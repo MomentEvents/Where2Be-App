@@ -36,6 +36,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
 import { EventContext } from "../../../contexts/EventContext";
+import SectionHeader from "../../../components/Styled/SectionHeader";
 type RouteParams = {
   school: School;
 };
@@ -51,12 +52,12 @@ const ExploreEvents = ({ navigation, route }) => {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const [errorThrown, setErrorThrown] = useState<boolean>(false)
+  const [errorThrown, setErrorThrown] = useState<boolean>(false);
 
   const pullEvents = async () => {
     // We will await getting featured first to load the more important
     // events on the header
-    setErrorThrown(false)
+    setErrorThrown(false);
     var errorThrown: boolean = false;
     getAllSchoolFeaturedEvents(currentSchool.SchoolID)
       .then((events: Event[]) => setFeaturedEvents(events))
@@ -64,7 +65,7 @@ const ExploreEvents = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -76,7 +77,7 @@ const ExploreEvents = ({ navigation, route }) => {
         if (!errorThrown) {
           displayError(error);
           errorThrown = true;
-          setErrorThrown(true)
+          setErrorThrown(true);
         }
       });
 
@@ -96,7 +97,7 @@ const ExploreEvents = ({ navigation, route }) => {
           if (!errorThrown) {
             displayError(error);
             errorThrown = true;
-            setErrorThrown(true)
+            setErrorThrown(true);
           }
         });
     }
@@ -115,11 +116,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
   const _renderBigEventCards = ({ item, index }) => {
     return (
-      <View
-        style={{
-          marginLeft: 10,
-        }}
-      >
+      <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
         <EventCard event={item} isBigCard={true} />
       </View>
     );
@@ -131,7 +128,7 @@ const ExploreEvents = ({ navigation, route }) => {
     }
     loadedEventsMap[item.EventID] = true;
     return (
-      <View style={styles.categoryTitle}>
+      <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
         <EventCard event={item} isBigCard={false} />
       </View>
     );
@@ -146,65 +143,57 @@ const ExploreEvents = ({ navigation, route }) => {
   }, []);
 
   return (
-    <GradientBackground>
-      <SafeAreaView style={styles.container}>
-        <SectionHeader>
-          <McText
-            h1
-            style={{
-              marginLeft: 10,
-            }}
-          >
-            Explore Events
-          </McText>
-        </SectionHeader>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-          }
-        >
-          {featuredEvents !== null && featuredEvents.length !== 0 ? (
-            <View>
-              <FlatList
-                horizontal
-                keyExtractor={(item) => item.EventID}
-                data={Object.values(featuredEvents)}
-                renderItem={_renderBigEventCards}
-                style={styles.flatlistContainer}
-              ></FlatList>
-            </View>
-          ) : (
-            <View />
-          )}
-          {interestToEventMap === null ? (
-            <></>
-          ) : (
-            Object.keys(interestToEventMap).map((key, index) => (
+    <SafeAreaView style={styles.container}>
+      <SectionHeader title={"Explore Events"} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      >
+        {featuredEvents !== null && featuredEvents.length !== 0 ? (
+
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.EventID}
+              data={Object.values(featuredEvents)}
+              renderItem={_renderBigEventCards}
+              style={styles.flatlistContainer}
+            />
+        ) : (
+          <View />
+        )}
+        {interestToEventMap === null ? (
+          <></>
+        ) : (
+          <View>
+            {Object.keys(interestToEventMap).map((key, index) => (
               <View key={key + index}>
                 <McText h2 style={styles.categoryTitle}>
                   {key}
                 </McText>
                 <FlatList
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   data={Object.values(interestToEventMap[key])}
                   renderItem={_renderSmallEventCards}
                   style={styles.flatlistContainer}
                 ></FlatList>
               </View>
-            ))
-          )}
-          <ActivityIndicator animating={loadingEvents || errorThrown} />
+            ))}
+          </View>
+        )}
+        <ActivityIndicator animating={loadingEvents || errorThrown} />
 
-          <View style={{ height: SIZES.tab_bar_height }} />
-        </ScrollView>
-        <TouchableOpacity style={styles.hoverButtonContainer}>
-          <GradientButton style={styles.hoverButtonIconContainer}>
-            <icons.plus height="60%" width="60%"></icons.plus>
-          </GradientButton>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </GradientBackground>
+        <View style={{ height: SIZES.tab_bar_height }} />
+      </ScrollView>
+      <TouchableOpacity style={styles.hoverButtonContainer}>
+        <GradientButton style={styles.hoverButtonIconContainer}>
+          <icons.plus height="60%" width="60%"></icons.plus>
+        </GradientButton>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
@@ -213,9 +202,10 @@ export default ExploreEvents;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.black,
   },
   categoryTitle: {
-    marginLeft: 10,
+    marginLeft: 20,
   },
   flatlistContainer: {
     marginTop: 15,
@@ -239,21 +229,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-const SectionHeader = ({ children }) => {
-  return (
-    <View
-      style={{
-        paddingHorizontal: 20,
-        paddingVertical: 6,
-        alignItems: "center",
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderColor: COLORS.gray,
-        backgroundColor: COLORS.trueBlack,
-      }}
-    >
-      {children}
-    </View>
-  );
-};

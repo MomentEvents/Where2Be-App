@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
-import { COLORS, SIZES, icons } from "../../../constants";
+import { COLORS, SCREENS, SIZES, icons } from "../../../constants";
 import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
@@ -41,6 +41,8 @@ import {
   getEventNumJoins,
   getEventNumShoutouts,
 } from "../../../services/EventService";
+import { getEventInterestsByEventId } from "../../../services/InterestService";
+import GradientButton from "../../../components/Styled/GradientButton";
 
 /*********************************************
  * route parameters:
@@ -75,12 +77,13 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToDidShoutout,
     eventIDToShoutouts,
     updateEventIDToShoutouts,
+    eventIDToInterests,
+    updateEventIDToInterests
   } = useContext(EventContext);
 
   const { eventID } = propsFromEventCard;
 
   const [host, setHost] = useState<User>(null);
-  const [tags, setTags] = useState<Interest[]>(null);
 
   const [isHost, setIsHost] = useState<boolean>(false);
 
@@ -191,10 +194,8 @@ const EventDetailsScreen = ({ route }) => {
     if (!eventIDToEvent[eventID]) {
       return;
     }
-    RootNavigation.navigate("NewEditEventScreen", {
-      Event: eventIDToEvent,
-      Tags: tags,
-      SetTags: setTags,
+    RootNavigation.navigate(SCREENS.EditEvent, {
+      eventID: eventID
     });
   };
 
@@ -218,6 +219,7 @@ const EventDetailsScreen = ({ route }) => {
               }
             );
 
+            updateEventIDToEvent({ id: eventID, event: undefined });
             RootNavigation.goBack();
           },
         },
@@ -311,17 +313,18 @@ const EventDetailsScreen = ({ route }) => {
 
     // Get interests by route.params.EventID
     // TODODATABASE
-    const pulledTags: Interest[] = [
-      {
-        InterestID: "abcde",
-        Name: "Interest 1",
-      },
-      {
-        InterestID: "fghijk",
-        Name: "Interest 2",
-      },
-    ];
-    setTags(pulledTags);
+
+    getEventInterestsByEventId(eventID)
+      .then((tags: Interest[]) => {
+        updateEventIDToInterests({id: eventID, interests: tags})
+      })
+      .catch((error: Error) => {
+        if (!gotError) {
+          gotError = true;
+          displayError(error);
+          RootNavigation.goBack();
+        }
+      });
 
     getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
@@ -338,10 +341,10 @@ const EventDetailsScreen = ({ route }) => {
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    setLoadedJoins(false)
-    setLoadedShoutouts(false)
-    setLoadedUserJoined(false)
-    setLoadedUserShouted(false)
+    setLoadedJoins(false);
+    setLoadedShoutouts(false);
+    setLoadedUserJoined(false);
+    setLoadedUserShouted(false);
     await pullData();
     setIsRefreshing(false);
   };
@@ -351,16 +354,16 @@ const EventDetailsScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    console.log("going into host use effect")
+    console.log("going into host use effect");
     if (host === null) {
       return;
     }
-    console.log("Host UserID is " + host.UserID)
-    console.log("Current user UserID is " + currentUser.UserID)
+    console.log("Host UserID is " + host.UserID);
+    console.log("Current user UserID is " + currentUser.UserID);
     if (host.UserID == currentUser.UserID) {
       setIsHost(true);
     } else {
-      console.log("bitch is false")
+      console.log("bitch is false");
       setIsHost(false);
     }
   }, [host]);
@@ -521,9 +524,7 @@ const EventDetailsScreen = ({ route }) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {tags === null
-                    ? null
-                    : tags.map((taglist) => (
+                  {eventIDToInterests[eventID] ? eventIDToInterests[eventID].map((taglist) => (
                         <View
                           key={taglist.InterestID}
                           style={{
@@ -545,7 +546,7 @@ const EventDetailsScreen = ({ route }) => {
                             {taglist === undefined ? null : taglist.Name}
                           </McText>
                         </View>
-                      ))}
+                      )) : null}
                 </ScrollView>
               </InterestSection>
 
@@ -665,7 +666,9 @@ const EventDetailsScreen = ({ route }) => {
                   </McText>
                 </View>
               </VisibilitySection>
-              {isHost ? (
+              {isHost &&
+              eventIDToInterests[eventID] &&
+              eventIDToEvent[eventID] ? (
                 <>
                   <EditOrDeleteEventSection>
                     <TouchableOpacity
@@ -716,13 +719,8 @@ const EventDetailsScreen = ({ route }) => {
                     marginRight: 60,
                   }}
                 >
-                  <LinearGradient
-                    colors={["#B66DFF", "#280292"]}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                    }}
+                  <GradientButton
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
@@ -752,7 +750,7 @@ const EventDetailsScreen = ({ route }) => {
                         <icons.inactivecheckmark width={35} />
                       )}
                     </TouchableOpacity>
-                  </LinearGradient>
+                  </GradientButton>
                   <McText
                     body3
                     style={{
@@ -779,13 +777,8 @@ const EventDetailsScreen = ({ route }) => {
                     alignItems: "center",
                   }}
                 >
-                  <LinearGradient
-                    colors={["#B66DFF", "#280292"]}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 80,
-                    }}
+                  <GradientButton
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
@@ -815,7 +808,7 @@ const EventDetailsScreen = ({ route }) => {
                         <icons.inactiveshoutout width={35} />
                       )}
                     </TouchableOpacity>
-                  </LinearGradient>
+                  </GradientButton>
                   <McText
                     body3
                     style={{

@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { Event } from "../constants";
+import { Event, Interest } from "../constants";
 import { min } from "moment";
 
 type EventContextType = {
@@ -7,6 +7,11 @@ type EventContextType = {
   updateEventIDToEvent: React.Dispatch<{
     id: string;
     event: Event;
+  }>;
+  eventIDToInterests: { [key: string]: Interest[]};
+  updateEventIDToInterests: React.Dispatch<{
+    id: string;
+    interests: Interest[]
   }>;
   eventIDToDidJoin: { [key: string]: boolean };
   updateEventIDToDidJoin: React.Dispatch<{
@@ -41,6 +46,8 @@ export const EventContext = createContext<EventContextType>({
   updateEventIDToDidShoutout: null,
   eventIDToShoutouts: null,
   updateEventIDToShoutouts: null,
+  eventIDToInterests: null,
+  updateEventIDToInterests: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
@@ -55,6 +62,10 @@ export const EventProvider = ({ children }) => {
   );
   const [eventIDToDidShoutout, updateEventIDToDidShoutout] = useReducer(
     setDidShoutoutMap,
+    {}
+  );
+  const [eventIDToInterests, updateEventIDToInterests] = useReducer(
+    setInterestsMap,
     {}
   );
 
@@ -103,6 +114,15 @@ export const EventProvider = ({ children }) => {
     return map;
   }
 
+  function setInterestsMap(
+    map: { [key: string]: Interest[]},
+    action: { id: string; interests: Interest[]}
+  ) {
+    map[action.id] = action.interests;
+    map = {...map}
+    return map;
+  }
+
   return (
     <EventContext.Provider
       value={{
@@ -116,6 +136,8 @@ export const EventProvider = ({ children }) => {
         updateEventIDToDidShoutout,
         eventIDToShoutouts,
         updateEventIDToShoutouts,
+        eventIDToInterests,
+        updateEventIDToInterests
       }}
     >
       {children}

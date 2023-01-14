@@ -1,12 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../../constants";
 
 const GradientButton = ({ style, children }) => {
   return (
-    <LinearGradient colors={["#B66DFF", "#280292"]} style={[style]}>
+    <View style={{backgroundColor: COLORS.purple, ...style}}>
       {children}
-    </LinearGradient>
+    </View>
+
+    // <LinearGradient colors={["#B66DFF", "#280292"]} style={[style]}>
+    //   {children}
+    // </LinearGradient>
   );
 };
 
