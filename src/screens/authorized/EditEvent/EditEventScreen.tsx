@@ -69,9 +69,23 @@ const EditEventScreen = ({ navigation, route }) => {
   );
   const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
   const [selectedInterests, setSelectedInterests] = useState(
-    new Set(eventIDToInterests[eventID])
+    new Set<Interest>(eventIDToInterests[eventID])
   );
 
+  // const [title, setTitle] = useState<string>();
+  // const [location, setLocation] = useState<string>(
+
+  // );
+  // const [image, setImage] = useState<string>();
+  // const [date, setDate] = useState<Date>();
+  // const [desc, setDesc] = useState<string>();
+  // const [start, setStart] = useState<Date>(
+    
+  // );
+  // const [end, setEnd] = useState<Date>();
+  // const [selectedInterests, setSelectedInterests] = useState(
+  //   new Set<Interest>()
+  // );
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
   const [openedEndTimePicker, setOpenedEndTimePicker] =
@@ -130,13 +144,8 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
-    console.log(updatedEvent.StartDateTime)
-    console.log(updatedEvent.StartDateTime.getTime())
-    console.log(updatedEvent.EndDateTime)
-    console.log(updatedEvent.EndDateTime.getTime())
     if (
-      updatedEvent.StartDateTime.getTime() >
-      updatedEvent.EndDateTime.getTime()
+      updatedEvent.StartDateTime.getTime() > updatedEvent.EndDateTime.getTime()
     ) {
       displayError(
         formatError("Input error", "The start time must be before the end time")
@@ -144,12 +153,16 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
-    console.log("\n\n")
-    console.log(updatedEvent.StartDateTime.getTime())
-    console.log(Date.now())
     if (updatedEvent.StartDateTime.getTime() < Date.now()) {
       displayError(
         formatError("Input error", "The event must not be in the past")
+      );
+      return;
+    }
+
+    if(selectedInterests.size !== 1){
+      displayError(
+        formatError("Input error", "Please only select one tag")
       );
       return;
     }
@@ -279,7 +292,7 @@ const EditEventScreen = ({ navigation, route }) => {
 
             <View style={{ flexDirection: "row", flex: 1 }}>
               <TouchableOpacity
-                style={styles.timeInputContainer}
+                style={styles.startTimeInputContainer}
                 onPress={() => {
                   setOpenedStartTimePicker(true);
                 }}
@@ -293,7 +306,7 @@ const EditEventScreen = ({ navigation, route }) => {
                 )}
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.timeInputContainer}
+                style={styles.endTimeInputContainer}
                 onPress={() => {
                   setOpenedEndTimePicker(true);
                 }}
@@ -411,7 +424,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10,
   },
-  timeInputContainer: {
+  startTimeInputContainer: {
     borderColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 5,
@@ -422,8 +435,22 @@ const styles = StyleSheet.create({
     paddingHorzontal: 10,
     paddingBottom: 10,
     paddingTop: 10,
-    width: SIZES.width * 0.5 - 30,
-    marginRight: 20,
+    width: "47%",
+  },
+  endTimeInputContainer: {
+    borderColor: COLORS.white,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingHorzontal: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
+    width: "47%",
+    position: "absolute",
+    right: 0
   },
   timeInputText: {
     fontSize: 16,
