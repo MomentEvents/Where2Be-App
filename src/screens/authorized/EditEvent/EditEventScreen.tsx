@@ -137,8 +137,6 @@ const EditEventScreen = ({ navigation, route }) => {
       Visibility: eventIDToEvent[eventID].Visibility,
     };
 
-    return
-
     if (!checkIfEventIsFormatted(updatedEvent)) {
       displayError(
         formatError("Input error", "Check that all of the fields are readable")

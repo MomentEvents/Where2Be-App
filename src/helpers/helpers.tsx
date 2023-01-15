@@ -99,28 +99,36 @@ export function convertToStartTimeEndTime(
 ): { [key: string]: Date } {
   // yyyy-mm-ddThh:mm:ss.000Z
 
+  var toOffsetDate = new Date();
+  var offset = toOffsetDate.getTimezoneOffset() * 60000;
 
-  const startDateTimeString: string =
-  date.getUTCFullYear() + "-" + ((date.getUTCMonth() + 1) < 10 ? "0" : "") +  (date.getUTCMonth() + 1)
+  const startDateTimeString =
+    moment.utc(date).local().format("YYYY[-]MM[-]DD") +
     "T" +
-    moment.utc(startTime).format("hh[:]mm") +
+    moment.utc(startTime).local().format("HH[:]mm") +
     ":00.000Z";
 
-  const endDateTimeString: string =
-    moment.utc(date).format("YYYY[-]MM[-]DD") +
+  const endDateTimeString =
+    moment.utc(date).local().format("YYYY[-]MM[-]DD") +
     "T" +
-    moment.utc(endTime).format("hh[:]mm") +
+    moment.utc(endTime).local().format("HH[:]mm") +
     ":00.000Z";
 
-    console.log("startDateTime")
-    console.log(startDateTimeString)
-    console.log("endDateTimeString")
-    console.log(endDateTimeString)
+  const toBeConvertedStartTime = new Date(startDateTimeString);
+
+  const convertedStartTime = new Date(
+    toBeConvertedStartTime.getTime() + offset
+  );
+
+  const toBeConvertedEndTime = new Date(endDateTimeString);
+
+  const convertedEndTime = new Date(toBeConvertedEndTime.getTime() + offset);
 
   var valuesToMap = {};
 
-  valuesToMap["startDateTime"] = new Date(startDateTimeString);
-  valuesToMap["endDateTime"] = new Date(endDateTimeString);
+  valuesToMap["startDateTime"] = convertedStartTime;
+  valuesToMap["endDateTime"] = convertedEndTime;
+
   return valuesToMap;
 }
 
