@@ -10,5 +10,8 @@ export const SCREENS = {
     MyProfile: "MyProfileScreen",
     EventDetails: "EventDetailsScreen",
     EditEvent: "EditEventScreen",
-    ProfileDetails: "ProfileDetailsScreen"
+    ProfileDetails: "ProfileDetailsScreen",
+    CreateEvent: "CreateEventScreen", // TODO
+    PreviewEvent: "PreviewEventScreen", // TODO
+    
 }

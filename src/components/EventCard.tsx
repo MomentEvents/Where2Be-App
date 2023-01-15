@@ -34,9 +34,10 @@ type EventCardProps = {
   isBigCard?: boolean;
   width?: number;
   height?: number;
+  showRelativeTime?: boolean;
 };
 
-const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps) => {
+const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const {
     eventIDToEvent,
@@ -217,7 +218,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
         >
           <Image
             source={{ uri: eventIDToEvent[event.EventID].Picture }}
-            blurRadius={1}
+            blurRadius={0}
             style={{
               height: cardHeight,
               width: cardWidth,
@@ -286,21 +287,9 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
                     marginRight: 4,
                   }}
                 >
-                  {moment(eventIDToEvent[event.EventID].StartDateTime)
-                    .format("MMM DD")
-                    .toUpperCase()}
-                </McText>
-                <McText
-                  h3
-                  style={{
-                    color: COLORS.white,
-                    opacity: 0.8,
-                    marginTop: 4,
-                    letterSpacing: 1.2,
-                  }}
-                >
-                  {moment(eventIDToEvent[event.EventID].StartDateTime)
-                    .format("hh:mm A")
+                  {showRelativeTime ? moment(eventIDToEvent[event.EventID].StartDateTime).fromNow() : 
+                    moment(eventIDToEvent[event.EventID].StartDateTime)
+                    .format("MMM DD hh:mm A")
                     .toUpperCase()}
                 </McText>
                 <View
@@ -384,7 +373,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height }: EventCardProps)
       >
         <Image
           source={{ uri: eventIDToEvent[event.EventID].Picture }}
-          blurRadius={3}
+          blurRadius={0}
           style={{
             height: cardHeight,
             width: cardWidth,

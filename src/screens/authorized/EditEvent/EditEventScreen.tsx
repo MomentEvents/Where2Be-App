@@ -137,6 +137,8 @@ const EditEventScreen = ({ navigation, route }) => {
       Visibility: eventIDToEvent[eventID].Visibility,
     };
 
+    return
+
     if (!checkIfEventIsFormatted(updatedEvent)) {
       displayError(
         formatError("Input error", "Check that all of the fields are readable")
@@ -144,6 +146,8 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
+    console.log("start time:")
+    console.log(updatedEvent.StartDateTime.getTime())
     if (
       updatedEvent.StartDateTime.getTime() > updatedEvent.EndDateTime.getTime()
     ) {
@@ -153,6 +157,7 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
+    console.log(Date.now())
     if (updatedEvent.StartDateTime.getTime() < Date.now()) {
       displayError(
         formatError("Input error", "The event must not be in the past")

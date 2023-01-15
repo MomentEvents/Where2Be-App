@@ -63,7 +63,7 @@ const ProfileDetailsScreen = ({ route }) => {
   const onRefresh = async () => {
     setPulledEvents(null);
     setIsRefreshing(true);
-    await pullData();
+    pullData();
     setIsRefreshing(false);
   };
 
@@ -108,7 +108,7 @@ const ProfileDetailsScreen = ({ route }) => {
           onPress={() => setIsFutureToggle(true)}
         >
           <McText h3 color={isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
-            Future Events
+            Upcoming
           </McText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,7 +123,7 @@ const ProfileDetailsScreen = ({ route }) => {
           onPress={() => setIsFutureToggle(false)}
         >
           <McText h3 color={!isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
-            Past Events
+            Previous
           </McText>
         </TouchableOpacity>
       </View>
@@ -140,7 +140,7 @@ const ProfileDetailsScreen = ({ route }) => {
               key={event.EventID + User.UserID + "Host"}
             >
               <EventCard
-                width={SIZES.width - 20}
+                width={SIZES.width - 40}
                 height={SIZES.height * 0.3}
                 event={event}
                 isBigCard={true}

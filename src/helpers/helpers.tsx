@@ -98,8 +98,10 @@ export function convertToStartTimeEndTime(
   endTime: Date
 ): { [key: string]: Date } {
   // yyyy-mm-ddThh:mm:ss.000Z
+
+
   const startDateTimeString: string =
-    moment.utc(date).format("YYYY[-]MM[-]DD") +
+  date.getUTCFullYear() + "-" + ((date.getUTCMonth() + 1) < 10 ? "0" : "") +  (date.getUTCMonth() + 1)
     "T" +
     moment.utc(startTime).format("hh[:]mm") +
     ":00.000Z";
@@ -109,6 +111,11 @@ export function convertToStartTimeEndTime(
     "T" +
     moment.utc(endTime).format("hh[:]mm") +
     ":00.000Z";
+
+    console.log("startDateTime")
+    console.log(startDateTimeString)
+    console.log("endDateTimeString")
+    console.log(endDateTimeString)
 
   var valuesToMap = {};
 

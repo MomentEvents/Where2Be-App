@@ -47,6 +47,7 @@ import GradientButton from "../../../components/Styled/GradientButton";
 type routeParametersType = {
   eventID: string;
 };
+
 const EventDetailsScreen = ({ route }) => {
   const { isLoggedIn, userToken, currentUser } = useContext(UserContext);
 
@@ -332,7 +333,7 @@ const EventDetailsScreen = ({ route }) => {
     setLoadedShoutouts(false);
     setLoadedUserJoined(false);
     setLoadedUserShouted(false);
-    await pullData();
+    pullData();
     setIsRefreshing(false);
   };
 
@@ -520,10 +521,10 @@ const EventDetailsScreen = ({ route }) => {
                                 ? 20
                                 : taglist.Name.length * 9 + 15,
                             height: 32,
-                            borderRadius: 14,
+                            borderRadius: 5,
                             marginRight: 10,
                             backgroundColor: COLORS.input,
-                            borderWidth: StyleSheet.hairlineWidth,
+                            borderWidth: 1,
                             borderColor: COLORS.purple,
                             justifyContent: "center",
                             alignItems: "center",
