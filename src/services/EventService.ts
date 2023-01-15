@@ -219,7 +219,7 @@ export async function getUserHostedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-  return null;
+  return [];
 }
 
 /*******************************************************

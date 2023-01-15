@@ -132,7 +132,21 @@ const ProfileDetailsScreen = ({ route }) => {
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
       >
+        {pulledEvents && pulledEvents.length === 0 ? (
+          <View
+            style={{
+              marginTop: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <McText h3>No events to display!</McText>
+          </View>
+        ) : (
+          <></>
+        )}
         {pulledEvents ? (
           pulledEvents.map((event: Event) => (
             <View
@@ -144,6 +158,7 @@ const ProfileDetailsScreen = ({ route }) => {
                 height={SIZES.height * 0.3}
                 event={event}
                 isBigCard={true}
+                showRelativeTime={true}
               />
             </View>
           ))

@@ -81,13 +81,13 @@ const MyCalendarScreen = ({ route }) => {
         !eventIDToDidJoin[event.EventID] ? (
           <></>
         ) : ( */}
-          <EventCard
-            width={SIZES.width - 40}
-            height={SIZES.height * 0.3}
-            event={event}
-            isBigCard={true}
-            showRelativeTime={true}
-          />
+        <EventCard
+          width={SIZES.width - 40}
+          height={SIZES.height * 0.3}
+          event={event}
+          isBigCard={true}
+          showRelativeTime={true}
+        />
         {/* )} */}
       </View>
     );
@@ -140,6 +140,7 @@ const MyCalendarScreen = ({ route }) => {
       </View>
 
       <ScrollView
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
@@ -149,6 +150,20 @@ const MyCalendarScreen = ({ route }) => {
         ) : (
           <ActivityIndicator style={{ marginTop: 20 }} />
         )}
+        {pulledEvents && pulledEvents.length === 0 ? (
+          <View
+            style={{
+              marginTop: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <McText h3>No events to display!</McText>
+          </View>
+        ) : (
+          <></>
+        )}
+        <View style={{ height: SIZES.tab_bar_height }} />
       </ScrollView>
     </SafeAreaView>
   );

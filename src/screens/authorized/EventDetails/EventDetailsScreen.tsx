@@ -383,6 +383,7 @@ const EventDetailsScreen = ({ route }) => {
             refreshControl={
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
             }
+            showsVerticalScrollIndicator={false}
           >
             <ImageBackground
               resizeMode="cover"
@@ -928,7 +929,7 @@ const DescriptionSection = styled.View`
 
 const LocationSection = styled.View`
   flex-direction: row;
-  margin: 5px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
   border-radius: 10px;
   align-items: center;
 `;
