@@ -90,37 +90,49 @@ const ProfileDetailsScreen = ({ route }) => {
           </McText>
         </View>
       </View>
-      {isFutureToggle ? (
-        <View
+      <View
+        style={{
+          backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
+          ...styles.buttonToggleContainer,
+        }}
+      >
+        <TouchableOpacity
           style={{
-            backgroundColor: COLORS.black,
-            ...styles.buttonToggleContainer,
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: isFutureToggle ? 0 : 1,
+            borderColor: COLORS.gray,
+            backgroundColor: isFutureToggle ? COLORS.white : COLORS.trueBlack,
+            ...styles.toggleButton,
           }}
+          onPress={() => setIsFutureToggle(true)}
         >
-          <TouchableOpacity></TouchableOpacity>
-          <TouchableOpacity></TouchableOpacity>
-        </View>
-      ) : (
-        <View
+          <McText h3 color={isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
+            Future Events
+          </McText>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={{
-            backgroundColor: COLORS.white,
-            ...styles.buttonToggleContainer,
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: !isFutureToggle ? 0 : 1,
+            borderColor: COLORS.gray,
+            backgroundColor: !isFutureToggle ? COLORS.white : COLORS.trueBlack,
+            ...styles.toggleButton,
           }}
+          onPress={() => setIsFutureToggle(false)}
         >
-          <TouchableOpacity></TouchableOpacity>
-          <TouchableOpacity></TouchableOpacity>
-        </View>
-      )}
+          <McText h3 color={!isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
+            Past Events
+          </McText>
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
-        <Button
-          title={"Test"}
-          onPress={() => setIsFutureToggle(!isFutureToggle)}
-        />
         {pulledEvents ? (
           pulledEvents.map((event: Event) => (
             <View
@@ -173,12 +185,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonToggleContainer: {
-    height: 40,
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderColor: COLORS.gray,
     flexDirection: "row",
+    backgroundColor: COLORS.trueBlack,
   },
-  futureButton: {},
-  pastButton: {},
+  toggleButton: {
+    width: SIZES.width * 0.5,
+    height: 40,
+  },
 });
