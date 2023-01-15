@@ -38,13 +38,15 @@ const InterestSelector = (props: InterestSelectorProps) => {
           interestIDToInterestMapTemp[element.InterestID] = element;
         });
         var selectedInterestsTemp = new Set<Interest>();
-        props.selectedInterests.forEach((element) => {
-          if (interestIDToInterestMapTemp[element.InterestID]) {
-            selectedInterestsTemp.add(
-              interestIDToInterestMapTemp[element.InterestID]
-            );
-          }
-        });
+        props.selectedInterests !== undefined
+          ? props.selectedInterests.forEach((element) => {
+              if (interestIDToInterestMapTemp[element.InterestID]) {
+                selectedInterestsTemp.add(
+                  interestIDToInterestMapTemp[element.InterestID]
+                );
+              }
+            })
+          : {};
 
         console.log(selectedInterestsTemp);
 
@@ -62,16 +64,17 @@ const InterestSelector = (props: InterestSelectorProps) => {
 
   return (
     //style={{ flexWrap: 'wrap', flexDirection: "row", alignSelf: "baseline"}}
-    <View style={{flexWrap: 'wrap', flexDirection: "row", alignSelf: "baseline"}}>
+    <View
+      style={{ flexWrap: "wrap", flexDirection: "row", alignSelf: "baseline" }}
+    >
       {interestIDToInterestMap ? (
         Object.keys(interestIDToInterestMap).map((key, index) => (
-
-            <InterestButton
-              tag={interestIDToInterestMap[key]}
-              selectedInterests={props.selectedInterests}
-              setSelectedInterests={props.setSelectedInterests}
-              key={key + index}
-            />
+          <InterestButton
+            tag={interestIDToInterestMap[key]}
+            selectedInterests={props.selectedInterests}
+            setSelectedInterests={props.setSelectedInterests}
+            key={key + index}
+          />
         ))
       ) : (
         <ActivityIndicator />

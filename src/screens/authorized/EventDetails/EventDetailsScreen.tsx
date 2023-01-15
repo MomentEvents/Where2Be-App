@@ -311,9 +311,6 @@ const EventDetailsScreen = ({ route }) => {
         }
       });
 
-    // Get interests by route.params.EventID
-    // TODODATABASE
-
     getEventInterestsByEventId(eventID)
       .then((tags: Interest[]) => {
         updateEventIDToInterests({id: eventID, interests: tags})

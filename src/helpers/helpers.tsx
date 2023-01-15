@@ -46,10 +46,10 @@ export function checkIfStringIsAlphanumeric(test: string): boolean {
  * a boolean which if true, means the string is only alphanumeric or if false, is not alpanumeric
  */
 export function formatError(name: string, message: string): Error {
-  const thrownError: Error = new Error(message)
-  thrownError.name = name
+  const thrownError: Error = new Error(message);
+  thrownError.name = name;
 
-  return thrownError
+  return thrownError;
 }
 
 /***********************************
@@ -64,19 +64,33 @@ export function formatError(name: string, message: string): Error {
  * a boolean which if true, means the string is only alphanumeric or if false, is not alpanumeric
  */
 export function displayError(error: Error): boolean {
-  Alert.alert(error.name, error.message)
-  return true
+  Alert.alert(error.name, error.message);
+  return true;
 }
 
 export function isDisplayNameFormatted(test: string): boolean {
-  return /^[a-zA-Z].*[\s\.]*$/.test(test)
+  return /^[a-zA-Z].*[\s\.]*$/.test(test);
+}
+
+export function convertDateToUTC(originalDate: Date): Date {
+  var date = originalDate
+  var now_utc = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
+
+  return date
 }
 
 export async function HELPME() {
-  for(var i = 0; i < 9999999; i++){
-    if(i % 10000 === 0){
-      console.log(i)
+  for (var i = 0; i < 9999999; i++) {
+    if (i % 10000 === 0) {
+      console.log(i);
     }
   }
-  return
+  return;
 }
