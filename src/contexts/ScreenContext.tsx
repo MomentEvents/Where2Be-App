@@ -78,7 +78,7 @@ export const ScreenProvider = ({ children }) => {
           }}
         >
           <SafeAreaView style={{ alignItems: "center" }}>
-            <icons.moment width={SIZES.width * 0.7}></icons.moment>
+            <icons.moment width={Math.min(SIZES.width * 0.7, SIZES.height * .7)}></icons.moment>
             <ActivityIndicator size="small" />
           </SafeAreaView>
         </View>

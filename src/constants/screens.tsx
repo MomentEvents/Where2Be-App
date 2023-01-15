@@ -9,5 +9,6 @@ export const SCREENS = {
     MyCalendar: "MyCalendarScreen",
     MyProfile: "MyProfileScreen",
     EventDetails: "EventDetailsScreen",
-    EditEvent: "EditEventScreen"
+    EditEvent: "EditEventScreen",
+    ProfileDetails: "ProfileDetailsScreen"
 }

@@ -17,7 +17,7 @@ import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
-import * as RootNavigation from "../../../navigation/Navigator";
+import * as Navigator from "../../../navigation/Navigator";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
@@ -43,16 +43,6 @@ import {
 } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
-
-/*********************************************
- * route parameters:
- *
- * EventID: string,
- * SetCardLikes?: React.SetStateAction<number>,
- * SetCardShoutouts?: React.SetStateAction<number>,
- * SetCardUserLiked?: React.SetStateAction<boolean>,
- * SetCardUserShouted?: React.SetStateAction<boolean>
- *********************************************/
 
 type routeParametersType = {
   eventID: string;
@@ -184,8 +174,8 @@ const EventDetailsScreen = ({ route }) => {
 
   const onHostUsernamePressed = () => {
     if (host !== null) {
-      RootNavigation.push("ProfileDetail", {
-        UserID: host.UserID,
+      Navigator.push(SCREENS.ProfileDetails, {
+        User: host,
       });
     }
   };
@@ -194,7 +184,7 @@ const EventDetailsScreen = ({ route }) => {
     if (!eventIDToEvent[eventID]) {
       return;
     }
-    RootNavigation.navigate(SCREENS.EditEvent, {
+    Navigator.navigate(SCREENS.EditEvent, {
       eventID: eventID
     });
   };
@@ -220,7 +210,7 @@ const EventDetailsScreen = ({ route }) => {
             );
 
             updateEventIDToEvent({ id: eventID, event: undefined });
-            RootNavigation.goBack();
+            Navigator.goBack();
           },
         },
       ],
@@ -229,7 +219,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onBackPressed = () => {
-    RootNavigation.goBack();
+    Navigator.goBack();
   };
 
   // For description expansion
@@ -252,7 +242,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -265,7 +255,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -278,7 +268,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -291,7 +281,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -307,7 +297,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -319,7 +309,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
 
@@ -331,7 +321,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          RootNavigation.goBack();
+          Navigator.goBack();
         }
       });
   };
@@ -583,8 +573,8 @@ const EventDetailsScreen = ({ route }) => {
               <DescriptionSection>
                 <View
                   style={{
-                    marginBottom: 4,
-                    marginTop: 4,
+                    marginBottom: 8,
+                    marginTop: 8,
                     marginRight: 12,
                     marginLeft: 12,
                   }}

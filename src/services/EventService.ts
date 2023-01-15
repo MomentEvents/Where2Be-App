@@ -35,8 +35,7 @@ export const SOCIAL = "social";
  * Return: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
-  
-  const pulledEvent: Event =     {
+  const pulledEvent: Event = {
     EventID: eventID,
     Title: "I am a pulled Event",
     Description: "Description for Event\n\n\n\n\n\n\n\n yo\n expand me",
@@ -46,7 +45,7 @@ export async function getEvent(eventID: string): Promise<Event> {
     StartDateTime: new Date("2023-01-29T10:30:00.000Z"),
     EndDateTime: new Date("2023-01-29T11:30:00.000Z"),
     Visibility: true,
-  }
+  };
   return pulledEvent;
 }
 
@@ -63,7 +62,8 @@ export async function createEvent(
   userAccessToken: string,
 
   createdEvent: Event,
-  interests: Interest[]): Promise<boolean> {
+  interests: Interest[]
+): Promise<boolean> {
   return null;
 }
 
@@ -96,18 +96,17 @@ export async function updateEvent(
 
 export async function deleteEvent(
   userAccessToken: string,
-  
-  eventID: string): Promise<boolean> {
+
+  eventID: string
+): Promise<boolean> {
   return null;
 }
 
-export async function getEventNumJoins(eventID: string): Promise<number>{
-
+export async function getEventNumJoins(eventID: string): Promise<number> {
   return 7;
 }
 
-export async function getEventNumShoutouts(eventID: string): Promise<number>{
-
+export async function getEventNumShoutouts(eventID: string): Promise<number> {
   return 7;
 }
 
@@ -120,10 +119,35 @@ export async function getEventNumShoutouts(eventID: string): Promise<number>{
  * Return: An Event array which has all of the joined events of the current user
  */
 export async function getUserJoinedFutureEvents(
-  userID: string,
   userAccessToken: string,
+  userID: string
 ): Promise<Event[]> {
-  return null
+  const pulledFeaturedEvents: Event[] = [
+    {
+      EventID: "Featured1",
+      Title: "Bonfire at La Jolla shores! All are welcome to join",
+      Description: "Description for Event",
+      Picture:
+        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      Visibility: true,
+    },
+    {
+      EventID: "Featured2",
+      Title: "Another Featured Event",
+      Description: "Description for Event",
+      Picture:
+        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+  ];
+
+  return pulledFeaturedEvents;
 }
 
 /******************************************************
@@ -135,10 +159,10 @@ export async function getUserJoinedFutureEvents(
  * Return: An Event array which has all of the joined events of the current user
  */
 export async function getUserJoinedPastEvents(
-  userID: string,
   userAccessToken: string,
+  userID: string
 ): Promise<Event[]> {
-  return null
+  return null;
 }
 
 /******************************************************
@@ -151,10 +175,35 @@ export async function getUserJoinedPastEvents(
  */
 
 export async function getUserHostedFutureEvents(
-  userID: string,
   userAccessToken: string,
+  userID: string
 ): Promise<Event[]> {
-  return null;
+  const pulledFeaturedEvents: Event[] = [
+    {
+      EventID: "Featured1",
+      Title: "Bonfire at La Jolla shores! All are welcome to join",
+      Description: "Description for Event",
+      Picture:
+        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      Visibility: true,
+    },
+    {
+      EventID: "Featured2",
+      Title: "Another Featured Event",
+      Description: "Description for Event",
+      Picture:
+        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+      Location: "Featured Location",
+      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      Visibility: true,
+    },
+  ];
+
+  return pulledFeaturedEvents;
 }
 
 /******************************************************
@@ -167,24 +216,26 @@ export async function getUserHostedFutureEvents(
  */
 
 export async function getUserHostedPastEvents(
-  userID: string,
   userAccessToken: string,
+  userID: string
 ): Promise<Event[]> {
   return null;
 }
 
 /*******************************************************
  * getAllSchoolFeaturedEvents
- * 
+ *
  * Gets all of the featured events from a school
- * 
+ *
  * Parameters:
  * schoolID: the schoolID
- * 
+ *
  * Return:
  * An array of events which are labeled as featured
  */
-export async function getAllSchoolFeaturedEvents(schoolID: string): Promise<Event[]>{
+export async function getAllSchoolFeaturedEvents(
+  schoolID: string
+): Promise<Event[]> {
   const pulledFeaturedEvents: Event[] = [
     {
       EventID: "Featured1",
@@ -215,16 +266,18 @@ export async function getAllSchoolFeaturedEvents(schoolID: string): Promise<Even
 
 /*******************************************************
  * getAllSchoolOngoingEvents
- * 
+ *
  * Gets all of the ongoing events from a school
- * 
+ *
  * Parameters:
  * schoolID: the schoolID
- * 
+ *
  * Return:
  * An array of events which are labeled as ongoing
  */
-export async function getAllSchoolOngoingEvents(schoolID: string): Promise<Event[]>{
+export async function getAllSchoolOngoingEvents(
+  schoolID: string
+): Promise<Event[]> {
   const ongoingEvents: Event[] = [
     {
       EventID: "StartingSoon1",
@@ -261,7 +314,7 @@ export async function getAllSchoolOngoingEvents(schoolID: string): Promise<Event
     },
   ];
 
-  return ongoingEvents
+  return ongoingEvents;
 }
 /******************************************************
  * getAllSchoolEventsByCategory
@@ -285,7 +338,6 @@ export async function getAllSchoolEventsByInterest(
     );
   }
   switch (interestID) {
-
     case ACADEMIC:
       const pulledAcademicEvents: Event[] = [
         {

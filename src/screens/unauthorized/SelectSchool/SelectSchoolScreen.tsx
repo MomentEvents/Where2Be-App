@@ -44,7 +44,7 @@ const SelectSchoolScreen = ({ navigation, route }) => {
         }}
       >
         <SafeAreaView style={{ alignItems: "center" }}>
-          <icons.moment width={SIZES.width * 0.7}></icons.moment>
+          <icons.moment width={Math.min(SIZES.width * 0.7, SIZES.height * .7)}></icons.moment>
           <View
             style={{
               alignItems: "center",
