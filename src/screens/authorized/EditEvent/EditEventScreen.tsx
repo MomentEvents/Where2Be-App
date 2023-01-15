@@ -25,6 +25,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import styled from "styled-components/native";
 import ImagePickerButton from "../../../components/ImagePickerButton";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -50,66 +51,112 @@ const EditEventScreen = ({ navigation, route }) => {
     eventIDToEvent[eventID].StartDateTime
   );
   const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
-
   const [selectedInterests, setSelectedInterests] = useState(
     new Set<Interest>(eventIDToInterests[eventID])
   );
 
+  const [openedDatePicker, setOpenedDatePicker] = useState<boolean>(false);
+
   useEffect(() => {}, []);
 
+  const onDateTimePicked = (selectedDate: Date) => {
+    setDate(selectedDate);
+    setOpenedDatePicker(false);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <SectionHeader
-        title={"Edit Event"}
-        leftButtonOnClick={() => {}}
-        leftButtonSVG={<icons.backarrow />}
-        rightButtonOnClick={() => {}}
-        rightButtonSVG={
-          <McText h3 color={COLORS.purple}>
-            Save
-          </McText>
-        }
+    <View>
+      <View style={{marginTop: 200}}/>
+      <Button  title="Show Date Picker" onPress={() => setOpenedDatePicker(true)} />
+      <DateTimePickerModal
+        isVisible={openedDatePicker}
+        mode="date"
+        onConfirm={onDateTimePicked}
+        onCancel={() => setOpenedDatePicker(false)}
       />
-      <KeyboardAwareScrollView style={styles.scrollViewContainer}>
-        <SectionInputs>
-          <View style={styles.titleContainer}>
-            <icons.pickpicture width={30} />
-            <McText h3>Image</McText>
-          </View>
+    </View>
+    // <SafeAreaView style={styles.container}>
+    //   <DateTimePickerModal
+    //     isVisible={openedDatePicker}
+    //     mode="date"
+    //     onConfirm={onDateTimePicked}
+    //     onCancel={() => setOpenedDatePicker(false)}
+    //   />
+    //   <SectionHeader
+    //     title={"Edit Event"}
+    //     leftButtonOnClick={() => {}}
+    //     leftButtonSVG={<icons.backarrow />}
+    //     rightButtonOnClick={() => {}}
+    //     rightButtonSVG={
+    //       <McText h3 color={COLORS.purple}>
+    //         Save
+    //       </McText>
+    //     }
+    //   />
+    //   <KeyboardAwareScrollView>
+    //     <View style={styles.scrollViewContainer}>
+    //       <SectionInputs>
+    //         <View style={styles.titleContainer}>
+    //           <icons.pickpicture width={30} />
+    //           <McText h3>Image</McText>
+    //         </View>
 
-          <ImagePickerButton
-            originalImageURI={image}
-            setImageURI={setImage}
-            width={Math.min(SIZES.height, SIZES.width) - 40}
-            height={Math.min(SIZES.height, SIZES.width) - 40}
-          />
+    //         <ImagePickerButton
+    //           originalImageURI={image}
+    //           setImageURI={setImage}
+    //           width={Math.min(SIZES.height, SIZES.width) - 40}
+    //           height={Math.min(SIZES.height, SIZES.width) - 40}
+    //         />
 
-          <View style={styles.titleContainer}>
-            <icons.picktitle style={styles.iconsContainer} width={30} />
-            <McText h3>Title</McText>
-          </View>
+    //         <View style={styles.titleContainer}>
+    //           <icons.picktitle style={styles.iconsContainer} width={30} />
+    //           <McText h3>Title</McText>
+    //         </View>
 
-          <TextInput
-            placeholder={"enter your title"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setTitle(newText)}
-          />
+    //         <TextInput
+    //           placeholder={"enter your title"}
+    //           placeholderTextColor={COLORS.gray}
+    //           style={styles.textInputContainer}
+    //           value={title}
+    //           onChangeText={setTitle}
+    //           multiline={true}
+    //           maxLength={40}
+    //         />
 
-          <View style={styles.titleContainer}>
-            <icons.picktags style={styles.iconsContainer} width={30} />
-            <McText h3>Tags (select up to 1)</McText>
-          </View>
+    //         <View style={styles.titleContainer}>
+    //           <icons.pickdescription style={styles.iconsContainer} width={30} />
+    //           <McText h3>Description</McText>
+    //         </View>
 
-          <View>
-            <InterestSelector
-              selectedInterests={selectedInterests}
-              setSelectedInterests={setSelectedInterests}
-            />
-          </View>
-        </SectionInputs>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+    //         <TextInput
+    //           placeholder={"enter your description"}
+    //           placeholderTextColor={COLORS.gray}
+    //           style={styles.textInputContainer}
+    //           value={desc}
+    //           onChangeText={setDesc}
+    //           multiline={true}
+    //           maxLength={40}
+    //         />
+    //         <View style={styles.titleContainer}>
+    //           <icons.picktags style={styles.iconsContainer} width={30} />
+    //           <McText h3>Tags (select up to 1)</McText>
+    //         </View>
+
+    //         <View>
+    //           <InterestSelector
+    //             selectedInterests={selectedInterests}
+    //             setSelectedInterests={setSelectedInterests}
+    //           />
+    //         </View>
+    //         <Button
+    //           title={"open date picker"}
+    //           onPress={() => {
+    //             setOpenedDatePicker(true);
+    //           }}
+    //         />
+    //       </SectionInputs>
+    //     </View>
+    //   </KeyboardAwareScrollView>
+    // </SafeAreaView>
   );
 };
 
@@ -159,10 +206,11 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
-    paddingVertical: 10,
+    paddingHorzontal: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
   iconsContainer: {
     marginRight: 10,
-  }
-
+  },
 });
