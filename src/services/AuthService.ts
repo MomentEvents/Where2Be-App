@@ -5,7 +5,7 @@ import {
   checkIfStringIsEmail,
   checkIfStringIsAlphanumeric,
   formatError,
-  isDisplayNameFormatted,
+  checkIfStringIsReadable,
 } from "../helpers/helpers";
 import { Token, User } from "../constants";
 
@@ -31,11 +31,13 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-
   // DO LOGIN HERE
 
-  if (usercred === null || usercred === "") {
-    throw formatError("Input error", "Please enter a valid username or email");
+  if (
+    !checkIfStringIsReadable(usercred) ||
+    !checkIfStringIsAlphanumeric(usercred)
+  ) {
+    throw formatError("Input error", "Please enter a valid username");
   }
 
   if (password === null || password === "") {
@@ -48,14 +50,10 @@ export async function login(
     throw formatError("Input error", "Email login is not supported yet");
   }
 
-  if (!checkIfStringIsAlphanumeric(usercred)) {
-    throw formatError("Input Error", "Username is not alphanumeric");
-  }
-
   const createdToken: Token = createTokenFromUserAccessToken(usercred);
   writeToken(createdToken);
 
-  return Promise.resolve(createdToken)
+  return Promise.resolve(createdToken);
 
   var pulledUserAccessToken: string = null;
 
@@ -130,13 +128,12 @@ export async function signup(
   password: string,
   schoolID: string
 ): Promise<Token> {
-
-  if (!isDisplayNameFormatted(displayName)) {
+  if (!checkIfStringIsReadable(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
   }
   if (
-    username === "" ||
-    username === null ||
+    !checkIfStringIsReadable(username) ||
+    !checkIfStringIsAlphanumeric(username) ||
     displayName === "" ||
     displayName === null ||
     password === "" ||

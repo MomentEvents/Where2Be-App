@@ -1,3 +1,5 @@
+import { Event } from "../constants";
+
 /***********************************
  * checkIfStringIsEmail
  *
@@ -69,12 +71,15 @@ export function displayError(error: Error): boolean {
   return true;
 }
 
-export function isDisplayNameFormatted(test: string): boolean {
-  return /^[a-zA-Z].*[\s\.]*$/.test(test);
+export function checkIfStringIsReadable(test: string): boolean {
+  if (test === undefined || test === null) {
+    return false;
+  }
+  return /^[A-Za-z,;'"!@%.].*[\s\.]*$/.test(test);
 }
 
 export function convertDateToUTC(originalDate: Date): Date {
-  var date = originalDate
+  var date = originalDate;
   var now_utc = Date.UTC(
     date.getUTCFullYear(),
     date.getUTCMonth(),
@@ -84,20 +89,47 @@ export function convertDateToUTC(originalDate: Date): Date {
     date.getUTCSeconds()
   );
 
-  return date
+  return date;
 }
 
-export function convertToStartTimeEndTime (date: Date, startTime: Date, endTime: Date): {[key: string]: Date} {
+export function convertToStartTimeEndTime(
+  date: Date,
+  startTime: Date,
+  endTime: Date
+): { [key: string]: Date } {
   // yyyy-mm-ddThh:mm:ss.000Z
-  const startDateTimeString: string = moment.utc(date).format("YYYY[-]MM[-]DD") + "T" + moment.utc(startTime).format("hh[:]mm") + ":00.000Z"
+  const startDateTimeString: string =
+    moment.utc(date).format("YYYY[-]MM[-]DD") +
+    "T" +
+    moment.utc(startTime).format("hh[:]mm") +
+    ":00.000Z";
 
-  const endDateTimeString: string = moment.utc(date).format("YYYY[-]MM[-]DD") + "T" + moment.utc(endTime).format("hh[:]mm") + ":00.000Z"
+  const endDateTimeString: string =
+    moment.utc(date).format("YYYY[-]MM[-]DD") +
+    "T" +
+    moment.utc(endTime).format("hh[:]mm") +
+    ":00.000Z";
 
-  var valuesToMap = {}
+  var valuesToMap = {};
 
-  valuesToMap["startDateTime"] = new Date(startDateTimeString)
-  valuesToMap["endDateTime"] = new Date(endDateTimeString)
-  return valuesToMap
+  valuesToMap["startDateTime"] = new Date(startDateTimeString);
+  valuesToMap["endDateTime"] = new Date(endDateTimeString);
+  return valuesToMap;
+}
+
+export function checkIfEventIsFormatted(event: Event): boolean {
+  return (
+    checkIfStringIsReadable(event.Title) &&
+    event.Description !== undefined &&
+    event.Description !== null &&
+    event.Description !== "" &&
+    checkIfStringIsReadable(event.Location) &&
+    checkIfStringIsReadable(event.Picture) &&
+    event.StartDateTime !== null &&
+    event.StartDateTime !== undefined &&
+    event.EndDateTime !== null &&
+    event.EndDateTime !== undefined
+  );
 }
 
 export async function HELPME() {

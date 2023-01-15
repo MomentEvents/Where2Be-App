@@ -1,5 +1,5 @@
 import momentAPI from "../constants/server";
-import { Event } from "../constants";
+import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 
 // createEvent DONE
@@ -62,7 +62,8 @@ export async function getEvent(eventID: string): Promise<Event> {
 export async function createEvent(
   userAccessToken: string,
 
-  createdEvent: Event): Promise<boolean> {
+  createdEvent: Event,
+  interests: Interest[]): Promise<boolean> {
   return null;
 }
 
@@ -79,7 +80,7 @@ export async function createEvent(
 export async function updateEvent(
   userAccessToken: string,
 
-  updatedEvent: Event,
+  updatedEvent: Event
 ): Promise<void> {
   return null;
 }

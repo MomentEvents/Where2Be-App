@@ -29,8 +29,14 @@ import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import DatePicker from "react-native-date-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { convertDateToUTC, convertToStartTimeEndTime, displayError, formatError } from "../../../helpers/helpers";
-import * as Navigator from "../../../navigation/Navigator"
+import {
+  checkIfEventIsFormatted,
+  convertDateToUTC,
+  convertToStartTimeEndTime,
+  displayError,
+  formatError,
+} from "../../../helpers/helpers";
+import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
 import { updateEventInterestsByEventId } from "../../../services/InterestService";
@@ -43,7 +49,7 @@ const EditEventScreen = ({ navigation, route }) => {
   const { eventID }: EditEventScreenParams = route.params;
 
   const { setLoading } = useContext(ScreenContext);
-  const { userToken } = useContext(UserContext)
+  const { userToken } = useContext(UserContext);
   const {
     eventIDToEvent,
     updateEventIDToEvent,
@@ -52,13 +58,19 @@ const EditEventScreen = ({ navigation, route }) => {
   } = useContext(EventContext);
 
   const [title, setTitle] = useState<string>(eventIDToEvent[eventID].Title);
-  const [location, setLocation] = useState<string>(eventIDToEvent[eventID].Location);
+  const [location, setLocation] = useState<string>(
+    eventIDToEvent[eventID].Location
+  );
   const [image, setImage] = useState<string>(eventIDToEvent[eventID].Picture);
   const [date, setDate] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
   const [desc, setDesc] = useState<string>(eventIDToEvent[eventID].Description);
-  const [start, setStart] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
+  const [start, setStart] = useState<Date>(
+    eventIDToEvent[eventID].StartDateTime
+  );
   const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
-  const [selectedInterests, setSelectedInterests] = useState(new Set(eventIDToInterests[eventID]));
+  const [selectedInterests, setSelectedInterests] = useState(
+    new Set(eventIDToInterests[eventID])
+  );
 
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
@@ -86,13 +98,19 @@ const EditEventScreen = ({ navigation, route }) => {
   };
 
   const onSubmit = () => {
-    if(!date || !start || !end){
-      displayError(formatError("Input error", "Please fill in all valid fields"))
+    if (!date || !start || !end) {
+      displayError(
+        formatError("Input error", "Please fill in all valid fields")
+      );
     }
-    const timeValuesToMap: {[key: string]: Date} = convertToStartTimeEndTime(date, start, end)
+    const timeValuesToMap: { [key: string]: Date } = convertToStartTimeEndTime(
+      date,
+      start,
+      end
+    );
 
-    const startDateTime: Date = timeValuesToMap["startDateTime"]
-    const endDateTime: Date = timeValuesToMap["endDateTime"]
+    const startDateTime: Date = timeValuesToMap["startDateTime"];
+    const endDateTime: Date = timeValuesToMap["endDateTime"];
 
     const updatedEvent: Event = {
       EventID: eventID,
@@ -102,41 +120,81 @@ const EditEventScreen = ({ navigation, route }) => {
       Location: location,
       StartDateTime: startDateTime,
       EndDateTime: endDateTime,
-      Visibility: eventIDToEvent[eventID].Visibility
+      Visibility: eventIDToEvent[eventID].Visibility,
+    };
+
+    if (!checkIfEventIsFormatted(updatedEvent)) {
+      displayError(
+        formatError("Input error", "Check that all of the fields are readable")
+      );
+      return;
     }
 
-    console.log(updatedEvent)
+    console.log(updatedEvent.StartDateTime)
+    console.log(updatedEvent.StartDateTime.getTime())
+    console.log(updatedEvent.EndDateTime)
+    console.log(updatedEvent.EndDateTime.getTime())
+    if (
+      updatedEvent.StartDateTime.getTime() >
+      updatedEvent.EndDateTime.getTime()
+    ) {
+      displayError(
+        formatError("Input error", "The start time must be before the end time")
+      );
+      return;
+    }
 
-    setLoading(true)
-    updateEvent(userToken.UserAccessToken, updatedEvent).then(() => {
-      updateEventIDToEvent({id: eventID, event: updatedEvent})
-      const arraysInterests: Interest[] = Array.from(selectedInterests)
-      updateEventInterestsByEventId(userToken.UserAccessToken, arraysInterests, eventID).then(() => {
+    console.log("\n\n")
+    console.log(updatedEvent.StartDateTime.getTime())
+    console.log(Date.now())
+    if (updatedEvent.StartDateTime.getTime() < Date.now()) {
+      displayError(
+        formatError("Input error", "The event must not be in the past")
+      );
+      return;
+    }
+    console.log(updatedEvent);
 
-        updateEventIDToInterests({id: eventID, interests: arraysInterests})
-        setLoading(false)
-        Navigator.goBack()
-      }).catch((error: Error) => {
-        displayError(error)
-        setLoading(false)
+    setLoading(true);
+    updateEvent(userToken.UserAccessToken, updatedEvent)
+      .then(() => {
+        updateEventIDToEvent({ id: eventID, event: updatedEvent });
+        const arraysInterests: Interest[] = Array.from(selectedInterests);
+        updateEventInterestsByEventId(
+          userToken.UserAccessToken,
+          arraysInterests,
+          eventID
+        )
+          .then(() => {
+            updateEventIDToInterests({
+              id: eventID,
+              interests: arraysInterests,
+            });
+            setLoading(false);
+            Navigator.goBack();
+          })
+          .catch((error: Error) => {
+            displayError(error);
+            setLoading(false);
+          });
       })
-    }).catch((error: Error) => {
-      displayError(error)
-      setLoading(false)
-    })
-  }
-
-  useEffect(() => {
-    console.log("start has changed to " + start);
-  }, [start]);
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader
         title={"Edit Event"}
-        leftButtonOnClick={() => {Navigator.goBack()}}
+        leftButtonOnClick={() => {
+          Navigator.goBack();
+        }}
         leftButtonSVG={<icons.backarrow />}
-        rightButtonOnClick={() => {onSubmit()}}
+        rightButtonOnClick={() => {
+          onSubmit();
+        }}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>
             Save
@@ -172,7 +230,7 @@ const EditEventScreen = ({ navigation, route }) => {
               value={title}
               onChangeText={setTitle}
               multiline={false}
-              maxLength={40}
+              maxLength={70}
             />
 
             <View style={styles.titleContainer}>
