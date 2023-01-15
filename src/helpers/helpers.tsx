@@ -10,6 +10,7 @@
  * a boolean which if true, means the string is an email or if false, means the string is not an email
  */
 
+import moment from "moment";
 import { Alert } from "react-native";
 
 export function checkIfStringIsEmail(test: string): boolean {
@@ -84,6 +85,19 @@ export function convertDateToUTC(originalDate: Date): Date {
   );
 
   return date
+}
+
+export function convertToStartTimeEndTime (date: Date, startTime: Date, endTime: Date): {[key: string]: Date} {
+  // yyyy-mm-ddThh:mm:ss.000Z
+  const startDateTimeString: string = moment.utc(date).format("YYYY[-]MM[-]DD") + "T" + moment.utc(startTime).format("hh[:]mm") + ":00.000Z"
+
+  const endDateTimeString: string = moment.utc(date).format("YYYY[-]MM[-]DD") + "T" + moment.utc(endTime).format("hh[:]mm") + ":00.000Z"
+
+  var valuesToMap = {}
+
+  valuesToMap["startDateTime"] = new Date(startDateTimeString)
+  valuesToMap["endDateTime"] = new Date(endDateTimeString)
+  return valuesToMap
 }
 
 export async function HELPME() {

@@ -29,7 +29,11 @@ import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import DatePicker from "react-native-date-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { convertDateToUTC } from "../../../helpers/helpers";
+import { convertDateToUTC, convertToStartTimeEndTime, displayError, formatError } from "../../../helpers/helpers";
+import * as Navigator from "../../../navigation/Navigator"
+import { updateEvent } from "../../../services/EventService";
+import { UserContext } from "../../../contexts/UserContext";
+import { updateEventInterestsByEventId } from "../../../services/InterestService";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -37,8 +41,9 @@ type EditEventScreenParams = {
 
 const EditEventScreen = ({ navigation, route }) => {
   const { eventID }: EditEventScreenParams = route.params;
-  const { setLoading } = useContext(ScreenContext);
 
+  const { setLoading } = useContext(ScreenContext);
+  const { userToken } = useContext(UserContext)
   const {
     eventIDToEvent,
     updateEventIDToEvent,
@@ -46,27 +51,14 @@ const EditEventScreen = ({ navigation, route }) => {
     updateEventIDToInterests,
   } = useContext(EventContext);
 
-  const [title, setTitle] = useState<string>();
-  const [location, setLocation] = useState<string>();
-  const [image, setImage] = useState<string>();
-  const [date, setDate] = useState<Date>();
-  const [desc, setDesc] = useState<string>();
-  const [start, setStart] = useState<Date>();
-  const [end, setEnd] = useState<Date>();
-  const [selectedInterests, setSelectedInterests] = useState();
-
-  // const [title, setTitle] = useState(eventIDToEvent[eventID].Title);
-  // const [location, setLocation] = useState(eventIDToEvent[eventID].Location);
-  // const [image, setImage] = useState(eventIDToEvent[eventID].Picture);
-  // const [date, setDate] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
-  // const [desc, setDesc] = useState(eventIDToEvent[eventID].Description);
-  // const [start, setStart] = useState<Date>(
-  //   eventIDToEvent[eventID].StartDateTime
-  // );
-  // const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
-  // const [selectedInterests, setSelectedInterests] = useState(
-  //   new Set<Interest>(eventIDToInterests[eventID])
-  // );
+  const [title, setTitle] = useState<string>(eventIDToEvent[eventID].Title);
+  const [location, setLocation] = useState<string>(eventIDToEvent[eventID].Location);
+  const [image, setImage] = useState<string>(eventIDToEvent[eventID].Picture);
+  const [date, setDate] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
+  const [desc, setDesc] = useState<string>(eventIDToEvent[eventID].Description);
+  const [start, setStart] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
+  const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
+  const [selectedInterests, setSelectedInterests] = useState(new Set(eventIDToInterests[eventID]));
 
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
@@ -93,6 +85,47 @@ const EditEventScreen = ({ navigation, route }) => {
     setOpenedDatePicker(false);
   };
 
+  const onSubmit = () => {
+    if(!date || !start || !end){
+      displayError(formatError("Input error", "Please fill in all valid fields"))
+    }
+    const timeValuesToMap: {[key: string]: Date} = convertToStartTimeEndTime(date, start, end)
+
+    const startDateTime: Date = timeValuesToMap["startDateTime"]
+    const endDateTime: Date = timeValuesToMap["endDateTime"]
+
+    const updatedEvent: Event = {
+      EventID: eventID,
+      Title: title,
+      Description: desc,
+      Picture: image,
+      Location: location,
+      StartDateTime: startDateTime,
+      EndDateTime: endDateTime,
+      Visibility: eventIDToEvent[eventID].Visibility
+    }
+
+    console.log(updatedEvent)
+
+    setLoading(true)
+    updateEvent(userToken.UserAccessToken, updatedEvent).then(() => {
+      updateEventIDToEvent({id: eventID, event: updatedEvent})
+      const arraysInterests: Interest[] = Array.from(selectedInterests)
+      updateEventInterestsByEventId(userToken.UserAccessToken, arraysInterests, eventID).then(() => {
+
+        updateEventIDToInterests({id: eventID, interests: arraysInterests})
+        setLoading(false)
+        Navigator.goBack()
+      }).catch((error: Error) => {
+        displayError(error)
+        setLoading(false)
+      })
+    }).catch((error: Error) => {
+      displayError(error)
+      setLoading(false)
+    })
+  }
+
   useEffect(() => {
     console.log("start has changed to " + start);
   }, [start]);
@@ -101,9 +134,9 @@ const EditEventScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <SectionHeader
         title={"Edit Event"}
-        leftButtonOnClick={() => {}}
+        leftButtonOnClick={() => {Navigator.goBack()}}
         leftButtonSVG={<icons.backarrow />}
-        rightButtonOnClick={() => {}}
+        rightButtonOnClick={() => {onSubmit()}}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>
             Save

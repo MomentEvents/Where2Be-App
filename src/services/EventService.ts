@@ -80,7 +80,7 @@ export async function updateEvent(
   userAccessToken: string,
 
   updatedEvent: Event,
-): Promise<boolean> {
+): Promise<void> {
   return null;
 }
 
