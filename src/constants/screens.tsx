@@ -11,7 +11,9 @@ export const SCREENS = {
     EventDetails: "EventDetailsScreen",
     EditEvent: "EditEventScreen",
     ProfileDetails: "ProfileDetailsScreen",
-    CreateEvent: "CreateEventScreen", // TODO
-    PreviewEvent: "PreviewEventScreen", // TODO
-    
+    CreateEvent: "CreateEventScreen",
+    PreviewEvent: "PreviewEventScreen",
+    EditMyProfile: "EditMyProfileScreen",
+    Settings: "SettingsScreen",
+    EditMyPassword: "EditMyPasswordScreen"
 }
