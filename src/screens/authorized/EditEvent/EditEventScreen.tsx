@@ -116,6 +116,7 @@ const EditEventScreen = ({ navigation, route }) => {
       displayError(
         formatError("Input error", "Please fill in all valid fields")
       );
+      return
     }
     const timeValuesToMap: { [key: string]: Date } = convertToStartTimeEndTime(
       date,

@@ -33,7 +33,7 @@ import {
   removeUserShoutoutEvent,
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, formatError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import {
   deleteEvent,
@@ -73,6 +73,10 @@ const EventDetailsScreen = ({ route }) => {
   } = useContext(EventContext);
 
   const { eventID } = propsFromEventCard;
+
+  if(!eventID){
+    throw formatError("Error", "eventID was null or undefined when entering event details")
+  }
 
   const [host, setHost] = useState<User>(null);
 
@@ -351,7 +355,6 @@ const EventDetailsScreen = ({ route }) => {
     if (host.UserID == currentUser.UserID) {
       setIsHost(true);
     } else {
-      console.log("bitch is false");
       setIsHost(false);
     }
   }, [host]);

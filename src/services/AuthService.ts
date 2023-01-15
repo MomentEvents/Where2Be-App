@@ -31,7 +31,6 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-  // DO LOGIN HERE
 
   if (
     !checkIfStringIsReadable(usercred) ||
@@ -50,58 +49,12 @@ export async function login(
     throw formatError("Input error", "Email login is not supported yet");
   }
 
+  // DO LOGIN HERE
+
   const createdToken: Token = createTokenFromUserAccessToken(usercred);
   writeToken(createdToken);
 
   return Promise.resolve(createdToken);
-
-  var pulledUserAccessToken: string = null;
-
-  // if (isEmail) {
-  //   const authResp = await fetch(momentAPI + "/authentication/login/email", {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       email: usercred,
-  //       password: password,
-  //     }),
-  //   }).catch(() => {
-  //     throw formatError("Fetch Error", "Could not login with email");
-  //   });
-
-  //   if (!authResp.ok) {
-  //     throw formatError("Error " + authResp.status, authResp.statusText);
-  //   }
-
-  //   pulledUserAccessToken = "TestTest123";
-  // } else {
-  //   if (checkIfStringIsAlphanumeric(usercred)) {
-  //     throw formatError("Input Error", "Username is not alphanumeric");
-  //   }
-
-  //   const authResp = await fetch(momentAPI + "/authentication/login/username", {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       username: usercred,
-  //       password: password,
-  //     }),
-  //   }).catch(() => {
-  //     throw formatError("Fetch Error", "Could not login with username");
-  //   });
-
-  //   if (!authResp.ok) {
-  //     throw formatError("Error " + authResp.status, authResp.statusText);
-  //   }
-
-  //   pulledUserAccessToken = "TestTest123";
-  // }
 }
 
 /******************************************************

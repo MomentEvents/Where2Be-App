@@ -63,8 +63,11 @@ export async function createEvent(
 
   createdEvent: Event,
   interests: Interest[]
-): Promise<boolean> {
-  return null;
+): Promise<string> {
+
+  // SHOULD RETURN EVENT ID
+
+  return "Random event ID";
 }
 
 /******************************************************

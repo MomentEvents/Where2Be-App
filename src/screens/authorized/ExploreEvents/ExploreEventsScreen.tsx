@@ -188,7 +188,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
         <View style={{ height: SIZES.tab_bar_height }} />
       </ScrollView>
-      <TouchableOpacity style={styles.hoverButtonContainer}>
+      <TouchableOpacity style={styles.hoverButtonContainer} onPress={() => {Navigator.navigate(SCREENS.CreateEvent)}}>
         <GradientButton style={styles.hoverButtonIconContainer}>
           <icons.plus height="60%" width="60%"></icons.plus>
         </GradientButton>
