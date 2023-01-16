@@ -88,31 +88,30 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onSubmit = () => {
-    setLoading(true)
-    createEvent(userToken.UserAccessToken, createdEvent, interests).then(
-      (eventID: string) => {
+    setLoading(true);
+    createEvent(userToken.UserAccessToken, createdEvent, interests)
+      .then((eventID: string) => {
+        setLoading(false);
 
-        setLoading(false)
-        
         const pushedEvent: Event = {
-            EventID: eventID,
-            Title: createdEvent.Title,
-            Description: createdEvent.Description,
-            Picture: createdEvent.Picture,
-            Location: createdEvent.Location,
-            StartDateTime: createdEvent.StartDateTime,
-            EndDateTime: createdEvent.EndDateTime,
-            Visibility: createdEvent.Visibility
-        }
+          EventID: eventID,
+          Title: createdEvent.Title,
+          Description: createdEvent.Description,
+          Picture: createdEvent.Picture,
+          Location: createdEvent.Location,
+          StartDateTime: createdEvent.StartDateTime,
+          EndDateTime: createdEvent.EndDateTime,
+          Visibility: createdEvent.Visibility,
+        };
 
-        updateEventIDToEvent({id: eventID, event: createdEvent})
-        Navigator.popToTop()
-        Navigator.push(SCREENS.EventDetails, {eventID: eventID})
-      }
-    ).catch((error: Error) => {
-        displayError(error)
-        setLoading(false)
-    });
+        updateEventIDToEvent({ id: eventID, event: createdEvent });
+        Navigator.popToTop();
+        Navigator.push(SCREENS.EventDetails, { eventID: eventID });
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setLoading(false);
+      });
   };
 
   // For description expansion
@@ -158,8 +157,7 @@ const EventDetailsScreen = ({ route }) => {
               }}
               style={{
                 width: "100%",
-                height:
-                  SIZES.height < 700 ? SIZES.height * 0.4 : SIZES.height * 0.5,
+                height: SIZES.height * 0.3,
               }}
             >
               <View style={{ flex: 1 }}>
@@ -203,33 +201,51 @@ const EventDetailsScreen = ({ route }) => {
                           style={{
                             flexDirection: "row",
                             alignItems: "flex-start",
+                            width: SIZES.width - 40,
                           }}
                         >
+                          <icons.pickdate
+                            style={{ marginRight: 10, opacity: 0.7 }}
+                          />
                           <McText
-                            h3
+                            h4
                             style={{
-                              letterSpacing: 1.5,
-                              color: COLORS.purple,
-                              opacity: 0.85,
+                              letterSpacing: 0.5,
+                              color: COLORS.lightGray,
+                              opacity: 0.7,
                             }}
                           >
                             {moment(createdEvent.StartDateTime)
-                              .format("MMM DD")
-                              .toUpperCase()}
+                              .format("MMM DD[,] YYYY")
+                              .toLowerCase()}
                           </McText>
-                          <McText
-                            h3
+                          <View
                             style={{
-                              letterSpacing: 1.2,
-                              marginLeft: 10,
-                              color: COLORS.white,
-                              opacity: 0.85,
+                              position: "absolute",
+                              right: 0,
+                              flexDirection: "row",
                             }}
                           >
-                            {moment(createdEvent.StartDateTime).format(
-                              "h:mm A"
-                            )}
-                          </McText>
+                            <icons.picktime
+                              style={{ marginRight: 10, opacity: 0.7 }}
+                            />
+                            <McText
+                              h4
+                              style={{
+                                letterSpacing: 0.5,
+                                color: COLORS.lightGray,
+                                opacity: 0.7,
+                              }}
+                            >
+                              {moment(createdEvent.StartDateTime).format(
+                                "h:mm a"
+                              ) +
+                                " - " +
+                                moment(createdEvent.EndDateTime).format(
+                                  "h:mm a"
+                                )}
+                            </McText>
+                          </View>
                         </View>
                       </View>
                     </FooterContentView>
@@ -243,7 +259,7 @@ const EventDetailsScreen = ({ route }) => {
                   h1
                   style={{
                     width: SIZES.width * 0.8,
-                    marginTop: 5,
+                    marginTop: 10,
                   }}
                 >
                   {createdEvent.Title}
@@ -266,8 +282,6 @@ const EventDetailsScreen = ({ route }) => {
                         borderRadius: 5,
                         marginRight: 10,
                         backgroundColor: COLORS.input,
-                        borderWidth: 1,
-                        borderColor: COLORS.purple,
                         justifyContent: "center",
                         alignItems: "center",
                       }}
@@ -297,8 +311,8 @@ const EventDetailsScreen = ({ route }) => {
                     numberOfLines={1}
                     style={{
                       letterSpacing: 1,
-                      textTransform: "uppercase",
                       width: SIZES.width / 1.25,
+                      color: COLORS.lightGray,
                     }}
                   >
                     {currentUser.Name}
@@ -343,16 +357,16 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.purple,
+                    tintColor: COLORS.lightGray,
                   }}
                 />
                 <McText
                   h5
                   style={{
                     letterSpacing: 1,
-                    textTransform: "uppercase",
                     marginTop: -1,
                     width: SIZES.width * 0.83,
+                    color: COLORS.lightGray,
                   }}
                 >
                   {createdEvent.Location}
@@ -364,7 +378,7 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.purple,
+                    tintColor: COLORS.lightGray,
                   }}
                 />
                 <View>
@@ -372,12 +386,11 @@ const EventDetailsScreen = ({ route }) => {
                     body5
                     numberOfLines={1}
                     style={{
-                      opacity: 0.8,
                       letterSpacing: 1,
-                      textTransform: "uppercase",
+                      color: COLORS.lightGray,
                     }}
                   >
-                    {createdEvent.Visibility ? "Public" : "Private"}
+                    Public
                   </McText>
                 </View>
               </VisibilitySection>
