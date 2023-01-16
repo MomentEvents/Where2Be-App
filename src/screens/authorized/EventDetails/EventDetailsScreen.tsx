@@ -455,15 +455,38 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   <FooterContentView>
-                    <View style={styles.scrollcontainer}>
-                      <View
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                        width: "100%",
+                      }}
+                    >
+                      <icons.pickdate
+                        style={{ marginRight: 10, opacity: 0.7 }}
+                      />
+                      <McText
+                        h4
                         style={{
-                          flexDirection: "row",
-                          alignItems: "flex-start",
-                          width: SIZES.width - 40,
+                          letterSpacing: 0.5,
+                          color: COLORS.lightGray,
+                          opacity: 0.7,
                         }}
                       >
-                        <icons.pickdate
+                        {eventIDToEvent[eventID] === undefined
+                          ? null
+                          : moment(eventIDToEvent[eventID].StartDateTime)
+                              .format("MMM DD[,] YYYY")
+                              .toLowerCase()}
+                      </McText>
+                      <View
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          flexDirection: "row",
+                        }}
+                      >
+                        <icons.picktime
                           style={{ marginRight: 10, opacity: 0.7 }}
                         />
                         <McText
@@ -476,39 +499,14 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {eventIDToEvent[eventID] === undefined
                             ? null
-                            : moment(eventIDToEvent[eventID].StartDateTime)
-                                .format("MMM DD[,] YYYY")
-                                .toLowerCase()}
+                            : moment(
+                                eventIDToEvent[eventID].StartDateTime
+                              ).format("h:mm a") +
+                              " - " +
+                              moment(
+                                eventIDToEvent[eventID].EndDateTime
+                              ).format("h:mm a")}
                         </McText>
-                        <View
-                          style={{
-                            position: "absolute",
-                            right: 0,
-                            flexDirection: "row",
-                          }}
-                        >
-                          <icons.picktime
-                            style={{ marginRight: 10, opacity: 0.7 }}
-                          />
-                          <McText
-                            h4
-                            style={{
-                              letterSpacing: 0.5,
-                              color: COLORS.lightGray,
-                              opacity: 0.7,
-                            }}
-                          >
-                            {eventIDToEvent[eventID] === undefined
-                              ? null
-                              : moment(
-                                  eventIDToEvent[eventID].StartDateTime
-                                ).format("h:mm a") +
-                                " - " +
-                                moment(
-                                  eventIDToEvent[eventID].EndDateTime
-                                ).format("h:mm a")}
-                          </McText>
-                        </View>
                       </View>
                     </View>
                   </FooterContentView>
@@ -521,7 +519,6 @@ const EventDetailsScreen = ({ route }) => {
               <McText
                 h1
                 style={{
-                  width: SIZES.width * 0.8,
                   marginTop: 10,
                 }}
               >
@@ -581,7 +578,6 @@ const EventDetailsScreen = ({ route }) => {
                   numberOfLines={1}
                   style={{
                     letterSpacing: 1,
-                    width: SIZES.width / 1.25,
                     color: COLORS.lightGray,
                   }}
                 >
@@ -641,7 +637,6 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   letterSpacing: 1,
                   marginTop: -1,
-                  width: SIZES.width * 0.83,
                   color: COLORS.lightGray,
                 }}
               >
@@ -942,14 +937,14 @@ const ImageFooterSection = styled.View`
   flex: 1;
   justify-content: flex-end;
   position: relative;
-  width: ${SIZES.width}px;
+  width: 100%;
 `;
 
 const FooterContentView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  marginhorizontal: 15px;
+  margin-horizontal: 20px;
 `;
 
 const TitleSection = styled.View`
@@ -965,7 +960,6 @@ const InterestSection = styled.View`
 const HostSection = styled.View`
   flex-direction: row;
   margin: 5px 0px 10px 10px;
-  align-items: center;
 `;
 
 const DescriptionSection = styled.View`
