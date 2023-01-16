@@ -1,5 +1,5 @@
 import customFonts from "./fonts";
-import icons from "./icons";
+import icons from "./Icons";
 import images from "./images";
 import theme, { COLORS, SIZES, FONTS } from "./theme";
 import { User, Interest, Event, Token, School } from "./types";
