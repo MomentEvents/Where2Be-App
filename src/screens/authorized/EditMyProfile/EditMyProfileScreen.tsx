@@ -45,6 +45,7 @@ import { updateUser } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
 import * as Navigator from "../../../navigation/Navigator";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
+import SectionHeader from "../../../components/Styled/SectionHeader";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -92,197 +93,93 @@ const EditMyProfileScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProgressLoader
-        visible={loading}
-        isModal={true}
-        isHUD={true}
-        hudColor={"#000000"}
-        color={"#FFFFFF"}
-      ></ProgressLoader>
-      <View style={styles.tempNav}>
-        <SectionHeader>
-          <TouchableOpacity
-            style={{
-              width: 40,
-              height: 40,
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: -12,
-              marginTop: 4,
-            }}
-            onPress={() => {
-              navigation.pop();
-            }}
-          >
-            <McIcon
-              source={icons.close}
-              style={{
-                tintColor: COLORS.white,
-                marginBottom: 4,
-                marginLeft: -8,
-              }}
-              size={32}
-            />
-          </TouchableOpacity>
-          <McText h1>Edit Profile</McText>
-          <View
-            style={{
-              position: "absolute",
-              right: 0,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                marginRight: 15,
-                marginTop: 5,
-              }}
-              onPress={() => {
-                handleSubmit();
-              }}
-            >
-              <McText
-                h3
-                style={{
-                  color: COLORS.purple,
-                }}
-              >
-                Save
-              </McText>
-            </TouchableOpacity>
-          </View>
-        </SectionHeader>
-      </View>
+      <SectionHeader
+        title={"Edit Profile"}
+        leftButtonSVG={<icons.backarrow />}
+        leftButtonOnClick={() => Navigator.goBack()}
+      />
       <KeyboardAwareScrollView>
         <View
           style={{
             marginTop: 40,
           }}
         >
-          {/* For imagepicker, image prop will change to*/}
           <ImagePicker
             height={width * 0.3}
             width={width * 0.3}
             setImageURI={setImage}
             originalImageURI={image}
+            style={{borderRadius: 90}}
           />
         </View>
-        <SectionInputs>
+        <View
+          style={{
+            marginVertical: 8,
+          }}
+        >
           <View
             style={{
-              marginVertical: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 6,
             }}
           >
-            <View
+            <icons.displayname width={30} />
+            <McText
+              h3
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 6,
+                marginLeft: 4,
               }}
             >
-              <icons.displayname width={30} />
-              <McText
-                h3
-                style={{
-                  marginLeft: 4,
-                }}
-              >
-                Name
-              </McText>
-            </View>
-            <SectionTextIn>
-              <TextInput
-                placeholder={"enter your display name"}
-                placeholderTextColor={COLORS.gray}
-                style={styles.textInputContainer}
-                value={displayName}
-                onChangeText={setDisplayName}
-                multiline={false}
-                maxLength={40}
-              />
-            </SectionTextIn>
+              Name
+            </McText>
           </View>
+          <TextInput
+            placeholder={"enter your display name"}
+            placeholderTextColor={COLORS.gray}
+            style={styles.textInputContainer}
+            value={displayName}
+            onChangeText={setDisplayName}
+            multiline={false}
+            maxLength={40}
+          />
+        </View>
+        <View
+          style={{
+            marginVertical: 8,
+          }}
+        >
           <View
             style={{
-              marginVertical: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 6,
             }}
           >
-            <View
+            <icons.username width={30} />
+            <McText
+              h3
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 6,
+                marginLeft: 4,
               }}
             >
-              <icons.username width={30} />
-              <McText
-                h3
-                style={{
-                  marginLeft: 4,
-                }}
-              >
-                Username
-              </McText>
-            </View>
-            <SectionTextIn>
-            <TextInput
-                placeholder={"enter your display name"}
-                placeholderTextColor={COLORS.gray}
-                style={styles.textInputContainer}
-                value={username}
-                onChangeText={setUsername}
-                multiline={false}
-                maxLength={30}
-              />
-            </SectionTextIn>
+              Username
+            </McText>
           </View>
-        </SectionInputs>
+          <TextInput
+            placeholder={"enter your display name"}
+            placeholderTextColor={COLORS.gray}
+            style={styles.textInputContainer}
+            value={username}
+            onChangeText={setUsername}
+            multiline={false}
+            maxLength={30}
+          />
+        </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
-
-const SectionHeader = styled.View`
-  background-color: transparent;
-  padding: 16px ${SIZES.padding};
-  align-items: center;
-  flex-direction: row;
-`;
-
-const SectionImage = styled.View`
-  background-color: transparent;
-  align-items: center;
-  flex-direction: row;
-`;
-
-//temp fix for padding
-const SectionFooter = styled.View`
-  background-color: transparent;
-  padding: 60px;
-  justify-content: space-between;
-`;
-//justify-content: space-between;
-
-const SectionInputs = styled.View`
-  margin-left: 50;
-  margin-vertical: 15;
-`;
-const SectionTextIn = styled.View`
-  background-color: ${COLORS.black};
-  width: ${SIZES.width * 0.75};
-  border-radius: 10;
-  justify-content: center;
-  border: 2px;
-  border-color: ${COLORS.gray};
-  align-items: flex-start;
-`;
-const SectionTimings = styled.View`
-  background-color: ${COLORS.black};
-  width: ${SIZES.width * 0.33};
-  border-radius: 10;
-  justify-content: center;
-  border: 2px;
-  border-color: ${COLORS.gray};
-`;
 
 const styles = StyleSheet.create({
   container: {

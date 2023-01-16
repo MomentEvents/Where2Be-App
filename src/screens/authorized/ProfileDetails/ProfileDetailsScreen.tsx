@@ -85,7 +85,7 @@ const ProfileDetailsScreen = ({ route }) => {
         <Image style={styles.imageContainer} source={{ uri: User.Picture }} />
         <View style={styles.infoContainer}>
           <McText h3>{User.Name}</McText>
-          <McText b3 style={styles.usernameContainer}>
+          <McText body3 style={styles.usernameContainer}>
             @{User.Username}
           </McText>
         </View>

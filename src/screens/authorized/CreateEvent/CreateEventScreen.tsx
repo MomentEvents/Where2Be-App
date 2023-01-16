@@ -153,7 +153,7 @@ const CreateEventScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader
-        title={"Edit Event"}
+        title={"Create Event"}
         leftButtonOnClick={() => {
           Navigator.goBack();
         }}

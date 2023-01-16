@@ -77,7 +77,7 @@ const LoginScreen = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateSignup}>
-              <McText b3>Don't have an account? Create one here!</McText>
+              <McText body3>Don't have an account? Create one here!</McText>
             </TouchableOpacity>
           </SafeAreaView>
         </KeyboardAvoidingView>

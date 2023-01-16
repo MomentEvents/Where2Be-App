@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
-import { User, icons } from "../../../constants";
+import { SCREENS, User, icons } from "../../../constants";
 import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../../components/Styled";
 import { Event } from "../../../constants";
@@ -86,9 +86,16 @@ const MyProfileScreen = ({ route }) => {
         />
         <View style={styles.infoContainer}>
           <McText h3>{currentUser.Name}</McText>
-          <McText b3 style={styles.usernameContainer}>
+          <McText body3 style={styles.usernameContainer}>
             @{currentUser.Username}
           </McText>
+          <TouchableOpacity onPress={() => {
+            Navigator.navigate(SCREENS.EditMyProfile)
+          }}>
+            <View style={styles.editProfileButtonContainer}>
+              <McText h3>Edit Profile</McText>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View
@@ -195,11 +202,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.white,
   },
   infoContainer: {
-    paddingTop: 20,
+    paddingTop: 15,
   },
   displayNameContainer: {},
   usernameContainer: {
-    marginTop: 5,
+    marginTop: 1,
   },
   buttonToggleContainer: {
     flexDirection: "row",
@@ -208,5 +215,14 @@ const styles = StyleSheet.create({
   toggleButton: {
     width: SIZES.width * 0.5,
     height: 40,
+  },
+  editProfileButtonContainer: {
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginTop: 10,
+    backgroundColor: COLORS.gray1,
   },
 });
