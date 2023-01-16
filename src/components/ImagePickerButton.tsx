@@ -62,7 +62,7 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
         alignItems: "center",
         justifyContent: "center",
         borderWidth: 1,
-        borderColor: COLORS.white,
+        borderColor: COLORS.gray,
         width: width,
         height: height,
         ...props.style,

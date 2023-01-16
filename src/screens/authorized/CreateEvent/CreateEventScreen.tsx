@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textInputContainer: {
-    borderColor: COLORS.white,
+    borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   startTimeInputContainer: {
-    borderColor: COLORS.white,
+    borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     width: "47%",
   },
   endTimeInputContainer: {
-    borderColor: COLORS.white,
+    borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,

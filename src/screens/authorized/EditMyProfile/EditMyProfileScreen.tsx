@@ -163,85 +163,6 @@ const EditMyProfileScreen = ({ navigation, route }) => {
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
-    //   <View style={{ alignItems: "center"}}>
-    //   <View
-    //     style={{
-    //       marginTop: 40,
-    //     }}
-    //   >
-    //     <ImagePicker
-    //       height={width * 0.3}
-    //       width={width * 0.3}
-    //       setImageURI={setImage}
-    //       originalImageURI={image}
-    //       style={{ borderRadius: 90 }}
-    //     />
-    //   </View>
-    //   <View
-    //     style={{
-    //       marginVertical: 8,
-    //     }}
-    //   >
-    // <View
-    //   style={{
-    //     flexDirection: "row",
-    //     alignItems: "center",
-    //     marginBottom: 6,
-    //   }}
-    // >
-    //   <icons.displayname width={30} />
-    //   <McText
-    //     h3
-    //     style={{
-    //       marginLeft: 4,
-    //     }}
-    //   >
-    //     Name
-    //   </McText>
-    // </View>
-    //     <TextInput
-    //       placeholder={"enter your display name"}
-    //       placeholderTextColor={COLORS.gray}
-    //       style={styles.textInputContainer}
-    //       value={displayName}
-    //       onChangeText={setDisplayName}
-    //       multiline={false}
-    //       maxLength={40}
-    //     />
-    //   </View>
-    //   <View
-    //     style={{
-    //       marginVertical: 8,
-    //     }}
-    //   >
-    //     <View
-    //       style={{
-    //         flexDirection: "row",
-    //         alignItems: "center",
-    //         marginBottom: 6,
-    //       }}
-    //     >
-    //       <icons.username width={30} />
-    //       <McText
-    //         h3
-    //         style={{
-    //           marginLeft: 4,
-    //         }}
-    //       >
-    //         Username
-    //       </McText>
-    //     </View>
-    //     <TextInput
-    //       placeholder={"enter your display name"}
-    //       placeholderTextColor={COLORS.gray}
-    //       style={styles.textInputContainer}
-    //       value={username}
-    //       onChangeText={setUsername}
-    //       multiline={false}
-    //       maxLength={30}
-    //     />
-    //   </View>
-    // </View>
   );
 };
 
@@ -249,22 +170,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.black,
-  },
-  grabox: {
-    backgroundColor: "rgba(100,100,100,0.8)",
-    borderRadius: SIZES.radius,
-  },
-  tempNav: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#282828",
-    // borderRadius: 20
-  },
-  org: {
-    borderRadius: SIZES.radius,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: COLORS.gray,
   },
   userProfilePic: {
     height: height / 11,
@@ -304,7 +209,7 @@ const styles = StyleSheet.create({
 
   textInputContainer: {
     width: SIZES.width / 1.3,
-    borderColor: COLORS.white,
+    borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
