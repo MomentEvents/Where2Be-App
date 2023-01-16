@@ -218,7 +218,6 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
         >
           <Image
             source={{ uri: eventIDToEvent[event.EventID].Picture }}
-            blurRadius={0}
             style={{
               height: cardHeight,
               width: cardWidth,
@@ -253,7 +252,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             <LinearGradient
               colors={["transparent", COLORS.trueBlack]}
               start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 0.9 }}
+              end={{ x: 0, y: 1.1 }}
               style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
             ></LinearGradient>
 
@@ -407,7 +406,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
           <LinearGradient
             colors={["transparent", COLORS.trueBlack]}
             start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 0.9 }}
+            end={{ x: 0, y: 1.1 }}
             style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
           ></LinearGradient>
 
