@@ -99,85 +99,138 @@ const EditMyProfileScreen = ({ navigation, route }) => {
         leftButtonOnClick={() => Navigator.goBack()}
       />
       <KeyboardAwareScrollView>
-        <View
-          style={{
-            marginTop: 40,
-          }}
-        >
-          <ImagePicker
-            height={width * 0.3}
-            width={width * 0.3}
-            setImageURI={setImage}
-            originalImageURI={image}
-            style={{borderRadius: 90}}
-          />
-        </View>
-        <View
-          style={{
-            marginVertical: 8,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 6,
-            }}
-          >
-            <icons.displayname width={30} />
-            <McText
-              h3
-              style={{
-                marginLeft: 4,
-              }}
-            >
-              Name
-            </McText>
+        <View style={{ alignItems: "center" }}>
+          <View style={styles.titleContainer}>
+            <ImagePicker
+              height={width * 0.3}
+              width={width * 0.3}
+              setImageURI={setImage}
+              originalImageURI={image}
+              style={{ borderRadius: 90 }}
+            />
           </View>
-          <TextInput
-            placeholder={"enter your display name"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            value={displayName}
-            onChangeText={setDisplayName}
-            multiline={false}
-            maxLength={40}
-          />
-        </View>
-        <View
-          style={{
-            marginVertical: 8,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 6,
-            }}
-          >
-            <icons.username width={30} />
-            <McText
-              h3
-              style={{
-                marginLeft: 4,
-              }}
-            >
-              Username
-            </McText>
+          <View>
+            <View style={styles.titleContainer}>
+              <icons.displayname width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Name
+              </McText>
+            </View>
+            <TextInput
+              value={displayName}
+              placeholder={"enter your display name"}
+              placeholderTextColor={COLORS.gray}
+              style={styles.textInputContainer}
+              onChangeText={(newText) => setDisplayName(newText)}
+            />
           </View>
-          <TextInput
-            placeholder={"enter your display name"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            value={username}
-            onChangeText={setUsername}
-            multiline={false}
-            maxLength={30}
-          />
+          <View>
+            <View style={styles.titleContainer}>
+              <icons.username width={30} />
+              <McText
+                h3
+                style={{
+                  marginLeft: 4,
+                }}
+              >
+                Username
+              </McText>
+            </View>
+            <TextInput
+              value={username}
+              placeholder={"enter your display name"}
+              placeholderTextColor={COLORS.gray}
+              style={styles.textInputContainer}
+              onChangeText={(newText) => setUsername(newText)}
+            />
+          </View>
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
+    //   <View style={{ alignItems: "center"}}>
+    //   <View
+    //     style={{
+    //       marginTop: 40,
+    //     }}
+    //   >
+    //     <ImagePicker
+    //       height={width * 0.3}
+    //       width={width * 0.3}
+    //       setImageURI={setImage}
+    //       originalImageURI={image}
+    //       style={{ borderRadius: 90 }}
+    //     />
+    //   </View>
+    //   <View
+    //     style={{
+    //       marginVertical: 8,
+    //     }}
+    //   >
+    // <View
+    //   style={{
+    //     flexDirection: "row",
+    //     alignItems: "center",
+    //     marginBottom: 6,
+    //   }}
+    // >
+    //   <icons.displayname width={30} />
+    //   <McText
+    //     h3
+    //     style={{
+    //       marginLeft: 4,
+    //     }}
+    //   >
+    //     Name
+    //   </McText>
+    // </View>
+    //     <TextInput
+    //       placeholder={"enter your display name"}
+    //       placeholderTextColor={COLORS.gray}
+    //       style={styles.textInputContainer}
+    //       value={displayName}
+    //       onChangeText={setDisplayName}
+    //       multiline={false}
+    //       maxLength={40}
+    //     />
+    //   </View>
+    //   <View
+    //     style={{
+    //       marginVertical: 8,
+    //     }}
+    //   >
+    //     <View
+    //       style={{
+    //         flexDirection: "row",
+    //         alignItems: "center",
+    //         marginBottom: 6,
+    //       }}
+    //     >
+    //       <icons.username width={30} />
+    //       <McText
+    //         h3
+    //         style={{
+    //           marginLeft: 4,
+    //         }}
+    //       >
+    //         Username
+    //       </McText>
+    //     </View>
+    //     <TextInput
+    //       placeholder={"enter your display name"}
+    //       placeholderTextColor={COLORS.gray}
+    //       style={styles.textInputContainer}
+    //       value={username}
+    //       onChangeText={setUsername}
+    //       multiline={false}
+    //       maxLength={30}
+    //     />
+    //   </View>
+    // </View>
   );
 };
 
@@ -231,15 +284,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 
-  text: {
-    fontSize: 25,
-    color: "red",
-    padding: 3,
-    marginBottom: 10,
-    textAlign: "center",
+  titleContainer: {
+    marginTop: 20,
+    marginBottom: 2,
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   textInputContainer: {
+    width: SIZES.width / 1.3,
     borderColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 5,
@@ -247,9 +300,8 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
-    paddingHorzontal: 10,
-    paddingBottom: 10,
-    paddingTop: 10,
+    paddingVertical: 10,
+    marginTop: 8,
   },
 
   // Style for iOS ONLY...

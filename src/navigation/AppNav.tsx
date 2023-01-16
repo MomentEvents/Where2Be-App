@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native-stack";
+import { createStackNavigator } from "@react-navigation/native-stack";
 import { navigationRef } from "./Navigator";
 import { UserContext } from "../contexts/UserContext";
 import SelectSchoolScreen from "../screens/unauthorized/SelectSchool/SelectSchoolScreen";
