@@ -60,12 +60,12 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = width ? width : isBigCard ? 310 : 150;
+  const cardWidth = width ? width : isBigCard ? 330 : 160;
   const cardHeight = height ? height : isBigCard ? 240 : 210;
 
   const cardBorderRadius = 7;
   const cardBorderWidth = 1;
-  const cardBorderColor = COLORS.gray;
+  const cardBorderColor = COLORS.gray2;
 
   const onPressCard = () => {
     if (onClick !== undefined) {
@@ -254,7 +254,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
               colors={["transparent", COLORS.trueBlack]}
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 0.9 }}
-              style={{ borderRadius: cardBorderRadius, height: "100%" }}
+              style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
             ></LinearGradient>
 
             <View
@@ -278,7 +278,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
                 }}
               >
                 <McText
-                  h3
+                  h4
                   style={{
                     color: COLORS.white,
                     opacity: 0.8,
@@ -289,8 +289,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
                 >
                   {showRelativeTime ? moment(eventIDToEvent[event.EventID].StartDateTime).fromNow() : 
                     moment(eventIDToEvent[event.EventID].StartDateTime)
-                    .format("MMM DD hh:mm A")
-                    .toUpperCase()}
+                    .format("MMM DD h:mm a")}
                 </McText>
                 <View
                   style={{
@@ -409,7 +408,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             colors={["transparent", COLORS.trueBlack]}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 0.9 }}
-            style={{ borderRadius: cardBorderRadius, height: "100%" }}
+            style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
           ></LinearGradient>
 
           <View
@@ -428,14 +427,14 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
               {eventIDToEvent[event.EventID].Title}
             </McText>
             <McText
-              body3
+              h5
               style={{
                 color: COLORS.white,
                 opacity: 0.8,
               }}
             >
               {moment(eventIDToEvent[event.EventID].StartDateTime).format(
-                "MMM DD h:mm A"
+                "MMM DD h:mm a"
               )}
             </McText>
             <View

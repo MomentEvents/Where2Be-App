@@ -266,7 +266,7 @@ const EditEventScreen = ({ navigation, route }) => {
             />
 
             <View style={styles.titleContainer}>
-              <icons.pickdate style={styles.iconsContainer} width={30} />
+              <icons.pickdate style={styles.iconsContainer} width={30} fill="white" stroke="white" />
               <McText h3>Date</McText>
             </View>
 
