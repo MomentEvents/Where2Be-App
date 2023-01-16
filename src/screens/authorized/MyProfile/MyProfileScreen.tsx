@@ -85,13 +85,21 @@ const MyProfileScreen = ({ route }) => {
           source={{ uri: currentUser.Picture }}
         />
         <View style={styles.infoContainer}>
-          <McText h3>{currentUser.Name}</McText>
-          <McText body3 style={styles.usernameContainer}>
-            @{currentUser.Username}
-          </McText>
-          <TouchableOpacity onPress={() => {
-            Navigator.navigate(SCREENS.EditMyProfile)
-          }}>
+          <View style={{ flexDirection: "row" }}>
+            <McText h3 style={styles.displayNameContainer}>
+              {currentUser.Name}
+            </McText>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <McText body3 style={styles.usernameContainer}>
+              @{currentUser.Username}
+            </McText>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              Navigator.navigate(SCREENS.EditMyProfile);
+            }}
+          >
             <View style={styles.editProfileButtonContainer}>
               <McText h3>Edit Profile</McText>
             </View>
@@ -187,7 +195,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
   },
   profileContainer: {
-    height: 120,
     backgroundColor: COLORS.trueBlack,
     flexDirection: "row",
   },
@@ -199,10 +206,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 30,
     marginRight: 30,
+    marginBottom: 20,
     borderColor: COLORS.white,
   },
   infoContainer: {
     paddingTop: 15,
+    marginRight: 10,
+    flex: 1,
+    flexWrap: "wrap",
   },
   displayNameContainer: {},
   usernameContainer: {
@@ -223,6 +234,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 15,
     marginTop: 10,
+    marginBottom: 15,
     backgroundColor: COLORS.gray1,
   },
 });

@@ -84,10 +84,16 @@ const ProfileDetailsScreen = ({ route }) => {
       <View style={styles.profileContainer}>
         <Image style={styles.imageContainer} source={{ uri: User.Picture }} />
         <View style={styles.infoContainer}>
-          <McText h3>{User.Name}</McText>
-          <McText body3 style={styles.usernameContainer}>
-            @{User.Username}
-          </McText>
+          <View style={{ flexDirection: "row" }}>
+            <McText h3 style={styles.displayNameContainer}>
+              HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            </McText>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <McText body3 style={styles.usernameContainer}>
+              @HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            </McText>
+          </View>
         </View>
       </View>
       <View
@@ -195,9 +201,11 @@ const styles = StyleSheet.create({
   infoContainer: {
     paddingTop: 20,
   },
-  displayNameContainer: {},
+  displayNameContainer: { flex: 1, flexWrap: "wrap" },
   usernameContainer: {
     marginTop: 5,
+    flex: 1,
+    flexWrap: "wrap",
   },
   buttonToggleContainer: {
     flexDirection: "row",

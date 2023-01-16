@@ -26,7 +26,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { FONTS, SIZES, COLORS, icons, images } from "../../../constants";
+import { FONTS, SIZES, COLORS, icons, images, User } from "../../../constants";
 import { McText, McIcon, McAvatar } from "../../../components/Styled";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
@@ -51,7 +51,7 @@ var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 const EditMyProfileScreen = ({ navigation, route }) => {
-  const { currentUser, userToken } = useContext(UserContext);
+  const { currentUser, setCurrentUser, userToken } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(currentUser.Picture);
 
@@ -64,7 +64,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
       return;
     }
 
-    if (!checkIfStringIsAlphanumeric(username)) {
+    if (!checkIfStringIsReadable(username) || !checkIfStringIsAlphanumeric(username)) {
       Alert.alert("Error", "Please enter a valid username");
       return;
     }
@@ -83,6 +83,13 @@ const EditMyProfileScreen = ({ navigation, route }) => {
     )
       .then(() => {
         setLoading(false);
+        const updatedUser: User = {
+          UserID: currentUser.UserID,
+          Name: displayName,
+          Username: username,
+          Picture: image
+        }
+        setCurrentUser(updatedUser)
         Navigator.goBack();
       })
       .catch((error: Error) => {
@@ -97,6 +104,8 @@ const EditMyProfileScreen = ({ navigation, route }) => {
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
         leftButtonOnClick={() => Navigator.goBack()}
+        rightButtonSVG={<McText h3 color={COLORS.purple}>Save</McText>}
+        rightButtonOnClick={() => handleSubmit()}
       />
       <KeyboardAwareScrollView>
         <View style={{ alignItems: "center" }}>
@@ -126,6 +135,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
               placeholder={"enter your display name"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
+              maxLength={20}
               onChangeText={(newText) => setDisplayName(newText)}
             />
           </View>
@@ -143,10 +153,11 @@ const EditMyProfileScreen = ({ navigation, route }) => {
             </View>
             <TextInput
               value={username}
-              placeholder={"enter your display name"}
+              placeholder={"enter your username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
+              maxLength={20}
             />
           </View>
         </View>

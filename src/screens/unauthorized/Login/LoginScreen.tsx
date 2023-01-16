@@ -56,6 +56,7 @@ const LoginScreen = () => {
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsercred(newText)}
+              maxLength={20}
             />
             <TextInput
               placeholder={"password"}

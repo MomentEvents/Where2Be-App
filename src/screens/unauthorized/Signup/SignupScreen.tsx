@@ -65,12 +65,14 @@ const SignupScreen = () => {
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setDisplayName(newText)}
+              maxLength={20}
             />
             <TextInput
               placeholder={"username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
+              maxLength={20}
             />
             <TextInput
               placeholder={"password"}
