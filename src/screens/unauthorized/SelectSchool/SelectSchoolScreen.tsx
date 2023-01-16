@@ -46,10 +46,7 @@ const SelectSchoolScreen = ({ navigation, route }) => {
         <SafeAreaView style={{ alignItems: "center" }}>
           <icons.moment width={Math.min(SIZES.width * 0.7, SIZES.height * .7)}></icons.moment>
           <View
-            style={{
-              alignItems: "center",
-              padding: 20,
-            }}
+            style={styles.textInputContainer}
           >
             <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
           </View>
@@ -74,5 +71,17 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: "100%",
+  },
+  textInputContainer: {
+    width: SIZES.width / 1.3,
+    borderColor: COLORS.purple,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: FONTS.CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingVertical: 10,
+    marginTop: 20,
   },
 });

@@ -5,13 +5,13 @@ import { COLORS } from "../../constants";
 
 const GradientButton = ({ style, children }) => {
   return (
-    <View style={{backgroundColor: COLORS.purple, ...style}}>
-      {children}
-    </View>
-
-    // <LinearGradient colors={["#B66DFF", "#280292"]} style={[style]}>
+    // <View style={{backgroundColor: COLORS.purple, ...style}}>
     //   {children}
-    // </LinearGradient>
+    // </View>
+
+    <LinearGradient colors={[COLORS.lightPurple, COLORS.darkPurple]} style={[style]}>
+      {children}
+    </LinearGradient>
   );
 };
 

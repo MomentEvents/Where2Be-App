@@ -81,7 +81,7 @@ const SignupScreen = () => {
               onChangeText={(newText) => setPassword(newText)}
               secureTextEntry={true}
             />
-            <View style={styles.textInputContainer}>
+            <View style={styles.schoolInputContainer}>
               <SchoolSelector setSelectedSchool={setSelectedSchool} />
             </View>
             <TouchableOpacity onPress={onSignup}>
@@ -89,7 +89,7 @@ const SignupScreen = () => {
                 <McText
                   h4
                   style={{
-                    color: COLORS.black,
+                    color: COLORS.white,
                   }}
                 >
                   signup
@@ -97,7 +97,9 @@ const SignupScreen = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateLogin}>
-              <McText body3>Already have an account? Login here!</McText>
+              <McText body3 style={{
+                color: COLORS.purple
+              }}>Already have an account? Login here!</McText>
             </TouchableOpacity>
           </SafeAreaView>
         </KeyboardAvoidingView>
@@ -132,11 +134,23 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 20,
   },
+  schoolInputContainer: {
+    width: SIZES.width / 1.3,
+    borderColor: COLORS.purple,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingVertical: 10,
+    marginTop: 20,
+  },
   submitButton: {
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.purple,
     marginTop: 30,
     marginBottom: 60,
   },

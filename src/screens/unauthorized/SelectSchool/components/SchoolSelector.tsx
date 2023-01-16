@@ -77,6 +77,9 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               props.setSelectedSchool(null);
               props.setSelectedSchool(schoolMap[option.key]);
             }}
+            selectStyle      ={{
+              borderWidth: 0
+          }}
             selectTextStyle={{
               color: COLORS.white,
               fontFamily: CUSTOMFONT_BOLD,

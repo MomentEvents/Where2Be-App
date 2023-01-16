@@ -374,7 +374,7 @@ const EventDetailsScreen = ({ route }) => {
         visible={imageViewVisible}
         onRequestClose={() => setImageViewVisible(false)}
       />
-      <SafeAreaView>
+      <View>
         <View style={{ position: "relative" }}>
           <ScrollView
             contentContainerStyle={{
@@ -402,7 +402,7 @@ const EventDetailsScreen = ({ route }) => {
                   SIZES.height < 700 ? SIZES.height * 0.4 : SIZES.height * 0.5,
               }}
             >
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginTop: SIZES.height/30, }}>
                 <ImageHeaderSection>
                   <TouchableOpacity
                     onPress={() => {
@@ -744,7 +744,7 @@ const EventDetailsScreen = ({ route }) => {
                     </TouchableOpacity>
                   </GradientButton>
                   <McText
-                    body3
+                    body4
                     style={{
                       color: eventIDToDidJoin[eventID]
                         ? COLORS.purple
@@ -754,7 +754,7 @@ const EventDetailsScreen = ({ route }) => {
                     Join
                   </McText>
                   <McText
-                    body2
+                    h4
                     style={{
                       color: eventIDToDidJoin[eventID]
                         ? COLORS.purple
@@ -802,7 +802,7 @@ const EventDetailsScreen = ({ route }) => {
                     </TouchableOpacity>
                   </GradientButton>
                   <McText
-                    body3
+                    body4
                     style={{
                       color: eventIDToDidShoutout[eventID]
                         ? COLORS.purple
@@ -812,7 +812,7 @@ const EventDetailsScreen = ({ route }) => {
                     Shoutout
                   </McText>
                   <McText
-                    body2
+                    h4
                     style={{
                       color: eventIDToDidShoutout[eventID]
                         ? COLORS.purple
@@ -828,7 +828,7 @@ const EventDetailsScreen = ({ route }) => {
             )}
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 };
@@ -849,7 +849,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: SIZES.width,
-    height: 150,
+    height: 140,
     borderTopWidth: 0.5,
     borderColor: COLORS.gray,
     backgroundColor: COLORS.black,
@@ -959,6 +959,8 @@ const SectionFooter = styled.View`
 const UserOptionsSection = styled.View`
   flex: 1;
   flex-direction: row;
+  margin-top: 20px;
+  margin-bottom: 20px;
   align-items: center;
   justify-content: center;
 `;

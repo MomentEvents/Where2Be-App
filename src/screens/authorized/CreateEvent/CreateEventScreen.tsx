@@ -61,6 +61,8 @@ const CreateEventScreen = ({ navigation, route }) => {
     new Set<Interest>()
   );
 
+  const pickerWidth = SIZES.width - 75
+
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
   const [openedEndTimePicker, setOpenedEndTimePicker] =
@@ -171,7 +173,7 @@ const CreateEventScreen = ({ navigation, route }) => {
         <View style={styles.scrollViewContainer}>
           <SectionInputs>
             <View style={styles.titleContainer}>
-              <icons.pickpicture width={30} />
+              <icons.pickpicture style={styles.iconsContainer} width={30} />
               <McText h3>Image</McText>
             </View>
 
@@ -179,8 +181,8 @@ const CreateEventScreen = ({ navigation, route }) => {
               <ImagePickerButton
                 originalImageURI={image}
                 setImageURI={setImage}
-                width={Math.min(SIZES.height, SIZES.width) - 150}
-                height={Math.min(SIZES.height, SIZES.width) - 150}
+                width={pickerWidth}
+                height={pickerWidth}
               />
             </View>
 
@@ -416,6 +418,6 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   iconsContainer: {
-    marginRight: 10,
+    marginRight: 5,
   },
 });
