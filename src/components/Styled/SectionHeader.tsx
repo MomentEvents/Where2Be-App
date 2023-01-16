@@ -16,8 +16,7 @@ const SectionHeader = (props: sectionHeaderProps) => {
     <View
       style={{
         paddingHorizontal: 20,
-        paddingBottom: 15,
-        paddingTop: 5,
+        paddingVertical: 6,
         alignItems: "center",
         flexDirection: "row",
         borderBottomWidth: 1,

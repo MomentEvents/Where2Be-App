@@ -70,7 +70,7 @@ const LoginScreen = () => {
                 <McText
                   h4
                   style={{
-                    color: COLORS.white,
+                    color: COLORS.black,
                   }}
                 >
                   login
@@ -78,9 +78,7 @@ const LoginScreen = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateSignup}>
-              <McText body3 style={{
-                color:COLORS.purple
-              }}>Don't have an account?</McText>
+              <McText body3>Don't have an account? Create one here!</McText>
             </TouchableOpacity>
           </SafeAreaView>
         </KeyboardAvoidingView>
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: COLORS.purple,
+    backgroundColor: COLORS.white,
     marginTop: 30,
     marginBottom: 60,
   },

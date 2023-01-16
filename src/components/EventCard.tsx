@@ -180,6 +180,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
+            overlayColor: COLORS.trueBlack,
           }}
         />
         <ActivityIndicator
@@ -193,6 +194,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
+            backgroundColor: "rgba(0,0,0,.5)",
           }}
         />
       </View>
@@ -249,9 +251,9 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             }}
           >
             <LinearGradient
-              colors={["transparent", 'rgba(0,0,0,0.9)']}
-              start={{ x: 0, y: 0.3 }}
-              end={{ x: 0, y: 0.6 }}
+              colors={["transparent", COLORS.trueBlack]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 0.9 }}
               style={{ borderRadius: cardBorderRadius, height: "100%" }}
             ></LinearGradient>
 

@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   hoverButtonContainer: {
     flex: 1,
     position: "absolute",
-    right: 20,
+    right: 40,
     bottom: 20 + SIZES.tab_bar_height,
     borderRadius: 10,
   },
