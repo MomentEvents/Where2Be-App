@@ -866,7 +866,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   edit: {
-    backgroundColor: COLORS.purple,
+    backgroundColor: COLORS.gray2,
     width: SIZES.width / 3,
     padding: 8,
     borderRadius: 5,
@@ -925,7 +925,7 @@ const HostSection = styled.View`
 
 const DescriptionSection = styled.View`
   background-color: ${COLORS.input};
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 5px 0px 0px 0px;
   opacity: 0.8;
 `;

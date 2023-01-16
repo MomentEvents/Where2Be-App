@@ -78,7 +78,7 @@ const MyProfileScreen = ({ route }) => {
       <SectionHeader
         title={"Hosted Events"}
         rightButtonSVG={<icons.settings />}
-        rightButtonOnClick={() => {}}
+        rightButtonOnClick={() => {Navigator.navigate(SCREENS.Settings)}}
       />
       <SectionProfile user={currentUser} canEditProfile={true}/>
       <View
