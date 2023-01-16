@@ -215,12 +215,7 @@ const CreateEventScreen = ({ navigation, route }) => {
             />
 
             <View style={styles.titleContainer}>
-              <icons.pickdate
-                style={styles.iconsContainer}
-                viewBox="0 0 10 10"
-                fill="white"
-                stroke="white"
-              />
+              <icons.pickdate style={styles.iconsContainer} width={30} />
               <McText h3>Date</McText>
             </View>
 

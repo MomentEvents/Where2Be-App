@@ -283,13 +283,13 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
                     color: COLORS.white,
                     opacity: 0.8,
                     marginTop: 4,
-                    letterSpacing: 1.2,
+                    letterSpacing: .6,
                     marginRight: 4,
                   }}
                 >
                   {showRelativeTime ? moment(eventIDToEvent[event.EventID].StartDateTime).fromNow() : 
                     moment(eventIDToEvent[event.EventID].StartDateTime)
-                    .format("MMM DD h:mm a")}
+                    .format("MMM DD h:mm a").toLowerCase()}
                 </McText>
                 <View
                   style={{
@@ -423,7 +423,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
               width: cardWidth - 20,
             }}
           >
-            <McText h4 numberOfLines={2}>
+            <McText h3 numberOfLines={2}>
               {eventIDToEvent[event.EventID].Title}
             </McText>
             <McText
@@ -431,11 +431,12 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
               style={{
                 color: COLORS.white,
                 opacity: 0.8,
+                letterSpacing: .4,
               }}
             >
               {moment(eventIDToEvent[event.EventID].StartDateTime).format(
                 "MMM DD h:mm a"
-              )}
+              ).toLowerCase()}
             </McText>
             <View
               style={{
