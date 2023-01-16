@@ -24,6 +24,7 @@ import {
 } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
+import SectionProfile from "../../../components/Styled/SectionProfile";
 
 type ProfileDetailsRouteParams = {
   User: User;
@@ -81,21 +82,7 @@ const ProfileDetailsScreen = ({ route }) => {
           Navigator.goBack();
         }}
       />
-      <View style={styles.profileContainer}>
-        <Image style={styles.imageContainer} source={{ uri: User.Picture }} />
-        <View style={styles.infoContainer}>
-          <View style={{ flexDirection: "row" }}>
-            <McText h3 style={styles.displayNameContainer}>
-              HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-            </McText>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <McText body3 style={styles.usernameContainer}>
-              @HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-            </McText>
-          </View>
-        </View>
-      </View>
+      <SectionProfile user={User} canEditProfile={false}/>
       <View
         style={{
           backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
