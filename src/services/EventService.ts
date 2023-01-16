@@ -97,11 +97,11 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
-  return 0;
+  return 7;
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
-  return 0;
+  return 7;
 }
 
 /******************************************************

@@ -69,16 +69,13 @@ const EventDetailsScreen = ({ route }) => {
     eventIDToShoutouts,
     updateEventIDToShoutouts,
     eventIDToInterests,
-    updateEventIDToInterests,
+    updateEventIDToInterests
   } = useContext(EventContext);
 
   const { eventID } = propsFromEventCard;
 
-  if (!eventID) {
-    throw formatError(
-      "Error",
-      "eventID was null or undefined when entering event details"
-    );
+  if(!eventID){
+    throw formatError("Error", "eventID was null or undefined when entering event details")
   }
 
   const [host, setHost] = useState<User>(null);
@@ -193,7 +190,7 @@ const EventDetailsScreen = ({ route }) => {
       return;
     }
     Navigator.navigate(SCREENS.EditEvent, {
-      eventID: eventID,
+      eventID: eventID
     });
   };
 
@@ -311,7 +308,7 @@ const EventDetailsScreen = ({ route }) => {
 
     getEventInterestsByEventId(eventID)
       .then((tags: Interest[]) => {
-        updateEventIDToInterests({ id: eventID, interests: tags });
+        updateEventIDToInterests({id: eventID, interests: tags})
       })
       .catch((error: Error) => {
         if (!gotError) {
@@ -401,7 +398,8 @@ const EventDetailsScreen = ({ route }) => {
               }}
               style={{
                 width: "100%",
-                height: SIZES.height * 0.3,
+                height:
+                  SIZES.height < 700 ? SIZES.height * 0.4 : SIZES.height * 0.5,
               }}
             >
               <View style={{ flex: 1, marginTop: SIZES.height/30, }}>
@@ -461,55 +459,37 @@ const EventDetailsScreen = ({ route }) => {
                           style={{
                             flexDirection: "row",
                             alignItems: "flex-start",
-                            width: SIZES.width - 40,
                           }}
                         >
-                          <icons.pickdate
-                            style={{ marginRight: 10, opacity: 0.7 }}
-                          />
                           <McText
-                            h4
+                            h3
                             style={{
-                              letterSpacing: 0.5,
-                              color: COLORS.lightGray,
-                              opacity: 0.7,
+                              letterSpacing: 1.5,
+                              color: COLORS.purple,
+                              opacity: 0.85,
+                            }}
+                          >
+                            {eventIDToEvent[eventID] === undefined
+                              ? null
+                              : moment(eventIDToEvent[eventID].StartDateTime)
+                                  .format("MMM DD")
+                                  .toUpperCase()}
+                          </McText>
+                          <McText
+                            h3
+                            style={{
+                              letterSpacing: 1.2,
+                              marginLeft: 10,
+                              color: COLORS.white,
+                              opacity: 0.85,
                             }}
                           >
                             {eventIDToEvent[eventID] === undefined
                               ? null
                               : moment(
                                   eventIDToEvent[eventID].StartDateTime
-                                ).format("MMM DD[,] YYYY").toLowerCase()}
+                                ).format("h:mm A")}
                           </McText>
-                          <View
-                            style={{
-                              position: "absolute",
-                              right: 0,
-                              flexDirection: "row",
-                            }}
-                          >
-                            <icons.picktime
-                              style={{ marginRight: 10, opacity: 0.7 }}
-                            />
-                            <McText
-                              h4
-                              style={{
-                                letterSpacing: 0.5,
-                                color: COLORS.lightGray,
-                                opacity: 0.7,
-                              }}
-                            >
-                              {eventIDToEvent[eventID] === undefined
-                                ? null
-                                : moment(
-                                    eventIDToEvent[eventID].StartDateTime
-                                  ).format("h:mm a") +
-                                  " - " +
-                                  moment(
-                                    eventIDToEvent[eventID].EndDateTime
-                                  ).format("h:mm a")}
-                            </McText>
-                          </View>
                         </View>
                       </View>
                     </FooterContentView>
@@ -523,7 +503,7 @@ const EventDetailsScreen = ({ route }) => {
                   h1
                   style={{
                     width: SIZES.width * 0.8,
-                    marginTop: 10,
+                    marginTop: 5,
                   }}
                 >
                   {eventIDToEvent[eventID] === undefined
@@ -536,8 +516,7 @@ const EventDetailsScreen = ({ route }) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {eventIDToInterests[eventID]
-                    ? eventIDToInterests[eventID].map((taglist) => (
+                  {eventIDToInterests[eventID] ? eventIDToInterests[eventID].map((taglist) => (
                         <View
                           key={taglist.InterestID}
                           style={{
@@ -549,6 +528,8 @@ const EventDetailsScreen = ({ route }) => {
                             borderRadius: 5,
                             marginRight: 10,
                             backgroundColor: COLORS.input,
+                            borderWidth: 1,
+                            borderColor: COLORS.purple,
                             justifyContent: "center",
                             alignItems: "center",
                           }}
@@ -557,8 +538,7 @@ const EventDetailsScreen = ({ route }) => {
                             {taglist === undefined ? null : taglist.Name}
                           </McText>
                         </View>
-                      ))
-                    : null}
+                      )) : null}
                 </ScrollView>
               </InterestSection>
 
@@ -582,8 +562,8 @@ const EventDetailsScreen = ({ route }) => {
                     numberOfLines={1}
                     style={{
                       letterSpacing: 1,
+                      textTransform: "uppercase",
                       width: SIZES.width / 1.25,
-                      color: COLORS.lightGray,
                     }}
                   >
                     {host === null ? (
@@ -634,16 +614,16 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.lightGray,
+                    tintColor: COLORS.purple,
                   }}
                 />
                 <McText
                   h5
                   style={{
                     letterSpacing: 1,
+                    textTransform: "uppercase",
                     marginTop: -1,
                     width: SIZES.width * 0.83,
-                    color: COLORS.lightGray,
                   }}
                 >
                   {eventIDToEvent[eventID] === undefined
@@ -657,7 +637,7 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.lightGray,
+                    tintColor: COLORS.purple,
                   }}
                 />
                 <View>
@@ -665,8 +645,9 @@ const EventDetailsScreen = ({ route }) => {
                     body5
                     numberOfLines={1}
                     style={{
+                      opacity: 0.8,
                       letterSpacing: 1,
-                      color: COLORS.lightGray,
+                      textTransform: "uppercase",
                     }}
                   >
                     {eventIDToEvent[eventID] === undefined
@@ -727,31 +708,22 @@ const EventDetailsScreen = ({ route }) => {
                 <View
                   style={{
                     alignItems: "center",
-                    paddingHorizontal: 20,
-                    shadowColor: "#B66DFF",
-                    shadowRadius: 10,
-                    shadowOpacity: eventIDToDidJoin[eventID] ? 1 : 0,
-                    shadowOffset :{width: 0, height: 0}
+                    marginRight: 60,
                   }}
                 >
                   <GradientButton
-                    style={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: 80,
-                      marginBottom: 5,
-                    }}
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
-                        width: 58,
-                        height: 58,
+                        width: 60,
+                        height: 60,
                         borderRadius: 80,
                         marginBottom: 5,
                         backgroundColor: eventIDToDidJoin[eventID]
                           ? "transparent"
-                          : COLORS.white,
-                        borderWidth: 0,
+                          : COLORS.trueBlack,
+                        borderWidth: 2,
                         borderColor: eventIDToDidJoin[eventID]
                           ? COLORS.white
                           : COLORS.gray,
@@ -765,15 +737,14 @@ const EventDetailsScreen = ({ route }) => {
                       }}
                     >
                       {eventIDToDidJoin[eventID] ? (
-                        <icons.activecheckmark width={30}
-                        />
+                        <icons.activecheckmark width={35} />
                       ) : (
-                        <icons.inactivecheckmark width={30} />
+                        <icons.inactivecheckmark width={35} />
                       )}
                     </TouchableOpacity>
                   </GradientButton>
                   <McText
-                    h4
+                    body4
                     style={{
                       color: eventIDToDidJoin[eventID]
                         ? COLORS.purple
@@ -783,7 +754,7 @@ const EventDetailsScreen = ({ route }) => {
                     Join
                   </McText>
                   <McText
-                    h2
+                    h4
                     style={{
                       color: eventIDToDidJoin[eventID]
                         ? COLORS.purple
@@ -796,30 +767,21 @@ const EventDetailsScreen = ({ route }) => {
                 <View
                   style={{
                     alignItems: "center",
-                    paddingHorizontal: 20,
-                    shadowColor: "#B66DFF",
-                    shadowRadius: 10,
-                    shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
-                    shadowOffset :{width: 0, height: 0}
                   }}
                 >
                   <GradientButton
-                    style={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: 80,
-                      marginBottom: 5,
-                    }}
+                    style={{ width: 60, height: 60, borderRadius: 80 }}
                   >
                     <TouchableOpacity
                       style={{
-                        width: 58,
-                        height: 58,
+                        width: 60,
+                        height: 60,
                         borderRadius: 80,
+                        marginBottom: 5,
                         backgroundColor: eventIDToDidShoutout[eventID]
                           ? "transparent"
-                          : COLORS.white,
-                        borderWidth: 0,
+                          : COLORS.trueBlack,
+                        borderWidth: 2,
                         borderColor: eventIDToDidShoutout[eventID]
                           ? COLORS.white
                           : COLORS.gray,
@@ -833,14 +795,14 @@ const EventDetailsScreen = ({ route }) => {
                       }}
                     >
                       {eventIDToDidShoutout[eventID] ? (
-                        <icons.activeshoutout style={{marginRight: 2}} width={30} />
+                        <icons.activeshoutout width={35} />
                       ) : (
-                        <icons.inactiveshoutout style={{marginRight: 2}} width={30} />
+                        <icons.inactiveshoutout width={35} />
                       )}
                     </TouchableOpacity>
                   </GradientButton>
                   <McText
-                    body3
+                    body4
                     style={{
                       color: eventIDToDidShoutout[eventID]
                         ? COLORS.purple
@@ -850,7 +812,7 @@ const EventDetailsScreen = ({ route }) => {
                     Shoutout
                   </McText>
                   <McText
-                    body2
+                    h4
                     style={{
                       color: eventIDToDidShoutout[eventID]
                         ? COLORS.purple
@@ -886,13 +848,12 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     bottom: 0,
+    width: SIZES.width,
     height: 140,
-    width: SIZES.width - 20,
-    borderWidth: 1,
-    borderColor: "rgba(100,100,100,.8)",
-    backgroundColor: "rgba(40,40,40,.8)",
-    margin: 10,
-    borderRadius: 8,
+    borderTopWidth: 0.5,
+    borderColor: COLORS.gray,
+    backgroundColor: COLORS.black,
+    opacity: 0.9,
   },
   hostProfilePic: {
     height: 35,
@@ -900,12 +861,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: COLORS.lightGray,
+    borderColor: COLORS.white,
     justifyContent: "center",
     alignItems: "center",
   },
   edit: {
-    backgroundColor: COLORS.purple,
+    backgroundColor: COLORS.gray2,
     width: SIZES.width / 3,
     padding: 8,
     borderRadius: 5,
@@ -966,7 +927,7 @@ const DescriptionSection = styled.View`
   background-color: ${COLORS.input};
   border-radius: 5px;
   margin: 5px 0px 0px 0px;
-  opacity: 1;
+  opacity: 0.8;
 `;
 
 const LocationSection = styled.View`

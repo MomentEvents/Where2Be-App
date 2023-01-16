@@ -20,7 +20,6 @@ export const COLORS = {
   red: '#EB4B4B',
   lightGray: '#dedede',
   purple: '#9e69f5',
-  indigo: '#5C00F1',
   transparentWhite: 'rgba(255, 255, 255, 0.2)',
   transparentBlack: 'rgba(0, 0, 0, 0.9)',
   linear: ['transparent', '#F687FFE8'],

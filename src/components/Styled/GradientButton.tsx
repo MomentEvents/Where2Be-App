@@ -9,7 +9,7 @@ const GradientButton = ({ style, children }) => {
     //   {children}
     // </View>
 
-    <LinearGradient colors={["#B66DFF", "#280292"]} style={[style]}>
+    <LinearGradient colors={[COLORS.lightPurple, COLORS.darkPurple]} style={[style]}>
       {children}
     </LinearGradient>
   );

@@ -213,7 +213,7 @@ const CreateEventScreen = ({ navigation, route }) => {
               value={desc}
               onChangeText={setDesc}
               multiline={true}
-              maxLength={1500}
+              maxLength={400}
             />
 
             <View style={styles.titleContainer}>
