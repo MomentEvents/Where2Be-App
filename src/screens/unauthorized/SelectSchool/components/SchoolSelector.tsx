@@ -78,11 +78,16 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               props.setSelectedSchool(schoolMap[option.key]);
             }}
             selectTextStyle={{
-              color: COLORS.white,
+              color: COLORS.black,
               fontFamily: CUSTOMFONT_BOLD,
             }}
+            selectStyle={{
+              backgroundColor: COLORS.white,
+              borderColor: COLORS.white,
+              borderRadius: 5,
+            }}
             initValueTextStyle={{
-              color: COLORS.white,
+              color: COLORS.black,
               fontFamily: CUSTOMFONT_BOLD,
             }}
             optionContainerStyle={{
@@ -99,6 +104,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             cancelStyle={{
               backgroundColor: "rgba(120,120,120,0.9)",
             }}
+
           />
         ) : (
           <ActivityIndicator size="small" />

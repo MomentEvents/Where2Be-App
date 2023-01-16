@@ -81,11 +81,11 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             }}
             selectTextStyle={{
               color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
+              fontFamily: CUSTOMFONT_REGULAR,
             }}
             initValueTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
+              color: COLORS.gray,
+              fontFamily: CUSTOMFONT_REGULAR,
             }}
             optionContainerStyle={{
               backgroundColor: "rgba(120,120,120,0.9)",
