@@ -262,11 +262,11 @@ const EditEventScreen = ({ navigation, route }) => {
               value={desc}
               onChangeText={setDesc}
               multiline={true}
-              maxLength={400}
+              maxLength={1500}
             />
 
             <View style={styles.titleContainer}>
-              <icons.pickdate style={styles.iconsContainer} width={30} />
+              <icons.pickdate style={styles.iconsContainer} width={30} fill="white" stroke="white" />
               <McText h3>Date</McText>
             </View>
 
