@@ -23,8 +23,6 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const width = props.width ? props.width : defaultWidthHeight;
   const height = props.height ? props.height : defaultWidthHeight;
 
-  console.log("Original image URI is " + currentImageURI);
-
   const pickImage = async () => {
     // // No permissions request is necessary for launching the image library
     // const permissions = 'Permissions.CAMERA_ROLL';

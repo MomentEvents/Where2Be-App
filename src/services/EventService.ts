@@ -2,37 +2,23 @@ import momentAPI from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 
-// createEvent DONE
-
-// getEvent DONE
-
-// updateEvent DONE
-
-// deleteEvent DONE
-
-// getFutureHostedEventsByUserId DONE
-
-// getPastHostedEventsByUserId DONE
-
-// getCurrUserFutureJoinedEvents DONE
-
-// getCurrUserPastJoinedEvents DONE
-
-// getEventsByCategory DONE
-
-// Constants for category parameter checking in getAllSchoolEventsByCategory
 export const ACADEMIC = "academic";
 export const ATHLETICS = "athletics";
 export const PROFESSIONAL = "professional";
 export const SOCIAL = "social";
 
 /******************************************************
- * getEventById
+ * getEvent
  *
  * Gets an event based on its ID
  *
- * Parameters: An ID number to search up an event
- * Return: An event if it exists. null if it does not.
+ * Parameters: 
+ * 
+ * eventID - An ID number to search up an event
+ * 
+ * Return: 
+ * 
+ * Event: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
   const pulledEvent: Event = {
@@ -52,11 +38,16 @@ export async function getEvent(eventID: string): Promise<Event> {
 /******************************************************
  * createEvent
  *
- * Creates an event and links it to a school based on what school the currentUser is in
+ * Creates an event and links it to a school based on what school the user from userAccessToken is in
  *
  * Parameters:
- *          createdEvent: A created event to put in the database
- * Return: A boolean which is true if it's successfully created and false if there is an error
+ * 
+ * userAccessToken - The user access token of the user to send
+ * createdEvent - The created event of the 
+ * 
+ * Return: 
+ * 
+ * string - A string containing the eventID of the created event
  */
 export async function createEvent(
   userAccessToken: string,
@@ -85,7 +76,7 @@ export async function updateEvent(
 
   updatedEvent: Event
 ): Promise<void> {
-  return null;
+  return Promise.resolve();
 }
 
 /******************************************************

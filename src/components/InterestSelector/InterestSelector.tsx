@@ -48,8 +48,6 @@ const InterestSelector = (props: InterestSelectorProps) => {
             })
           : {};
 
-        console.log(selectedInterestsTemp);
-
         props.setSelectedInterests(selectedInterestsTemp);
         setInterestIDToInterestMap(interestIDToInterestMapTemp);
       })
@@ -63,7 +61,6 @@ const InterestSelector = (props: InterestSelectorProps) => {
   }, []);
 
   return (
-    //style={{ flexWrap: 'wrap', flexDirection: "row", alignSelf: "baseline"}}
     <View
       style={{ flexWrap: "wrap", flexDirection: "row", alignSelf: "baseline" }}
     >
