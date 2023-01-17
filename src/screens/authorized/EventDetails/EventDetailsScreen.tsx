@@ -729,8 +729,8 @@ const EventDetailsScreen = ({ route }) => {
                   paddingHorizontal: 20,
                   shadowColor: "#B66DFF",
                   shadowRadius: 10,
-                  shadowOpacity: eventIDToDidJoin[eventID] ? 1 : 0,
-                  shadowOffset: { width: 0, height: 0 },
+                  // shadowOpacity: eventIDToDidJoin[eventID] ? 1 : 0,
+                  // shadowOffset: { width: 0, height: 0 },
                 }}
               >
                 <GradientButton
@@ -752,7 +752,7 @@ const EventDetailsScreen = ({ route }) => {
                         : COLORS.white,
                       borderWidth: 0,
                       borderColor: eventIDToDidJoin[eventID]
-                        ? COLORS.white
+                        ? COLORS.purple
                         : COLORS.gray,
                       justifyContent: "center",
                       alignItems: "center",
@@ -797,8 +797,8 @@ const EventDetailsScreen = ({ route }) => {
                   paddingHorizontal: 20,
                   shadowColor: "#B66DFF",
                   shadowRadius: 10,
-                  shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
-                  shadowOffset: { width: 0, height: 0 },
+                  // shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
+                  // shadowOffset: { width: 0, height: 0 },
                 }}
               >
                 <GradientButton
