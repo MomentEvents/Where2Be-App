@@ -79,7 +79,7 @@ const TabNavigator = ({ params }) => {
           backgroundColor: COLORS.trueBlack,
           opacity: 1,
           borderTopColor: COLORS.gray2,
-          borderTopWidth: 1,
+          borderTopWidth: .3,
           height: SIZES.tab_bar_height,
           borderTopRightRadius: 0,
           borderTopLeftRadius: 0,

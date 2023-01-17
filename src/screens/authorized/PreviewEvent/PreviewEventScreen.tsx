@@ -196,56 +196,58 @@ const EventDetailsScreen = ({ route }) => {
                     }}
                   >
                     <FooterContentView>
-                      <View style={styles.scrollcontainer}>
-                        <View
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "flex-start",
+                          width: "100%",
+                        }}
+                      >
+                        <icons.calendar_eventdetails
+                          style={{ marginRight: 10 }}
+                        />
+                        <McText
+                          body3
                           style={{
-                            flexDirection: "row",
-                            alignItems: "flex-start",
-                            width: SIZES.width - 40,
+                            letterSpacing: 0.3,
+                            color: COLORS.lightGray,
+                            fontSize: 17,
                           }}
                         >
-                          <icons.pickdate
-                            style={{ marginRight: 10, opacity: 0.7 }}
+                          {createdEvent === undefined
+                            ? null
+                            : moment(createdEvent.StartDateTime)
+                                .format("MMM DD[,] YYYY")
+                                .toLowerCase()}
+                        </McText>
+                        <View
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            flexDirection: "row",
+                          }}
+                        >
+                          <icons.time_eventdetails
+                            style={{ marginRight: 10 }}
                           />
                           <McText
-                            h4
+                            body3
                             style={{
-                              letterSpacing: 0.5,
+                              letterSpacing: 0.3,
                               color: COLORS.lightGray,
-                              opacity: 0.7,
+                              fontSize: 17,
                             }}
                           >
-                            {moment(createdEvent.StartDateTime)
-                              .format("MMM DD[,] YYYY")
-                              .toLowerCase()}
-                          </McText>
-                          <View
-                            style={{
-                              position: "absolute",
-                              right: 0,
-                              flexDirection: "row",
-                            }}
-                          >
-                            <icons.picktime
-                              style={{ marginRight: 10, opacity: 0.7 }}
-                            />
-                            <McText
-                              h4
-                              style={{
-                                letterSpacing: 0.5,
-                                color: COLORS.lightGray,
-                                opacity: 0.7,
-                              }}
-                            >
-                              {moment(createdEvent.StartDateTime).format(
-                                "h:mm a"
-                              ) +
+                            {createdEvent === undefined
+                              ? null
+                              : moment(createdEvent.StartDateTime).format(
+                                  "h:mm a"
+                                ) +
                                 " - " +
                                 moment(createdEvent.EndDateTime).format(
                                   "h:mm a"
                                 )}
-                            </McText>
-                          </View>
+                          </McText>
                         </View>
                       </View>
                     </FooterContentView>
@@ -258,11 +260,10 @@ const EventDetailsScreen = ({ route }) => {
                 <McText
                   h1
                   style={{
-                    width: SIZES.width * 0.8,
                     marginTop: 10,
                   }}
                 >
-                  {createdEvent.Title}
+                  {createdEvent === undefined ? null : createdEvent.Title}
                 </McText>
               </TitleSection>
               <InterestSection>
@@ -270,27 +271,30 @@ const EventDetailsScreen = ({ route }) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {interests.map((taglist) => (
-                    <View
-                      key={taglist.InterestID}
-                      style={{
-                        width:
-                          taglist === undefined
-                            ? 20
-                            : taglist.Name.length * 9 + 15,
-                        height: 32,
-                        borderRadius: 5,
-                        marginRight: 10,
-                        backgroundColor: COLORS.input,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <McText h5 style={{ letterSpacing: 1 }}>
-                        {taglist === undefined ? null : taglist.Name}
-                      </McText>
-                    </View>
-                  ))}
+                  {interests
+                    ? interests.map((taglist) => (
+                        <View
+                          key={taglist.InterestID}
+                          style={{
+                            borderRadius: 5,
+                            paddingVertical: 5,
+                            paddingHorizontal: 15,
+                            marginRight: 10,
+                            backgroundColor: COLORS.input,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <McText
+                            h4
+                            color={COLORS.lightGray}
+                            style={{ letterSpacing: 0.8 }}
+                          >
+                            {taglist === undefined ? null : taglist.Name}
+                          </McText>
+                        </View>
+                      ))
+                    : null}
                 </ScrollView>
               </InterestSection>
 
@@ -311,11 +315,14 @@ const EventDetailsScreen = ({ route }) => {
                     numberOfLines={1}
                     style={{
                       letterSpacing: 1,
-                      width: SIZES.width / 1.25,
-                      color: COLORS.lightGray,
+                      color: COLORS.white,
                     }}
                   >
-                    {currentUser.Name}
+                    {currentUser === null ? (
+                      <ActivityIndicator style={{ marginLeft: 10 }} />
+                    ) : (
+                      currentUser.Name
+                    )}
                   </McText>
                 </View>
               </HostSection>
@@ -333,9 +340,15 @@ const EventDetailsScreen = ({ route }) => {
                     onTextLayout={descriptionOnExpand}
                     numberOfLines={descriptionExpanded ? undefined : 3}
                     body3
+                    style={{
+                      letterSpacing: 0.3,
+                      color: COLORS.lightGray,
+                    }}
                     selectable={true}
                   >
-                    {createdEvent.Description}
+                    {createdEvent === undefined
+                      ? null
+                      : createdEvent.Description}
                   </McText>
                   {lengthMoreText ? (
                     <McText
@@ -344,6 +357,7 @@ const EventDetailsScreen = ({ route }) => {
                         lineHeight: 22,
                         marginTop: 10,
                         color: COLORS.gray,
+                        letterSpacing: 0.3,
                       }}
                     >
                       {descriptionExpanded ? "Read less..." : "Read more..."}
@@ -357,19 +371,18 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.lightGray,
+                    tintColor: COLORS.purple,
                   }}
                 />
                 <McText
-                  h5
+                  body4
                   style={{
-                    letterSpacing: 1,
+                    letterSpacing: 0.5,
                     marginTop: -1,
-                    width: SIZES.width * 0.83,
                     color: COLORS.lightGray,
                   }}
                 >
-                  {createdEvent.Location}
+                  {createdEvent === undefined ? null : createdEvent.Location}
                 </McText>
               </LocationSection>
               <VisibilitySection>
@@ -378,7 +391,7 @@ const EventDetailsScreen = ({ route }) => {
                   size={16}
                   style={{
                     margin: 4,
-                    tintColor: COLORS.lightGray,
+                    tintColor: COLORS.purple,
                   }}
                 />
                 <View>
@@ -390,7 +403,11 @@ const EventDetailsScreen = ({ route }) => {
                       color: COLORS.lightGray,
                     }}
                   >
-                    Public
+                    {createdEvent === undefined
+                      ? null
+                      : createdEvent.Visibility
+                      ? "Public"
+                      : "Private"}
                   </McText>
                 </View>
               </VisibilitySection>
@@ -436,14 +453,14 @@ const ImageFooterSection = styled.View`
   flex: 1;
   justify-content: flex-end;
   position: relative;
-  width: ${SIZES.width}px;
+  width: 100%;
 `;
 
 const FooterContentView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  marginhorizontal: 15px;
+  margin-horizontal: 20px;
 `;
 
 const TitleSection = styled.View`
@@ -459,14 +476,13 @@ const InterestSection = styled.View`
 const HostSection = styled.View`
   flex-direction: row;
   margin: 5px 0px 10px 10px;
-  align-items: center;
 `;
 
 const DescriptionSection = styled.View`
   background-color: ${COLORS.input};
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 5px 0px 0px 0px;
-  opacity: 0.8;
+  opacity: 1;
 `;
 
 const LocationSection = styled.View`
@@ -481,23 +497,4 @@ const VisibilitySection = styled.View`
   margin: 0px 0px 0px 0px;
   border-radius: 10px;
   align-items: center;
-`;
-
-const EditOrDeleteEventSection = styled.View`
-  flex-direction: row;
-  margin: 10px 0px 0px 0px;
-  border-radius: 10px;
-  align-items: center;
-`;
-
-const SectionFooter = styled.View`
-  background-color: transparent;
-  justify-content: space-between;
-`;
-
-const UserOptionsSection = styled.View`
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;

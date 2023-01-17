@@ -462,15 +462,15 @@ const EventDetailsScreen = ({ route }) => {
                         width: "100%",
                       }}
                     >
-                      <icons.pickdate
-                        style={{ marginRight: 10, opacity: 0.7 }}
+                      <icons.calendar_eventdetails
+                        style={{ marginRight: 10 }}
                       />
                       <McText
-                        h4
+                        body3
                         style={{
-                          letterSpacing: 0.5,
+                          letterSpacing: 0.3,
                           color: COLORS.lightGray,
-                          opacity: 0.7,
+                          fontSize: 17,
                         }}
                       >
                         {eventIDToEvent[eventID] === undefined
@@ -486,15 +486,13 @@ const EventDetailsScreen = ({ route }) => {
                           flexDirection: "row",
                         }}
                       >
-                        <icons.picktime
-                          style={{ marginRight: 10, opacity: 0.7 }}
-                        />
+                        <icons.time_eventdetails style={{ marginRight: 10 }} />
                         <McText
-                          h4
+                          body3
                           style={{
-                            letterSpacing: 0.5,
+                            letterSpacing: 0.3,
                             color: COLORS.lightGray,
-                            opacity: 0.7,
+                            fontSize: 17,
                           }}
                         >
                           {eventIDToEvent[eventID] === undefined
@@ -537,19 +535,20 @@ const EventDetailsScreen = ({ route }) => {
                       <View
                         key={taglist.InterestID}
                         style={{
-                          width:
-                            taglist === undefined
-                              ? 20
-                              : taglist.Name.length * 9 + 15,
-                          height: 32,
                           borderRadius: 5,
+                          paddingVertical: 5,
+                          paddingHorizontal: 15,
                           marginRight: 10,
                           backgroundColor: COLORS.input,
                           justifyContent: "center",
                           alignItems: "center",
                         }}
                       >
-                        <McText h5 style={{ letterSpacing: 1 }}>
+                        <McText
+                          h4
+                          color={COLORS.lightGray}
+                          style={{ letterSpacing: 0.8 }}
+                        >
                           {taglist === undefined ? null : taglist.Name}
                         </McText>
                       </View>
@@ -578,7 +577,7 @@ const EventDetailsScreen = ({ route }) => {
                   numberOfLines={1}
                   style={{
                     letterSpacing: 1,
-                    color: COLORS.lightGray,
+                    color: COLORS.white,
                   }}
                 >
                   {host === null ? (
@@ -603,7 +602,12 @@ const EventDetailsScreen = ({ route }) => {
                   onTextLayout={descriptionOnExpand}
                   numberOfLines={descriptionExpanded ? undefined : 3}
                   body3
+                  style={{
+                    letterSpacing: 0.3,
+                    color: COLORS.lightGray
+                  }}
                   selectable={true}
+                  
                 >
                   {eventIDToEvent[eventID] === undefined
                     ? null
@@ -616,6 +620,7 @@ const EventDetailsScreen = ({ route }) => {
                       lineHeight: 22,
                       marginTop: 10,
                       color: COLORS.gray,
+                      letterSpacing: 0.3,
                     }}
                   >
                     {descriptionExpanded ? "Read less..." : "Read more..."}
@@ -629,13 +634,13 @@ const EventDetailsScreen = ({ route }) => {
                 size={16}
                 style={{
                   margin: 4,
-                  tintColor: COLORS.lightGray,
+                  tintColor: COLORS.purple,
                 }}
               />
               <McText
-                h5
+                body4
                 style={{
-                  letterSpacing: 1,
+                  letterSpacing: .5,
                   marginTop: -1,
                   color: COLORS.lightGray,
                 }}
@@ -651,7 +656,7 @@ const EventDetailsScreen = ({ route }) => {
                 size={16}
                 style={{
                   margin: 4,
-                  tintColor: COLORS.lightGray,
+                  tintColor: COLORS.purple,
                 }}
               />
               <View>

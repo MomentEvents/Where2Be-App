@@ -19,7 +19,7 @@ const SectionHeader = (props: sectionHeaderProps) => {
         paddingVertical: 6,
         alignItems: "center",
         flexDirection: "row",
-        borderBottomWidth: 1,
+        borderBottomWidth: .3,
         borderColor: COLORS.gray2,
         backgroundColor: COLORS.black,
       }}

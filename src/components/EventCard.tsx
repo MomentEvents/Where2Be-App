@@ -277,7 +277,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
                 }}
               >
                 <McText
-                  h4
+                  body3
                   style={{
                     color: COLORS.white,
                     opacity: 0.8,
@@ -426,7 +426,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
               {eventIDToEvent[event.EventID].Title}
             </McText>
             <McText
-              h5
+              body4
               style={{
                 color: COLORS.white,
                 opacity: 0.8,
