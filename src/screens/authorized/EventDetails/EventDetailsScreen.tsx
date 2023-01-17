@@ -634,7 +634,7 @@ const EventDetailsScreen = ({ route }) => {
                 size={16}
                 style={{
                   margin: 4,
-                  tintColor: COLORS.purple,
+                  tintColor: COLORS.lightGray,
                 }}
               />
               <McText
@@ -656,7 +656,7 @@ const EventDetailsScreen = ({ route }) => {
                 size={16}
                 style={{
                   margin: 4,
-                  tintColor: COLORS.purple,
+                  tintColor: COLORS.lightGray,
                 }}
               />
               <View>
