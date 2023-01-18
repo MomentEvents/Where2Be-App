@@ -476,8 +476,7 @@ const EventDetailsScreen = ({ route }) => {
                         {eventIDToEvent[eventID] === undefined
                           ? null
                           : moment(eventIDToEvent[eventID].StartDateTime)
-                              .format("MMM DD[,] YYYY")
-                              .toLowerCase()}
+                              .format("MMM DD[,] YYYY")}
                       </McText>
                       <View
                         style={{
@@ -638,7 +637,7 @@ const EventDetailsScreen = ({ route }) => {
                 }}
               />
               <McText
-                body4
+                h5
                 style={{
                   letterSpacing: .5,
                   marginTop: -1,
@@ -771,20 +770,20 @@ const EventDetailsScreen = ({ route }) => {
                   </TouchableOpacity>
                 </GradientButton>
                 <McText
-                  h4
+                  body3
                   style={{
                     color: eventIDToDidJoin[eventID]
-                      ? COLORS.purple
+                      ? COLORS.darkPurple
                       : COLORS.white,
                   }}
                 >
                   Join
                 </McText>
                 <McText
-                  h2
+                  body2
                   style={{
                     color: eventIDToDidJoin[eventID]
-                      ? COLORS.purple
+                      ? COLORS.darkPurple
                       : COLORS.white,
                   }}
                 >
@@ -844,20 +843,20 @@ const EventDetailsScreen = ({ route }) => {
                   </TouchableOpacity>
                 </GradientButton>
                 <McText
-                  h4
+                  body3
                   style={{
                     color: eventIDToDidShoutout[eventID]
-                      ? COLORS.purple
+                      ? COLORS.darkPurple
                       : COLORS.white,
                   }}
                 >
                   Shoutout
                 </McText>
                 <McText
-                  h2
+                  body2
                   style={{
                     color: eventIDToDidShoutout[eventID]
-                      ? COLORS.purple
+                      ? COLORS.darkPurple
                       : COLORS.white,
                   }}
                 >
@@ -894,8 +893,8 @@ const styles = StyleSheet.create({
     height: 140,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(100,100,100,.8)",
-    backgroundColor: "rgba(40,40,40,.8)",
+    borderColor: "rgba(100,100,100,.9)",
+    backgroundColor: "rgba(40,40,40,.9)",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 8,
