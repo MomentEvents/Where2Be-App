@@ -458,19 +458,18 @@ const EventDetailsScreen = ({ route }) => {
                     <View
                       style={{
                         flexDirection: "row",
-                        alignItems: "flex-start",
+                        alignItems: "center",
                         width: "100%",
                       }}
                     >
                       <icons.calendar_eventdetails
-                        style={{ marginRight: 10 }}
+                        style={{ marginRight: 8 }}
                       />
                       <McText
                         h4
                         style={{
-                          letterSpacing: 0.3,
+                          letterSpacing: 0.1,
                           color: COLORS.lightGray,
-                          fontSize: 17,
                         }}
                       >
                         {eventIDToEvent[eventID] === undefined
@@ -486,13 +485,12 @@ const EventDetailsScreen = ({ route }) => {
                           flexDirection: "row",
                         }}
                       >
-                        <icons.time_eventdetails style={{ marginRight: 10 }} />
+                        <icons.time_eventdetails style={{ marginRight: 8 }} />
                         <McText
                           h4
                           style={{
-                            letterSpacing: 0.3,
+                            letterSpacing: 0.1,
                             color: COLORS.lightGray,
-                            fontSize: 17,
                           }}
                         >
                           {eventIDToEvent[eventID] === undefined

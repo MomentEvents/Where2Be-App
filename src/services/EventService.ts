@@ -180,7 +180,7 @@ export async function getUserHostedFutureEvents(
       Picture:
         "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
       Location: "La Jolla Shores",
-      StartDateTime: new Date("2022-10-21T23:30:00.000Z"),
+      StartDateTime: new Date("2022-10-22T05:00:00.000Z"),
       EndDateTime: new Date("2022-10-22T05:30:00.000Z"),
       Visibility: true,
     },
