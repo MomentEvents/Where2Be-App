@@ -475,8 +475,9 @@ const EventDetailsScreen = ({ route }) => {
                       >
                         {eventIDToEvent[eventID] === undefined
                           ? null
-                          : moment(eventIDToEvent[eventID].StartDateTime)
-                              .format("MMM DD[,] YYYY")}
+                          : moment(
+                              eventIDToEvent[eventID].StartDateTime
+                            ).format("MMM DD[,] YYYY")}
                       </McText>
                       <View
                         style={{
@@ -602,11 +603,10 @@ const EventDetailsScreen = ({ route }) => {
                   numberOfLines={descriptionExpanded ? undefined : 3}
                   body3
                   style={{
-                    letterSpacing: 0.3,
-                    color: COLORS.lightGray
+                    letterSpacing: 0.7,
+                    color: COLORS.lightGray,
                   }}
                   selectable={true}
-                  
                 >
                   {eventIDToEvent[eventID] === undefined
                     ? null
@@ -639,7 +639,7 @@ const EventDetailsScreen = ({ route }) => {
               <McText
                 h5
                 style={{
-                  letterSpacing: .5,
+                  letterSpacing: 0.5,
                   marginTop: -1,
                   color: COLORS.lightGray,
                 }}
@@ -893,8 +893,8 @@ const styles = StyleSheet.create({
     height: 140,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "rgba(100,100,100,.9)",
-    backgroundColor: "rgba(40,40,40,.9)",
+    borderColor: "rgba(100,100,100,.95)",
+    backgroundColor: "rgba(40,40,40,.95)",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 8,

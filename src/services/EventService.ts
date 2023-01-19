@@ -120,12 +120,12 @@ export async function getUserJoinedFutureEvents(
     {
       EventID: "Featured1",
       Title: "Bonfire at La Jolla shores! All are welcome to join",
-      Description: "Description for Event",
+      Description: "Come join a fun bonfire event at La Jolla Shores! We will be having snacks, dinner, games, and more! Meet new people who you have not met before.",
       Picture:
         "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      Location: "La Jolla Shores",
+      StartDateTime: new Date("2023-06-29T23:30:00.000Z"),
+      EndDateTime: new Date("2023-06-30T05:30:00.000Z"),
       Visibility: true,
     },
     {
@@ -175,13 +175,13 @@ export async function getUserHostedFutureEvents(
   const pulledFeaturedEvents: Event[] = [
     {
       EventID: "Featured1",
-      Title: "Bonfire at La Jolla shores! All are welcome to join",
-      Description: "Description for Event",
+      Title: "Bonfire at La Jolla shores!",
+      Description: "Come join a fun bonfire event at La Jolla Shores! We will be having snacks, dinner, games, and more! Meet new people who you have not met before.",
       Picture:
         "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      Location: "La Jolla Shores",
+      StartDateTime: new Date("2022-10-21T23:30:00.000Z"),
+      EndDateTime: new Date("2022-10-22T05:30:00.000Z"),
       Visibility: true,
     },
     {

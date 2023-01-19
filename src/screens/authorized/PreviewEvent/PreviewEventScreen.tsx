@@ -216,8 +216,9 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {createdEvent === undefined
                             ? null
-                            : moment(createdEvent.StartDateTime)
-                                .format("MMM DD[,] YYYY")}
+                            : moment(createdEvent.StartDateTime).format(
+                                "MMM DD[,] YYYY"
+                              )}
                         </McText>
                         <View
                           style={{
@@ -339,10 +340,7 @@ const EventDetailsScreen = ({ route }) => {
                     onTextLayout={descriptionOnExpand}
                     numberOfLines={descriptionExpanded ? undefined : 3}
                     body3
-                    style={{
-                      letterSpacing: 0.3,
-                      color: COLORS.lightGray,
-                    }}
+                    style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
                     selectable={true}
                   >
                     {createdEvent === undefined
