@@ -72,7 +72,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
         {componentLoaded ? (
           <ModalSelector
             data={selectionData}
-            initValue="select your school"
+            initValue="Select your school"
             onChange={(option) => {
               props.setSelectedSchool(null);
               props.setSelectedSchool(schoolMap[option.key]);

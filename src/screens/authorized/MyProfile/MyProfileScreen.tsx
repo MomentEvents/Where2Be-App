@@ -92,13 +92,13 @@ const MyProfileScreen = ({ route }) => {
             alignItems: "center",
             justifyContent: "center",
             borderWidth: isFutureToggle ? 0 : 1,
-            borderColor: COLORS.gray,
-            backgroundColor: isFutureToggle ? COLORS.white : COLORS.trueBlack,
+            borderColor: COLORS.purple,
+            backgroundColor: isFutureToggle ? COLORS.purple : COLORS.trueBlack,
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(true)}
         >
-          <McText h3 color={isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
+          <McText h3 color={isFutureToggle ? COLORS.white : COLORS.purple}>
             Upcoming
           </McText>
         </TouchableOpacity>
@@ -107,13 +107,13 @@ const MyProfileScreen = ({ route }) => {
             alignItems: "center",
             justifyContent: "center",
             borderWidth: !isFutureToggle ? 0 : 1,
-            borderColor: COLORS.gray,
-            backgroundColor: !isFutureToggle ? COLORS.white : COLORS.trueBlack,
+            borderColor: COLORS.purple,
+            backgroundColor: !isFutureToggle ? COLORS.purple : COLORS.trueBlack,
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(false)}
         >
-          <McText h3 color={!isFutureToggle ? COLORS.trueBlack : COLORS.gray}>
+          <McText h3 color={!isFutureToggle ? COLORS.white : COLORS.purple}>
             Previous
           </McText>
         </TouchableOpacity>

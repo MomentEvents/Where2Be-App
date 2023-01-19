@@ -37,7 +37,14 @@ type EventCardProps = {
   showRelativeTime?: boolean;
 };
 
-const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime }: EventCardProps) => {
+const EventCard = ({
+  onClick,
+  event,
+  isBigCard,
+  width,
+  height,
+  showRelativeTime,
+}: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const {
     eventIDToEvent,
@@ -162,9 +169,7 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
     fetchedEvent,
   ]);
 
-  if (
-    !isLoaded || eventIDToEvent[event.EventID] === undefined
-  ) {
+  if (!isLoaded || eventIDToEvent[event.EventID] === undefined) {
     return (
       <View
         style={{
@@ -277,18 +282,40 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
                 }}
               >
                 <McText
-                  body3
+                  h3
                   style={{
-                    color: COLORS.white,
-                    opacity: 0.8,
+                    color: COLORS.lightPurple,
+                    opacity: 1,
                     marginTop: 4,
-                    letterSpacing: .6,
+                    letterSpacing: 0.6,
                     marginRight: 4,
                   }}
                 >
-                  {showRelativeTime ? moment(eventIDToEvent[event.EventID].StartDateTime).fromNow() : 
-                    moment(eventIDToEvent[event.EventID].StartDateTime)
-                    .format("MMM DD h:mm a").toLowerCase()}
+                  {showRelativeTime
+                    ? moment(
+                        eventIDToEvent[event.EventID].StartDateTime
+                      ).fromNow()
+                    : moment(
+                        eventIDToEvent[event.EventID].StartDateTime
+                      ).format("MMM DD")}
+                </McText>
+                <McText
+                  h3
+                  style={{
+                    color: COLORS.lightGray,
+                    opacity: 1,
+                    marginTop: 4,
+                    letterSpacing: 0.6,
+                    marginRight: 4,
+                  }}
+                >
+                  {showRelativeTime ? (
+                    <></>
+                  ) : (
+                    moment(eventIDToEvent[event.EventID].StartDateTime).format(
+                      "h:mm a"
+                    )
+                  )}
                 </McText>
                 <View
                   style={{
@@ -425,18 +452,31 @@ const EventCard = ({ onClick, event, isBigCard, width, height, showRelativeTime 
             <McText h3 numberOfLines={2}>
               {eventIDToEvent[event.EventID].Title}
             </McText>
-            <McText
-              body4
-              style={{
-                color: COLORS.white,
-                opacity: 0.8,
-                letterSpacing: .4,
-              }}
-            >
-              {moment(eventIDToEvent[event.EventID].StartDateTime).format(
-                "MMM DD h:mm a"
-              ).toLowerCase()}
-            </McText>
+            <View style={{flexDirection: "row"}}>
+              <McText
+                h5
+                style={{
+                  color: COLORS.lightPurple,
+                  letterSpacing: 0.4,
+                }}
+              >
+                {moment(eventIDToEvent[event.EventID].StartDateTime).format(
+                  "MMM DD"
+                )}
+              </McText>
+              <McText
+                body4
+                style={{
+                  color: COLORS.lightGray,
+                  letterSpacing: 0.4,
+                  marginLeft: 4,
+                }}
+              >
+                {moment(eventIDToEvent[event.EventID].StartDateTime).format(
+                  "h:mm a"
+                )}
+              </McText>
+            </View>
             <View
               style={{
                 flexDirection: "row",

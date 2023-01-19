@@ -72,7 +72,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
         {componentLoaded ? (
           <ModalSelector
             data={selectionData}
-            initValue="select your school"
+            initValue="Select your school"
             selectStyle      ={{
                 borderWidth: 0
             }}

@@ -73,12 +73,12 @@ const LoginScreen = () => {
                     color: COLORS.black,
                   }}
                 >
-                  login
+                  Login
                 </McText>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateSignup}>
-              <McText body3>Don't have an account? Create one here!</McText>
+              <McText body3>Don't have an account?</McText>
             </TouchableOpacity>
           </SafeAreaView>
         </KeyboardAvoidingView>
