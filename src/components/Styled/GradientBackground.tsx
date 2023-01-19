@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../../constants";
 
 const GradientBackground = ({ children }) => {
   return (
     <LinearGradient
-      colors={["#000000", "#292436"]}
+      colors={[COLORS.black,COLORS.black]}
       style={{
         position: "absolute",
         left: 0,

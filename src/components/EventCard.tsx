@@ -284,7 +284,7 @@ const EventCard = ({
                 <McText
                   h3
                   style={{
-                    color: COLORS.lightPurple,
+                    color: COLORS.purple,
                     opacity: 1,
                     marginTop: 4,
                     letterSpacing: 0.6,
@@ -456,7 +456,7 @@ const EventCard = ({
               <McText
                 h5
                 style={{
-                  color: COLORS.lightPurple,
+                  color: COLORS.purple,
                   letterSpacing: 0.4,
                 }}
               >

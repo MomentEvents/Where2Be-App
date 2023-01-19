@@ -52,14 +52,14 @@ const LoginScreen = () => {
               <McText h1 style={styles.welcomeText}>Welcome to Moment!</McText>
             </View>
             <TextInput
-              placeholder={"username"}
+              placeholder={"Username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsercred(newText)}
               maxLength={20}
             />
             <TextInput
-              placeholder={"password"}
+              placeholder={"Password"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setPassword(newText)}

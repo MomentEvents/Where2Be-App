@@ -6829,6 +6829,13 @@
   dependencies:
     "prop-types" "^15.7.2"
 
+"react-native-modal-selector-searchable@^2.1.4":
+  "integrity" "sha512-58hSgwiN34+Z43NNAgBKqb5plTqtLEFyJfBHxeCkNkjQ8abSfIZrpCiyx43aA3uHDlmqKy4HOLOBstPs0E23rQ=="
+  "resolved" "https://registry.npmjs.org/react-native-modal-selector-searchable/-/react-native-modal-selector-searchable-2.1.4.tgz"
+  "version" "2.1.4"
+  dependencies:
+    "prop-types" "^15.5.10"
+
 "react-native-modal-selector@^2.1.2":
   "integrity" "sha512-+Cvoz/yNUFmfIkJ7xkmlLR2nhJOUhx00S6BPqp2Ruy8LkmaiNr7WMZ4BzsgzylyEgZ84Q+42HQ0v0QzJYobviA=="
   "resolved" "https://registry.npmjs.org/react-native-modal-selector/-/react-native-modal-selector-2.1.2.tgz"

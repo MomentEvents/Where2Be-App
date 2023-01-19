@@ -132,7 +132,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
             </View>
             <TextInput
               value={displayName}
-              placeholder={"enter your display name"}
+              placeholder={"Enter your display name"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               maxLength={20}
@@ -153,7 +153,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
             </View>
             <TextInput
               value={username}
-              placeholder={"enter your username"}
+              placeholder={"Enter your username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}

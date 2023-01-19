@@ -207,7 +207,7 @@ const EventDetailsScreen = ({ route }) => {
                           style={{ marginRight: 10 }}
                         />
                         <McText
-                          body3
+                          h4
                           style={{
                             letterSpacing: 0.3,
                             color: COLORS.lightGray,
@@ -217,8 +217,7 @@ const EventDetailsScreen = ({ route }) => {
                           {createdEvent === undefined
                             ? null
                             : moment(createdEvent.StartDateTime)
-                                .format("MMM DD[,] YYYY")
-                                .toLowerCase()}
+                                .format("MMM DD[,] YYYY")}
                         </McText>
                         <View
                           style={{
@@ -231,7 +230,7 @@ const EventDetailsScreen = ({ route }) => {
                             style={{ marginRight: 10 }}
                           />
                           <McText
-                            body3
+                            h4
                             style={{
                               letterSpacing: 0.3,
                               color: COLORS.lightGray,
@@ -375,7 +374,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 />
                 <McText
-                  body4
+                  h5
                   style={{
                     letterSpacing: 0.5,
                     marginTop: -1,

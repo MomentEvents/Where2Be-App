@@ -20,7 +20,7 @@ export async function getAllSchools(): Promise<School[]> {
   const pulledUniversities: School[] = [
     {
       SchoolID: "SomeUCSDID",
-      Name: "UC San Diego",
+      Name: "University of California, San Diego",
       Abbreviation: "UCSD",
     },
     {

@@ -1,6 +1,7 @@
 import { Component, useEffect, useState } from "react";
 import { View, StyleSheet, TextInput, Switch, ActivityIndicator } from "react-native";
-import ModalSelector from "react-native-modal-selector";
+
+import ModalSelector from "react-native-modal-selector-searchable";
 import { getAllSchools } from "../../../../services/SchoolService";
 import { COLORS, FONTS, School } from "../../../../constants";
 import { displayError } from "../../../../helpers/helpers";
@@ -71,6 +72,18 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
       <View>
         {componentLoaded ? (
           <ModalSelector
+          renderItem={(item) => {
+            return <></>;
+          }}
+          searchStyle={{
+            borderColor: COLORS.white,
+            paddingHorizontal: 10,
+          }}
+          searchTextStyle={{
+            color: COLORS.lightGray,
+            fontFamily: CUSTOMFONT_BOLD,
+            fontSize: 15,
+          }}
             data={selectionData}
             initValue="Select your school"
             selectStyle      ={{

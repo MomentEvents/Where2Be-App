@@ -61,21 +61,21 @@ const SignupScreen = () => {
               </McText>
             </View>
             <TextInput
-              placeholder={"name"}
+              placeholder={"Name"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setDisplayName(newText)}
               maxLength={20}
             />
             <TextInput
-              placeholder={"username"}
+              placeholder={"Username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
               maxLength={20}
             />
             <TextInput
-              placeholder={"password"}
+              placeholder={"Password"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setPassword(newText)}

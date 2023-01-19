@@ -190,7 +190,7 @@ const CreateEventScreen = ({ navigation, route }) => {
             </View>
 
             <TextInput
-              placeholder={"enter your event's title"}
+              placeholder={"Enter your event's title"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               value={title}
@@ -205,7 +205,7 @@ const CreateEventScreen = ({ navigation, route }) => {
             </View>
 
             <TextInput
-              placeholder={"enter your event's description"}
+              placeholder={"Enter your event's description"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               value={desc}
@@ -232,7 +232,7 @@ const CreateEventScreen = ({ navigation, route }) => {
                   </Text>
                 ) : (
                   <Text style={styles.timeInputInactiveText}>
-                    pick your event's date
+                    Pick your event's date
                   </Text>
                 )}
               </Text>
@@ -255,7 +255,7 @@ const CreateEventScreen = ({ navigation, route }) => {
                     {moment.utc(start).local().format("LT")}
                   </Text>
                 ) : (
-                  <Text style={styles.timeInputInactiveText}>start</Text>
+                  <Text style={styles.timeInputInactiveText}>Start</Text>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
@@ -269,7 +269,7 @@ const CreateEventScreen = ({ navigation, route }) => {
                     {moment.utc(end).local().format("LT")}
                   </Text>
                 ) : (
-                  <Text style={styles.timeInputInactiveText}>end</Text>
+                  <Text style={styles.timeInputInactiveText}>End</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -280,7 +280,7 @@ const CreateEventScreen = ({ navigation, route }) => {
             </View>
 
             <TextInput
-              placeholder={"enter your event's location"}
+              placeholder={"Enter your event's location"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               value={location}
