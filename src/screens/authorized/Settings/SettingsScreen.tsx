@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
   },
   horizontalSeparator: {
     borderBottomColor: COLORS.gray2,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   }
 });
