@@ -85,8 +85,6 @@ export async function signup(
     throw formatError("Input error", "Please enter a readable display name");
   }
   if (
-    !checkIfStringIsReadable(username) ||
-    !checkIfStringIsAlphanumeric(username) ||
     displayName === "" ||
     displayName === null ||
     password === "" ||
@@ -96,6 +94,10 @@ export async function signup(
       "Input error",
       "Please enter non-empty values before signing up"
     );
+  }
+  if(
+  !checkIfStringIsReadable(displayName)){
+    throw formatError("Input error", "Please have a readable display name")
   }
   if (!checkIfStringIsAlphanumeric(username)) {
     throw formatError("Input error", "Please enter an alphanumeric username");

@@ -82,10 +82,12 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           searchStyle={{
             borderColor: COLORS.white,
             paddingHorizontal: 10,
+            marginBottom: 20,
+            borderWidth: 2,
           }}
           searchTextStyle={{
             color: COLORS.lightGray,
-            fontFamily: CUSTOMFONT_BOLD,
+            fontFamily: CUSTOMFONT_REGULAR,
             fontSize: 15,
           }}
           data={selectionData}
