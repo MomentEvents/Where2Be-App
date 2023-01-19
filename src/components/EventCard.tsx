@@ -288,7 +288,7 @@ const EventCard = ({
                     opacity: 1,
                     marginTop: 4,
                     letterSpacing: 0.6,
-                    marginRight: 4,
+                    marginRight: 8,
                   }}
                 >
                   {showRelativeTime
