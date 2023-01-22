@@ -97,11 +97,11 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
-  return 0;
+  return 20;
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
-  return 0;
+  return 20;
 }
 
 /******************************************************
@@ -238,7 +238,7 @@ export async function getAllSchoolFeaturedEvents(
       Picture:
         "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
       Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+      StartDateTime: new Date("2023-01-29T10:30:00.000Z"),
       EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
       Visibility: true,
     },
@@ -275,35 +275,24 @@ export async function getAllSchoolOngoingEvents(
   const ongoingEvents: Event[] = [
     {
       EventID: "StartingSoon1",
-      Title: "StartingSoonEvent " + schoolID,
+      Title: "pSemi Techtalk & Recruiting Event",
       Description: "Description for Event",
       Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+        "https://media.discordapp.net/attachments/693568717300301946/959659695398862928/pSemi_Techtalk_and_Recruiting_Event.jpg?width=1442&height=755",
       Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "StartingSoon3",
-      Title: "AcademicEvent " + schoolID,
-      Description: "Description for Event",
-      Picture:
-        "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      StartDateTime: new Date("2023-10-18T17:30:00.000Z"),
+      EndDateTime: new Date("2023-06-29T18:30:00.000Z"),
       Visibility: true,
     },
     {
       EventID: "StartingSoon2",
-      Title: "AcademicEvent " + schoolID,
+      Title: "Interview Workshop",
       Description: "Description for Event",
       Picture:
-        "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "https://media.discordapp.net/attachments/693568717300301946/958126142160789595/Interview_Workshop.png?width=1280&height=670",
       Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+      StartDateTime: new Date("2023-10-18T18:00:00.000Z"),
+      EndDateTime: new Date("2023-06-29T18:30:00.000Z"),
       Visibility: true,
     },
   ];
@@ -336,13 +325,35 @@ export async function getAllSchoolEventsByInterest(
       const pulledAcademicEvents: Event[] = [
         {
           EventID: "Academic1",
-          Title: "AcademicEvent " + schoolID,
+          Title: "SWE x HKN Health Devices Workshop",
           Description: "Description for Event",
           Picture:
-            "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "https://media.discordapp.net/attachments/693568717300301946/975856601263145050/devopsworkshopgraphic2.png",
           Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+          StartDateTime: new Date("2022-11-22T11:30:00.000Z"),
+          EndDateTime: new Date("2023-11-22T11:45:00.000Z"),
+          Visibility: true,
+        },
+        {
+          EventID: "Academic3",
+          Title: "SWE x HKN Health Devices Workshop",
+          Description: "Description for Event",
+          Picture:
+            "https://media.discordapp.net/attachments/693568717300301946/947657617063444500/TinkerCAD_Workshop.jpg?width=1280&height=670",
+          Location: "Featured Location",
+          StartDateTime: new Date("2022-11-22T11:30:00.000Z"),
+          EndDateTime: new Date("2023-11-22T11:45:00.000Z"),
+          Visibility: true,
+        },
+        {
+          EventID: "Academic2",
+          Title: "SWE x HKN Health Devices Workshop",
+          Description: "Description for Event",
+          Picture:
+            "https://media.discordapp.net/attachments/693568717300301946/947915123366961192/Cards_against_humanity_social_v1.2.png?width=1280&height=670",
+          Location: "Featured Location",
+          StartDateTime: new Date("2022-11-22T11:30:00.000Z"),
+          EndDateTime: new Date("2023-11-22T11:45:00.000Z"),
           Visibility: true,
         },
       ];
