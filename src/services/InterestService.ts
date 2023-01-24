@@ -24,19 +24,19 @@ import { formatError } from "../helpers/helpers";
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
   const pulledInterests: Interest[] = [
     {
-      InterestID: ACADEMIC,
+      InterestID: "Academic",
       Name: "Academic",
     },
     {
-      InterestID: ATHLETICS,
+      InterestID: "Athletics",
       Name: "Athletics",
     },
     {
-      InterestID: PROFESSIONAL,
+      InterestID: "Professional",
       Name: "Professional",
     },
     {
-      InterestID: SOCIAL,
+      InterestID: "Social",
       Name: "Social",
     },
   ];

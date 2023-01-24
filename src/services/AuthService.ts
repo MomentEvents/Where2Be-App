@@ -43,16 +43,32 @@ export async function login(
     throw formatError("Input error", "Please enter a valid password");
   }
 
-  usercred = usercred.toLowerCase();
+  // usercred = usercred.toLowerCase();
 
-  if (checkIfStringIsEmail(usercred)) {
+  if (checkIfStringIsEmail(usercred.toLowerCase())) {
     throw formatError("Input error", "Email login is not supported yet");
   }
 
   // DO LOGIN HERE
 
-  const createdToken: Token = createTokenFromUserAccessToken(usercred);
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/authentication/login/username`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: usercred,
+      password: password,
+    })
+  });
+  const data = await response.json();
+
+  console.log(data)
+
+  const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
   writeToken(createdToken);
+
+  console.log(createdToken)
 
   return Promise.resolve(createdToken);
 }

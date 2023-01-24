@@ -14,7 +14,19 @@ import { User } from "../constants";
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUser(UserID: string): Promise<User> {
-  return null;
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${UserID}`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+
+  const pulledUser: User = {
+    UserID: data["UserID"],
+    Name: data["Name"],
+    Username: data["Username"],
+    Picture: data["Picture"],
+  };
+
+  return pulledUser;
 }
 
 /******************************************************
@@ -29,13 +41,26 @@ export async function getUser(UserID: string): Promise<User> {
 export async function getUserByUserAccessToken(
   userAccessToken: string
 ): Promise<User> {
+  // const pulledUser: User = {
+  //   UserID: "kyle1373",
+  //   Name: "Kyle",
+  //   Username: "kyle1373",
+  //   Picture:
+  //     "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+  // };
+  // userAccessToken = "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_access_token/${userAccessToken}`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+
   const pulledUser: User = {
-    UserID: "kyle1373",
-    Name: "Kyle",
-    Username: "kyle1373",
-    Picture:
-      "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+    UserID: data["UserID"],
+    Name: data["Name"],
+    Username: data["Username"],
+    Picture: data["Picture"],
   };
+
   return Promise.resolve(pulledUser);
 }
 
@@ -71,15 +96,26 @@ export async function getEventHostByEventId(
 
   eventID: string
 ): Promise<User> {
+
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/event_id/${eventID}/host`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken
+    })
+  });
+  const data = await response.json();
+
   const pulledUser: User = {
-    UserID: "kyle1373",
-    Name: "Kyle Wade",
-    Username: "kyle1373",
-    Picture:
-      "https://images.unsplash.com/photo-1671433002028-f72f14b56b7a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+    UserID: data["user_id"],
+    Name: data["display_name"],
+    Username: data["username"],
+    Picture: data["picture"],
   };
 
-  return pulledUser
+  return pulledUser;
 }
 
 export async function getUserJoinEvent(
@@ -88,7 +124,18 @@ export async function getUserJoinEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return false;
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken
+    })
+  });
+  const data = await response.json();
+
+  return data["did_join"];
 }
 
 export async function addUserJoinEvent(
@@ -96,14 +143,47 @@ export async function addUserJoinEvent(
   userID: string,
 
   eventID: string
-): Promise<void> {}
+): Promise<void> {
+
+  console.log("USERID ######",userID)
+
+  userID = "Chirag1"
+  
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
+    method: 'UPDATE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      did_join: true
+    })
+  });
+  const data = await response.json();
+}
 
 export async function removeUserJoinEvent(
   userAccessToken: string,
   userID: string,
 
   eventID: string
-): Promise<void> {}
+): Promise<void> {
+  console.log("USERID ######",userID)
+
+  userID = "Chirag1"
+  
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
+    method: 'UPDATE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      did_join: false
+    })
+  });
+  const data = await response.json();
+}
 
 export async function getUserShoutoutEvent(
   userAccessToken: string,
@@ -111,7 +191,19 @@ export async function getUserShoutoutEvent(
 
   eventID: string
 ): Promise<boolean> {
-  return false;
+
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken
+    })
+  });
+  const data = await response.json();
+
+  return data["did_shoutout"];
 }
 
 export async function addUserShoutoutEvent(
@@ -119,11 +211,43 @@ export async function addUserShoutoutEvent(
   userID: string,
 
   eventID: string
-): Promise<void> {}
+): Promise<void> {
+  console.log("USERID ######",userID)
+
+  userID = "Chirag1"
+  
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
+    method: 'UPDATE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      did_join: true
+    })
+  });
+  const data = await response.json();
+}
 
 export async function removeUserShoutoutEvent(
   userAccessToken: string,
   userID: string,
 
   eventID: string
-): Promise<void> {}
+): Promise<void> {
+  console.log("USERID ######",userID)
+
+  userID = "Chirag1"
+  
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
+    method: 'UPDATE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      did_join: true
+    })
+  });
+  const data = await response.json();
+}

@@ -21,17 +21,31 @@ export const SOCIAL = "social";
  * Event: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
+  console.log(eventID)
+
+  // eventID = "q-QBXBX_gT7FEzHBH4ChxsZDSItxE5LqnSv26KRqz-g"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/event_id/${eventID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
   const pulledEvent: Event = {
-    EventID: eventID,
-    Title: "I am a pulled Event",
-    Description: "Description for Event\n\n\n\n\n\n\n\n yo\n expand me",
-    Picture:
-      "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    Location: "Featured Location",
-    StartDateTime: new Date("2023-01-29T10:30:00.000Z"),
-    EndDateTime: new Date("2023-01-29T11:30:00.000Z"),
-    Visibility: true,
+    EventID: data["event_id"],
+    Title: data["title"],
+    Description: data["description"],
+    Picture: data["picture"],
+    Location: data["location"],
+    StartDateTime: new Date(data["start_date_time"]),
+    EndDateTime: new Date(data["end_date_time"]),
+    Visibility: data["visibility"],
   };
+
   return pulledEvent;
 }
 
@@ -56,9 +70,30 @@ export async function createEvent(
   interests: Interest[]
 ): Promise<string> {
 
-  // SHOULD RETURN EVENT ID
+  console.log(createdEvent.StartDateTime.toISOString())
 
-  return "Random event ID";
+  const interestIDArray = interests.map((interest) => interest.Name);
+  console.log(interestIDArray);
+
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/create_event`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao",
+      title: createdEvent.Title,
+      description: createdEvent.Description, 
+      location: createdEvent.Location,
+      start_date_time: createdEvent.StartDateTime.toISOString(),
+      end_date_time: createdEvent.EndDateTime.toISOString(),
+      visibility: createdEvent.Visibility,
+      interest_ids: interestIDArray,
+    })
+  });
+  const data = await response.json();
+
+  return data["event_id"];
 }
 
 /******************************************************
@@ -97,7 +132,13 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
-  return 0;
+  // eventID = "7vDDco3j9km5hMQXaDRFRMucu2WBBD7A0tHfKxyF_sw"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+  
+  return data;
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
@@ -115,33 +156,35 @@ export async function getEventNumShoutouts(eventID: string): Promise<number> {
 export async function getUserJoinedFutureEvents(
   userAccessToken: string,
   userID: string
-): Promise<Event[]> {
-  const pulledFeaturedEvents: Event[] = [
-    {
-      EventID: "Featured1",
-      Title: "Bonfire at La Jolla shores! All are welcome to join",
-      Description: "Come join a fun bonfire event at La Jolla Shores! We will be having snacks, dinner, games, and more! Meet new people who you have not met before.",
-      Picture:
-        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-      Location: "La Jolla Shores",
-      StartDateTime: new Date("2023-06-29T23:30:00.000Z"),
-      EndDateTime: new Date("2023-06-30T05:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "Featured2",
-      Title: "Another Featured Event",
-      Description: "Description for Event",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-  ];
+): Promise<Event[]> 
 
-  return pulledFeaturedEvents;
+{
+  userID = "Chirag1"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/join_future`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
+
+  return EventArray;
 }
 
 /******************************************************
@@ -156,7 +199,33 @@ export async function getUserJoinedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-  return null;
+
+  userID = "Chirag1"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/join_past`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
+
+  return EventArray;
 }
 
 /******************************************************
@@ -172,32 +241,33 @@ export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-  const pulledFeaturedEvents: Event[] = [
-    {
-      EventID: "Featured1",
-      Title: "Bonfire at La Jolla shores!",
-      Description: "Come join a fun bonfire event at La Jolla Shores! We will be having snacks, dinner, games, and more! Meet new people who you have not met before.",
-      Picture:
-        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-      Location: "La Jolla Shores",
-      StartDateTime: new Date("2022-10-22T05:00:00.000Z"),
-      EndDateTime: new Date("2022-10-22T05:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "Featured2",
-      Title: "Another Featured Event",
-      Description: "Description for Event",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-  ];
 
-  return pulledFeaturedEvents;
+  userID = "Chirag1"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/host_future`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
+
+  return EventArray;
 }
 
 /******************************************************
@@ -213,7 +283,35 @@ export async function getUserHostedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-  return [];
+
+  userID = "Chirag1"
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/host_past`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
+
+  console.log("#######Future events", EventArray)
+
+  return EventArray;
 }
 
 /*******************************************************
@@ -230,32 +328,28 @@ export async function getUserHostedPastEvents(
 export async function getAllSchoolFeaturedEvents(
   schoolID: string
 ): Promise<Event[]> {
-  const pulledFeaturedEvents: Event[] = [
-    {
-      EventID: "Featured1",
-      Title: "Bonfire at La Jolla shores! All are welcome to join",
-      Description: "Description for Event",
-      Picture:
-        "https://cdn.discordapp.com/attachments/770851058019991569/1031579004114845766/bonfire_graphic.png",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "Featured2",
-      Title: "Another Featured Event " + schoolID,
-      Description: "Description for Event",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-  ];
 
-  return pulledFeaturedEvents;
+  schoolID = "univ_UIUC"
+
+  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/school_id/${schoolID}/featured`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
+
+  return EventArray;
 }
 
 /*******************************************************
@@ -308,7 +402,7 @@ export async function getAllSchoolOngoingEvents(
     },
   ];
 
-  return ongoingEvents;
+  return [];//ongoingEvents;
 }
 /******************************************************
  * getAllSchoolEventsByCategory
@@ -331,79 +425,29 @@ export async function getAllSchoolEventsByInterest(
       "SchoolID is null"
     );
   }
-  switch (interestID) {
-    case ACADEMIC:
-      const pulledAcademicEvents: Event[] = [
-        {
-          EventID: "Academic1",
-          Title: "AcademicEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
 
-      return pulledAcademicEvents;
+  let response;
+  let data;
 
-    case ATHLETICS:
-      const pulledAthleticsEvents: Event[] = [
-        {
-          EventID: "Athletics1",
-          Title: "AthleticsEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
+  schoolID = "univ_UIUC"
+  response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
+    method: 'GET'
+  });
+  data = await response.json();
 
-      return pulledAthleticsEvents;
+  const EventArray = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility
+    }
+  });
 
-    case PROFESSIONAL:
-      const pulledProfessionalEvents: Event[] = [
-        {
-          EventID: "Entertainment1",
-          Title: "EntertainmentEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledProfessionalEvents;
-
-    case SOCIAL:
-      const pulledSocialEvents: Event[] = [
-        {
-          EventID: "Recreation1",
-          Title: "RecreationEvent " + schoolID,
-          Description: "Description for Event",
-          Picture:
-            "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-          Location: "Featured Location",
-          StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-          EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-          Visibility: true,
-        },
-      ];
-
-      return pulledSocialEvents;
-
-    default:
-      throw formatError(
-        "Development Error in getAllSchoolEventsByCategory",
-        "Invalid category " + interestID + " passed in"
-      );
-  }
+  console.log("############### "+interestID+" array",EventArray)
+  return EventArray;
 }
