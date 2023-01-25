@@ -12,6 +12,8 @@ export interface Event {
   StartDateTime: Date;
   EndDateTime: Date | null; // startingDateTime and endingDateTime will be same date but different times
   Visibility: boolean;
+  NumJoins: number;
+  NumShoutouts: number;
 }
 
 export interface Interest {

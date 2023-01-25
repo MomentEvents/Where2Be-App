@@ -23,8 +23,9 @@ export const SOCIAL = "social";
 export async function getEvent(eventID: string): Promise<Event> {
   console.log(eventID)
 
-  // eventID = "q-QBXBX_gT7FEzHBH4ChxsZDSItxE5LqnSv26KRqz-g"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/event_id/${eventID}`, {
+  // need to send user Access token
+
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -44,6 +45,8 @@ export async function getEvent(eventID: string): Promise<Event> {
     StartDateTime: new Date(data["start_date_time"]),
     EndDateTime: new Date(data["end_date_time"]),
     Visibility: data["visibility"],
+    NumJoins: 0,
+    NumShoutouts: 0
   };
 
   return pulledEvent;
@@ -75,7 +78,7 @@ export async function createEvent(
   const interestIDArray = interests.map((interest) => interest.Name);
   console.log(interestIDArray);
 
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/create_event`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/create_event`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -132,8 +135,7 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
-  // eventID = "7vDDco3j9km5hMQXaDRFRMucu2WBBD7A0tHfKxyF_sw"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
     method: 'GET'
   });
   const data = await response.json();
@@ -142,7 +144,12 @@ export async function getEventNumJoins(eventID: string): Promise<number> {
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
-  return 0;
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_shoutouts/`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+  
+  return data;
 }
 
 /******************************************************
@@ -160,7 +167,7 @@ export async function getUserJoinedFutureEvents(
 
 {
   userID = "Chirag1"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/join_future`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_future`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -201,7 +208,7 @@ export async function getUserJoinedPastEvents(
 ): Promise<Event[]> {
 
   userID = "Chirag1"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/join_past`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_past`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -243,13 +250,13 @@ export async function getUserHostedFutureEvents(
 ): Promise<Event[]> {
 
   userID = "Chirag1"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/host_future`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_future`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+      user_access_token: userAccessToken
     })
   });
   const data = await response.json();
@@ -285,13 +292,13 @@ export async function getUserHostedPastEvents(
 ): Promise<Event[]> {
 
   userID = "Chirag1"
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/user_id/${userID}/host_past`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_past`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+      user_access_token: userAccessToken
     })
   });
   const data = await response.json();
@@ -329,9 +336,7 @@ export async function getAllSchoolFeaturedEvents(
   schoolID: string
 ): Promise<Event[]> {
 
-  schoolID = "univ_UIUC"
-
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/school_id/${schoolID}/featured`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/featured`, {
     method: 'GET'
   });
   const data = await response.json();
@@ -366,41 +371,41 @@ export async function getAllSchoolFeaturedEvents(
 export async function getAllSchoolOngoingEvents(
   schoolID: string
 ): Promise<Event[]> {
-  const ongoingEvents: Event[] = [
-    {
-      EventID: "StartingSoon1",
-      Title: "StartingSoonEvent " + schoolID,
-      Description: "Description for Event",
-      Picture:
-        "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "StartingSoon3",
-      Title: "AcademicEvent " + schoolID,
-      Description: "Description for Event",
-      Picture:
-        "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-    {
-      EventID: "StartingSoon2",
-      Title: "AcademicEvent " + schoolID,
-      Description: "Description for Event",
-      Picture:
-        "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      Location: "Featured Location",
-      StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-      EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-      Visibility: true,
-    },
-  ];
+  // const ongoingEvents: Event[] = [
+  //   {
+  //     EventID: "StartingSoon1",
+  //     Title: "StartingSoonEvent " + schoolID,
+  //     Description: "Description for Event",
+  //     Picture:
+  //       "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
+  //     Location: "Featured Location",
+  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+  //     Visibility: true,
+  //   },
+  //   {
+  //     EventID: "StartingSoon3",
+  //     Title: "AcademicEvent " + schoolID,
+  //     Description: "Description for Event",
+  //     Picture:
+  //       "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //     Location: "Featured Location",
+  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+  //     Visibility: true,
+  //   },
+  //   {
+  //     EventID: "StartingSoon2",
+  //     Title: "AcademicEvent " + schoolID,
+  //     Description: "Description for Event",
+  //     Picture:
+  //       "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //     Location: "Featured Location",
+  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
+  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
+  //     Visibility: true,
+  //   },
+  // ];
 
   return [];//ongoingEvents;
 }
@@ -429,8 +434,7 @@ export async function getAllSchoolEventsByInterest(
   let response;
   let data;
 
-  schoolID = "univ_UIUC"
-  response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
+  response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
     method: 'GET'
   });
   data = await response.json();

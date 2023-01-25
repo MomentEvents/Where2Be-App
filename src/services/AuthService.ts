@@ -51,7 +51,7 @@ export async function login(
 
   // DO LOGIN HERE
 
-  const response = await fetch(`http://127.0.0.1:8000/api_ver_1.0.0/authentication/login/username`, {
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/authentication/login/username`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -62,8 +62,6 @@ export async function login(
     })
   });
   const data = await response.json();
-
-  console.log(data)
 
   const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
   writeToken(createdToken);
@@ -124,29 +122,28 @@ export async function signup(
 
   // DO SIGNUP HERE
 
-  const createdToken: Token = createTokenFromUserAccessToken("TestTest123");
-  writeToken(createdToken);
-
-  return Promise.resolve(createdToken);
-  const authResp = await fetch(momentAPI + "/authentication/signup", {
-    method: "POST",
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/authentication/signup`, {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       username: username,
       display_name: displayName,
       password: password,
       school_id: schoolID,
-    }),
+    })
   }).catch(() => {
-    throw formatError("Fetch Error", "Could not signup");
-  });
+      throw formatError("Fetch Error", "Could not signup");
+    });;
+  const data = await response.json();
 
-  if (!authResp.ok) {
-    throw formatError("Error" + authResp.status, authResp.statusText);
-  }
+  const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
+  writeToken(createdToken);
+
+  console.log(createdToken)
+
+  return Promise.resolve(createdToken);
 }
 
 /******************************************************

@@ -16,21 +16,22 @@ import { School } from "../constants";
  */
 export async function getAllSchools(): Promise<School[]> {
 
-  //throw formatError("Error", "Unable to pull schools")
-  const pulledUniversities: School[] = [
-    {
-      SchoolID: "SomeUCSDID",
-      Name: "University of California, San Diego",
-      Abbreviation: "UCSD",
-    },
-    {
-      SchoolID: "SomeUIUCID",
-      Name: "University of Illinois Urbana-Champaign",
-      Abbreviation: "UIUC",
-    },
-  ];
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/school`, {
+    method: 'GET'
+  }).catch((error: Error) => {throw formatError("School Service error", error.message)});
+  const data = await response.json();
 
-  return Promise.resolve(pulledUniversities)
+  const SchoolArray = data.map(school => {
+    return {
+      SchoolID: school.school_id,
+      Name: school.name,
+      Abbreviation: school.abbreviation,
+    }
+  });
+
+  // console.log("School Array",SchoolArray);
+
+  return Promise.resolve(SchoolArray);
 }
 
 /******************************************************
@@ -52,11 +53,18 @@ export async function getSchoolByUserId(
   //   },
   // }).catch((error: Error) => {throw formatError("School Service error", error.message)});
 
-  const pulledSchool: School =    
-  {
-    SchoolID: "SomeUCSDID",
-    Name: "UC San Diego",
-    Abbreviation: "UCSD",
-  }
+  console.log("########UserID",UserID)
+
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/school/user_id/${UserID}`, {
+    method: 'GET'
+  }).catch((error: Error) => {throw formatError("School Service error", error.message)});
+  const data = await response.json();
+
+  const pulledSchool: School = {
+    SchoolID: data["school_id"],
+    Name: data["name"],
+    Abbreviation: data["abbreviation"],
+  };
+
   return Promise.resolve(pulledSchool)
 }

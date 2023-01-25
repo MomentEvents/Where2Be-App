@@ -22,25 +22,19 @@ import { formatError } from "../helpers/helpers";
  * Return: List of all interests
  */
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
-  const pulledInterests: Interest[] = [
-    {
-      InterestID: "Academic",
-      Name: "Academic",
-    },
-    {
-      InterestID: "Athletics",
-      Name: "Athletics",
-    },
-    {
-      InterestID: "Professional",
-      Name: "Professional",
-    },
-    {
-      InterestID: "Social",
-      Name: "Social",
-    },
-  ];
-  return pulledInterests;
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/interest`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+
+  const InterestArray = data.map(interest => {
+    return {
+      InterestID: interest.interest_id,
+      Name: interest.name,
+    }
+  });
+
+  return InterestArray;
 }
 
 /******************************************************
@@ -54,18 +48,31 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
 export async function getEventInterestsByEventId(
   eventID: string
 ): Promise<Interest[]> {
-  const pulledInterests: Interest[] = [
-    {
-      InterestID: PROFESSIONAL,
-      Name: "Professional",
-    },
-    {
-      InterestID: SOCIAL,
-      Name: "Social",
-    },
-  ];
 
-  return pulledInterests
+  // need user_access_token
+
+  console.log("INTEREST#######",eventID)
+
+  const response = await fetch(momentAPI+`/api_ver_1.0.0/interest/event_id/${eventID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+    })
+  });
+  const data = await response.json();
+
+  console.log("INTEREST#######",data)
+  const InterestArray = data.map(interest => {
+    return {
+      InterestID: interest.interest_id,
+      Name: interest.name,
+    }
+  });
+
+  return InterestArray;
 }
 
 export async function updateEventInterestsByEventId(userAccessToken: string,
