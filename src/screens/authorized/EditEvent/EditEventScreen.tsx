@@ -80,7 +80,7 @@ const EditEventScreen = ({ navigation, route }) => {
   // const [date, setDate] = useState<Date>();
   // const [desc, setDesc] = useState<string>();
   // const [start, setStart] = useState<Date>(
-    
+
   // );
   // const [end, setEnd] = useState<Date>();
   // const [selectedInterests, setSelectedInterests] = useState(
@@ -116,7 +116,7 @@ const EditEventScreen = ({ navigation, route }) => {
       displayError(
         formatError("Input error", "Please fill in all valid fields")
       );
-      return
+      return;
     }
     const timeValuesToMap: { [key: string]: Date } = convertToStartTimeEndTime(
       date,
@@ -136,6 +136,8 @@ const EditEventScreen = ({ navigation, route }) => {
       StartDateTime: startDateTime,
       EndDateTime: endDateTime,
       Visibility: eventIDToEvent[eventID].Visibility,
+      NumJoins: eventIDToEvent[eventID].NumJoins,
+      NumShoutouts: eventIDToEvent[eventID].NumShoutouts,
     };
 
     if (!checkIfEventIsFormatted(updatedEvent)) {
@@ -145,8 +147,8 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
-    console.log("start time:")
-    console.log(updatedEvent.StartDateTime.getTime())
+    console.log("start time:");
+    console.log(updatedEvent.StartDateTime.getTime());
     if (
       updatedEvent.StartDateTime.getTime() > updatedEvent.EndDateTime.getTime()
     ) {
@@ -156,7 +158,7 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
-    console.log(Date.now())
+    console.log(Date.now());
     if (updatedEvent.StartDateTime.getTime() < Date.now()) {
       displayError(
         formatError("Input error", "The event must not be in the past")
@@ -164,36 +166,19 @@ const EditEventScreen = ({ navigation, route }) => {
       return;
     }
 
-    if(selectedInterests.size !== 1){
-      displayError(
-        formatError("Input error", "Please only select one tag")
-      );
+    if (selectedInterests.size !== 1) {
+      displayError(formatError("Input error", "Please only select one tag"));
       return;
     }
     console.log(updatedEvent);
 
     setLoading(true);
-    updateEvent(userToken.UserAccessToken, updatedEvent)
+    const arrayInterests: Interest[] = Array.from(selectedInterests);
+    updateEvent(userToken.UserAccessToken, updatedEvent, arrayInterests)
       .then(() => {
         updateEventIDToEvent({ id: eventID, event: updatedEvent });
-        const arraysInterests: Interest[] = Array.from(selectedInterests);
-        updateEventInterestsByEventId(
-          userToken.UserAccessToken,
-          arraysInterests,
-          eventID
-        )
-          .then(() => {
-            updateEventIDToInterests({
-              id: eventID,
-              interests: arraysInterests,
-            });
-            setLoading(false);
-            Navigator.goBack();
-          })
-          .catch((error: Error) => {
-            displayError(error);
-            setLoading(false);
-          });
+        setLoading(false);
+        Navigator.goBack();
       })
       .catch((error: Error) => {
         displayError(error);
@@ -266,7 +251,12 @@ const EditEventScreen = ({ navigation, route }) => {
             />
 
             <View style={styles.titleContainer}>
-              <icons.pickdate style={styles.iconsContainer} width={30} fill="white" stroke="white" />
+              <icons.pickdate
+                style={styles.iconsContainer}
+                width={30}
+                fill="white"
+                stroke="white"
+              />
               <McText h3>Date</McText>
             </View>
 
@@ -454,7 +444,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     width: "47%",
     position: "absolute",
-    right: 0
+    right: 0,
   },
   timeInputText: {
     fontSize: 16,

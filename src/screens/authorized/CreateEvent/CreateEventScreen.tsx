@@ -111,6 +111,8 @@ const CreateEventScreen = ({ navigation, route }) => {
       StartDateTime: startDateTime,
       EndDateTime: endDateTime,
       Visibility: true,
+      NumJoins: 0,
+      NumShoutouts: 0,
     };
 
     if (!checkIfEventIsFormatted(createdEvent)) {

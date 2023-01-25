@@ -73,13 +73,15 @@ const EditMyProfileScreen = ({ navigation, route }) => {
 
     setLoading(true);
 
+    const createdUser: User = {
+      UserID: currentUser.UserID,
+      Name: displayName,
+      Username: username,
+      Picture: image,
+    }
     updateUser(
-      currentUser.UserID,
       userToken.UserAccessToken,
-      username,
-      displayName,
-      null,
-      image
+      createdUser,
     )
       .then(() => {
         setLoading(false);

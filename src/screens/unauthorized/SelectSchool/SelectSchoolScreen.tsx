@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
@@ -27,6 +28,10 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 const SelectSchoolScreen = ({ navigation, route }) => {
   const [school, setSchool] = useState<School>(null);
 
+  const onNavigateLogin = () => {
+    Navigator.navigate(SCREENS.Login);
+  };
+
   useEffect(() => {
     if (school != null) {
       console.log("School selected is " + school.Name);
@@ -36,25 +41,29 @@ const SelectSchoolScreen = ({ navigation, route }) => {
 
   return (
     <GradientBackground>
-      <View
+      <SafeAreaView
         style={{
-          flex: 1,
-          // backgroundColor: COLORS.black,
+          alignItems: "center",
           justifyContent: "center",
+          flex: 1,
         }}
       >
-        <SafeAreaView style={{ alignItems: "center" }}>
-          <icons.moment width={Math.min(SIZES.width * 0.7, SIZES.height * .7)}></icons.moment>
-          <View
-            style={{
-              alignItems: "center",
-              padding: 20,
-            }}
-          >
-            <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
-          </View>
-        </SafeAreaView>
-      </View>
+        <icons.moment
+          width={Math.min(SIZES.width * 0.7, SIZES.height * 0.7)}
+        ></icons.moment>
+        <View
+          style={{
+            marginTop: 30,
+            marginBottom: 60,
+            marginHorizontal: 30,
+          }}
+        >
+          <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
+        </View>
+        <TouchableOpacity onPress={onNavigateLogin}>
+          <McText body3>Already have an account?</McText>
+        </TouchableOpacity>
+      </SafeAreaView>
     </GradientBackground>
   );
 };

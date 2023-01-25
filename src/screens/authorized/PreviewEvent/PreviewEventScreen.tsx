@@ -92,18 +92,6 @@ const EventDetailsScreen = ({ route }) => {
     createEvent(userToken.UserAccessToken, createdEvent, interests)
       .then((eventID: string) => {
         setLoading(false);
-
-        const pushedEvent: Event = {
-          EventID: eventID,
-          Title: createdEvent.Title,
-          Description: createdEvent.Description,
-          Picture: createdEvent.Picture,
-          Location: createdEvent.Location,
-          StartDateTime: createdEvent.StartDateTime,
-          EndDateTime: createdEvent.EndDateTime,
-          Visibility: createdEvent.Visibility,
-        };
-
         updateEventIDToEvent({ id: eventID, event: createdEvent });
         Navigator.popToTop();
         Navigator.push(SCREENS.EventDetails, { eventID: eventID });
