@@ -84,7 +84,7 @@ export async function createEvent(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao",
+      user_access_token: userAccessToken,
       title: createdEvent.Title,
       description: createdEvent.Description, 
       location: createdEvent.Location,
@@ -166,14 +166,13 @@ export async function getUserJoinedFutureEvents(
 ): Promise<Event[]> 
 
 {
-  userID = "Chirag1"
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_future`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+      user_access_token: userAccessToken
     })
   });
   const data = await response.json();
@@ -207,14 +206,13 @@ export async function getUserJoinedPastEvents(
   userID: string
 ): Promise<Event[]> {
 
-  userID = "Chirag1"
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_past`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+      user_access_token: userAccessToken
     })
   });
   const data = await response.json();
@@ -249,7 +247,6 @@ export async function getUserHostedFutureEvents(
   userID: string
 ): Promise<Event[]> {
 
-  userID = "Chirag1"
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_future`, {
     method: 'POST',
     headers: {
@@ -291,7 +288,6 @@ export async function getUserHostedPastEvents(
   userID: string
 ): Promise<Event[]> {
 
-  userID = "Chirag1"
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_past`, {
     method: 'POST',
     headers: {
