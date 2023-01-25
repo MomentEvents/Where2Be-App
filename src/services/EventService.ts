@@ -112,7 +112,8 @@ export async function createEvent(
 export async function updateEvent(
   userAccessToken: string,
 
-  updatedEvent: Event
+  updatedEvent: Event,
+  updatedInterests: Interest[], 
 ): Promise<void> {
   return Promise.resolve();
 }

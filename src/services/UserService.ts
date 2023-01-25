@@ -71,13 +71,9 @@ export async function getUserByUserAccessToken(
  * a promise if updating the user was successful or not
  */
 export async function updateUser(
-  userID: string,
   userAccessToken: string,
 
-  username: string | null,
-  displayName: string | null,
-  password: string | null,
-  picture: string | null
+  updatedUser: User,
 ): Promise<void> {
   return null;
 }
