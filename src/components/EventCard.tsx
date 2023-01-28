@@ -51,19 +51,13 @@ const EventCard = ({
     updateEventIDToEvent,
     eventIDToDidJoin,
     updateEventIDToDidJoin,
-    eventIDToJoins,
-    updateEventIDToJoins,
     eventIDToDidShoutout,
     updateEventIDToDidShoutout,
-    eventIDToShoutouts,
-    updateEventIDToShoutouts,
   } = useContext(EventContext);
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
   const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
   const [fetchedDidUserJoin, setFetchedDidUserJoin] = useState(false);
-  const [fetchedShoutouts, setFetchedShoutouts] = useState(false);
-  const [fetchedJoins, setFetchedJoins] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -89,27 +83,7 @@ const EventCard = ({
   const pullData = async () => {
     updateEventIDToEvent({ id: event.EventID, event: event });
     setFetchedEvent(true);
-
-    await getEventNumJoins(event.EventID)
-      .then((joins: number) => {
-        updateEventIDToJoins({ id: event.EventID, joins: joins });
-        setFetchedJoins(true);
-      })
-      .catch((error: Error) => {
-        console.log(error);
-      });
-
-    await getEventNumShoutouts(event.EventID)
-      .then((shoutouts: number) => {
-        updateEventIDToShoutouts({ id: event.EventID, shoutouts: shoutouts });
-        setFetchedShoutouts(true);
-      })
-      .catch((error: Error) => {
-        console.log(error);
-      });
-
     if (isLoggedIn) {
-      console.log("Going to is logged in");
 
       getUserJoinEvent(
         userToken.UserAccessToken,
@@ -117,9 +91,7 @@ const EventCard = ({
         event.EventID
       )
         .then((didJoin: boolean) => {
-          console.log("updated didJoin for " + event.Title);
           updateEventIDToDidJoin({ id: event.EventID, didJoin: didJoin });
-          setFetchedDidUserJoin(true);
         })
         .catch((error: Error) => {
           console.log(error);
@@ -134,10 +106,8 @@ const EventCard = ({
             id: event.EventID,
             didShoutout: didShoutout,
           });
-          setFetchedDidUserShoutout(true);
         })
         .catch((error: Error) => {
-          console.log("updated didShoutout for " + event.Title);
           console.log(error);
         });
     } else {
@@ -155,16 +125,10 @@ const EventCard = ({
 
   useEffect(() => {
     setIsLoaded(
-      fetchedJoins &&
-        fetchedDidUserJoin &&
-        fetchedShoutouts &&
-        fetchedDidUserShoutout &&
         fetchedEvent
     );
   }, [
-    fetchedJoins,
     fetchedDidUserJoin,
-    fetchedShoutouts,
     fetchedDidUserShoutout,
     fetchedEvent,
   ]);
@@ -346,7 +310,7 @@ const EventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToJoins[event.EventID]}
+                    {eventIDToEvent[event.EventID].NumJoins}
                   </McText>
                   <McIcon
                     source={icons.shoutout}
@@ -369,7 +333,7 @@ const EventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToShoutouts[event.EventID]}
+                    {eventIDToEvent[event.EventID].NumShoutouts}
                   </McText>
                 </View>
               </View>
@@ -503,7 +467,7 @@ const EventCard = ({
                     : COLORS.lightGray,
                 }}
               >
-                {eventIDToJoins[event.EventID]}
+                {eventIDToEvent[event.EventID].NumJoins}
               </McText>
               <McIcon
                 source={icons.shoutout}
@@ -526,7 +490,7 @@ const EventCard = ({
                     : COLORS.lightGray,
                 }}
               >
-                {eventIDToShoutouts[event.EventID]}
+                {eventIDToEvent[event.EventID].NumShoutouts}
               </McText>
             </View>
           </View>

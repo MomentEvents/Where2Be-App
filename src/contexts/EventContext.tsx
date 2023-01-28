@@ -18,20 +18,10 @@ type EventContextType = {
     id: string;
     didJoin: boolean;
   }>;
-  eventIDToJoins: { [key: string]: number };
-  updateEventIDToJoins: React.Dispatch<{
-    id: string;
-    joins: number;
-  }>;
   eventIDToDidShoutout: { [key: string]: boolean };
   updateEventIDToDidShoutout: React.Dispatch<{
     id: string;
     didShoutout: boolean;
-  }>;
-  eventIDToShoutouts: { [key: string]: number };
-  updateEventIDToShoutouts: React.Dispatch<{
-    id: string;
-    shoutouts: number;
   }>;
 };
 
@@ -40,24 +30,15 @@ export const EventContext = createContext<EventContextType>({
   updateEventIDToEvent: null,
   eventIDToDidJoin: null,
   updateEventIDToDidJoin: null,
-  eventIDToJoins: null,
-  updateEventIDToJoins: null,
   eventIDToDidShoutout: null,
   updateEventIDToDidShoutout: null,
-  eventIDToShoutouts: null,
-  updateEventIDToShoutouts: null,
   eventIDToInterests: null,
   updateEventIDToInterests: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
-  const [eventIDToJoins, updateEventIDToJoins] = useReducer(setJoinsMap, {});
   const [eventIDToDidJoin, updateEventIDToDidJoin] = useReducer(
     setDidJoinMap,
-    {}
-  );
-  const [eventIDToShoutouts, updateEventIDToShoutouts] = useReducer(
-    setShoutoutsMap,
     {}
   );
   const [eventIDToDidShoutout, updateEventIDToDidShoutout] = useReducer(
@@ -130,12 +111,8 @@ export const EventProvider = ({ children }) => {
         updateEventIDToEvent,
         eventIDToDidJoin,
         updateEventIDToDidJoin,
-        eventIDToJoins,
-        updateEventIDToJoins,
         eventIDToDidShoutout,
         updateEventIDToDidShoutout,
-        eventIDToShoutouts,
-        updateEventIDToShoutouts,
         eventIDToInterests,
         updateEventIDToInterests
       }}

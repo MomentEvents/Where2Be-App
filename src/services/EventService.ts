@@ -21,7 +21,7 @@ export const SOCIAL = "social";
  * Event: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
-  console.log(eventID)
+  // console.log(eventID)
 
   // need to send user Access token
 
@@ -313,7 +313,7 @@ export async function getUserHostedPastEvents(
     }
   });
 
-  console.log("#######Future events", EventArray)
+  // console.log("#######Future events", EventArray)
 
   return EventArray;
 }
@@ -347,7 +347,9 @@ export async function getAllSchoolFeaturedEvents(
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
       EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
+      Visibility: event.Visibility,
+      NumJoins: 10,
+      NumShoutouts: 5,
     }
   });
 
@@ -404,7 +406,27 @@ export async function getAllSchoolOngoingEvents(
   //   },
   // ];
 
-  return [];//ongoingEvents;
+  const response: Response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/academic`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+
+  const EventArray: Event[] = data.map(event => {
+    return {
+      EventID: event.EventID,
+      Title: event.Title,
+      Description: event.Description,
+      Picture: event.Picture,
+      Location: event.Location,
+      StartDateTime: new Date(event.StartDateTime),
+      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility,
+      NumJoins: 10,
+      NumShoutouts: 5,
+    }
+  });
+
+  return Promise.resolve(EventArray);//ongoingEvents;
 }
 /******************************************************
  * getAllSchoolEventsByCategory
@@ -428,15 +450,13 @@ export async function getAllSchoolEventsByInterest(
     );
   }
 
-  let response;
-  let data;
-
-  response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
+  const response: Response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
     method: 'GET'
   });
-  data = await response.json();
+  console.log("from getAllSchoolEventsByInterest got " + interestID + " events from backend")
+  const data = await response.json();
 
-  const EventArray = data.map(event => {
+  const EventArray: Event[] = data.map(event => {
     return {
       EventID: event.EventID,
       Title: event.Title,
@@ -445,10 +465,12 @@ export async function getAllSchoolEventsByInterest(
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
       EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
+      Visibility: event.Visibility,
+      NumJoins: 10,
+      NumShoutouts: 5,
     }
   });
 
-  console.log("############### "+interestID+" array",EventArray)
+  // console.log("############### "+interestID+" array",EventArray)
   return EventArray;
 }

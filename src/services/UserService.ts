@@ -122,8 +122,6 @@ export async function getUserJoinEvent(
   });
   const data = await response.json();
 
-  console.log(data["did_join"])
-
   return data["did_join"];
 }
 
