@@ -13,7 +13,7 @@ import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
-import { getAllSchoolEvents } from "../../services/EventService";
+import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
 
 type EventViewerProps = {
@@ -29,17 +29,17 @@ const EventViewer = (props: EventViewerProps) => {
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
 
   const pullData = async () => {
-    getAllSchoolEvents(
+    getAllSchoolEventsCategorized(
       isLoggedIn ? userToken.UserAccessToken : undefined,
       props.school.SchoolID
     )
       .then((map: { [key: string]: Event[] }) => {
-        setIsLoadingEvents(false)
-        setIsRefreshing(false)
+        setIsLoadingEvents(false);
+        setIsRefreshing(false);
         setCategoryNameToEventsMap(map);
       })
       .catch((error: Error) => {
-        setIsRefreshing(false)
+        setIsRefreshing(false);
         displayError(error);
       });
   };
@@ -62,8 +62,8 @@ const EventViewer = (props: EventViewerProps) => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setIsLoadingEvents(true)
-    pullData()
+    setIsLoadingEvents(true);
+    pullData();
   };
 
   useEffect(() => {
@@ -78,24 +78,37 @@ const EventViewer = (props: EventViewerProps) => {
       }
     >
       {isLoadingEvents && !isRefreshing && (
-        <ActivityIndicator style={{marginTop: 20}} size={"small"} />
+        <ActivityIndicator style={{ marginTop: 20 }} size={"small"} />
       )}
-      {Object.keys(categoryNameToEventsMap).map((key, index) => (
-        <View key={key + index}>
-          <McText h2 style={styles.categoryTitle}>
-            {key}
-          </McText>
+      {Object.keys(categoryNameToEventsMap).map((key, index) =>
+        key === "Featured" ? (
+          <View key={key + index}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.EventID}
+              data={Object.values(categoryNameToEventsMap[key])}
+              renderItem={_renderBigEventCards}
+              style={styles.flatlistContainer}
+            />
+          </View>
+        ) : (
+          <View key={key + index}>
+            <McText h2 style={styles.categoryTitle}>
+              {key}
+            </McText>
 
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={Object.values(categoryNameToEventsMap[key])}
-            renderItem={_renderSmallEventCards}
-            style={styles.flatlistContainer}
-          ></FlatList>
-        </View>
-      ))}
- 
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={Object.values(categoryNameToEventsMap[key])}
+              renderItem={_renderSmallEventCards}
+              style={styles.flatlistContainer}
+            />
+          </View>
+        )
+      )}
+
       {isLoggedIn && <View style={{ height: SIZES.tab_bar_height }} />}
     </ScrollView>
   );

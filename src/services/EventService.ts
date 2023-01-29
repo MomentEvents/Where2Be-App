@@ -343,14 +343,14 @@ export async function getUserHostedPastEvents(
   return EventArray;
 }
 
-export async function getAllSchoolEvents(
+export async function getAllSchoolEventsCategorized(
   userAccessToken: string,
   schoolID: string
 ): Promise<{ [key: string]: Event[] }> {
   const categoryMap: { [key: string]: Event[] } = {};
 
   const response = await fetch(
-    momentAPI + `/api_ver_1.0.0/event/school_id/${schoolID}/`,
+    momentAPI + `/api_ver_1.0.0/event/school_id/${schoolID}/categorized`,
     {
       method: "POST",
       headers: {
@@ -371,12 +371,11 @@ export async function getAllSchoolEvents(
     throw formatError("Error " + response.status, response.statusText)
   }
 
-  const responseJSON = JSON.parse(await response.json())
-
-  console.log(responseJSON)
+  const responseJSON = await response.json()
 
   for(const categoryToEvents in responseJSON){
-    responseJSON.categoryToEvents.forEach((event) => {
+    categoryMap[categoryToEvents] = []
+    responseJSON[categoryToEvents].forEach((event) => {
       categoryMap[categoryToEvents].push({
         EventID: event.event_id,
         Title: event.title,
@@ -384,7 +383,7 @@ export async function getAllSchoolEvents(
         Picture: event.picture,
         Location: event.location,
         StartDateTime: new Date(event.start_date_time),
-        EndDateTime: event.end_date_time === "NULL" ? undefined : new Date(event.end_date_time),
+        EndDateTime: event.end_date_time ? undefined : new Date(event.end_date_time),
         Visibility: event.visibility,
         NumJoins: event.num_joins,
         NumShoutouts: event.num_shoutouts,
