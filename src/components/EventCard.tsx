@@ -83,39 +83,6 @@ const EventCard = ({
   const pullData = async () => {
     updateEventIDToEvent({ id: event.EventID, event: event });
     setFetchedEvent(true);
-    if (isLoggedIn) {
-
-      getUserJoinEvent(
-        userToken.UserAccessToken,
-        currentUser.UserID,
-        event.EventID
-      )
-        .then((didJoin: boolean) => {
-          updateEventIDToDidJoin({ id: event.EventID, didJoin: didJoin });
-        })
-        .catch((error: Error) => {
-          console.log(error);
-        });
-      getUserShoutoutEvent(
-        userToken.UserAccessToken,
-        currentUser.UserID,
-        event.EventID
-      )
-        .then((didShoutout: boolean) => {
-          updateEventIDToDidShoutout({
-            id: event.EventID,
-            didShoutout: didShoutout,
-          });
-        })
-        .catch((error: Error) => {
-          console.log(error);
-        });
-    } else {
-      updateEventIDToDidJoin({ id: event.EventID, didJoin: false });
-      setFetchedDidUserJoin(true);
-      updateEventIDToDidShoutout({ id: event.EventID, didShoutout: false });
-      setFetchedDidUserShoutout(true);
-    }
   };
 
   // First time being loaded and rendered
@@ -128,8 +95,6 @@ const EventCard = ({
         fetchedEvent
     );
   }, [
-    fetchedDidUserJoin,
-    fetchedDidUserShoutout,
     fetchedEvent,
   ]);
 

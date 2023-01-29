@@ -20,11 +20,6 @@ import {
 } from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
-import {
-  getAllSchoolOngoingEvents,
-  getAllSchoolFeaturedEvents,
-  getAllSchoolEventsByInterest,
-} from "../../../services/EventService";
 import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
 import EventCard from "../../../components/EventCard";

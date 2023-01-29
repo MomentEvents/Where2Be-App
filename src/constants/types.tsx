@@ -14,6 +14,8 @@ export interface Event {
   Visibility: boolean;
   NumJoins: number;
   NumShoutouts: number;
+  UserJoin: boolean;
+  UserShoutout: boolean;
 }
 
 export interface Interest {

@@ -1,6 +1,7 @@
 import momentAPI from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
+import { confirmButtonStyles } from "react-native-modal-datetime-picker";
 
 export const ACADEMIC = "academic";
 export const ATHLETICS = "athletics";
@@ -12,12 +13,12 @@ export const SOCIAL = "social";
  *
  * Gets an event based on its ID
  *
- * Parameters: 
- * 
+ * Parameters:
+ *
  * eventID - An ID number to search up an event
- * 
- * Return: 
- * 
+ *
+ * Return:
+ *
  * Event: An event if it exists. null if it does not.
  */
 export async function getEvent(eventID: string): Promise<Event> {
@@ -25,15 +26,18 @@ export async function getEvent(eventID: string): Promise<Event> {
 
   // need to send user Access token
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
-    })
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/event_id/${eventID}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao",
+      }),
+    }
+  );
   const data = await response.json();
 
   const pulledEvent: Event = {
@@ -46,7 +50,9 @@ export async function getEvent(eventID: string): Promise<Event> {
     EndDateTime: new Date(data["end_date_time"]),
     Visibility: data["visibility"],
     NumJoins: 0,
-    NumShoutouts: 0
+    NumShoutouts: 0,
+    UserJoin: false,
+    UserShoutout: false,
   };
 
   return pulledEvent;
@@ -58,12 +64,12 @@ export async function getEvent(eventID: string): Promise<Event> {
  * Creates an event and links it to a school based on what school the user from userAccessToken is in
  *
  * Parameters:
- * 
+ *
  * userAccessToken - The user access token of the user to send
- * createdEvent - The created event of the 
- * 
- * Return: 
- * 
+ * createdEvent - The created event of the
+ *
+ * Return:
+ *
  * string - A string containing the eventID of the created event
  */
 export async function createEvent(
@@ -72,28 +78,30 @@ export async function createEvent(
   createdEvent: Event,
   interests: Interest[]
 ): Promise<string> {
-
-  console.log(createdEvent.StartDateTime.toISOString())
+  console.log(createdEvent.StartDateTime.toISOString());
 
   const interestIDArray = interests.map((interest) => interest.Name);
   console.log(interestIDArray);
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/create_event`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      title: createdEvent.Title,
-      description: createdEvent.Description, 
-      location: createdEvent.Location,
-      start_date_time: createdEvent.StartDateTime.toISOString(),
-      end_date_time: createdEvent.EndDateTime.toISOString(),
-      visibility: createdEvent.Visibility,
-      interest_ids: interestIDArray,
-    })
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/create_event`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        title: createdEvent.Title,
+        description: createdEvent.Description,
+        location: createdEvent.Location,
+        start_date_time: createdEvent.StartDateTime.toISOString(),
+        end_date_time: createdEvent.EndDateTime.toISOString(),
+        visibility: createdEvent.Visibility,
+        interest_ids: interestIDArray,
+      }),
+    }
+  );
   const data = await response.json();
 
   return data["event_id"];
@@ -113,7 +121,7 @@ export async function updateEvent(
   userAccessToken: string,
 
   updatedEvent: Event,
-  updatedInterests: Interest[], 
+  updatedInterests: Interest[]
 ): Promise<void> {
   return Promise.resolve();
 }
@@ -136,20 +144,26 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
-    method: 'GET'
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`,
+    {
+      method: "GET",
+    }
+  );
   const data = await response.json();
-  
+
   return data;
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_shoutouts/`, {
-    method: 'GET'
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/event_id/${eventID}/num_shoutouts/`,
+    {
+      method: "GET",
+    }
+  );
   const data = await response.json();
-  
+
   return data;
 }
 
@@ -164,21 +178,22 @@ export async function getEventNumShoutouts(eventID: string): Promise<number> {
 export async function getUserJoinedFutureEvents(
   userAccessToken: string,
   userID: string
-): Promise<Event[]> 
-
-{
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_future`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
+): Promise<Event[]> {
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/user_id/${userID}/join_future`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );
   const data = await response.json();
 
-  const EventArray = data.map(event => {
+  const EventArray = data.map((event) => {
     return {
       EventID: event.EventID,
       Title: event.Title,
@@ -186,9 +201,10 @@ export async function getUserJoinedFutureEvents(
       Picture: event.Picture,
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
-    }
+      EndDateTime:
+        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility,
+    };
   });
 
   return EventArray;
@@ -206,19 +222,21 @@ export async function getUserJoinedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/join_past`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/user_id/${userID}/join_past`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );
   const data = await response.json();
 
-  const EventArray = data.map(event => {
+  const EventArray = data.map((event) => {
     return {
       EventID: event.EventID,
       Title: event.Title,
@@ -226,9 +244,10 @@ export async function getUserJoinedPastEvents(
       Picture: event.Picture,
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
-    }
+      EndDateTime:
+        event.EndDateTime === null ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility,
+    };
   });
 
   return EventArray;
@@ -247,19 +266,21 @@ export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_future`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/user_id/${userID}/host_future`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );
   const data = await response.json();
 
-  const EventArray = data.map(event => {
+  const EventArray = data.map((event) => {
     return {
       EventID: event.EventID,
       Title: event.Title,
@@ -267,9 +288,10 @@ export async function getUserHostedFutureEvents(
       Picture: event.Picture,
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
-    }
+      EndDateTime:
+        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility,
+    };
   });
 
   return EventArray;
@@ -288,19 +310,21 @@ export async function getUserHostedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/user_id/${userID}/host_past`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/user_id/${userID}/host_past`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );
   const data = await response.json();
 
-  const EventArray = data.map(event => {
+  const EventArray = data.map((event) => {
     return {
       EventID: event.EventID,
       Title: event.Title,
@@ -308,9 +332,10 @@ export async function getUserHostedPastEvents(
       Picture: event.Picture,
       Location: event.Location,
       StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility
-    }
+      EndDateTime:
+        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
+      Visibility: event.Visibility,
+    };
   });
 
   // console.log("#######Future events", EventArray)
@@ -318,159 +343,56 @@ export async function getUserHostedPastEvents(
   return EventArray;
 }
 
-/*******************************************************
- * getAllSchoolFeaturedEvents
- *
- * Gets all of the featured events from a school
- *
- * Parameters:
- * schoolID: the schoolID
- *
- * Return:
- * An array of events which are labeled as featured
- */
-export async function getAllSchoolFeaturedEvents(
+export async function getAllSchoolEvents(
+  userAccessToken: string,
   schoolID: string
-): Promise<Event[]> {
+): Promise<{ [key: string]: Event[] }> {
+  const categoryMap: { [key: string]: Event[] } = {};
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/featured`, {
-    method: 'GET'
-  });
-  const data = await response.json();
-
-  const EventArray = data.map(event => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-      NumJoins: 10,
-      NumShoutouts: 5,
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/event/school_id/${schoolID}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify({
+        user_access_token: userAccessToken ? userAccessToken : null,
+      }),
     }
-  });
-
-  return EventArray;
-}
-
-/*******************************************************
- * getAllSchoolOngoingEvents
- *
- * Gets all of the ongoing events from a school
- *
- * Parameters:
- * schoolID: the schoolID
- *
- * Return:
- * An array of events which are labeled as ongoing
- */
-export async function getAllSchoolOngoingEvents(
-  schoolID: string
-): Promise<Event[]> {
-  // const ongoingEvents: Event[] = [
-  //   {
-  //     EventID: "StartingSoon1",
-  //     Title: "StartingSoonEvent " + schoolID,
-  //     Description: "Description for Event",
-  //     Picture:
-  //       "https://test-bucket-chirag5241.s3.us-west-1.amazonaws.com/test_image.jpeg",
-  //     Location: "Featured Location",
-  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-  //     Visibility: true,
-  //   },
-  //   {
-  //     EventID: "StartingSoon3",
-  //     Title: "AcademicEvent " + schoolID,
-  //     Description: "Description for Event",
-  //     Picture:
-  //       "https://images.pexels.com/photos/14402633/pexels-photo-14402633.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //     Location: "Featured Location",
-  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-  //     Visibility: true,
-  //   },
-  //   {
-  //     EventID: "StartingSoon2",
-  //     Title: "AcademicEvent " + schoolID,
-  //     Description: "Description for Event",
-  //     Picture:
-  //       "https://images.pexels.com/photos/12581595/pexels-photo-12581595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //     Location: "Featured Location",
-  //     StartDateTime: new Date("2023-06-29T10:30:00.000Z"),
-  //     EndDateTime: new Date("2023-06-29T11:30:00.000Z"),
-  //     Visibility: true,
-  //   },
-  // ];
-
-  const response: Response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/academic`, {
-    method: 'GET'
-  });
-  const data = await response.json();
-
-  const EventArray: Event[] = data.map(event => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-      NumJoins: 10,
-      NumShoutouts: 5,
-    }
-  });
-
-  return Promise.resolve(EventArray);//ongoingEvents;
-}
-/******************************************************
- * getAllSchoolEventsByCategory
- *
- * Gets all of the events in the current user's school which has a specific category. This is used in our home (1st iteration) page
- *
- * Parameters:
- *          category: A string which corresponds to a constant of either FEATURED, FOR_YOU,
- *                    STARTING_SOON, ONGOING, ACADEMIC, ATHLETICS, CAREER_DEVELOPMENT, COMMUNITY,
- *                    ENTERTAINMENT, RECREATION, or OTHER.
- * Return: An Event array which are based on one of the categories above
- */
-export async function getAllSchoolEventsByInterest(
-  schoolID: string,
-  interestID: string
-): Promise<Event[]> {
-  if (schoolID === null) {
+  ).catch((error: Error) => {
     throw formatError(
-      "Development Error in getAllSchoolEventsByCategory",
-      "SchoolID is null"
+      "Error in getting school events",
+      error.name + ": " + error.message
     );
+  });
+
+  if(!response.ok){
+    throw formatError("Error " + response.status, response.statusText)
   }
 
-  const response: Response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/${interestID}`, {
-    method: 'GET'
-  });
-  console.log("from getAllSchoolEventsByInterest got " + interestID + " events from backend")
-  const data = await response.json();
+  const responseJSON = JSON.parse(await response.json())
 
-  const EventArray: Event[] = data.map(event => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime: event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-      NumJoins: 10,
-      NumShoutouts: 5,
-    }
-  });
+  console.log(responseJSON)
 
-  // console.log("############### "+interestID+" array",EventArray)
-  return EventArray;
+  for(const categoryToEvents in responseJSON){
+    responseJSON.categoryToEvents.forEach((event) => {
+      categoryMap[categoryToEvents].push({
+        EventID: event.event_id,
+        Title: event.title,
+        Description: event.description,
+        Picture: event.picture,
+        Location: event.location,
+        StartDateTime: new Date(event.start_date_time),
+        EndDateTime: event.end_date_time === "NULL" ? undefined : new Date(event.end_date_time),
+        Visibility: event.visibility,
+        NumJoins: event.num_joins,
+        NumShoutouts: event.num_shoutouts,
+        UserJoin: event.user_join,
+        UserShoutout: event.user_shoutout
+      })
+    })
+  }
+
+  return categoryMap;
 }
