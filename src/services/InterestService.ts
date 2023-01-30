@@ -2,6 +2,7 @@ import momentAPI from "../constants/server";
 import { Interest } from "../constants";
 import { ACADEMIC, ATHLETICS, PROFESSIONAL, SOCIAL } from "./EventService";
 import { formatError } from "../helpers/helpers";
+import { InterestResponse } from "../constants/types";
 
 // getAllInterests
 
@@ -24,10 +25,12 @@ import { formatError } from "../helpers/helpers";
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
   const response = await fetch(momentAPI+`/api_ver_1.0.0/interest`, {
     method: 'GET'
+  }).catch((error: Error) => {
+    throw formatError("Error getting all interests", error.message)
   });
   const data = await response.json();
 
-  const InterestArray = data.map(interest => {
+  const InterestArray = data.map((interest: InterestResponse) => {
     return {
       InterestID: interest.interest_id,
       Name: interest.name,

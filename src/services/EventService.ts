@@ -2,6 +2,7 @@ import momentAPI from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
+import { EventResponse } from "../constants/types";
 
 export const ACADEMIC = "academic";
 export const ATHLETICS = "athletics";
@@ -21,11 +22,12 @@ export const SOCIAL = "social";
  *
  * Event: An event if it exists. null if it does not.
  */
-export async function getEvent(eventID: string): Promise<Event> {
+export async function getEvent(eventID: string, userAccessToken: string): Promise<Event> {
   // console.log(eventID)
 
   // need to send user Access token
 
+  console.log("useraccesstoken is" + userAccessToken)
   const response = await fetch(
     momentAPI + `/api_ver_1.0.0/event/event_id/${eventID}`,
     {
@@ -34,12 +36,22 @@ export async function getEvent(eventID: string): Promise<Event> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao",
+        user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch((error: Error) => {
+    throw formatError(
+      "Error in getting school events",
+      error.name + ": " + error.message
+    );
+  });
+
+  if(!response.ok){
+    throw formatError("Error " + response.status, response.statusText)
+  }
   const data = await response.json();
 
+  console.log(data)
   const pulledEvent: Event = {
     EventID: data["event_id"],
     Title: data["title"],
@@ -49,10 +61,10 @@ export async function getEvent(eventID: string): Promise<Event> {
     StartDateTime: new Date(data["start_date_time"]),
     EndDateTime: new Date(data["end_date_time"]),
     Visibility: data["visibility"],
-    NumJoins: 0,
-    NumShoutouts: 0,
-    UserJoin: false,
-    UserShoutout: false,
+    NumJoins: data["num_joins"],
+    NumShoutouts: data["num_shoutouts"],
+    UserJoin: data["user_join"],
+    UserShoutout: data["user_shoutout"],
   };
 
   return pulledEvent;
@@ -191,20 +203,24 @@ export async function getUserJoinedFutureEvents(
       }),
     }
   );
-  const data = await response.json();
+  const responseJSON = await response.json();
 
-  const EventArray = data.map((event) => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime:
-        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-    };
+  const EventArray: Event[] = []
+  responseJSON.forEach((event:EventResponse) => {
+    EventArray.push({
+      EventID: event.event_id,
+      Title: event.title,
+      Description: event.description,
+      Picture: event.picture,
+      Location: event.location,
+      StartDateTime: new Date(event.start_date_time),
+      EndDateTime: event.end_date_time ? undefined : new Date(event.end_date_time),
+      Visibility: event.visibility,
+      NumJoins: event.num_joins,
+      NumShoutouts: event.num_shoutouts,
+      UserJoin: event.user_join,
+      UserShoutout: event.user_shoutout
+    })
   });
 
   return EventArray;
@@ -234,20 +250,24 @@ export async function getUserJoinedPastEvents(
       }),
     }
   );
-  const data = await response.json();
+  const responseJSON = await response.json();
 
-  const EventArray = data.map((event) => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime:
-        event.EndDateTime === null ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-    };
+  const EventArray: Event[] = []
+  responseJSON.forEach((event:EventResponse) => {
+    EventArray.push({
+      EventID: event.event_id,
+      Title: event.title,
+      Description: event.description,
+      Picture: event.picture,
+      Location: event.location,
+      StartDateTime: new Date(event.start_date_time),
+      EndDateTime: event.end_date_time ? undefined : new Date(event.end_date_time),
+      Visibility: event.visibility,
+      NumJoins: event.num_joins,
+      NumShoutouts: event.num_shoutouts,
+      UserJoin: event.user_join,
+      UserShoutout: event.user_shoutout
+    })
   });
 
   return EventArray;
@@ -278,20 +298,24 @@ export async function getUserHostedFutureEvents(
       }),
     }
   );
-  const data = await response.json();
+  const responseJSON = await response.json();
 
-  const EventArray = data.map((event) => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime:
-        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-    };
+  const EventArray: Event[] = []
+  responseJSON.forEach((event:EventResponse) => {
+    EventArray.push({
+      EventID: event.event_id,
+      Title: event.title,
+      Description: event.description,
+      Picture: event.picture,
+      Location: event.location,
+      StartDateTime: new Date(event.start_date_time),
+      EndDateTime: event.end_date_time ? undefined : new Date(event.end_date_time),
+      Visibility: event.visibility,
+      NumJoins: event.num_joins,
+      NumShoutouts: event.num_shoutouts,
+      UserJoin: event.user_join,
+      UserShoutout: event.user_shoutout
+    })
   });
 
   return EventArray;
@@ -322,31 +346,48 @@ export async function getUserHostedPastEvents(
       }),
     }
   );
-  const data = await response.json();
 
-  const EventArray = data.map((event) => {
-    return {
-      EventID: event.EventID,
-      Title: event.Title,
-      Description: event.Description,
-      Picture: event.Picture,
-      Location: event.Location,
-      StartDateTime: new Date(event.StartDateTime),
-      EndDateTime:
-        event.EndDateTime != "NULL" ? new Date(event.EndDateTime) : null,
-      Visibility: event.Visibility,
-    };
+  const responseJSON = await response.json();
+
+  const EventArray: Event[] = []
+  responseJSON.forEach((event:EventResponse) => {
+    EventArray.push({
+      EventID: event.event_id,
+      Title: event.title,
+      Description: event.description,
+      Picture: event.picture,
+      Location: event.location,
+      StartDateTime: new Date(event.start_date_time),
+      EndDateTime: event.end_date_time ? undefined : new Date(event.end_date_time),
+      Visibility: event.visibility,
+      NumJoins: event.num_joins,
+      NumShoutouts: event.num_shoutouts,
+      UserJoin: event.user_join,
+      UserShoutout: event.user_shoutout
+    })
   });
 
-  // console.log("#######Future events", EventArray)
-
   return EventArray;
+}
+
+export async function getAllSchoolEvents(
+  userAccessToken: string,
+  schoolID: string
+): Promise<Event[]> {
+
+  console.log("Call to EventService: getAllSchoolEvents")
+
+  return []
 }
 
 export async function getAllSchoolEventsCategorized(
   userAccessToken: string,
   schoolID: string
 ): Promise<{ [key: string]: Event[] }> {
+
+  console.log("Call to EventService: getAllSchoolEventsCategorized")
+  console.log("UserAccessToken: " + userAccessToken)
+
   const categoryMap: { [key: string]: Event[] } = {};
 
   const response = await fetch(
@@ -375,7 +416,7 @@ export async function getAllSchoolEventsCategorized(
 
   for(const categoryToEvents in responseJSON){
     categoryMap[categoryToEvents] = []
-    responseJSON[categoryToEvents].forEach((event) => {
+    responseJSON[categoryToEvents].forEach((event: EventResponse) => {
       categoryMap[categoryToEvents].push({
         EventID: event.event_id,
         Title: event.title,
@@ -393,5 +434,5 @@ export async function getAllSchoolEventsCategorized(
     })
   }
 
-  return categoryMap;
+  return Promise.resolve(categoryMap);
 }

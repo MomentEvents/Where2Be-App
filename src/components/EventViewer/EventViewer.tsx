@@ -8,13 +8,14 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { SIZES, School, Event, Interest } from "../../constants";
+import { SIZES, School, Event, Interest, SCREENS } from "../../constants";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
+import * as Navigator from "../../navigation/Navigator";
 
 type EventViewerProps = {
   school: School;
@@ -27,7 +28,6 @@ const EventViewer = (props: EventViewerProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
-
   const pullData = async () => {
     getAllSchoolEventsCategorized(
       isLoggedIn ? userToken.UserAccessToken : undefined,
@@ -47,7 +47,7 @@ const EventViewer = (props: EventViewerProps) => {
   const _renderBigEventCards = ({ item, index }) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
-        <EventCard event={item} isBigCard={true} />
+        {isLoggedIn ? <EventCard event={item} isBigCard={true}/> : <EventCard event={item} isBigCard={true} onClick={() => {Navigator.navigate(SCREENS.Login)}}/>}
       </View>
     );
   };
@@ -55,13 +55,14 @@ const EventViewer = (props: EventViewerProps) => {
   const _renderSmallEventCards = ({ item, index }) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
-        <EventCard event={item} isBigCard={false} />
+        {isLoggedIn ? <EventCard event={item} isBigCard={false}/> : <EventCard event={item} isBigCard={false} onClick={() => {Navigator.navigate(SCREENS.Login)}}/>}
       </View>
     );
   };
 
   const onRefresh = () => {
     setIsRefreshing(true);
+    setCategoryNameToEventsMap({})
     setIsLoadingEvents(true);
     pullData();
   };

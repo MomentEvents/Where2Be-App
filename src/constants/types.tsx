@@ -10,7 +10,7 @@ export interface Event {
   Picture: string;
   Location: string;
   StartDateTime: Date;
-  EndDateTime: Date | null; // startingDateTime and endingDateTime will be same date but different times
+  EndDateTime: Date | null;
   Visibility: boolean;
   NumJoins: number;
   NumShoutouts: number;
@@ -18,15 +18,42 @@ export interface Event {
   UserShoutout: boolean;
 }
 
+export interface EventResponse {
+  event_id: string;
+  title: string;
+  description: string;
+  picture: string;
+  location: string;
+  start_date_time: string;
+  end_date_time: string;
+  visibility: boolean;
+  num_joins: number;
+  num_shoutouts: number;
+  user_join: boolean;
+  user_shoutout: boolean;
+}
+
 export interface Interest {
   InterestID: string;
   Name: string;
 }
 
+export interface InterestResponse {
+  interest_id: string;
+  name: string;
+}
+
+
 export interface School {
   SchoolID: string;
   Name: string;
   Abbreviation: string;
+}
+
+export interface SchoolResponse {
+  school_id: string;
+  name: string;
+  abbreviation: string;
 }
 
 export interface User {

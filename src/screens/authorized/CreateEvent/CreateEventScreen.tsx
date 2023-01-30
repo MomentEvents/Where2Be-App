@@ -113,6 +113,8 @@ const CreateEventScreen = ({ navigation, route }) => {
       Visibility: true,
       NumJoins: 0,
       NumShoutouts: 0,
+      UserJoin: false,
+      UserShoutout: false,
     };
 
     if (!checkIfEventIsFormatted(createdEvent)) {

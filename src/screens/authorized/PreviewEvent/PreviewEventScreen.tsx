@@ -23,15 +23,6 @@ import moment from "moment";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
-import {
-  addUserJoinEvent,
-  addUserShoutoutEvent,
-  getEventHostByEventId,
-  getUserJoinEvent,
-  getUserShoutoutEvent,
-  removeUserJoinEvent,
-  removeUserShoutoutEvent,
-} from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
@@ -63,14 +54,6 @@ const EventDetailsScreen = ({ route }) => {
   const {
     eventIDToEvent,
     updateEventIDToEvent,
-    eventIDToDidJoin,
-    updateEventIDToDidJoin,
-    eventIDToJoins,
-    updateEventIDToJoins,
-    eventIDToDidShoutout,
-    updateEventIDToDidShoutout,
-    eventIDToShoutouts,
-    updateEventIDToShoutouts,
     eventIDToInterests,
     updateEventIDToInterests,
   } = useContext(EventContext);

@@ -1,6 +1,7 @@
 import momentAPI from "../constants/server";
 import { formatError } from "../helpers/helpers";
-import { School } from "../constants";
+import { School } from "../constants/types";
+import { SchoolResponse } from "../constants/types";
 
 // getAllUniversities
 
@@ -15,21 +16,20 @@ import { School } from "../constants";
  * Return: List of all schools with type School
  */
 export async function getAllSchools(): Promise<School[]> {
-
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/school`, {
-    method: 'GET'
-  }).catch((error: Error) => {throw formatError("School Service error", error.message)});
+  const response = await fetch(momentAPI + `/api_ver_1.0.0/school`, {
+    method: "GET",
+  }).catch((error: Error) => {
+    throw formatError("School Service error", error.message);
+  });
   const data = await response.json();
 
-  const SchoolArray = data.map(school => {
+  const SchoolArray = data.map((school: SchoolResponse) => {
     return {
       SchoolID: school.school_id,
       Name: school.name,
       Abbreviation: school.abbreviation,
-    }
+    };
   });
-
-  // console.log("School Array",SchoolArray);
 
   return Promise.resolve(SchoolArray);
 }
@@ -42,9 +42,7 @@ export async function getAllSchools(): Promise<School[]> {
  * Parameters: None
  * Return: The school that the current user is in
  */
-export async function getSchoolByUserId(
-  UserID: string
-): Promise<School> {
+export async function getSchoolByUserId(UserID: string): Promise<School> {
   // const resp = await fetch(momentAPI + "/school/user_id/" + UserID, {
   //   method: "GET",
   //   headers: {
@@ -53,11 +51,16 @@ export async function getSchoolByUserId(
   //   },
   // }).catch((error: Error) => {throw formatError("School Service error", error.message)});
 
-  console.log("########UserID",UserID)
+  console.log("########UserID", UserID);
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/school/user_id/${UserID}`, {
-    method: 'GET'
-  }).catch((error: Error) => {throw formatError("School Service error", error.message)});
+  const response = await fetch(
+    momentAPI + `/api_ver_1.0.0/school/user_id/${UserID}`,
+    {
+      method: "GET",
+    }
+  ).catch((error: Error) => {
+    throw formatError("School Service error", error.message);
+  });
   const data = await response.json();
 
   const pulledSchool: School = {
@@ -66,5 +69,5 @@ export async function getSchoolByUserId(
     Abbreviation: data["abbreviation"],
   };
 
-  return Promise.resolve(pulledSchool)
+  return Promise.resolve(pulledSchool);
 }

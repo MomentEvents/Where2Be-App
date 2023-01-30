@@ -17,14 +17,6 @@ import "react-native-gesture-handler";
 import * as Navigator from "../navigation/Navigator";
 import { Event } from "../constants";
 import { UserContext } from "../contexts/UserContext";
-import {
-  getEventNumJoins,
-  getEventNumShoutouts,
-} from "../services/EventService";
-import {
-  getUserJoinEvent,
-  getUserShoutoutEvent,
-} from "../services/UserService";
 import { displayError } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
 
@@ -49,10 +41,6 @@ const EventCard = ({
   const {
     eventIDToEvent,
     updateEventIDToEvent,
-    eventIDToDidJoin,
-    updateEventIDToDidJoin,
-    eventIDToDidShoutout,
-    updateEventIDToDidShoutout,
   } = useContext(EventContext);
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
@@ -258,7 +246,7 @@ const EventCard = ({
                     source={icons.check}
                     size={20}
                     style={{
-                      tintColor: eventIDToDidJoin[event.EventID]
+                      tintColor: eventIDToEvent[event.EventID].UserJoin
                         ? COLORS.purple
                         : COLORS.lightGray,
                       marginRight: 10,
@@ -270,7 +258,7 @@ const EventCard = ({
                       marginTop: 2,
                       marginLeft: -7,
                       marginRight: 10,
-                      color: eventIDToDidJoin[event.EventID]
+                      color: eventIDToEvent[event.EventID].UserJoin
                         ? COLORS.purple
                         : COLORS.lightGray,
                     }}
@@ -281,7 +269,7 @@ const EventCard = ({
                     source={icons.shoutout}
                     size={20}
                     style={{
-                      tintColor: eventIDToDidShoutout[event.EventID]
+                      tintColor: eventIDToEvent[event.EventID].UserShoutout
                         ? COLORS.purple
                         : COLORS.lightGray,
                       marginRight: 10,
@@ -293,7 +281,7 @@ const EventCard = ({
                       marginTop: 2,
                       marginLeft: -7,
                       marginRight: 10,
-                      color: eventIDToDidShoutout[event.EventID]
+                      color: eventIDToEvent[event.EventID].UserShoutout
                         ? COLORS.purple
                         : COLORS.lightGray,
                     }}
@@ -415,7 +403,7 @@ const EventCard = ({
                 source={icons.check}
                 size={20}
                 style={{
-                  tintColor: eventIDToDidJoin[event.EventID]
+                  tintColor: eventIDToEvent[event.EventID].UserJoin
                     ? COLORS.purple
                     : COLORS.lightGray,
                   marginRight: 10,
@@ -427,7 +415,7 @@ const EventCard = ({
                   marginTop: 2,
                   marginLeft: -7,
                   marginRight: 10,
-                  color: eventIDToDidJoin[event.EventID]
+                  color: eventIDToEvent[event.EventID].UserJoin
                     ? COLORS.purple
                     : COLORS.lightGray,
                 }}
@@ -438,7 +426,7 @@ const EventCard = ({
                 source={icons.shoutout}
                 size={20}
                 style={{
-                  tintColor: eventIDToDidShoutout[event.EventID]
+                  tintColor: eventIDToEvent[event.EventID].UserShoutout
                     ? COLORS.purple
                     : COLORS.lightGray,
                   marginRight: 10,
@@ -450,7 +438,7 @@ const EventCard = ({
                   marginTop: 2,
                   marginLeft: -7,
                   marginRight: 10,
-                  color: eventIDToDidShoutout[event.EventID]
+                  color: eventIDToEvent[event.EventID].UserShoutout
                     ? COLORS.purple
                     : COLORS.lightGray,
                 }}

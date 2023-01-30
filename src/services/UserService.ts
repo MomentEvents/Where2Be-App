@@ -105,26 +105,6 @@ export async function getEventHostByEventId(
   return pulledUser;
 }
 
-export async function getUserJoinEvent(
-  userAccessToken: string,
-  userID: string,
-
-  eventID: string
-): Promise<boolean> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
-  const data = await response.json();
-
-  return data["did_join"];
-}
-
 export async function addUserJoinEvent(
   userAccessToken: string,
   userID: string,
@@ -163,27 +143,6 @@ export async function removeUserJoinEvent(
     })
   });
   const data = await response.json();
-}
-
-export async function getUserShoutoutEvent(
-  userAccessToken: string,
-  userID: string,
-
-  eventID: string
-): Promise<boolean> {
-
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
-  });
-  const data = await response.json();
-
-  return data["did_shoutout"];
 }
 
 export async function addUserShoutoutEvent(
