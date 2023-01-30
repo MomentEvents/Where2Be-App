@@ -23,7 +23,7 @@ import { InterestResponse } from "../constants/types";
  * Return: List of all interests
  */
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/interest`, {
+  const response = await fetch(momentAPI+`/interest`, {
     method: 'GET'
   }).catch((error: Error) => {
     throw formatError("Error getting all interests", error.message)
@@ -56,7 +56,7 @@ export async function getEventInterestsByEventId(
 
   console.log("INTEREST#######",eventID)
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/interest/event_id/${eventID}`, {
+  const response = await fetch(momentAPI+`/interest/event_id/${eventID}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

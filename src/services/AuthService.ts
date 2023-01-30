@@ -51,7 +51,7 @@ export async function login(
 
   // DO LOGIN HERE
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/authentication/login/username`, {
+  const response = await fetch(momentAPI+`/authentication/login/username`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export async function signup(
 
   // DO SIGNUP HERE
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/authentication/signup`, {
+  const response = await fetch(momentAPI+`/authentication/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

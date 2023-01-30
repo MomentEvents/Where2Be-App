@@ -16,7 +16,7 @@ import { SchoolResponse } from "../constants/types";
  * Return: List of all schools with type School
  */
 export async function getAllSchools(): Promise<School[]> {
-  const response = await fetch(momentAPI + `/api_ver_1.0.0/school`, {
+  const response = await fetch(momentAPI + `/school`, {
     method: "GET",
   }).catch((error: Error) => {
     throw formatError("School Service error", error.message);
@@ -54,7 +54,7 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
   console.log("########UserID", UserID);
 
   const response = await fetch(
-    momentAPI + `/api_ver_1.0.0/school/user_id/${UserID}`,
+    momentAPI + `/school/user_id/${UserID}`,
     {
       method: "GET",
     }

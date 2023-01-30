@@ -14,7 +14,7 @@ import { User } from "../constants";
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUser(UserID: string): Promise<User> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${UserID}`, {
+  const response = await fetch(momentAPI+`/user/user_id/${UserID}`, {
     method: 'GET'
   });
   const data = await response.json();
@@ -41,7 +41,7 @@ export async function getUser(UserID: string): Promise<User> {
 export async function getUserByUserAccessToken(
   userAccessToken: string
 ): Promise<User> {
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_access_token/${userAccessToken}`, {
+  const response = await fetch(momentAPI+`/user/user_access_token/${userAccessToken}`, {
     method: 'GET'
   });
   const data = await response.json();
@@ -84,7 +84,7 @@ export async function getEventHostByEventId(
   eventID: string
 ): Promise<User> {
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/event_id/${eventID}/host`, {
+  const response = await fetch(momentAPI+`/user/event_id/${eventID}/host`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ export async function addUserJoinEvent(
   eventID: string
 ): Promise<void> {
 
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
+  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/join`, {
     method: 'UPDATE',
     headers: {
       'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ export async function removeUserJoinEvent(
   eventID: string
 ): Promise<void> {
   
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/join`, {
+  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/join`, {
     method: 'UPDATE',
     headers: {
       'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ export async function addUserShoutoutEvent(
   eventID: string
 ): Promise<void> {
   
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
+  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
     method: 'UPDATE',
     headers: {
       'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ export async function removeUserShoutoutEvent(
   eventID: string
 ): Promise<void> {
   
-  const response = await fetch(momentAPI+`/api_ver_1.0.0/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
+  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
     method: 'UPDATE',
     headers: {
       'Content-Type': 'application/json'
