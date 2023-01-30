@@ -2,6 +2,14 @@ import momentAPI from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 
+// import * as Base64 from 'js-base64';
+
+import { Platform } from 'react-native';
+// import RNFetchBlob from 'rn-fetch-blob';
+
+// import RNFS from 'react-native-fs';
+// import 
+
 export const ACADEMIC = "academic";
 export const ATHLETICS = "athletics";
 export const PROFESSIONAL = "professional";
@@ -78,21 +86,65 @@ export async function createEvent(
   const interestIDArray = interests.map((interest) => interest.Name);
   console.log(interestIDArray);
 
+  // convert the image path to a File object
+  const ImagePath = createdEvent.Picture;
+  const fileUri = Platform.OS === 'ios' ? ImagePath.replace('file://', '') : ImagePath
+  const fileName = fileUri.substring(fileUri.lastIndexOf('/') + 1);
+  const fileType = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+  // console.log("###########picture,",fileUri)
+
+  const img_response = await fetch(fileUri) //, 'base64');
+  const blob = await img_response.blob();
+
+  const file = new File([blob], fileName, { type: `image/${fileType}` });
+
+  // const file = new Blob([fileUri],{ type: `image/${fileType}` });
+
+  let fileReader = new FileReader();
+
+  
+  // console.log("###########dataURI,",fileType, fileName)
+
+  // create FormData with the event data and the image file
+  const formData = new FormData();
+  formData.append('user_access_token', userAccessToken);
+  formData.append('title', createdEvent.Title);
+  formData.append('description', createdEvent.Description);
+  formData.append('location', createdEvent.Location);
+  formData.append('start_date_time', createdEvent.StartDateTime.toISOString());
+  formData.append('end_date_time', createdEvent.EndDateTime.toISOString());
+  formData.append('visibility', createdEvent.Visibility.toString());
+  formData.append('interest_ids', JSON.stringify(interests.map((interest) => interest.Name)));
+  formData.append('picture', file);
+
+  console.log("###########formData,",formData)
+
+  // formData.append('file', {
+  //   uri:fileUri,
+  //   type:fileType,
+  //   name:fileName,
+  // })
+
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/create_event`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      title: createdEvent.Title,
-      description: createdEvent.Description, 
-      location: createdEvent.Location,
-      start_date_time: createdEvent.StartDateTime.toISOString(),
-      end_date_time: createdEvent.EndDateTime.toISOString(),
-      visibility: createdEvent.Visibility,
-      interest_ids: interestIDArray,
-    })
+    body: formData
+    // headers: {
+    //   'Content-Type': 'application/json'
+    // },
+    // body: JSON.stringify({
+    //   user_access_token: userAccessToken,
+    //   title: createdEvent.Title,
+    //   description: createdEvent.Description, 
+    //   location: createdEvent.Location,
+    //   start_date_time: createdEvent.StartDateTime.toISOString(),
+    //   end_date_time: createdEvent.EndDateTime.toISOString(),
+    //   visibility: createdEvent.Visibility,
+    //   interest_ids: interestIDArray,
+    // })
   });
   const data = await response.json();
 
@@ -136,6 +188,9 @@ export async function deleteEvent(
 }
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
+
+  // return 0;
+
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
     method: 'GET'
   });
@@ -145,6 +200,9 @@ export async function getEventNumJoins(eventID: string): Promise<number> {
 }
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
+
+  // return 0;
+  
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_shoutouts/`, {
     method: 'GET'
   });
@@ -333,6 +391,8 @@ export async function getAllSchoolFeaturedEvents(
   schoolID: string
 ): Promise<Event[]> {
 
+  return [];
+
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/school_id/${schoolID}/featured`, {
     method: 'GET'
   });
@@ -427,6 +487,8 @@ export async function getAllSchoolEventsByInterest(
       "SchoolID is null"
     );
   }
+
+  return [];
 
   let response;
   let data;
