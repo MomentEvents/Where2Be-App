@@ -42,11 +42,11 @@ const SearchToggler = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
 
+  const [searchText, setSearchText] = useState<string>("");
+
   const searchQuery = (newText: string) => {
-    if (isEventsToggle) {
-      if (!pulledEvents) {
-        return;
-      }
+    setSearchText(newText);
+    if (pulledEvents) {
       const searchedEventsTemp: Event[] = [];
 
       pulledEvents.forEach((event: Event) => {
@@ -64,10 +64,8 @@ const SearchToggler = () => {
       });
 
       setSearchedEvents(searchedEventsTemp);
-    } else {
-      if (!pulledUsers) {
-        return;
-      }
+    }
+    if (pulledUsers) {
       const searchedUsersTemp: User[] = [];
 
       pulledUsers.forEach((user: User) => {
@@ -87,36 +85,37 @@ const SearchToggler = () => {
     }
   };
   const pullData = async () => {
-    if (isEventsToggle) {
-      // getting events
-      getAllSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID)
-        .then((events: Event[]) => {
-          setPulledEvents(events);
-          setSearchedEvents(events);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    } else {
-      // getting users
-      getAllSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID)
-        .then((users: User[]) => {
-          setPulledUsers(users);
-          setSearchedUsers(users);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    }
+    // getting events
+    getAllSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID)
+      .then((events: Event[]) => {
+        setPulledEvents(events);
+        setSearchedEvents(events);
+        setIsRefreshing(false);
+        searchQuery(searchText);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setIsRefreshing(false);
+      });
+    // getting users
+    getAllSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID)
+      .then((users: User[]) => {
+        setPulledUsers(users);
+        setSearchedUsers(users);
+        setIsRefreshing(false);
+        searchQuery(searchText);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        setIsRefreshing(false);
+      });
   };
 
   const onRefresh = async () => {
-    isEventsToggle ? setPulledEvents(null) : setPulledUsers(null);
-    isEventsToggle ? setSearchedEvents(null) : setSearchedUsers(null);
+    setPulledEvents(null)
+    setPulledUsers(null);
+    setSearchedEvents(null)
+    setSearchedUsers(null);
     setIsRefreshing(true);
     pullData();
   };
@@ -185,7 +184,9 @@ const SearchToggler = () => {
             backgroundColor: isEventsToggle ? COLORS.purple : COLORS.trueBlack,
             ...styles.toggleButton,
           }}
-          onPress={() => setIsEventsToggle(true)}
+          onPress={() => {
+            setIsEventsToggle(true);
+          }}
         >
           <McText h3 color={isEventsToggle ? COLORS.white : COLORS.purple}>
             Events
@@ -200,7 +201,9 @@ const SearchToggler = () => {
             backgroundColor: !isEventsToggle ? COLORS.purple : COLORS.trueBlack,
             ...styles.toggleButton,
           }}
-          onPress={() => setIsEventsToggle(false)}
+          onPress={() => {
+            setIsEventsToggle(false);
+          }}
         >
           <McText h3 color={!isEventsToggle ? COLORS.white : COLORS.purple}>
             Users
@@ -214,6 +217,7 @@ const SearchToggler = () => {
         }
         keyboardShouldPersistTaps={"always"}
       >
+        <View style={{height: 10}}/>
         <View style={{ flex: 1 }}>
           {isEventsToggle ? (
             searchedEvents ? (
