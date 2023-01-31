@@ -50,12 +50,16 @@ const SearchToggler = () => {
       const searchedEventsTemp: Event[] = [];
 
       pulledEvents.forEach((event: Event) => {
-        if (
-          event.Title.toLowerCase().includes(newText.toLowerCase()) ||
-          event.Description.toLowerCase().includes(newText.toLowerCase()) ||
-          event.Location.toLowerCase().includes(newText.toLowerCase())
-        ) {
+        try {
+          if (
+            event.Title.toLowerCase().includes(newText.toLowerCase()) ||
+            event.Description.toLowerCase().includes(newText.toLowerCase()) ||
+            event.Location.toLowerCase().includes(newText.toLowerCase())
+          ) {
             searchedEventsTemp.push(event);
+          }
+        } catch (e) {
+          console.log("exception with event with EventID " + event.EventID);
         }
       });
 
@@ -67,11 +71,15 @@ const SearchToggler = () => {
       const searchedUsersTemp: User[] = [];
 
       pulledUsers.forEach((user: User) => {
-        if (
-          user.Name.toLowerCase().includes(newText.toLowerCase()) ||
-          user.Username.toLowerCase().includes(newText.toLowerCase())
-        ) {
-          searchedUsersTemp.push(user);
+        try {
+          if (
+            user.Name.toLowerCase().includes(newText.toLowerCase()) ||
+            user.Username.toLowerCase().includes(newText.toLowerCase())
+          ) {
+            searchedUsersTemp.push(user);
+          }
+        } catch (e) {
+          console.log("exception with user with UserID " + user.UserID);
         }
       });
 
@@ -138,6 +146,30 @@ const SearchToggler = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      <View style={{ backgroundColor: COLORS.black }}>
+        <View
+          style={{
+            width: "90%",
+            backgroundColor: "rgba(80,80,80,.90)",
+            borderRadius: 5,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            marginVertical: 20,
+            justifyContent: "center",
+            alignSelf: "center",
+          }}
+        >
+          <TextInput
+            placeholder="Search..."
+            onChangeText={searchQuery}
+            style={{
+              fontFamily: CUSTOMFONT_REGULAR,
+              color: COLORS.white,
+              fontSize: 16,
+            }}
+          />
+        </View>
+      </View>
       <View
         style={{
           backgroundColor: isEventsToggle ? COLORS.black : COLORS.white,
@@ -175,30 +207,6 @@ const SearchToggler = () => {
           </McText>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          zIndex: 100,
-          width: "90%",
-          position: "absolute",
-          top: 55,
-          backgroundColor: "rgba(80,80,80,.90)",
-          borderRadius: 5,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-      >
-        <TextInput
-          placeholder="Search..."
-          onChangeText={searchQuery}
-          style={{
-            fontFamily: CUSTOMFONT_REGULAR,
-            color: COLORS.white,
-            fontSize: 16,
-          }}
-        />
-      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -206,7 +214,6 @@ const SearchToggler = () => {
         }
         keyboardShouldPersistTaps={"always"}
       >
-        <View style={{ height: 65 }} />
         <View style={{ flex: 1 }}>
           {isEventsToggle ? (
             searchedEvents ? (
@@ -220,7 +227,7 @@ const SearchToggler = () => {
                     alignItems: "center",
                   }}
                 >
-                  <McText h3>No events to display!</McText>
+                  <McText h3>No upcoming events!</McText>
                 </View>
               )
             ) : (
