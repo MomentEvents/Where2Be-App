@@ -40,7 +40,6 @@ import {
 import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
-import { updateEventInterestsByEventId } from "../../../services/InterestService";
 
 type EditEventScreenParams = {
   eventID: string;

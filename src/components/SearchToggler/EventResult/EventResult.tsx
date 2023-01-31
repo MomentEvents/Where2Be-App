@@ -1,11 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { Event } from '../../../constants'
 
-const EventResult = () => {
+type EventResultProps = {
+  event: Event
+}
+const EventResult = (props: EventResultProps) => {
   return (
-    <View>
+    <TouchableOpacity>
       <Text>EventResult</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
