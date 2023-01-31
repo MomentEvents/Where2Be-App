@@ -320,6 +320,17 @@ export async function validateTokenExpirationAndUpdate(): Promise<Token> {
  * none
  */
 export async function getServerStatus(): Promise<void> {
+  const response = await fetch(momentAPI+`/status`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).catch((error: Error) => {
+    throw formatError("Unable to connect to server", "Please try again later");
+  });
+  
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
   return Promise.resolve();
-  throw formatError("Unable to connect to server", "Please try again later");
 }

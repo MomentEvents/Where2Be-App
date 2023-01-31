@@ -79,7 +79,7 @@ const SettingsScreen = () => {
         <TouchableOpacity onPress={onContactSupportClick}>
           <View style={styles.buttonContainer}>
             <icons.contact style={styles.iconContainer} width={30} />
-            <McText body2>Contact Support</McText>
+            <McText h3>Contact Support</McText>
           </View>
         </TouchableOpacity>
         <View
@@ -88,7 +88,7 @@ const SettingsScreen = () => {
         <TouchableOpacity onPress={onLogoutClick}>
           <View style={styles.buttonContainer}>
             <icons.logout style={styles.iconContainer} width={30} />
-            <McText body2>Logout</McText>
+            <McText h3>Logout</McText>
           </View>
         </TouchableOpacity>
         <View
@@ -116,7 +116,5 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   horizontalSeparator: {
-    borderBottomColor: COLORS.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
   }
 });

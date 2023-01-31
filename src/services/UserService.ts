@@ -44,6 +44,8 @@ export async function getUserByUserAccessToken(
 ): Promise<User> {
   const response = await fetch(momentAPI+`/user/user_access_token/${userAccessToken}`, {
     method: 'GET'
+  }).catch((error: Error) => {
+    throw formatError("Error", "Unable to get user by access token")
   });
   const data = await response.json();
 
