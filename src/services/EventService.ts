@@ -49,22 +49,23 @@ export async function getEvent(
   if (!response.ok) {
     throw formatError("Error " + response.status, response.statusText);
   }
-  const data = await response.json();
+  const event: EventResponse = await response.json();
 
-  console.log(data);
   const pulledEvent: Event = {
-    EventID: data["event_id"],
-    Title: data["title"],
-    Description: data["description"],
-    Picture: data["picture"],
-    Location: data["location"],
-    StartDateTime: new Date(data["start_date_time"]),
-    EndDateTime: new Date(data["end_date_time"]),
-    Visibility: data["visibility"],
-    NumJoins: data["num_joins"],
-    NumShoutouts: data["num_shoutouts"],
-    UserJoin: data["user_join"],
-    UserShoutout: data["user_shoutout"],
+    EventID: event.event_id,
+    Title: event.title,
+    Description: event.description,
+    Picture: event.picture,
+    Location: event.location,
+    StartDateTime: new Date(event.start_date_time),
+    EndDateTime: event.end_date_time
+      ? new Date(event.end_date_time)
+      : undefined,
+    Visibility: event.visibility,
+    NumJoins: event.num_joins,
+    NumShoutouts: event.num_shoutouts,
+    UserJoin: event.user_join,
+    UserShoutout: event.user_shoutout,
   };
 
   return pulledEvent;
@@ -152,30 +153,6 @@ export async function deleteEvent(
   return null;
 }
 
-export async function getEventNumJoins(eventID: string): Promise<number> {
-  const response = await fetch(
-    momentAPI + `/event/event_id/${eventID}/num_joins/`,
-    {
-      method: "GET",
-    }
-  );
-  const data = await response.json();
-
-  return data;
-}
-
-export async function getEventNumShoutouts(eventID: string): Promise<number> {
-  const response = await fetch(
-    momentAPI + `/event/event_id/${eventID}/num_shoutouts/`,
-    {
-      method: "GET",
-    }
-  );
-  const data = await response.json();
-
-  return data;
-}
-
 /******************************************************
  * getCurrUserJoinedFutureEvents
  *
@@ -212,8 +189,8 @@ export async function getUserJoinedFutureEvents(
       Location: event.location,
       StartDateTime: new Date(event.start_date_time),
       EndDateTime: event.end_date_time
-        ? undefined
-        : new Date(event.end_date_time),
+        ? new Date(event.end_date_time)
+        : undefined,
       Visibility: event.visibility,
       NumJoins: event.num_joins,
       NumShoutouts: event.num_shoutouts,
@@ -261,8 +238,8 @@ export async function getUserJoinedPastEvents(
       Location: event.location,
       StartDateTime: new Date(event.start_date_time),
       EndDateTime: event.end_date_time
-        ? undefined
-        : new Date(event.end_date_time),
+        ? new Date(event.end_date_time)
+        : undefined,
       Visibility: event.visibility,
       NumJoins: event.num_joins,
       NumShoutouts: event.num_shoutouts,
@@ -311,8 +288,8 @@ export async function getUserHostedFutureEvents(
       Location: event.location,
       StartDateTime: new Date(event.start_date_time),
       EndDateTime: event.end_date_time
-        ? undefined
-        : new Date(event.end_date_time),
+        ? new Date(event.end_date_time)
+        : undefined,
       Visibility: event.visibility,
       NumJoins: event.num_joins,
       NumShoutouts: event.num_shoutouts,
@@ -367,8 +344,8 @@ export async function getUserHostedPastEvents(
       Location: event.location,
       StartDateTime: new Date(event.start_date_time),
       EndDateTime: event.end_date_time
-        ? undefined
-        : new Date(event.end_date_time),
+        ? new Date(event.end_date_time)
+        : undefined,
       Visibility: event.visibility,
       NumJoins: event.num_joins,
       NumShoutouts: event.num_shoutouts,
@@ -385,8 +362,44 @@ export async function getAllSchoolEvents(
   schoolID: string
 ): Promise<Event[]> {
   console.log("Call to EventService: getAllSchoolEvents");
+  const response = await fetch(momentAPI + `/event/school_id/${schoolID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    }),
+  }).catch((error: Error) => {
+    throw formatError(
+      "Error in getting host past events",
+      error.name + ": " + error.message
+    );
+  });
 
-  return [];
+  const responseJSON = await response.json();
+
+  const EventArray: Event[] = [];
+  responseJSON.forEach((event: EventResponse) => {
+    EventArray.push({
+      EventID: event.event_id,
+      Title: event.title,
+      Description: event.description,
+      Picture: event.picture,
+      Location: event.location,
+      StartDateTime: new Date(event.start_date_time),
+      EndDateTime: event.end_date_time
+        ? new Date(event.end_date_time)
+        : undefined,
+      Visibility: event.visibility,
+      NumJoins: event.num_joins,
+      NumShoutouts: event.num_shoutouts,
+      UserJoin: event.user_join,
+      UserShoutout: event.user_shoutout,
+    });
+  });
+
+  return EventArray;
 }
 
 export async function getAllSchoolEventsCategorized(
@@ -433,8 +446,8 @@ export async function getAllSchoolEventsCategorized(
         Location: event.location,
         StartDateTime: new Date(event.start_date_time),
         EndDateTime: event.end_date_time
-          ? undefined
-          : new Date(event.end_date_time),
+          ? new Date(event.end_date_time)
+          : undefined,
         Visibility: event.visibility,
         NumJoins: event.num_joins,
         NumShoutouts: event.num_shoutouts,
@@ -444,6 +457,6 @@ export async function getAllSchoolEventsCategorized(
     });
   }
 
-  console.log(categoryMap)
+  console.log(categoryMap);
   return Promise.resolve(categoryMap);
 }

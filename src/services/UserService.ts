@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/UserContext";
 import momentAPI from "../constants/server";
 import { HELPME, formatError } from "../helpers/helpers";
 import { User } from "../constants";
+import { UserResponse } from "../constants/types";
 
 /******************************************************
  * getUser
@@ -122,7 +123,9 @@ export async function addUserJoinEvent(
       did_join: true
     })
   });
-  const data = await response.json();
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
 }
 
 export async function removeUserJoinEvent(
@@ -142,7 +145,9 @@ export async function removeUserJoinEvent(
       did_join: false
     })
   });
-  const data = await response.json();
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
 }
 
 export async function addUserShoutoutEvent(
@@ -162,7 +167,9 @@ export async function addUserShoutoutEvent(
       did_shoutout: true
     })
   });
-  const data = await response.json();
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
 }
 
 export async function removeUserShoutoutEvent(
@@ -182,5 +189,41 @@ export async function removeUserShoutoutEvent(
       did_shoutout: false
     })
   });
-  const data = await response.json();
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
+}
+
+export async function getAllSchoolUsers(
+  userAccessToken: string,
+  schoolID: string
+): Promise<User[]> {
+
+  const response = await fetch(momentAPI+`user/school/${schoolID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    })
+  })
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
+
+  const responseJSON = await response.json()
+
+  const userArray: User[] = []
+  responseJSON.forEach
+  for(const user in responseJSON){
+    userArray.push({
+      UserID: "",
+      Name: "",
+      Username: "",
+      Picture: ""
+    })
+  }
+
+  return userArray
 }

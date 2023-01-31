@@ -1,8 +1,8 @@
+import { InterestResponse } from './../constants/types';
 import momentAPI from "../constants/server";
 import { Interest } from "../constants";
 import { ACADEMIC, ATHLETICS, PROFESSIONAL, SOCIAL } from "./EventService";
 import { formatError } from "../helpers/helpers";
-import { InterestResponse } from "../constants/types";
 
 // getAllInterests
 
@@ -49,7 +49,8 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
  * Return: List of all interests relating to that event
  */
 export async function getEventInterestsByEventId(
-  eventID: string
+  eventID: string,
+  userAccessToken: string,
 ): Promise<Interest[]> {
 
   // need user_access_token
@@ -62,13 +63,13 @@ export async function getEventInterestsByEventId(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_access_token: "DoRyKLAVMRAUpeUc_aoAFwERg3Lgjeq1qgtMd7Wtxao"
+      user_access_token: userAccessToken
     })
   });
   const data = await response.json();
 
   console.log("INTEREST#######",data)
-  const InterestArray = data.map(interest => {
+  const InterestArray = data.map((interest: InterestResponse) => {
     return {
       InterestID: interest.interest_id,
       Name: interest.name,
@@ -77,11 +78,3 @@ export async function getEventInterestsByEventId(
 
   return InterestArray;
 }
-
-export async function updateEventInterestsByEventId(userAccessToken: string,
-  
-  interests: Interest[],
-  eventID: string): Promise<void>
-  {
-    return Promise.resolve()
-  }

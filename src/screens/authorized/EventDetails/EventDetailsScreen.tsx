@@ -36,8 +36,6 @@ import { EventContext } from "../../../contexts/EventContext";
 import {
   deleteEvent,
   getEvent,
-  getEventNumJoins,
-  getEventNumShoutouts,
 } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
@@ -250,7 +248,7 @@ const EventDetailsScreen = ({ route }) => {
         }
       });
 
-    getEventInterestsByEventId(eventID)
+    getEventInterestsByEventId(eventID, userToken.UserAccessToken)
       .then((tags: Interest[]) => {
         updateEventIDToInterests({ id: eventID, interests: tags });
         setDidFetchInterests(true);
@@ -443,12 +441,14 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {eventIDToEvent[eventID] === undefined
                             ? null
-                            : moment(
+                            : eventIDToEvent[eventID].EndDateTime ? moment(
                                 eventIDToEvent[eventID].StartDateTime
                               ).format("h:mm a") +
                               " - " +
                               moment(
                                 eventIDToEvent[eventID].EndDateTime
+                              ).format("h:mm a") : moment(
+                                eventIDToEvent[eventID].StartDateTime
                               ).format("h:mm a")}
                         </McText>
                       </View>

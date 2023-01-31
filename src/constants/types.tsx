@@ -62,3 +62,10 @@ export interface User {
   Username: string;
   Picture: string;
 }
+
+export interface UserResponse {
+  user_id: string;
+  display_name: string;
+  username: string;
+  picture: string;
+}
