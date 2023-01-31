@@ -42,10 +42,10 @@ const UserResult = (props: UserResultProps) => {
               justifyContent: "center"
             }}
           >
-            <McText h3>
+            <McText h3 numberOfLines={1}>
                 {props.user.Name}
             </McText>
-            <McText b5>
+            <McText b5 numberOfLines={1}>
                 @{props.user.Username}
             </McText>
           </View>

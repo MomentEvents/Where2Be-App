@@ -28,10 +28,6 @@ import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import {
   createEvent,
-  deleteEvent,
-  getEvent,
-  getEventNumJoins,
-  getEventNumShoutouts,
 } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";

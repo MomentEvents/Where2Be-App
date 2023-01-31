@@ -181,7 +181,7 @@ const SearchToggler = () => {
           width: "90%",
           position: "absolute",
           top: 55,
-          backgroundColor: "rgba(80,80,80,.60)",
+          backgroundColor: "rgba(80,80,80,.90)",
           borderRadius: 5,
           paddingHorizontal: 10,
           paddingVertical: 10,
