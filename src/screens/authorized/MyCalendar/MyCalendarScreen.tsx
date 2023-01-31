@@ -30,7 +30,6 @@ import { EventContext } from "../../../contexts/EventContext";
 
 const MyCalendarScreen = ({ route }) => {
   const { userToken, currentUser } = useContext(UserContext);
-  const { eventIDToDidJoin } = useContext(EventContext);
 
   const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
 

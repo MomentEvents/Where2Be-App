@@ -83,7 +83,7 @@ const EventViewer = (props: EventViewerProps) => {
       )}
       {Object.keys(categoryNameToEventsMap).map((key, index) =>
         key === "Featured" ? (
-          <View key={key + index}>
+          <View key={"Featured"+key + index}>
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}

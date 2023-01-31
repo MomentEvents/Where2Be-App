@@ -78,11 +78,11 @@ const EventDetailsScreen = ({ route }) => {
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
 
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const [didFetchEvent, setDidFetchEvent] = useState<boolean>(false);
   const [didFetchInterests, setDidFetchInterests] = useState<boolean>(false);
-  const [didFetchHost, setDidFetchHost] = useState<boolean>(false)
+  const [didFetchHost, setDidFetchHost] = useState<boolean>(false);
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
@@ -90,11 +90,7 @@ const EventDetailsScreen = ({ route }) => {
 
   const addUserJoin = async () => {
     setLoading(true);
-    addUserJoinEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    )
+    addUserJoinEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
       .then(() => {
         updateEventIDToEvent({
           id: eventID,
@@ -210,14 +206,14 @@ const EventDetailsScreen = ({ route }) => {
           onPress: async () => {
             console.log("Yes Pressed");
 
-            await deleteEvent(userToken.UserAccessToken, eventID).catch(
-              (error: Error) => {
+            deleteEvent(userToken.UserAccessToken, eventID)
+              .then(() => {
+                updateEventIDToEvent({ id: eventID, event: undefined });
+                Navigator.goBack();
+              })
+              .catch((error: Error) => {
                 displayError(error);
-              }
-            );
-
-            updateEventIDToEvent({ id: eventID, event: undefined });
-            Navigator.goBack();
+              });
           },
         },
       ],
@@ -244,7 +240,7 @@ const EventDetailsScreen = ({ route }) => {
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
-        setDidFetchEvent(true)
+        setDidFetchEvent(true);
       })
       .catch((error: Error) => {
         if (!gotError) {
@@ -257,7 +253,7 @@ const EventDetailsScreen = ({ route }) => {
     getEventInterestsByEventId(eventID)
       .then((tags: Interest[]) => {
         updateEventIDToInterests({ id: eventID, interests: tags });
-        setDidFetchInterests(true)
+        setDidFetchInterests(true);
       })
       .catch((error: Error) => {
         if (!gotError) {
@@ -283,11 +279,11 @@ const EventDetailsScreen = ({ route }) => {
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    setHost(undefined)
-    setDidFetchHost(false)
-    setDidFetchInterests(false)
-    setDidFetchEvent(false)
-    updateEventIDToInterests({id: eventID, interests: undefined})
+    setHost(undefined);
+    setDidFetchHost(false);
+    setDidFetchInterests(false);
+    setDidFetchEvent(false);
+    updateEventIDToInterests({ id: eventID, interests: undefined });
     pullData();
   };
 
@@ -296,15 +292,15 @@ const EventDetailsScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    if(didFetchHost && didFetchEvent && didFetchInterests){
-      setIsRefreshing(false)
+    if (didFetchHost && didFetchEvent && didFetchInterests) {
+      setIsRefreshing(false);
     }
-  }, [didFetchHost, didFetchEvent, didFetchInterests])
+  }, [didFetchHost, didFetchEvent, didFetchInterests]);
 
   useEffect(() => {
     console.log("going into host use effect");
     if (!host) {
-      setIsHost(false)
+      setIsHost(false);
       return;
     }
     console.log("Host UserID is " + host.UserID);
@@ -667,7 +663,7 @@ const EventDetailsScreen = ({ route }) => {
           </View>
         </ScrollView>
         <View style={styles.userControlContainer}>
-          {didFetchEvent ? (
+          {didFetchEvent && eventIDToEvent[eventID] ? (
             <UserOptionsSection>
               <View
                 style={{

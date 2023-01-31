@@ -348,7 +348,12 @@ export async function getUserHostedPastEvents(
         user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch((error: Error) => {
+    throw formatError(
+      "Error in getting host past events",
+      error.name + ": " + error.message
+    );
+  });
 
   const responseJSON = await response.json();
 
@@ -439,5 +444,6 @@ export async function getAllSchoolEventsCategorized(
     });
   }
 
+  console.log(categoryMap)
   return Promise.resolve(categoryMap);
 }

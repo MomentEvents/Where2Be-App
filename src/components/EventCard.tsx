@@ -86,7 +86,7 @@ const EventCard = ({
     fetchedEvent,
   ]);
 
-  if (!isLoaded || eventIDToEvent[event.EventID] === undefined) {
+  if (!isLoaded || !eventIDToEvent[event.EventID]) {
     return (
       <View
         style={{
