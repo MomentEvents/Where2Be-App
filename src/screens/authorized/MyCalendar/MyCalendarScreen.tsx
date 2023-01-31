@@ -46,9 +46,11 @@ const MyCalendarScreen = ({ route }) => {
       getUserJoinedFutureEvents(userToken.UserAccessToken, currentUser.UserID)
         .then((events: Event[]) => {
           setPulledEvents(events);
+          setIsRefreshing(false);
         })
         .catch((error: Error) => {
           displayError(error);
+          setIsRefreshing(false);
         });
     } else {
       // getting past events
@@ -56,9 +58,11 @@ const MyCalendarScreen = ({ route }) => {
       getUserJoinedPastEvents(userToken.UserAccessToken, currentUser.UserID)
         .then((events: Event[]) => {
           setPulledEvents(events);
+          setIsRefreshing(false);
         })
         .catch((error: Error) => {
           displayError(error);
+          setIsRefreshing(false);
         });
     }
   };
@@ -66,8 +70,7 @@ const MyCalendarScreen = ({ route }) => {
   const onRefresh = async () => {
     setPulledEvents(null);
     setIsRefreshing(true);
-    await pullData();
-    setIsRefreshing(false);
+    pullData();
   };
 
   const renderEventCard = (event: Event) => {
@@ -76,10 +79,6 @@ const MyCalendarScreen = ({ route }) => {
         style={{ alignItems: "center", marginTop: 15 }}
         key={event.EventID + currentUser.UserID + "Joined Event"}
       >
-        {/* {eventIDToDidJoin[event.EventID] !== undefined &&
-        !eventIDToDidJoin[event.EventID] ? (
-          <></>
-        ) : ( */}
         <EventCard
           width={SIZES.width - 40}
           height={SIZES.height * 0.3}
@@ -87,7 +86,6 @@ const MyCalendarScreen = ({ route }) => {
           isBigCard={true}
           showRelativeTime={true}
         />
-        {/* )} */}
       </View>
     );
   };
@@ -144,10 +142,10 @@ const MyCalendarScreen = ({ route }) => {
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
-        {pulledEvents ? (
+        {pulledEvents? (
           pulledEvents.map((event: Event) => renderEventCard(event))
         ) : (
-          <ActivityIndicator style={{ marginTop: 20 }} />
+          !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
         )}
         {pulledEvents && pulledEvents.length === 0 ? (
           <View

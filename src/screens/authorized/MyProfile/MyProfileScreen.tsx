@@ -44,9 +44,11 @@ const MyProfileScreen = ({ route }) => {
       getUserHostedFutureEvents(userToken.UserAccessToken, currentUser.UserID)
         .then((events: Event[]) => {
           setPulledEvents(events);
+          setIsRefreshing(false);
         })
         .catch((error: Error) => {
           displayError(error);
+          setIsRefreshing(false);
         });
     } else {
       // getting past events
@@ -54,9 +56,11 @@ const MyProfileScreen = ({ route }) => {
       getUserHostedPastEvents(userToken.UserAccessToken, currentUser.UserID)
         .then((events: Event[]) => {
           setPulledEvents(events);
+          setIsRefreshing(false);
         })
         .catch((error: Error) => {
           displayError(error);
+          setIsRefreshing(false);
         });
     }
   };
@@ -65,7 +69,6 @@ const MyProfileScreen = ({ route }) => {
     setPulledEvents(null);
     setIsRefreshing(true);
     pullData();
-    setIsRefreshing(false);
   };
 
   useEffect(() => {
@@ -154,7 +157,7 @@ const MyProfileScreen = ({ route }) => {
             </View>
           ))
         ) : (
-          <ActivityIndicator style={{ marginTop: 20 }} />
+          !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
         )}
         <View style={{ height: SIZES.tab_bar_height }} />
       </ScrollView>
