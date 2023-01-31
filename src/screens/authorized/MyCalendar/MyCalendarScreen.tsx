@@ -30,12 +30,19 @@ import { EventContext } from "../../../contexts/EventContext";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 
 const MyCalendarScreen = ({ route }) => {
-  const {currentUser} = useContext(UserContext)
+  const { currentUser } = useContext(UserContext);
 
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader title={"Joined Events"} />
-      <EventToggler selectedUser={currentUser} eventsToPull={EVENT_TOGGLER.JoinedEvents}/>
+      <View style={{flex: 1}}>
+        <EventToggler
+          selectedUser={currentUser}
+          eventsToPull={EVENT_TOGGLER.JoinedEvents}
+        />
+      </View>
+
+      <View style={{ height: SIZES.tab_bar_height }} />
     </SafeAreaView>
   );
 };

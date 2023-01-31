@@ -68,7 +68,10 @@ const EventToggler = (props: EventTogglerProps) => {
       // getting past events
 
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
-        ? getUserJoinedPastEvents(userToken.UserAccessToken, props.selectedUser.UserID)
+        ? getUserJoinedPastEvents(
+            userToken.UserAccessToken,
+            props.selectedUser.UserID
+          )
             .then((events: Event[]) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
@@ -77,7 +80,10 @@ const EventToggler = (props: EventTogglerProps) => {
               displayError(error);
               setIsRefreshing(false);
             })
-        : getUserHostedPastEvents(userToken.UserAccessToken, props.selectedUser.UserID)
+        : getUserHostedPastEvents(
+            userToken.UserAccessToken,
+            props.selectedUser.UserID
+          )
             .then((events: Event[]) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
@@ -99,7 +105,12 @@ const EventToggler = (props: EventTogglerProps) => {
     return (
       <View
         style={{ alignItems: "center", marginTop: 15 }}
-        key={event.EventID + props.selectedUser.UserID + props.eventsToPull + " Event"}
+        key={
+          event.EventID +
+          props.selectedUser.UserID +
+          props.eventsToPull +
+          " Event"
+        }
       >
         <EventCard
           width={SIZES.width - 40}
@@ -184,27 +195,24 @@ const EventToggler = (props: EventTogglerProps) => {
           ) : (
             !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
           )
-        ) : (
-          pulledPastEvents ? (
-            pulledPastEvents.length !== 0 ? (
-              pulledPastEvents.map((event: Event) => renderEventCard(event))
-            ) : (
-              <View
-                style={{
-                  marginTop: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <McText h3>No events to display!</McText>
-              </View>
-            )
+        ) : pulledPastEvents ? (
+          pulledPastEvents.length !== 0 ? (
+            pulledPastEvents.map((event: Event) => renderEventCard(event))
           ) : (
-            !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
+            <View
+              style={{
+                marginTop: 20,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <McText h3>No events to display!</McText>
+            </View>
           )
+        ) : (
+          !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
         )}
-
-        <View style={{ height: SIZES.tab_bar_height }} />
+        <View style={{ height: SIZES.tab_bar_height }}/>
       </ScrollView>
     </View>
   );
@@ -213,38 +221,14 @@ const EventToggler = (props: EventTogglerProps) => {
 export default EventToggler;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.black,
-  },
-  profileContainer: {
-    height: 120,
-    backgroundColor: COLORS.trueBlack,
-    flexDirection: "row",
-  },
-  imageContainer: {
-    height: 90,
-    width: 90,
-    borderRadius: 90,
-    borderWidth: 1,
-    marginTop: 15,
-    marginLeft: 30,
-    marginRight: 30,
-    borderColor: COLORS.white,
-  },
-  infoContainer: {
-    paddingTop: 20,
-  },
-  displayNameContainer: {},
-  usernameContainer: {
-    marginTop: 5,
-  },
+  
+  
   buttonToggleContainer: {
     flexDirection: "row",
     backgroundColor: COLORS.trueBlack,
   },
   toggleButton: {
-    width: SIZES.width * 0.5,
+    width: "50%",
     height: 40,
   },
 });
