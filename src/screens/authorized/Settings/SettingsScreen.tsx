@@ -67,7 +67,7 @@ const SettingsScreen = () => {
         }}
       />
       <ScrollView>
-        <TouchableOpacity onPress={onChangePasswordClick}>
+        {/* <TouchableOpacity onPress={onChangePasswordClick}>
           <View style={styles.buttonContainer}>
             <icons.password style={styles.iconContainer} width={30} />
             <McText body2>Change Password</McText>
@@ -75,7 +75,7 @@ const SettingsScreen = () => {
         </TouchableOpacity>
         <View
           style={styles.horizontalSeparator}
-        />
+        /> */}
         <TouchableOpacity onPress={onContactSupportClick}>
           <View style={styles.buttonContainer}>
             <icons.contact style={styles.iconContainer} width={30} />
