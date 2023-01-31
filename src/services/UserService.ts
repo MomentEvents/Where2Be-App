@@ -199,7 +199,8 @@ export async function getAllSchoolUsers(
   schoolID: string
 ): Promise<User[]> {
 
-  const response = await fetch(momentAPI+`user/school/${schoolID}`, {
+  console.log("Call to UserService: getAllSchoolUsers")
+  const response = await fetch(momentAPI+`/user/school_id/${schoolID}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -214,16 +215,17 @@ export async function getAllSchoolUsers(
 
   const responseJSON = await response.json()
 
+  console.log(responseJSON)
   const userArray: User[] = []
-  responseJSON.forEach
-  for(const user in responseJSON){
+
+  responseJSON.forEach((user: UserResponse) => {
     userArray.push({
-      UserID: "",
-      Name: "",
-      Username: "",
-      Picture: ""
-    })
-  }
+      UserID: user.user_id,
+      Name: user.display_name,
+      Username: user.username,
+      Picture: user.picture
+    });
+  });
 
   return userArray
 }

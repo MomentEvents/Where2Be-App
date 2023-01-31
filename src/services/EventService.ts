@@ -372,13 +372,15 @@ export async function getAllSchoolEvents(
     }),
   }).catch((error: Error) => {
     throw formatError(
-      "Error in getting host past events",
+      "Error in getting all school events",
       error.name + ": " + error.message
     );
   });
 
   const responseJSON = await response.json();
 
+  console.log("getAllSchoolEvents")
+  console.log(responseJSON)
   const EventArray: Event[] = [];
   responseJSON.forEach((event: EventResponse) => {
     EventArray.push({

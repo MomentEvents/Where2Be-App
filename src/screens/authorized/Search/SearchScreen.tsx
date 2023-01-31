@@ -5,14 +5,14 @@ import { McText } from "../../../components/Styled";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { COLORS } from "../../../constants";
+import SearchToggler from "../../../components/SearchToggler/SearchToggler";
 
 const SearchScreen = () => {
+
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader title={"Search"} />
-      <View style={styles.searchContainer}>
-        <McText h2>Coming soon!</McText>
-      </View>
+      <SearchToggler/>
     </SafeAreaView>
   );
 };
