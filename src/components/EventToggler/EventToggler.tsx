@@ -132,7 +132,7 @@ const EventToggler = (props: EventTogglerProps) => {
   }, [isFutureToggle]);
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View
         style={{
           backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
@@ -212,7 +212,7 @@ const EventToggler = (props: EventTogglerProps) => {
         ) : (
           !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
         )}
-        <View style={{ height: SIZES.tab_bar_height }}/>
+        <View style={{ height: SIZES.tab_bar_height + 10 }}/>
       </ScrollView>
     </View>
   );

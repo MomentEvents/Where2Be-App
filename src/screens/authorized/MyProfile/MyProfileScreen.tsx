@@ -32,50 +32,6 @@ type ProfileDetailsRouteParams = {
 };
 const MyProfileScreen = ({ route }) => {
   const { currentUser } = useContext(UserContext);
-  const { userToken } = useContext(UserContext);
-
-  const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
-
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
-  const pullData = async () => {
-    if (isFutureToggle) {
-      // getting future events
-
-      getUserHostedFutureEvents(userToken.UserAccessToken, currentUser.UserID)
-        .then((events: Event[]) => {
-          setPulledEvents(events);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    } else {
-      // getting past events
-
-      getUserHostedPastEvents(userToken.UserAccessToken, currentUser.UserID)
-        .then((events: Event[]) => {
-          setPulledEvents(events);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    }
-  };
-
-  const onRefresh = async () => {
-    setPulledEvents(null);
-    setIsRefreshing(true);
-    pullData();
-  };
-
-  useEffect(() => {
-    setPulledEvents(null);
-    pullData();
-  }, [isFutureToggle]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,8 +47,6 @@ const MyProfileScreen = ({ route }) => {
           eventsToPull={EVENT_TOGGLER.HostedEvents}
         />
       </View>
-
-      <View style={{ height: SIZES.tab_bar_height }} />
     </SafeAreaView>
   );
 };

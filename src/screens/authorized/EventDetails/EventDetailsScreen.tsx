@@ -176,7 +176,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onHostUsernamePressed = () => {
-    if (host !== null) {
+    if (host) {
       Navigator.push(SCREENS.ProfileDetails, {
         User: host,
       });

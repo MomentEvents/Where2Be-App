@@ -42,7 +42,6 @@ const MyCalendarScreen = ({ route }) => {
         />
       </View>
 
-      <View style={{ height: SIZES.tab_bar_height }} />
     </SafeAreaView>
   );
 };

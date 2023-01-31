@@ -110,7 +110,7 @@ const EventViewer = (props: EventViewerProps) => {
         )
       )}
 
-      {isLoggedIn && <View style={{ height: SIZES.tab_bar_height }} />}
+      {isLoggedIn && <View style={{ height: SIZES.tab_bar_height + 10 }} />}
     </ScrollView>
   );
 };
