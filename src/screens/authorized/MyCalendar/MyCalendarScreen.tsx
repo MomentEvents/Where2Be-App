@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
-import { User, icons } from "../../../constants";
+import { EVENT_TOGGLER, User, icons } from "../../../constants";
 import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../../components/Styled";
 import { Event } from "../../../constants";
@@ -27,141 +27,15 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
+import EventToggler from "../../../components/EventToggler/EventToggler";
 
 const MyCalendarScreen = ({ route }) => {
-  const { userToken, currentUser } = useContext(UserContext);
-
-  const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
-
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
-
-  var didRenderEventID = new Set<string>();
-
-  const pullData = async () => {
-    didRenderEventID.clear();
-    if (isFutureToggle) {
-      // getting future events
-
-      getUserJoinedFutureEvents(userToken.UserAccessToken, currentUser.UserID)
-        .then((events: Event[]) => {
-          setPulledEvents(events);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    } else {
-      // getting past events
-
-      getUserJoinedPastEvents(userToken.UserAccessToken, currentUser.UserID)
-        .then((events: Event[]) => {
-          setPulledEvents(events);
-          setIsRefreshing(false);
-        })
-        .catch((error: Error) => {
-          displayError(error);
-          setIsRefreshing(false);
-        });
-    }
-  };
-
-  const onRefresh = async () => {
-    setPulledEvents(null);
-    setIsRefreshing(true);
-    pullData();
-  };
-
-  const renderEventCard = (event: Event) => {
-    return (
-      <View
-        style={{ alignItems: "center", marginTop: 15 }}
-        key={event.EventID + currentUser.UserID + "Joined Event"}
-      >
-        <EventCard
-          width={SIZES.width - 40}
-          height={SIZES.height * 0.3}
-          event={event}
-          isBigCard={true}
-          showRelativeTime={true}
-        />
-      </View>
-    );
-  };
-
-  useEffect(() => {
-    setPulledEvents(null);
-    pullData();
-  }, [isFutureToggle]);
+  const {currentUser} = useContext(UserContext)
 
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader title={"Joined Events"} />
-      <View
-        style={{
-          backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
-          ...styles.buttonToggleContainer,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: isFutureToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: isFutureToggle ? COLORS.purple : COLORS.trueBlack,
-            ...styles.toggleButton,
-          }}
-          onPress={() => setIsFutureToggle(true)}
-        >
-          <McText h3 color={isFutureToggle ? COLORS.white : COLORS.purple}>
-            Upcoming
-          </McText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: !isFutureToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: !isFutureToggle ? COLORS.purple : COLORS.trueBlack,
-            ...styles.toggleButton,
-          }}
-          onPress={() => setIsFutureToggle(false)}
-        >
-          <McText h3 color={!isFutureToggle ? COLORS.white : COLORS.purple}>
-            Previous
-          </McText>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-        }
-      >
-        {pulledEvents? (
-          pulledEvents.map((event: Event) => renderEventCard(event))
-        ) : (
-          !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
-        )}
-        {pulledEvents && pulledEvents.length === 0 ? (
-          <View
-            style={{
-              marginTop: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <McText h3>No events to display!</McText>
-          </View>
-        ) : (
-          <></>
-        )}
-        <View style={{ height: SIZES.tab_bar_height }} />
-      </ScrollView>
+      <EventToggler selectedUser={currentUser} eventsToPull={EVENT_TOGGLER.JoinedEvents}/>
     </SafeAreaView>
   );
 };
