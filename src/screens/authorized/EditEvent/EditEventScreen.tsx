@@ -160,7 +160,7 @@ const EditEventScreen = ({ navigation, route }) => {
 
     setLoading(true);
     const arrayInterests: Interest[] = Array.from(selectedInterests);
-    const updatedEventBase64 = updatedEvent;
+    const updatedEventBase64 = {...updatedEvent};
     updatedEventBase64.Picture = base64Image;
     updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
       .then(() => {

@@ -83,7 +83,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
       Username: username,
       Picture: image,
     };
-    const createdUserBase64 = createdUser;
+    const createdUserBase64 = {...createdUser};
     createdUserBase64.Picture = base64Image;
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
