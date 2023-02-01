@@ -115,12 +115,12 @@ const CreateEventScreen = ({ navigation, route }) => {
       NumShoutouts: 0,
     };
 
-    if (!checkIfEventIsFormatted(createdEvent)) {
-      displayError(
-        formatError("Input error", "Check that all of the fields are readable")
-      );
-      return;
-    }
+    // if (!checkIfEventIsFormatted(createdEvent)) {
+    //   displayError(
+    //     formatError("Input error", "Check that all of the fields are readable")
+    //   );
+    //   return;
+    // }
 
     console.log("start time:");
     console.log(createdEvent.StartDateTime.getTime());

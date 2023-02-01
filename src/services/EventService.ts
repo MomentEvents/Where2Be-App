@@ -6,6 +6,7 @@ import { formatError } from "../helpers/helpers";
 
 import { Platform } from 'react-native';
 // import RNFetchBlob from 'rn-fetch-blob';
+import * as FileSystem from 'expo-file-system';
 
 // import RNFS from 'react-native-fs';
 // import 
@@ -89,24 +90,12 @@ export async function createEvent(
   console.log(interestIDArray);
 
   // convert the image path to a File object
-  const ImagePath = createdEvent.Picture;
-  const fileUri = Platform.OS === 'ios' ? ImagePath.replace('file://', '') : ImagePath
-  const fileName = fileUri.substring(fileUri.lastIndexOf('/') + 1);
-  const fileType = fileName.substring(fileName.lastIndexOf('.') + 1);
+  const Image = createdEvent.Picture;
+  // const fileUri = Platform.OS === 'ios' ? ImagePath.replace('file://', '') : ImagePath
+  // const fileName = fileUri.substring(fileUri.lastIndexOf('/') + 1);
+  // const fileType = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-  // console.log("###########picture,",fileUri)
-
-  const img_response = await fetch(fileUri) //, 'base64');
-  const blob = await img_response.blob();
-
-  const file = new File([blob], fileName, { type: `image/${fileType}` });
-
-  // const file = new Blob([fileUri],{ type: `image/${fileType}` });
-
-  // let fileReader = new FileReader();
-
-  
-  // console.log("###########dataURI,",fileType, fileName)
+  // console.log("###########picture,",Image)
 
   // create FormData with the event data and the image file
   const formData = new FormData();
@@ -118,15 +107,9 @@ export async function createEvent(
   formData.append('end_date_time', createdEvent.EndDateTime.toISOString());
   formData.append('visibility', createdEvent.Visibility.toString());
   formData.append('interest_ids', JSON.stringify(interests.map((interest) => interest.Name)));
-  formData.append('picture', file);
+  formData.append('picture', Image);
 
   console.log("###########formData,",formData)
-
-  // formData.append('file', {
-  //   uri:fileUri,
-  //   type:fileType,
-  //   name:fileName,
-  // })
 
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/create_event`, {
     method: 'POST',

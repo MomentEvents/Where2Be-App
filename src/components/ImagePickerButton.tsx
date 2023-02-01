@@ -43,14 +43,15 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       allowsEditing: true,
       aspect: [4, 4],
       quality: 100,
+      base64: true,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      const { uri } = result as ImageInfo;
-      setCurrentImageURI(uri);
-      props.setImageURI(uri);
+      const { base64 } = result as ImageInfo;
+      setCurrentImageURI(base64);
+      props.setImageURI(base64);
     }
   };
 
