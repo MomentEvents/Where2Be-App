@@ -69,7 +69,7 @@ const EventDetailsScreen = ({ route }) => {
 
   const onSubmit = () => {
     setLoading(true);
-    const createdEventBase64 = createdEvent;
+    const createdEventBase64 = {...createdEvent};
     createdEventBase64.Picture = base64Image
     createEvent(userToken.UserAccessToken, createdEventBase64, interests)
       .then((eventID: string) => {

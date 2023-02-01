@@ -94,23 +94,40 @@ export async function createEvent(
   console.log(createdEvent.StartDateTime.toISOString());
 
   const interestIDArray = interests.map((interest) => interest.Name);
-  console.log(interestIDArray);
+
+  const formData = new FormData();
+  formData.append('user_access_token', userAccessToken);
+  formData.append('title', createdEvent.Title);
+  formData.append('description', createdEvent.Description);
+  formData.append('location', createdEvent.Location);
+  formData.append('start_date_time', createdEvent.StartDateTime.toISOString());
+  formData.append('end_date_time', createdEvent.EndDateTime.toISOString());
+  formData.append('visibility', createdEvent.Visibility.toString());
+  formData.append('interest_ids', JSON.stringify(interests.map((interest) => interest.Name)));
+  formData.append('picture', createdEvent.Picture);
+
+  // console.log("Base64 image ######"+createdEvent.Picture)
 
   const response = await fetch(momentAPI + `/event/create_event`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'multipart/form-data'
     },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      title: createdEvent.Title,
-      description: createdEvent.Description,
-      location: createdEvent.Location,
-      start_date_time: createdEvent.StartDateTime.toISOString(),
-      end_date_time: createdEvent.EndDateTime.toISOString(),
-      visibility: createdEvent.Visibility,
-      interest_ids: interestIDArray,
-    }),
+    body: formData
+    // headers: {
+    //   "Content-Type": "application/json",
+    // },
+    // body: JSON.stringify({
+    //   user_access_token: userAccessToken,
+    //   title: createdEvent.Title,
+    //   description: createdEvent.Description,
+    //   location: createdEvent.Location,
+    //   start_date_time: createdEvent.StartDateTime.toISOString(),
+    //   end_date_time: createdEvent.EndDateTime.toISOString(),
+    //   visibility: createdEvent.Visibility,
+    //   interest_ids: interestIDArray,
+    //   picture: createdEvent.Picture,
+    // }),
   });
   const data = await response.json();
 
@@ -149,8 +166,20 @@ export async function deleteEvent(
   userAccessToken: string,
 
   eventID: string
-): Promise<boolean> {
-  return null;
+): Promise<void> {
+
+  const response = await fetch(momentAPI + `/event/event_id/${eventID}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    }),
+  });
+  const data = await response.json();
+
+  return Promise.resolve(data);;
 }
 
 /******************************************************
