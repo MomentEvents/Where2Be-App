@@ -31,6 +31,8 @@ export const SOCIAL = "social";
 export async function getEvent(eventID: string): Promise<Event> {
   console.log(eventID)
 
+  return None;
+
   // need to send user Access token
 
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}`, {
@@ -101,7 +103,7 @@ export async function createEvent(
 
   // const file = new Blob([fileUri],{ type: `image/${fileType}` });
 
-  let fileReader = new FileReader();
+  // let fileReader = new FileReader();
 
   
   // console.log("###########dataURI,",fileType, fileName)
@@ -189,7 +191,7 @@ export async function deleteEvent(
 
 export async function getEventNumJoins(eventID: string): Promise<number> {
 
-  // return 0;
+  return 0;
 
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_joins/`, {
     method: 'GET'
@@ -201,7 +203,7 @@ export async function getEventNumJoins(eventID: string): Promise<number> {
 
 export async function getEventNumShoutouts(eventID: string): Promise<number> {
 
-  // return 0;
+  return 0;
   
   const response = await fetch(momentAPI+`/api_ver_1.0.0/event/event_id/${eventID}/num_shoutouts/`, {
     method: 'GET'
