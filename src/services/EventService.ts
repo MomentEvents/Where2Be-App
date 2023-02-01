@@ -106,7 +106,7 @@ export async function createEvent(
   formData.append('interest_ids', JSON.stringify(interests.map((interest) => interest.Name)));
   formData.append('picture', createdEvent.Picture);
 
-  // console.log("Base64 image ######"+createdEvent.Picture)
+  console.log("Form data ######"+formData)
 
   const response = await fetch(momentAPI + `/event/create_event`, {
     method: "POST",
@@ -177,9 +177,12 @@ export async function deleteEvent(
       user_access_token: userAccessToken,
     }),
   });
-  const data = await response.json();
+  if (!response.ok){
+    throw formatError("Error: "+response.status, response.statusText)
+  }
+  // const data = await response.json();
 
-  return Promise.resolve(data);;
+  return Promise.resolve();
 }
 
 /******************************************************
