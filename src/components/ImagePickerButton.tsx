@@ -10,6 +10,7 @@ type ImagePickerButtonProps = {
   width?: number;
   height?: number;
   setImageURI: React.Dispatch<React.SetStateAction<string>>;
+  setImageBase64: React.Dispatch<React.SetStateAction<string>>;
   style?: any;
 };
 
@@ -43,14 +44,16 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       allowsEditing: true,
       aspect: [4, 4],
       quality: 100,
+      base64: true,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      const { uri } = result as ImageInfo;
+      const { uri, base64 } = result as ImageInfo;
       setCurrentImageURI(uri);
       props.setImageURI(uri);
+      props.setImageBase64(base64)
     }
   };
 

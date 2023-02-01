@@ -35,6 +35,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 
 type routeParametersType = {
   createdEvent: Event;
+  base64Image: string;
   interests: Interest[];
 };
 
@@ -54,7 +55,7 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToInterests,
   } = useContext(EventContext);
 
-  const { createdEvent, interests } = propsFromEventCard;
+  const { createdEvent, interests, base64Image } = propsFromEventCard;
 
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
@@ -68,7 +69,9 @@ const EventDetailsScreen = ({ route }) => {
 
   const onSubmit = () => {
     setLoading(true);
-    createEvent(userToken.UserAccessToken, createdEvent, interests)
+    const createdEventBase64 = createdEvent;
+    createdEventBase64.Picture = base64Image
+    createEvent(userToken.UserAccessToken, createdEventBase64, interests)
       .then((eventID: string) => {
         setLoading(false);
         updateEventIDToEvent({ id: eventID, event: createdEvent });

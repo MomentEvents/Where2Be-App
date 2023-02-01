@@ -52,6 +52,7 @@ const CreateEventScreen = ({ navigation, route }) => {
   const [title, setTitle] = useState<string>();
   const [location, setLocation] = useState<string>();
   const [image, setImage] = useState<string>();
+  const [base64Image, setBase64Image] = useState<string>();
   const [date, setDate] = useState<Date>();
   const [desc, setDesc] = useState<string>();
   const [start, setStart] = useState<Date>();
@@ -149,6 +150,7 @@ const CreateEventScreen = ({ navigation, route }) => {
 
     Navigator.navigate(SCREENS.PreviewEvent, {
       createdEvent: createdEvent,
+      base64Image: base64Image,
       interests: Array.from(selectedInterests),
     });
   };
@@ -182,6 +184,7 @@ const CreateEventScreen = ({ navigation, route }) => {
               <ImagePickerButton
                 originalImageURI={image}
                 setImageURI={setImage}
+                setImageBase64={setBase64Image}
                 width={Math.min(SIZES.height, SIZES.width) - 150}
                 height={Math.min(SIZES.height, SIZES.width) - 150}
               />

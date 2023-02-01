@@ -39,7 +39,6 @@ import {
 import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
-import { updateEventInterestsByEventId } from "../../../services/InterestService";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -62,6 +61,7 @@ const EditEventScreen = ({ navigation, route }) => {
     eventIDToEvent[eventID].Location
   );
   const [image, setImage] = useState<string>(eventIDToEvent[eventID].Picture);
+  const [base64Image, setBase64Image] = useState<string>(null);
   const [date, setDate] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
   const [desc, setDesc] = useState<string>(eventIDToEvent[eventID].Description);
   const [start, setStart] = useState<Date>(
@@ -72,27 +72,11 @@ const EditEventScreen = ({ navigation, route }) => {
     new Set<Interest>(eventIDToInterests[eventID])
   );
 
-  // const [title, setTitle] = useState<string>();
-  // const [location, setLocation] = useState<string>(
-
-  // );
-  // const [image, setImage] = useState<string>();
-  // const [date, setDate] = useState<Date>();
-  // const [desc, setDesc] = useState<string>();
-  // const [start, setStart] = useState<Date>(
-
-  // );
-  // const [end, setEnd] = useState<Date>();
-  // const [selectedInterests, setSelectedInterests] = useState(
-  //   new Set<Interest>()
-  // );
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
   const [openedEndTimePicker, setOpenedEndTimePicker] =
     useState<boolean>(false);
   const [openedDatePicker, setOpenedDatePicker] = useState<boolean>(false);
-
-  useEffect(() => {}, []);
 
   const onStartTimePicked = (selectedTime: Date) => {
     var date = convertDateToUTC(selectedTime);
@@ -138,6 +122,8 @@ const EditEventScreen = ({ navigation, route }) => {
       Visibility: eventIDToEvent[eventID].Visibility,
       NumJoins: eventIDToEvent[eventID].NumJoins,
       NumShoutouts: eventIDToEvent[eventID].NumShoutouts,
+      UserJoin: eventIDToEvent[eventID].UserJoin,
+      UserShoutout: eventIDToEvent[eventID].UserShoutout,
     };
 
     if (!checkIfEventIsFormatted(updatedEvent)) {
@@ -174,7 +160,9 @@ const EditEventScreen = ({ navigation, route }) => {
 
     setLoading(true);
     const arrayInterests: Interest[] = Array.from(selectedInterests);
-    updateEvent(userToken.UserAccessToken, updatedEvent, arrayInterests)
+    const updatedEventBase64 = updatedEvent;
+    updatedEventBase64.Picture = base64Image;
+    updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
       .then(() => {
         updateEventIDToEvent({ id: eventID, event: updatedEvent });
         setLoading(false);
@@ -215,6 +203,7 @@ const EditEventScreen = ({ navigation, route }) => {
               <ImagePickerButton
                 originalImageURI={image}
                 setImageURI={setImage}
+                setImageBase64={setBase64Image}
                 width={Math.min(SIZES.height, SIZES.width) - 150}
                 height={Math.min(SIZES.height, SIZES.width) - 150}
               />

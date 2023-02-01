@@ -54,6 +54,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
   const { currentUser, setCurrentUser, userToken } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(currentUser.Picture);
+  const [base64Image, setBase64Image] = useState<string>(null);
 
   const [displayName, setDisplayName] = useState(currentUser.Name);
   const [username, setUsername] = useState(currentUser.Username);
@@ -64,7 +65,10 @@ const EditMyProfileScreen = ({ navigation, route }) => {
       return;
     }
 
-    if (!checkIfStringIsReadable(username) || !checkIfStringIsAlphanumeric(username)) {
+    if (
+      !checkIfStringIsReadable(username) ||
+      !checkIfStringIsAlphanumeric(username)
+    ) {
       Alert.alert("Error", "Please enter a valid username");
       return;
     }
@@ -78,20 +82,19 @@ const EditMyProfileScreen = ({ navigation, route }) => {
       Name: displayName,
       Username: username,
       Picture: image,
-    }
-    updateUser(
-      userToken.UserAccessToken,
-      createdUser,
-    )
+    };
+    const createdUserBase64 = createdUser;
+    createdUserBase64.Picture = base64Image;
+    updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
         const updatedUser: User = {
           UserID: currentUser.UserID,
           Name: displayName,
           Username: username,
-          Picture: image
-        }
-        setCurrentUser(updatedUser)
+          Picture: image,
+        };
+        setCurrentUser(updatedUser);
         Navigator.goBack();
       })
       .catch((error: Error) => {
@@ -106,7 +109,11 @@ const EditMyProfileScreen = ({ navigation, route }) => {
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
         leftButtonOnClick={() => Navigator.goBack()}
-        rightButtonSVG={<McText h3 color={COLORS.purple}>Save</McText>}
+        rightButtonSVG={
+          <McText h3 color={COLORS.purple}>
+            Save
+          </McText>
+        }
         rightButtonOnClick={() => handleSubmit()}
       />
       <KeyboardAwareScrollView>
@@ -116,6 +123,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
               height={width * 0.3}
               width={width * 0.3}
               setImageURI={setImage}
+              setImageBase64={setBase64Image}
               originalImageURI={image}
               style={{ borderRadius: 90 }}
             />
