@@ -15,8 +15,8 @@ import { UserResponse } from "../constants/types";
  * Return: The user object (if found. Null if not found.)
  */
 export async function getUser(UserID: string): Promise<User> {
-  const response = await fetch(momentAPI+`/user/user_id/${UserID}`, {
-    method: 'GET'
+  const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
+    method: "GET",
   });
   const data = await response.json();
 
@@ -42,10 +42,13 @@ export async function getUser(UserID: string): Promise<User> {
 export async function getUserByUserAccessToken(
   userAccessToken: string
 ): Promise<User> {
-  const response = await fetch(momentAPI+`/user/user_access_token/${userAccessToken}`, {
-    method: 'GET'
-  }).catch((error: Error) => {
-    throw formatError("Error", "Unable to get user by access token")
+  const response = await fetch(
+    momentAPI + `/user/user_access_token/${userAccessToken}`,
+    {
+      method: "GET",
+    }
+  ).catch((error: Error) => {
+    throw formatError("Error", "Unable to get user by access token");
   });
   const data = await response.json();
 
@@ -76,8 +79,9 @@ export async function getUserByUserAccessToken(
 export async function updateUser(
   userAccessToken: string,
 
-  updatedUser: User,
+  updatedUser: User
 ): Promise<void> {
+  //updatedUser.Picture is assumed to be base64
   return null;
 }
 
@@ -86,15 +90,14 @@ export async function getEventHostByEventId(
 
   eventID: string
 ): Promise<User> {
-
-  const response = await fetch(momentAPI+`/user/event_id/${eventID}/host`, {
-    method: 'POST',
+  const response = await fetch(momentAPI + `/user/event_id/${eventID}/host`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
+      user_access_token: userAccessToken,
+    }),
   });
   const data = await response.json();
 
@@ -114,19 +117,21 @@ export async function addUserJoinEvent(
 
   eventID: string
 ): Promise<void> {
-
-  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/join`, {
-    method: 'UPDATE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      did_join: true
-    })
-  });
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/join`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_join: true,
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 }
 
@@ -136,19 +141,21 @@ export async function removeUserJoinEvent(
 
   eventID: string
 ): Promise<void> {
-  
-  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/join`, {
-    method: 'UPDATE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      did_join: false
-    })
-  });
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/join`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_join: false,
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 }
 
@@ -158,19 +165,21 @@ export async function addUserShoutoutEvent(
 
   eventID: string
 ): Promise<void> {
-  
-  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
-    method: 'UPDATE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      did_shoutout: true
-    })
-  });
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/shoutout`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_shoutout: true,
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 }
 
@@ -180,19 +189,21 @@ export async function removeUserShoutoutEvent(
 
   eventID: string
 ): Promise<void> {
-  
-  const response = await fetch(momentAPI+`/user/user_id/${userID}/event_id/${eventID}/shoutout`, {
-    method: 'UPDATE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      did_shoutout: false
-    })
-  });
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/shoutout`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_shoutout: false,
+      }),
+    }
+  );
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 }
 
@@ -200,34 +211,33 @@ export async function getAllSchoolUsers(
   userAccessToken: string,
   schoolID: string
 ): Promise<User[]> {
-
-  console.log("Call to UserService: getAllSchoolUsers")
-  const response = await fetch(momentAPI+`/user/school_id/${schoolID}`, {
-    method: 'POST',
+  console.log("Call to UserService: getAllSchoolUsers");
+  const response = await fetch(momentAPI + `/user/school_id/${schoolID}`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       user_access_token: userAccessToken,
-    })
-  })
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+    }),
+  });
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 
-  const responseJSON = await response.json()
+  const responseJSON = await response.json();
 
-  console.log(responseJSON)
-  const userArray: User[] = []
+  console.log(responseJSON);
+  const userArray: User[] = [];
 
   responseJSON.forEach((user: UserResponse) => {
     userArray.push({
       UserID: user.user_id,
       Name: user.display_name,
       Username: user.username,
-      Picture: user.picture
+      Picture: user.picture,
     });
   });
 
-  return userArray
+  return userArray;
 }

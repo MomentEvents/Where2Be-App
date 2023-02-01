@@ -51,6 +51,8 @@ export async function getEvent(
   }
   const event: EventResponse = await response.json();
 
+  console.log(event)
+
   const pulledEvent: Event = {
     EventID: event.event_id,
     Title: event.title,
@@ -68,6 +70,7 @@ export async function getEvent(
     UserShoutout: event.user_shoutout,
   };
 
+  console.log(pulledEvent)
   return pulledEvent;
 }
 
@@ -92,28 +95,31 @@ export async function createEvent(
   interests: Interest[]
 ): Promise<string> {
   console.log(createdEvent.StartDateTime.toISOString());
-
-  const interestIDArray = interests.map((interest) => interest.Name);
+  console.log(createdEvent.EndDateTime.toISOString());
+  // createdEvent.Picture is assumed to be base64 string
 
   const formData = new FormData();
-  formData.append('user_access_token', userAccessToken);
-  formData.append('title', createdEvent.Title);
-  formData.append('description', createdEvent.Description);
-  formData.append('location', createdEvent.Location);
-  formData.append('start_date_time', createdEvent.StartDateTime.toISOString());
-  formData.append('end_date_time', createdEvent.EndDateTime.toISOString());
-  formData.append('visibility', createdEvent.Visibility.toString());
-  formData.append('interest_ids', JSON.stringify(interests.map((interest) => interest.Name)));
-  formData.append('picture', createdEvent.Picture);
+  formData.append("user_access_token", userAccessToken);
+  formData.append("title", createdEvent.Title);
+  formData.append("description", createdEvent.Description);
+  formData.append("location", createdEvent.Location);
+  formData.append("start_date_time", createdEvent.StartDateTime.toISOString());
+  formData.append("end_date_time", createdEvent.EndDateTime.toISOString());
+  formData.append("visibility", createdEvent.Visibility.toString());
+  formData.append(
+    "interest_ids",
+    JSON.stringify(interests.map((interest) => interest.Name))
+  );
+  formData.append("picture", createdEvent.Picture);
 
-  console.log("Form data ######"+formData)
+  console.log("Form data ######" + formData);
 
   const response = await fetch(momentAPI + `/event/create_event`, {
     method: "POST",
     headers: {
-      'Content-Type': 'multipart/form-data'
+      "Content-Type": "multipart/form-data",
     },
-    body: formData
+    body: formData,
     // headers: {
     //   "Content-Type": "application/json",
     // },
@@ -150,6 +156,7 @@ export async function updateEvent(
   updatedEvent: Event,
   updatedInterests: Interest[]
 ): Promise<void> {
+  // updatedEvent.Picture is assumed to be base64 string
   return Promise.resolve();
 }
 
@@ -167,7 +174,6 @@ export async function deleteEvent(
 
   eventID: string
 ): Promise<void> {
-
   const response = await fetch(momentAPI + `/event/event_id/${eventID}`, {
     method: "DELETE",
     headers: {
@@ -177,8 +183,8 @@ export async function deleteEvent(
       user_access_token: userAccessToken,
     }),
   });
-  if (!response.ok){
-    throw formatError("Error: "+response.status, response.statusText)
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
   // const data = await response.json();
 
@@ -411,8 +417,8 @@ export async function getAllSchoolEvents(
 
   const responseJSON = await response.json();
 
-  console.log("getAllSchoolEvents")
-  console.log(responseJSON)
+  console.log("getAllSchoolEvents");
+  console.log(responseJSON);
   const EventArray: Event[] = [];
   responseJSON.forEach((event: EventResponse) => {
     EventArray.push({
