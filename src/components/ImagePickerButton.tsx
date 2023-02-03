@@ -40,17 +40,14 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
           const response = await fetch(result.uri);
           const blob = await response.blob();
           const reader = new FileReader();
-          const base64: string = async (): Promise<string> => {
-            const response = await fetch(result.uri);
-            const blob = await response.blob();
-            const reader = new FileReader();
+          const dataURL = await new Promise((resolve) => {
             reader.onload = function() {
-              const base64 = reader.result.toString().split(',')[1];
-              Promise.resolve(base64);
+              resolve(reader.result);
             };
             reader.readAsDataURL(blob);
-          }
-
+          });
+          const base64 = dataURL.toString().split(',')[1];
+          
           didPick = true;
           imgUri = result.uri;
           imgBase64 = base64;
