@@ -31,6 +31,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 type RouteParams = {
   school: School;
 };
@@ -60,7 +61,7 @@ const IntroduceEventsScreen = ({ navigation, route }) => {
         <EventViewer school={school}></EventViewer>
         <TouchableOpacity
           style={styles.hoverButtonContainer}
-          onPress={navigateToLogin}
+          onPressOut={navigateToLogin}
         >
           <GradientButton style={styles.hoverButtonIconContainer}>
             <icons.login height="50%" width="50%"></icons.login>
@@ -75,7 +76,7 @@ export default IntroduceEventsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black
+    backgroundColor: COLORS.black,
   },
   categoryTitle: {
     marginLeft: 20,

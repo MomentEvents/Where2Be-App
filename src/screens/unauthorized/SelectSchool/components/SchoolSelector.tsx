@@ -104,6 +104,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             backgroundColor: COLORS.white,
             borderColor: COLORS.white,
             borderRadius: 5,
+            borderWidth: 0,
           }}
           initValueTextStyle={{
             color: COLORS.black,

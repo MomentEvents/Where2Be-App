@@ -47,7 +47,7 @@ const ExploreEvents = ({ navigation, route }) => {
       <EventViewer school={currentSchool}/>
       <TouchableOpacity
         style={styles.hoverButtonContainer}
-        onPress={() => {
+        onPressOut={() => {
           Navigator.navigate(SCREENS.CreateEvent);
         }}
       >
