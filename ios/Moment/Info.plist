@@ -52,6 +52,8 @@
         </dict>
       </dict>
     </dict>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Moment needs access to your photos for posting events</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

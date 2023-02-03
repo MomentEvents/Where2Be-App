@@ -4,7 +4,8 @@ import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McIcon } from "./Styled";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
-import * as Permissions from 'expo-permissions';
+import { PermissionsAndroid } from "react-native";
+import * as DocumentPicker from "expo-document-picker";
 
 type ImagePickerButtonProps = {
   originalImageURI?: string;
@@ -26,27 +27,59 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const height = props.height ? props.height : defaultWidthHeight;
 
   const pickImage = async () => {
+    var didPick = false;
+    var imgUri: string = undefined;
+    var imgBase64: string = undefined;
 
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status !== 'granted') {
-      console.error('Camera roll permission not granted');
+    if (Platform.OS === "android") {
+      try {
+        const result = await DocumentPicker.getDocumentAsync({
+          type: "image/*",
+        });
+        if (result.type === "success") {
+          const response = await fetch(result.uri);
+          const blob = await response.blob();
+          const reader = new FileReader();
+          const base64: string = async (): Promise<string> => {
+            const response = await fetch(result.uri);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onload = function() {
+              const base64 = reader.result.toString().split(',')[1];
+              Promise.resolve(base64);
+            };
+            reader.readAsDataURL(blob);
+          }
+
+          didPick = true;
+          imgUri = result.uri;
+          imgBase64 = base64;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 100,
+        base64: true,
+      });
+      if (!result.cancelled) {
+        const { uri, base64 } = result as ImageInfo;
+        didPick = true;
+        imgUri = uri;
+        imgBase64 = base64;
+      }
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 100,
-      base64: true,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      const { uri, base64 } = result as ImageInfo;
-      setCurrentImageURI(uri);
-      props.setImageURI(uri);
-      props.setImageBase64(base64)
+    if (didPick) {
+      setCurrentImageURI(imgUri);
+      console.log(imgUri);
+      props.setImageURI(imgUri);
+      console.log(imgBase64);
+      props.setImageBase64(imgBase64);
     }
   };
 
@@ -76,10 +109,16 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
           }}
         />
       ) : (
-        <View style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center", borderRadius: 5 }}>
-          <icons.imagepickeraddimage
-            height={Math.min(height / 3, width / 3)}
-          />
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 5,
+          }}
+        >
+          <icons.imagepickeraddimage height={Math.min(height / 3, width / 3)} />
         </View>
       )}
     </TouchableOpacity>
