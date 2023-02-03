@@ -166,6 +166,7 @@ const SearchToggler = () => {
               color: COLORS.white,
               fontSize: 16,
             }}
+            placeholderTextColor={COLORS.lightGray}
           />
         </View>
       </View>
