@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { COLORS, SCREENS, SIZES, icons } from "../constants";
@@ -80,7 +80,7 @@ const TabNavigator = ({ params }) => {
           opacity: 1,
           borderTopColor: COLORS.gray2,
           borderTopWidth: StyleSheet.hairlineWidth,
-          height: SIZES.tab_bar_height,
+          height: Platform.OS === 'ios' ? SIZES.tab_bar_height : SIZES.tab_bar_height - 20,
           borderTopRightRadius: 0,
           borderTopLeftRadius: 0,
         },

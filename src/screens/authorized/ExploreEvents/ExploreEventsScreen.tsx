@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Button,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     right: 40,
-    bottom: 20 + SIZES.tab_bar_height,
+    bottom: Platform.OS === 'ios' ? SIZES.tab_bar_height + 20 : SIZES.tab_bar_height,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

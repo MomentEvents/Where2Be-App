@@ -15,6 +15,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import * as Navigator from "../../../navigation/Navigator";
 import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const SettingsScreen = () => {
 
@@ -58,7 +59,7 @@ const SettingsScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView>
       <SectionHeader
         title={"Settings"}
         leftButtonSVG={<icons.backarrow />}
@@ -95,7 +96,7 @@ const SettingsScreen = () => {
           style={styles.horizontalSeparator}
         />
       </ScrollView>
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 

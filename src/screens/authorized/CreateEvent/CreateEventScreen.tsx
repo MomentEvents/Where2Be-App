@@ -40,6 +40,7 @@ import {
 import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -156,7 +157,7 @@ const CreateEventScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView>
       <SectionHeader
         title={"Create Event"}
         leftButtonOnClick={() => {
@@ -168,7 +169,7 @@ const CreateEventScreen = ({ navigation, route }) => {
         }}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>
-            Next
+            Save
           </McText>
         }
       />
@@ -329,7 +330,7 @@ const CreateEventScreen = ({ navigation, route }) => {
         onConfirm={onEndTimePicked}
         onCancel={() => setOpenedEndTimePicker(false)}
       />
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 

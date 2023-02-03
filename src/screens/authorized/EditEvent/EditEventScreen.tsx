@@ -39,6 +39,7 @@ import {
 import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -176,7 +177,7 @@ const EditEventScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView>
       <SectionHeader
         title={"Edit Event"}
         leftButtonOnClick={() => {
@@ -354,7 +355,7 @@ const EditEventScreen = ({ navigation, route }) => {
         onConfirm={onEndTimePicked}
         onCancel={() => setOpenedEndTimePicker(false)}
       />
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 
