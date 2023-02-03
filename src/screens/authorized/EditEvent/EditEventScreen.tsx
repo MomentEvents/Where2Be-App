@@ -165,6 +165,7 @@ const EditEventScreen = ({ navigation, route }) => {
     updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
       .then(() => {
         updateEventIDToEvent({ id: eventID, event: updatedEvent });
+        updateEventIDToInterests({id: eventID, interests: arrayInterests})
         setLoading(false);
         Navigator.goBack();
       })

@@ -4,6 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McIcon } from "./Styled";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
+import * as Permissions from 'expo-permissions';
 
 type ImagePickerButtonProps = {
   originalImageURI?: string;
@@ -25,19 +26,11 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const height = props.height ? props.height : defaultWidthHeight;
 
   const pickImage = async () => {
-    // // No permissions request is necessary for launching the image library
-    // const permissions = 'Permissions.CAMERA_ROLL';
-    // const { status } = await Permissions.askAsync(permissions);
-    // type imagePickerResult = {
-    //     assetId: string,
-    //     cancelled: boolean,
-    //     fileName: string,
-    //     fileSize: number,
-    //     height: number,
-    //     type: string,
-    //     uri: string,
-    //     width: number
-    // }
+
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      console.error('Camera roll permission not granted');
+    }
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,

@@ -3801,6 +3801,11 @@
     "fs-extra" "^9.1.0"
     "uuid" "^3.4.0"
 
+"expo-permissions@^14.0.0":
+  "integrity" "sha512-z/1u4Kt5AhzFEB/4LjJxNE+pDX8YijjhGaokNchPNwjjn3W1f+o4JQVdZBPS2TwRpFEXbrBSTUSalxijlJKGmw=="
+  "resolved" "https://registry.npmjs.org/expo-permissions/-/expo-permissions-14.0.0.tgz"
+  "version" "14.0.0"
+
 "expo-splash-screen@~0.16.2":
   "integrity" "sha512-AHSRyGwu58WNt8shW5g/4cQ9e9IzUwNTC/WGWxshHCwgbWIJmHLvK3+D45MTmzGWteOoTI8oV7KSQKBNJSTiyw=="
   "resolved" "https://registry.npmjs.org/expo-splash-screen/-/expo-splash-screen-0.16.2.tgz"
