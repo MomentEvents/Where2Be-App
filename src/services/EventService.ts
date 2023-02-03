@@ -157,6 +157,34 @@ export async function updateEvent(
   updatedInterests: Interest[]
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string
+  console.log(updatedEvent.StartDateTime.toISOString());
+  console.log(updatedEvent.EndDateTime.toISOString());
+  // createdEvent.Picture is assumed to be base64 string
+
+  const formData: FormData = new FormData();
+  formData.append("user_access_token", userAccessToken);
+  formData.append("title", updatedEvent.Title);
+  formData.append("description", updatedEvent.Description);
+  formData.append("location", updatedEvent.Location);
+  formData.append("start_date_time", updatedEvent.StartDateTime.toISOString());
+  formData.append("end_date_time", updatedEvent.EndDateTime.toISOString());
+  formData.append("visibility", updatedEvent.Visibility.toString());
+  formData.append(
+    "interest_ids",
+    JSON.stringify(updatedInterests.map((interest) => interest.Name))
+  );
+  formData.append("picture", updatedEvent.Picture);
+
+  console.log(updatedEvent.Picture)
+
+  const response = await fetch(momentAPI + `/event/event_id/${updatedEvent.EventID}`, {
+    method: "UPDATE",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    body: formData,
+  });
+
   return Promise.resolve();
 }
 
