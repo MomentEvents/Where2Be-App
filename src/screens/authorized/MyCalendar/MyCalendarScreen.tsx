@@ -35,7 +35,7 @@ const MyCalendarScreen = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <SectionHeader title={"Joined Events"} />
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: COLORS.black}}>
         <EventToggler
           selectedUser={currentUser}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   buttonToggleContainer: {
     flexDirection: "row",
-    backgroundColor: COLORS.trueBlack,
+    backgroundColor: COLORS.black,
   },
   toggleButton: {
     width: SIZES.width * 0.5,

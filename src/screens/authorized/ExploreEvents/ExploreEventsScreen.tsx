@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   hoverButtonContainer: {
     flex: 1,
     position: "absolute",
-    right: 40,
+    right: 20,
     bottom: Platform.OS === 'ios' ? SIZES.tab_bar_height + 20 : SIZES.tab_bar_height,
     borderRadius: 10,
   },
@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 90,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
   },

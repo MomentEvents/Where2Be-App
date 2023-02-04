@@ -311,7 +311,7 @@ const EventDetailsScreen = ({ route }) => {
   }, [host]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ImageView
         images={[
           {
@@ -348,10 +348,10 @@ const EventDetailsScreen = ({ route }) => {
             }}
             style={{
               width: "100%",
-              height: SIZES.height * 0.3,
+              height: SIZES.height * 0.37,
             }}
           >
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : 50 }}>
               <ImageHeaderSection>
                 <TouchableOpacity
                   onPress={() => {
@@ -812,7 +812,7 @@ const EventDetailsScreen = ({ route }) => {
           )}
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

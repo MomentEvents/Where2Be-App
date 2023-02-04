@@ -172,9 +172,9 @@ const EventCard = ({
             }}
           >
             <LinearGradient
-              colors={["transparent", COLORS.trueBlack]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1.1 }}
+              colors={["transparent",COLORS.transparentBlack,COLORS.transparentBlack]}
+              start={{ x: 0, y: 0.4 }}
+              end={{ x: 0, y: 1.3 }}
               style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
             ></LinearGradient>
 
@@ -348,8 +348,8 @@ const EventCard = ({
           }}
         >
           <LinearGradient
-            colors={["transparent", COLORS.trueBlack]}
-            start={{ x: 0, y: 0 }}
+            colors={["transparent",COLORS.transparentBlack, COLORS.trueBlack]}
+            start={{ x: 0, y: 0.4 }}
             end={{ x: 0, y: 1.1 }}
             style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
           ></LinearGradient>

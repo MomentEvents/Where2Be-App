@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   toggleButton: {
     width: SIZES.width * 0.5,
     height: 40,
+    backgroundColor: COLORS.trueBlack
   },
   editProfileButtonContainer: {
     borderRadius: 5,

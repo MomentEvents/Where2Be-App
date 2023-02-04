@@ -143,14 +143,15 @@ const EventToggler = (props: EventTogglerProps) => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: isFutureToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: isFutureToggle ? COLORS.purple : COLORS.trueBlack,
+            borderWidth: isFutureToggle ? 1 : 0,
+            borderColor: 'transparent',
+            borderBottomColor: isFutureToggle ? COLORS.purple : COLORS.trueBlack,
+            backgroundColor: 'transparent',
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(true)}
         >
-          <McText h3 color={isFutureToggle ? COLORS.white : COLORS.purple}>
+          <McText h3 color={isFutureToggle ? COLORS.purple : COLORS.white}>
             Upcoming
           </McText>
         </TouchableOpacity>
@@ -158,14 +159,15 @@ const EventToggler = (props: EventTogglerProps) => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: !isFutureToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: !isFutureToggle ? COLORS.purple : COLORS.trueBlack,
+            borderWidth: !isFutureToggle ? 1 : 0,
+            borderColor: 'transparent',
+            borderBottomColor: isFutureToggle ? COLORS.trueBlack : COLORS.purple,
+            backgroundColor: 'transparent',
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(false)}
         >
-          <McText h3 color={!isFutureToggle ? COLORS.white : COLORS.purple}>
+          <McText h3 color={!isFutureToggle ? COLORS.purple : COLORS.white}>
             Previous
           </McText>
         </TouchableOpacity>
