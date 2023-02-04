@@ -59,7 +59,7 @@ export const SIZES = {
   // app dimensions
   width,
   height,
-  tab_bar_height: 80,
+  tab_bar_height: Platform.OS === 'ios' ? 80 : 60,
 };
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},

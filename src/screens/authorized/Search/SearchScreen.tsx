@@ -18,7 +18,6 @@ const SearchScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1 }}>
-        <SectionHeader title={"Search"} />
         <SearchToggler />
       </View>
     </SafeAreaView>
@@ -29,12 +28,13 @@ export default SearchScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
     flex: 1,
   },
   searchContainer: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+    backgroundColor: COLORS.black
   },
 });

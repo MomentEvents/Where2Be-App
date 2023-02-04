@@ -20,7 +20,7 @@ const SectionHeader = (props: sectionHeaderProps) => {
         flexDirection: "row",
         borderBottomWidth: .3,
         borderColor: COLORS.gray2,
-        backgroundColor: COLORS.black,
+        backgroundColor: 'transparent',
       }}
     >
       {props.leftButtonSVG && props.leftButtonOnClick? (

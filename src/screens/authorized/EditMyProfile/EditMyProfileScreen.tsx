@@ -46,6 +46,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import * as Navigator from "../../../navigation/Navigator";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -103,7 +104,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView style={styles.container}>
       <SectionHeader
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
@@ -171,7 +172,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 

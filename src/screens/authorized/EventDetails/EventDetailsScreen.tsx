@@ -323,6 +323,8 @@ const EventDetailsScreen = ({ route }) => {
         ]}
         imageIndex={0}
         visible={imageViewVisible}
+        backgroundColor="#101010"
+        presentationStyle= {Platform.OS === 'ios' ? 'fullScreen' : 'overFullScreen'}
         onRequestClose={() => setImageViewVisible(false)}
       />
       <View style={{ height: "100%", position: "relative" }}>
@@ -348,7 +350,7 @@ const EventDetailsScreen = ({ route }) => {
             }}
             style={{
               width: "100%",
-              height: SIZES.height * 0.37,
+              height: SIZES.height * 0.45,
             }}
           >
             <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : 50 }}>
@@ -669,8 +671,8 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   alignItems: "center",
                   paddingHorizontal: 20,
-                  shadowColor: "#B66DFF",
-                  shadowRadius: 10,
+                  // shadowColor: "#B66DFF",
+                  // shadowRadius: 10,
                   // shadowOpacity: eventIDToDidJoin[eventID] ? 1 : 0,
                   // shadowOffset: { width: 0, height: 0 },
                 }}
@@ -722,7 +724,7 @@ const EventDetailsScreen = ({ route }) => {
                 >
                   Join
                 </McText>
-                <McText
+                {/* <McText
                   body2
                   style={{
                     color: eventIDToEvent[eventID].UserJoin
@@ -731,7 +733,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {eventIDToEvent[eventID].NumJoins}
-                </McText>
+                </McText> */}
               </View>
               <View
                 style={{
@@ -795,7 +797,7 @@ const EventDetailsScreen = ({ route }) => {
                 >
                   Shoutout
                 </McText>
-                <McText
+                {/* <McText
                   body2
                   style={{
                     color: eventIDToEvent[eventID].UserShoutout
@@ -804,7 +806,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {eventIDToEvent[eventID].NumShoutouts}
-                </McText>
+                </McText> */}
               </View>
             </UserOptionsSection>
           ) : (
@@ -830,10 +832,10 @@ const styles = StyleSheet.create({
   userControlContainer: {
     flex: 1,
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     left: 10,
     right: 10,
-    height: 140,
+    height: 100,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(100,100,100,.95)",

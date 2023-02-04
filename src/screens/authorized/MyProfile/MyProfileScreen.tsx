@@ -56,10 +56,10 @@ export default MyProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   profileContainer: {
-    backgroundColor: COLORS.trueBlack,
+    backgroundColor: COLORS.black,
     flexDirection: "row",
   },
   imageContainer: {
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
   },
   buttonToggleContainer: {
     flexDirection: "row",
-    backgroundColor: COLORS.trueBlack,
+    backgroundColor: COLORS.black,
   },
   toggleButton: {
     width: SIZES.width * 0.5,
     height: 40,
-    backgroundColor: COLORS.trueBlack
+    backgroundColor: COLORS.black
   },
   editProfileButtonContainer: {
     borderRadius: 5,

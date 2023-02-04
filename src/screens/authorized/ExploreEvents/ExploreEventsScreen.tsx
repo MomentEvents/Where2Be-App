@@ -64,7 +64,7 @@ export default ExploreEvents;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   hoverButtonContainer: {
     flex: 1,

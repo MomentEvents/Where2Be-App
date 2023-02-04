@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Platform,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -144,22 +145,22 @@ const SearchToggler = () => {
   }, [isEventsToggle]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ backgroundColor: COLORS.black }}>
+    <View style={{ flex: 1, marginTop: -20, backgroundColor:COLORS.black }}>
+      <View style={{ backgroundColor: COLORS.trueBlack }}>
         <View
           style={{
             width: "90%",
             backgroundColor: "rgba(80,80,80,.90)",
-            borderRadius: 5,
+            borderRadius: 15,
             paddingHorizontal: 10,
-            paddingVertical: 10,
+            paddingVertical: Platform.OS === 'ios' ? 10 : 5,
             marginVertical: 20,
             justifyContent: "center",
             alignSelf: "center",
           }}
         >
           <TextInput
-            placeholder="Search..."
+            placeholder="Search"
             onChangeText={searchQuery}
             style={{
               fontFamily: CUSTOMFONT_REGULAR,
@@ -172,7 +173,7 @@ const SearchToggler = () => {
       </View>
       <View
         style={{
-          backgroundColor: isEventsToggle ? COLORS.black : COLORS.white,
+          backgroundColor: COLORS.trueBlack,
           ...styles.buttonToggleContainer,
         }}
       >
@@ -180,16 +181,17 @@ const SearchToggler = () => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: isEventsToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            borderWidth: 1,
+            borderColor: "transparent",
+            borderBottomColor: isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            backgroundColor: COLORS.trueBlack,
             ...styles.toggleButton,
           }}
           onPress={() => {
             setIsEventsToggle(true);
           }}
         >
-          <McText h3 color={isEventsToggle ? COLORS.white : COLORS.purple}>
+          <McText h3 color={isEventsToggle ? COLORS.purple : COLORS.white}>
             Events
           </McText>
         </TouchableOpacity>
@@ -197,16 +199,17 @@ const SearchToggler = () => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: !isEventsToggle ? 0 : 1,
-            borderColor: COLORS.purple,
-            backgroundColor: !isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            borderWidth: 1,
+            borderColor: 'transparent',
+            borderBottomColor: !isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            backgroundColor: COLORS.trueBlack,
             ...styles.toggleButton,
           }}
           onPress={() => {
             setIsEventsToggle(false);
           }}
         >
-          <McText h3 color={!isEventsToggle ? COLORS.white : COLORS.purple}>
+          <McText h3 color={!isEventsToggle ? COLORS.purple : COLORS.white}>
             Users
           </McText>
         </TouchableOpacity>

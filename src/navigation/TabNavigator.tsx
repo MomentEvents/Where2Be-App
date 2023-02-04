@@ -22,9 +22,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activehome height={32}></icons.activehome>
+            <icons.activehome height={Platform.OS === 'ios' ? 32 : 20}></icons.activehome>
           ) : (
-            <icons.inactivehome height={32}></icons.inactivehome>
+            <icons.inactivehome height={Platform.OS === 'ios' ? 32 : 20}></icons.inactivehome>
           )}
         </View>
       );
@@ -32,9 +32,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activesearch height={32}></icons.activesearch>
+            <icons.activesearch height={Platform.OS === 'ios' ? 32 : 20}></icons.activesearch>
           ) : (
-            <icons.inactivesearch height={32}></icons.inactivesearch>
+            <icons.inactivesearch height={Platform.OS === 'ios' ? 32 : 20}></icons.inactivesearch>
           )}
         </View>
       );
@@ -42,9 +42,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activefavorite height={32}></icons.activefavorite>
+            <icons.activefavorite height={Platform.OS === 'ios' ? 32 : 20}></icons.activefavorite>
           ) : (
-            <icons.inactivefavorite height={32}></icons.inactivefavorite>
+            <icons.inactivefavorite height={Platform.OS === 'ios' ? 32 : 20}></icons.inactivefavorite>
           )}
         </View>
       );
@@ -52,9 +52,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activeprofile height={32}></icons.activeprofile>
+            <icons.activeprofile height={Platform.OS === 'ios' ? 32 : 20}></icons.activeprofile>
           ) : (
-            <icons.inactiveprofile height={32}></icons.inactiveprofile>
+            <icons.inactiveprofile height={Platform.OS === 'ios' ? 32 : 20}></icons.inactiveprofile>
           )}
         </View>
       );

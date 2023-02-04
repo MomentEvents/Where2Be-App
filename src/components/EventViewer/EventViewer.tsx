@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { SIZES, School, Event, Interest, SCREENS } from "../../constants";
+import { SIZES, School, Event, Interest, SCREENS, COLORS } from "../../constants";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
@@ -77,6 +77,7 @@ const EventViewer = (props: EventViewerProps) => {
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
       }
+      style={{backgroundColor:COLORS.black}}
     >
       {isLoadingEvents && !isRefreshing && (
         <ActivityIndicator style={{ marginTop: 20 }} size={"small"} />
@@ -120,9 +121,11 @@ export default EventViewer;
 const styles = StyleSheet.create({
   categoryTitle: {
     marginLeft: 20,
+    backgroundColor: COLORS.black
   },
   flatlistContainer: {
     marginTop: 15,
     marginBottom: 20,
+    backgroundColor: COLORS.black
   },
 });

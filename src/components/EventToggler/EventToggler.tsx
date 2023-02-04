@@ -178,6 +178,7 @@ const EventToggler = (props: EventTogglerProps) => {
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
+        style={{backgroundColor: COLORS.black}}
       >
         {isFutureToggle ? (
           pulledFutureEvents ? (
