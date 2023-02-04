@@ -353,7 +353,7 @@ const EventDetailsScreen = ({ route }) => {
               height: SIZES.height * 0.45,
             }}
           >
-            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : 50 }}>
+            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : SIZES.tab_bar_height/2 }}>
               <ImageHeaderSection>
                 <TouchableOpacity
                   onPress={() => {
@@ -835,7 +835,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 10,
     right: 10,
-    height: 100,
+    height: 110,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(100,100,100,.95)",

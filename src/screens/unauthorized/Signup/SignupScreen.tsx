@@ -89,7 +89,7 @@ const SignupScreen = () => {
                 <McText
                   h4
                   style={{
-                    color: COLORS.black,
+                    color: COLORS.white,
                   }}
                 >
                   Signup
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.purple,
     marginTop: 30,
     marginBottom: 60,
   },

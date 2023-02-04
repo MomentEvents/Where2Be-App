@@ -53,7 +53,7 @@ export default ProfileDetailsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   profileContainer: {
     height: 120,

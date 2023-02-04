@@ -18,6 +18,7 @@ const UserResult = (props: UserResultProps) => {
         width: "100%",
         paddingVertical: 10,
         paddingHorizontal: 15,
+        marginLeft:10,
         justifyContent: "center",
         backgroundColor: COLORS.black
       }}
@@ -37,7 +38,7 @@ const UserResult = (props: UserResultProps) => {
           <View
             style={{
               marginRight: 20,
-              marginLeft: 30,
+              marginLeft: 15,
               flex: 1,
               flexWrap: "wrap",
               justifyContent: "center"
@@ -46,7 +47,7 @@ const UserResult = (props: UserResultProps) => {
             <McText h3 numberOfLines={1}>
                 {props.user.Name}
             </McText>
-            <McText b5 numberOfLines={1}>
+            <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
             </McText>
           </View>
