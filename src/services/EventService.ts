@@ -185,6 +185,10 @@ export async function updateEvent(
     body: formData,
   });
 
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
+
   return Promise.resolve();
 }
 

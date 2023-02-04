@@ -82,7 +82,24 @@ export async function updateUser(
   updatedUser: User
 ): Promise<void> {
   //updatedUser.Picture is assumed to be base64
-  return null;
+  const formData: FormData = new FormData();
+  formData.append("user_access_token", userAccessToken);
+  formData.append("display_name", updatedUser.Name);
+  formData.append("username", updatedUser.Username);
+  formData.append("picture", updatedUser.Picture);
+
+  const response = await fetch(momentAPI + `/user/user_id/${updatedUser.UserID}`, {
+    method: "UPDATE",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    body: formData,
+  });
+  if(!response.ok){
+    throw formatError("Error: " + response.status, response.statusText)
+  }
+
+  return Promise.resolve();
 }
 
 export async function getEventHostByEventId(

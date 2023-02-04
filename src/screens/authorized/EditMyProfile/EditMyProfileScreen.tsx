@@ -75,8 +75,6 @@ const EditMyProfileScreen = ({ navigation, route }) => {
 
     // Update information
 
-    setLoading(true);
-
     const createdUser: User = {
       UserID: currentUser.UserID,
       Name: displayName,
@@ -85,6 +83,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
     };
     const createdUserBase64 = {...createdUser};
     createdUserBase64.Picture = base64Image;
+    setLoading(true);
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
