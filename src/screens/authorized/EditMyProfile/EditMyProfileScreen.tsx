@@ -47,13 +47,14 @@ import * as Navigator from "../../../navigation/Navigator";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { ScreenContext } from "../../../contexts/ScreenContext";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 const EditMyProfileScreen = ({ navigation, route }) => {
   const { currentUser, setCurrentUser, userToken } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
+  const {setLoading} = useContext(ScreenContext)
   const [image, setImage] = useState(currentUser.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
 
@@ -84,17 +85,11 @@ const EditMyProfileScreen = ({ navigation, route }) => {
     };
     const createdUserBase64 = {...createdUser};
     createdUserBase64.Picture = base64Image;
-    setLoading(true);
+    setLoading(true)
     updateUser(userToken.UserAccessToken, createdUserBase64)
-      .then(() => {
+      .then((pulledUser: User) => {
         setLoading(false);
-        const updatedUser: User = {
-          UserID: currentUser.UserID,
-          Name: displayName,
-          Username: username,
-          Picture: image,
-        };
-        setCurrentUser(updatedUser);
+        setCurrentUser(pulledUser);
         Navigator.goBack();
       })
       .catch((error: Error) => {

@@ -18,16 +18,16 @@ export async function getUser(UserID: string): Promise<User> {
   const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
     method: "GET",
   });
-  const data = await response.json();
+  const data: UserResponse = await response.json();
 
   const pulledUser: User = {
-    UserID: data["UserID"],
-    Name: data["Name"],
-    Username: data["Username"],
-    Picture: data["Picture"],
+    UserID: data.user_id,
+    Name: data.display_name,
+    Username: data.username,
+    Picture: data.picture,
   };
-
-  return pulledUser;
+  
+  return Promise.resolve(pulledUser);
 }
 
 /******************************************************
@@ -80,7 +80,7 @@ export async function updateUser(
   userAccessToken: string,
 
   updatedUser: User
-): Promise<void> {
+): Promise<User> {
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -102,7 +102,16 @@ export async function updateUser(
     throw formatError("Error: " + response.status, response.statusText);
   }
 
-  return Promise.resolve();
+  const responseJSON: UserResponse = await response.json();
+
+  const pulledUser: User = {
+    UserID: responseJSON.user_id,
+    Name: responseJSON.display_name,
+    Username: responseJSON.username,
+    Picture: responseJSON.picture,
+  }
+
+  return Promise.resolve(pulledUser)
 }
 
 export async function deleteUser(

@@ -27,14 +27,21 @@ import { displayError } from "../../../helpers/helpers";
 import SectionProfile from "../../../components/Styled/SectionProfile";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { getUser } from "../../../services/UserService";
 
 type ProfileDetailsRouteParams = {
   User: User;
 };
 const ProfileDetailsScreen = ({ route }) => {
   const { User }: ProfileDetailsRouteParams = route.params;
-
+  const [viewedUser, setViewedUser] = useState<User>(User)
   const { isAdmin } = useContext(UserContext)
+
+  useEffect(() => {
+    getUser(User.UserID).then((pulledUser: User) => {
+      setViewedUser(pulledUser)
+    })
+  }, [])
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
@@ -45,7 +52,7 @@ const ProfileDetailsScreen = ({ route }) => {
         }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={User} canEditProfile={false} canNukeUser={isAdmin}/>
+      <SectionProfile user={viewedUser} canEditProfile={false} canNukeUser={isAdmin}/>
       <EventToggler selectedUser={User} eventsToPull={EVENT_TOGGLER.HostedEvents}/>
     </MobileSafeView>
   );
