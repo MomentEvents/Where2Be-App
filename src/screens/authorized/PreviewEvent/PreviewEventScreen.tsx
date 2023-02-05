@@ -26,12 +26,11 @@ import ImageView from "react-native-image-viewing";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
-import {
-  createEvent,
-} from "../../../services/EventService";
+import { createEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -69,8 +68,8 @@ const EventDetailsScreen = ({ route }) => {
 
   const onSubmit = () => {
     setLoading(true);
-    const createdEventBase64 = {...createdEvent};
-    createdEventBase64.Picture = base64Image
+    const createdEventBase64 = { ...createdEvent };
+    createdEventBase64.Picture = base64Image;
     createEvent(userToken.UserAccessToken, createdEventBase64, interests)
       .then((eventID: string) => {
         setLoading(false);
@@ -95,7 +94,18 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <MobileSafeView isBottomViewable={true} style={styles.container}>
+      <SectionHeader
+        title={"Preview Event"}
+        leftButtonOnClick={onBackPressed}
+        leftButtonSVG={<icons.backarrow />}
+        rightButtonOnClick={onSubmit}
+        rightButtonSVG={
+          <McText h3 color={COLORS.purple}>
+            Post
+          </McText>
+        }
+      />
       <ImageView
         images={[
           {
@@ -106,76 +116,86 @@ const EventDetailsScreen = ({ route }) => {
         visible={imageViewVisible}
         onRequestClose={() => setImageViewVisible(false)}
       />
-      <SafeAreaView style={styles.container}>
-        <SectionHeader
-          title={"Preview Event"}
-          leftButtonOnClick={onBackPressed}
-          leftButtonSVG={<icons.backarrow />}
-          rightButtonOnClick={onSubmit}
-          rightButtonSVG={
-            <McText h3 color={COLORS.purple}>
-              Post
-            </McText>
-          }
-        />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ position: "relative" }}>
-            <ImageBackground
-              resizeMode="cover"
-              source={{
-                uri: createdEvent.Picture,
-              }}
-              style={{
-                width: "100%",
-                height: SIZES.height * 0.3,
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                <ImageHeaderSection>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setImageViewVisible(true);
-                    }}
+      <ScrollView
+        style={{ flex: 1, backgroundColor: COLORS.black }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ position: "relative" }}>
+          <ImageBackground
+            resizeMode="cover"
+            source={{
+              uri: createdEvent.Picture,
+            }}
+            style={{
+              width: "100%",
+              height: SIZES.height * 0.3,
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <ImageHeaderSection>
+                <TouchableOpacity
+                  onPress={() => {
+                    setImageViewVisible(true);
+                  }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 13,
+                  }}
+                >
+                  <McIcon
+                    source={icons.fullscreen}
                     style={{
-                      width: 40,
-                      height: 40,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 13,
+                      tintColor: COLORS.white,
                     }}
-                  >
-                    <McIcon
-                      source={icons.fullscreen}
+                    size={24}
+                  />
+                </TouchableOpacity>
+              </ImageHeaderSection>
+              <ImageFooterSection>
+                <LinearGradient
+                  colors={["transparent", COLORS.black]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={{
+                    width: "100%",
+                    height: 120,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <FooterContentView>
+                    <View
                       style={{
-                        tintColor: COLORS.white,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: "100%",
                       }}
-                      size={24}
-                    />
-                  </TouchableOpacity>
-                </ImageHeaderSection>
-                <ImageFooterSection>
-                  <LinearGradient
-                    colors={["transparent", COLORS.black]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{
-                      width: "100%",
-                      height: 120,
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <FooterContentView>
-                      <View
+                    >
+                      <icons.calendar_eventdetails style={{ marginRight: 8 }} />
+                      <McText
+                        h4
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          width: "100%",
+                          letterSpacing: 0.1,
+                          color: COLORS.lightGray,
                         }}
                       >
-                        <icons.calendar_eventdetails
-                          style={{ marginRight: 8 }}
-                        />
+                        {createdEvent === undefined
+                          ? null
+                          : moment(createdEvent.StartDateTime).format(
+                              "MMM DD[,] YYYY"
+                            )}
+                      </McText>
+                      <View
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          flexDirection: "row",
+                        }}
+                      >
+                        <icons.time_eventdetails style={{ marginRight: 8 }} />
                         <McText
                           h4
                           style={{
@@ -185,200 +205,175 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {createdEvent === undefined
                             ? null
-                            : moment(
-                              createdEvent.StartDateTime
-                              ).format("MMM DD[,] YYYY")}
+                            : moment(createdEvent.StartDateTime).format(
+                                "h:mm a"
+                              ) +
+                              " - " +
+                              moment(createdEvent.EndDateTime).format("h:mm a")}
                         </McText>
-                        <View
-                          style={{
-                            position: "absolute",
-                            right: 0,
-                            flexDirection: "row",
-                          }}
-                        >
-                          <icons.time_eventdetails style={{ marginRight: 8 }} />
-                          <McText
-                            h4
-                            style={{
-                              letterSpacing: 0.1,
-                              color: COLORS.lightGray,
-                            }}
-                          >
-                            {createdEvent === undefined
-                              ? null
-                              : moment(
-                                createdEvent.StartDateTime
-                                ).format("h:mm a") +
-                                " - " +
-                                moment(
-                                  createdEvent.EndDateTime
-                                ).format("h:mm a")}
-                          </McText>
-                        </View>
                       </View>
-                    </FooterContentView>
-                  </LinearGradient>
-                </ImageFooterSection>
-              </View>
-            </ImageBackground>
-            <View style={styles.scrollcontainer}>
-              <TitleSection>
-                <McText
-                  h1
-                  style={{
-                    marginTop: 10,
-                  }}
-                >
-                  {createdEvent === undefined ? null : createdEvent.Title}
-                </McText>
-              </TitleSection>
-              <InterestSection>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {interests
-                    ? interests.map((taglist) => (
-                        <View
-                          key={taglist.InterestID}
-                          style={{
-                            borderRadius: 5,
-                            paddingVertical: 5,
-                            paddingHorizontal: 15,
-                            marginRight: 10,
-                            backgroundColor: COLORS.input,
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
+                    </View>
+                  </FooterContentView>
+                </LinearGradient>
+              </ImageFooterSection>
+            </View>
+          </ImageBackground>
+          <View style={styles.scrollcontainer}>
+            <TitleSection>
+              <McText
+                h1
+                style={{
+                  marginTop: 10,
+                }}
+              >
+                {createdEvent === undefined ? null : createdEvent.Title}
+              </McText>
+            </TitleSection>
+            <InterestSection>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {interests
+                  ? interests.map((taglist) => (
+                      <View
+                        key={taglist.InterestID}
+                        style={{
+                          borderRadius: 5,
+                          paddingVertical: 5,
+                          paddingHorizontal: 15,
+                          marginRight: 10,
+                          backgroundColor: COLORS.input,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <McText
+                          h4
+                          color={COLORS.lightGray}
+                          style={{ letterSpacing: 0.8 }}
                         >
-                          <McText
-                            h4
-                            color={COLORS.lightGray}
-                            style={{ letterSpacing: 0.8 }}
-                          >
-                            {taglist === undefined ? null : taglist.Name}
-                          </McText>
-                        </View>
-                      ))
-                    : null}
-                </ScrollView>
-              </InterestSection>
+                          {taglist === undefined ? null : taglist.Name}
+                        </McText>
+                      </View>
+                    ))
+                  : null}
+              </ScrollView>
+            </InterestSection>
 
-              <HostSection>
-                <View
+            <HostSection>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  style={styles.hostProfilePic}
+                  source={{ uri: currentUser.Picture }}
+                ></Image>
+                <McText
+                  h4
+                  numberOfLines={1}
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    letterSpacing: 1,
+                    color: COLORS.white,
                   }}
                 >
-                  <Image
-                    style={styles.hostProfilePic}
-                    source={{ uri: currentUser.Picture }}
-                  ></Image>
+                  {currentUser === null ? (
+                    <ActivityIndicator style={{ marginLeft: 10 }} />
+                  ) : (
+                    currentUser.Name
+                  )}
+                </McText>
+              </View>
+            </HostSection>
+
+            <DescriptionSection>
+              <View
+                style={{
+                  marginBottom: 8,
+                  marginTop: 8,
+                  marginRight: 12,
+                  marginLeft: 12,
+                }}
+              >
+                <McText
+                  onTextLayout={descriptionOnExpand}
+                  numberOfLines={descriptionExpanded ? undefined : 3}
+                  body3
+                  style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
+                  selectable={true}
+                >
+                  {createdEvent === undefined ? null : createdEvent.Description}
+                </McText>
+                {lengthMoreText ? (
                   <McText
-                    h4
-                    numberOfLines={1}
+                    onPress={descriptionToggleNumberOfLines}
                     style={{
-                      letterSpacing: 1,
-                      color: COLORS.white,
+                      lineHeight: 22,
+                      marginTop: 10,
+                      color: COLORS.gray,
+                      letterSpacing: 0.3,
                     }}
                   >
-                    {currentUser === null ? (
-                      <ActivityIndicator style={{ marginLeft: 10 }} />
-                    ) : (
-                      currentUser.Name
-                    )}
+                    {descriptionExpanded ? "Read less..." : "Read more..."}
                   </McText>
-                </View>
-              </HostSection>
-
-              <DescriptionSection>
-                <View
-                  style={{
-                    marginBottom: 8,
-                    marginTop: 8,
-                    marginRight: 12,
-                    marginLeft: 12,
-                  }}
-                >
-                  <McText
-                    onTextLayout={descriptionOnExpand}
-                    numberOfLines={descriptionExpanded ? undefined : 3}
-                    body3
-                    style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
-                    selectable={true}
-                  >
-                    {createdEvent === undefined
-                      ? null
-                      : createdEvent.Description}
-                  </McText>
-                  {lengthMoreText ? (
-                    <McText
-                      onPress={descriptionToggleNumberOfLines}
-                      style={{
-                        lineHeight: 22,
-                        marginTop: 10,
-                        color: COLORS.gray,
-                        letterSpacing: 0.3,
-                      }}
-                    >
-                      {descriptionExpanded ? "Read less..." : "Read more..."}
-                    </McText>
-                  ) : null}
-                </View>
-              </DescriptionSection>
-              <LocationSection>
-                <McIcon
-                  source={icons.location}
-                  size={16}
-                  style={{
-                    margin: 4,
-                    tintColor: COLORS.lightGray,
-                  }}
-                />
+                ) : null}
+              </View>
+            </DescriptionSection>
+            <LocationSection>
+              <McIcon
+                source={icons.location}
+                size={16}
+                style={{
+                  margin: 4,
+                  tintColor: COLORS.lightGray,
+                }}
+              />
+              <McText
+                h5
+                style={{
+                  letterSpacing: 0.5,
+                  marginTop: -1,
+                  color: COLORS.lightGray,
+                }}
+              >
+                {createdEvent === undefined ? null : createdEvent.Location}
+              </McText>
+            </LocationSection>
+            <VisibilitySection>
+              <McIcon
+                source={icons.visibility}
+                size={16}
+                style={{
+                  margin: 4,
+                  tintColor: COLORS.lightGray,
+                }}
+              />
+              <View>
                 <McText
-                  h5
+                  body5
+                  numberOfLines={1}
                   style={{
-                    letterSpacing: 0.5,
-                    marginTop: -1,
+                    letterSpacing: 1,
                     color: COLORS.lightGray,
                   }}
                 >
-                  {createdEvent === undefined ? null : createdEvent.Location}
+                  {createdEvent === undefined
+                    ? null
+                    : createdEvent.Visibility
+                    ? "Public"
+                    : "Private"}
                 </McText>
-              </LocationSection>
-              <VisibilitySection>
-                <McIcon
-                  source={icons.visibility}
-                  size={16}
-                  style={{
-                    margin: 4,
-                    tintColor: COLORS.lightGray,
-                  }}
-                />
-                <View>
-                  <McText
-                    body5
-                    numberOfLines={1}
-                    style={{
-                      letterSpacing: 1,
-                      color: COLORS.lightGray,
-                    }}
-                  >
-                    {createdEvent === undefined
-                      ? null
-                      : createdEvent.Visibility
-                      ? "Public"
-                      : "Private"}
-                  </McText>
-                </View>
-              </VisibilitySection>
-            </View>
+              </View>
+            </VisibilitySection>
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+        </View>
+        <View style={{ height: SIZES.bottomBarHeight }} />
+      </ScrollView>
+    </MobileSafeView>
   );
 };
 
@@ -387,7 +382,7 @@ export default EventDetailsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   scrollcontainer: {
     marginLeft: 20,

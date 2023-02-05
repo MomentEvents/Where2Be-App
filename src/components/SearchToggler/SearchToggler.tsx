@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Platform,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -258,7 +257,7 @@ const SearchToggler = () => {
           ) : (
             !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
           )}
-          <TouchableOpacity style={{ height: SIZES.tabBarHeight + 10 }} />
+          <View style={{ height: 20 }} />
         </View>
       </ScrollView>
     </View>

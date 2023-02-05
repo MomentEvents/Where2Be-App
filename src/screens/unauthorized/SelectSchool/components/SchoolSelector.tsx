@@ -5,6 +5,7 @@ import {
   TextInput,
   Switch,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import ModalSelector from "react-native-modal-selector-searchable";
 import { getAllSchools } from "../../../../services/SchoolService";
@@ -13,6 +14,7 @@ import { displayError } from "../../../../helpers/helpers";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,
+  SIZES,
 } from "../../../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
@@ -73,7 +75,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
   }, [schoolMap, selectionData]);
 
   return (
-    <View>
+    <SafeAreaView>
       {componentLoaded ? (
         <ModalSelector
           renderItem={(item) => {
@@ -114,6 +116,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
           optionContainerStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
+            marginTop: SIZES.topBarHeight + 10
           }}
           optionTextStyle={{
             color: COLORS.white,
@@ -125,12 +128,13 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
           cancelStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
+            marginBottom: SIZES.bottomBarHeight + 10
           }}
         />
       ) : (
         <ActivityIndicator size="small" />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

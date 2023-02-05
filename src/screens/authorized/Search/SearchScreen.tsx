@@ -13,14 +13,15 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import { COLORS } from "../../../constants";
 import SearchToggler from "../../../components/SearchToggler/SearchToggler";
 import { Keyboard } from "react-native";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const SearchScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
       <View style={{ flex: 1 }}>
         <SearchToggler />
       </View>
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 

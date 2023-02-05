@@ -26,6 +26,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import SectionProfile from "../../../components/Styled/SectionProfile";
 import EventToggler from "../../../components/EventToggler/EventToggler";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 type ProfileDetailsRouteParams = {
   User: User;
@@ -34,7 +35,7 @@ const MyProfileScreen = ({ route }) => {
   const { currentUser } = useContext(UserContext);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
       <SectionHeader
         title={"Hosted Events"}
         rightButtonSVG={<icons.settings />}
@@ -48,7 +49,7 @@ const MyProfileScreen = ({ route }) => {
           eventsToPull={EVENT_TOGGLER.HostedEvents}
         />
       </View>
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 

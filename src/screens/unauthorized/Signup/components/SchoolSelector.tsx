@@ -8,6 +8,7 @@ import { displayError } from "../../../../helpers/helpers";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,
+  SIZES,
 } from "../../../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
@@ -104,6 +105,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               fontFamily: CUSTOMFONT_REGULAR,
             }}
             optionContainerStyle={{
+              marginTop: SIZES.topBarHeight + 10,
               backgroundColor: "rgba(60,60,60,0.9)",
             }}
             optionTextStyle={{
@@ -116,6 +118,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             }}
             cancelStyle={{
               backgroundColor: "rgba(60,60,60,0.9)",
+              marginBottom: SIZES.bottomBarHeight + 10
             }}
 
           />

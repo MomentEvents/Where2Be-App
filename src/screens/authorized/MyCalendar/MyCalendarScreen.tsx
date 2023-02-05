@@ -28,12 +28,13 @@ import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import EventToggler from "../../../components/EventToggler/EventToggler";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const MyCalendarScreen = ({ route }) => {
   const { currentUser } = useContext(UserContext);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
       <SectionHeader title={"Joined Events"} hideBottomUnderline={true} style={{paddingBottom: 17}}/>
       <View style={{flex: 1, backgroundColor: COLORS.black}}>
         <EventToggler
@@ -41,8 +42,7 @@ const MyCalendarScreen = ({ route }) => {
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
         />
       </View>
-
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 
@@ -50,7 +50,6 @@ export default MyCalendarScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLORS.trueBlack,
   },
   profileContainer: {
