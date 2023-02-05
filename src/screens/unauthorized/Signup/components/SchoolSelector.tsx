@@ -75,6 +75,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           renderItem={(item) => {
             return <></>;
           }}
+          frozenSearch={true}
           searchStyle={{
             borderColor: COLORS.white,
             paddingHorizontal: 10,
@@ -103,7 +104,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               fontFamily: CUSTOMFONT_REGULAR,
             }}
             optionContainerStyle={{
-              backgroundColor: "rgba(120,120,120,0.9)",
+              backgroundColor: "rgba(60,60,60,0.9)",
             }}
             optionTextStyle={{
               color: COLORS.white,
@@ -114,7 +115,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
               fontFamily: CUSTOMFONT_BOLD,
             }}
             cancelStyle={{
-              backgroundColor: "rgba(120,120,120,0.9)",
+              backgroundColor: "rgba(60,60,60,0.9)",
             }}
 
           />

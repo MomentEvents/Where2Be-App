@@ -61,6 +61,11 @@ export async function login(
       password: password,
     })
   });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error", message)
+  }
   const data = await response.json();
 
   const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
@@ -333,7 +338,7 @@ export async function getServerStatus(): Promise<void> {
     const message = await response.text()
     throw formatError("Error " + response.status, message)
   }
-  
+
   return Promise.resolve();
 }
 

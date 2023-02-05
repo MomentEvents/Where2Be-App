@@ -99,7 +99,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <MobileSafeView style={styles.container}>
+    <MobileSafeView style={styles.container} >
       <SectionHeader
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
@@ -174,7 +174,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   userProfilePic: {
     height: height / 11,
