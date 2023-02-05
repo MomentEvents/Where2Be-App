@@ -59,7 +59,7 @@ const SettingsScreen = () => {
   }
 
   return (
-    <MobileSafeView>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Settings"}
         leftButtonSVG={<icons.backarrow />}
@@ -104,8 +104,7 @@ export default SettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.black,
-    flex: 1,
+    backgroundColor: COLORS.trueBlack,
   },
   buttonContainer: {
     width: SIZES.width,

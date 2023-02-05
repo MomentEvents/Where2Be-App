@@ -5,7 +5,7 @@ import { COLORS, SIZES } from "../../constants";
 
 type MobileSafeViewProps = {
   children;
-  style;
+  style?;
   isBottomViewable?: boolean;
   isTopViewable?: boolean;
   isTabNavigatorVisible?: boolean;

@@ -330,11 +330,10 @@ export async function getServerStatus(): Promise<void> {
   });
   
   if(!response.ok){
-    console.log("Response is not ok")
-    const status = await response.json() 
-    console.log(status)
-    throw formatError("Server Error", status.message)
+    const message = await response.text()
+    throw formatError("Error " + response.status, message)
   }
+  
   return Promise.resolve();
 }
 
@@ -352,7 +351,8 @@ export async function checkIfUserAccessTokenIsAdmin(userAccessToken: string): Pr
   });
 
   if(!response.ok){
-    throw formatError("Error " + response.status, "Could not check if user was admin for some reason")
+    const message = await response.text()
+    throw formatError("Error " + response.status, message)
   }
   
   const responseJSON = await response.json()

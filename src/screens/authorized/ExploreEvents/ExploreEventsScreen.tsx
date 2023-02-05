@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   hoverButtonContainer: {
     flex: 1,
     position: "absolute",
-    right: 20,
-    bottom: 20,
+    right: 30,
+    bottom: 30,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

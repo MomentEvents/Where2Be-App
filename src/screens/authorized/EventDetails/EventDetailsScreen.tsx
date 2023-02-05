@@ -33,10 +33,7 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError, formatError } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
-import {
-  deleteEvent,
-  getEvent,
-} from "../../../services/EventService";
+import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 
@@ -45,7 +42,7 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, currentUser } = useContext(UserContext);
+  const { userToken, currentUser, isAdmin } = useContext(UserContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -303,7 +300,7 @@ const EventDetailsScreen = ({ route }) => {
     }
     console.log("Host UserID is " + host.UserID);
     console.log("Current user UserID is " + currentUser.UserID);
-    if (host.UserID == currentUser.UserID) {
+    if (host.UserID == currentUser.UserID || isAdmin) {
       setIsHost(true);
     } else {
       setIsHost(false);
@@ -324,7 +321,6 @@ const EventDetailsScreen = ({ route }) => {
         imageIndex={0}
         visible={imageViewVisible}
         backgroundColor="#101010"
-        presentationStyle= {Platform.OS === 'ios' ? 'fullScreen' : 'overFullScreen'}
         onRequestClose={() => setImageViewVisible(false)}
       />
       <View style={{ height: "100%", position: "relative" }}>
@@ -353,7 +349,12 @@ const EventDetailsScreen = ({ route }) => {
               height: SIZES.height * 0.45,
             }}
           >
-            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : SIZES.tabBarHeight/2 }}>
+            <View
+              style={{
+                flex: 1,
+                marginTop: SIZES.topBarHeight,
+              }}
+            >
               <ImageHeaderSection>
                 <TouchableOpacity
                   onPress={() => {
@@ -443,13 +444,15 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {eventIDToEvent[eventID] === undefined
                             ? null
-                            : eventIDToEvent[eventID].EndDateTime ? moment(
+                            : eventIDToEvent[eventID].EndDateTime
+                            ? moment(
                                 eventIDToEvent[eventID].StartDateTime
                               ).format("h:mm a") +
                               " - " +
                               moment(
                                 eventIDToEvent[eventID].EndDateTime
-                              ).format("h:mm a") : moment(
+                              ).format("h:mm a")
+                            : moment(
                                 eventIDToEvent[eventID].StartDateTime
                               ).format("h:mm a")}
                         </McText>
@@ -624,44 +627,36 @@ const EventDetailsScreen = ({ route }) => {
               </View>
             </VisibilitySection>
             {isHost &&
-            eventIDToInterests[eventID] &&
-            eventIDToEvent[eventID] ? (
-              <>
-                <EditOrDeleteEventSection>
-                  <TouchableOpacity
-                    style={styles.edit}
-                    onPress={() => {
-                      onEditEventPressed();
-                    }}
-                  >
-                    <McText h5>Edit this Event</McText>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.delete}
-                    onPress={() => {
-                      onDeleteEventPressed();
-                    }}
-                  >
-                    <McText h5>Delete this Event</McText>
-                  </TouchableOpacity>
-                </EditOrDeleteEventSection>
-                <SectionFooter>
-                  <View
-                    style={{
-                      height: 170,
-                    }}
-                  ></View>
-                </SectionFooter>
-              </>
-            ) : (
-              <SectionFooter>
-                <View
-                  style={{
-                    height: 170,
-                  }}
-                ></View>
-              </SectionFooter>
-            )}
+              eventIDToInterests[eventID] &&
+              eventIDToEvent[eventID] && (
+                <>
+                  <EditOrDeleteEventSection>
+                    <TouchableOpacity
+                      style={styles.edit}
+                      onPress={() => {
+                        onEditEventPressed();
+                      }}
+                    >
+                      <McText h5>Edit this Event</McText>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.delete}
+                      onPress={() => {
+                        onDeleteEventPressed();
+                      }}
+                    >
+                      <McText h5>Delete this Event</McText>
+                    </TouchableOpacity>
+                  </EditOrDeleteEventSection>
+                </>
+              )}
+            <SectionFooter>
+              <View
+                style={{
+                  height: 170 + SIZES.bottomBarHeight,
+                }}
+              ></View>
+            </SectionFooter>
           </View>
         </ScrollView>
         <View style={styles.userControlContainer}>
@@ -671,10 +666,6 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   alignItems: "center",
                   paddingHorizontal: 20,
-                  // shadowColor: "#B66DFF",
-                  // shadowRadius: 10,
-                  // shadowOpacity: eventIDToDidJoin[eventID] ? 1 : 0,
-                  // shadowOffset: { width: 0, height: 0 },
                 }}
               >
                 <GradientButton
@@ -694,10 +685,8 @@ const EventDetailsScreen = ({ route }) => {
                       backgroundColor: eventIDToEvent[eventID].UserJoin
                         ? "transparent"
                         : COLORS.white,
-                      borderWidth: 0,
-                      borderColor: eventIDToEvent[eventID].UserJoin
-                        ? COLORS.purple
-                        : COLORS.gray,
+                      // borderWidth: StyleSheet.hairlineWidth,
+                      // borderColor: COLORS.white,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
@@ -724,7 +713,7 @@ const EventDetailsScreen = ({ route }) => {
                 >
                   Join
                 </McText>
-                {/* <McText
+                <McText
                   body2
                   style={{
                     color: eventIDToEvent[eventID].UserJoin
@@ -733,7 +722,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {eventIDToEvent[eventID].NumJoins}
-                </McText> */}
+                </McText>
               </View>
               <View
                 style={{
@@ -761,10 +750,8 @@ const EventDetailsScreen = ({ route }) => {
                       backgroundColor: eventIDToEvent[eventID].UserShoutout
                         ? "transparent"
                         : COLORS.white,
-                      borderWidth: 0,
-                      borderColor: eventIDToEvent[eventID].UserShoutout
-                        ? COLORS.white
-                        : COLORS.gray,
+                      // borderWidth: StyleSheet.hairlineWidth,
+                      // borderColor: COLORS.white,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
@@ -797,7 +784,7 @@ const EventDetailsScreen = ({ route }) => {
                 >
                   Shoutout
                 </McText>
-                {/* <McText
+                <McText
                   body2
                   style={{
                     color: eventIDToEvent[eventID].UserShoutout
@@ -806,7 +793,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {eventIDToEvent[eventID].NumShoutouts}
-                </McText> */}
+                </McText>
               </View>
             </UserOptionsSection>
           ) : (
@@ -832,10 +819,10 @@ const styles = StyleSheet.create({
   userControlContainer: {
     flex: 1,
     position: "absolute",
-    bottom: 20,
+    bottom: SIZES.bottomBarHeight + 10,
     left: 10,
     right: 10,
-    height: 110,
+    height: 130,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(100,100,100,.95)",

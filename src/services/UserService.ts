@@ -88,19 +88,52 @@ export async function updateUser(
   formData.append("username", updatedUser.Username);
   formData.append("picture", updatedUser.Picture);
 
-  const response = await fetch(momentAPI + `/user/user_id/${updatedUser.UserID}`, {
-    method: "UPDATE",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    body: formData,
-  });
-  if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+  const response = await fetch(
+    momentAPI + `/user/user_id/${updatedUser.UserID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    }
+  );
+  if (!response.ok) {
+    throw formatError("Error: " + response.status, response.statusText);
   }
 
   return Promise.resolve();
 }
+
+export async function deleteUser(
+  userAccessToken: string,
+
+  userID: string
+): Promise<void> {
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );  
+
+  if (!response.ok) {
+    const message = await response.text()
+    throw formatError("Error: " + response.status, message);
+  }
+
+  const responseJSON = await response.json()
+
+
+  return Promise.resolve();
+}
+
 
 export async function getEventHostByEventId(
   userAccessToken: string,

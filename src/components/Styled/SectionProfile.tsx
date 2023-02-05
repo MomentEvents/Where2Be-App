@@ -5,11 +5,16 @@ import {
   Image,
   TouchableOpacity,
   Touchable,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
 import * as Navigator from "../../navigation/Navigator";
+import { UserContext } from "../../contexts/UserContext";
+import { ScreenContext } from "../../contexts/ScreenContext";
+import { deleteUser } from "../../services/UserService";
+import { displayError } from "../../helpers/helpers";
 
 type SectionProfileProps = {
   user: User;
@@ -18,7 +23,36 @@ type SectionProfileProps = {
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
-  console.log("can nuke user is " + props.canNukeUser)
+  const {userToken} = useContext(UserContext)
+  const {setLoading} = useContext(ScreenContext)
+
+  const nukeUser = () => {
+    Alert.alert(
+      "Nuke user",
+      "Are you sure you want to delete " + props.user.Name + " and all of their events?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes Pressed");
+            setLoading(true)
+            deleteUser(userToken.UserAccessToken, props.user.UserID).then(() => {
+              setLoading(false)
+              Navigator.popToTop()
+            }).catch((error: Error) => {
+              setLoading(false)
+              displayError(error)
+            });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -47,7 +81,9 @@ const SectionProfile = (props: SectionProfileProps) => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+            nukeUser()
+          }}>
           {props.canNukeUser && (
             <View style={styles.nukeProfileButtonContainer}>
               <McText h3>Nuke User</McText>
