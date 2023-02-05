@@ -37,37 +37,24 @@ type RouteParams = {
 };
 const IntroduceEventsScreen = ({ navigation, route }) => {
   const { school }: RouteParams = route.params;
-  var loadedEventsMap: { [eventID: string]: boolean } = {};
-
-  const [featuredEvents, setFeaturedEvents] = useState<Event[]>(null);
-  const [interestToEventMap, setInterestToEventMap] = useState<{
-    [key: string]: Event[];
-  }>(null);
-
-  const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
-  const [errorThrown, setErrorThrown] = useState<boolean>(false);
-
 
   const navigateToLogin = (): void => {
     Navigator.navigate(SCREENS.Login);
   };
 
- 
   return (
-      <SafeAreaView style={styles.container}>
-        <SectionHeader title={"Explore Events"} leftButtonSVG={<icons.backarrow/>} leftButtonOnClick={() => {Navigator.goBack()}}/>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
+      <SectionHeader title={"Explore Events"} leftButtonSVG={<icons.backarrow/>} leftButtonOnClick={() => {Navigator.goBack()}}/>
         <EventViewer school={school}></EventViewer>
-        <TouchableOpacity
-          style={styles.hoverButtonContainer}
-          onPressOut={navigateToLogin}
-        >
-          <GradientButton style={styles.hoverButtonIconContainer}>
-            <icons.login height="50%" width="50%"></icons.login>
-          </GradientButton>
-        </TouchableOpacity>
-      </SafeAreaView>
+      <TouchableOpacity
+        style={styles.hoverButtonContainer}
+        onPressOut={navigateToLogin}
+      >
+        <GradientButton style={styles.hoverButtonIconContainer}>
+          <icons.login height="50%" width="50%"></icons.login>
+        </GradientButton>
+      </TouchableOpacity>
+    </MobileSafeView>
   );
 };
 
@@ -75,8 +62,8 @@ export default IntroduceEventsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
+    position: "relative",
   },
   categoryTitle: {
     marginLeft: 20,
@@ -89,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     right: 20,
-    bottom: 20,
+    bottom: 20 + SIZES.bottomBarHeight,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

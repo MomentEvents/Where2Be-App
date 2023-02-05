@@ -51,7 +51,7 @@ export async function login(
 
   // DO LOGIN HERE
 
-  const response = await fetch(momentAPI+`/authentication/login/username`, {
+  const response = await fetch(momentAPI+`/auth/login/username`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export async function signup(
 
   // DO SIGNUP HERE
 
-  const response = await fetch(momentAPI+`/authentication/signup`, {
+  const response = await fetch(momentAPI+`/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -330,7 +330,32 @@ export async function getServerStatus(): Promise<void> {
   });
   
   if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+    console.log("Response is not ok")
+    const status = await response.json() 
+    console.log(status)
+    throw formatError("Server Error", status.message)
   }
   return Promise.resolve();
 }
+
+export async function checkIfUserAccessTokenIsAdmin(userAccessToken: string): Promise<boolean> {
+  const response = await fetch(momentAPI+`/auth/privileged_admin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken
+    })
+  }).catch((error: Error) => {
+    throw formatError("Unable to connect to server", "Please try again later");
+  });
+
+  if(!response.ok){
+    throw formatError("Error " + response.status, "Could not check if user was admin for some reason")
+  }
+  
+  const responseJSON = await response.json()
+
+  return Promise.resolve(responseJSON.is_admin);
+} 

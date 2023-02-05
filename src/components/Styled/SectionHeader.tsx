@@ -9,6 +9,8 @@ type sectionHeaderProps = {
   title: string;
   rightButtonSVG?: any;
   rightButtonOnClick?: () => void;
+  hideBottomUnderline?: boolean;
+  style?;
 };
 const SectionHeader = (props: sectionHeaderProps) => {
   return (
@@ -18,13 +20,19 @@ const SectionHeader = (props: sectionHeaderProps) => {
         paddingVertical: 6,
         alignItems: "center",
         flexDirection: "row",
-        borderBottomWidth: .3,
+        borderBottomWidth: props.hideBottomUnderline
+          ? 0
+          : StyleSheet.hairlineWidth,
         borderColor: COLORS.gray2,
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
+        ...props.style
       }}
     >
-      {props.leftButtonSVG && props.leftButtonOnClick? (
-        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => props.leftButtonOnClick()}>
+      {props.leftButtonSVG && props.leftButtonOnClick ? (
+        <TouchableOpacity
+          style={{ marginRight: 20 }}
+          onPress={() => props.leftButtonOnClick()}
+        >
           {props.leftButtonSVG}
         </TouchableOpacity>
       ) : null}
@@ -32,7 +40,10 @@ const SectionHeader = (props: sectionHeaderProps) => {
         {props.title}
       </McText>
       {props.rightButtonSVG && props.rightButtonOnClick ? (
-        <TouchableOpacity style={{ alignContent: "flex-end" }} onPress={() => props.rightButtonOnClick()}>
+        <TouchableOpacity
+          style={{ alignContent: "flex-end" }}
+          onPress={() => props.rightButtonOnClick()}
+        >
           {props.rightButtonSVG}
         </TouchableOpacity>
       ) : null}

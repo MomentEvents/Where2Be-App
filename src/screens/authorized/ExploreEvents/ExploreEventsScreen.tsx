@@ -19,7 +19,6 @@ import {
   School,
   icons,
 } from "../../../constants";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
@@ -34,6 +33,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { EventContext } from "../../../contexts/EventContext";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
+import MobileSafeView from "../../../components/Styled/MobileSafeView";
 type RouteParams = {
   school: School;
 };
@@ -42,7 +42,7 @@ const ExploreEvents = ({ navigation, route }) => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
       <SectionHeader title={"Explore Events"} />
       <EventViewer school={currentSchool}/>
       <TouchableOpacity
@@ -55,7 +55,7 @@ const ExploreEvents = ({ navigation, route }) => {
           <icons.plus height="50%" width="50%"></icons.plus>
         </GradientButton>
       </TouchableOpacity>
-    </SafeAreaView>
+    </MobileSafeView>
   );
 };
 
@@ -63,14 +63,13 @@ export default ExploreEvents;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLORS.trueBlack,
   },
   hoverButtonContainer: {
     flex: 1,
     position: "absolute",
     right: 20,
-    bottom: Platform.OS === 'ios' ? SIZES.tab_bar_height + 20 : SIZES.tab_bar_height,
+    bottom: 20,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

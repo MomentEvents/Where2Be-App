@@ -145,16 +145,16 @@ const SearchToggler = () => {
   }, [isEventsToggle]);
 
   return (
-    <View style={{ flex: 1, marginTop: -20, backgroundColor:COLORS.black }}>
+    <View style={{ flex: 1, backgroundColor:COLORS.black }}>
       <View style={{ backgroundColor: COLORS.trueBlack }}>
         <View
           style={{
             width: "90%",
             backgroundColor: "rgba(80,80,80,.90)",
-            borderRadius: 15,
-            paddingHorizontal: 10,
-            paddingVertical: Platform.OS === 'ios' ? 10 : 5,
-            marginVertical: 20,
+            borderRadius: 10,
+            paddingHorizontal: 15,
+            paddingVertical: 10,
+            marginVertical: 10,
             justifyContent: "center",
             alignSelf: "center",
           }}
@@ -258,7 +258,7 @@ const SearchToggler = () => {
           ) : (
             !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
           )}
-          <TouchableOpacity style={{ height: SIZES.tab_bar_height + 10 }} />
+          <TouchableOpacity style={{ height: SIZES.tabBarHeight + 10 }} />
         </View>
       </ScrollView>
     </View>

@@ -353,7 +353,7 @@ const EventDetailsScreen = ({ route }) => {
               height: SIZES.height * 0.45,
             }}
           >
-            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : SIZES.tab_bar_height/2 }}>
+            <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 25 : SIZES.tabBarHeight/2 }}>
               <ImageHeaderSection>
                 <TouchableOpacity
                   onPress={() => {

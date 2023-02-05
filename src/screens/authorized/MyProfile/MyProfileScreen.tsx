@@ -39,8 +39,9 @@ const MyProfileScreen = ({ route }) => {
         title={"Hosted Events"}
         rightButtonSVG={<icons.settings />}
         rightButtonOnClick={() => {Navigator.navigate(SCREENS.Settings)}}
+        hideBottomUnderline={true}
       />
-      <SectionProfile user={currentUser} canEditProfile={true}/>
+      <SectionProfile user={currentUser} canEditProfile={true} canNukeUser={false}/>
       <View style={{flex: 1}}>
         <EventToggler
           selectedUser={currentUser}

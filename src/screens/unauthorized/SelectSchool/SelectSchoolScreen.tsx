@@ -61,7 +61,7 @@ const SelectSchoolScreen = ({ navigation, route }) => {
           <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
         </View>
         <TouchableOpacity onPress={onNavigateLogin}>
-          <McText body3 style={{color:COLORS.purple}}>Already have an account?</McText>
+          <McText body3>Already have an account?</McText>
         </TouchableOpacity>
       </SafeAreaView>
     </GradientBackground>

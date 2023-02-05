@@ -16,10 +16,13 @@ import {
   ImageBackground,
   SafeAreaView,
   View,
+  Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from "react-native";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
-import { getServerStatus } from "../services/AuthService";
 // import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
@@ -31,34 +34,24 @@ export const ScreenContext = createContext<ScreenContextType>({
 
 export const ScreenProvider = ({ children }) => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
-  const [serverConnected, setServerConnected] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const { isUserContextLoaded } = useContext(UserContext);
 
   const loadAssets = async () => {
-    console.log("Loading assets")
+    console.log("Loading assets");
     await Font.loadAsync(customFonts)
       .then(() => setAssetsLoaded(true))
       .catch((error: Error) => displayError(error));
   };
 
-  const checkServerStatus = async () => {
-    console.log("Getting server status")
-    await getServerStatus()
-    .then(() => setServerConnected(true))
-    .catch((error: Error) => displayError(error));
-  }
-
   useEffect(() => {
     loadAssets();
-    checkServerStatus();
   }, []);
-  
+
   return (
     <ScreenContext.Provider value={{ setLoading }}>
-      {assetsLoaded && isUserContextLoaded && serverConnected ? (
+      {assetsLoaded && isUserContextLoaded ? (
         <>
           <ProgressLoader
             visible={loading}
@@ -67,6 +60,7 @@ export const ScreenProvider = ({ children }) => {
             hudColor={"#000000"}
             color={"#FFFFFF"}
           ></ProgressLoader>
+
           {children}
         </>
       ) : (
@@ -78,7 +72,9 @@ export const ScreenProvider = ({ children }) => {
           }}
         >
           <SafeAreaView style={{ alignItems: "center" }}>
-            <icons.moment width={Math.min(SIZES.width * 0.7, SIZES.height * .7)}></icons.moment>
+            <icons.moment
+              width={Math.min(SIZES.width * 0.7, SIZES.height * 0.7)}
+            ></icons.moment>
             <ActivityIndicator size="small" />
           </SafeAreaView>
         </View>

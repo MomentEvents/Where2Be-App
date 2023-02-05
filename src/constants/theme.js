@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StatusBar } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 export const CUSTOMFONT_REGULAR = 'ProductSans-Regular';
@@ -59,7 +59,9 @@ export const SIZES = {
   // app dimensions
   width,
   height,
-  tab_bar_height: Platform.OS === 'ios' ? 80 : 60,
+  tabBarHeight: 50 + (Platform.OS === 'ios' ? 24 : 0),
+  topBarHeight: Platform.OS === 'ios' ? 44 : 24,
+  bottomBarHeight: Platform.OS === 'ios' ? 24 : 0,
 };
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},

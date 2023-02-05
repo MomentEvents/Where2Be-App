@@ -40,6 +40,7 @@ import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import EventEditor from "../../../components/EventEditor/EventEditor";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -177,7 +178,7 @@ const EditEventScreen = ({ navigation, route }) => {
   };
 
   return (
-    <MobileSafeView>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Edit Event"}
         leftButtonOnClick={() => {
@@ -193,168 +194,27 @@ const EditEventScreen = ({ navigation, route }) => {
           </McText>
         }
       />
-      <KeyboardAwareScrollView>
-        <View style={styles.scrollViewContainer}>
-          <SectionInputs>
-            <View style={styles.titleContainer}>
-              <icons.pickpicture width={30} />
-              <McText h3>Image</McText>
-            </View>
-
-            <View style={{ alignItems: "center" }}>
-              <ImagePickerButton
-                originalImageURI={image}
-                setImageURI={setImage}
-                setImageBase64={setBase64Image}
-                width={Math.min(SIZES.height, SIZES.width) - 150}
-                height={Math.min(SIZES.height, SIZES.width) - 150}
-              />
-            </View>
-
-            <View style={styles.titleContainer}>
-              <icons.picktitle style={styles.iconsContainer} width={30} />
-              <McText h3>Title</McText>
-            </View>
-
-            <TextInput
-              placeholder={"Enter your event's title"}
-              placeholderTextColor={COLORS.gray}
-              style={styles.textInputContainer}
-              value={title}
-              onChangeText={setTitle}
-              multiline={false}
-              maxLength={70}
-            />
-
-            <View style={styles.titleContainer}>
-              <icons.pickdescription style={styles.iconsContainer} width={30} />
-              <McText h3>Description</McText>
-            </View>
-
-            <TextInput
-              placeholder={"Enter your event's description"}
-              placeholderTextColor={COLORS.gray}
-              style={styles.textInputContainer}
-              value={desc}
-              onChangeText={setDesc}
-              multiline={true}
-              maxLength={1500}
-            />
-
-            <View style={styles.titleContainer}>
-              <icons.pickdate
-                style={styles.iconsContainer}
-                width={30}
-                fill="white"
-                stroke="white"
-              />
-              <McText h3>Date</McText>
-            </View>
-
-            <TouchableOpacity
-              style={styles.textInputContainer}
-              onPress={() => {
-                setOpenedDatePicker(true);
-              }}
-            >
-              <Text style={styles.timeInputText}>
-                {date ? (
-                  <Text style={styles.timeInputText}>
-                    {moment.utc(date).local().format("ll")}
-                  </Text>
-                ) : (
-                  <Text style={styles.timeInputInactiveText}>
-                    Pick your event's date
-                  </Text>
-                )}
-              </Text>
-            </TouchableOpacity>
-
-            <View style={styles.titleContainer}>
-              <icons.picktime style={styles.iconsContainer} width={30} />
-              <McText h3>Time</McText>
-            </View>
-
-            <View style={{ flexDirection: "row", flex: 1 }}>
-              <TouchableOpacity
-                style={styles.startTimeInputContainer}
-                onPress={() => {
-                  setOpenedStartTimePicker(true);
-                }}
-              >
-                {start ? (
-                  <Text style={styles.timeInputText}>
-                    {moment.utc(start).local().format("LT")}
-                  </Text>
-                ) : (
-                  <Text style={styles.timeInputInactiveText}>Start</Text>
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.endTimeInputContainer}
-                onPress={() => {
-                  setOpenedEndTimePicker(true);
-                }}
-              >
-                {end ? (
-                  <Text style={styles.timeInputText}>
-                    {moment.utc(end).local().format("LT")}
-                  </Text>
-                ) : (
-                  <Text style={styles.timeInputInactiveText}>End</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.titleContainer}>
-              <icons.picklocation style={styles.iconsContainer} width={30} />
-              <McText h3>Location</McText>
-            </View>
-
-            <TextInput
-              placeholder={"Enter your event's location"}
-              placeholderTextColor={COLORS.gray}
-              style={styles.textInputContainer}
-              value={location}
-              onChangeText={setLocation}
-              maxLength={50}
-            />
-
-            <View style={styles.titleContainer}>
-              <icons.picktags style={styles.iconsContainer} width={30} />
-              <McText h3>Tags (select 1)</McText>
-            </View>
-
-            <View>
-              <InterestSelector
-                selectedInterests={selectedInterests}
-                setSelectedInterests={setSelectedInterests}
-              />
-            </View>
-          </SectionInputs>
-        </View>
-      </KeyboardAwareScrollView>
-      <DateTimePickerModal
-        isVisible={openedDatePicker}
-        mode="date"
+      <EventEditor
+        title={title}
+        setTitle={setTitle}
+        location={location}
+        setLocation={setLocation}
+        image={image}
+        setImage={setImage}
+        base64Image={base64Image}
+        setBase64Image={setBase64Image}
         date={date}
-        onConfirm={onDatePicked}
-        onCancel={() => setOpenedDatePicker(false)}
+        setDate={setDate}
+        description={desc}
+        setDescription={setDesc}
+        startTime={start}
+        setStartTime={setStart}
+        endTime={end}
+        setEndTime={setEnd}
+        selectedInterests={selectedInterests}
+        setSelectedInterests={setSelectedInterests}
       />
-      <DateTimePickerModal
-        isVisible={openedStartTimePicker}
-        mode="time"
-        date={start}
-        onConfirm={onStartTimePicked}
-        onCancel={() => setOpenedStartTimePicker(false)}
-      />
-      <DateTimePickerModal
-        isVisible={openedEndTimePicker}
-        mode="time"
-        date={end}
-        onConfirm={onEndTimePicked}
-        onCancel={() => setOpenedEndTimePicker(false)}
-      />
+
     </MobileSafeView>
   );
 };
@@ -386,7 +246,7 @@ const SectionTimings = styled.View`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   scrollViewContainer: {
     marginHorizontal: 10,

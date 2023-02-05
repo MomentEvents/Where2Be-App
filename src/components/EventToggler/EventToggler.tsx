@@ -215,7 +215,7 @@ const EventToggler = (props: EventTogglerProps) => {
         ) : (
           !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
         )}
-        <View style={{ height: SIZES.tab_bar_height + 10 }}/>
+        <View style={{height: SIZES.bottomBarHeight + 10}}/>
       </ScrollView>
     </View>
   );

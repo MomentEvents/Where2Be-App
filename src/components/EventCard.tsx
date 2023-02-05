@@ -19,6 +19,7 @@ import { Event } from "../constants";
 import { UserContext } from "../contexts/UserContext";
 import { displayError } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
+import { useNavigation } from "@react-navigation/native";
 
 type EventCardProps = {
   onClick?: () => void;

@@ -34,7 +34,7 @@ const MyCalendarScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SectionHeader title={"Joined Events"} />
+      <SectionHeader title={"Joined Events"} hideBottomUnderline={true} style={{paddingBottom: 17}}/>
       <View style={{flex: 1, backgroundColor: COLORS.black}}>
         <EventToggler
           selectedUser={currentUser}

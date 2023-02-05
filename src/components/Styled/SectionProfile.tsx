@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Touchable,
+} from "react-native";
 import React from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
@@ -7,9 +14,11 @@ import * as Navigator from "../../navigation/Navigator";
 type SectionProfileProps = {
   user: User;
   canEditProfile: boolean;
+  canNukeUser: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
+  console.log("can nuke user is " + props.canNukeUser)
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -35,6 +44,13 @@ const SectionProfile = (props: SectionProfileProps) => {
           {props.canEditProfile && (
             <View style={styles.editProfileButtonContainer}>
               <McText h3>Edit Profile</McText>
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity>
+          {props.canNukeUser && (
+            <View style={styles.nukeProfileButtonContainer}>
+              <McText h3>Nuke User</McText>
             </View>
           )}
         </TouchableOpacity>
@@ -93,5 +109,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: SIZES.width - 170,
     backgroundColor: COLORS.gray1,
+  },
+  nukeProfileButtonContainer: {
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginTop: 10,
+    marginBottom: 15,
+    width: SIZES.width - 170,
+    backgroundColor: COLORS.red,
   },
 });

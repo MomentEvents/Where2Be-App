@@ -12,6 +12,8 @@
 import React, { useState, useEffect, createContext } from "react";
 import { User, School, Token } from "../constants";
 import {
+  checkIfUserAccessTokenIsAdmin,
+  getServerStatus,
   logout,
   validateTokenExpirationAndUpdate,
 } from "../services/AuthService";
@@ -30,6 +32,7 @@ type UserContextType = {
   isLoggedIn: boolean;
   setContextVarsBasedOnToken: (token: Token) => Promise<void>;
   syncUserContextWithToken: (token: Token) => Promise<void>;
+  isAdmin: boolean;
 };
 export const UserContext = createContext<UserContextType>({
   userToken: null,
@@ -41,6 +44,7 @@ export const UserContext = createContext<UserContextType>({
   isLoggedIn: null,
   setContextVarsBasedOnToken: null,
   syncUserContextWithToken: null,
+  isAdmin: null
 });
 
 export const UserProvider = ({ children }) => {
@@ -50,6 +54,7 @@ export const UserProvider = ({ children }) => {
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
@@ -64,7 +69,11 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fillUserData();
+    getServerStatus().then(() => {
+      fillUserData();
+    }).catch((error: Error) => {
+      displayError(error)
+    })
   }, []);
 
   useEffect(() => {
@@ -116,6 +125,14 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
+    checkIfUserAccessTokenIsAdmin(token.UserAccessToken).then((pulledIsAdmin: boolean) => {
+      if(pulledIsAdmin){
+        setIsAdmin(true)
+      }
+    }).catch((error: Error) => {
+      displayError(error)
+    })
+
     const pulledUser: User = await getUserByUserAccessToken(
       token.UserAccessToken
     ).catch((error: Error) => {
@@ -154,6 +171,7 @@ export const UserProvider = ({ children }) => {
         isLoggedIn,
         setContextVarsBasedOnToken,
         syncUserContextWithToken,
+        isAdmin
       }}
     >
       {children}

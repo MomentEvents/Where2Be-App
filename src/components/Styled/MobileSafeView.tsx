@@ -1,16 +1,56 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../../constants";
+import { COLORS, SIZES } from "../../constants";
 
-const MobileSafeView = ({ children }, style) => {
+type MobileSafeViewProps = {
+  children;
+  style;
+  isBottomViewable?: boolean;
+  isTopViewable?: boolean;
+  isTabNavigatorVisible?: boolean;
+};
+const MobileSafeView = (props: MobileSafeViewProps) => {
+  
+  if (props.isBottomViewable || props.isTopViewable || props.isTabNavigatorVisible) {
+    return (
+      <View style={[props.style, styles.container]}>
+        {!props.isTopViewable && (
+          <View style={[styles.topBarContainer]} />
+        )}
+        <View style={[styles.container]}>{props.children}</View>
+        {props.isTabNavigatorVisible && (
+          <View style={[styles.tabBarContainer]} />
+        )}
+        {!props.isBottomViewable && (
+          <View style={[styles.bottomBarContainer]} />
+        )}
+      </View>
+    );
+  }
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.black }}>
-      {children}
+    <SafeAreaView style={[props.style, styles.container]}>
+      <View style={{ flex: 1 }}>{props.children}</View>
     </SafeAreaView>
   );
 };
 
 export default MobileSafeView;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  topBarContainer: {
+    width: "100%",
+    height: SIZES.topBarHeight,
+  },
+  bottomBarContainer: {
+    width: "100%",
+    height: SIZES.bottomBarHeight,
+  },
+  tabBarContainer: {
+    width: "100%",
+    height: SIZES.tabBarHeight - SIZES.bottomBarHeight,
+  }
+});
