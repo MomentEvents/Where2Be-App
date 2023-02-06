@@ -31,44 +31,18 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
     var imgUri: string = undefined;
     var imgBase64: string = undefined;
 
-    if (Platform.OS === "android") {
-      try {
-        const result = await DocumentPicker.getDocumentAsync({
-          type: "image/*",
-        });
-        if (result.type === "success") {
-          const response = await fetch(result.uri);
-          const blob = await response.blob();
-          const reader = new FileReader();
-          const dataURL = await new Promise((resolve) => {
-            reader.onload = function() {
-              resolve(reader.result);
-            };
-            reader.readAsDataURL(blob);
-          });
-          const base64 = dataURL.toString().split(',')[1];
-          
-          didPick = true;
-          imgUri = result.uri;
-          imgBase64 = base64;
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    } else {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 100,
-        base64: true,
-      });
-      if (!result.cancelled) {
-        const { uri, base64 } = result as ImageInfo;
-        didPick = true;
-        imgUri = uri;
-        imgBase64 = base64;
-      }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      base64: true,
+    });
+    
+    if (!result.cancelled) {
+      const { uri, base64 } = result as ImageInfo;
+      didPick = true;
+      imgUri = uri;
+      imgBase64 = base64;
     }
 
     if (didPick) {
