@@ -105,7 +105,7 @@ const ProfileDetailsScreen = ({ route }) => {
           hideBottomUnderline={true}
         />
       )}
-      <SectionProfile user={user} canEditProfile={true} />
+      <SectionProfile user={user} canEditProfile={isAdmin} />
       <EventToggler
         selectedUser={user}
         eventsToPull={EVENT_TOGGLER.HostedEvents}

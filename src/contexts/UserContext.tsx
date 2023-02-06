@@ -129,8 +129,6 @@ export const UserProvider = ({ children }) => {
       if(pulledIsAdmin){
         setIsAdmin(true)
       }
-      // TO DELETE LATER
-      setIsAdmin(true)
     }).catch((error: Error) => {
       displayError(error)
     })
