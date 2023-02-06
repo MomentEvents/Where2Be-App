@@ -20,9 +20,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Text,
 } from "react-native";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
+import { McText } from "../components/Styled";
+import { appVersion } from "../constants/texts";
 // import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
@@ -74,16 +77,17 @@ export const ScreenProvider = ({ children }) => {
         >
           <View
             style={{
-              position: "absolute",
-              flex: 1,
-              zIndex: 99,
-              width: "70%",
+              flex: 2,
+              width: "100%",
               justifyContent: "flex-end",
+              alignItems: "center",
             }}
           >
-            <icons.moment width="100%"></icons.moment>
+            <icons.moment
+              width="70%"
+              style={{ marginBottom: 50 }}
+            ></icons.moment>
           </View>
-          <View style={{ flex: 2 }} />
           <View
             style={{
               flex: 1,
@@ -91,6 +95,11 @@ export const ScreenProvider = ({ children }) => {
             }}
           >
             <ActivityIndicator size="small" />
+          </View>
+          <View style={{ padding: 5 }}>
+            <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
+              {appVersion}
+            </Text>
           </View>
         </SafeAreaView>
       )}

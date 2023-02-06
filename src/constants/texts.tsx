@@ -1,0 +1,1 @@
+export const appVersion = "Moment Beta version 1.0.0"

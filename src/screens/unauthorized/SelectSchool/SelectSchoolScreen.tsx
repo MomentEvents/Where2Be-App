@@ -24,6 +24,7 @@ import SchoolSelector from "./components/SchoolSelector";
 import * as Navigator from "../../../navigation/Navigator";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientBackground from "../../../components/Styled/GradientBackground";
+import { appVersion } from "../../../constants/texts";
 
 const SelectSchoolScreen = ({ navigation, route }) => {
   const [school, setSchool] = useState<School>(null);
@@ -43,24 +44,22 @@ const SelectSchoolScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View
         style={{
-          position: "absolute",
-          flex: 1,
-          zIndex: 99,
-          width: "70%",
+          flex: 2,
+          width: "100%",
           justifyContent: "flex-end",
+          alignItems: "center",
         }}
       >
-        <icons.moment width="100%"></icons.moment>
+        <icons.moment width="70%" style={{ marginBottom: 50 }}></icons.moment>
       </View>
-      <View style={{ flex: 2 }} />
       <View
         style={{
           flex: 1,
           justifyContent: "flex-start",
-          width: "70%"
+          width: "70%",
         }}
       >
-        <View style={{ alignItems: "center", justifyContent: 'flex-start' }}>
+        <View style={{ alignItems: "center", justifyContent: "flex-start" }}>
           <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
         </View>
         <View style={{ alignItems: "center" }}>
@@ -71,6 +70,11 @@ const SelectSchoolScreen = ({ navigation, route }) => {
             <McText body3>Already have an account?</McText>
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={{ padding: 5 }}>
+        <McText body6 color={COLORS.gray1}>
+          {appVersion}
+        </McText>
       </View>
     </SafeAreaView>
   );
