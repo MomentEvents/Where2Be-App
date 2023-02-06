@@ -13,7 +13,7 @@ export const SCREENS = {
     ProfileDetails: "ProfileDetailsScreen",
     CreateEvent: "CreateEventScreen",
     PreviewEvent: "PreviewEventScreen",
-    EditMyProfile: "EditMyProfileScreen",
+    EditProfile: "EditProfileScreen",
     Settings: "SettingsScreen",
     EditMyPassword: "EditMyPasswordScreen"
 }

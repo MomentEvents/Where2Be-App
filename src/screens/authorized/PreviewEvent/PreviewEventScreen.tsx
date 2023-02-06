@@ -284,7 +284,7 @@ const EventDetailsScreen = ({ route }) => {
                   {currentUser === null ? (
                     <ActivityIndicator style={{ marginLeft: 10 }} />
                   ) : (
-                    currentUser.Name
+                    currentUser.DisplayName
                   )}
                 </McText>
               </View>

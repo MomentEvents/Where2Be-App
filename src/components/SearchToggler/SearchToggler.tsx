@@ -71,7 +71,7 @@ const SearchToggler = () => {
       pulledUsers.forEach((user: User) => {
         try {
           if (
-            user.Name.toLowerCase().includes(newText.toLowerCase()) ||
+            user.DisplayName.toLowerCase().includes(newText.toLowerCase()) ||
             user.Username.toLowerCase().includes(newText.toLowerCase())
           ) {
             searchedUsersTemp.push(user);

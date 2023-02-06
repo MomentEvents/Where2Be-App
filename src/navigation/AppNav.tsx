@@ -15,7 +15,7 @@ import ProfileDetailsScreen from "../screens/authorized/ProfileDetails/ProfileDe
 import CreateEventScreen from "../screens/authorized/CreateEvent/CreateEventScreen";
 import PreviewEventScreen from "../screens/authorized/PreviewEvent/PreviewEventScreen";
 import EditMyPasswordScreen from "../screens/authorized/EditMyPassword/EditMyPasswordScreen";
-import EditMyProfileScreen from "../screens/authorized/EditMyProfile/EditMyProfileScreen";
+import EditProfile from "../screens/authorized/EditProfile/EditProfile";
 import SettingsScreen from "../screens/authorized/Settings/SettingsScreen";
 
 const Stack = createStackNavigator();
@@ -60,7 +60,7 @@ const AppStack = () => {
       <Stack.Screen name={SCREENS.ProfileDetails} component={ProfileDetailsScreen}/>
       <Stack.Screen name={SCREENS.CreateEvent} component={CreateEventScreen}/>
       <Stack.Screen name={SCREENS.PreviewEvent} component={PreviewEventScreen}/>
-      <Stack.Screen name={SCREENS.EditMyProfile} component={EditMyProfileScreen}/>
+      <Stack.Screen name={SCREENS.EditProfile} component={EditProfile}/>
       <Stack.Screen name={SCREENS.EditMyPassword} component={EditMyPasswordScreen}/>
       <Stack.Screen name={SCREENS.Settings} component={SettingsScreen}/>
     </Stack.Navigator>

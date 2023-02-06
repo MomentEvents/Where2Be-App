@@ -58,7 +58,7 @@ export interface SchoolResponse {
 
 export interface User {
   UserID: string;
-  Name: string;
+  DisplayName: string;
   Username: string;
   Picture: string;
 }

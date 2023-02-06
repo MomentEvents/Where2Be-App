@@ -19,40 +19,9 @@ import { displayError } from "../../helpers/helpers";
 type SectionProfileProps = {
   user: User;
   canEditProfile: boolean;
-  canNukeUser: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
-  const {userToken} = useContext(UserContext)
-  const {setLoading} = useContext(ScreenContext)
-
-  const nukeUser = () => {
-    Alert.alert(
-      "Nuke user",
-      "Are you sure you want to delete " + props.user.Name + " and all of their events?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-        },
-        {
-          text: "Yes",
-          onPress: () => {
-            console.log("Yes Pressed");
-            setLoading(true)
-            deleteUser(userToken.UserAccessToken, props.user.UserID).then(() => {
-              setLoading(false)
-              Navigator.popToTop()
-            }).catch((error: Error) => {
-              setLoading(false)
-              displayError(error)
-            });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  }
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -62,7 +31,7 @@ const SectionProfile = (props: SectionProfileProps) => {
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
-            {props.user.Name}
+            {props.user.DisplayName}
           </McText>
         </View>
         <View style={{ flexDirection: "row" }}>
@@ -72,21 +41,12 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            Navigator.navigate(SCREENS.EditMyProfile);
+            Navigator.navigate(SCREENS.EditProfile, {user: props.user, isSelf: true});
           }}
         >
           {props.canEditProfile && (
             <View style={styles.editProfileButtonContainer}>
               <McText h3>Edit Profile</McText>
-            </View>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {
-            nukeUser()
-          }}>
-          {props.canNukeUser && (
-            <View style={styles.nukeProfileButtonContainer}>
-              <McText h3>Nuke User</McText>
             </View>
           )}
         </TouchableOpacity>

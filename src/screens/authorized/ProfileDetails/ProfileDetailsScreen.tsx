@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Button,
   Image,
   RefreshControl,
@@ -27,36 +28,88 @@ import { displayError } from "../../../helpers/helpers";
 import SectionProfile from "../../../components/Styled/SectionProfile";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
-import { getUser } from "../../../services/UserService";
+import { deleteUser, getUser } from "../../../services/UserService";
+import { ScreenContext } from "../../../contexts/ScreenContext";
 
 type ProfileDetailsRouteParams = {
-  User: User;
+  user: User;
 };
 const ProfileDetailsScreen = ({ route }) => {
-  const { User }: ProfileDetailsRouteParams = route.params;
-  const [viewedUser, setViewedUser] = useState<User>(User)
-  const { isAdmin } = useContext(UserContext)
+  const { user }: ProfileDetailsRouteParams = route.params;
+  const [viewedUser, setViewedUser] = useState<User>(user);
+  const { isAdmin, userToken } = useContext(UserContext);
+  const { setLoading } = useContext(ScreenContext);
+
+  const nukeUser = () => {
+    Alert.alert(
+      "Nuke user",
+      "Are you sure you want to delete " +
+        viewedUser.DisplayName +
+        " and all of their events?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes Pressed");
+            setLoading(true);
+            deleteUser(userToken.UserAccessToken, user.UserID)
+              .then(() => {
+                setLoading(false);
+                Navigator.popToTop();
+              })
+              .catch((error: Error) => {
+                setLoading(false);
+                displayError(error);
+              });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   useEffect(() => {
-    getUser(User.UserID).then((pulledUser: User) => {
-      setViewedUser(pulledUser)
-    }).catch((error: Error) => {
-      displayError(error);
-      Navigator.goBack()
-    })
-  }, [])
+    getUser(user.UserID)
+      .then((pulledUser: User) => {
+        setViewedUser(pulledUser);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+        Navigator.goBack();
+      });
+  }, []);
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader
-        title={"View Profile"}
-        leftButtonSVG={<icons.backarrow />}
-        leftButtonOnClick={() => {
-          Navigator.goBack();
-        }}
-        hideBottomUnderline={true}
+      {isAdmin ? (
+        <SectionHeader
+          title={"View Profile"}
+          leftButtonSVG={<icons.backarrow />}
+          leftButtonOnClick={() => {
+            Navigator.goBack();
+          }}
+          hideBottomUnderline={true}
+          rightButtonOnClick={nukeUser}
+          rightButtonSVG={<icons.trash />}
+        />
+      ) : (
+        <SectionHeader
+          title={"View Profile"}
+          leftButtonSVG={<icons.backarrow />}
+          leftButtonOnClick={() => {
+            Navigator.goBack();
+          }}
+          hideBottomUnderline={true}
+        />
+      )}
+      <SectionProfile user={user} canEditProfile={true} />
+      <EventToggler
+        selectedUser={user}
+        eventsToPull={EVENT_TOGGLER.HostedEvents}
       />
-      <SectionProfile user={viewedUser} canEditProfile={false} canNukeUser={isAdmin}/>
-      <EventToggler selectedUser={User} eventsToPull={EVENT_TOGGLER.HostedEvents}/>
     </MobileSafeView>
   );
 };

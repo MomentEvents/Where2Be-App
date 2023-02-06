@@ -37,6 +37,7 @@ import calendar_eventdetails from "../../assets/icons/svgicons/eventdetails/cale
 import time_eventdetails from "../../assets/icons/svgicons/eventdetails/time_eventdetails.svg"
 import location_eventdetails from "../../assets/icons/svgicons/eventdetails/location_eventdetails.svg"
 import visibility_eventdetails from "../../assets/icons/svgicons/eventdetails/visibility_eventdetails.svg"
+import trash from "../../assets/icons/svgicons/trash.svg"
 
 //_____________________________________________________________________________
 // Deter from using the ones below. We will replace them with the ones up top
@@ -123,5 +124,6 @@ export default {
   calendar_eventdetails,
   location_eventdetails,
   time_eventdetails,
-  visibility_eventdetails
+  visibility_eventdetails,
+  trash
 };

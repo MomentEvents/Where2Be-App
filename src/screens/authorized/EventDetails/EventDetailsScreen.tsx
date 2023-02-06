@@ -173,7 +173,7 @@ const EventDetailsScreen = ({ route }) => {
   const onHostUsernamePressed = () => {
     if (host) {
       Navigator.push(SCREENS.ProfileDetails, {
-        User: host,
+        user: host,
       });
     }
   };
@@ -534,7 +534,7 @@ const EventDetailsScreen = ({ route }) => {
                   {!host ? (
                     <ActivityIndicator style={{ marginLeft: 10 }} />
                   ) : (
-                    host.Name
+                    host.DisplayName
                   )}
                 </McText>
               </TouchableOpacity>

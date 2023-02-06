@@ -29,7 +29,7 @@ export async function getUser(UserID: string): Promise<User> {
 
   const pulledUser: User = {
     UserID: data.user_id,
-    Name: data.display_name,
+    DisplayName: data.display_name,
     Username: data.username,
     Picture: data.picture,
   };
@@ -63,13 +63,13 @@ export async function getUserByUserAccessToken(
     throw formatError("Error " + response.status, message)
   }
 
-  const data = await response.json();
+  const responseJSON = await response.json();
 
   const pulledUser: User = {
-    UserID: data["user_id"],
-    Name: data["display_name"],
-    Username: data["username"],
-    Picture: data["picture"],
+    UserID: responseJSON["user_id"],
+    DisplayName: responseJSON["display_name"],
+    Username: responseJSON["username"],
+    Picture: responseJSON["picture"],
   };
   return Promise.resolve(pulledUser);
 }
@@ -97,7 +97,7 @@ export async function updateUser(
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
-  formData.append("display_name", updatedUser.Name);
+  formData.append("display_name", updatedUser.DisplayName);
   formData.append("username", updatedUser.Username);
   formData.append("picture", updatedUser.Picture);
 
@@ -123,7 +123,7 @@ export async function updateUser(
 
   const pulledUser: User = {
     UserID: responseJSON.user_id,
-    Name: responseJSON.display_name,
+    DisplayName: responseJSON.display_name,
     Username: responseJSON.username,
     Picture: responseJSON.picture,
   }
@@ -182,13 +182,13 @@ export async function getEventHostByEventId(
     throw formatError("Error " + response.status, message)
   }
 
-  const data = await response.json();
+  const responseJSON = await response.json();
 
   const pulledUser: User = {
-    UserID: data["user_id"],
-    Name: data["display_name"],
-    Username: data["username"],
-    Picture: data["picture"],
+    UserID: responseJSON["user_id"],
+    DisplayName: responseJSON["display_name"],
+    Username: responseJSON["username"],
+    Picture: responseJSON["picture"],
   };
 
   return pulledUser;
@@ -336,7 +336,7 @@ export async function getAllSchoolUsers(
   responseJSON.forEach((user: UserResponse) => {
     userArray.push({
       UserID: user.user_id,
-      Name: user.display_name,
+      DisplayName: user.display_name,
       Username: user.username,
       Picture: user.picture,
     });

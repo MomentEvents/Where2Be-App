@@ -42,7 +42,7 @@ const MyProfileScreen = ({ route }) => {
         rightButtonOnClick={() => {Navigator.navigate(SCREENS.Settings)}}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={currentUser} canEditProfile={true} canNukeUser={false}/>
+      <SectionProfile user={currentUser} canEditProfile={true}/>
       <View style={{flex: 1}}>
         <EventToggler
           selectedUser={currentUser}

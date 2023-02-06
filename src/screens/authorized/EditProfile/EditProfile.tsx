@@ -52,14 +52,19 @@ import { ScreenContext } from "../../../contexts/ScreenContext";
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
-const EditMyProfileScreen = ({ navigation, route }) => {
-  const { currentUser, setCurrentUser, userToken } = useContext(UserContext);
-  const {setLoading} = useContext(ScreenContext)
-  const [image, setImage] = useState(currentUser.Picture);
+type EditProfileParams = {
+  user: User;
+  isSelf?: boolean;
+};
+const EditProfile = ({ navigation, route }) => {
+  const {user, isSelf}: EditProfileParams = route.params
+  const { setCurrentUser, userToken } = useContext(UserContext);
+  const { setLoading } = useContext(ScreenContext);
+  const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
 
-  const [displayName, setDisplayName] = useState(currentUser.Name);
-  const [username, setUsername] = useState(currentUser.Username);
+  const [displayName, setDisplayName] = useState(user.DisplayName);
+  const [username, setUsername] = useState(user.Username);
 
   const handleSubmit = () => {
     if (!checkIfStringIsReadable(displayName)) {
@@ -78,18 +83,20 @@ const EditMyProfileScreen = ({ navigation, route }) => {
     // Update information
 
     const createdUser: User = {
-      UserID: currentUser.UserID,
-      Name: displayName,
+      UserID: user.UserID,
+      DisplayName: displayName,
       Username: username,
       Picture: image,
     };
-    const createdUserBase64 = {...createdUser};
+    const createdUserBase64 = { ...createdUser };
     createdUserBase64.Picture = base64Image;
-    setLoading(true)
+    setLoading(true);
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then((pulledUser: User) => {
         setLoading(false);
-        setCurrentUser(pulledUser);
+        if (isSelf) {
+          setCurrentUser(pulledUser);
+        }
         Navigator.goBack();
       })
       .catch((error: Error) => {
@@ -99,7 +106,7 @@ const EditMyProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <MobileSafeView style={styles.container} >
+    <MobileSafeView style={styles.container}>
       <SectionHeader
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
@@ -272,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditMyProfileScreen;
+export default EditProfile;

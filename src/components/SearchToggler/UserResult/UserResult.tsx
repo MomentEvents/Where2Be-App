@@ -9,7 +9,7 @@ type UserResultProps = {
 };
 const UserResult = (props: UserResultProps) => {
   const onUserPress = () => {
-    Navigator.navigate(SCREENS.ProfileDetails, { User: props.user });
+    Navigator.navigate(SCREENS.ProfileDetails, { user: props.user });
   };
 
   return (
@@ -45,7 +45,7 @@ const UserResult = (props: UserResultProps) => {
             }}
           >
             <McText h3 numberOfLines={1}>
-                {props.user.Name}
+                {props.user.DisplayName}
             </McText>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
