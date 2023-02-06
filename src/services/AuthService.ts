@@ -60,11 +60,13 @@ export async function login(
       username: usercred,
       password: password,
     })
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not login");
   });
 
   if(!response.ok){
     const message = await response.text();
-    throw formatError("Error", message)
+    throw formatError("Error: " + response.statusText, message)
   }
   const data = await response.json();
 
@@ -138,9 +140,15 @@ export async function signup(
       password: password,
       school_id: schoolID,
     })
-  }).catch(() => {
-      throw formatError("Fetch Error", "Could not signup");
-    });;
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not signup");
+  });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
+  
   const data = await response.json();
 
   const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
@@ -352,7 +360,7 @@ export async function checkIfUserAccessTokenIsAdmin(userAccessToken: string): Pr
       user_access_token: userAccessToken
     })
   }).catch((error: Error) => {
-    throw formatError("Unable to connect to server", "Please try again later");
+    throw formatError("Network error", "Unable to check if user is admin");
   });
 
   if(!response.ok){

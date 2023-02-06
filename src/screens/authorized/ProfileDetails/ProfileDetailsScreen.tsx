@@ -40,6 +40,9 @@ const ProfileDetailsScreen = ({ route }) => {
   useEffect(() => {
     getUser(User.UserID).then((pulledUser: User) => {
       setViewedUser(pulledUser)
+    }).catch((error: Error) => {
+      displayError(error);
+      Navigator.goBack()
     })
   }, [])
   return (

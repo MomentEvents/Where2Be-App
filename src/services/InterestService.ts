@@ -1,18 +1,7 @@
-import { InterestResponse } from './../constants/types';
+import { InterestResponse } from "./../constants/types";
 import momentAPI from "../constants/server";
 import { Interest } from "../constants";
-import { ACADEMIC, ATHLETICS, PROFESSIONAL, SOCIAL } from "./EventService";
 import { formatError } from "../helpers/helpers";
-
-// getAllInterests
-
-// getCurrUserInterests
-
-// updateCurrUserInterests
-
-// updateEventInterestsByEventId
-
-// getInterestsByEventId
 
 /******************************************************
  * getAllInterests
@@ -23,18 +12,24 @@ import { formatError } from "../helpers/helpers";
  * Return: List of all interests
  */
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
-  const response = await fetch(momentAPI+`/interest`, {
-    method: 'GET'
+  const response = await fetch(momentAPI + `/interest`, {
+    method: "GET",
   }).catch((error: Error) => {
-    throw formatError("Error getting all interests", error.message)
+    throw formatError("Network error", "Could not get all interests");
   });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message);
+  }
+
   const data = await response.json();
 
   const InterestArray = data.map((interest: InterestResponse) => {
     return {
       InterestID: interest.interest_id,
       Name: interest.name,
-    }
+    };
   });
 
   return InterestArray;
@@ -50,30 +45,33 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
  */
 export async function getEventInterestsByEventId(
   eventID: string,
-  userAccessToken: string,
+  userAccessToken: string
 ): Promise<Interest[]> {
-
-  // need user_access_token
-
-  console.log("INTEREST#######",eventID)
-
-  const response = await fetch(momentAPI+`/interest/event_id/${eventID}`, {
-    method: 'POST',
+  const response = await fetch(momentAPI + `/interest/event_id/${eventID}`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
+      user_access_token: userAccessToken,
+    }),
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not get event interests");
   });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message);
+  }
+
   const data = await response.json();
 
-  console.log("INTEREST#######",data)
+  console.log("INTEREST#######", data);
   const InterestArray = data.map((interest: InterestResponse) => {
     return {
       InterestID: interest.interest_id,
       Name: interest.name,
-    }
+    };
   });
 
   return InterestArray;

@@ -26,9 +26,6 @@ export async function getEvent(
   eventID: string,
   userAccessToken: string
 ): Promise<Event> {
-  // console.log(eventID)
-
-  // need to send user Access token
 
   console.log("useraccesstoken is" + userAccessToken);
   const response = await fetch(momentAPI + `/event/event_id/${eventID}`, {
@@ -40,15 +37,14 @@ export async function getEvent(
       user_access_token: userAccessToken,
     }),
   }).catch((error: Error) => {
-    throw formatError(
-      "Error in getting school events",
-      error.name + ": " + error.message
-    );
+    throw formatError("Network error", "Could not get event");
   });
 
-  if (!response.ok) {
-    throw formatError("Error " + response.status, response.statusText);
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
   }
+  
   const event: EventResponse = await response.json();
 
   console.log(event)
@@ -94,10 +90,6 @@ export async function createEvent(
   createdEvent: Event,
   interests: Interest[]
 ): Promise<string> {
-  console.log(createdEvent.StartDateTime.toISOString());
-  console.log(createdEvent.EndDateTime.toISOString());
-  // createdEvent.Picture is assumed to be base64 string
-
   const formData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", createdEvent.Title);
@@ -112,29 +104,21 @@ export async function createEvent(
   );
   formData.append("picture", createdEvent.Picture);
 
-  console.log("Form data ######" + formData);
-
   const response = await fetch(momentAPI + `/event/create_event`, {
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
     },
     body: formData,
-    // headers: {
-    //   "Content-Type": "application/json",
-    // },
-    // body: JSON.stringify({
-    //   user_access_token: userAccessToken,
-    //   title: createdEvent.Title,
-    //   description: createdEvent.Description,
-    //   location: createdEvent.Location,
-    //   start_date_time: createdEvent.StartDateTime.toISOString(),
-    //   end_date_time: createdEvent.EndDateTime.toISOString(),
-    //   visibility: createdEvent.Visibility,
-    //   interest_ids: interestIDArray,
-    //   picture: createdEvent.Picture,
-    // }),
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not create event");
   });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
+  
   const data = await response.json();
 
   return data["event_id"];
@@ -156,11 +140,8 @@ export async function updateEvent(
   updatedEvent: Event,
   updatedInterests: Interest[]
 ): Promise<void> {
-  // updatedEvent.Picture is assumed to be base64 string
-  console.log(updatedEvent.StartDateTime.toISOString());
-  console.log(updatedEvent.EndDateTime.toISOString());
-  // createdEvent.Picture is assumed to be base64 string
 
+  // updatedEvent.Picture is assumed to be base64 string
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", updatedEvent.Title);
@@ -183,10 +164,13 @@ export async function updateEvent(
       "Content-Type": "multipart/form-data",
     },
     body: formData,
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not update event");
   });
 
   if(!response.ok){
-    throw formatError("Error: " + response.status, response.statusText)
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
   }
 
   return Promise.resolve();
@@ -214,10 +198,15 @@ export async function deleteEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not delete event");
   });
-  if (!response.ok) {
-    throw formatError("Error: " + response.status, response.statusText);
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
   }
+  
   // const data = await response.json();
 
   return Promise.resolve();
@@ -246,7 +235,15 @@ export async function getUserJoinedFutureEvents(
         user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get user joined future events");
+  });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
+  
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -295,7 +292,15 @@ export async function getUserJoinedPastEvents(
         user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get user joined past events");
+  });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
+  
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -345,7 +350,15 @@ export async function getUserHostedFutureEvents(
         user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get user hosted future events");
+  });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
+  
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -396,11 +409,13 @@ export async function getUserHostedPastEvents(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError(
-      "Error in getting host past events",
-      error.name + ": " + error.message
-    );
+    throw formatError("Network error", "Could not get user hosted past events");
   });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
 
   const responseJSON = await response.json();
 
@@ -441,11 +456,13 @@ export async function getAllSchoolEvents(
       user_access_token: userAccessToken,
     }),
   }).catch((error: Error) => {
-    throw formatError(
-      "Error in getting all school events",
-      error.name + ": " + error.message
-    );
+    throw formatError("Network error", "Could not get all school events");
   });
+
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
+  }
 
   const responseJSON = await response.json();
 
@@ -495,14 +512,12 @@ export async function getAllSchoolEventsCategorized(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError(
-      "Error in getting school events",
-      error.name + ": " + error.message
-    );
+    throw formatError("Network error", "Could not get all categorized events");
   });
 
-  if (!response.ok) {
-    throw formatError("Error " + response.status, response.statusText);
+  if(!response.ok){
+    const message = await response.text();
+    throw formatError("Error: " + response.statusText, message)
   }
 
   const responseJSON = await response.json();
