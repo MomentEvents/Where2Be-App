@@ -64,20 +64,35 @@ export const ScreenProvider = ({ children }) => {
           {children}
         </>
       ) : (
-        <View
+        <SafeAreaView
           style={{
             flex: 1,
-            backgroundColor: COLORS.black,
+            backgroundColor: COLORS.trueBlack,
+            alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <SafeAreaView style={{ alignItems: "center" }}>
-            <icons.moment
-              width={Math.min(SIZES.width * 0.7, SIZES.height * 0.7)}
-            ></icons.moment>
+          <View
+            style={{
+              position: "absolute",
+              flex: 1,
+              zIndex: 99,
+              width: "70%",
+              justifyContent: "flex-end",
+            }}
+          >
+            <icons.moment width="100%"></icons.moment>
+          </View>
+          <View style={{ flex: 2 }} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "flex-start",
+            }}
+          >
             <ActivityIndicator size="small" />
-          </SafeAreaView>
-        </View>
+          </View>
+        </SafeAreaView>
       )}
     </ScreenContext.Provider>
   );

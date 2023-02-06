@@ -40,31 +40,39 @@ const SelectSchoolScreen = ({ navigation, route }) => {
   }, [school]);
 
   return (
-    <GradientBackground>
-      <SafeAreaView
+    <SafeAreaView style={styles.container}>
+      <View
         style={{
-          alignItems: "center",
-          justifyContent: "center",
+          position: "absolute",
           flex: 1,
+          zIndex: 99,
+          width: "70%",
+          justifyContent: "flex-end",
         }}
       >
-        <icons.moment
-          width={Math.min(SIZES.width * 0.7, SIZES.height * 0.7)}
-        ></icons.moment>
-        <View
-          style={{
-            marginTop: 30,
-            marginBottom: 60,
-            marginHorizontal: 30,
-          }}
-        >
+        <icons.moment width="100%"></icons.moment>
+      </View>
+      <View style={{ flex: 2 }} />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-start",
+          width: "70%"
+        }}
+      >
+        <View style={{ alignItems: "center", justifyContent: 'flex-start' }}>
           <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
         </View>
-        <TouchableOpacity onPress={onNavigateLogin}>
-          <McText body3>Already have an account?</McText>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </GradientBackground>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            style={{ marginTop: 40, alignSelf: "center" }}
+            onPress={onNavigateLogin}
+          >
+            <McText body3>Already have an account?</McText>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -73,7 +81,7 @@ export default SelectSchoolScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
     alignItems: "center",
     justifyContent: "center",
   },

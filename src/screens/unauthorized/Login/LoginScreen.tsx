@@ -41,7 +41,7 @@ const LoginScreen = () => {
   }
 
   return (
-    <GradientBackground>
+    <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
@@ -83,7 +83,7 @@ const LoginScreen = () => {
           </SafeAreaView>
         </KeyboardAvoidingView>
       </ScrollView>
-    </GradientBackground>
+    </SafeAreaView>
   );
 };
 
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: COLORS.trueBlack
   },
   welcomeTextContainer: {
     marginBottom: 40,
