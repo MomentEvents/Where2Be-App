@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Button,
   Image,
+  Platform,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -35,8 +36,12 @@ const MyCalendarScreen = ({ route }) => {
 
   return (
     <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
-      <SectionHeader title={"Joined Events"} hideBottomUnderline={true} style={{paddingBottom: 17}}/>
-      <View style={{flex: 1, backgroundColor: COLORS.black}}>
+      <SectionHeader
+        title={"Joined Events"}
+        hideBottomUnderline={true}
+        style={{ paddingBottom: Platform.OS === "ios" ? 17 : 24 }}
+      />
+      <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         <EventToggler
           selectedUser={currentUser}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
