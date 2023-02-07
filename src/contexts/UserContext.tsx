@@ -126,9 +126,7 @@ export const UserProvider = ({ children }) => {
     }
 
     checkIfUserAccessTokenIsAdmin(token.UserAccessToken).then((pulledIsAdmin: boolean) => {
-      if(pulledIsAdmin){
-        setIsAdmin(true)
-      }
+      setIsAdmin(pulledIsAdmin)
     }).catch((error: Error) => {
       displayError(error)
     })

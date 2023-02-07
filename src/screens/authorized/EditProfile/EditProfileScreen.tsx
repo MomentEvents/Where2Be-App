@@ -56,7 +56,7 @@ type EditProfileParams = {
   user: User;
   isSelf?: boolean;
 };
-const EditProfile = ({ navigation, route }) => {
+const EditProfileScreen = ({ navigation, route }) => {
   const {user, isSelf}: EditProfileParams = route.params
   const { setCurrentUser, userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProfile;
+export default EditProfileScreen;
