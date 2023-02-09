@@ -17,11 +17,12 @@ import { COLORS, FONTS, SCREENS, SIZES } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { displayError } from "../../../helpers/helpers";
-import * as Navigator from "../../../navigation/Navigator"
+import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
   const { setLoading } = useContext(ScreenContext);
+  const navigation = useNavigation<any>();
 
   const [usercred, setUsercred] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -37,7 +38,7 @@ const LoginScreen = () => {
   };
 
   const onNavigateSignup = () => {
-    Navigator.navigate(SCREENS.Signup)
+    navigation.navigate(SCREENS.Signup)
   }
 
   return (

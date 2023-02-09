@@ -15,7 +15,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { EVENT_TOGGLER, User, icons } from "../../../constants";
-import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../../components/Styled";
 import { Event } from "../../../constants";
 import EventCard from "../../../components/EventCard";

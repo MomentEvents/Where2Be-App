@@ -25,27 +25,35 @@ import { displayError } from "../../../helpers/helpers";
 import EventCard from "../../../components/EventCard";
 import { McIcon, McText } from "../../../components/Styled";
 import styled from "styled-components/native";
-import * as Navigator from "../../../navigation/Navigator";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { useNavigation } from "@react-navigation/native";
 type RouteParams = {
   school: School;
 };
-const IntroduceEventsScreen = ({ navigation, route }) => {
+const IntroduceEventsScreen = ({ route }) => {
   const { school }: RouteParams = route.params;
 
+  const navigation = useNavigation<any>();
+
   const navigateToLogin = (): void => {
-    Navigator.navigate(SCREENS.Login);
+    navigation.navigate(SCREENS.Login);
   };
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Explore Events"} leftButtonSVG={<icons.backarrow/>} leftButtonOnClick={() => {Navigator.goBack()}}/>
-        <EventViewer school={school}></EventViewer>
+      <SectionHeader
+        title={"Explore Events"}
+        leftButtonSVG={<icons.backarrow />}
+        leftButtonOnClick={() => {
+          navigation.goBack();
+        }}
+      />
+      <EventViewer school={school}></EventViewer>
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={navigateToLogin}

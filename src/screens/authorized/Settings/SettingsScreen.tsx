@@ -12,14 +12,15 @@ import React, { useContext } from "react";
 import { COLORS, icons, SIZES } from "../../../constants";
 import { McText } from "../../../components/Styled";
 import SectionHeader from "../../../components/Styled/SectionHeader";
-import * as Navigator from "../../../navigation/Navigator";
 import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { useNavigation } from "@react-navigation/native";
 
 const SettingsScreen = () => {
 
   const {userLogout} = useContext(AuthContext)
+  const navigation = useNavigation<any>();
 
   const onChangePasswordClick = () => {
 
@@ -64,7 +65,7 @@ const SettingsScreen = () => {
         title={"Settings"}
         leftButtonSVG={<icons.backarrow />}
         leftButtonOnClick={() => {
-          Navigator.goBack();
+          navigation.goBack();
         }}
       />
       <ScrollView>

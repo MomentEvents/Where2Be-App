@@ -17,7 +17,6 @@ import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Navigator from "../../../navigation/Navigator";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
@@ -31,6 +30,7 @@ import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { useNavigation } from "@react-navigation/native";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -54,6 +54,8 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToInterests,
   } = useContext(EventContext);
 
+  const navigation = useNavigation<any>();
+
   const { createdEvent, interests, base64Image } = propsFromEventCard;
 
   const [descriptionExpanded, setDescriptionExpanded] =
@@ -63,7 +65,7 @@ const EventDetailsScreen = ({ route }) => {
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   const onBackPressed = () => {
-    Navigator.goBack();
+    navigation.goBack();
   };
 
   const onSubmit = () => {
@@ -74,8 +76,8 @@ const EventDetailsScreen = ({ route }) => {
       .then((eventID: string) => {
         setLoading(false);
         updateEventIDToEvent({ id: eventID, event: createdEvent });
-        Navigator.popToTop();
-        Navigator.push(SCREENS.EventDetails, { eventID: eventID });
+        navigation.popToTop();
+        navigation.push(SCREENS.EventDetails, { eventID: eventID });
       })
       .catch((error: Error) => {
         displayError(error);

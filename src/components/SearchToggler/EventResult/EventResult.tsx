@@ -1,16 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React from "react";
 import { COLORS, SCREENS, Event, icons, SIZES } from "../../../constants";
-import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../Styled";
 import moment from "moment";
+import { useNavigation } from "@react-navigation/native";
 
 type EventResultProps = {
   event: Event;
 };
 const EventResult = (props: EventResultProps) => {
+  const navigation = useNavigation<any>();
   const onEventPress = () => {
-    Navigator.navigate(SCREENS.EventDetails, { eventID: props.event.EventID });
+    navigation.push(SCREENS.EventDetails, { eventID: props.event.EventID });
   };
 
   return (

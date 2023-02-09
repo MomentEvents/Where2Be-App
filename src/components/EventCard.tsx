@@ -14,7 +14,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SIZES, COLORS, icons, SCREENS } from "../constants";
 import { McText, McIcon } from "./Styled";
 import "react-native-gesture-handler";
-import * as Navigator from "../navigation/Navigator";
 import { Event } from "../constants";
 import { UserContext } from "../contexts/UserContext";
 import { displayError } from "../helpers/helpers";
@@ -39,10 +38,8 @@ const EventCard = ({
   showRelativeTime,
 }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
-  const {
-    eventIDToEvent,
-    updateEventIDToEvent,
-  } = useContext(EventContext);
+  const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
+  const navigation = useNavigation<any>();
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
   const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
@@ -62,8 +59,7 @@ const EventCard = ({
       onClick();
       return;
     }
-
-    Navigator.navigate(SCREENS.EventDetails, {
+    navigation.push(SCREENS.EventDetails, {
       eventID: event.EventID,
     });
     // Navigate to event details page
@@ -80,12 +76,8 @@ const EventCard = ({
   }, []);
 
   useEffect(() => {
-    setIsLoaded(
-        fetchedEvent
-    );
-  }, [
-    fetchedEvent,
-  ]);
+    setIsLoaded(fetchedEvent);
+  }, [fetchedEvent]);
 
   if (!isLoaded || !eventIDToEvent[event.EventID]) {
     return (
@@ -94,33 +86,11 @@ const EventCard = ({
           height: cardHeight,
           width: cardWidth,
           borderRadius: cardBorderRadius,
+          borderWidth: cardBorderWidth,
+          borderColor: cardBorderColor,
+          backgroundColor: COLORS.trueBlack,
         }}
-      >
-        <Image
-          style={{
-            height: cardHeight,
-            width: cardWidth,
-            borderRadius: cardBorderRadius,
-            borderWidth: cardBorderWidth,
-            borderColor: cardBorderColor,
-            overlayColor: COLORS.trueBlack,
-          }}
-        />
-        <ActivityIndicator
-          style={{
-            flex: 1,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            height: cardHeight,
-            width: cardWidth,
-            borderRadius: cardBorderRadius,
-            borderWidth: cardBorderWidth,
-            borderColor: cardBorderColor,
-            backgroundColor: "rgba(0,0,0,.5)",
-          }}
-        />
-      </View>
+      />
     );
   }
 
@@ -173,7 +143,11 @@ const EventCard = ({
             }}
           >
             <LinearGradient
-              colors={["transparent",COLORS.transparentBlack,COLORS.transparentBlack]}
+              colors={[
+                "transparent",
+                COLORS.transparentBlack,
+                COLORS.transparentBlack,
+              ]}
               start={{ x: 0, y: 0.4 }}
               end={{ x: 0, y: 1.3 }}
               style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
@@ -349,7 +323,7 @@ const EventCard = ({
           }}
         >
           <LinearGradient
-            colors={["transparent",COLORS.transparentBlack, COLORS.trueBlack]}
+            colors={["transparent", COLORS.transparentBlack, COLORS.trueBlack]}
             start={{ x: 0, y: 0.4 }}
             end={{ x: 0, y: 1.1 }}
             style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
@@ -370,7 +344,7 @@ const EventCard = ({
             <McText h3 numberOfLines={2}>
               {eventIDToEvent[event.EventID].Title}
             </McText>
-            <View style={{flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }}>
               <McText
                 h5
                 style={{

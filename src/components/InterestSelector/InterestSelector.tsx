@@ -50,6 +50,7 @@ const InterestSelector = (props: InterestSelectorProps) => {
 
         props.setSelectedInterests(selectedInterestsTemp);
         setInterestIDToInterestMap(interestIDToInterestMapTemp);
+        console.log(selectedInterestsTemp)
       })
       .catch((error: Error) => {
         displayError(error);

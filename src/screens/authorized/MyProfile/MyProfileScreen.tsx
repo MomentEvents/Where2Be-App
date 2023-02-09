@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { EVENT_TOGGLER, SCREENS, User, icons } from "../../../constants";
-import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../../components/Styled";
 import { Event } from "../../../constants";
 import EventCard from "../../../components/EventCard";
@@ -27,23 +26,27 @@ import { displayError } from "../../../helpers/helpers";
 import SectionProfile from "../../../components/Styled/SectionProfile";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
+import { useNavigation } from "@react-navigation/native";
 
 type ProfileDetailsRouteParams = {
   User: User;
 };
 const MyProfileScreen = ({ route }) => {
   const { currentUser } = useContext(UserContext);
+  const navigation = useNavigation<any>();
 
   return (
     <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
       <SectionHeader
         title={"Hosted Events"}
         rightButtonSVG={<icons.settings />}
-        rightButtonOnClick={() => {Navigator.navigate(SCREENS.Settings)}}
+        rightButtonOnClick={() => {
+          navigation.navigate(SCREENS.Settings);
+        }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={currentUser} canEditProfile={true}/>
-      <View style={{flex: 1}}>
+      <SectionProfile user={currentUser} canEditProfile={true} />
+      <View style={{ flex: 1 }}>
         <EventToggler
           selectedUser={currentUser}
           eventsToPull={EVENT_TOGGLER.HostedEvents}
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
   toggleButton: {
     width: SIZES.width * 0.5,
     height: 40,
-    backgroundColor: COLORS.black
+    backgroundColor: COLORS.black,
   },
   editProfileButtonContainer: {
     borderRadius: 5,

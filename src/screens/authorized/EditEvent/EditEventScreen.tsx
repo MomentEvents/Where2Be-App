@@ -36,17 +36,17 @@ import {
   displayError,
   formatError,
 } from "../../../helpers/helpers";
-import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import EventEditor from "../../../components/EventEditor/EventEditor";
+import { useNavigation } from "@react-navigation/native";
 
 type EditEventScreenParams = {
   eventID: string;
 };
 
-const EditEventScreen = ({ navigation, route }) => {
+const EditEventScreen = ({ route }) => {
   const { eventID }: EditEventScreenParams = route.params;
 
   const { setLoading } = useContext(ScreenContext);
@@ -57,6 +57,7 @@ const EditEventScreen = ({ navigation, route }) => {
     eventIDToInterests,
     updateEventIDToInterests,
   } = useContext(EventContext);
+  const navigation = useNavigation<any>();
 
   const [title, setTitle] = useState<string>(eventIDToEvent[eventID].Title);
   const [location, setLocation] = useState<string>(
@@ -169,7 +170,7 @@ const EditEventScreen = ({ navigation, route }) => {
         updateEventIDToEvent({ id: eventID, event: updatedEvent });
         updateEventIDToInterests({id: eventID, interests: arrayInterests})
         setLoading(false);
-        Navigator.goBack();
+        navigation.goBack();
       })
       .catch((error: Error) => {
         displayError(error);
@@ -182,7 +183,7 @@ const EditEventScreen = ({ navigation, route }) => {
       <SectionHeader
         title={"Edit Event"}
         leftButtonOnClick={() => {
-          Navigator.goBack();
+          navigation.goBack();
         }}
         leftButtonSVG={<icons.backarrow />}
         rightButtonOnClick={() => {

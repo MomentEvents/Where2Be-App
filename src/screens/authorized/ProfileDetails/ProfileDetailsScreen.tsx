@@ -15,7 +15,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { EVENT_TOGGLER, User, icons } from "../../../constants";
-import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../../components/Styled";
 import { Event } from "../../../constants";
 import EventCard from "../../../components/EventCard";
@@ -30,11 +29,13 @@ import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { deleteUser, getUser } from "../../../services/UserService";
 import { ScreenContext } from "../../../contexts/ScreenContext";
+import { useNavigation } from "@react-navigation/native";
 
 type ProfileDetailsRouteParams = {
   user: User;
 };
 const ProfileDetailsScreen = ({ route }) => {
+  const navigation = useNavigation<any>();
   const { user }: ProfileDetailsRouteParams = route.params;
   const [viewedUser, setViewedUser] = useState<User>(user);
   const { isAdmin, userToken } = useContext(UserContext);
@@ -59,7 +60,7 @@ const ProfileDetailsScreen = ({ route }) => {
             deleteUser(userToken.UserAccessToken, user.UserID)
               .then(() => {
                 setLoading(false);
-                Navigator.popToTop();
+                navigation.popToTop();
               })
               .catch((error: Error) => {
                 setLoading(false);
@@ -79,7 +80,7 @@ const ProfileDetailsScreen = ({ route }) => {
       })
       .catch((error: Error) => {
         displayError(error);
-        Navigator.goBack();
+        navigation.goBack();
       });
   }, []);
   return (
@@ -89,7 +90,7 @@ const ProfileDetailsScreen = ({ route }) => {
           title={"View Profile"}
           leftButtonSVG={<icons.backarrow />}
           leftButtonOnClick={() => {
-            Navigator.goBack();
+            navigation.goBack();
           }}
           hideBottomUnderline={true}
           rightButtonOnClick={nukeUser}
@@ -100,7 +101,7 @@ const ProfileDetailsScreen = ({ route }) => {
           title={"View Profile"}
           leftButtonSVG={<icons.backarrow />}
           leftButtonOnClick={() => {
-            Navigator.goBack();
+            navigation.goBack();
           }}
           hideBottomUnderline={true}
         />

@@ -8,19 +8,27 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import { SIZES, School, Event, Interest, SCREENS, COLORS } from "../../constants";
+import {
+  SIZES,
+  School,
+  Event,
+  Interest,
+  SCREENS,
+  COLORS,
+} from "../../constants";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
-import * as Navigator from "../../navigation/Navigator";
+import { useNavigation } from "@react-navigation/native";
 
 type EventViewerProps = {
   school: School;
 };
 const EventViewer = (props: EventViewerProps) => {
+  const navigation = useNavigation<any>();
   const { isLoggedIn, userToken } = useContext(UserContext);
   const [categoryNameToEventsMap, setCategoryNameToEventsMap] = useState<{
     [key: string]: Event[];
@@ -47,7 +55,17 @@ const EventViewer = (props: EventViewerProps) => {
   const _renderBigEventCards = ({ item, index }) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
-        {isLoggedIn ? <EventCard event={item} isBigCard={true}/> : <EventCard event={item} isBigCard={true} onClick={() => {Navigator.navigate(SCREENS.Login)}}/>}
+        {isLoggedIn ? (
+          <EventCard event={item} isBigCard={true} />
+        ) : (
+          <EventCard
+            event={item}
+            isBigCard={true}
+            onClick={() => {
+              navigation.navigate(SCREENS.Login);
+            }}
+          />
+        )}
       </View>
     );
   };
@@ -55,14 +73,24 @@ const EventViewer = (props: EventViewerProps) => {
   const _renderSmallEventCards = ({ item, index }) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
-        {isLoggedIn ? <EventCard event={item} isBigCard={false}/> : <EventCard event={item} isBigCard={false} onClick={() => {Navigator.navigate(SCREENS.Login)}}/>}
+        {isLoggedIn ? (
+          <EventCard event={item} isBigCard={false} />
+        ) : (
+          <EventCard
+            event={item}
+            isBigCard={false}
+            onClick={() => {
+              navigation.navigate(SCREENS.Login);
+            }}
+          />
+        )}
       </View>
     );
   };
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setCategoryNameToEventsMap({})
+    setCategoryNameToEventsMap({});
     setIsLoadingEvents(true);
     pullData();
   };
@@ -77,14 +105,19 @@ const EventViewer = (props: EventViewerProps) => {
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
       }
-      style={{backgroundColor:COLORS.black}}
+      style={{ backgroundColor: COLORS.black }}
     >
       {isLoadingEvents && !isRefreshing && (
         <ActivityIndicator style={{ marginTop: 20 }} size={"small"} />
       )}
+      {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
+        <View style={{marginTop: 20, alignItems: "center"}}>
+          <McText h3>No upcoming events!</McText>
+        </View>
+      )}
       {Object.keys(categoryNameToEventsMap).map((key, index) =>
         key === "Featured" ? (
-          <View key={"Featured"+key + index}>
+          <View key={"Featured" + key + index}>
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -110,7 +143,7 @@ const EventViewer = (props: EventViewerProps) => {
           </View>
         )
       )}
-      <View style={{height: SIZES.bottomBarHeight}}/>
+      <View style={{ height: SIZES.bottomBarHeight }} />
     </ScrollView>
   );
 };
@@ -120,11 +153,11 @@ export default EventViewer;
 const styles = StyleSheet.create({
   categoryTitle: {
     marginLeft: 20,
-    backgroundColor: COLORS.black
+    backgroundColor: COLORS.black,
   },
   flatlistContainer: {
     marginTop: 15,
     marginBottom: 20,
-    backgroundColor: COLORS.black
+    backgroundColor: COLORS.black,
   },
 });

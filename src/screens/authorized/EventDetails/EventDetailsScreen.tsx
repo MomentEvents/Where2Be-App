@@ -17,7 +17,6 @@ import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Navigator from "../../../navigation/Navigator";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
@@ -36,6 +35,7 @@ import { EventContext } from "../../../contexts/EventContext";
 import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
+import { useNavigation } from "@react-navigation/native";
 
 type routeParametersType = {
   eventID: string;
@@ -43,7 +43,8 @@ type routeParametersType = {
 
 const EventDetailsScreen = ({ route }) => {
   const { userToken, currentUser, isAdmin } = useContext(UserContext);
-
+  const navigation = useNavigation<any>();
+  
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
   const { eventID } = propsFromEventCard;
@@ -172,7 +173,7 @@ const EventDetailsScreen = ({ route }) => {
 
   const onHostUsernamePressed = () => {
     if (host) {
-      Navigator.push(SCREENS.ProfileDetails, {
+      navigation.push(SCREENS.ProfileDetails, {
         user: host,
       });
     }
@@ -182,7 +183,7 @@ const EventDetailsScreen = ({ route }) => {
     if (!eventIDToEvent[eventID]) {
       return;
     }
-    Navigator.navigate(SCREENS.EditEvent, {
+    navigation.navigate(SCREENS.EditEvent, {
       eventID: eventID,
     });
   };
@@ -200,13 +201,15 @@ const EventDetailsScreen = ({ route }) => {
           text: "Yes",
           onPress: async () => {
             console.log("Yes Pressed");
-
+            setLoading(true)
             deleteEvent(userToken.UserAccessToken, eventID)
               .then(() => {
+                setLoading(false)
                 updateEventIDToEvent({ id: eventID, event: undefined });
-                Navigator.goBack();
+                navigation.goBack();
               })
               .catch((error: Error) => {
+                setLoading(false)
                 displayError(error);
               });
           },
@@ -217,7 +220,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onBackPressed = () => {
-    Navigator.goBack();
+    navigation.goBack();
   };
 
   // For description expansion
@@ -241,7 +244,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          Navigator.goBack();
+          navigation.goBack();
         }
       });
 
@@ -254,7 +257,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          Navigator.goBack();
+          navigation.goBack();
         }
       });
 
@@ -267,7 +270,7 @@ const EventDetailsScreen = ({ route }) => {
         if (!gotError) {
           gotError = true;
           displayError(error);
-          Navigator.goBack();
+          navigation.goBack();
         }
       });
   };

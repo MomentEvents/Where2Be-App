@@ -229,7 +229,7 @@ const SearchToggler = () => {
               ) : (
                 <View
                   style={{
-                    marginTop: 20,
+                    marginTop: 10,
                     justifyContent: "center",
                     alignItems: "center",
                   }}
@@ -238,7 +238,7 @@ const SearchToggler = () => {
                 </View>
               )
             ) : (
-              !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
+              !isRefreshing && <ActivityIndicator style={{ marginTop: 10 }} />
             )
           ) : searchedUsers ? (
             searchedUsers.length !== 0 ? (
@@ -246,7 +246,7 @@ const SearchToggler = () => {
             ) : (
               <View
                 style={{
-                  marginTop: 20,
+                  marginTop: 10,
                   justifyContent: "center",
                   alignItems: "center",
                 }}
@@ -255,7 +255,7 @@ const SearchToggler = () => {
               </View>
             )
           ) : (
-            !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
+            !isRefreshing && <ActivityIndicator style={{ marginTop: 10 }} />
           )}
           <View style={{ height: 20 }} />
         </View>

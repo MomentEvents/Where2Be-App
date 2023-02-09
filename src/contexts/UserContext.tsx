@@ -20,7 +20,9 @@ import {
 import { getSchoolByUserId } from "../services/SchoolService";
 import { getUserByUserAccessToken } from "../services/UserService";
 import { displayError, formatError } from "../helpers/helpers";
-// import { displayError } from "../helpers/helpers";
+import Constants from "expo-constants"
+import { appVersion, appVersionText } from "../constants/texts";
+
 
 type UserContextType = {
   userToken: Token;
@@ -69,7 +71,7 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getServerStatus().then(() => {
+    getServerStatus(appVersion).then(() => {
       fillUserData();
     }).catch((error: Error) => {
       displayError(error)

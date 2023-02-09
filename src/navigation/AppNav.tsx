@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { navigationRef } from "./Navigator";
 import { UserContext } from "../contexts/UserContext";
 import SelectSchoolScreen from "../screens/unauthorized/SelectSchool/SelectSchoolScreen";
 import IntroduceEventsScreen from "../screens/unauthorized/IntroduceEvents/IntroduceEventsScreen";
@@ -23,7 +22,7 @@ const Stack = createStackNavigator();
 const AppNav = () => {
   const { isLoggedIn } = useContext(UserContext);
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer>
       {isLoggedIn ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );

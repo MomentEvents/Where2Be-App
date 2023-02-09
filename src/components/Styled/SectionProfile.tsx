@@ -10,11 +10,11 @@ import {
 import React, { useContext } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
-import * as Navigator from "../../navigation/Navigator";
 import { UserContext } from "../../contexts/UserContext";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { deleteUser } from "../../services/UserService";
 import { displayError } from "../../helpers/helpers";
+import { useNavigation } from "@react-navigation/native";
 
 type SectionProfileProps = {
   user: User;
@@ -22,6 +22,8 @@ type SectionProfileProps = {
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
+  const { currentUser } = useContext(UserContext);
+  const navigation = useNavigation<any>();
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -41,7 +43,10 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            Navigator.navigate(SCREENS.EditProfile, {user: props.user, isSelf: true});
+            navigation.navigate(SCREENS.EditProfile, {
+              user: props.user,
+              isSelf: props.user.UserID === currentUser.UserID,
+            });
           }}
         >
           {props.canEditProfile && (

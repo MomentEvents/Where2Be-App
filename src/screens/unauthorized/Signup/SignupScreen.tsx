@@ -17,13 +17,14 @@ import { COLORS, FONTS, SCREENS, SIZES, School } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { displayError, formatError } from "../../../helpers/helpers";
-import * as Navigator from "../../../navigation/Navigator";
 import SchoolSelector from "./components/SchoolSelector";
+import { useNavigation } from "@react-navigation/native";
 
 const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
   const { setLoading } = useContext(ScreenContext);
-
+  const navigation = useNavigation<any>();
+  
   const [username, setUsername] = useState<string>("");
   const [displayName, setDisplayName] = useState<string>("");
   const [selectedSchool, setSelectedSchool] = useState<School>(null);
@@ -44,7 +45,7 @@ const SignupScreen = () => {
   };
 
   const onNavigateLogin = () => {
-    Navigator.navigate(SCREENS.Login);
+    navigation.navigate(SCREENS.Login);
   };
 
   return (

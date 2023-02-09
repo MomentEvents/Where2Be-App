@@ -21,22 +21,23 @@ import { ScreenContext } from "../../../contexts/ScreenContext";
 import { McText } from "../../../components/Styled";
 import SelectList from "react-native-dropdown-select-list";
 import SchoolSelector from "./components/SchoolSelector";
-import * as Navigator from "../../../navigation/Navigator";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientBackground from "../../../components/Styled/GradientBackground";
-import { appVersion } from "../../../constants/texts";
+import { appVersionText } from "../../../constants/texts";
+import { useNavigation } from "@react-navigation/native";
 
-const SelectSchoolScreen = ({ navigation, route }) => {
+const SelectSchoolScreen = ({ route }) => {
   const [school, setSchool] = useState<School>(null);
+  const navigation = useNavigation<any>();
 
   const onNavigateLogin = () => {
-    Navigator.navigate(SCREENS.Login);
+    navigation.navigate(SCREENS.Login);
   };
 
   useEffect(() => {
     if (school != null) {
       console.log("School selected is " + school.Name);
-      Navigator.navigate(SCREENS.IntroduceEvents, { school: school });
+      navigation.navigate(SCREENS.IntroduceEvents, { school: school });
     }
   }, [school]);
 
@@ -73,7 +74,7 @@ const SelectSchoolScreen = ({ navigation, route }) => {
       </View>
       <View style={{ padding: 5 }}>
         <McText body6 color={COLORS.gray1}>
-          {appVersion}
+          {appVersionText}
         </McText>
       </View>
     </SafeAreaView>

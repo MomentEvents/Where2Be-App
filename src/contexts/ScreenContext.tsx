@@ -25,7 +25,7 @@ import {
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { McText } from "../components/Styled";
-import { appVersion } from "../constants/texts";
+import { appVersionText } from "../constants/texts";
 // import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
@@ -98,7 +98,7 @@ export const ScreenProvider = ({ children }) => {
           </View>
           <View style={{ padding: 5 }}>
             <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
-              {appVersion}
+              {appVersionText}
             </Text>
           </View>
         </SafeAreaView>

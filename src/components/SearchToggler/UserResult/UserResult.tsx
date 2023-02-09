@@ -1,15 +1,16 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React from "react";
 import { COLORS, SCREENS, User } from "../../../constants";
-import * as Navigator from "../../../navigation/Navigator";
 import { McText } from "../../Styled";
+import { useNavigation } from "@react-navigation/native";
 
 type UserResultProps = {
   user: User;
 };
 const UserResult = (props: UserResultProps) => {
+  const navigation = useNavigation<any>();
   const onUserPress = () => {
-    Navigator.navigate(SCREENS.ProfileDetails, { user: props.user });
+    navigation.push(SCREENS.ProfileDetails, { user: props.user });
   };
 
   return (

@@ -30,7 +30,7 @@ import { FONTS, SIZES, COLORS, icons, images, User } from "../../../constants";
 import { McText, McIcon, McAvatar } from "../../../components/Styled";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -43,7 +43,6 @@ import {
 } from "../../../helpers/helpers";
 import { updateUser } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
-import * as Navigator from "../../../navigation/Navigator";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
@@ -56,8 +55,10 @@ type EditProfileParams = {
   user: User;
   isSelf?: boolean;
 };
-const EditProfileScreen = ({ navigation, route }) => {
+const EditProfileScreen = ({ route }) => {
   const {user, isSelf}: EditProfileParams = route.params
+
+  const navigation = useNavigation<any>();
   const { setCurrentUser, userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
@@ -76,7 +77,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       !checkIfStringIsReadable(username) ||
       !checkIfStringIsAlphanumeric(username)
     ) {
-      Alert.alert("Error", "Please enter a valid username");
+      Alert.alert("Error", "Please enter an alphanumeric username");
       return;
     }
 
@@ -97,7 +98,7 @@ const EditProfileScreen = ({ navigation, route }) => {
         if (isSelf) {
           setCurrentUser(pulledUser);
         }
-        Navigator.goBack();
+        navigation.goBack();
       })
       .catch((error: Error) => {
         displayError(error);
@@ -110,7 +111,7 @@ const EditProfileScreen = ({ navigation, route }) => {
       <SectionHeader
         title={"Edit Profile"}
         leftButtonSVG={<icons.backarrow />}
-        leftButtonOnClick={() => Navigator.goBack()}
+        leftButtonOnClick={() => navigation.goBack()}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>
             Save

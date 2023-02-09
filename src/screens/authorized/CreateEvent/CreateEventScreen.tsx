@@ -37,17 +37,19 @@ import {
   displayError,
   formatError,
 } from "../../../helpers/helpers";
-import * as Navigator from "../../../navigation/Navigator";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import EventEditor from "../../../components/EventEditor/EventEditor";
+import { useNavigation } from "@react-navigation/native";
 
 type EditEventScreenParams = {
   eventID: string;
 };
 
-const CreateEventScreen = ({ navigation, route }) => {
+const CreateEventScreen = ({ route }) => {
+  const navigation = useNavigation<any>();
+
   const [title, setTitle] = useState<string>();
   const [location, setLocation] = useState<string>();
   const [image, setImage] = useState<string>();
@@ -122,7 +124,7 @@ const CreateEventScreen = ({ navigation, route }) => {
     }
     console.log(createdEvent);
 
-    Navigator.navigate(SCREENS.PreviewEvent, {
+    navigation.navigate(SCREENS.PreviewEvent, {
       createdEvent: createdEvent,
       base64Image: base64Image,
       interests: Array.from(selectedInterests),
@@ -134,7 +136,7 @@ const CreateEventScreen = ({ navigation, route }) => {
       <SectionHeader
         title={"Create Event"}
         leftButtonOnClick={() => {
-          Navigator.goBack();
+          navigation.goBack();
         }}
         leftButtonSVG={<icons.backarrow />}
         rightButtonOnClick={() => {
