@@ -1,5 +1,11 @@
 import { Component, useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Switch, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Switch,
+  ActivityIndicator,
+} from "react-native";
 
 import ModalSelector from "react-native-modal-selector-searchable";
 import { getAllSchools } from "../../../../services/SchoolService";
@@ -69,10 +75,9 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
   }, [schoolMap, selectionData]);
 
   return (
-
-      <View>
-        {componentLoaded ? (
-          <ModalSelector
+    <View>
+      {componentLoaded ? (
+        <ModalSelector
           renderItem={(item) => {
             return <></>;
           }}
@@ -88,44 +93,43 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             fontFamily: CUSTOMFONT_REGULAR,
             fontSize: 15,
           }}
-            data={selectionData}
-            initValue="Select your school"
-            selectStyle      ={{
-                borderWidth: 0
-            }}
-            onChange={(option) => {
-              props.setSelectedSchool(schoolMap[option.key]);
-            }}
-            selectTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_REGULAR,
-            }}
-            initValueTextStyle={{
-              color: COLORS.gray,
-              fontFamily: CUSTOMFONT_REGULAR,
-            }}
-            optionContainerStyle={{
-              marginTop: SIZES.topBarHeight + 10,
-              backgroundColor: "rgba(60,60,60,0.9)",
-            }}
-            optionTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
-            }}
-            cancelTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
-            }}
-            cancelStyle={{
-              backgroundColor: "rgba(60,60,60,0.9)",
-              marginBottom: SIZES.bottomBarHeight + 10
-            }}
-
-          />
-        ) : (
-          <ActivityIndicator size="small" />
-        )}
-      </View>
+          data={selectionData}
+          initValue="Select your school"
+          selectStyle={{
+            borderWidth: 0,
+          }}
+          onChange={(option) => {
+            props.setSelectedSchool(schoolMap[option.key]);
+          }}
+          selectTextStyle={{
+            color: COLORS.white,
+            fontFamily: CUSTOMFONT_REGULAR,
+          }}
+          initValueTextStyle={{
+            color: COLORS.gray,
+            fontFamily: CUSTOMFONT_REGULAR,
+          }}
+          optionContainerStyle={{
+            marginTop: SIZES.topBarHeight + 10,
+            backgroundColor: "rgba(60,60,60,0.9)",
+          }}
+          optionTextStyle={{
+            color: COLORS.white,
+            fontFamily: CUSTOMFONT_BOLD,
+          }}
+          cancelTextStyle={{
+            color: COLORS.white,
+            fontFamily: CUSTOMFONT_BOLD,
+          }}
+          cancelStyle={{
+            backgroundColor: "rgba(60,60,60,0.9)",
+            marginBottom: SIZES.bottomBarHeight + 10,
+          }}
+        />
+      ) : (
+        <ActivityIndicator size="small" style={{padding: 8}}/>
+      )}
+    </View>
   );
 };
 
@@ -143,6 +147,6 @@ const styles = StyleSheet.create({
     top: 0,
     height: "100%",
   },
-})
+});
 
 export default SchoolSelector;

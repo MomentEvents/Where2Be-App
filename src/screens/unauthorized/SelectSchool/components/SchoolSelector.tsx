@@ -116,7 +116,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
           optionContainerStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
-            marginTop: SIZES.topBarHeight + 10
+            marginTop: SIZES.topBarHeight + 10,
           }}
           optionTextStyle={{
             color: COLORS.white,
@@ -128,11 +128,11 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
           cancelStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
-            marginBottom: SIZES.bottomBarHeight + 10
+            marginBottom: SIZES.bottomBarHeight + 10,
           }}
         />
       ) : (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator style={{ marginBottom: 15 }} size="small" />
       )}
     </SafeAreaView>
   );
