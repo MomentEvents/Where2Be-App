@@ -335,7 +335,7 @@ const EventDetailsScreen = ({ route }) => {
             backgroundColor: "transparent",
           }}
           refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
         >
@@ -535,7 +535,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {!host ? (
-                    <ActivityIndicator style={{ marginLeft: 10 }} />
+                    <ActivityIndicator color={COLORS.white} style={{ marginLeft: 10 }} />
                   ) : (
                     host.DisplayName
                   )}
@@ -800,7 +800,7 @@ const EventDetailsScreen = ({ route }) => {
               </View>
             </UserOptionsSection>
           ) : (
-            <ActivityIndicator style={{ marginTop: 20 }} />
+            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
           )}
         </View>
       </View>

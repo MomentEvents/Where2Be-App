@@ -94,7 +94,7 @@ export const ScreenProvider = ({ children }) => {
               justifyContent: "flex-start",
             }}
           >
-            <ActivityIndicator size="small" />
+            <ActivityIndicator color={COLORS.white} size="small" />
           </View>
           <View style={{ padding: 5 }}>
             <Text style={{ fontSize: 12, color: COLORS.gray1 }}>

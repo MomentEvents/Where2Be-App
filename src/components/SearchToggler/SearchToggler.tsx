@@ -216,7 +216,7 @@ const SearchToggler = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
         }
         keyboardShouldPersistTaps={"always"}
       >
@@ -238,7 +238,7 @@ const SearchToggler = () => {
                 </View>
               )
             ) : (
-              !isRefreshing && <ActivityIndicator style={{ marginTop: 10 }} />
+              !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
             )
           ) : searchedUsers ? (
             searchedUsers.length !== 0 ? (
@@ -255,7 +255,7 @@ const SearchToggler = () => {
               </View>
             )
           ) : (
-            !isRefreshing && <ActivityIndicator style={{ marginTop: 10 }} />
+            !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
           )}
           <View style={{ height: 20 }} />
         </View>

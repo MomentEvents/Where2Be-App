@@ -103,12 +103,12 @@ const EventViewer = (props: EventViewerProps) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
       }
       style={{ backgroundColor: COLORS.black }}
     >
       {isLoadingEvents && !isRefreshing && (
-        <ActivityIndicator style={{ marginTop: 20 }} size={"small"} />
+        <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} size={"small"} />
       )}
       {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
         <View style={{marginTop: 20, alignItems: "center"}}>

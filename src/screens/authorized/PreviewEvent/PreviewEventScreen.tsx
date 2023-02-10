@@ -284,7 +284,7 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {currentUser === null ? (
-                    <ActivityIndicator style={{ marginLeft: 10 }} />
+                    <ActivityIndicator color={COLORS.white} style={{ marginLeft: 10 }} />
                   ) : (
                     currentUser.DisplayName
                   )}

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ImageBackground,
   Image,
-  ActivityIndicator,
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";

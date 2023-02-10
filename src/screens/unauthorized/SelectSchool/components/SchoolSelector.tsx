@@ -132,7 +132,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
         />
       ) : (
-        <ActivityIndicator style={{ marginBottom: 15 }} size="small" />
+        <ActivityIndicator color={COLORS.white} style={{ marginBottom: 15 }} size="small" />
       )}
     </SafeAreaView>
   );

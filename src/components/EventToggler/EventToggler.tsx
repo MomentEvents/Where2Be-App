@@ -175,7 +175,7 @@ const EventToggler = (props: EventTogglerProps) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
         }
         style={{backgroundColor: COLORS.black}}
       >
@@ -195,7 +195,7 @@ const EventToggler = (props: EventTogglerProps) => {
               </View>
             )
           ) : (
-            !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
+            !isRefreshing && <ActivityIndicator color={COLORS.white}style={{ marginTop: 20 }} />
           )
         ) : pulledPastEvents ? (
           pulledPastEvents.length !== 0 ? (
@@ -212,7 +212,7 @@ const EventToggler = (props: EventTogglerProps) => {
             </View>
           )
         ) : (
-          !isRefreshing && <ActivityIndicator style={{ marginTop: 20 }} />
+          !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
         )}
         <View style={{height: SIZES.bottomBarHeight + 10}}/>
       </ScrollView>

@@ -127,7 +127,7 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
         />
       ) : (
-        <ActivityIndicator size="small" style={{padding: 8}}/>
+        <ActivityIndicator color={COLORS.white} size="small" style={{padding: 8}}/>
       )}
     </View>
   );

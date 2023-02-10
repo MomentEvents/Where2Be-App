@@ -4,6 +4,7 @@ import { UserProvider } from "./contexts/UserContext";
 import { ScreenProvider } from "./contexts/ScreenContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EventProvider } from "./contexts/EventContext";
+import { StatusBar } from "react-native";
 
 const Main = () => {
   // Disable font scaling
@@ -16,6 +17,7 @@ const Main = () => {
       <EventProvider>
         <ScreenProvider>
           <AuthProvider>
+            <StatusBar barStyle="light-content" translucent={true} />
             <AppNav />
           </AuthProvider>
         </ScreenProvider>
