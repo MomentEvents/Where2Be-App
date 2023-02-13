@@ -1,6 +1,8 @@
 import {
+  Alert,
   Button,
   KeyboardAvoidingView,
+  Linking,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -24,7 +26,7 @@ const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
   const { setLoading } = useContext(ScreenContext);
   const navigation = useNavigation<any>();
-  
+
   const [username, setUsername] = useState<string>("");
   const [displayName, setDisplayName] = useState<string>("");
   const [selectedSchool, setSelectedSchool] = useState<School>(null);
@@ -48,11 +50,36 @@ const SignupScreen = () => {
     navigation.navigate(SCREENS.Login);
   };
 
+  const onTermsOfServiceClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app/terms");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://momentevents.app/terms");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://momentevents.app/terms"}`);
+    }
+  };
+
+  const onPrivacyPolicyClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app/privacy");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://momentevents.app/privacy");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://momentevents.app/privacy"}`);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <SafeAreaView style={styles.container}>
@@ -97,6 +124,29 @@ const SignupScreen = () => {
                 </McText>
               </View>
             </TouchableOpacity>
+            <View style={{ marginBottom: 80, width: "80%", alignItems: "center" }}>
+              <McText style={{textAlign: 'center'}} body6 color={COLORS.gray}>
+                By creating an account, you agree to our{" "}
+                <McText
+                  onPress={onTermsOfServiceClick}
+                  body6
+                  color={COLORS.gray}
+                  style={{textDecorationLine: 'underline'}}
+                >
+                  
+                  Terms of Service
+                </McText>
+                {" "}and{" "}
+                <McText
+                  onPress={onPrivacyPolicyClick}
+                  body6
+                  color={COLORS.gray}
+                  style={{textDecorationLine: 'underline'}}
+                >
+                  Privacy Policy
+                </McText>
+              </McText>
+            </View>
             <TouchableOpacity onPress={onNavigateLogin}>
               <McText body3>Already have an account?</McText>
             </TouchableOpacity>
@@ -114,16 +164,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.trueBlack
+    paddingHorizontal: 30,
+    backgroundColor: COLORS.trueBlack,
   },
   welcomeTextContainer: {
     marginBottom: 40,
   },
-  welcomeText: { 
-    textAlign: "center" 
+  welcomeText: {
+    textAlign: "center",
   },
   textInputContainer: {
-    width: SIZES.width / 1.3,
+    width: "100%",
     borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,
@@ -140,6 +191,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: COLORS.purple,
     marginTop: 30,
-    marginBottom: 60,
+    marginBottom: 20,
   },
 });

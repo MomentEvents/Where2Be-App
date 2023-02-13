@@ -46,6 +46,7 @@ const LoginScreen = () => {
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <SafeAreaView style={styles.container}>
@@ -93,6 +94,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 30,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.trueBlack
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
     textAlign: "center" 
   },
   textInputContainer: {
-    width: SIZES.width / 1.3,
+    width: "100%",
     borderColor: COLORS.gray,
     borderWidth: 1,
     borderRadius: 5,

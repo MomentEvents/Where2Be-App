@@ -18,25 +18,34 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 
 const SettingsScreen = () => {
-
-  const {userLogout} = useContext(AuthContext)
+  const { userLogout } = useContext(AuthContext);
   const navigation = useNavigation<any>();
 
-  const onChangePasswordClick = () => {
+  const onChangePasswordClick = () => {};
 
-  }
+  const onWebsiteClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app");
 
-  const onContactSupportClick = () => {
-    const supported = Linking.canOpenURL("https://discord.gg/dQZ64mGgbP");
-        
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://discord.gg/dQZ64mGgbP");
+      Linking.openURL("https://momentevents.app");
     } else {
-      Alert.alert(`Unable to open link: ${"https://discord.gg/dQZ64mGgbP"}`);
+      Alert.alert(`Unable to open link: ${"https://momentevents.app"}`);
     }
-  }
+  };
+
+  const onContactSupportClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app/contact");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://momentevents.app/contact");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://momentevents.app/contact"}`);
+    }
+  };
 
   const onLogoutClick = () => {
     Alert.alert(
@@ -57,7 +66,7 @@ const SettingsScreen = () => {
       ],
       { cancelable: false }
     );
-  }
+  };
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
@@ -78,24 +87,51 @@ const SettingsScreen = () => {
         <View
           style={styles.horizontalSeparator}
         /> */}
+        <TouchableOpacity onPress={onWebsiteClick}>
+          <View style={styles.buttonContainer}>
+            <View
+              style={{
+                width: 50,
+                marginRight: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <icons.website style={styles.iconContainer}/>
+            </View>
+            <McText h3>Visit Website</McText>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onContactSupportClick}>
           <View style={styles.buttonContainer}>
-            <icons.contact style={styles.iconContainer} width={30} />
+            <View
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <icons.contact style={styles.iconContainer} />
+            </View>
             <McText h3>Contact Support</McText>
           </View>
         </TouchableOpacity>
-        <View
-          style={styles.horizontalSeparator}
-        />
         <TouchableOpacity onPress={onLogoutClick}>
           <View style={styles.buttonContainer}>
-            <icons.logout style={styles.iconContainer} width={30} />
+            <View
+              style={{
+                width: 46,
+                marginLeft: 4,
+                marginRight: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <icons.logout style={styles.iconContainer}/>
+            </View>
             <McText h3>Logout</McText>
           </View>
         </TouchableOpacity>
-        <View
-          style={styles.horizontalSeparator}
-        />
       </ScrollView>
     </MobileSafeView>
   );
@@ -110,12 +146,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: SIZES.width,
     flexDirection: "row",
-    padding: 15,
+    marginLeft: 15,
+    paddingVertical: 10,
     alignItems: "center",
   },
   iconContainer: {
-    marginRight: 20,
+    marginRight: 10,
   },
-  horizontalSeparator: {
-  }
+  horizontalSeparator: {},
 });

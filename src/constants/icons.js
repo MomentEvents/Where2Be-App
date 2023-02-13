@@ -38,6 +38,7 @@ import time_eventdetails from "../../assets/icons/svgicons/eventdetails/time_eve
 import location_eventdetails from "../../assets/icons/svgicons/eventdetails/location_eventdetails.svg"
 import visibility_eventdetails from "../../assets/icons/svgicons/eventdetails/visibility_eventdetails.svg"
 import trash from "../../assets/icons/svgicons/trash.svg"
+import website from "../../assets/icons/svgicons/website.svg"
 
 //_____________________________________________________________________________
 // Deter from using the ones below. We will replace them with the ones up top
@@ -125,5 +126,6 @@ export default {
   location_eventdetails,
   time_eventdetails,
   visibility_eventdetails,
-  trash
+  trash,
+  website
 };
