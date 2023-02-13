@@ -112,19 +112,7 @@ const SignupScreen = () => {
             <View style={styles.textInputContainer}>
               <SchoolSelector setSelectedSchool={setSelectedSchool} />
             </View>
-            <TouchableOpacity onPress={onSignup}>
-              <View style={styles.submitButton}>
-                <McText
-                  h4
-                  style={{
-                    color: COLORS.white,
-                  }}
-                >
-                  Signup
-                </McText>
-              </View>
-            </TouchableOpacity>
-            <View style={{ marginBottom: 80, width: "80%", alignItems: "center" }}>
+            <View style={{ marginTop: 40, marginBottom: 20, width: "80%", alignItems: "center" }}>
               <McText style={{textAlign: 'center'}} body6 color={COLORS.gray}>
                 By creating an account, you agree to our{" "}
                 <McText
@@ -147,6 +135,18 @@ const SignupScreen = () => {
                 </McText>
               </McText>
             </View>
+            <TouchableOpacity onPress={onSignup}>
+              <View style={styles.submitButton}>
+                <McText
+                  h4
+                  style={{
+                    color: COLORS.white,
+                  }}
+                >
+                  Signup
+                </McText>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateLogin}>
               <McText body3>Already have an account?</McText>
             </TouchableOpacity>
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: COLORS.purple,
-    marginTop: 30,
-    marginBottom: 20,
+    marginBottom: 50,
   },
 });
