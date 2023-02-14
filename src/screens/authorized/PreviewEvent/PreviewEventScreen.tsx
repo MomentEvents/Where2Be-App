@@ -123,81 +123,63 @@ const EventDetailsScreen = ({ route }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ position: "relative" }}>
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri: createdEvent.Picture,
-            }}
-            style={{
-              width: "100%",
-              height: SIZES.height * 0.3,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <ImageHeaderSection>
-                <TouchableOpacity
-                  onPress={() => {
-                    setImageViewVisible(true);
-                  }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 13,
-                  }}
-                >
-                  <McIcon
-                    source={icons.fullscreen}
-                    style={{
-                      tintColor: COLORS.white,
+          <TouchableOpacity onPress={() => setImageViewVisible(true)}>
+            <ImageBackground
+              resizeMode="cover"
+              source={{
+                uri: createdEvent.Picture,
+              }}
+              style={{
+                width: "100%",
+                height: SIZES.height * 0.3,
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <ImageHeaderSection>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setImageViewVisible(true);
                     }}
-                    size={24}
-                  />
-                </TouchableOpacity>
-              </ImageHeaderSection>
-              <ImageFooterSection>
-                <LinearGradient
-                  colors={["transparent", COLORS.black]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={{
-                    width: "100%",
-                    height: 120,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <FooterContentView>
-                    <View
+                    style={{
+                      width: 40,
+                      height: 40,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 13,
+                    }}
+                  >
+                    <McIcon
+                      source={icons.fullscreen}
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        width: "100%",
+                        tintColor: COLORS.white,
                       }}
-                    >
-                      <icons.calendar_eventdetails style={{ marginRight: 8 }} />
-                      <McText
-                        h4
-                        style={{
-                          letterSpacing: 0.1,
-                          color: COLORS.lightGray,
-                        }}
-                      >
-                        {createdEvent === undefined
-                          ? null
-                          : moment(createdEvent.StartDateTime).format(
-                              "MMM DD[,] YYYY"
-                            )}
-                      </McText>
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </ImageHeaderSection>
+                <ImageFooterSection>
+                  <LinearGradient
+                    colors={["transparent", COLORS.black]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={{
+                      width: "100%",
+                      height: 120,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <FooterContentView>
                       <View
                         style={{
-                          position: "absolute",
-                          right: 0,
                           flexDirection: "row",
+                          alignItems: "center",
+                          width: "100%",
                         }}
                       >
-                        <icons.time_eventdetails style={{ marginRight: 8 }} />
+                        <icons.calendar_eventdetails
+                          style={{ marginRight: 8 }}
+                        />
                         <McText
                           h4
                           style={{
@@ -208,18 +190,42 @@ const EventDetailsScreen = ({ route }) => {
                           {createdEvent === undefined
                             ? null
                             : moment(createdEvent.StartDateTime).format(
-                                "h:mm a"
-                              ) +
-                              " - " +
-                              moment(createdEvent.EndDateTime).format("h:mm a")}
+                                "MMM DD[,] YYYY"
+                              )}
                         </McText>
+                        <View
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            flexDirection: "row",
+                          }}
+                        >
+                          <icons.time_eventdetails style={{ marginRight: 8 }} />
+                          <McText
+                            h4
+                            style={{
+                              letterSpacing: 0.1,
+                              color: COLORS.lightGray,
+                            }}
+                          >
+                            {createdEvent === undefined
+                              ? null
+                              : moment(createdEvent.StartDateTime).format(
+                                  "h:mm a"
+                                ) +
+                                " - " +
+                                moment(createdEvent.EndDateTime).format(
+                                  "h:mm a"
+                                )}
+                          </McText>
+                        </View>
                       </View>
-                    </View>
-                  </FooterContentView>
-                </LinearGradient>
-              </ImageFooterSection>
-            </View>
-          </ImageBackground>
+                    </FooterContentView>
+                  </LinearGradient>
+                </ImageFooterSection>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>
               <McText
@@ -284,7 +290,10 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {currentUser === null ? (
-                    <ActivityIndicator color={COLORS.white} style={{ marginLeft: 10 }} />
+                    <ActivityIndicator
+                      color={COLORS.white}
+                      style={{ marginLeft: 10 }}
+                    />
                   ) : (
                     currentUser.DisplayName
                   )}

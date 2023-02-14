@@ -44,7 +44,7 @@ type routeParametersType = {
 const EventDetailsScreen = ({ route }) => {
   const { userToken, currentUser, isAdmin } = useContext(UserContext);
   const navigation = useNavigation<any>();
-  
+
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
   const { eventID } = propsFromEventCard;
@@ -201,15 +201,15 @@ const EventDetailsScreen = ({ route }) => {
           text: "Yes",
           onPress: async () => {
             console.log("Yes Pressed");
-            setLoading(true)
+            setLoading(true);
             deleteEvent(userToken.UserAccessToken, eventID)
               .then(() => {
-                setLoading(false)
+                setLoading(false);
                 updateEventIDToEvent({ id: eventID, event: undefined });
                 navigation.goBack();
               })
               .catch((error: Error) => {
-                setLoading(false)
+                setLoading(false);
                 displayError(error);
               });
           },
@@ -335,109 +335,95 @@ const EventDetailsScreen = ({ route }) => {
             backgroundColor: "transparent",
           }}
           refreshControl={
-            <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              tintColor={COLORS.white}
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
           }
           showsVerticalScrollIndicator={false}
         >
-          <ImageBackground
-            resizeMode="cover"
-            source={{
-              uri:
-                eventIDToEvent[eventID] === undefined
-                  ? null
-                  : eventIDToEvent[eventID].Picture,
-            }}
-            style={{
-              width: "100%",
-              height: SIZES.height * 0.45,
-            }}
-          >
-            <View
+          <TouchableOpacity onPress={() => setImageViewVisible(true)}>
+            <ImageBackground
+              resizeMode="cover"
+              source={{
+                uri:
+                  eventIDToEvent[eventID] === undefined
+                    ? null
+                    : eventIDToEvent[eventID].Picture,
+              }}
               style={{
-                flex: 1,
-                marginTop: SIZES.topBarHeight,
+                width: "100%",
+                height: SIZES.height * 0.45,
               }}
             >
-              <ImageHeaderSection>
-                <TouchableOpacity
-                  onPress={() => {
-                    onBackPressed();
-                  }}
-                  style={{
-                    width: 56,
-                    height: 40,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 13,
-                  }}
-                >
-                  <icons.backarrow width={24} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    setImageViewVisible(true);
-                  }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 13,
-                  }}
-                >
-                  <McIcon
-                    source={icons.fullscreen}
-                    style={{
-                      tintColor: COLORS.white,
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: SIZES.topBarHeight,
+                }}
+              >
+                <ImageHeaderSection>
+                  <TouchableOpacity
+                    onPress={() => {
+                      onBackPressed();
                     }}
-                    size={24}
-                  />
-                </TouchableOpacity>
-              </ImageHeaderSection>
-              <ImageFooterSection>
-                <LinearGradient
-                  colors={["transparent", COLORS.black]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={{
-                    width: "100%",
-                    height: 120,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <FooterContentView>
-                    <View
+                    style={{
+                      width: 56,
+                      height: 40,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 13,
+                    }}
+                  >
+                    <icons.backarrow width={24} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      setImageViewVisible(true);
+                    }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 13,
+                    }}
+                  >
+                    <McIcon
+                      source={icons.fullscreen}
                       style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        width: "100%",
+                        tintColor: COLORS.white,
                       }}
-                    >
-                      <icons.calendar_eventdetails style={{ marginRight: 8 }} />
-                      <McText
-                        h4
-                        style={{
-                          letterSpacing: 0.1,
-                          color: COLORS.lightGray,
-                        }}
-                      >
-                        {eventIDToEvent[eventID] === undefined
-                          ? null
-                          : moment(
-                              eventIDToEvent[eventID].StartDateTime
-                            ).format("MMM DD[,] YYYY")}
-                      </McText>
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </ImageHeaderSection>
+                <ImageFooterSection>
+                  <LinearGradient
+                    colors={["transparent", COLORS.black]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={{
+                      width: "100%",
+                      height: 120,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <FooterContentView>
                       <View
                         style={{
-                          position: "absolute",
-                          right: 0,
                           flexDirection: "row",
+                          alignItems: "center",
+                          width: "100%",
                         }}
                       >
-                        <icons.time_eventdetails style={{ marginRight: 8 }} />
+                        <icons.calendar_eventdetails
+                          style={{ marginRight: 8 }}
+                        />
                         <McText
                           h4
                           style={{
@@ -447,25 +433,47 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           {eventIDToEvent[eventID] === undefined
                             ? null
-                            : eventIDToEvent[eventID].EndDateTime
-                            ? moment(
-                                eventIDToEvent[eventID].StartDateTime
-                              ).format("h:mm a") +
-                              " - " +
-                              moment(
-                                eventIDToEvent[eventID].EndDateTime
-                              ).format("h:mm a")
                             : moment(
                                 eventIDToEvent[eventID].StartDateTime
-                              ).format("h:mm a")}
+                              ).format("MMM DD[,] YYYY")}
                         </McText>
+                        <View
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            flexDirection: "row",
+                          }}
+                        >
+                          <icons.time_eventdetails style={{ marginRight: 8 }} />
+                          <McText
+                            h4
+                            style={{
+                              letterSpacing: 0.1,
+                              color: COLORS.lightGray,
+                            }}
+                          >
+                            {eventIDToEvent[eventID] === undefined
+                              ? null
+                              : eventIDToEvent[eventID].EndDateTime
+                              ? moment(
+                                  eventIDToEvent[eventID].StartDateTime
+                                ).format("h:mm a") +
+                                " - " +
+                                moment(
+                                  eventIDToEvent[eventID].EndDateTime
+                                ).format("h:mm a")
+                              : moment(
+                                  eventIDToEvent[eventID].StartDateTime
+                                ).format("h:mm a")}
+                          </McText>
+                        </View>
                       </View>
-                    </View>
-                  </FooterContentView>
-                </LinearGradient>
-              </ImageFooterSection>
-            </View>
-          </ImageBackground>
+                    </FooterContentView>
+                  </LinearGradient>
+                </ImageFooterSection>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>
               <McText
@@ -535,7 +543,10 @@ const EventDetailsScreen = ({ route }) => {
                   }}
                 >
                   {!host ? (
-                    <ActivityIndicator color={COLORS.white} style={{ marginLeft: 10 }} />
+                    <ActivityIndicator
+                      color={COLORS.white}
+                      style={{ marginLeft: 10 }}
+                    />
                   ) : (
                     host.DisplayName
                   )}
