@@ -1,5 +1,5 @@
 import { getUserByUserAccessToken } from "./UserService";
-import momentAPI from "../constants/server";
+import { momentAPI, momentAPIVersionless } from "../constants/server";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   checkIfStringIsEmail,
@@ -31,7 +31,6 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-
   if (
     !checkIfStringIsReadable(usercred) ||
     !checkIfStringIsAlphanumeric(usercred)
@@ -51,29 +50,31 @@ export async function login(
 
   // DO LOGIN HERE
 
-  const response = await fetch(momentAPI+`/auth/login/username`, {
-    method: 'POST',
+  const response = await fetch(momentAPI + `/auth/login/username`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       username: usercred,
       password: password,
-    })
+    }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not login");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
   const data = await response.json();
 
-  const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
+  const createdToken: Token = createTokenFromUserAccessToken(
+    data["user_access_token"]
+  );
   writeToken(createdToken);
 
-  console.log(createdToken)
+  console.log(createdToken);
 
   return Promise.resolve(createdToken);
 }
@@ -116,9 +117,8 @@ export async function signup(
       "Please enter non-empty values before signing up"
     );
   }
-  if(
-  !checkIfStringIsReadable(displayName)){
-    throw formatError("Input error", "Please have a readable display name")
+  if (!checkIfStringIsReadable(displayName)) {
+    throw formatError("Input error", "Please have a readable display name");
   }
   if (!checkIfStringIsAlphanumeric(username)) {
     throw formatError("Input error", "Please enter an alphanumeric username");
@@ -129,32 +129,34 @@ export async function signup(
 
   // DO SIGNUP HERE
 
-  const response = await fetch(momentAPI+`/auth/signup`, {
-    method: 'POST',
+  const response = await fetch(momentAPI + `/auth/signup`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       username: username,
       display_name: displayName,
       password: password,
       school_id: schoolID,
-    })
+    }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not signup");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const data = await response.json();
 
-  const createdToken: Token = createTokenFromUserAccessToken(data["user_access_token"]);
+  const createdToken: Token = createTokenFromUserAccessToken(
+    data["user_access_token"]
+  );
   writeToken(createdToken);
 
-  console.log(createdToken)
+  console.log(createdToken);
 
   return Promise.resolve(createdToken);
 }
@@ -333,46 +335,48 @@ export async function validateTokenExpirationAndUpdate(): Promise<Token> {
  * none
  */
 export async function getServerStatus(version: string): Promise<void> {
-  console.log("Version is" + version)
-  const response = await fetch(momentAPI+`/status`, {
-    method: 'POST',
+  console.log("Version is " + version);
+  const response = await fetch(momentAPIVersionless + "/app_compatability", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      app_version: version
-    })
+      app_version: version,
+    }),
   }).catch((error: Error) => {
     throw formatError("Unable to connect to server", "Please try again later");
   });
-  
-  if(!response.ok){
-    const message = await response.text()
-    throw formatError("Error " + response.status, message)
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
   }
 
   return Promise.resolve();
 }
 
-export async function checkIfUserAccessTokenIsAdmin(userAccessToken: string): Promise<boolean> {
-  const response = await fetch(momentAPI+`/auth/privileged_admin`, {
-    method: 'POST',
+export async function checkIfUserAccessTokenIsAdmin(
+  userAccessToken: string
+): Promise<boolean> {
+  const response = await fetch(momentAPI + `/auth/privileged_admin`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      user_access_token: userAccessToken
-    })
+      user_access_token: userAccessToken,
+    }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Unable to check if user is admin");
   });
 
-  if(!response.ok){
-    const message = await response.text()
-    throw formatError("Error " + response.status, message)
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
   }
-  
-  const responseJSON = await response.json()
+
+  const responseJSON = await response.json();
 
   return Promise.resolve(responseJSON.is_admin);
-} 
+}

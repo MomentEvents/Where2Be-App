@@ -1,4 +1,4 @@
-import momentAPI from "../constants/server";
+import { momentAPI } from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
@@ -26,7 +26,6 @@ export async function getEvent(
   eventID: string,
   userAccessToken: string
 ): Promise<Event> {
-
   console.log("useraccesstoken is" + userAccessToken);
   const response = await fetch(momentAPI + `/event/event_id/${eventID}`, {
     method: "POST",
@@ -40,14 +39,14 @@ export async function getEvent(
     throw formatError("Network error", "Could not get event");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const event: EventResponse = await response.json();
 
-  console.log(event)
+  console.log(event);
 
   const pulledEvent: Event = {
     EventID: event.event_id,
@@ -66,7 +65,7 @@ export async function getEvent(
     UserShoutout: event.user_shoutout,
   };
 
-  console.log(pulledEvent)
+  console.log(pulledEvent);
   return pulledEvent;
 }
 
@@ -114,11 +113,11 @@ export async function createEvent(
     throw formatError("Network error", "Could not create event");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const data = await response.json();
 
   return data["event_id"];
@@ -140,7 +139,6 @@ export async function updateEvent(
   updatedEvent: Event,
   updatedInterests: Interest[]
 ): Promise<void> {
-
   // updatedEvent.Picture is assumed to be base64 string
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -156,21 +154,24 @@ export async function updateEvent(
   );
   formData.append("picture", updatedEvent.Picture);
 
-  console.log(updatedEvent.Picture)
+  console.log(updatedEvent.Picture);
 
-  const response = await fetch(momentAPI + `/event/event_id/${updatedEvent.EventID}`, {
-    method: "UPDATE",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    body: formData,
-  }).catch((error: Error) => {
+  const response = await fetch(
+    momentAPI + `/event/event_id/${updatedEvent.EventID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    }
+  ).catch((error: Error) => {
     throw formatError("Network error", "Could not update event");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
 
   return Promise.resolve();
@@ -202,11 +203,11 @@ export async function deleteEvent(
     throw formatError("Network error", "Could not delete event");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   // const data = await response.json();
 
   return Promise.resolve();
@@ -236,14 +237,17 @@ export async function getUserJoinedFutureEvents(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get user joined future events");
+    throw formatError(
+      "Network error",
+      "Could not get user joined future events"
+    );
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -296,11 +300,11 @@ export async function getUserJoinedPastEvents(
     throw formatError("Network error", "Could not get user joined past events");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -351,14 +355,17 @@ export async function getUserHostedFutureEvents(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get user hosted future events");
+    throw formatError(
+      "Network error",
+      "Could not get user hosted future events"
+    );
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
-  
+
   const responseJSON = await response.json();
 
   const EventArray: Event[] = [];
@@ -412,9 +419,9 @@ export async function getUserHostedPastEvents(
     throw formatError("Network error", "Could not get user hosted past events");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
 
   const responseJSON = await response.json();
@@ -459,9 +466,9 @@ export async function getAllSchoolEvents(
     throw formatError("Network error", "Could not get all school events");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
 
   const responseJSON = await response.json();
@@ -515,9 +522,9 @@ export async function getAllSchoolEventsCategorized(
     throw formatError("Network error", "Could not get all categorized events");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message)
+    throw formatError("Error: " + response.statusText, message);
   }
 
   const responseJSON = await response.json();

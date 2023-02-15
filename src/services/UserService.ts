@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-import momentAPI from "../constants/server";
+import { momentAPI } from "../constants/server";
 import { HELPME, formatError } from "../helpers/helpers";
 import { User } from "../constants";
 import { UserResponse } from "../constants/types";
@@ -18,12 +18,12 @@ export async function getUser(UserID: string): Promise<User> {
   const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
     method: "GET",
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could not fetch user by user id")
+    throw formatError("Network error", "Could not fetch user by user id");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
   const data: UserResponse = await response.json();
 
@@ -33,7 +33,7 @@ export async function getUser(UserID: string): Promise<User> {
     Username: data.username,
     Picture: data.picture,
   };
-  
+
   return Promise.resolve(pulledUser);
 }
 
@@ -55,12 +55,15 @@ export async function getUserByUserAccessToken(
       method: "GET",
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get user by user access token")
+    throw formatError(
+      "Network error",
+      "Could not get user by user access token"
+    );
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -111,12 +114,12 @@ export async function updateUser(
       body: formData,
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not update user")
+    throw formatError("Network error", "Could not update user");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON: UserResponse = await response.json();
@@ -126,9 +129,9 @@ export async function updateUser(
     DisplayName: responseJSON.display_name,
     Username: responseJSON.username,
     Picture: responseJSON.picture,
-  }
+  };
 
-  return Promise.resolve(pulledUser)
+  return Promise.resolve(pulledUser);
 }
 
 export async function deleteUser(
@@ -136,29 +139,25 @@ export async function deleteUser(
 
   userID: string
 ): Promise<void> {
-  const response = await fetch(
-    momentAPI + `/user/user_id/${userID}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
-    }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not delete user")
+  const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    }),
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could not delete user");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 
   return Promise.resolve();
 }
-
 
 export async function getEventHostByEventId(
   userAccessToken: string,
@@ -174,12 +173,12 @@ export async function getEventHostByEventId(
       user_access_token: userAccessToken,
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could not fetch event host")
+    throw formatError("Network error", "Could not fetch event host");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -213,12 +212,12 @@ export async function addUserJoinEvent(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not add join")
+    throw formatError("Network error", "Could not add join");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 }
 
@@ -241,12 +240,12 @@ export async function removeUserJoinEvent(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not remove join")
+    throw formatError("Network error", "Could not remove join");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 }
 
@@ -269,12 +268,12 @@ export async function addUserShoutoutEvent(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not add shoutout")
+    throw formatError("Network error", "Could not add shoutout");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 }
 
@@ -297,12 +296,12 @@ export async function removeUserShoutoutEvent(
       }),
     }
   ).catch((error: Error) => {
-    throw formatError("Network error", "Could not remove shoutout")
+    throw formatError("Network error", "Could not remove shoutout");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 }
 
@@ -320,12 +319,12 @@ export async function getAllSchoolUsers(
       user_access_token: userAccessToken,
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all school users")
+    throw formatError("Network error", "Could not get all school users");
   });
 
-  if(!response.ok){
+  if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error " + response.status, message)
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();

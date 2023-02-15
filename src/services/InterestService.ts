@@ -1,5 +1,5 @@
 import { InterestResponse } from "./../constants/types";
-import momentAPI from "../constants/server";
+import { momentAPI } from "../constants/server";
 import { Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 
