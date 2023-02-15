@@ -2,7 +2,7 @@
   "expo": {
     "name": "Moment",
     "slug": "Moment",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "owner": "moment-app",
     "privacy": "public",
     "description": "Event app",
