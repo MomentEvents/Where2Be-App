@@ -1,7 +1,6 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
 
-// module.exports = getDefaultConfig(__dirname);
 module.exports = (async () => {
     const {
       resolver: { sourceExts, assetExts },
@@ -12,7 +11,7 @@ module.exports = (async () => {
       },
       resolver: {
         assetExts: assetExts.filter(ext => ext !== 'svg'),
-        sourceExts: [...sourceExts, 'svg'],
+        sourceExts: [...sourceExts, 'svg', 'cjs'],
       },
     };
   })();
