@@ -10,7 +10,7 @@ import {
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { SIZES, COLORS, icons, SCREENS } from "../constants";
+import { SIZES, COLORS, SCREENS } from "../constants";
 import { McText, McIcon } from "./Styled";
 import "react-native-gesture-handler";
 import { Event } from "../constants";
@@ -18,6 +18,7 @@ import { UserContext } from "../contexts/UserContext";
 import { displayError } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 type EventCardProps = {
   onClick?: () => void;
@@ -210,28 +211,28 @@ const EventCard = ({
                 </McText>
                 <View
                   style={{
-                    flexDirection: "row",
                     position: "absolute",
                     right: 0,
                     bottom: 0,
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  <McIcon
-                    source={icons.check}
-                    size={20}
-                    style={{
-                      tintColor: eventIDToEvent[event.EventID].UserJoin
+                  <Ionicons
+                    name="md-checkmark"
+                    size={21}
+                    color={
+                      eventIDToEvent[event.EventID].UserJoin
                         ? COLORS.purple
-                        : COLORS.lightGray,
-                      marginRight: 10,
-                    }}
+                        : COLORS.lightGray
+                    }
+                    style={{marginTop: 1}}
                   />
                   <McText
-                    body7
+                    body3
                     style={{
-                      marginTop: 2,
-                      marginLeft: -7,
-                      marginRight: 10,
+                      marginRight: 12,
+                      marginLeft: 5,
                       color: eventIDToEvent[event.EventID].UserJoin
                         ? COLORS.purple
                         : COLORS.lightGray,
@@ -239,22 +240,21 @@ const EventCard = ({
                   >
                     {eventIDToEvent[event.EventID].NumJoins}
                   </McText>
-                  <McIcon
-                    source={icons.shoutout}
-                    size={20}
-                    style={{
-                      tintColor: eventIDToEvent[event.EventID].UserShoutout
+                  <Ionicons
+                    name="md-megaphone-outline"
+                    size={15}
+                    color={
+                      eventIDToEvent[event.EventID].UserShoutout
                         ? COLORS.purple
-                        : COLORS.lightGray,
-                      marginRight: 10,
-                    }}
+                        : COLORS.lightGray
+                    }
+                    style={{ marginTop: 1 }}
                   />
                   <McText
-                    body7
+                    body3
                     style={{
-                      marginTop: 2,
-                      marginLeft: -7,
-                      marginRight: 10,
+                      marginRight: 12,
+                      marginLeft: 8,
                       color: eventIDToEvent[event.EventID].UserShoutout
                         ? COLORS.purple
                         : COLORS.lightGray,
@@ -371,24 +371,24 @@ const EventCard = ({
             <View
               style={{
                 flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              <McIcon
-                source={icons.check}
-                size={20}
-                style={{
-                  tintColor: eventIDToEvent[event.EventID].UserJoin
+              <Ionicons
+                name="md-checkmark"
+                size={18}
+                color={
+                  eventIDToEvent[event.EventID].UserJoin
                     ? COLORS.purple
-                    : COLORS.lightGray,
-                  marginRight: 10,
-                }}
+                    : COLORS.lightGray
+                }
+                style={{ marginTop: 1 }}
               />
               <McText
-                body7
+                body4
                 style={{
-                  marginTop: 2,
-                  marginLeft: -7,
-                  marginRight: 10,
+                  marginRight: 12,
+                  marginLeft: 4,
                   color: eventIDToEvent[event.EventID].UserJoin
                     ? COLORS.purple
                     : COLORS.lightGray,
@@ -396,22 +396,21 @@ const EventCard = ({
               >
                 {eventIDToEvent[event.EventID].NumJoins}
               </McText>
-              <McIcon
-                source={icons.shoutout}
-                size={20}
-                style={{
-                  tintColor: eventIDToEvent[event.EventID].UserShoutout
+              <Ionicons
+                name="md-megaphone-outline"
+                size={13}
+                color={
+                  eventIDToEvent[event.EventID].UserShoutout
                     ? COLORS.purple
-                    : COLORS.lightGray,
-                  marginRight: 10,
-                }}
+                    : COLORS.lightGray
+                }
+                style={{ marginTop: 1 }}
               />
               <McText
-                body7
+                body4
                 style={{
-                  marginTop: 2,
-                  marginLeft: -7,
-                  marginRight: 10,
+                  marginRight: 12,
+                  marginLeft: 6,
                   color: eventIDToEvent[event.EventID].UserShoutout
                     ? COLORS.purple
                     : COLORS.lightGray,

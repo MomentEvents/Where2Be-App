@@ -24,7 +24,7 @@ export async function getAllSchools(): Promise<School[]> {
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
   const data = await response.json();
 
@@ -58,7 +58,7 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
   const data = await response.json();
 

@@ -75,7 +75,7 @@ export function checkIfStringIsReadable(test: string): boolean {
   if (test === undefined || test === null) {
     return false;
   }
-  return /^[A-Za-z,;'"!@%.].*[\s\.]*$/.test(test);
+  return /^[A-Za-z0-9,;'"!@%.].*[\s\.]*$/.test(test);
 }
 
 export function convertDateToUTC(originalDate: Date): Date {
@@ -134,12 +134,12 @@ export function convertToStartTimeEndTime(
 
 export function checkIfEventIsFormatted(event: Event): boolean {
   return (
-    checkIfStringIsReadable(event.Title) &&
+    //checkIfStringIsReadable(event.Title) &&
     event.Description !== undefined &&
     event.Description !== null &&
     event.Description !== "" &&
-    checkIfStringIsReadable(event.Location) &&
-    checkIfStringIsReadable(event.Picture) &&
+    //checkIfStringIsReadable(event.Location) &&
+    //checkIfStringIsReadable(event.Picture) &&
     event.StartDateTime !== null &&
     event.StartDateTime !== undefined &&
     event.EndDateTime !== null &&

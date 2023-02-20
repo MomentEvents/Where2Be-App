@@ -25,7 +25,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { appVersionText } from "../../../constants/texts";
 import { useNavigation } from "@react-navigation/native";
-import { Icon } from 'react-native-elements';
 
 const SelectSchoolScreen = ({ route }) => {
   const [school, setSchool] = useState<School>(null);
@@ -53,9 +52,6 @@ const SelectSchoolScreen = ({ route }) => {
         }}
       >
         <icons.moment width="70%" style={{ marginBottom: 50 }}></icons.moment>
-        <Icon name="home" type="material" color="#900" />
-        <Icon name="home" type="material" color="transparent" iconStyle={{borderWidth: 10, borderColor: COLORS.white}} />
-
       </View>
       <View
         style={{

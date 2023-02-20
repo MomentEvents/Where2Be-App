@@ -31,6 +31,7 @@ import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -149,13 +150,7 @@ const EventDetailsScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <McIcon
-                      source={icons.fullscreen}
-                      style={{
-                        tintColor: COLORS.white,
-                      }}
-                      size={24}
-                    />
+                    <Ionicons name="md-expand" size={24} color="white" />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>
@@ -334,52 +329,50 @@ const EventDetailsScreen = ({ route }) => {
                 ) : null}
               </View>
             </DescriptionSection>
-            <LocationSection>
-              <McIcon
-                source={icons.location}
-                size={16}
-                style={{
-                  margin: 4,
-                  tintColor: COLORS.lightGray,
-                }}
-              />
-              <McText
-                h5
-                style={{
-                  letterSpacing: 0.5,
-                  marginTop: -1,
-                  color: COLORS.lightGray,
-                }}
-              >
-                {createdEvent === undefined ? null : createdEvent.Location}
-              </McText>
-            </LocationSection>
-            <VisibilitySection>
-              <McIcon
-                source={icons.visibility}
-                size={16}
-                style={{
-                  margin: 4,
-                  tintColor: COLORS.lightGray,
-                }}
-              />
-              <View>
+            <View style={{ marginRight: 20 }}>
+              <LocationSection>
+                <Ionicons
+                  name="location-outline"
+                  size={16}
+                  style={{ marginHorizontal: 8 }}
+                  color={COLORS.lightGray}
+                />
                 <McText
-                  body5
-                  numberOfLines={1}
+                  h5
                   style={{
-                    letterSpacing: 1,
+                    letterSpacing: 0.5,
+                    marginTop: -1,
                     color: COLORS.lightGray,
                   }}
                 >
-                  {createdEvent === undefined
-                    ? null
-                    : createdEvent.Visibility
-                    ? "Public"
-                    : "Private"}
+                  {createdEvent === undefined ? null : createdEvent.Location}
                 </McText>
-              </View>
-            </VisibilitySection>
+              </LocationSection>
+              <VisibilitySection>
+                <MaterialCommunityIcons
+                  name="map-search"
+                  size={16}
+                  style={{ marginHorizontal: 8 }}
+                  color={COLORS.lightGray}
+                />
+                <View>
+                  <McText
+                    body5
+                    numberOfLines={1}
+                    style={{
+                      letterSpacing: 1,
+                      color: COLORS.lightGray,
+                    }}
+                  >
+                    {createdEvent === undefined
+                      ? null
+                      : createdEvent.Visibility
+                      ? "Public"
+                      : "Private"}
+                  </McText>
+                </View>
+              </VisibilitySection>
+            </View>
           </View>
         </View>
         <View style={{ height: SIZES.bottomBarHeight }} />
@@ -454,16 +447,17 @@ const DescriptionSection = styled.View`
   opacity: 1;
 `;
 
+// top right bottom left
 const LocationSection = styled.View`
   flex-direction: row;
-  margin: 10px 0px 0px 0px;
+  margin: 10px 10px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;
 
 const VisibilitySection = styled.View`
   flex-direction: row;
-  margin: 0px 0px 0px 0px;
+  margin: 5px 0px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;

@@ -36,6 +36,7 @@ import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 type routeParametersType = {
   eventID: string;
@@ -393,13 +394,7 @@ const EventDetailsScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <McIcon
-                      source={icons.fullscreen}
-                      style={{
-                        tintColor: COLORS.white,
-                      }}
-                      size={24}
-                    />
+                    <Ionicons name="md-expand" size={24} color="white" />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>
@@ -553,93 +548,90 @@ const EventDetailsScreen = ({ route }) => {
                 </McText>
               </TouchableOpacity>
             </HostSection>
-
-            <DescriptionSection>
-              <View
-                style={{
-                  marginBottom: 8,
-                  marginTop: 8,
-                  marginRight: 12,
-                  marginLeft: 12,
-                }}
-              >
-                <McText
-                  onTextLayout={descriptionOnExpand}
-                  numberOfLines={descriptionExpanded ? undefined : 3}
-                  body3
+            <View style={{ marginRight: 20 }}>
+              <DescriptionSection>
+                <View
                   style={{
-                    letterSpacing: 0.7,
+                    marginBottom: 8,
+                    marginTop: 8,
+                    marginRight: 12,
+                    marginLeft: 12,
+                  }}
+                >
+                  <McText
+                    onTextLayout={descriptionOnExpand}
+                    numberOfLines={descriptionExpanded ? undefined : 3}
+                    body3
+                    style={{
+                      letterSpacing: 0.7,
+                      color: COLORS.lightGray,
+                    }}
+                    selectable={true}
+                  >
+                    {eventIDToEvent[eventID] === undefined
+                      ? null
+                      : eventIDToEvent[eventID].Description}
+                  </McText>
+                  {lengthMoreText ? (
+                    <McText
+                      onPress={descriptionToggleNumberOfLines}
+                      style={{
+                        lineHeight: 22,
+                        marginTop: 10,
+                        color: COLORS.gray,
+                        letterSpacing: 0.3,
+                      }}
+                    >
+                      {descriptionExpanded ? "Read less..." : "Read more..."}
+                    </McText>
+                  ) : null}
+                </View>
+              </DescriptionSection>
+              <LocationSection>
+                <Ionicons
+                  name="location-outline"
+                  size={16}
+                  style={{ marginHorizontal: 8 }}
+                  color={COLORS.lightGray}
+                />
+                <McText
+                  h5
+                  style={{
+                    letterSpacing: 0.5,
+                    marginTop: -1,
                     color: COLORS.lightGray,
                   }}
-                  selectable={true}
                 >
                   {eventIDToEvent[eventID] === undefined
                     ? null
-                    : eventIDToEvent[eventID].Description}
+                    : eventIDToEvent[eventID].Location}
                 </McText>
-                {lengthMoreText ? (
+              </LocationSection>
+              <VisibilitySection>
+                <MaterialCommunityIcons
+                  name="map-search"
+                  size={16}
+                  style={{ marginHorizontal: 8 }}
+                  color={COLORS.lightGray}
+                />
+                <View>
                   <McText
-                    onPress={descriptionToggleNumberOfLines}
+                    body5
+                    numberOfLines={1}
                     style={{
-                      lineHeight: 22,
-                      marginTop: 10,
-                      color: COLORS.gray,
-                      letterSpacing: 0.3,
+                      letterSpacing: 1,
+                      color: COLORS.lightGray,
                     }}
                   >
-                    {descriptionExpanded ? "Read less..." : "Read more..."}
+                    {eventIDToEvent[eventID] === undefined
+                      ? null
+                      : eventIDToEvent[eventID].Visibility
+                      ? "Public"
+                      : "Private"}
                   </McText>
-                ) : null}
-              </View>
-            </DescriptionSection>
-            <LocationSection>
-              <McIcon
-                source={icons.location}
-                size={16}
-                style={{
-                  margin: 4,
-                  tintColor: COLORS.lightGray,
-                }}
-              />
-              <McText
-                h5
-                style={{
-                  letterSpacing: 0.5,
-                  marginTop: -1,
-                  color: COLORS.lightGray,
-                }}
-              >
-                {eventIDToEvent[eventID] === undefined
-                  ? null
-                  : eventIDToEvent[eventID].Location}
-              </McText>
-            </LocationSection>
-            <VisibilitySection>
-              <McIcon
-                source={icons.visibility}
-                size={16}
-                style={{
-                  margin: 4,
-                  tintColor: COLORS.lightGray,
-                }}
-              />
-              <View>
-                <McText
-                  body5
-                  numberOfLines={1}
-                  style={{
-                    letterSpacing: 1,
-                    color: COLORS.lightGray,
-                  }}
-                >
-                  {eventIDToEvent[eventID] === undefined
-                    ? null
-                    : eventIDToEvent[eventID].Visibility
-                    ? "Public"
-                    : "Private"}
-                </McText>
-              </View>
-            </VisibilitySection>
+                </View>
+              </VisibilitySection>
+            </View>
             {isHost &&
               eventIDToInterests[eventID] &&
               eventIDToEvent[eventID] && (
@@ -919,19 +911,21 @@ const DescriptionSection = styled.View`
   opacity: 1;
 `;
 
+// top right bottom left
 const LocationSection = styled.View`
   flex-direction: row;
-  margin: 10px 0px 0px 0px;
+  margin: 10px 10px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;
 
 const VisibilitySection = styled.View`
   flex-direction: row;
-  margin: 0px 0px 0px 0px;
+  margin: 5px 0px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;
+
 
 const EditOrDeleteEventSection = styled.View`
   flex-direction: row;

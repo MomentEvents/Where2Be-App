@@ -20,7 +20,7 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const data = await response.json();
@@ -61,7 +61,7 @@ export async function getEventInterestsByEventId(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const data = await response.json();

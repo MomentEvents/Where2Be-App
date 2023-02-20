@@ -65,7 +65,7 @@ export async function login(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
   const data = await response.json();
 
@@ -146,7 +146,7 @@ export async function signup(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const data = await response.json();

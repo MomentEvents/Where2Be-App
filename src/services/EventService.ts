@@ -41,7 +41,7 @@ export async function getEvent(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const event: EventResponse = await response.json();
@@ -115,7 +115,7 @@ export async function createEvent(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const data = await response.json();
@@ -171,7 +171,7 @@ export async function updateEvent(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   return Promise.resolve();
@@ -205,7 +205,7 @@ export async function deleteEvent(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   // const data = await response.json();
@@ -245,7 +245,7 @@ export async function getUserJoinedFutureEvents(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -302,7 +302,7 @@ export async function getUserJoinedPastEvents(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -363,7 +363,7 @@ export async function getUserHostedFutureEvents(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -421,7 +421,7 @@ export async function getUserHostedPastEvents(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -468,7 +468,7 @@ export async function getAllSchoolEvents(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
@@ -524,7 +524,7 @@ export async function getAllSchoolEventsCategorized(
 
   if (!response.ok) {
     const message = await response.text();
-    throw formatError("Error: " + response.statusText, message);
+    throw formatError("Error " + response.status, message);
   }
 
   const responseJSON = await response.json();
