@@ -68,18 +68,19 @@ const EditProfileScreen = ({ route }) => {
   const [username, setUsername] = useState(user.Username);
 
   const handleSubmit = () => {
-    if (!checkIfStringIsReadable(displayName)) {
-      Alert.alert("Error", "Please enter a valid display name");
-      return;
-    }
+    // These checks will be done by the API
+    // if (!checkIfStringIsReadable(displayName)) {
+    //   Alert.alert("Error", "Please enter a valid display name");
+    //   return;
+    // }
 
-    if (
-      !checkIfStringIsReadable(username) ||
-      !checkIfStringIsAlphanumeric(username)
-    ) {
-      Alert.alert("Error", "Please enter an alphanumeric username");
-      return;
-    }
+    // if (
+    //   !checkIfStringIsReadable(username) ||
+    //   !checkIfStringIsAlphanumeric(username)
+    // ) {
+    //   Alert.alert("Error", "Please enter an alphanumeric username");
+    //   return;
+    // }
 
     // Update information
 

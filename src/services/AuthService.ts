@@ -32,13 +32,12 @@ export async function login(
   password: string
 ): Promise<Token> {
   if (
-    !checkIfStringIsReadable(usercred) ||
-    !checkIfStringIsAlphanumeric(usercred)
+    !usercred || usercred === ""
   ) {
     throw formatError("Input error", "Please enter a valid username");
   }
 
-  if (password === null || password === "") {
+  if (!password || password === "") {
     throw formatError("Input error", "Please enter a valid password");
   }
 
@@ -108,22 +107,22 @@ export async function signup(
   }
   if (
     displayName === "" ||
-    displayName === null ||
+    !displayName ||
     password === "" ||
-    password === null
+    !password
   ) {
     throw formatError(
       "Input error",
       "Please enter non-empty values before signing up"
     );
   }
-  if (!checkIfStringIsReadable(displayName)) {
-    throw formatError("Input error", "Please have a readable display name");
-  }
-  if (!checkIfStringIsAlphanumeric(username)) {
-    throw formatError("Input error", "Please enter an alphanumeric username");
-  }
-  if (schoolID === "" || schoolID === null) {
+  // if (!checkIfStringIsReadable(displayName)) {
+  //   throw formatError("Input error", "Please have a readable display name");
+  // }
+  // if (!checkIfStringIsAlphanumeric(username)) {
+  //   throw formatError("Input error", "Please enter an alphanumeric username");
+  // }
+  if (schoolID === "" || !schoolID) {
     throw formatError("Input error", "Please enter a valid school");
   }
 
