@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from "react";
-import { TouchableOpacity, Button, Image, View, Platform } from "react-native";
+import { TouchableOpacity, Button, Image, View, Platform, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons, images } from "../constants";
 import { McIcon } from "./Styled";
@@ -27,6 +27,13 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const height = props.height ? props.height : defaultWidthHeight;
 
   const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert("Permission error", "Moment does not have access to your photos. Please enable them in settings.")
+      return;
+    }
     var didPick = false;
     var imgUri: string = undefined;
     var imgBase64: string = undefined;
@@ -37,7 +44,7 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       aspect: [1, 1],
       base64: true,
     });
-    
+
     if (!result.cancelled) {
       const { uri, base64 } = result as ImageInfo;
       didPick = true;
