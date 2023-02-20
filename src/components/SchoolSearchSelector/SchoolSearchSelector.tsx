@@ -5,29 +5,33 @@ import {
   TextInput,
   Switch,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
-
-import ModalSelector from "react-native-modal-selector-searchable";
-import { getAllSchools } from "../../../../services/SchoolService";
-import { COLORS, FONTS, School } from "../../../../constants";
-import { displayError } from "../../../../helpers/helpers";
+import ModalSelector from "./components";
+import { getAllSchools } from "../../services/SchoolService";
+import { COLORS, FONTS, School } from "../../constants";
+import { displayError } from "../../helpers/helpers";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,
   SIZES,
-} from "../../../../constants/theme";
+} from "../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
 
 type SchoolSelectorProps = {
   setSelectedSchool: React.Dispatch<React.SetStateAction<School>>;
+  textStyle: any;
+  buttonStyle: any;
+  initialText: string;
+  maxHeight?: number;
 };
 
 type SchoolSelectorState = {
   selectionData: [{ key: string; label: string }];
   textInputValue: string;
 };
-const SchoolSelector = (props: SchoolSelectorProps) => {
+const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   const [selectionData, setSelectionData] =
     useState<[{ key?: string; label?: string }]>(null);
   const [textInputValue, setTextInputValue] = useState<string>("");
@@ -74,8 +78,65 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
     console.log(schoolMap !== null && selectionData !== null);
   }, [schoolMap, selectionData]);
 
+  if (props.maxHeight) {
+    return (
+      <View style={{ height: props.maxHeight }}>
+        {componentLoaded ? (
+          <ModalSelector
+            renderItem={(item) => {
+              return <></>;
+            }}
+            frozenSearch={true}
+            searchStyle={{
+              backgroundColor: "rgba(90,90,90,0.5)",
+              paddingHorizontal: 10,
+              marginTop: 10,
+              marginBottom: 20,
+              borderWidth: 0,
+            }}
+            searchTextStyle={{
+              color: COLORS.lightGray,
+              fontFamily: CUSTOMFONT_REGULAR,
+              fontSize: 15,
+            }}
+            data={selectionData}
+            optionContainerStyle={{
+              backgroundColor: "rgba(60,60,60,0.9)",
+              marginTop: SIZES.topBarHeight + 10,
+            }}
+            optionTextStyle={{
+              color: COLORS.white,
+              fontFamily: CUSTOMFONT_BOLD,
+            }}
+            cancelTextStyle={{
+              color: COLORS.white,
+              fontFamily: CUSTOMFONT_BOLD,
+            }}
+            cancelStyle={{
+              backgroundColor: "rgba(60,60,60,0.9)",
+              marginBottom: SIZES.bottomBarHeight + 10,
+            }}
+            onChange={(option) => {
+              props.setSelectedSchool(null);
+              props.setSelectedSchool(schoolMap[option.key]);
+            }}
+            // Initial Text
+            initValue={props.initialText}
+            // Text style
+            selectTextStyle={props.textStyle}
+            // Button
+            selectStyle={props.buttonStyle}
+            // Text style
+            initValueTextStyle={props.textStyle}
+          />
+        ) : (
+          <ActivityIndicator color={COLORS.white} size="small" />
+        )}
+      </View>
+    );
+  }
   return (
-    <View>
+    <View style={{ justifyContent: "center" }}>
       {componentLoaded ? (
         <ModalSelector
           renderItem={(item) => {
@@ -83,10 +144,11 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
           }}
           frozenSearch={true}
           searchStyle={{
-            borderColor: COLORS.white,
+            backgroundColor: "rgba(90,90,90,0.5)",
             paddingHorizontal: 10,
+            marginTop: 10,
             marginBottom: 20,
-            borderWidth: 2,
+            borderWidth: 0,
           }}
           searchTextStyle={{
             color: COLORS.lightGray,
@@ -94,24 +156,9 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             fontSize: 15,
           }}
           data={selectionData}
-          initValue="Select your school"
-          selectStyle={{
-            borderWidth: 0,
-          }}
-          onChange={(option) => {
-            props.setSelectedSchool(schoolMap[option.key]);
-          }}
-          selectTextStyle={{
-            color: COLORS.white,
-            fontFamily: CUSTOMFONT_REGULAR,
-          }}
-          initValueTextStyle={{
-            color: COLORS.gray,
-            fontFamily: CUSTOMFONT_REGULAR,
-          }}
           optionContainerStyle={{
-            marginTop: SIZES.topBarHeight + 10,
             backgroundColor: "rgba(60,60,60,0.9)",
+            marginTop: SIZES.topBarHeight + 10,
           }}
           optionTextStyle={{
             color: COLORS.white,
@@ -125,9 +172,21 @@ const SchoolSelector = (props: SchoolSelectorProps) => {
             backgroundColor: "rgba(60,60,60,0.9)",
             marginBottom: SIZES.bottomBarHeight + 10,
           }}
+          onChange={(option) => {
+            props.setSelectedSchool(null);
+            props.setSelectedSchool(schoolMap[option.key]);
+          }}
+          // Initial Text
+          initValue={props.initialText}
+          // Text style
+          selectTextStyle={props.textStyle}
+          // Button
+          selectStyle={props.buttonStyle}
+          // Text style
+          initValueTextStyle={props.textStyle}
         />
       ) : (
-        <ActivityIndicator color={COLORS.white} size="small" style={{padding: 8}}/>
+        <ActivityIndicator style={{padding: 8}} color={COLORS.white} size="small" />
       )}
     </View>
   );
@@ -149,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SchoolSelector;
+export default SchoolSearchSelector;

@@ -16,11 +16,11 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 import { McText } from "../../../components/Styled";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { COLORS, FONTS, SCREENS, SIZES, School } from "../../../constants";
-import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
+import { CUSTOMFONT_BOLD, CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { displayError, formatError } from "../../../helpers/helpers";
-import SchoolSelector from "./components/SchoolSelector";
 import { useNavigation } from "@react-navigation/native";
+import SchoolSearchSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
 
 const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
@@ -110,7 +110,18 @@ const SignupScreen = () => {
               secureTextEntry={true}
             />
             <View style={styles.textInputContainer}>
-              <SchoolSelector setSelectedSchool={setSelectedSchool} />
+            <SchoolSearchSelector
+            setSelectedSchool={setSelectedSchool}
+            textStyle={{
+              color: COLORS.gray,
+              fontFamily: CUSTOMFONT_REGULAR,
+            }}
+            buttonStyle={{
+              borderRadius: 5,
+              borderWidth: 0
+            }}
+            initialText={"Select your school"}
+          />
             </View>
             <View style={{ marginTop: 40, marginBottom: 20, width: "80%", alignItems: "center" }}>
               <McText style={{textAlign: 'center'}} body6 color={COLORS.gray}>

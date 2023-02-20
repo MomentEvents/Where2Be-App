@@ -20,11 +20,13 @@ import {
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { McText } from "../../../components/Styled";
 import SelectList from "react-native-dropdown-select-list";
-import SchoolSelector from "./components/SchoolSelector";
+import SchoolSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientBackground from "../../../components/Styled/GradientBackground";
 import { appVersionText } from "../../../constants/texts";
 import { useNavigation } from "@react-navigation/native";
+import SchoolSearchSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
+import { CUSTOMFONT_BOLD } from "../../../constants/theme";
 
 const SelectSchoolScreen = ({ route }) => {
   const [school, setSchool] = useState<School>(null);
@@ -61,11 +63,27 @@ const SelectSchoolScreen = ({ route }) => {
         }}
       >
         <View style={{ alignItems: "center", justifyContent: "flex-start" }}>
-          <SchoolSelector setSelectedSchool={setSchool}></SchoolSelector>
+          <SchoolSearchSelector
+            setSelectedSchool={setSchool}
+            textStyle={{
+              color: COLORS.white,
+              fontFamily: CUSTOMFONT_BOLD,
+              paddingHorizontal: 10,
+              paddingVertical: 3,
+            }}
+            buttonStyle={{
+              backgroundColor: COLORS.purple,
+              borderColor: COLORS.purple,
+              borderRadius: 5,
+              borderWidth: 0
+            }}
+            initialText={"Select your school"}
+            maxHeight={130}
+          />
         </View>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
-            style={{ marginTop: 40, alignSelf: "center" }}
+            style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
             <McText body3>Already have an account?</McText>

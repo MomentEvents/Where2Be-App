@@ -1,0 +1,59 @@
+{
+  "name": "react-native-modal-selector-searchable",
+  "version": "2.1.4",
+  "description": "A cross-platform (iOS / Android), selector/picker component for React Native that is filterable, highly customizable and supports sections.",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postversion": "git push && git push --tags",
+    "lint": "./node_modules/.bin/eslint ./",
+    "lint-fix": "./node_modules/.bin/eslint --fix ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hepter/react-native-modal-selector-searchable.git"
+  },
+  "keywords": [
+    "react-native",
+    "dropdown",
+    "popover",
+    "select",
+    "picker",
+    "modal",
+    "ios",
+    "android",
+    "react-component",
+    "search",
+    "filter"
+  ],
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  },
+  "author": "Daniel Korger <dan@imake.io>",
+  "contributors": [
+    "Alex Spring <notlose@hotmail.com>",
+    "Peace Chen (https://github.com/peacechen)",
+    "Mustafa Kuru (https://github.com/hepter)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peacechen/react-native-modal-selector/issues"
+  },
+  "homepage": "https://github.com/hepter/react-native-modal-selector-searchable",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.0",
+    "eslint": "^7.0.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-flowtype": "^5.4.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.2.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react-native": "^3.0.1"
+  }
+}
