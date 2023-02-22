@@ -36,11 +36,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "795a8d15-64b5-4442-918f-40a0b90fbd14"
-      }
-    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
@@ -51,6 +46,11 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c26d4688-b61a-4d6b-acd1-2d6cbb13ad2f"
+      }
+    }
   }
 }
