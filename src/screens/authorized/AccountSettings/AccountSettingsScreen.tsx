@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext } from "react";
-import { COLORS, icons, SIZES } from "../../../constants";
+import { COLORS, icons, SCREENS, SIZES } from "../../../constants";
 import { McText } from "../../../components/Styled";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { UserContext } from "../../../contexts/UserContext";
@@ -39,17 +39,21 @@ const AccountSettingsScreen = () => {
         {
           text: "Yes",
           onPress: () => {
-            setLoading(true)
+            setLoading(true);
             deleteUser(userToken.UserAccessToken, currentUser.UserID)
               .then(() => {
-                userLogout().then(() => {setLoading(false)}).catch((error: Error) => {
-                  displayError(error)
-                  setLoading(false)
-                });
+                userLogout()
+                  .then(() => {
+                    setLoading(false);
+                  })
+                  .catch((error: Error) => {
+                    displayError(error);
+                    setLoading(false);
+                  });
               })
               .catch((error: Error) => {
                 displayError(error);
-                setLoading(false)
+                setLoading(false);
               });
           },
         },
@@ -57,6 +61,10 @@ const AccountSettingsScreen = () => {
       { cancelable: false }
     );
   };
+
+  const onPressChangePassword = () => {
+    navigation.navigate(SCREENS.ChangePassword)
+  }
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
@@ -68,6 +76,24 @@ const AccountSettingsScreen = () => {
         }}
       />
       <ScrollView>
+        <TouchableOpacity onPress={onPressChangePassword}>
+          <View style={styles.buttonContainer}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="shield-key-outline"
+                size={28}
+                color="white"
+              />
+            </View>
+            <McText h3>Change Password</McText>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onDeleteAccountClick}>
           <View style={styles.buttonContainer}>
             <View

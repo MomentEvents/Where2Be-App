@@ -17,6 +17,7 @@ import EditMyPasswordScreen from "../screens/authorized/EditMyPassword/EditMyPas
 import EditProfileScreen from "../screens/authorized/EditProfile/EditProfileScreen";
 import SettingsScreen from "../screens/authorized/Settings/SettingsScreen";
 import AccountSettingsScreen from "../screens/authorized/AccountSettings/AccountSettingsScreen";
+import ChangePasswordScreen from "../screens/authorized/ChangePassword/ChangePasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ const AppStack = () => {
       <Stack.Screen name={SCREENS.EditMyPassword} component={EditMyPasswordScreen}/>
       <Stack.Screen name={SCREENS.Settings} component={SettingsScreen}/>
       <Stack.Screen name={SCREENS.AccountSettings} component={AccountSettingsScreen}/>
+      <Stack.Screen name={SCREENS.ChangePassword} component={ChangePasswordScreen}/>
     </Stack.Navigator>
   );
 };
