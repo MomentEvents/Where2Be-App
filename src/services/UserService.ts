@@ -139,6 +139,7 @@ export async function deleteUser(
 
   userID: string
 ): Promise<void> {
+  
   const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
     method: "DELETE",
     headers: {

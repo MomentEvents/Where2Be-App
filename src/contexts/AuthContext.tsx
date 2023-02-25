@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const userLogout = async () => {
-    logout();
+    await logout();
     setContextVarsBasedOnToken(null);
   };
 

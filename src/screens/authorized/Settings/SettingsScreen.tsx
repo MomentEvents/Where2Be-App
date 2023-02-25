@@ -9,23 +9,26 @@ import {
   View,
 } from "react-native";
 import React, { useContext } from "react";
-import { COLORS, icons, SIZES } from "../../../constants";
+import { COLORS, icons, SCREENS, SIZES } from "../../../constants";
 import { McText } from "../../../components/Styled";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { displayError } from "../../../helpers/helpers";
+import { ScreenContext } from "../../../contexts/ScreenContext";
 
 const SettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
+  const { setLoading } = useContext(ScreenContext);
   const navigation = useNavigation<any>();
 
   const onChangePasswordClick = () => {};
 
   const onWebsiteClick = () => {
     const supported = Linking.canOpenURL("https://momentevents.app");
-
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
@@ -47,6 +50,10 @@ const SettingsScreen = () => {
     }
   };
 
+  const onAccountSettingsClick = () => {
+    navigation.navigate(SCREENS.AccountSettings);
+  };
+
   const onLogoutClick = () => {
     Alert.alert(
       "Log out",
@@ -60,7 +67,14 @@ const SettingsScreen = () => {
           text: "Yes",
           onPress: () => {
             console.log("Yes Pressed");
-            userLogout();
+            userLogout()
+              .then(() => {
+                setLoading(false);
+              })
+              .catch((error: Error) => {
+                displayError(error);
+                setLoading(false);
+              });
           },
         },
       ],
@@ -97,7 +111,7 @@ const SettingsScreen = () => {
                 alignItems: "center",
               }}
             >
-              <icons.website style={styles.iconContainer}/>
+              <icons.website style={styles.iconContainer} />
             </View>
             <McText h3>Visit Website</McText>
           </View>
@@ -116,18 +130,37 @@ const SettingsScreen = () => {
             <McText h3>Contact Support</McText>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={onAccountSettingsClick}>
+          <View style={styles.buttonContainer}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="account-circle-outline"
+                style={styles.iconContainer}
+                size={28}
+                color="white"
+              />
+            </View>
+            <McText h3>Account Settings</McText>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onLogoutClick}>
           <View style={styles.buttonContainer}>
             <View
               style={{
                 width: 46,
-                marginLeft: 4,
-                marginRight: 1,
+                marginLeft: 3,
+                marginRight: 2,
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <icons.logout style={styles.iconContainer}/>
+              <icons.logout style={styles.iconContainer} />
             </View>
             <McText h3>Logout</McText>
           </View>

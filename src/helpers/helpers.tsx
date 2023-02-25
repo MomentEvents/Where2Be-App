@@ -158,3 +158,26 @@ export function openURL(url: string): void {
     Alert.alert(`Unable to open link: ${url}`);
   }
 }
+
+export function showCancelablePopup(
+  title: string,
+  description: string,
+  onYesFunction: () => {},
+): void {
+  Alert.alert(
+    "Log out",
+    "Are you sure you want to log out?",
+    [
+      {
+        text: "Cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () => {
+          onYesFunction()
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+}

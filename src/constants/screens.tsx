@@ -15,5 +15,6 @@ export const SCREENS = {
     PreviewEvent: "PreviewEventScreen",
     EditProfile: "EditProfileScreen",
     Settings: "SettingsScreen",
-    EditMyPassword: "EditMyPasswordScreen"
+    EditMyPassword: "EditMyPasswordScreen",
+    AccountSettings: "AccountSettings",
 }
