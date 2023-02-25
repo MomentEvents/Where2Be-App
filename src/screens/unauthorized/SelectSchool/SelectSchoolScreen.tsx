@@ -1,6 +1,8 @@
 import {
   ActivityIndicator,
+  Alert,
   ImageBackground,
+  Linking,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -34,6 +36,18 @@ const SelectSchoolScreen = ({ route }) => {
 
   const onNavigateLogin = () => {
     navigation.navigate(SCREENS.Login);
+  };
+
+  const onDiscordClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app/discord");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://momentevents.app/discord");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://momentevents.app/discord"}`);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +89,7 @@ const SelectSchoolScreen = ({ route }) => {
               backgroundColor: COLORS.purple,
               borderColor: COLORS.purple,
               borderRadius: 5,
-              borderWidth: 0
+              borderWidth: 0,
             }}
             initialText={"Select your school"}
             maxHeight={130}
@@ -91,9 +105,20 @@ const SelectSchoolScreen = ({ route }) => {
         </View>
       </View>
       <View style={{ padding: 5 }}>
-        <McText body6 color={COLORS.gray1}>
-          {appVersionText}
-        </McText>
+        <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
+          {appVersionText}{" "}|{" "}Join our{" "}
+          <Text
+            onPress={onDiscordClick}
+            style={{
+              fontSize: 12,
+              color: COLORS.gray1,
+              textDecorationLine: "underline",
+            }}
+          >
+            Discord server
+          </Text>
+          !
+        </Text>
       </View>
     </SafeAreaView>
   );

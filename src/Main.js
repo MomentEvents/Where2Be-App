@@ -17,7 +17,7 @@ const Main = () => {
       <EventProvider>
         <ScreenProvider>
           <AuthProvider>
-            {/* <StatusBar barStyle="light-content" translucent={true} /> */}
+            <StatusBar barStyle="light-content" translucent={true} />
             <AppNav />
           </AuthProvider>
         </ScreenProvider>

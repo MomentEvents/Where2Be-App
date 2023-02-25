@@ -21,6 +21,8 @@ import {
   Keyboard,
   Platform,
   Text,
+  Alert,
+  Linking,
 } from "react-native";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
@@ -46,6 +48,18 @@ export const ScreenProvider = ({ children }) => {
     await Font.loadAsync(customFonts)
       .then(() => setAssetsLoaded(true))
       .catch((error: Error) => displayError(error));
+  };
+
+  const onDiscordClick = () => {
+    const supported = Linking.canOpenURL("https://momentevents.app/discord");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://momentevents.app/discord");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://momentevents.app/discord"}`);
+    }
   };
 
   useEffect(() => {
@@ -98,7 +112,14 @@ export const ScreenProvider = ({ children }) => {
           </View>
           <View style={{ padding: 5 }}>
             <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
-              {appVersionText}
+              {appVersionText}{" "}|{" "}Join our{" "}
+              <Text
+                onPress={onDiscordClick}
+                style={{ fontSize: 12, color: COLORS.gray1, textDecorationLine: "underline" }}
+              >
+                Discord server
+              </Text>
+              !
             </Text>
           </View>
         </SafeAreaView>
