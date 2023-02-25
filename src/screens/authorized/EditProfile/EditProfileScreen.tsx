@@ -57,7 +57,7 @@ type EditProfileParams = {
   isSelf?: boolean;
 };
 const EditProfileScreen = ({ route }) => {
-  const {user, isSelf}: EditProfileParams = route.params
+  const { user, isSelf }: EditProfileParams = route.params;
 
   const navigation = useNavigation<any>();
   const { setCurrentUser, userToken } = useContext(UserContext);
@@ -69,19 +69,15 @@ const EditProfileScreen = ({ route }) => {
   const [username, setUsername] = useState(user.Username);
 
   const handleSubmit = () => {
-    // These checks will be done by the API
-    // if (!checkIfStringIsReadable(displayName)) {
-    //   Alert.alert("Error", "Please enter a valid display name");
-    //   return;
-    // }
+    if (displayName === "") {
+      Alert.alert("Input Error", "Please enter a valid display name");
+      return;
+    }
 
-    // if (
-    //   !checkIfStringIsReadable(username) ||
-    //   !checkIfStringIsAlphanumeric(username)
-    // ) {
-    //   Alert.alert("Error", "Please enter an alphanumeric username");
-    //   return;
-    // }
+    if (username === "") {
+      Alert.alert("Input Error", "Please enter an alphanumeric username");
+      return;
+    }
 
     // Update information
 

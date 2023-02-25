@@ -60,6 +60,15 @@ const ChangePasswordScreen = ({ route }) => {
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
 
   const handleSubmit = () => {
+    if(oldPassword === "" || newPassword === "" || confirmNewPassword === ""){
+        displayError(
+            formatError(
+              "Input error",
+              "Make sure all fields are filled in"
+            )
+          );
+          return;
+    }
     if (confirmNewPassword !== newPassword) {
       displayError(
         formatError(
