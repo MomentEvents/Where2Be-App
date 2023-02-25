@@ -419,6 +419,13 @@ interface IModalSelectorProps<TOption> {
    * Default is `''`
    */
   selectedKey?: React.Key;
+
+    /**
+   * Max lines of selected
+   * 
+   * Default is `none`
+   */
+  maxLines?: number;
 }
 
 export default class ModalSelector<TOption = IOption> extends React.Component<IModalSelectorProps<TOption> & FlatListProps<any>, any> { }

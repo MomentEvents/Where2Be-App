@@ -25,6 +25,7 @@ type SchoolSelectorProps = {
   buttonStyle: any;
   initialText: string;
   maxHeight?: number;
+  maxLines?: number;
 };
 
 type SchoolSelectorState = {
@@ -128,6 +129,8 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             selectStyle={props.buttonStyle}
             // Text style
             initValueTextStyle={props.textStyle}
+
+            maxLines={props.maxLines}
           />
         ) : (
           <ActivityIndicator color={COLORS.white} size="small" />
@@ -184,6 +187,8 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           selectStyle={props.buttonStyle}
           // Text style
           initValueTextStyle={props.textStyle}
+
+          maxLines={props.maxLines}
         />
       ) : (
         <ActivityIndicator style={{padding: 8}} color={COLORS.white} size="small" />

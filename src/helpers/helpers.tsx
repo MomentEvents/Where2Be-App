@@ -13,7 +13,7 @@ import { Event } from "../constants";
  */
 
 import moment from "moment";
-import { Alert } from "react-native";
+import { Alert, Linking } from "react-native";
 
 export function checkIfStringIsEmail(test: string): boolean {
   const expression =
@@ -147,11 +147,14 @@ export function checkIfEventIsFormatted(event: Event): boolean {
   );
 }
 
-export async function HELPME() {
-  for (var i = 0; i < 9999999; i++) {
-    if (i % 10000 === 0) {
-      console.log(i);
-    }
+export function openURL(url: string): void {
+  const supported = Linking.canOpenURL(url);
+
+  if (supported) {
+    // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+    // by some browser in the mobile
+    Linking.openURL(url);
+  } else {
+    Alert.alert(`Unable to open link: ${url}`);
   }
-  return;
 }

@@ -47,6 +47,7 @@ import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { ScreenContext } from "../../../contexts/ScreenContext";
+import { CONSTRAINTS } from "../../../constants/constraints";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -149,7 +150,7 @@ const EditProfileScreen = ({ route }) => {
               placeholder={"Enter your display name"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
-              maxLength={20}
+              maxLength={CONSTRAINTS.User.DisplayName.Max}
               onChangeText={(newText) => setDisplayName(newText)}
             />
           </View>
@@ -171,7 +172,7 @@ const EditProfileScreen = ({ route }) => {
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
-              maxLength={20}
+              maxLength={CONSTRAINTS.User.Username.Max}
             />
           </View>
         </View>

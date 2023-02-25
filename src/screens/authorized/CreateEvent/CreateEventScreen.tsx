@@ -42,6 +42,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import EventEditor from "../../../components/EventEditor/EventEditor";
 import { useNavigation } from "@react-navigation/native";
+import { CONSTRAINTS } from "../../../constants/constraints";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -118,8 +119,12 @@ const CreateEventScreen = ({ route }) => {
       return;
     }
 
-    if (selectedInterests.size !== 1) {
-      displayError(formatError("Input error", "Please only select one tag"));
+    if (selectedInterests.size > CONSTRAINTS.Event.Interest.Max) {
+      displayError(formatError("Input error", "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."));
+      return;
+    }
+    if (selectedInterests.size < CONSTRAINTS.Event.Interest.Min) {
+      displayError(formatError("Input error", "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."));
       return;
     }
     console.log(createdEvent);

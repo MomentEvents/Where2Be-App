@@ -16,6 +16,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import styled from "styled-components/native";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { convertDateToUTC } from "../../helpers/helpers";
+import { CONSTRAINTS } from "../../constants/constraints";
 
 type EventEditorProps = {
     title: string,
@@ -93,7 +94,7 @@ const EventEditor = (props: EventEditorProps) => {
               value={props.title}
               onChangeText={props.setTitle}
               multiline={false}
-              maxLength={70}
+              maxLength={CONSTRAINTS.Event.Title.Max}
             />
 
             <View style={styles.titleContainer}>
@@ -108,7 +109,7 @@ const EventEditor = (props: EventEditorProps) => {
               value={props.description}
               onChangeText={props.setDescription}
               multiline={true}
-              maxLength={1500}
+              maxLength={CONSTRAINTS.Event.Description.Max}
             />
 
             <View style={styles.titleContainer}>
@@ -182,7 +183,7 @@ const EventEditor = (props: EventEditorProps) => {
               style={styles.textInputContainer}
               value={props.location}
               onChangeText={props.setLocation}
-              maxLength={50}
+              maxLength={CONSTRAINTS.Event.Location.Max}
             />
 
             <View style={styles.titleContainer}>
