@@ -375,7 +375,7 @@ const EventDetailsScreen = ({ route }) => {
             </View>
           </View>
         </View>
-        <View style={{ height: SIZES.bottomBarHeight }} />
+        <View style={{ height: SIZES.bottomBarHeight + 10}} />
       </ScrollView>
     </MobileSafeView>
   );
