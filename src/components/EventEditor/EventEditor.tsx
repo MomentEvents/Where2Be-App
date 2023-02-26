@@ -68,7 +68,7 @@ const EventEditor = (props: EventEditorProps) => {
         <View style={styles.scrollViewContainer}>
           <SectionInputs>
             <View style={styles.titleContainer}>
-              <icons.pickpicture width={30} />
+              <icons.pickpicture style={styles.iconsContainer} width={30} />
               <McText h3>Image</McText>
             </View>
 
