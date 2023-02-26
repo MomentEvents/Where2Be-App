@@ -30,6 +30,7 @@ import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
@@ -94,113 +95,115 @@ const SignupScreen = () => {
 
   return (
     <MobileSafeView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 30 }}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollviewContainer}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <KeyboardAvoidingView style={styles.container}>
-          <View style={styles.backarrowContainer}>
-            <TouchableOpacity onPress={onNavigateBack}>
-              <icons.backarrow />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.welcomeTextContainer}>
-            <McText h1 style={styles.welcomeText}>
-              Welcome to Moment!
-            </McText>
-          </View>
-          <TextInput
-            placeholder={"Name"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setDisplayName(newText)}
-            maxLength={CONSTRAINTS.User.DisplayName.Max}
-          />
-          <TextInput
-            placeholder={"Username"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setUsername(newText)}
-            maxLength={CONSTRAINTS.User.Username.Max}
-          />
-          <TextInput
-            placeholder={"Password"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setPassword(newText)}
-            secureTextEntry={true}
-            maxLength={CONSTRAINTS.User.Password.Max}
-          />
-          <TextInput
-            placeholder={"Confirm Password"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setConfirmPassword(newText)}
-            secureTextEntry={true}
-            maxLength={CONSTRAINTS.User.Password.Max}
-          />
-          <View style={styles.textInputContainer}>
-            <SchoolSearchSelector
-              setSelectedSchool={setSelectedSchool}
-              textStyle={{
-                color: COLORS.gray,
-                fontFamily: CUSTOMFONT_REGULAR,
-              }}
-              buttonStyle={{
-                borderRadius: 5,
-                borderWidth: 0,
-              }}
-              initialText={"Select your school"}
-              maxLines={1}
-            />
-          </View>
-          <View
-            style={{
-              marginTop: 40,
-              marginBottom: 20,
-              width: "80%",
-              alignItems: "center",
+        <View style={styles.backarrowContainer}>
+          <TouchableOpacity onPress={onNavigateBack}>
+            <icons.backarrow />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.welcomeTextContainer}>
+          <McText h1 style={styles.welcomeText}>
+            Welcome to Moment!
+          </McText>
+        </View>
+        <TextInput
+          placeholder={"Name"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setDisplayName(newText)}
+          maxLength={CONSTRAINTS.User.DisplayName.Max}
+        />
+        <TextInput
+          placeholder={"Username"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setUsername(newText)}
+          maxLength={CONSTRAINTS.User.Username.Max}
+        />
+        <TextInput
+          placeholder={"Password"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setPassword(newText)}
+          secureTextEntry={true}
+          maxLength={CONSTRAINTS.User.Password.Max}
+        />
+        <TextInput
+          placeholder={"Confirm Password"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setConfirmPassword(newText)}
+          secureTextEntry={true}
+          maxLength={CONSTRAINTS.User.Password.Max}
+        />
+        <View style={styles.textInputContainer}>
+          <SchoolSearchSelector
+            setSelectedSchool={setSelectedSchool}
+            textStyle={{
+              color: COLORS.gray,
+              fontFamily: CUSTOMFONT_REGULAR,
             }}
+            buttonStyle={{
+              borderRadius: 5,
+              borderWidth: 0,
+            }}
+            initialText={"Select your school"}
+            maxLines={1}
+          />
+        </View>
+        <View
+          style={{
+            marginTop: 40,
+            marginBottom: 20,
+            width: "80%",
+            alignItems: "center",
+          }}
+        >
+          <McText
+            style={{ textAlign: "center", width: SIZES.width - 80 }}
+            body6
+            color={COLORS.gray}
           >
-            <McText style={{ textAlign: "center" }} body6 color={COLORS.gray}>
-              By creating an account, you agree to our{" "}
-              <McText
-                onPress={onTermsOfServiceClick}
-                body6
-                color={COLORS.gray}
-                style={{ textDecorationLine: "underline" }}
-              >
-                Terms of Service
-              </McText>{" "}
-              and{" "}
-              <McText
-                onPress={onPrivacyPolicyClick}
-                body6
-                color={COLORS.gray}
-                style={{ textDecorationLine: "underline" }}
-              >
-                Privacy Policy
-              </McText>
+            By creating an account, you agree to our{" "}
+            <McText
+              onPress={onTermsOfServiceClick}
+              body6
+              color={COLORS.gray}
+              style={{ textDecorationLine: "underline" }}
+            >
+              Terms of Service
+            </McText>{" "}
+            and{" "}
+            <McText
+              onPress={onPrivacyPolicyClick}
+              body6
+              color={COLORS.gray}
+              style={{ textDecorationLine: "underline" }}
+            >
+              Privacy Policy
+            </McText>
+          </McText>
+        </View>
+        <TouchableOpacity onPress={onSignup}>
+          <View style={styles.submitButton}>
+            <McText
+              h4
+              style={{
+                color: COLORS.white,
+              }}
+            >
+              Signup
             </McText>
           </View>
-          <TouchableOpacity onPress={onSignup}>
-            <View style={styles.submitButton}>
-              <McText
-                h4
-                style={{
-                  color: COLORS.white,
-                }}
-              >
-                Signup
-              </McText>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onNavigateLogin}>
-            <McText body3>Already have an account?</McText>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onNavigateLogin}>
+          <McText body3>Already have an account?</McText>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </MobileSafeView>
   );
 };
@@ -213,9 +216,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: COLORS.trueBlack,
+    width: SIZES.width,
+  },
+  scrollviewContainer: {
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: COLORS.trueBlack,
+    width: SIZES.width,
   },
   welcomeTextContainer: {
-    marginTop: 15
+    marginTop: 15,
   },
   welcomeText: {
     textAlign: "center",

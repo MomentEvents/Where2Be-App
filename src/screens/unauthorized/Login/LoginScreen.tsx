@@ -21,6 +21,7 @@ import { displayError, openURL } from "../../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -50,73 +51,75 @@ const LoginScreen = () => {
 
   return (
     <MobileSafeView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 30 }}
-        keyboardShouldPersistTaps="handled"
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollviewContainer}
         showsVerticalScrollIndicator={false}
       >
-        <KeyboardAvoidingView style={styles.container}>
-          <View style={styles.backarrowContainer}>
-            <TouchableOpacity onPress={onNavigateBack}>
-              <icons.backarrow />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.welcomeTextContainer}>
-            <McText h1 style={styles.welcomeText}>
-              Welcome to Moment!
-            </McText>
-          </View>
-          <TextInput
-            placeholder={"Username"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setUsercred(newText)}
-            maxLength={CONSTRAINTS.User.Username.Max}
-          />
-          <TextInput
-            placeholder={"Password"}
-            placeholderTextColor={COLORS.gray}
-            style={styles.textInputContainer}
-            onChangeText={(newText) => setPassword(newText)}
-            secureTextEntry={true}
-          />
-          <View
-            style={{
-              marginTop: 30,
-              marginBottom: 15,
-              width: "80%",
-              alignItems: "center",
-            }}
+        <View style={styles.backarrowContainer}>
+          <TouchableOpacity onPress={onNavigateBack}>
+            <icons.backarrow />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.welcomeTextContainer}>
+          <McText h1 style={styles.welcomeText}>
+            Welcome to Moment!
+          </McText>
+        </View>
+        <TextInput
+          placeholder={"Username"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setUsercred(newText)}
+          maxLength={CONSTRAINTS.User.Username.Max}
+        />
+        <TextInput
+          placeholder={"Password"}
+          placeholderTextColor={COLORS.gray}
+          style={styles.textInputContainer}
+          onChangeText={(newText) => setPassword(newText)}
+          secureTextEntry={true}
+        />
+
+        <View
+          style={{
+            marginTop: 30,
+            marginBottom: 15,
+            width: "80%",
+            alignItems: "center",
+          }}
+        >
+          <McText
+            style={{ textAlign: "center", width: SIZES.width - 80 }}
+            body6
+            color={COLORS.gray}
           >
-            <McText style={{ textAlign: "center" }} body6 color={COLORS.gray}>
-              Forgot your password?{" "}
-              <McText
-                onPress={() => openURL("https://momentevents.app/contact")}
-                body6
-                color={COLORS.gray}
-                style={{ textDecorationLine: "underline" }}
-              >
-                 Contact us
-              </McText>
+            Forgot your password?{" "}
+            <McText
+              onPress={() => openURL("https://momentevents.app/contact")}
+              body6
+              color={COLORS.gray}
+              style={{ textDecorationLine: "underline" }}
+            >
+              Contact us
+            </McText>
+          </McText>
+        </View>
+        <TouchableOpacity onPress={onLogin}>
+          <View style={styles.submitButton}>
+            <McText
+              h4
+              style={{
+                color: COLORS.white,
+              }}
+            >
+              Login
             </McText>
           </View>
-          <TouchableOpacity onPress={onLogin}>
-            <View style={styles.submitButton}>
-              <McText
-                h4
-                style={{
-                  color: COLORS.white,
-                }}
-              >
-                Login
-              </McText>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onNavigateSignup}>
-            <McText body3>Don't have an account?</McText>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onNavigateSignup}>
+          <McText body3>Don't have an account?</McText>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </MobileSafeView>
   );
 };
@@ -129,6 +132,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: COLORS.trueBlack,
+    width: SIZES.width,
+  },
+  scrollviewContainer: {
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: COLORS.trueBlack,
+    width: SIZES.width,
   },
   backarrowContainer: {
     width: SIZES.width - 60,
