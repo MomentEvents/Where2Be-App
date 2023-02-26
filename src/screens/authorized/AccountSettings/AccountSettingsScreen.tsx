@@ -101,6 +101,7 @@ const AccountSettingsScreen = () => {
                 width: 50,
                 justifyContent: "center",
                 alignItems: "center",
+                marginRight: 1,
               }}
             >
               <MaterialCommunityIcons
