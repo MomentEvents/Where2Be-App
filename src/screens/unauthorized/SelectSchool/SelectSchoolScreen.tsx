@@ -50,13 +50,6 @@ const SelectSchoolScreen = ({ route }) => {
     }
   };
 
-  useEffect(() => {
-    if (school != null) {
-      console.log("School selected is " + school.Name);
-      navigation.navigate(SCREENS.IntroduceEvents, { school: school });
-    }
-  }, [school]);
-
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -78,7 +71,10 @@ const SelectSchoolScreen = ({ route }) => {
       >
         <View style={{ alignItems: "center", justifyContent: "flex-start" }}>
           <SchoolSearchSelector
-            setSelectedSchool={setSchool}
+            onSelectSchool={(school: School) => {
+              setSchool(school);
+              navigation.navigate(SCREENS.IntroduceEvents, { school: school });
+            }}
             textStyle={{
               color: COLORS.white,
               fontFamily: CUSTOMFONT_BOLD,
@@ -106,7 +102,7 @@ const SelectSchoolScreen = ({ route }) => {
       </View>
       <View style={{ padding: 5 }}>
         <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
-          {appVersionText}{" "}|{" "}Join our{" "}
+          {appVersionText} | Join our{" "}
           <Text
             onPress={onDiscordClick}
             style={{

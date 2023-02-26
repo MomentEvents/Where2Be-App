@@ -142,7 +142,9 @@ const SignupScreen = () => {
         />
         <View style={styles.textInputContainer}>
           <SchoolSearchSelector
-            setSelectedSchool={setSelectedSchool}
+            onSelectSchool={(school:School) => {
+              setSelectedSchool(school)
+            }}
             textStyle={{
               color: COLORS.gray,
               fontFamily: CUSTOMFONT_REGULAR,

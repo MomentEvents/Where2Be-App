@@ -20,7 +20,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
 
 type SchoolSelectorProps = {
-  setSelectedSchool: React.Dispatch<React.SetStateAction<School>>;
+  onSelectSchool: (school: School) => void;
   textStyle: any;
   buttonStyle: any;
   initialText: string;
@@ -32,6 +32,7 @@ type SchoolSelectorState = {
   selectionData: [{ key: string; label: string }];
   textInputValue: string;
 };
+
 const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   const [selectionData, setSelectionData] =
     useState<[{ key?: string; label?: string }]>(null);
@@ -118,8 +119,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
               marginBottom: SIZES.bottomBarHeight + 10,
             }}
             onChange={(option) => {
-              props.setSelectedSchool(null);
-              props.setSelectedSchool(schoolMap[option.key]);
+              props.onSelectSchool(schoolMap[option.key]);
             }}
             // Initial Text
             initValue={props.initialText}
@@ -129,7 +129,6 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             selectStyle={props.buttonStyle}
             // Text style
             initValueTextStyle={props.textStyle}
-
             maxLines={props.maxLines}
           />
         ) : (
@@ -176,8 +175,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             marginBottom: SIZES.bottomBarHeight + 10,
           }}
           onChange={(option) => {
-            props.setSelectedSchool(null);
-            props.setSelectedSchool(schoolMap[option.key]);
+            props.onSelectSchool(schoolMap[option.key]);
           }}
           // Initial Text
           initValue={props.initialText}
@@ -187,11 +185,14 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           selectStyle={props.buttonStyle}
           // Text style
           initValueTextStyle={props.textStyle}
-
           maxLines={props.maxLines}
         />
       ) : (
-        <ActivityIndicator style={{padding: 8}} color={COLORS.white} size="small" />
+        <ActivityIndicator
+          style={{ padding: 8 }}
+          color={COLORS.white}
+          size="small"
+        />
       )}
     </View>
   );
