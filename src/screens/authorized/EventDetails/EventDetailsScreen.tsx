@@ -9,6 +9,7 @@ import {
   Alert,
   RefreshControl,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
@@ -37,6 +38,7 @@ import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
   eventID: string;
@@ -558,20 +560,26 @@ const EventDetailsScreen = ({ route }) => {
                     marginLeft: 12,
                   }}
                 >
-                  <McText
-                    onTextLayout={descriptionOnExpand}
-                    numberOfLines={descriptionExpanded ? undefined : 3}
-                    body3
-                    style={{
-                      letterSpacing: 0.7,
-                      color: COLORS.lightGray,
-                    }}
-                    selectable={true}
+                  <Hyperlink
+                    linkDefault={true}
+                    linkStyle={{ textDecorationLine: "underline" }}
                   >
-                    {eventIDToEvent[eventID] === undefined
-                      ? null
-                      : eventIDToEvent[eventID].Description}
-                  </McText>
+                    <McText
+                      onTextLayout={descriptionOnExpand}
+                      numberOfLines={descriptionExpanded ? undefined : 3}
+                      body3
+                      style={{
+                        letterSpacing: 0.7,
+                        color: COLORS.lightGray,
+                      }}
+                      selectable={true}
+                    >
+                      {eventIDToEvent[eventID] === undefined
+                        ? null
+                        : eventIDToEvent[eventID].Description}
+                    </McText>
+                  </Hyperlink>
+
                   {lengthMoreText ? (
                     <McText
                       onPress={descriptionToggleNumberOfLines}
@@ -925,7 +933,6 @@ const VisibilitySection = styled.View`
   border-radius: 10px;
   align-items: center;
 `;
-
 
 const EditOrDeleteEventSection = styled.View`
   flex-direction: row;

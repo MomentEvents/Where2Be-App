@@ -52,6 +52,7 @@
     "react-native-dropdown-select-list": "^1.0.21",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.5.0",
+    "react-native-hyperlink": "^0.0.22",
     "react-native-image-crop-picker": "^0.39.0",
     "react-native-image-picker": "^5.0.1",
     "react-native-image-view": "^2.1.9",

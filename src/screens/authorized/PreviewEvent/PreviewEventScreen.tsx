@@ -32,6 +32,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -305,15 +306,22 @@ const EventDetailsScreen = ({ route }) => {
                   marginLeft: 12,
                 }}
               >
-                <McText
-                  onTextLayout={descriptionOnExpand}
-                  numberOfLines={descriptionExpanded ? undefined : 3}
-                  body3
-                  style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
-                  selectable={true}
+                <Hyperlink
+                  linkDefault={true}
+                  linkStyle={{ textDecorationLine: "underline" }}
                 >
-                  {createdEvent === undefined ? null : createdEvent.Description}
-                </McText>
+                  <McText
+                    onTextLayout={descriptionOnExpand}
+                    numberOfLines={descriptionExpanded ? undefined : 3}
+                    body3
+                    style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
+                    selectable={true}
+                  >
+                    {createdEvent === undefined
+                      ? null
+                      : createdEvent.Description}
+                  </McText>
+                </Hyperlink>
                 {lengthMoreText ? (
                   <McText
                     onPress={descriptionToggleNumberOfLines}
@@ -375,7 +383,7 @@ const EventDetailsScreen = ({ route }) => {
             </View>
           </View>
         </View>
-        <View style={{ height: SIZES.bottomBarHeight + 10}} />
+        <View style={{ height: SIZES.bottomBarHeight + 10 }} />
       </ScrollView>
     </MobileSafeView>
   );
