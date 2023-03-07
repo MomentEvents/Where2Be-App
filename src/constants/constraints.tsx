@@ -5,7 +5,7 @@ export const CONSTRAINTS = {
             Min: 3,
         },
         Description: {
-            Max: 1500,
+            Max: 2000,
             Min: 0,
         },
         Location: {

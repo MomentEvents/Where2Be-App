@@ -4,6 +4,7 @@ import { momentAPI } from "../constants/server";
 import { formatError } from "../helpers/helpers";
 import { User } from "../constants";
 import { UserResponse } from "../constants/types";
+import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
 
 /******************************************************
  * getUser
@@ -25,16 +26,10 @@ export async function getUser(UserID: string): Promise<User> {
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
-  const data: UserResponse = await response.json();
+  const pulledUser: UserResponse = await response.json();
+  const convertedUser: User = userResponseToUser(pulledUser)
 
-  const pulledUser: User = {
-    UserID: data.user_id,
-    DisplayName: data.display_name,
-    Username: data.username,
-    Picture: data.picture,
-  };
-
-  return Promise.resolve(pulledUser);
+  return convertedUser;
 }
 
 /******************************************************
@@ -66,15 +61,10 @@ export async function getUserByUserAccessToken(
     throw formatError("Error " + response.status, message);
   }
 
-  const responseJSON = await response.json();
+  const pulledUsers: UserResponse[] = await response.json();
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
 
-  const pulledUser: User = {
-    UserID: responseJSON["user_id"],
-    DisplayName: responseJSON["display_name"],
-    Username: responseJSON["username"],
-    Picture: responseJSON["picture"],
-  };
-  return Promise.resolve(pulledUser);
+  return convertedUsers[0];
 }
 
 /******************************************************
@@ -122,16 +112,10 @@ export async function updateUser(
     throw formatError("Error " + response.status, message);
   }
 
-  const responseJSON: UserResponse = await response.json();
+  const pulledUsers: UserResponse[] = await response.json();
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
 
-  const pulledUser: User = {
-    UserID: responseJSON.user_id,
-    DisplayName: responseJSON.display_name,
-    Username: responseJSON.username,
-    Picture: responseJSON.picture,
-  };
-
-  return Promise.resolve(pulledUser);
+  return convertedUsers[0];
 }
 
 export async function deleteUser(
@@ -182,16 +166,10 @@ export async function getEventHostByEventId(
     throw formatError("Error " + response.status, message);
   }
 
-  const responseJSON = await response.json();
+  const pulledUsers: UserResponse[] = await response.json();
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
 
-  const pulledUser: User = {
-    UserID: responseJSON["user_id"],
-    DisplayName: responseJSON["display_name"],
-    Username: responseJSON["username"],
-    Picture: responseJSON["picture"],
-  };
-
-  return pulledUser;
+  return Promise.resolve(convertedUsers[0]);
 }
 
 export async function addUserJoinEvent(
@@ -328,19 +306,8 @@ export async function getAllSchoolUsers(
     throw formatError("Error " + response.status, message);
   }
 
-  const responseJSON = await response.json();
+  const pulledUsers: UserResponse[] = await response.json();
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
 
-  console.log(responseJSON);
-  const userArray: User[] = [];
-
-  responseJSON.forEach((user: UserResponse) => {
-    userArray.push({
-      UserID: user.user_id,
-      DisplayName: user.display_name,
-      Username: user.username,
-      Picture: user.picture,
-    });
-  });
-
-  return userArray;
+  return convertedUsers;
 }

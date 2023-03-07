@@ -1,6 +1,5 @@
-import { InterestResponse } from "./../constants/types";
+import { Interest, InterestResponse } from "./../constants/types";
 import { momentAPI } from "../constants/server";
-import { Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 
 /******************************************************
@@ -23,7 +22,7 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
     throw formatError("Error " + response.status, message);
   }
 
-  const data = await response.json();
+  const pulledInterests: InterestResponse = await response.json();
 
   const InterestArray = data.map((interest: InterestResponse) => {
     return {
