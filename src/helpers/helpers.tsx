@@ -98,9 +98,7 @@ export function convertToStartTimeEndTime(
   endTime: Date
 ): { [key: string]: Date } {
   // yyyy-mm-ddThh:mm:ss.000Z
-
-  var toOffsetDate = new Date();
-  var offset = toOffsetDate.getTimezoneOffset() * 60000;
+  const offset = date.getTimezoneOffset() * 60000;
 
   const startDateTimeString =
     moment.utc(date).local().format("YYYY[-]MM[-]DD") +
