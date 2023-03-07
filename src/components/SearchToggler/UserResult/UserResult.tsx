@@ -38,10 +38,9 @@ const UserResult = (props: UserResultProps) => {
           />
           <View
             style={{
-              marginRight: 20,
+              marginRight: 30,
               marginLeft: 15,
               flex: 1,
-              flexWrap: "wrap",
               justifyContent: "center"
             }}
           >

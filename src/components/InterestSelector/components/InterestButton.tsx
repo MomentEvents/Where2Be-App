@@ -33,11 +33,11 @@ const InterestButton = (props: InterestButtonProps) => {
           _onPress();
         }}
         style={{
-          width: props.tag.Name.length * 8 + 20,
           height: 32,
           borderRadius: 5,
           marginVertical: 4,
           marginHorizontal: 4,
+          paddingHorizontal: 10,
           backgroundColor: toggle
             ? COLORS.purple
             : COLORS.input,

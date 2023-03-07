@@ -9,11 +9,7 @@ import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
 /******************************************************
  * getUser
  *
- * Gets a user by its Id
- *
- * Parameters:
- *          Id: ID to get user
- * Return: The user object (if found. Null if not found.)
+ * Gets a user by its id
  */
 export async function getUser(UserID: string): Promise<User> {
   const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
@@ -35,11 +31,7 @@ export async function getUser(UserID: string): Promise<User> {
 /******************************************************
  * getUserByUserAccessToken
  *
- * Gets a user by its access token
- *
- * Parameters:
- *          userAccessToken
- * Return: The user object (if found. Null if not found.)
+ * Gets a user by its user access token
  */
 export async function getUserByUserAccessToken(
   userAccessToken: string
@@ -61,26 +53,16 @@ export async function getUserByUserAccessToken(
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledUsers: UserResponse[] = await response.json();
-  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
+  const pulledUser: UserResponse = await response.json();
+  const convertedUser: User = userResponseToUser(pulledUser)
 
-  return convertedUsers[0];
+  return convertedUser;
 }
 
 /******************************************************
  * updateCurrentUser
  *
- * Updates the current user. All non-null values are updated
- *
- * Parameters -
- * username: the username to update
- * displayName: the display name to update
- * email: the email to update
- * password: the password to update
- * picture: the picture to update
- *
- * Return -
- * a promise if updating the user was successful or not
+ * Updates the current user
  */
 export async function updateUser(
   userAccessToken: string,
@@ -112,10 +94,10 @@ export async function updateUser(
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledUsers: UserResponse[] = await response.json();
-  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
+  const pulledUser: UserResponse = await response.json();
+  const convertedUser: User = userResponseToUser(pulledUser)
 
-  return convertedUsers[0];
+  return convertedUser;
 }
 
 export async function deleteUser(
@@ -166,10 +148,10 @@ export async function getEventHostByEventId(
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledUsers: UserResponse[] = await response.json();
-  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
+  const pulledUser: UserResponse = await response.json();
+  const convertedUser: User = userResponseToUser(pulledUser)
 
-  return Promise.resolve(convertedUsers[0]);
+  return convertedUser;
 }
 
 export async function addUserJoinEvent(

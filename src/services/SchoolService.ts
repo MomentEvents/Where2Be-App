@@ -2,18 +2,12 @@ import { momentAPI } from "../constants/server";
 import { formatError } from "../helpers/helpers";
 import { School } from "../constants/types";
 import { SchoolResponse } from "../constants/types";
-
-// getAllUniversities
-
-// getUniversityByUserId
+import { schoolResponseToSchool, schoolResponseToSchools } from "../helpers/converters";
 
 /******************************************************
- * getAllUniversities
+ * getAllSchools
  *
  * Gets a list of all of the schools in the database
- *
- * Parameters: None
- * Return: List of all schools with type School
  */
 export async function getAllSchools(): Promise<School[]> {
   const response = await fetch(momentAPI + `/school`, {
@@ -26,26 +20,17 @@ export async function getAllSchools(): Promise<School[]> {
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
-  const data = await response.json();
 
-  const SchoolArray = data.map((school: SchoolResponse) => {
-    return {
-      SchoolID: school.school_id,
-      Name: school.name,
-      Abbreviation: school.abbreviation,
-    };
-  });
+  const pulledSchools: SchoolResponse[] = await response.json();
+  const convertedSchools: School[] = schoolResponseToSchools(pulledSchools)
 
-  return Promise.resolve(SchoolArray);
+  return convertedSchools;
 }
 
 /******************************************************
  * getSchoolByUserId
  *
- * Gets the current user's school
- *
- * Parameters: None
- * Return: The school that the current user is in
+ * Gets the user's school by user id
  */
 export async function getSchoolByUserId(UserID: string): Promise<School> {
   console.log("########UserID", UserID);
@@ -60,13 +45,9 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
-  const data = await response.json();
 
-  const pulledSchool: School = {
-    SchoolID: data["school_id"],
-    Name: data["name"],
-    Abbreviation: data["abbreviation"],
-  };
+  const pulledSchool: SchoolResponse = await response.json();
+  const convertedSchool: School = schoolResponseToSchool(pulledSchool)
 
-  return Promise.resolve(pulledSchool);
+  return convertedSchool;
 }

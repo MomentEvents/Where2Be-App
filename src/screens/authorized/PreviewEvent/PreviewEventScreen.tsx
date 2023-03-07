@@ -337,7 +337,7 @@ const EventDetailsScreen = ({ route }) => {
                 ) : null}
               </View>
             </DescriptionSection>
-            <View style={{ marginRight: 20 }}>
+            <View>
               <LocationSection>
                 <Ionicons
                   name="location-outline"

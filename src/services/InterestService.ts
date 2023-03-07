@@ -1,6 +1,7 @@
 import { Interest, InterestResponse } from "./../constants/types";
 import { momentAPI } from "../constants/server";
 import { formatError } from "../helpers/helpers";
+import { interestResponseToInterests } from "../helpers/converters";
 
 /******************************************************
  * getAllInterests
@@ -22,16 +23,10 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledInterests: InterestResponse = await response.json();
+  const pulledInterests: InterestResponse[] = await response.json();
+  const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
-  const InterestArray = data.map((interest: InterestResponse) => {
-    return {
-      InterestID: interest.interest_id,
-      Name: interest.name,
-    };
-  });
-
-  return InterestArray;
+  return convertedInterests;
 }
 
 /******************************************************
@@ -63,15 +58,8 @@ export async function getEventInterestsByEventId(
     throw formatError("Error " + response.status, message);
   }
 
-  const data = await response.json();
+  const pulledInterests: InterestResponse[] = await response.json();
+  const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
-  console.log("INTEREST#######", data);
-  const InterestArray = data.map((interest: InterestResponse) => {
-    return {
-      InterestID: interest.interest_id,
-      Name: interest.name,
-    };
-  });
-
-  return InterestArray;
+  return convertedInterests;
 }

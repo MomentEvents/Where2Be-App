@@ -3,7 +3,7 @@ import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
 import { EventResponse } from "../constants/types";
-import { eventResponseToEvents } from "../helpers/converters";
+import { eventResponseToEvent, eventResponseToEvents } from "../helpers/converters";
 
 /******************************************************
  * getEvent
@@ -32,10 +32,10 @@ export async function getEvent(
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledEvents: EventResponse[] = await response.json();
-  const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
+  const pulledEvent: EventResponse = await response.json();
+  const convertedEvent: Event = eventResponseToEvent(pulledEvent);
 
-  return convertedEvents[0];
+  return convertedEvent;
 }
 
 /******************************************************

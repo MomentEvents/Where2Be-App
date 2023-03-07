@@ -550,7 +550,7 @@ const EventDetailsScreen = ({ route }) => {
                 </McText>
               </TouchableOpacity>
             </HostSection>
-            <View style={{ marginRight: 20 }}>
+            <View>
               <DescriptionSection>
                 <View
                   style={{
@@ -922,14 +922,14 @@ const DescriptionSection = styled.View`
 // top right bottom left
 const LocationSection = styled.View`
   flex-direction: row;
-  margin: 10px 10px 5px 0px;
+  margin: 10px 20px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;
 
 const VisibilitySection = styled.View`
   flex-direction: row;
-  margin: 5px 0px 5px 0px;
+  margin: 5px 20px 5px 0px;
   border-radius: 10px;
   align-items: center;
 `;

@@ -139,7 +139,7 @@ export function checkIfEventIsFormatted(event: Event): boolean {
     event.Description !== null &&
     event.Description !== "" &&
     //checkIfStringIsReadable(event.Location) &&
-    //checkIfStringIsReadable(event.Picture) &&
+    checkIfStringIsReadable(event.Picture) &&
     event.StartDateTime !== null &&
     event.StartDateTime !== undefined &&
     event.EndDateTime !== null &&

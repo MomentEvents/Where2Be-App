@@ -232,23 +232,6 @@ const SectionInputs = styled.View`
   margin-horizontal: 10px;
   margin-vertical: 15px;
 `;
-const SectionTextIn = styled.View`
-  background-color: ${COLORS.black};
-  width: ${SIZES.width * 0.76};
-  border-radius: 5px;
-  justify-content: center;
-  border: 2px;
-  border-color: ${COLORS.gray};
-  align-items: flex-start;
-`;
-const SectionTimings = styled.View`
-  background-color: ${COLORS.black};
-  width: ${SIZES.width * 0.33};
-  border-radius: 5px;
-  justify-content: center;
-  border: 2px;
-  border-color: ${COLORS.gray};
-`;
 
 const styles = StyleSheet.create({
   container: {
@@ -256,7 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.trueBlack,
   },
   scrollViewContainer: {
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
   titleContainer: {
     marginTop: 20,

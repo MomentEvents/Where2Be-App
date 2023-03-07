@@ -39,26 +39,26 @@ const EventResult = (props: EventResultProps) => {
           />
           <View
             style={{
-              marginRight: 20,
+              marginRight: 30,
               marginLeft: 15,
               flex: 1,
               justifyContent: "center",
             }}
           >
-            <McText h3 numberOfLines={1} style={{marginRight: 10, marginLeft: 3}}>
+            <McText h3 numberOfLines={1} style={{marginLeft: 3}}>
               {props.event.Title}
             </McText>
             <View style={{ paddingVertical: 2, alignItems: "center", flexDirection: "row" }}>
-              <icons.pickdate width={20} height={12}/>
-              <McText body5 numberOfLines={1}>
+              <icons.pickdate width={25} height={12}/>
+              <McText body5 style={{marginRight: 25}} numberOfLines={1}>
                 {moment(props.event.StartDateTime).format("MMM DD[,] YYYY") +
                   " at " +
                   moment(props.event.StartDateTime).format("h:mm a")}
               </McText>
             </View>
             <View style={{ paddingVertical: 2, alignItems: "center", flexDirection: "row" }}>
-              <icons.picklocation width={20} height={12} style={{opacity: 0.7}}/>
-              <McText body5 numberOfLines={1} style={{color:COLORS.gray}}>
+              <icons.picklocation width={25} height={12} style={{opacity: 0.7}}/>
+              <McText body5 numberOfLines={1} style={{color:COLORS.gray, marginRight: 25}}>
                 {props.event.Location}
               </McText>
             </View>
