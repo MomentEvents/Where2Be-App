@@ -24,7 +24,6 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
 
   timestamp = Date.parse(pulledEvent.end_date_time);
 
-  console.log(timestamp)
   if (isNaN(timestamp)) {
     parsedEndDateTime = undefined;
   } else {
