@@ -11,7 +11,7 @@ export interface Event {
   Location: string;
   StartDateTime: Date;
   EndDateTime: Date | null;
-  Visibility: boolean;
+  Visibility: string;
   NumJoins: number;
   NumShoutouts: number;
   UserJoin: boolean;
@@ -26,7 +26,7 @@ export interface EventResponse {
   location: string;
   start_date_time: string;
   end_date_time: string;
-  visibility: boolean;
+  visibility: string;
   num_joins: number;
   num_shoutouts: number;
   user_join: boolean;

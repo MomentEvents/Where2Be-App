@@ -375,8 +375,7 @@ const EventDetailsScreen = ({ route }) => {
                     {createdEvent === undefined
                       ? null
                       : createdEvent.Visibility
-                      ? "Public"
-                      : "Private"}
+                    }
                   </McText>
                 </View>
               </VisibilitySection>

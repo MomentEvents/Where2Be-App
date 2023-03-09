@@ -81,16 +81,7 @@ const EventCard = ({
 
   if (!isLoaded || !eventIDToEvent[event.EventID]) {
     return (
-      <View
-        style={{
-          height: cardHeight,
-          width: cardWidth,
-          borderRadius: cardBorderRadius,
-          borderWidth: cardBorderWidth,
-          borderColor: cardBorderColor,
-          backgroundColor: COLORS.trueBlack,
-        }}
-      />
+      <View/>
     );
   }
 

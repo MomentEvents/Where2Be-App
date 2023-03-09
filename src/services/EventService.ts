@@ -57,7 +57,7 @@ export async function createEvent(
   formData.append("location", createdEvent.Location);
   formData.append("start_date_time", createdEvent.StartDateTime.toISOString());
   formData.append("end_date_time", createdEvent.EndDateTime.toISOString());
-  formData.append("visibility", createdEvent.Visibility.toString());
+  formData.append("visibility", createdEvent.Visibility);
   formData.append(
     "interest_ids",
     JSON.stringify(interests.map((interest) => interest.Name))
@@ -103,7 +103,7 @@ export async function updateEvent(
   formData.append("location", updatedEvent.Location);
   formData.append("start_date_time", updatedEvent.StartDateTime.toISOString());
   formData.append("end_date_time", updatedEvent.EndDateTime.toISOString());
-  formData.append("visibility", updatedEvent.Visibility.toString());
+  formData.append("visibility", updatedEvent.Visibility);
   formData.append(
     "interest_ids",
     JSON.stringify(updatedInterests.map((interest) => interest.Name))

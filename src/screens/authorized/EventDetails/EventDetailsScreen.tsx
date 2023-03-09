@@ -633,9 +633,7 @@ const EventDetailsScreen = ({ route }) => {
                   >
                     {eventIDToEvent[eventID] === undefined
                       ? null
-                      : eventIDToEvent[eventID].Visibility
-                      ? "Public"
-                      : "Private"}
+                      : eventIDToEvent[eventID].Visibility}
                   </McText>
                 </View>
               </VisibilitySection>
