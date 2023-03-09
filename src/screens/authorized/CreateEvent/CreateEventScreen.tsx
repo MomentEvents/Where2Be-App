@@ -87,7 +87,7 @@ const CreateEventScreen = ({ route }) => {
       Location: location,
       StartDateTime: startDateTime,
       EndDateTime: endDateTime,
-      Visibility: true,
+      Visibility: "Public",
       NumJoins: 0,
       NumShoutouts: 0,
       UserJoin: false,
