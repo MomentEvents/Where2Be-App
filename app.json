@@ -2,7 +2,7 @@
   "expo": {
     "name": "MomentEvents",
     "slug": "MomentEvents",
-    "version": "1.0.4",
+    "version": "1.0.7",
     "owner": "moment-app",
     "privacy": "public",
     "description": "Event app",
@@ -43,7 +43,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "Moment accesses your photos to let you share them with your friends."
         }
       ]
     ],
