@@ -75,3 +75,4 @@ dist/
 # @end expo-cli
 
 eas.json
+credentials.json
