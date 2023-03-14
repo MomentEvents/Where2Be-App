@@ -96,7 +96,7 @@ const SelectSchoolScreen = ({ route }) => {
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
-            <McText body3>Click here to sign in</McText>
+            <McText body3>Log in or Sign up</McText>
           </TouchableOpacity>
         </View>
       </View>
