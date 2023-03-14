@@ -794,7 +794,7 @@ const EventDetailsScreen = ({ route }) => {
                       : COLORS.white,
                   }}
                 >
-                  Shoutout
+                  Boost
                 </McText>
                 <McText
                   body2

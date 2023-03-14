@@ -7,6 +7,9 @@ import MyCalendarScreen from "../screens/authorized/MyCalendar/MyCalendarScreen"
 import ExploreEventsScreen from "../screens/authorized/ExploreEvents/ExploreEventsScreen";
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
 import MyProfileScreen from "../screens/authorized/MyProfile/MyProfileScreen";
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { Octicons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 const Tab = createBottomTabNavigator();
 
@@ -22,9 +25,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activehome height={32}></icons.activehome>
+            <Octicons name="home" size={28} color="white" />
           ) : (
-            <icons.inactivehome height={32}></icons.inactivehome>
+            <Octicons name="home" size={28} color="gray" />
           )}
         </View>
       );
@@ -32,9 +35,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activesearch height={32}></icons.activesearch>
+            <Octicons name="search" size={28} color="white" />
           ) : (
-            <icons.inactivesearch height={32}></icons.inactivesearch>
+            <Octicons name="search" size={28} color="gray" />
           )}
         </View>
       );
@@ -42,9 +45,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activefavorite height={32}></icons.activefavorite>
+            <MaterialIcons name="event-available" size={30} color="white" />
           ) : (
-            <icons.inactivefavorite height={32}></icons.inactivefavorite>
+            <MaterialIcons name="event-available" size={30} color="gray" />
           )}
         </View>
       );
@@ -52,9 +55,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <icons.activeprofile height={32}></icons.activeprofile>
+            <Octicons name="person" size={28} color="white" />
           ) : (
-            <icons.inactiveprofile height={32}></icons.inactiveprofile>
+            <Octicons name="person" size={28} color="gray" />
           )}
         </View>
       );
