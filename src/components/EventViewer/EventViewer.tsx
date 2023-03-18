@@ -143,7 +143,7 @@ const EventViewer = (props: EventViewerProps) => {
           </View>
         )
       )}
-      <View style={{ height: SIZES.bottomBarHeight }} />
+      <View style={{ height: SIZES.bottomBarHeight + 110 }} />
     </ScrollView>
   );
 };
@@ -152,12 +152,12 @@ export default EventViewer;
 
 const styles = StyleSheet.create({
   categoryTitle: {
+    marginTop: 15,
+    marginBottom: 10,
     marginLeft: 20,
     backgroundColor: COLORS.black,
   },
   flatlistContainer: {
-    marginTop: 15,
-    marginBottom: 20,
     backgroundColor: COLORS.black,
   },
 });
