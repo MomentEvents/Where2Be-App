@@ -195,6 +195,7 @@ const EventToggler = (props: EventTogglerProps) => {
               </View>
             )
           ) : (
+            // LOAD THIS
             !isRefreshing && <ActivityIndicator color={COLORS.white}style={{ marginTop: 20 }} />
           )
         ) : pulledPastEvents ? (
@@ -212,6 +213,7 @@ const EventToggler = (props: EventTogglerProps) => {
             </View>
           )
         ) : (
+          // LOAD THIS
           !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
         )}
         <View style={{height: SIZES.bottomBarHeight + 10}}/>

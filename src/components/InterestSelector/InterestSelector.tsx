@@ -75,6 +75,7 @@ const InterestSelector = (props: InterestSelectorProps) => {
           />
         ))
       ) : (
+        // LOAD THIS
         <ActivityIndicator color={COLORS.white} />
       )}
     </View>

@@ -19,17 +19,8 @@ import {
   School,
   icons,
 } from "../../../constants";
-import { Event } from "../../../constants";
-import { getAllInterests } from "../../../services/InterestService";
-import { displayError } from "../../../helpers/helpers";
-import EventCard from "../../../components/EventCard";
-import { McIcon, McText } from "../../../components/Styled";
-import styled from "styled-components/native";
-import GradientBackground from "../../../components/Styled/GradientBackground";
-import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { UserContext } from "../../../contexts/UserContext";
-import { EventContext } from "../../../contexts/EventContext";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";

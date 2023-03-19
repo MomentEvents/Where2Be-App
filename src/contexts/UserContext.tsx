@@ -20,9 +20,8 @@ import {
 import { getSchoolByUserId } from "../services/SchoolService";
 import { getUserByUserAccessToken } from "../services/UserService";
 import { displayError, formatError } from "../helpers/helpers";
-import Constants from "expo-constants"
+import Constants from "expo-constants";
 import { appVersion, appVersionText } from "../constants/texts";
-
 
 type UserContextType = {
   userToken: Token;
@@ -35,6 +34,8 @@ type UserContextType = {
   setContextVarsBasedOnToken: (token: Token) => Promise<void>;
   syncUserContextWithToken: (token: Token) => Promise<void>;
   isAdmin: boolean;
+  pullTokenFromServer: () => void;
+  serverError: boolean;
 };
 export const UserContext = createContext<UserContextType>({
   userToken: null,
@@ -46,7 +47,9 @@ export const UserContext = createContext<UserContextType>({
   isLoggedIn: null,
   setContextVarsBasedOnToken: null,
   syncUserContextWithToken: null,
-  isAdmin: null
+  isAdmin: null,
+  pullTokenFromServer: null,
+  serverError: false,
 });
 
 export const UserProvider = ({ children }) => {
@@ -56,26 +59,37 @@ export const UserProvider = ({ children }) => {
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<boolean>(false);
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
       await validateTokenExpirationAndUpdate().catch((error: Error) => {
+        setServerError(true)
         displayError(error);
         return null;
       })
     ).catch((error: Error) => {
+      setServerError(true)
       displayError(error);
     });
     setIsUserContextLoaded(true);
   };
 
+  const pullTokenFromServer = () => {
+    setServerError(false)
+    getServerStatus(appVersion)
+      .then(() => {
+        fillUserData();
+      })
+      .catch((error: Error) => {
+        setServerError(true)
+        displayError(error);
+      });
+  };
+
   useEffect(() => {
-    getServerStatus(appVersion).then(() => {
-      fillUserData();
-    }).catch((error: Error) => {
-      displayError(error)
-    })
+    pullTokenFromServer();
   }, []);
 
   useEffect(() => {
@@ -127,11 +141,13 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    checkIfUserAccessTokenIsAdmin(token.UserAccessToken).then((pulledIsAdmin: boolean) => {
-      setIsAdmin(pulledIsAdmin)
-    }).catch((error: Error) => {
-      displayError(error)
-    })
+    checkIfUserAccessTokenIsAdmin(token.UserAccessToken)
+      .then((pulledIsAdmin: boolean) => {
+        setIsAdmin(pulledIsAdmin);
+      })
+      .catch((error: Error) => {
+        displayError(error);
+      });
 
     const pulledUser: User = await getUserByUserAccessToken(
       token.UserAccessToken
@@ -147,10 +163,7 @@ export const UserProvider = ({ children }) => {
       setCurrentUser(null);
       setCurrentSchool(null);
       logout();
-      throw formatError(
-        "Error",
-        "Cannot pull " + pulledUser.Username + " school"
-      );
+      throw error
     });
     setUserToken(token);
     setCurrentUser(pulledUser);
@@ -171,7 +184,9 @@ export const UserProvider = ({ children }) => {
         isLoggedIn,
         setContextVarsBasedOnToken,
         syncUserContextWithToken,
-        isAdmin
+        isAdmin,
+        pullTokenFromServer,
+        serverError
       }}
     >
       {children}

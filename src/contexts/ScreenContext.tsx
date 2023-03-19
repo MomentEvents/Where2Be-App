@@ -1,33 +1,22 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import {
-  User,
-  School,
-  Token,
-  SIZES,
-  images,
-  COLORS,
-  icons,
-} from "../constants";
+import { COLORS, icons } from "../constants";
 import ProgressLoader from "rn-progress-loader";
 import * as Font from "expo-font";
 import { customFonts } from "../constants";
 import {
   ActivityIndicator,
-  ImageBackground,
   SafeAreaView,
   View,
-  Dimensions,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
   Text,
   Alert,
   Linking,
+  TouchableOpacity,
 } from "react-native";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
-import { McText } from "../components/Styled";
 import { appVersionText } from "../constants/texts";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 // import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
@@ -41,7 +30,8 @@ export const ScreenProvider = ({ children }) => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { isUserContextLoaded } = useContext(UserContext);
+  const { isUserContextLoaded, pullTokenFromServer, serverError } =
+    useContext(UserContext);
 
   const loadAssets = async () => {
     console.log("Loading assets");
@@ -108,14 +98,24 @@ export const ScreenProvider = ({ children }) => {
               justifyContent: "flex-start",
             }}
           >
-            <ActivityIndicator color={COLORS.white} size="small" />
+            {serverError ? (
+              <TouchableOpacity onPress={pullTokenFromServer}>
+                <MaterialCommunityIcons name="reload" size={24} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <ActivityIndicator color={COLORS.white} size="small" />
+            )}
           </View>
           <View style={{ padding: 5 }}>
             <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
-              {appVersionText}{" "}|{" "}Join our{" "}
+              {appVersionText} | Join our{" "}
               <Text
                 onPress={onDiscordClick}
-                style={{ fontSize: 12, color: COLORS.gray1, textDecorationLine: "underline" }}
+                style={{
+                  fontSize: 12,
+                  color: COLORS.gray1,
+                  textDecorationLine: "underline",
+                }}
               >
                 Discord server
               </Text>

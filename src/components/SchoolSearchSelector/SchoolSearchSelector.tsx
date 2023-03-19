@@ -132,6 +132,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             maxLines={props.maxLines}
           />
         ) : (
+          // LOAD THIS
           <ActivityIndicator color={COLORS.white} size="small" />
         )}
       </View>
@@ -188,6 +189,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           maxLines={props.maxLines}
         />
       ) : (
+        // LOAD THIS
         <ActivityIndicator
           style={{ padding: 8 }}
           color={COLORS.white}

@@ -108,6 +108,7 @@ const EventViewer = (props: EventViewerProps) => {
       style={{ backgroundColor: COLORS.black }}
     >
       {isLoadingEvents && !isRefreshing && (
+        // LOAD THIS
         <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} size={"small"} />
       )}
       {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
