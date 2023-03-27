@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+type renderWithRetryProps = {
+    onRender: any,
+    onError: any,
+}
+
 function RenderWithRetry({ onRender, onError }) {
   const [hasError, setHasError] = useState(false);
 

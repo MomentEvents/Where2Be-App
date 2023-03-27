@@ -65,25 +65,25 @@ export const UserProvider = ({ children }) => {
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
       await validateTokenExpirationAndUpdate().catch((error: Error) => {
-        setServerError(true)
+        setServerError(true);
         displayError(error);
         return null;
       })
     ).catch((error: Error) => {
-      setServerError(true)
+      setServerError(true);
       displayError(error);
     });
     setIsUserContextLoaded(true);
   };
 
   const pullTokenFromServer = () => {
-    setServerError(false)
+    setServerError(false);
     getServerStatus(appVersion)
       .then(() => {
         fillUserData();
       })
       .catch((error: Error) => {
-        setServerError(true)
+        setServerError(true);
         displayError(error);
       });
   };
@@ -101,6 +101,12 @@ export const UserProvider = ({ children }) => {
     setIsLoggedIn(
       userToken !== null && currentUser !== null && currentSchool !== null
     );
+    if (userToken && currentUser && currentSchool) {
+      setIsLoggedIn(true);
+      // DO PUSH NOTIFICATION CHECK HERE
+    } else {
+      setIsLoggedIn(false);
+    }
   }, [userToken, currentUser, currentSchool]);
 
   // This should be done every now and then to see if the token
@@ -163,7 +169,7 @@ export const UserProvider = ({ children }) => {
       setCurrentUser(null);
       setCurrentSchool(null);
       logout();
-      throw error
+      throw error;
     });
     setUserToken(token);
     setCurrentUser(pulledUser);
@@ -186,7 +192,7 @@ export const UserProvider = ({ children }) => {
         syncUserContextWithToken,
         isAdmin,
         pullTokenFromServer,
-        serverError
+        serverError,
       }}
     >
       {children}
