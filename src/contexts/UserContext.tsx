@@ -19,9 +19,12 @@ import {
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
 import { getUserByUserAccessToken } from "../services/UserService";
-import { displayError, formatError } from "../helpers/helpers";
-import Constants from "expo-constants";
-import { appVersion, appVersionText } from "../constants/texts";
+import { displayError } from "../helpers/helpers";
+import { appVersion } from "../constants/texts";
+import {
+  getPushNotificationToken,
+  registerPushNotificationToken,
+} from "../services/NotificationService";
 
 type UserContextType = {
   userToken: Token;
@@ -98,12 +101,21 @@ export const UserProvider = ({ children }) => {
     // when userToken, currentUser, or currentSchool
     // becomes null, it throws an error in the main app.
     // So, syncUserContextWithToken() should be called outside
-    setIsLoggedIn(
-      userToken !== null && currentUser !== null && currentSchool !== null
-    );
     if (userToken && currentUser && currentSchool) {
+      getPushNotificationToken().then((token: string) => {
+        registerPushNotificationToken(
+          userToken.UserAccessToken,
+          currentUser.UserID,
+          token
+        )
+          .then(() =>
+            console.log("Registered push notification token " + token)
+          )
+          .catch((error: Error) => {
+            displayError(error);
+          });
+      });
       setIsLoggedIn(true);
-      // DO PUSH NOTIFICATION CHECK HERE
     } else {
       setIsLoggedIn(false);
     }
