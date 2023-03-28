@@ -78,7 +78,6 @@ const TabNavigator = ({ params }) => {
         tabBarInactiveTintColor: COLORS.white,
         tabBarShowLabel: false,
         tabBarStyle: {
-          position: "absolute",
           backgroundColor: COLORS.trueBlack,
           opacity: 1,
           borderTopColor: COLORS.gray2,
