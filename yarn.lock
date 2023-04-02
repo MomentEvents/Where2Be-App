@@ -4180,6 +4180,11 @@ expo-permissions@~13.2.0:
   resolved "https://registry.npmjs.org/expo-permissions/-/expo-permissions-13.2.0.tgz"
   integrity sha512-fAvutJjlUjlmyR2jjI9uQT0LXQ+A3U8hZnA4twQG8eXEURR3/V5WSGkx5wwX+7OF6qWR68rvs7Xjkd3ghsCm4w==
 
+expo-secure-store@~11.3.0:
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-11.3.0.tgz#7f2f05f6aa6669f2d31e034561aa6b3d530a71a0"
+  integrity sha512-k8dw1v7MCHIv7MnAIBXqyqplJo0I5MmRjZXO7bsVPb/BqWvvfBo/JAFdM6K60X6szh+13TWgxwx6GxAkCJVUnQ==
+
 expo-splash-screen@~0.16.2:
   version "0.16.2"
   resolved "https://registry.npmjs.org/expo-splash-screen/-/expo-splash-screen-0.16.2.tgz"

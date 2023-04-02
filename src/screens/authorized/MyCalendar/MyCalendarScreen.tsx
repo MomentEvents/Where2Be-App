@@ -34,7 +34,7 @@ const MyCalendarScreen = ({ route }) => {
   const { currentUser } = useContext(UserContext);
 
   return (
-    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Joined Events"}
         hideBottomUnderline={true}

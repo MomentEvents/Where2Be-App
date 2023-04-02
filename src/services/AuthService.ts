@@ -1,6 +1,6 @@
 import { getUserByUserAccessToken } from "./UserService";
 import { momentAPI, momentAPIVersionless } from "../constants/server";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 import {
   checkIfStringIsEmail,
   checkIfStringIsAlphanumeric,
@@ -218,8 +218,8 @@ async function writeToken(newToken: Token): Promise<void> {
   console.log("Expiration:");
   console.log(newToken.Expiration);
   console.log();
-  await AsyncStorage.setItem(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
-  await AsyncStorage.setItem(
+  await SecureStore.setItemAsync(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
+  await SecureStore.setItemAsync(
     EXPIRATION_STORAGE,
     newToken.Expiration.toISOString()
   );
@@ -235,13 +235,13 @@ async function writeToken(newToken: Token): Promise<void> {
  */
 async function getToken(): Promise<Token> {
   console.log("getToken() call.\nUser Access Token:");
-  console.log(await AsyncStorage.getItem(USERACCESSTOKEN_STORAGE));
+  console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
   console.log("Expiration:");
-  console.log(await AsyncStorage.getItem(EXPIRATION_STORAGE));
-  const userAccessToken: string = await AsyncStorage.getItem(
+  console.log(await SecureStore.getItemAsync(EXPIRATION_STORAGE));
+  const userAccessToken: string = await SecureStore.getItemAsync(
     USERACCESSTOKEN_STORAGE
   );
-  const expirationString: string = await AsyncStorage.getItem(
+  const expirationString: string = await SecureStore.getItemAsync(
     EXPIRATION_STORAGE
   );
 
@@ -265,11 +265,11 @@ async function getToken(): Promise<Token> {
  */
 export async function deleteToken(): Promise<void> {
   console.log("deleteToken() call.\nUser Access Token:");
-  console.log(await AsyncStorage.getItem(USERACCESSTOKEN_STORAGE));
+  console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
   console.log("Expiration:");
-  console.log(await AsyncStorage.getItem(EXPIRATION_STORAGE));
-  await AsyncStorage.removeItem(USERACCESSTOKEN_STORAGE);
-  await AsyncStorage.removeItem(EXPIRATION_STORAGE);
+  console.log(await SecureStore.getItemAsync(EXPIRATION_STORAGE));
+  await SecureStore.deleteItemAsync(USERACCESSTOKEN_STORAGE);
+  await SecureStore.deleteItemAsync(EXPIRATION_STORAGE);
 }
 
 /******************************************************

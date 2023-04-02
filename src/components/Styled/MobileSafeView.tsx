@@ -8,20 +8,16 @@ type MobileSafeViewProps = {
   style?;
   isBottomViewable?: boolean;
   isTopViewable?: boolean;
-  isTabNavigatorVisible?: boolean;
 };
 const MobileSafeView = (props: MobileSafeViewProps) => {
   
-  if (props.isBottomViewable || props.isTopViewable || props.isTabNavigatorVisible) {
+  if (props.isBottomViewable || props.isTopViewable) {
     return (
       <View style={[props.style, styles.container]}>
         {!props.isTopViewable && (
           <View style={[styles.topBarContainer]} />
         )}
         <View style={[styles.container]}>{props.children}</View>
-        {props.isTabNavigatorVisible && (
-          <View style={[styles.tabBarContainer]} />
-        )}
         {!props.isBottomViewable && (
           <View style={[styles.bottomBarContainer]} />
         )}

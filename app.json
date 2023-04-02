@@ -22,6 +22,9 @@
       "**/*"
     ],
     "ios": {
+      "config": {
+        "usesNonExemptEncryption": false
+      },
       "supportsTablet": false,
       "bundleIdentifier": "com.momentevents.moment",
       "buildNumber": "1"

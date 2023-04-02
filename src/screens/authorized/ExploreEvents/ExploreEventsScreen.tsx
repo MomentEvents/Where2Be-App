@@ -33,7 +33,7 @@ const ExploreEvents = ({ route }) => {
   const navigation = useNavigation<any>();
 
   return (
-    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader title={"Explore Events"} />
       <EventViewer school={currentSchool}/>
       <TouchableOpacity

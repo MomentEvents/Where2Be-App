@@ -17,7 +17,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const SearchScreen = () => {
   return (
-    <MobileSafeView style={styles.container} isTabNavigatorVisible={true}>
+    <MobileSafeView style={styles.container} isBottomViewable={true}>
       <View style={{ flex: 1 }}>
         <SearchToggler />
       </View>
