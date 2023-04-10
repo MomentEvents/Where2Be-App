@@ -36,27 +36,52 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
 
+  const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
+  const [searchText, setSearchText] = useState<string>("");
+
+  // For auto list scrolling
   const eventsFlatListRef = useRef(null);
   const usersFlatListRef = useRef(null);
 
+  // Data currently in the list
   const [displayingUsers, setDisplayingUsers] = useState<User[]>([]);
   const [displayingEvents, setDisplayingEvents] = useState<Event[]>([]);
 
+  // All data pulled with empty search query
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [allEvents, setAllEvents] = useState<Event[]>([]);
 
+  // Is list refreshing
   const [isEventsRefreshing, setIsEventsRefreshing] = useState<boolean>(true);
   const [isUsersRefreshing, setIsUsersRefreshing] = useState<boolean>(true);
+  // Show activity indicator for the entire search
+  const [showRefresh, setShowRefresh] = useState(true);
 
+  // Current batch number
   const [eventsCurrentBatch, setEventsCurrentBatch] = useState<number>(0);
   const [usersCurrentBatch, setUsersCurrentBatch] = useState<number>(0);
 
+  // A set of batch number used (avoid repetitive api calls)
   const [eventsBatchSet, setEventsBatchSet] = useState<Set<number>>(new Set());
   const [usersBatchSet, setUsersBatchSet] = useState<Set<number>>(new Set());
 
-  const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
+  // Is search or "See all results" pressed
+  const [searchPressed, setSearchPressed] = useState<boolean>(false);
 
-  const [searchText, setSearchText] = useState<string>("");
+  // Allow api calls
+  const [allowServerSearch, setAllowServerSearch] = useState<boolean>(true);
+
+  // Initial
+  useEffect(() => {
+    onEventsRefresh();
+    onUsersRefresh(true);
+  }, []);
+  
+  // Reset when search text changes
+  useEffect(() => {
+    setSearchPressed(false);
+    setAllowServerSearch(searchText == ""? true : false);
+  }, [searchText]);
 
   const toggleTab = (isEvent: boolean) => {
     if (isEventsToggle != isEvent){
@@ -70,86 +95,100 @@ const SearchToggler = () => {
     }
   }
 
-  const pullEvents = async (reset: boolean) => {
+  const pullEvents = async (reset: boolean, stopRefresh=false) => {
     const currentBatch = reset? 0 : eventsCurrentBatch;
     const currentSearchText = searchText;
-    console.log("eventsBatchSet.has(currentBatch) is " + eventsBatchSet.has(currentBatch) + ", size is " + eventsBatchSet.size);
+    console.log(eventsBatchSet.has(currentBatch)? "events api current batch " +  currentBatch + " is repetitive and blocked" : "events api current batch " +  currentBatch + " is allowed and underway");
     if (reset || !eventsBatchSet.has(currentBatch)){
       eventsBatchSet.add(currentBatch);
       // getting events
       getAllSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, currentSearchText, currentBatch)
         .then((events: Event[]) => {
           console.log("Received response from EventService: getAllSchoolEvents (searchQuery: " + currentSearchText + ", currentBatch: " + currentBatch + ", reset: " + reset + ")");
-          setDisplayingEvents(reset? events : displayingEvents.concat(events));
+          setDisplayingEvents(prevDisplayingEvents => reset? events : prevDisplayingEvents.concat(events));
           if (searchText == ""){
-            setAllEvents(reset? events : allEvents.concat(events));
+            setAllEvents(prevAllEvents => reset? events : prevAllEvents.concat(events));
           }
           setIsEventsRefreshing(false);
-          if (reset && eventsFlatListRef.current && events.length > 0) {
-            eventsFlatListRef.current.scrollToIndex({ index: 0 });
-          }
+          // if (reset && eventsFlatListRef.current && events.length > 0) {
+          //   eventsFlatListRef.current.scrollToIndex({ index: 0 });
+          // }
           if (reset){
             setEventsCurrentBatch(1);
           } else if (events.length > 0){
-            setEventsCurrentBatch(eventsCurrentBatch + 1);
+            setEventsCurrentBatch(prevEventsCurrentBatch => prevEventsCurrentBatch + 1);
           }
         })
         .catch((error: Error) => {
           displayError(error);
           setIsEventsRefreshing(false);
+          setShowRefresh(false);
+        })
+        .finally(() => {
+          if (stopRefresh){
+            setShowRefresh(false);
+          }
         });
     }
   };
 
-  const pullUsers = async (reset: boolean) => {
+  const pullUsers = async (reset: boolean, stopRefresh=false) => {
     const currentBatch = reset? 0 : usersCurrentBatch;
     const currentSearchText = searchText;
-    console.log("usersBatchSet.has(currentBatch) is " + usersBatchSet.has(currentBatch) + ", size is " + usersBatchSet.size);
+    console.log(usersBatchSet.has(currentBatch)? "users api current batch " +  currentBatch + " is repetitive and blocked" : "users api current batch " +  currentBatch + " is allowed and underway");
     if (reset || !usersBatchSet.has(currentBatch)){
       usersBatchSet.add(currentBatch);
       // getting users
       getAllSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID, currentSearchText, currentBatch)
         .then((users: User[]) => {
           console.log("Received response from UserService: getAllSchoolUsers (searchQuery: " + currentSearchText + ", currentBatch: " + currentBatch + ", reset: " + reset + ")");
-          setDisplayingUsers(reset? users : displayingUsers.concat(users));
+          setDisplayingUsers(prevDisplayingUsers => reset? users : prevDisplayingUsers.concat(users));
           if (searchText == ""){
-            setAllUsers(reset? users : allUsers.concat(users));
+            setAllUsers(prevAllUsers => reset? users : prevAllUsers.concat(users));
           }
           setIsUsersRefreshing(false);
-          if (reset && usersFlatListRef.current && users.length > 0) {
-            usersFlatListRef.current.scrollToIndex({ index: 0 });
-          }
+          // if (reset && usersFlatListRef.current && users.length > 0) {
+          //   usersFlatListRef.current.scrollToIndex({ index: 0 });
+          // }
           if (reset){
             setUsersCurrentBatch(1);
           } else if (users.length > 0){
-            setUsersCurrentBatch(usersCurrentBatch + 1);
+            setUsersCurrentBatch(prevUsersCurrentBatch => prevUsersCurrentBatch + 1);
           }
         })
         .catch((error: Error) => {
           displayError(error);
           setIsUsersRefreshing(false);
+          setShowRefresh(false);
+        })
+        .finally(() => {
+          if (stopRefresh){
+            setShowRefresh(false);
+          }
         });
     }
   };
 
-  const onEventsRefresh = async () => {
+  const onEventsRefresh = async (stopRefresh=false) => {
     setEventsBatchSet(new Set());
     setIsEventsRefreshing(true);
-    await pullEvents(true);
+    await pullEvents(true, stopRefresh);
   };
-
-  const onUsersRefresh = async () => {
+  const onUsersRefresh = async (stopRefresh=false) => {
     setUsersBatchSet(new Set());
     setIsUsersRefreshing(true);
-    await pullUsers(true);
+    await pullUsers(true, stopRefresh);
   };
 
   const handleLoadMoreEvents = () => {
-    pullEvents(false);
+    if (allowServerSearch){
+      pullEvents(false);
+    }
   }
-
   const handleLoadMoreUsers = () => {
-    pullUsers(false);
+    if (allowServerSearch){
+      pullUsers(false);
+    }
   }
 
   const renderEventResult = (event: Event) => {
@@ -165,6 +204,40 @@ const SearchToggler = () => {
         <UserResult user={user} />
       </View>
     );
+  };
+
+  const renderListFooter = () => {
+    if (!searchPressed && searchText !== '') {
+      return (
+        <TouchableOpacity
+          style={{
+            marginTop: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={searchQueryServer}
+        >
+          <McText h4 numberOfLines={1}>
+            See all results
+          </McText>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            marginTop: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <McText h3>
+            {isEventsToggle && displayingEvents.length == 0 && !isEventsRefreshing? "No upcoming events!" : 
+            !isEventsToggle && displayingUsers.length == 0 && !isUsersRefreshing? "No users to display!" : ""}
+          </McText>
+        </View>
+      )
+    }
   };
 
   const searchQueryLocal = (newText: string) => {
@@ -185,9 +258,9 @@ const SearchToggler = () => {
       }
     });
     setDisplayingEvents(searchedEventsTemp);
-    if (eventsFlatListRef.current && searchedEventsTemp.length > 0) {
-      eventsFlatListRef.current.scrollToIndex({ index: 0 });
-    }
+    // if (eventsFlatListRef.current && searchedEventsTemp.length > 0) {
+    //   eventsFlatListRef.current.scrollToIndex({ index: 0 });
+    // }
     allUsers.forEach((user: User) => {
       try {
         if (
@@ -201,22 +274,21 @@ const SearchToggler = () => {
       }
     });
     setDisplayingUsers(searchedUsersTemp);
-    if (usersFlatListRef.current && searchedUsersTemp.length > 0) {
-      usersFlatListRef.current.scrollToIndex({ index: 0 });
-    }
+    // if (usersFlatListRef.current && searchedUsersTemp.length > 0) {
+    //   usersFlatListRef.current.scrollToIndex({ index: 0 });
+    // }
   }
 
-  const searchQueryServer = () => {
+  const searchQueryServer = async() => {
+    Keyboard.dismiss();
+    setSearchPressed(true);
+    setShowRefresh(true);
+    setDisplayingEvents([]);
+    setDisplayingUsers([]);
     onEventsRefresh();
-    onUsersRefresh();
+    onUsersRefresh(true);
+    setAllowServerSearch(true);
   }
-
-  useEffect(() => {
-    onEventsRefresh();
-    onUsersRefresh();
-  }, []);
-
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   return (
     <View style={{ flex: 1, backgroundColor:COLORS.black }}>
@@ -244,8 +316,6 @@ const SearchToggler = () => {
               fontSize: 16,
             }}
             placeholderTextColor={COLORS.lightGray}
-            onFocus={() => setKeyboardVisible(true)}
-            onBlur={() => setKeyboardVisible(false)}
           />
         </View>
       </View>
@@ -293,25 +363,12 @@ const SearchToggler = () => {
         </TouchableOpacity>
       </View>
       {
-        isKeyboardVisible && searchText != ""? (
-          <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginVertical: 10
-            }}
-            onPress={() => {
-              searchQueryServer();
-              Keyboard.dismiss();
-            }}  
-          >
-            <McText h4 numberOfLines={1}>See all results</McText>
-          </TouchableOpacity>
-        ) : (<></>)
-      }
-      {isEventsToggle? (
-        displayingEvents.length > 0? (
+        showRefresh? (
+          <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }}/>
+        ) : (
+        isEventsToggle? (
           <FlatList
+            contentContainerStyle={{paddingTop: 10, paddingBottom: 20}}
             ref={eventsFlatListRef}
             data={displayingEvents}
             keyExtractor={(item) => item.EventID + "SearchToggler renderEventResult"}
@@ -327,25 +384,12 @@ const SearchToggler = () => {
             }
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps={"always"}
+            ListFooterComponent={renderListFooter}
+            onScrollBeginDrag={() => {Keyboard.dismiss()}}
           />
         ) : (
-          isEventsRefreshing? (
-            <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
-          ) : (
-            <View
-              style={{
-                marginTop: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <McText h3>{isEventsRefreshing || isKeyboardVisible? "": "No upcoming events!"}</McText>
-            </View>
-          )
-        ) 
-      ) : (
-        displayingUsers.length > 0? (
           <FlatList
+            contentContainerStyle={{paddingTop: 10, paddingBottom: 20}}
             ref={usersFlatListRef}
             data={displayingUsers}
             keyExtractor={(item) => item.UserID + "SearchToggler renderUserResult"}
@@ -361,21 +405,9 @@ const SearchToggler = () => {
             }
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps={"always"}
+            ListFooterComponent={renderListFooter}
+            onScrollBeginDrag={() => {Keyboard.dismiss()}}
           />
-        ) : (
-          isUsersRefreshing? (
-            <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
-          ) : (
-            <View
-              style={{
-                marginTop: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <McText h3>{isUsersRefreshing || isKeyboardVisible? "" : "No users to display!"}</McText>
-            </View>
-          )
         )
       )}
     </View>
