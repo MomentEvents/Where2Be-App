@@ -363,7 +363,7 @@ export async function getAllSchoolEvents(
   currentBatch: number,
 ): Promise<Event[]> {
   console.log("Call to EventService: getAllSchoolEvents (schoolID: " + schoolID + ", searchQuery: " + searchQuery + ", currentBatch: " + currentBatch + ")");
-  const response = await fetch(`http://0.0.0.0:8070/api_ver_1.0.1/event/school_id/${schoolID}`, {
+  const response = await fetch(`http://0.0.0.0:8080/api_ver_1.0.1/event/school_id/${schoolID}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -395,8 +395,23 @@ export async function getAllSchoolEventsCategorized(
   console.log("Call to EventService: getAllSchoolEventsCategorized");
   console.log("UserAccessToken: " + userAccessToken);
 
+  // const response = await fetch(
+  //   momentAPI + `/event/school_id/${schoolID}/categorized`,
+  //   {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       user_access_token: userAccessToken ? userAccessToken : null,
+  //     }),
+  //   }
+  // ).catch((error: Error) => {
+  //   throw formatError("Network error", "Could not get all categorized events");
+  // });
+
   const response = await fetch(
-    momentAPI + `/event/school_id/${schoolID}/categorized`,
+    `http://0.0.0.0:8080/api_ver_1.0.0/event/school_id/${schoolID}/categorized`,
     {
       method: "POST",
       headers: {

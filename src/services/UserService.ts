@@ -301,7 +301,7 @@ export async function getAllSchoolUsers(
   currentBatch: number,
 ): Promise<User[]> {
   console.log("Call to UserService: getAllSchoolUsers (schoolID: " + schoolID + ", searchQuery: " + searchQuery + ", currentBatch: " + currentBatch + ")");
-  const response = await fetch(`http://0.0.0.0:8070/api_ver_1.0.1/user/school_id/${schoolID}`, {
+  const response = await fetch(`http://0.0.0.0:8080/api_ver_1.0.1/user/school_id/${schoolID}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
