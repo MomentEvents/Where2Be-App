@@ -274,29 +274,18 @@ export async function getAllSchoolUsers(
 ): Promise<User[]> {
   console.log("Call to UserService: getAllSchoolUsers");
 
-  // Dev
-  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search/a${query}`, {
-    method: "GET",
+  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      query: query
+    }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school users");
   });
-
-  // Prod
-  // const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     user_access_token: userAccessToken,
-  //     query: query
-  //   }),
-  // }).catch((error: Error) => {
-  //   throw formatError("Network error", "Could not get all school users");
-  // });
 
   if (!response.ok) {
     const message = await response.text();
