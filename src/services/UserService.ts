@@ -266,54 +266,37 @@ export async function removeUserShoutoutEvent(
   }
 }
 
-// export async function getAllSchoolUsers(
-//   userAccessToken: string,
-//   schoolID: string
-// ): Promise<User[]> {
-//   console.log("Call to UserService: getAllSchoolUsers");
-//   const response = await fetch(momentAPI + `/user/school_id/${schoolID}`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       user_access_token: userAccessToken,
-//     }),
-//   }).catch((error: Error) => {
-//     throw formatError("Network error", "Could not get all school users");
-//   });
-
-//   if (!response.ok) {
-//     const message = await response.text();
-//     throw formatError("Error " + response.status, message);
-//   }
-
-//   const pulledUsers: UserResponse[] = await response.json();
-//   const convertedUsers: User[] = userResponseToUsers(pulledUsers)
-
-//   return convertedUsers;
-// }
 
 export async function getAllSchoolUsers(
   userAccessToken: string,
   schoolID: string,
-  searchQuery: string,
-  currentBatch: number,
+  query: string
 ): Promise<User[]> {
-  console.log("Call to UserService: getAllSchoolUsers (schoolID: " + schoolID + ", searchQuery: " + searchQuery + ", currentBatch: " + currentBatch + ")");
-  const response = await fetch(`http://0.0.0.0:8080/api_ver_1.0.1/user/school_id/${schoolID}`, {
-    method: "POST",
+  console.log("Call to UserService: getAllSchoolUsers");
+
+  // Dev
+  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search/a${query}`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      search_query: searchQuery,
-      current_batch: currentBatch,
-    }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school users");
   });
+
+  // Prod
+  // const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     user_access_token: userAccessToken,
+  //     query: query
+  //   }),
+  // }).catch((error: Error) => {
+  //   throw formatError("Network error", "Could not get all school users");
+  // });
 
   if (!response.ok) {
     const message = await response.text();
