@@ -329,12 +329,12 @@ export async function getUserHostedPastEvents(
 }
 
 
-export async function getAllSchoolEvents(
+export async function searchSchoolEvents(
   userAccessToken: string,
   schoolID: string,
   query: string
 ): Promise<Event[]> {
-  console.log("Call to EventService: getAllSchoolEvents");
+  console.log("Call to EventService: searchSchoolEvents");
   const response = await fetch(momentAPI + `/event/school_id/${schoolID}/search`, {
     method: "POST",
     headers: {

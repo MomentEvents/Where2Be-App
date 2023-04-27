@@ -267,12 +267,12 @@ export async function removeUserShoutoutEvent(
 }
 
 
-export async function getAllSchoolUsers(
+export async function searchSchoolUsers(
   userAccessToken: string,
   schoolID: string,
   query: string
 ): Promise<User[]> {
-  console.log("Call to UserService: getAllSchoolUsers");
+  console.log("Call to UserService: searchSchoolUsers");
 
   const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
     method: "POST",
