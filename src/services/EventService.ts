@@ -334,6 +334,11 @@ export async function searchSchoolEvents(
   schoolID: string,
   query: string
 ): Promise<Event[]> {
+
+  if(query === "" || !query){
+    return []
+  }
+
   console.log("Call to EventService: searchSchoolEvents");
   const response = await fetch(momentAPI + `/event/school_id/${schoolID}/search`, {
     method: "POST",

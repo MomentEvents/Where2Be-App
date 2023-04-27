@@ -47,7 +47,7 @@ const SearchToggler = () => {
     setPulledUsers(null);
     setSearchText(newText);
     clearTimeout(timeoutId);
-    const newTimeoutId = setTimeout(() => pullData(newText), 500);
+    const newTimeoutId = setTimeout(() => pullData(newText), 400);
     setTimeoutId(newTimeoutId);
   };
 
@@ -56,7 +56,7 @@ const SearchToggler = () => {
     // getting events
     searchSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, newText)
       .then((events: Event[]) => {
-        setPulledEvents(prevEvents => events);
+        setPulledEvents(events);
       })
       .catch((error: Error) => {
         displayError(error);
@@ -64,7 +64,7 @@ const SearchToggler = () => {
     // getting users
     searchSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID, newText)
       .then((users: User[]) => {
-        setPulledUsers(prevUsers => users);
+        setPulledUsers(users);
       })
       .catch((error: Error) => {
         displayError(error);
@@ -171,14 +171,14 @@ const SearchToggler = () => {
             pulledEvents? (
               pulledEvents.map((event: Event) => renderEventResult(event))
             ) : (
-              <></>
-            )
+              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
+              )
           ) : (
             pulledUsers? (
               pulledUsers.map((user: User) => renderUserResult(user))
             ) : (
-              <></>
-            )
+              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
+              )
           )}
           <View style={{ height: 20 }} />
         </View>

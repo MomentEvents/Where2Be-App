@@ -274,6 +274,10 @@ export async function searchSchoolUsers(
 ): Promise<User[]> {
   console.log("Call to UserService: searchSchoolUsers");
 
+  if(query === "" || !query){
+    return []
+  }
+
   const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
     method: "POST",
     headers: {
