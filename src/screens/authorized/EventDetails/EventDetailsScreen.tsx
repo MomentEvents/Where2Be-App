@@ -88,45 +88,52 @@ const EventDetailsScreen = ({ route }) => {
   // Update the previous screen event cards
 
   const addUserJoin = async () => {
-    setLoading(true);
-    addUserJoinEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
-      .then(() => {
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserJoin: true,
-            NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-          },
-        });
-
-        setLoading(false);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserJoin: true,
+        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
+      },
+    });
+    addUserJoinEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      eventID
+    ).catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserJoin: false,
+          NumJoins: eventIDToEvent[eventID].NumJoins - 1,
+        },
       });
+      displayError(error);
+    });
   };
 
   const addUserShoutout = () => {
-    setLoading(true);
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserShoutout: true,
+        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
+      },
+    });
     addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
-      .then(() => {
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserShoutout: true,
-            NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
-          },
-        });
-
-        setLoading(false);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
+    .catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserShoutout: false,
+          NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
+        },
       });
+      displayError(error);
+    });
   };
 
   const removeUserJoin = () => {
@@ -672,7 +679,7 @@ const EventDetailsScreen = ({ route }) => {
           </View>
         </ScrollView>
         <View style={styles.userControlContainer}>
-          {didFetchEvent && eventIDToEvent[eventID] ? (
+          {eventIDToEvent[eventID] ? (
             <UserOptionsSection>
               <View
                 style={{
