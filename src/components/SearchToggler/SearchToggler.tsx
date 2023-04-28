@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
@@ -38,36 +38,48 @@ const SearchToggler = () => {
 
   const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
 
-  const [searchText, setSearchText] = useState<string>("");
+  const searchTextRef = useRef<string>("");
+  const newTextRef = useRef<string>("");
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
   const onSearchTextChanged = (newText: string) => {
     setPulledEvents(null);
     setPulledUsers(null);
-    setSearchText(newText);
+    searchTextRef.current = newText;
     clearTimeout(timeoutId);
-    const newTimeoutId = setTimeout(() => pullData(newText), 400);
+    const newTimeoutId = setTimeout(() => pullData(), 500);
     setTimeoutId(newTimeoutId);
   };
 
+  const pullData = async () => {
+    newTextRef.current = searchTextRef.current;
+    const newText = newTextRef.current;
 
-  const pullData = async (newText: string) => {
     // getting events
     searchSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, newText)
       .then((events: Event[]) => {
+        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        if (newText !== searchTextRef.current) {
+          return;
+        }
         setPulledEvents(events);
       })
       .catch((error: Error) => {
-        displayError(error);
+        console.warn(error);
       });
+
     // getting users
     searchSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID, newText)
       .then((users: User[]) => {
+        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        if (newText !== searchTextRef.current) {
+          return;
+        }
         setPulledUsers(users);
       })
       .catch((error: Error) => {
-        displayError(error);
+        console.warn(error);
       });
   };
 
@@ -87,7 +99,7 @@ const SearchToggler = () => {
   };
 
   useEffect(() => {
-    pullData(searchText)
+    pullData();
   }, []);
 
   return (
