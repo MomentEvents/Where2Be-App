@@ -328,18 +328,26 @@ export async function getUserHostedPastEvents(
   return convertedEvents;
 }
 
-export async function getAllSchoolEvents(
+
+export async function searchSchoolEvents(
   userAccessToken: string,
-  schoolID: string
+  schoolID: string,
+  query: string
 ): Promise<Event[]> {
-  console.log("Call to EventService: getAllSchoolEvents");
-  const response = await fetch(momentAPI + `/event/school_id/${schoolID}`, {
+
+  if(query === "" || !query){
+    return []
+  }
+
+  console.log("Call to EventService: searchSchoolEvents");
+  const response = await fetch(momentAPI + `/event/school_id/${schoolID}/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       user_access_token: userAccessToken,
+      query: query
     }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school events");

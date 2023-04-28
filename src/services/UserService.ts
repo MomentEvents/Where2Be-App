@@ -266,18 +266,26 @@ export async function removeUserShoutoutEvent(
   }
 }
 
-export async function getAllSchoolUsers(
+
+export async function searchSchoolUsers(
   userAccessToken: string,
-  schoolID: string
+  schoolID: string,
+  query: string
 ): Promise<User[]> {
-  console.log("Call to UserService: getAllSchoolUsers");
-  const response = await fetch(momentAPI + `/user/school_id/${schoolID}`, {
+  console.log("Call to UserService: searchSchoolUsers");
+
+  if(query === "" || !query){
+    return []
+  }
+
+  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       user_access_token: userAccessToken,
+      query: query
     }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school users");

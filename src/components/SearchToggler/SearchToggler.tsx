@@ -1,7 +1,7 @@
 import {
   ActivityIndicator,
+  Keyboard,
   Platform,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,13 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
 import { displayError } from "../../helpers/helpers";
 import {
-  getAllSchoolEvents,
+  searchSchoolEvents,
   getUserHostedFutureEvents,
   getUserHostedPastEvents,
   getUserJoinedFutureEvents,
@@ -24,7 +24,7 @@ import {
 import EventCard from "../EventCard";
 import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
-import { getAllSchoolUsers } from "../../services/UserService";
+import { searchSchoolUsers } from "../../services/UserService";
 import UserResult from "./UserResult/UserResult";
 import EventResult from "./EventResult/EventResult";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
@@ -36,88 +36,51 @@ const SearchToggler = () => {
   const [pulledUsers, setPulledUsers] = useState<User[]>(null);
   const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
 
-  const [searchedUsers, setSearchedUsers] = useState<User[]>(null);
-  const [searchedEvents, setSearchedEvents] = useState<Event[]>(null);
-
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
 
-  const [searchText, setSearchText] = useState<string>("");
+  const searchTextRef = useRef<string>("");
+  const newTextRef = useRef<string>("");
 
-  const searchQuery = (newText: string) => {
-    setSearchText(newText);
-    if (pulledEvents) {
-      const searchedEventsTemp: Event[] = [];
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
-      pulledEvents.forEach((event: Event) => {
-        try {
-          if (
-            event.Title.toLowerCase().includes(newText.toLowerCase()) ||
-            event.Description.toLowerCase().includes(newText.toLowerCase()) ||
-            event.Location.toLowerCase().includes(newText.toLowerCase())
-          ) {
-            searchedEventsTemp.push(event);
-          }
-        } catch (e) {
-          console.log("exception with event with EventID " + event.EventID);
-        }
-      });
-
-      setSearchedEvents(searchedEventsTemp);
-    }
-    if (pulledUsers) {
-      const searchedUsersTemp: User[] = [];
-
-      pulledUsers.forEach((user: User) => {
-        try {
-          if (
-            user.DisplayName.toLowerCase().includes(newText.toLowerCase()) ||
-            user.Username.toLowerCase().includes(newText.toLowerCase())
-          ) {
-            searchedUsersTemp.push(user);
-          }
-        } catch (e) {
-          console.log("exception with user with UserID " + user.UserID);
-        }
-      });
-
-      setSearchedUsers(searchedUsersTemp);
-    }
-  };
-  const pullData = async () => {
-    // getting events
-    getAllSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID)
-      .then((events: Event[]) => {
-        setPulledEvents(events);
-        setSearchedEvents(events);
-        setIsRefreshing(false);
-        searchQuery(searchText);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setIsRefreshing(false);
-      });
-    // getting users
-    getAllSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID)
-      .then((users: User[]) => {
-        setPulledUsers(users);
-        setSearchedUsers(users);
-        setIsRefreshing(false);
-        searchQuery(searchText);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setIsRefreshing(false);
-      });
-  };
-
-  const onRefresh = async () => {
-    setPulledEvents(null)
+  const onSearchTextChanged = (newText: string) => {
+    setPulledEvents(null);
     setPulledUsers(null);
-    setSearchedEvents(null)
-    setSearchedUsers(null);
-    setIsRefreshing(true);
-    pullData();
+    searchTextRef.current = newText;
+    clearTimeout(timeoutId);
+    const newTimeoutId = setTimeout(() => pullData(), 500);
+    setTimeoutId(newTimeoutId);
+  };
+
+  const pullData = async () => {
+    newTextRef.current = searchTextRef.current;
+    const newText = newTextRef.current;
+
+    // getting events
+    searchSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, newText)
+      .then((events: Event[]) => {
+        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        if (newText !== searchTextRef.current) {
+          return;
+        }
+        setPulledEvents(events);
+      })
+      .catch((error: Error) => {
+        console.warn(error);
+      });
+
+    // getting users
+    searchSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID, newText)
+      .then((users: User[]) => {
+        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        if (newText !== searchTextRef.current) {
+          return;
+        }
+        setPulledUsers(users);
+      })
+      .catch((error: Error) => {
+        console.warn(error);
+      });
   };
 
   const renderEventResult = (event: Event) => {
@@ -136,12 +99,8 @@ const SearchToggler = () => {
   };
 
   useEffect(() => {
-    if (isEventsToggle && !pulledEvents) {
-      pullData();
-    } else if (!isEventsToggle && !pulledUsers) {
-      pullData();
-    }
-  }, [isEventsToggle]);
+    pullData();
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor:COLORS.black }}>
@@ -160,7 +119,7 @@ const SearchToggler = () => {
         >
           <TextInput
             placeholder="Search"
-            onChangeText={searchQuery}
+            onChangeText={onSearchTextChanged}
             style={{
               fontFamily: CUSTOMFONT_REGULAR,
               color: COLORS.white,
@@ -215,47 +174,23 @@ const SearchToggler = () => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
-        }
         keyboardShouldPersistTaps={"always"}
+        onScrollBeginDrag={() => Keyboard.dismiss()}
       >
         <View style={{height: 10}}/>
         <View style={{ flex: 1 }}>
           {isEventsToggle ? (
-            searchedEvents ? (
-              searchedEvents.length !== 0 ? (
-                searchedEvents.map((event: Event) => renderEventResult(event))
-              ) : (
-                <View
-                  style={{
-                    marginTop: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <McText h3>No upcoming events!</McText>
-                </View>
+            pulledEvents? (
+              pulledEvents.map((event: Event) => renderEventResult(event))
+            ) : (
+              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
               )
-            ) : (
-              !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
-            )
-          ) : searchedUsers ? (
-            searchedUsers.length !== 0 ? (
-              searchedUsers.map((user: User) => renderUserResult(user))
-            ) : (
-              <View
-                style={{
-                  marginTop: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <McText h3>No users to display!</McText>
-              </View>
-            )
           ) : (
-            !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 10 }} />
+            pulledUsers? (
+              pulledUsers.map((user: User) => renderUserResult(user))
+            ) : (
+              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
+              )
           )}
           <View style={{ height: 20 }} />
         </View>
