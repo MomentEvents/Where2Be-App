@@ -15,6 +15,7 @@ import { ScreenContext } from "../../contexts/ScreenContext";
 import { deleteUser } from "../../services/UserService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 type SectionProfileProps = {
   user: User;
@@ -33,7 +34,8 @@ const SectionProfile = (props: SectionProfileProps) => {
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
-            {props.user.DisplayName}
+            {props.user.DisplayName} {}
+            {props.user.VerifiedOrganization? <MaterialIcons name="verified" size={18} color={COLORS.purple} /> : <></>}
           </McText>
         </View>
         <View style={{ flexDirection: "row" }}>

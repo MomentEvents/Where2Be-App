@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SIZES, COLORS, SCREENS } from "../constants";
 import { McText, McIcon } from "./Styled";
 import "react-native-gesture-handler";
-import { Event } from "../constants";
+import { Event, User } from "../constants";
 import { UserContext } from "../contexts/UserContext";
 import { displayError } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
@@ -23,6 +23,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 type EventCardProps = {
   onClick?: () => void;
   event: Event;
+  user?: User;
   isBigCard?: boolean;
   width?: number;
   height?: number;
@@ -32,6 +33,7 @@ type EventCardProps = {
 const EventCard = ({
   onClick,
   event,
+  user,
   isBigCard,
   width,
   height,
@@ -61,6 +63,7 @@ const EventCard = ({
     }
     navigation.push(SCREENS.EventDetails, {
       eventID: event.EventID,
+      passedUser: user? user : null,
     });
     // Navigate to event details page
   };

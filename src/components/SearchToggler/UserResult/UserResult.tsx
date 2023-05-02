@@ -3,6 +3,7 @@ import React from "react";
 import { COLORS, SCREENS, User } from "../../../constants";
 import { McText } from "../../Styled";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 type UserResultProps = {
   user: User;
@@ -45,7 +46,8 @@ const UserResult = (props: UserResultProps) => {
             }}
           >
             <McText h3 numberOfLines={1}>
-                {props.user.DisplayName}
+              {props.user.VerifiedOrganization? <MaterialIcons name="verified" size={18} color={COLORS.purple} /> : <></>} {}
+              {props.user.DisplayName}
             </McText>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
