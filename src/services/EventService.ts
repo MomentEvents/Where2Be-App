@@ -60,7 +60,7 @@ export async function createEvent(
   formData.append("visibility", createdEvent.Visibility);
   formData.append(
     "interest_ids",
-    JSON.stringify(interests.map((interest) => interest.Name))
+    JSON.stringify(interests.map((interest) => interest.InterestID))
   );
   formData.append("picture", createdEvent.Picture);
 
