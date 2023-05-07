@@ -29,9 +29,17 @@ import UserResult from "./UserResult/UserResult";
 import EventResult from "./EventResult/EventResult";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const SearchToggler = () => {
+
+type SearchTogglerProps = {
+  canGoBack?: boolean;
+};
+const SearchToggler = (props: SearchTogglerProps) => {
+  const { canGoBack } = props;
   const { userToken, currentSchool } = useContext(UserContext);
+  const navigation = useNavigation<any>();
 
   const [pulledUsers, setPulledUsers] = useState<User[]>(null);
   const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
@@ -57,9 +65,15 @@ const SearchToggler = () => {
     const newText = newTextRef.current;
 
     // getting events
-    searchSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, newText)
+    searchSchoolEvents(
+      userToken.UserAccessToken,
+      currentSchool.SchoolID,
+      newText
+    )
       .then((events: Event[]) => {
-        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        console.log(
+          "newText: " + newText + " searchText: " + searchTextRef.current
+        );
         if (newText !== searchTextRef.current) {
           return;
         }
@@ -70,9 +84,15 @@ const SearchToggler = () => {
       });
 
     // getting users
-    searchSchoolUsers(userToken.UserAccessToken, currentSchool.SchoolID, newText)
+    searchSchoolUsers(
+      userToken.UserAccessToken,
+      currentSchool.SchoolID,
+      newText
+    )
       .then((users: User[]) => {
-        console.log("newText: " + newText + " searchText: " + searchTextRef.current);
+        console.log(
+          "newText: " + newText + " searchText: " + searchTextRef.current
+        );
         if (newText !== searchTextRef.current) {
           return;
         }
@@ -103,20 +123,23 @@ const SearchToggler = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor:COLORS.black }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.black }}>
       <View style={{ backgroundColor: COLORS.trueBlack }}>
         <View
           style={{
             width: "90%",
             backgroundColor: "rgba(80,80,80,.90)",
             borderRadius: 10,
-            paddingHorizontal: 15,
+            paddingHorizontal: 10,
             paddingVertical: 10,
             marginVertical: 10,
-            justifyContent: "center",
+            flexDirection: "row",
             alignSelf: "center",
           }}
         >
+          <TouchableOpacity onPress={() =>navigation.pop()}>
+            <MaterialIcons name="arrow-back" size={25} color="white" />
+          </TouchableOpacity>
           <TextInput
             placeholder="Search"
             onChangeText={onSearchTextChanged}
@@ -124,6 +147,7 @@ const SearchToggler = () => {
               fontFamily: CUSTOMFONT_REGULAR,
               color: COLORS.white,
               fontSize: 16,
+              paddingLeft: 10,
             }}
             placeholderTextColor={COLORS.lightGray}
           />
@@ -141,7 +165,9 @@ const SearchToggler = () => {
             justifyContent: "center",
             borderWidth: 1,
             borderColor: "transparent",
-            borderBottomColor: isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            borderBottomColor: isEventsToggle
+              ? COLORS.purple
+              : COLORS.trueBlack,
             backgroundColor: COLORS.trueBlack,
             ...styles.toggleButton,
           }}
@@ -158,8 +184,10 @@ const SearchToggler = () => {
             alignItems: "center",
             justifyContent: "center",
             borderWidth: 1,
-            borderColor: 'transparent',
-            borderBottomColor: !isEventsToggle ? COLORS.purple : COLORS.trueBlack,
+            borderColor: "transparent",
+            borderBottomColor: !isEventsToggle
+              ? COLORS.purple
+              : COLORS.trueBlack,
             backgroundColor: COLORS.trueBlack,
             ...styles.toggleButton,
           }}
@@ -177,20 +205,26 @@ const SearchToggler = () => {
         keyboardShouldPersistTaps={"always"}
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >
-        <View style={{height: 10}}/>
+        <View style={{ height: 10 }} />
         <View style={{ flex: 1 }}>
           {isEventsToggle ? (
-            pulledEvents? (
+            pulledEvents ? (
               pulledEvents.map((event: Event) => renderEventResult(event))
             ) : (
-              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
-              )
+              <ActivityIndicator
+                style={{ marginTop: 10 }}
+                color={COLORS.white}
+                size="small"
+              />
+            )
+          ) : pulledUsers ? (
+            pulledUsers.map((user: User) => renderUserResult(user))
           ) : (
-            pulledUsers? (
-              pulledUsers.map((user: User) => renderUserResult(user))
-            ) : (
-              <ActivityIndicator style={{marginTop: 10}} color={COLORS.white} size="small" />
-              )
+            <ActivityIndicator
+              style={{ marginTop: 10 }}
+              color={COLORS.white}
+              size="small"
+            />
           )}
           <View style={{ height: 20 }} />
         </View>

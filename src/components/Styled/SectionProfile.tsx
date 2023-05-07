@@ -7,7 +7,7 @@ import {
   Touchable,
   Alert,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
 import { UserContext } from "../../contexts/UserContext";
@@ -15,13 +15,16 @@ import { ScreenContext } from "../../contexts/ScreenContext";
 import { deleteUser } from "../../services/UserService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 type SectionProfileProps = {
   user: User;
   canEditProfile: boolean;
+  canFollow?: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
+  const [isFollowed, setIsFollowed] = useState(false);
   const { currentUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
   return (
@@ -52,6 +55,24 @@ const SectionProfile = (props: SectionProfileProps) => {
           {props.canEditProfile && (
             <View style={styles.editProfileButtonContainer}>
               <McText h3>Edit Profile</McText>
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setIsFollowed(!isFollowed);
+          }}
+        >
+          {props.canFollow && (
+            <View style={styles.editProfileButtonContainer}>
+              {isFollowed ? (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Ionicons style={{marginRight: 5}} name="checkmark-sharp" size={22} color="white" />
+                  <McText h3>Following</McText>
+                </View>
+              ) : (
+                <McText h3>Follow</McText>
+              )}
             </View>
           )}
         </TouchableOpacity>

@@ -10,6 +10,7 @@ import MyProfileScreen from "../screens/authorized/MyProfile/MyProfileScreen";
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { Octicons } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import HomeScreen from "../screens/authorized/Home/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,9 +36,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <Octicons name="search" size={28} color="white" />
+            <MaterialCommunityIcons name="compass-outline" size={32} color="white" />
           ) : (
-            <Octicons name="search" size={28} color="gray" />
+            <MaterialCommunityIcons name="compass-outline" size={32} color="gray" />
           )}
         </View>
       );
@@ -93,8 +94,8 @@ const TabNavigator = ({ params }) => {
       }}
     >
       <Tab.Screen
-        name={SCREENS.ExploreEvents}
-        component={ExploreEventsScreen}
+        name={SCREENS.Home}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={EVENTS} />
@@ -104,7 +105,7 @@ const TabNavigator = ({ params }) => {
 
       <Tab.Screen
         name={SCREENS.Search}
-        component={SearchScreen}
+        component={ExploreEventsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={SEARCH} />
