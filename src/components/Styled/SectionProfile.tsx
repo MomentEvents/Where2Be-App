@@ -35,10 +35,10 @@ const SectionProfile = (props: SectionProfileProps) => {
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
             {props.user.DisplayName}
-            {props.user.VerifiedOrganization? 
+            {props.user.VerifiedOrganization && 
               <View style={{ paddingLeft: 3 }}>
                 <MaterialIcons name="verified" size={18} color={COLORS.purple} />
-              </View> : <></>}
+              </View>}
           </McText>
         </View>
         <View style={{ flexDirection: "row" }}>

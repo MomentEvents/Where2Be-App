@@ -49,10 +49,10 @@ const UserResult = (props: UserResultProps) => {
               <McText h3 numberOfLines={1}>
                 {props.user.DisplayName}
               </McText>
-              {props.user.VerifiedOrganization? 
+              {props.user.VerifiedOrganization &&
                 <View style={{ paddingLeft: 3 }}>
                   <MaterialIcons name="verified" size={18} color={COLORS.purple} /> 
-                </View> : <></>}
+                </View>}
             </View>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
