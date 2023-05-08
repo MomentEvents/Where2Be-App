@@ -66,7 +66,10 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
     DisplayName: pulledUser.display_name,
     Username: pulledUser.username,
     Picture: pulledUser.picture,
-    VerifiedOrganization: pulledUser.verified_organization
+    VerifiedOrganization: pulledUser.verified_organization,
+    UserFollow: false, // FXCHANGETHIS
+    NumFollowers: 0,
+    NumFollowing: 0,
   };
   return formattedUser;
 };

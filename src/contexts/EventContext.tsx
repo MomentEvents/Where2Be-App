@@ -39,7 +39,7 @@ export const EventProvider = ({ children }) => {
     setInterestsMap,
     {}
   );
-  const {userToken, currentUser} = useContext(UserContext)
+  const {userToken, currentUserID} = useContext(UserContext)
 
   function setEventMap(
     map: { [key: string]: Event },
@@ -61,7 +61,7 @@ export const EventProvider = ({ children }) => {
     });
     addUserJoinEvent(
       userToken.UserAccessToken,
-      currentUser.UserID,
+      currentUserID,
       eventID
     ).catch((error: Error) => {
       updateEventIDToEvent({
@@ -87,7 +87,7 @@ export const EventProvider = ({ children }) => {
     });
     addUserShoutoutEvent(
       userToken.UserAccessToken,
-      currentUser.UserID,
+      currentUserID,
       eventID
     ).catch((error: Error) => {
       updateEventIDToEvent({
@@ -113,7 +113,7 @@ export const EventProvider = ({ children }) => {
     });
     removeUserJoinEvent(
       userToken.UserAccessToken,
-      currentUser.UserID,
+      currentUserID,
       eventID
     ).catch((error: Error) => {
       updateEventIDToEvent({
@@ -139,7 +139,7 @@ export const EventProvider = ({ children }) => {
     });
     removeUserShoutoutEvent(
       userToken.UserAccessToken,
-      currentUser.UserID,
+      currentUserID,
       eventID
     ).catch((error: Error) => {
       updateEventIDToEvent({

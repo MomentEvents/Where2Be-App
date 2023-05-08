@@ -60,7 +60,7 @@ const EditProfileScreen = ({ route }) => {
   const { user, isSelf }: EditProfileParams = route.params;
 
   const navigation = useNavigation<any>();
-  const { setCurrentUser, userToken } = useContext(UserContext);
+  const { currentUserID, updateUserIDToUser, userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
@@ -86,6 +86,10 @@ const EditProfileScreen = ({ route }) => {
       DisplayName: displayName,
       Username: username,
       Picture: image,
+      VerifiedOrganization: user.VerifiedOrganization,
+      UserFollow: user.UserFollow,
+      NumFollowers: user.NumFollowers,
+      NumFollowing: user.NumFollowing
     };
     const createdUserBase64 = { ...createdUser };
     createdUserBase64.Picture = base64Image;
@@ -93,9 +97,7 @@ const EditProfileScreen = ({ route }) => {
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then((pulledUser: User) => {
         setLoading(false);
-        if (isSelf) {
-          setCurrentUser(pulledUser);
-        }
+        updateUserIDToUser({id: createdUser.UserID, user: createdUser})
         navigation.goBack();
       })
       .catch((error: Error) => {

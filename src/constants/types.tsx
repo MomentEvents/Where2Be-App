@@ -62,6 +62,9 @@ export interface User {
   Username: string;
   Picture: string;
   VerifiedOrganization: boolean;
+  UserFollow: boolean;
+  NumFollowers: number;
+  NumFollowing: number;
 }
 
 export interface UserResponse {
@@ -70,4 +73,5 @@ export interface UserResponse {
   username: string;
   picture: string;
   verified_organization: boolean;
+  user_follow: boolean;
 }

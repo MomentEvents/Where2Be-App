@@ -40,7 +40,6 @@ const HomeEventCard = ({
   showRelativeTime,
   host
 }: EventCardProps) => {
-  const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const {
     eventIDToEvent,
     updateEventIDToEvent,
