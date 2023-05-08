@@ -533,9 +533,9 @@ const EventDetailsScreen = ({ route }) => {
             <HostSection>
               <TouchableOpacity
                 style={{
+                  maxWidth: '80%',
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
                 }}
                 onPress={() => {
                   onHostPressed();

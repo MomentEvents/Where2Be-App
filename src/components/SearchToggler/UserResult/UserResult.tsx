@@ -42,13 +42,18 @@ const UserResult = (props: UserResultProps) => {
               marginRight: 30,
               marginLeft: 15,
               flex: 1,
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
-            <McText h3 numberOfLines={1}>
-              {props.user.VerifiedOrganization? <MaterialIcons name="verified" size={18} color={COLORS.purple} /> : <></>} {}
-              {props.user.DisplayName}
-            </McText>
+            <View style={{ flexDirection:'row', alignItems: 'center'}}>
+              <McText h3 numberOfLines={1}>
+                {props.user.DisplayName}
+              </McText>
+              {props.user.VerifiedOrganization? 
+                <View style={{ paddingLeft: 3 }}>
+                  <MaterialIcons name="verified" size={18} color={COLORS.purple} /> 
+                </View> : <></>}
+            </View>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
             </McText>

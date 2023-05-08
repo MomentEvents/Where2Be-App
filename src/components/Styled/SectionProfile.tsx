@@ -34,8 +34,11 @@ const SectionProfile = (props: SectionProfileProps) => {
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
-            {props.user.DisplayName} {}
-            {props.user.VerifiedOrganization? <MaterialIcons name="verified" size={18} color={COLORS.purple} /> : <></>}
+            {props.user.DisplayName}
+            {props.user.VerifiedOrganization? 
+              <View style={{ paddingLeft: 3 }}>
+                <MaterialIcons name="verified" size={18} color={COLORS.purple} />
+              </View> : <></>}
           </McText>
         </View>
         <View style={{ flexDirection: "row" }}>
