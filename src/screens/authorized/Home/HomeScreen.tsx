@@ -108,23 +108,24 @@ const HomeScreen = () => {
     UserID: "fnDiI3UbQl1kaLLLwuOnq3fTro-KP6pgMMuHcQnt89c",
     DisplayName: "The Zone @ UCSD",
     Username: "thezoneucsd",
-    Picture:
-      "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/fnDiI3UbQl1kaLLLwuOnq3fTro-KP6pgMMuHcQnt89c/OQpIe21QcJ2JN5K6gXvvB2lzw81TJDAVRXtz3kv4leE.png",
+    Picture: "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/fnDiI3UbQl1kaLLLwuOnq3fTro-KP6pgMMuHcQnt89c/OQpIe21QcJ2JN5K6gXvvB2lzw81TJDAVRXtz3kv4leE.png",
+    VerifiedOrganization: false
   };
 
   const host2: User = {
     UserID: "063SJucuuBZg3MycOWxildtrZjgy9OrMZUJe2Epc2cs",
     DisplayName: "HKN Kappa Psi",
     Username: "hknkappapsi",
-    Picture:
-      "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/063SJucuuBZg3MycOWxildtrZjgy9OrMZUJe2Epc2cs/Y_5aqNo-JbP9MDBRfsN6yIDkmILLrcHEgkQTM7UmZcw.png",
+    Picture: "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/063SJucuuBZg3MycOWxildtrZjgy9OrMZUJe2Epc2cs/Y_5aqNo-JbP9MDBRfsN6yIDkmILLrcHEgkQTM7UmZcw.png",
+    VerifiedOrganization: false
   };
 
   const host3: User ={
     UserID: "tS-gfTkigELjlqacL_SxI4XcHiejQFJPcBfrYTED3n0",
     DisplayName: "ECE USC Discord",
     Username: "eceuscdiscord",
-    Picture: "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/tS-gfTkigELjlqacL_SxI4XcHiejQFJPcBfrYTED3n0/P0R9GMDBeSYz2Sxo-0iBCt5gBDpLz1bCYSjHTTnsAaI.png"
+    Picture: "https://moment-events.s3.us-east-2.amazonaws.com/app-uploads/images/users/user-id/tS-gfTkigELjlqacL_SxI4XcHiejQFJPcBfrYTED3n0/P0R9GMDBeSYz2Sxo-0iBCt5gBDpLz1bCYSjHTTnsAaI.png",
+    VerifiedOrganization: false
   }
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>

@@ -228,6 +228,7 @@ const EventDetailsScreen = ({ route }) => {
       });
     } else{
       setHost(passedUser)
+      setDidFetchHost(true);
     }
   };
 

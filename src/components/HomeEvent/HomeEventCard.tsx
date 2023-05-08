@@ -224,7 +224,7 @@ const HomeEventCard = ({
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginRight: 10,
+                    marginRight: 5,
                   }}
                   onPress={
                     eventIDToEvent[event.EventID].UserJoin
@@ -234,7 +234,7 @@ const HomeEventCard = ({
                 >
                   <Ionicons
                     name="checkmark-sharp"
-                    size={24}
+                    size={22}
                     color={
                       eventIDToEvent[event.EventID].UserJoin
                         ? COLORS.purple
@@ -243,7 +243,7 @@ const HomeEventCard = ({
                     style={{ alignSelf: "center" }}
                   />
                   <McText
-                    body2
+                    h3
                     style={{
                       marginRight: 12,
                       marginLeft: 5,
@@ -265,7 +265,7 @@ const HomeEventCard = ({
                 >
                   <Ionicons
                     name="md-megaphone-outline"
-                    size={20}
+                    size={16}
                     color={
                       eventIDToEvent[event.EventID].UserShoutout
                         ? COLORS.purple
@@ -274,7 +274,7 @@ const HomeEventCard = ({
                     style={{ alignSelf: "center" }}
                   />
                   <McText
-                    body2
+                    h3
                     style={{
                       marginRight: 12,
                       marginLeft: 8,
