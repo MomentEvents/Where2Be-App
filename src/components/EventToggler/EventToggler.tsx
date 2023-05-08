@@ -115,6 +115,7 @@ const EventToggler = (props: EventTogglerProps) => {
           width={SIZES.width - 40}
           height={SIZES.height * 0.3}
           event={event}
+          user={props.selectedUser}
           isBigCard={true}
           showRelativeTime={true}
         />

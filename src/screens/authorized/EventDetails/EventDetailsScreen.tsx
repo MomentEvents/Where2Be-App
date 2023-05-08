@@ -37,11 +37,16 @@ import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
   eventID: string;
+  passedUser?: User;
 };
 
 const EventDetailsScreen = ({ route }) => {
@@ -50,7 +55,7 @@ const EventDetailsScreen = ({ route }) => {
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
-  const { eventID } = propsFromEventCard;
+  const { eventID, passedUser } = propsFromEventCard;
 
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
@@ -95,7 +100,7 @@ const EventDetailsScreen = ({ route }) => {
   let beforeLoadJoin = useRef<boolean>(undefined);
   let beforeLoadShoutout = useRef<boolean>(undefined);
 
-  const onHostUsernamePressed = () => {
+  const onHostPressed = () => {
     if (host) {
       navigation.push(SCREENS.ProfileDetails, {
         user: host,
@@ -208,7 +213,8 @@ const EventDetailsScreen = ({ route }) => {
         }
       });
 
-    getEventHostByEventId(userToken.UserAccessToken, eventID)
+    if(!passedUser){
+      getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
         setHost(pulledHost);
         setDidFetchHost(true);
@@ -220,6 +226,9 @@ const EventDetailsScreen = ({ route }) => {
           navigation.goBack();
         }
       });
+    } else{
+      setHost(passedUser)
+    }
   };
 
   const onRefresh = async () => {
@@ -252,11 +261,7 @@ const EventDetailsScreen = ({ route }) => {
     }
     console.log("Host UserID is " + host.UserID);
     console.log("Current user UserID is " + currentUser.UserID);
-    if (host.UserID == currentUser.UserID || isAdmin) {
-      setIsHost(true);
-    } else {
-      setIsHost(false);
-    }
+    setIsHost(host.UserID == currentUser.UserID || isAdmin);
   }, [host]);
 
   return (
@@ -465,12 +470,12 @@ const EventDetailsScreen = ({ route }) => {
             <HostSection>
               <TouchableOpacity
                 style={{
+                  maxWidth: "80%",
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
                 }}
                 onPress={() => {
-                  onHostUsernamePressed();
+                  onHostPressed();
                 }}
               >
                 <Image
@@ -494,6 +499,15 @@ const EventDetailsScreen = ({ route }) => {
                     host.DisplayName
                   )}
                 </McText>
+                {host && host.VerifiedOrganization && (
+                  <View style={{ paddingLeft: 3 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
               </TouchableOpacity>
             </HostSection>
             <View>
