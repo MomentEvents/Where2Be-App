@@ -11,7 +11,7 @@ import {
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { SIZES, COLORS, SCREENS } from "../../constants";
+import { SIZES, COLORS, SCREENS, User } from "../../constants";
 import { McText, McIcon } from "./../Styled";
 import "react-native-gesture-handler";
 import { Event } from "../../constants";
@@ -28,6 +28,7 @@ type EventCardProps = {
   width?: number;
   height?: number;
   showRelativeTime?: boolean;
+  host: User;
 };
 
 const HomeEventCard = ({
@@ -37,6 +38,7 @@ const HomeEventCard = ({
   width,
   height,
   showRelativeTime,
+  host
 }: EventCardProps) => {
   const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const {
@@ -70,6 +72,7 @@ const HomeEventCard = ({
     }
     navigation.push(SCREENS.EventDetails, {
       eventID: event.EventID,
+      passedUser: host
     });
     // Navigate to event details page
   };

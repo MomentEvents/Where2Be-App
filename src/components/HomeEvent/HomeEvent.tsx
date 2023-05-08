@@ -71,7 +71,7 @@ const HomeEvent = (props: HomeEventProps) => {
           </McText>
         </TouchableOpacity>
       </View>
-      <HomeEventCard event={props.event} />
+      <HomeEventCard event={props.event} host={props.user} />
     </View>
   );
 };
