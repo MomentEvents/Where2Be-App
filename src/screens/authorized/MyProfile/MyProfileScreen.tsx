@@ -38,14 +38,14 @@ const MyProfileScreen = ({ route }) => {
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
-        title={"Hosted Events"}
+        title={"Profile"}
         rightButtonSVG={<icons.settings />}
         rightButtonOnClick={() => {
           navigation.navigate(SCREENS.Settings);
         }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={currentUser} canEditProfile={true} />
+      <SectionProfile user={currentUser} canEditProfile={true} canFollow={false}/>
       <View style={{ flex: 1 }}>
         <EventToggler
           selectedUser={currentUser}

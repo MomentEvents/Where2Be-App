@@ -6,16 +6,26 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { User, Event, COLORS, SCREENS } from "../../constants";
 import { McText } from "../Styled";
 import { useNavigation } from "@react-navigation/native";
 import HomeEventCard from "./HomeEventCard";
+import { displayError } from "../../helpers/helpers";
+import {
+  addUserJoinEvent,
+  addUserShoutoutEvent,
+  removeUserJoinEvent,
+  removeUserShoutoutEvent,
+} from "../../services/UserService";
+import { EventContext } from "../../contexts/EventContext";
+import { UserContext } from "../../contexts/UserContext";
 
 type HomeEventProps = {
   event: Event;
   user: User;
 };
+
 const HomeEvent = (props: HomeEventProps) => {
   const navigation = useNavigation<any>();
 
@@ -24,6 +34,7 @@ const HomeEvent = (props: HomeEventProps) => {
       user: props.user,
     });
   };
+
   return (
     <View>
       <View
@@ -60,7 +71,7 @@ const HomeEvent = (props: HomeEventProps) => {
           </McText>
         </TouchableOpacity>
       </View>
-      <HomeEventCard isBigCard={true} event={props.event}/>
+      <HomeEventCard event={props.event} />
     </View>
   );
 };

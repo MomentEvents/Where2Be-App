@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import GradientButton from "../../../components/Styled/GradientButton";
@@ -14,9 +14,12 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import { COLORS, SCREENS, User, Event, icons } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
+import { UserContext } from "../../../contexts/UserContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
+
+  const {currentSchool} = useContext(UserContext)
 
   const createdEvent1: Event = {
     EventID: "hLT3hvPW_HCDJal4giA-uD_Ojo_Jt7pW9rDwGVWOyIk",
@@ -125,7 +128,7 @@ const HomeScreen = () => {
   }
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Home"} />
+      <SectionHeader title={"Moment @ " + currentSchool.Abbreviation} />
       <ScrollView
       showsVerticalScrollIndicator={false}
         contentContainerStyle={{ backgroundColor: COLORS.black }}

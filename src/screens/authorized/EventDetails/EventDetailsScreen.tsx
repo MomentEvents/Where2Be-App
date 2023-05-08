@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Linking,
 } from "react-native";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { COLORS, SCREENS, SIZES, icons } from "../../../constants";
 import { Event } from "../../../constants/types";
@@ -60,6 +60,10 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToEvent,
     eventIDToInterests,
     updateEventIDToInterests,
+    addUserJoin,
+    addUserShoutout,
+    removeUserJoin,
+    removeUserShoutout,
   } = useContext(EventContext);
 
   if (!eventID) {
@@ -85,101 +89,11 @@ const EventDetailsScreen = ({ route }) => {
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
-  // Update the previous screen event cards
-
-  const addUserJoin = async () => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserJoin: true,
-        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-      },
-    });
-    addUserJoinEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    ).catch((error: Error) => {
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserJoin: false,
-          NumJoins: eventIDToEvent[eventID].NumJoins - 1,
-        },
-      });
-      displayError(error);
-    });
-  };
-
-  const addUserShoutout = () => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserShoutout: true,
-        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
-      },
-    });
-    addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
-    .catch((error: Error) => {
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserShoutout: false,
-          NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
-        },
-      });
-      displayError(error);
-    });
-  };
-
-  const removeUserJoin = () => {
-    setLoading(true);
-    removeUserJoinEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
-      .then(() => {
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserJoin: false,
-            NumJoins: eventIDToEvent[eventID].NumJoins - 1,
-          },
-        });
-
-        setLoading(false);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
-      });
-  };
-
-  const removeUserShoutout = () => {
-    setLoading(true);
-    removeUserShoutoutEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    )
-      .then(() => {
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserShoutout: false,
-            NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
-          },
-        });
-        setLoading(false);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
-      });
-  };
+  // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
+  // This updates the event counter and the boolean in case there is a discrepency.
+  // Please see pullData() logic specifically in the pullEvent logic
+  let beforeLoadJoin = useRef<boolean>(undefined);
+  let beforeLoadShoutout = useRef<boolean>(undefined);
 
   const onHostUsernamePressed = () => {
     if (host) {
@@ -247,6 +161,29 @@ const EventDetailsScreen = ({ route }) => {
     var gotError = false;
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
+        if (beforeLoadJoin.current === undefined) {
+          // Join button has not been clicked. Do nothing
+        } else if (beforeLoadJoin.current && !pulledEvent.UserJoin) {
+          // User has clicked join in between when the event has been pulled, yet the user has not joined when the event has been pulled. Update counter
+          pulledEvent.UserJoin = true;
+          pulledEvent.NumJoins = pulledEvent.NumJoins + 1;
+        } else if (!beforeLoadJoin.current && pulledEvent.UserJoin) {
+          // User has unclicked join in between when the event has been pulled, yet the user has joined when the event has been pulled. Update counter
+          pulledEvent.UserJoin = false;
+          pulledEvent.NumJoins = pulledEvent.NumJoins - 1;
+        }
+
+        if (beforeLoadShoutout.current === undefined) {
+          // Join button has not been clicked. Do nothing
+        } else if (beforeLoadShoutout.current && !pulledEvent.UserShoutout) {
+          // User has clicked shoutout in between when the event has been pulled, yet the user has not shouted out when the event has been pulled. Update counter
+          pulledEvent.UserShoutout = true;
+          pulledEvent.NumShoutouts = pulledEvent.NumShoutouts + 1;
+        } else if (!beforeLoadShoutout.current && pulledEvent.UserShoutout) {
+          // User has unclicked shoutout in between when the event has been pulled, yet the user has shouted out when the event has been pulled. Update counter
+          pulledEvent.UserShoutout = false;
+          pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
+        }
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
         setDidFetchEvent(true);
       })
@@ -286,6 +223,8 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onRefresh = async () => {
+    beforeLoadJoin.current = undefined;
+    beforeLoadShoutout.current = undefined;
     setIsRefreshing(true);
     setHost(undefined);
     setDidFetchHost(false);
@@ -709,11 +648,21 @@ const EventDetailsScreen = ({ route }) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    onPressOut={() => {
+                    onPress={
                       eventIDToEvent[eventID].UserJoin
-                        ? removeUserJoin()
-                        : addUserJoin();
-                    }}
+                        ? () => {
+                            if (!didFetchEvent) {
+                              beforeLoadJoin.current = false;
+                            }
+                            removeUserJoin(eventID);
+                          }
+                        : () => {
+                            if (!didFetchEvent) {
+                              beforeLoadJoin.current = true;
+                            }
+                            addUserJoin(eventID);
+                          }
+                    }
                   >
                     {eventIDToEvent[eventID].UserJoin ? (
                       <icons.activecheckmark width={30} />
@@ -722,16 +671,6 @@ const EventDetailsScreen = ({ route }) => {
                     )}
                   </TouchableOpacity>
                 </GradientButton>
-                <McText
-                  body3
-                  style={{
-                    color: eventIDToEvent[eventID].UserJoin
-                      ? COLORS.darkPurple
-                      : COLORS.white,
-                  }}
-                >
-                  Join
-                </McText>
                 <McText
                   body2
                   style={{
@@ -774,11 +713,21 @@ const EventDetailsScreen = ({ route }) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    onPress={() => {
+                    onPress={
                       eventIDToEvent[eventID].UserShoutout
-                        ? removeUserShoutout()
-                        : addUserShoutout();
-                    }}
+                        ? () => {
+                            if (!didFetchEvent) {
+                              beforeLoadShoutout.current = false;
+                            }
+                            removeUserShoutout(eventID);
+                          }
+                        : () => {
+                            if (!didFetchEvent) {
+                              beforeLoadShoutout.current = true;
+                            }
+                            addUserShoutout(eventID);
+                          }
+                    }
                   >
                     {eventIDToEvent[eventID].UserShoutout ? (
                       <icons.activeshoutout
@@ -793,16 +742,6 @@ const EventDetailsScreen = ({ route }) => {
                     )}
                   </TouchableOpacity>
                 </GradientButton>
-                <McText
-                  body3
-                  style={{
-                    color: eventIDToEvent[eventID].UserShoutout
-                      ? COLORS.darkPurple
-                      : COLORS.white,
-                  }}
-                >
-                  Boost
-                </McText>
                 <McText
                   body2
                   style={{
@@ -841,7 +780,7 @@ const styles = StyleSheet.create({
     bottom: SIZES.bottomBarHeight + 10,
     left: 10,
     right: 10,
-    height: 130,
+    height: 110,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(100,100,100,.95)",

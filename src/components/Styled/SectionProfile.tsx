@@ -20,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 type SectionProfileProps = {
   user: User;
   canEditProfile: boolean;
-  canFollow?: boolean;
+  canFollow: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {

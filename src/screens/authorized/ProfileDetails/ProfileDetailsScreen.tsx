@@ -87,7 +87,7 @@ const ProfileDetailsScreen = ({ route }) => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       {isAdmin ? (
         <SectionHeader
-          title={"View Profile"}
+          title={"Profile"}
           leftButtonSVG={<icons.backarrow />}
           leftButtonOnClick={() => {
             navigation.goBack();
@@ -98,7 +98,7 @@ const ProfileDetailsScreen = ({ route }) => {
         />
       ) : (
         <SectionHeader
-          title={"View Profile"}
+          title={"Profile"}
           leftButtonSVG={<icons.backarrow />}
           leftButtonOnClick={() => {
             navigation.goBack();
@@ -106,7 +106,7 @@ const ProfileDetailsScreen = ({ route }) => {
           hideBottomUnderline={true}
         />
       )}
-      <SectionProfile user={user} canEditProfile={false} canFollow={true}/>
+      <SectionProfile user={user} canEditProfile={isAdmin} canFollow={true}/>
       <EventToggler
         selectedUser={user}
         eventsToPull={EVENT_TOGGLER.HostedEvents}
