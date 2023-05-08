@@ -16,10 +16,10 @@ type EventContextType = {
     id: string;
     interests: Interest[];
   }>;
-  addUserJoin: (eventID: string) => void;
-  addUserShoutout: (eventID: string) => void;
-  removeUserJoin: (eventID: string) => void;
-  removeUserShoutout: (eventID: string) => void;
+  clientAddUserJoin: (eventID: string) => void;
+  clientAddUserShoutout: (eventID: string) => void;
+  clientRemoveUserJoin: (eventID: string) => void;
+  clientRemoveUserShoutout: (eventID: string) => void;
 
 };
 
@@ -28,10 +28,10 @@ export const EventContext = createContext<EventContextType>({
   updateEventIDToEvent: null,
   eventIDToInterests: null,
   updateEventIDToInterests: null,
-  addUserJoin: null,
-  addUserShoutout: null,
-  removeUserJoin: null,
-  removeUserShoutout: null,
+  clientAddUserJoin: null,
+  clientAddUserShoutout: null,
+  clientRemoveUserJoin: null,
+  clientRemoveUserShoutout: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
@@ -50,7 +50,7 @@ export const EventProvider = ({ children }) => {
     return map;
   }
 
-  const addUserJoin = (eventID: string) => {
+  const clientAddUserJoin = (eventID: string) => {
     updateEventIDToEvent({
       id: eventID,
       event: {
@@ -76,7 +76,7 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const addUserShoutout = (eventID: string) => {
+  const clientAddUserShoutout = (eventID: string) => {
     updateEventIDToEvent({
       id: eventID,
       event: {
@@ -102,7 +102,7 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const removeUserJoin = (eventID: string) => {
+  const clientRemoveUserJoin = (eventID: string) => {
     updateEventIDToEvent({
       id: eventID,
       event: {
@@ -128,7 +128,7 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const removeUserShoutout = (eventID: string) => {
+  const clientRemoveUserShoutout = (eventID: string) => {
     updateEventIDToEvent({
       id: eventID,
       event: {
@@ -170,10 +170,10 @@ export const EventProvider = ({ children }) => {
         updateEventIDToEvent,
         eventIDToInterests,
         updateEventIDToInterests,
-        addUserJoin,
-        addUserShoutout,
-        removeUserJoin,
-        removeUserShoutout,
+        clientAddUserJoin,
+        clientAddUserShoutout,
+        clientRemoveUserJoin,
+        clientRemoveUserShoutout,
       }}
     >
       {children}

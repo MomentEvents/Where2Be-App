@@ -23,7 +23,7 @@ export async function getUser(UserID: string): Promise<User> {
     throw formatError("Error " + response.status, message);
   }
   const pulledUser: UserResponse = await response.json();
-  const convertedUser: User = userResponseToUser(pulledUser)
+  const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
 }
@@ -54,7 +54,7 @@ export async function getUserByUserAccessToken(
   }
 
   const pulledUser: UserResponse = await response.json();
-  const convertedUser: User = userResponseToUser(pulledUser)
+  const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
 }
@@ -95,7 +95,7 @@ export async function updateUser(
   }
 
   const pulledUser: UserResponse = await response.json();
-  const convertedUser: User = userResponseToUser(pulledUser)
+  const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
 }
@@ -105,7 +105,6 @@ export async function deleteUser(
 
   userID: string
 ): Promise<void> {
-  
   const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
     method: "DELETE",
     headers: {
@@ -148,7 +147,7 @@ export async function getEventHostByEventId(
   }
 
   const pulledUser: UserResponse = await response.json();
-  const convertedUser: User = userResponseToUser(pulledUser)
+  const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
 }
@@ -265,7 +264,6 @@ export async function removeUserShoutoutEvent(
   }
 }
 
-
 export async function searchSchoolUsers(
   userAccessToken: string,
   schoolID: string,
@@ -273,20 +271,23 @@ export async function searchSchoolUsers(
 ): Promise<User[]> {
   console.log("Call to UserService: searchSchoolUsers");
 
-  if(query === "" || !query){
-    return []
+  if (query === "" || !query) {
+    return [];
   }
 
-  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      query: query
-    }),
-  }).catch((error: Error) => {
+  const response = await fetch(
+    momentAPI + `/user/school_id/${schoolID}/search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        query: query,
+      }),
+    }
+  ).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school users");
   });
 
@@ -296,7 +297,25 @@ export async function searchSchoolUsers(
   }
 
   const pulledUsers: UserResponse[] = await response.json();
-  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers);
 
   return convertedUsers;
+}
+
+export async function followUser(
+  userAccessToken: string,
+  userID: string,
+  toUserID: string
+): Promise<void> {
+
+
+}
+
+export async function unfollowUser(
+  userAccessToken: string,
+  userID: string,
+  toUserID: string
+): Promise<void> {
+
+  
 }

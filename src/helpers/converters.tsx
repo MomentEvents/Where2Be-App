@@ -43,6 +43,7 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     NumShoutouts: pulledEvent.num_shoutouts,
     UserJoin: pulledEvent.user_join,
     UserShoutout: pulledEvent.user_shoutout,
+    HostUserID: pulledEvent.host_user_id
   };
 
   return formattedEvent;

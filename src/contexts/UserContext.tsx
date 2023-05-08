@@ -21,9 +21,11 @@ import { getSchoolByUserId } from "../services/SchoolService";
 import {
   addUserJoinEvent,
   addUserShoutoutEvent,
+  followUser,
   getUserByUserAccessToken,
   removeUserJoinEvent,
   removeUserShoutoutEvent,
+  unfollowUser,
 } from "../services/UserService";
 import { displayError } from "../helpers/helpers";
 import { appVersion } from "../constants/texts";
@@ -50,6 +52,9 @@ type UserContextType = {
     id: string;
     user: User;
   }>;
+  clientFollowUser: (userID: string) => Promise<void>;
+  clientUnfollowUser: (userID: string) => Promise<void>;
+  
 };
 export const UserContext = createContext<UserContextType>({
   userToken: null,
@@ -66,6 +71,8 @@ export const UserContext = createContext<UserContextType>({
   setCurrentUserID: null,
   userIDToUser: null,
   updateUserIDToUser: null,
+  clientFollowUser: null,
+  clientUnfollowUser: null,
 });
 
 export const UserProvider = ({ children }) => {
@@ -89,26 +96,79 @@ export const UserProvider = ({ children }) => {
     return map;
   }
 
-  const followUser = async (userID: string): Promise<void> => {
+  const clientFollowUser = async (userID: string): Promise<void> => {
     updateUserIDToUser({
       id: userID,
       user: {
-        ...userIDToUser[userID],
-        UserFollow: true,
-        NumFollowers: userIDToUser[userID].NumFollowers + 1,
+        ...userIDToUser[currentUserID],
+        NumFollowing: userIDToUser[userID].NumFollowing - 1,
       },
     });
     updateUserIDToUser({
       id: userID,
       user: {
         ...userIDToUser[userID],
-        UserFollow: true,
-        NumFollowers: userIDToUser[userID].NumFollowers + 1,
+        UserFollow: false,
+        NumFollowers: userIDToUser[userID].NumFollowers - 1,
       },
     });
+
+    unfollowUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+      displayError(error);
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[currentUserID],
+          NumFollowing: userIDToUser[userID].NumFollowing + 1,
+        },
+      });
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[userID],
+          UserFollow: true,
+          NumFollowers: userIDToUser[userID].NumFollowers + 1,
+        },
+      });
+    })
   };
 
-  const unfollowUser = async (userID: string): Promise<void> => {};
+  const clientUnfollowUser = async (userID: string): Promise<void> => {
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[currentUserID],
+        NumFollowing: userIDToUser[userID].NumFollowing + 1,
+      },
+    });
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[userID],
+        UserFollow: true,
+        NumFollowers: userIDToUser[userID].NumFollowers + 1,
+      },
+    });
+
+    followUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+      displayError(error);
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[currentUserID],
+          NumFollowing: userIDToUser[userID].NumFollowing - 1,
+        },
+      });
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[userID],
+          UserFollow: false,
+          NumFollowers: userIDToUser[userID].NumFollowers - 1,
+        },
+      });
+    })
+  };
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
@@ -252,7 +312,9 @@ export const UserProvider = ({ children }) => {
         currentUserID,
         setCurrentUserID,
         userIDToUser,
-        updateUserIDToUser
+        updateUserIDToUser,
+        clientFollowUser,
+        clientUnfollowUser,
       }}
     >
       {children}

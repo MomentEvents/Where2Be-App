@@ -43,10 +43,10 @@ const HomeEventCard = ({
   const {
     eventIDToEvent,
     updateEventIDToEvent,
-    addUserJoin,
-    addUserShoutout,
-    removeUserJoin,
-    removeUserShoutout,
+    clientAddUserJoin: addUserJoin,
+    clientAddUserShoutout: addUserShoutout,
+    clientRemoveUserJoin: removeUserJoin,
+    clientRemoveUserShoutout: removeUserShoutout,
   } = useContext(EventContext);
 
   const navigation = useNavigation<any>();

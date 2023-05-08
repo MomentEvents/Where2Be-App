@@ -16,6 +16,7 @@ export interface Event {
   NumShoutouts: number;
   UserJoin: boolean;
   UserShoutout: boolean;
+  HostUserID: string;
 }
 
 export interface EventResponse {
@@ -31,6 +32,7 @@ export interface EventResponse {
   num_shoutouts: number;
   user_join: boolean;
   user_shoutout: boolean;
+  host_user_id: string;
 }
 
 export interface Interest {

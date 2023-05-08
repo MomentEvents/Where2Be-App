@@ -65,10 +65,10 @@ const EventDetailsScreen = ({ route }) => {
     updateEventIDToEvent,
     eventIDToInterests,
     updateEventIDToInterests,
-    addUserJoin,
-    addUserShoutout,
-    removeUserJoin,
-    removeUserShoutout,
+    clientAddUserJoin: addUserJoin,
+    clientAddUserShoutout: addUserShoutout,
+    clientRemoveUserJoin: removeUserJoin,
+    clientRemoveUserShoutout: removeUserShoutout,
   } = useContext(EventContext);
 
   if (!eventID) {
