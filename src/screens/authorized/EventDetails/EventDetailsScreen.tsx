@@ -37,11 +37,17 @@ import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 type routeParametersType = {
   eventID: string;
+  passedUser?: User;
 };
 
 const EventDetailsScreen = ({ route }) => {
@@ -50,7 +56,7 @@ const EventDetailsScreen = ({ route }) => {
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
-  const { eventID } = propsFromEventCard;
+  const { eventID, passedUser } = propsFromEventCard;
 
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
@@ -114,6 +120,7 @@ const EventDetailsScreen = ({ route }) => {
         NumJoins: eventIDToEvent[eventID].NumJoins + 1,
       },
     });
+<<<<<<< HEAD
     handleAddUserJoin();
   };
 
@@ -121,6 +128,13 @@ const EventDetailsScreen = ({ route }) => {
   const handleAddUserShoutoutEvent = () => {
     addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
     .catch((error: Error) => {
+=======
+    addUserShoutoutEvent(
+      userToken.UserAccessToken,
+      currentUser.UserID,
+      eventID
+    ).catch((error: Error) => {
+>>>>>>> main
       updateEventIDToEvent({
         id: eventID,
         event: {
@@ -190,7 +204,7 @@ const EventDetailsScreen = ({ route }) => {
       });
   };
 
-  const onHostUsernamePressed = () => {
+  const onHostPressed = () => {
     if (host) {
       navigation.push(SCREENS.ProfileDetails, {
         user: host,
@@ -303,7 +317,11 @@ const EventDetailsScreen = ({ route }) => {
     var gotError = false;
     gotError = handleGetEvent(gotError);
     gotError = handleGetEventInterestsByEventId(gotError);
-    handleGetEventHostByEventId(gotError)
+    if (!passedUser) {
+      handleGetEventHostByEventId(gotError);
+    } else {
+      setHost(passedUser);
+    }
   };
 
   const onRefresh = async () => {
@@ -547,12 +565,12 @@ const EventDetailsScreen = ({ route }) => {
             <HostSection>
               <TouchableOpacity
                 style={{
+                  maxWidth: "80%",
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
                 }}
                 onPress={() => {
-                  onHostUsernamePressed();
+                  onHostPressed();
                 }}
               >
                 <Image
@@ -576,6 +594,15 @@ const EventDetailsScreen = ({ route }) => {
                     host.DisplayName
                   )}
                 </McText>
+                {host && host.VerifiedOrganization && (
+                  <View style={{ paddingLeft: 3 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
               </TouchableOpacity>
             </HostSection>
             <View>

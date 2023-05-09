@@ -128,7 +128,6 @@ export async function deleteUser(
 
 export async function getEventHostByEventId(
   userAccessToken: string,
-
   eventID: string
 ): Promise<User> {
   const response = await fetch(momentAPI + `/user/event_id/${eventID}/host`, {

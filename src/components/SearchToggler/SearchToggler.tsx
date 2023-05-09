@@ -44,8 +44,11 @@ const SearchToggler = () => {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
   const onSearchTextChanged = (newText: string) => {
-    setPulledEvents(null);
-    setPulledUsers(null);
+    if (newText == searchTextRef.current){
+      return;
+    }
+    setPulledEvents(newText === ""? [] : null);
+    setPulledUsers(newText === ""? [] : null);
     searchTextRef.current = newText;
     clearTimeout(timeoutId);
     const newTimeoutId = setTimeout(() => pullData(), 500);

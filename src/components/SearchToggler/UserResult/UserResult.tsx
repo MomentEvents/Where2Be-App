@@ -3,6 +3,7 @@ import React from "react";
 import { COLORS, SCREENS, User } from "../../../constants";
 import { McText } from "../../Styled";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 type UserResultProps = {
   user: User;
@@ -41,12 +42,18 @@ const UserResult = (props: UserResultProps) => {
               marginRight: 30,
               marginLeft: 15,
               flex: 1,
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
-            <McText h3 numberOfLines={1}>
+            <View style={{ flexDirection:'row', alignItems: 'center'}}>
+              <McText h3 numberOfLines={1}>
                 {props.user.DisplayName}
-            </McText>
+              </McText>
+              {props.user.VerifiedOrganization &&
+                <View style={{ paddingLeft: 3 }}>
+                  <MaterialIcons name="verified" size={18} color={COLORS.purple} /> 
+                </View>}
+            </View>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{props.user.Username}
             </McText>
