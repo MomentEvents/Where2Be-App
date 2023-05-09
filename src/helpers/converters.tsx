@@ -184,6 +184,8 @@ export const schoolResponseToSchool = (
     SchoolID: pulledSchool.school_id,
     Name: pulledSchool.name,
     Abbreviation: pulledSchool.abbreviation,
+    Latitude: pulledSchool.latitude,
+    Longitude: pulledSchool.longitude
   };
 
   const keysConvert = Object.keys(pulledSchool);
