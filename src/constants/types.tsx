@@ -56,6 +56,8 @@ export interface SchoolResponse {
   school_id: string;
   name: string;
   abbreviation: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface User {
@@ -67,6 +69,7 @@ export interface User {
   UserFollow: boolean;
   NumFollowers: number;
   NumFollowing: number;
+  Email?: string;
 }
 
 export interface UserResponse {
@@ -76,4 +79,5 @@ export interface UserResponse {
   picture: string;
   verified_organization: boolean;
   user_follow: boolean;
+  email?: string;
 }

@@ -85,9 +85,9 @@ export const UserProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [serverError, setServerError] = useState<boolean>(false);
 
-  const [userIDToUser, updateUserIDToUser] = useReducer(setEventMap, {});
+  const [userIDToUser, updateUserIDToUser] = useReducer(setUserMap, {});
 
-  function setEventMap(
+  function setUserMap(
     map: { [key: string]: User },
     action: { id: string; user: User }
   ) {
