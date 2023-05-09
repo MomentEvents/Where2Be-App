@@ -11,7 +11,13 @@ import {
   ActivityIndicator,
   Linking,
 } from "react-native";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { COLORS, SCREENS, SIZES, icons } from "../../../constants";
 import { Event } from "../../../constants/types";
@@ -46,16 +52,15 @@ import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
   eventID: string;
-  passedUser?: User;
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, currentUserID, isAdmin } = useContext(UserContext);
+  const { userToken, currentUserID, isAdmin, userIDToUser, updateUserIDToUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
-  const { eventID, passedUser } = propsFromEventCard;
+  const { eventID } = propsFromEventCard;
 
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
@@ -213,10 +218,10 @@ const EventDetailsScreen = ({ route }) => {
         }
       });
 
-    if(!passedUser){
-      getEventHostByEventId(userToken.UserAccessToken, eventID)
+    getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
         setHost(pulledHost);
+        updateUserIDToUser({id: pulledHost.UserID, user: pulledHost})
         setDidFetchHost(true);
       })
       .catch((error: Error) => {
@@ -226,10 +231,6 @@ const EventDetailsScreen = ({ route }) => {
           navigation.goBack();
         }
       });
-    } else{
-      setHost(passedUser)
-      setDidFetchHost(true);
-    }
   };
 
   const onRefresh = async () => {
@@ -245,6 +246,9 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   useEffect(() => {
+    if(eventIDToEvent[eventID]){
+      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID])
+    }
     pullData();
   }, []);
 

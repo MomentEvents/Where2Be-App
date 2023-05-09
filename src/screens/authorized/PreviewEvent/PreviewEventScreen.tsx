@@ -31,7 +31,7 @@ import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
@@ -270,7 +270,7 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  maxWidth: "80%",
                 }}
               >
                 <Image
@@ -294,6 +294,15 @@ const EventDetailsScreen = ({ route }) => {
                     userIDToUser[currentUserID].DisplayName
                   )}
                 </McText>
+                {userIDToUser[currentUserID] && userIDToUser[currentUserID].VerifiedOrganization && (
+                  <View style={{ paddingLeft: 3 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
               </View>
             </HostSection>
 
