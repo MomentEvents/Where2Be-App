@@ -61,7 +61,7 @@ export interface User {
   DisplayName: string;
   Username: string;
   Picture: string;
-  VerifiedOrganization: boolean;
+  VerifiedOrganization?: boolean;
 }
 
 export interface UserResponse {
