@@ -59,6 +59,18 @@ const ChangePasswordScreen = ({ route }) => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
 
+  const handleChangePassword = () => {
+    changePassword(userToken.UserAccessToken, oldPassword, newPassword)
+      .then(() => {
+        setLoading(false);
+        navigation.goBack();
+      })
+      .catch((error: Error) => {
+        displayError(error, handleChangePassword);
+        setLoading(false);
+      });
+  }
+
   const handleSubmit = () => {
     if(oldPassword === "" || newPassword === "" || confirmNewPassword === ""){
         displayError(
@@ -79,15 +91,7 @@ const ChangePasswordScreen = ({ route }) => {
       return;
     }
     setLoading(true);
-    changePassword(userToken.UserAccessToken, oldPassword, newPassword)
-      .then(() => {
-        setLoading(false);
-        navigation.goBack();
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
-      });
+    handleChangePassword();
   };
 
   return (

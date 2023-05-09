@@ -99,6 +99,20 @@ const EditEventScreen = ({ route }) => {
     setOpenedDatePicker(false);
   };
 
+  const handleUpdateEvent = (updatedEventBase64: Event, arrayInterests: Interest[], updatedEvent: Event) => {
+    updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
+      .then(() => {
+        updateEventIDToEvent({ id: eventID, event: updatedEvent });
+        updateEventIDToInterests({ id: eventID, interests: arrayInterests });
+        setLoading(false);
+        navigation.goBack();
+      })
+      .catch((error: Error) => {
+        displayError(error, () => handleUpdateEvent(updatedEventBase64, arrayInterests, updatedEvent));
+        setLoading(false);
+      });
+  }
+
   const onSubmit = () => {
     if (!date || !start || !end) {
       displayError(
@@ -184,17 +198,7 @@ const EditEventScreen = ({ route }) => {
     const arrayInterests: Interest[] = Array.from(selectedInterests);
     const updatedEventBase64 = { ...updatedEvent };
     updatedEventBase64.Picture = base64Image;
-    updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
-      .then(() => {
-        updateEventIDToEvent({ id: eventID, event: updatedEvent });
-        updateEventIDToInterests({ id: eventID, interests: arrayInterests });
-        setLoading(false);
-        navigation.goBack();
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
-      });
+    handleUpdateEvent(updatedEventBase64, arrayInterests, updatedEvent);
   };
 
   return (

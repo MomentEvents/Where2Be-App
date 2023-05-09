@@ -48,7 +48,7 @@ const EventViewer = (props: EventViewerProps) => {
       })
       .catch((error: Error) => {
         setIsRefreshing(false);
-        displayError(error);
+        displayError(error, pullData);
       });
   };
 

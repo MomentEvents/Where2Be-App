@@ -53,7 +53,7 @@ const InterestSelector = (props: InterestSelectorProps) => {
         console.log(selectedInterestsTemp)
       })
       .catch((error: Error) => {
-        displayError(error);
+        displayError(error, pullData);
       });
   };
 

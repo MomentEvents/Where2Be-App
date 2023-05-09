@@ -69,12 +69,11 @@ export const UserProvider = ({ children }) => {
     await setContextVarsBasedOnToken(
       await validateTokenExpirationAndUpdate().catch((error: Error) => {
         setServerError(true);
-        displayError(error);
-        return null;
+        throw error;
       })
     ).catch((error: Error) => {
       setServerError(true);
-      displayError(error);
+      displayError(error, fillUserData);
     });
     setIsUserContextLoaded(true);
   };
@@ -87,7 +86,7 @@ export const UserProvider = ({ children }) => {
       })
       .catch((error: Error) => {
         setServerError(true);
-        displayError(error);
+        displayError(error, pullTokenFromServer);
       });
   };
 
@@ -95,7 +94,8 @@ export const UserProvider = ({ children }) => {
     pullTokenFromServer();
   }, []);
 
-  useEffect(() => {
+
+  const managePushNotificationToken = () => {
     // This runs for user login.
     // This doesn't work when user log out, because
     // when userToken, currentUser, or currentSchool
@@ -112,13 +112,17 @@ export const UserProvider = ({ children }) => {
             console.log("Registered push notification token " + token)
           )
           .catch((error: Error) => {
-            displayError(error);
+            displayError(error, managePushNotificationToken);
           });
       });
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
+  }
+
+  useEffect(() => {
+    managePushNotificationToken();
   }, [userToken, currentUser, currentSchool]);
 
   // This should be done every now and then to see if the token
@@ -141,13 +145,24 @@ export const UserProvider = ({ children }) => {
     // Token has expired.
     const returnedToken: Token = await validateTokenExpirationAndUpdate().catch(
       (error: Error) => {
-        displayError(error);
+        displayError(error, syncUserContextWithToken);
         return null;
       }
     );
 
     setContextVarsBasedOnToken(returnedToken);
   };
+
+
+  const handleCheckIfUserAccessTokenIsAdmin = (token: Token) => {
+    checkIfUserAccessTokenIsAdmin(token.UserAccessToken)
+      .then((pulledIsAdmin: boolean) => {
+        setIsAdmin(pulledIsAdmin);
+      })
+      .catch((error: Error) => {
+        displayError(error, () => handleCheckIfUserAccessTokenIsAdmin(token));
+      });
+  }
 
   const setContextVarsBasedOnToken = async (token: Token): Promise<void> => {
     if (token === null) {
@@ -159,13 +174,7 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    checkIfUserAccessTokenIsAdmin(token.UserAccessToken)
-      .then((pulledIsAdmin: boolean) => {
-        setIsAdmin(pulledIsAdmin);
-      })
-      .catch((error: Error) => {
-        displayError(error);
-      });
+    handleCheckIfUserAccessTokenIsAdmin(token);
 
     const pulledUser: User = await getUserByUserAccessToken(
       token.UserAccessToken

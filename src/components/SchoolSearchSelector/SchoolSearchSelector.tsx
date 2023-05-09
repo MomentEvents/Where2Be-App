@@ -44,35 +44,39 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   const [componentLoaded, setComponentLoaded] = useState<boolean>(false);
 
   const populateSchools = async (): Promise<void> => {
-    const pulledSchools: School[] = await getAllSchools().catch(
-      (error: Error) => {
-        throw error;
-      }
-    );
+    try {
+      const pulledSchools: School[] = await getAllSchools().catch(
+        (error: Error) => {
+          throw error;
+        }
+      );
 
-    var selectionDataTemp: [{ key?: string; label?: string }] = [{}];
-    var schoolMapTemp: { [key: string]: School } = {};
+      var selectionDataTemp: [{ key?: string; label?: string }] = [{}];
+      var schoolMapTemp: { [key: string]: School } = {};
 
-    selectionDataTemp.pop();
+      selectionDataTemp.pop();
 
-    pulledSchools.forEach((school) => {
-      const selectionPart: { key?: string; label?: string } = {
-        key: school.SchoolID,
-        label: school.Abbreviation + " - " + school.Name,
-      };
-      selectionDataTemp.push(selectionPart);
-      schoolMapTemp[school.SchoolID] = school;
-    });
+      pulledSchools.forEach((school) => {
+        const selectionPart: { key?: string; label?: string } = {
+          key: school.SchoolID,
+          label: school.Abbreviation + " - " + school.Name,
+        };
+        selectionDataTemp.push(selectionPart);
+        schoolMapTemp[school.SchoolID] = school;
+      });
 
-    console.log(selectionDataTemp);
-    console.log(schoolMapTemp);
+      console.log(selectionDataTemp);
+      console.log(schoolMapTemp);
 
-    setSelectionData(selectionDataTemp);
-    setSchoolMap(schoolMapTemp);
+      setSelectionData(selectionDataTemp);
+      setSchoolMap(schoolMapTemp);
+    } catch (error) {
+      displayError(error, populateSchools)
+    }
   };
 
   useEffect(() => {
-    populateSchools().catch((error: Error) => displayError(error));
+    populateSchools();
   }, []);
 
   useEffect(() => {

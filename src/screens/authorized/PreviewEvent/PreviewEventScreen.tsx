@@ -82,7 +82,7 @@ const EventDetailsScreen = ({ route }) => {
         navigation.push(SCREENS.EventDetails, { eventID: eventID });
       })
       .catch((error: Error) => {
-        displayError(error);
+        displayError(error, onSubmit);
         setLoading(false);
       });
   };

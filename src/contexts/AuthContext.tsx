@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { UserContext } from "./UserContext";
-import { displayError } from "../helpers/helpers";
+import { displayError, formatError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
 
 type AuthContextType = {
@@ -29,8 +29,7 @@ export const AuthProvider = ({ children }) => {
         throw error;
       })
     ).catch((error: Error) => {
-      displayError(error);
-      return null;
+      throw error;
     });
   };
 
@@ -47,8 +46,7 @@ export const AuthProvider = ({ children }) => {
         }
       )
     ).catch((error) => {
-      displayError(error);
-      return null;
+      throw error;
     });
   };
 

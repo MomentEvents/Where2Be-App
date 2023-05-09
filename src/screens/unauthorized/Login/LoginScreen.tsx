@@ -36,7 +36,7 @@ const LoginScreen = () => {
     userLogin(usercred, password)
       .then(() => setLoading(false))
       .catch((error) => {
-        displayError(error);
+        displayError(error, onLogin);
         setLoading(false);
       });
   };

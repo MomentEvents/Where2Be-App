@@ -64,7 +64,7 @@ const ProfileDetailsScreen = ({ route }) => {
               })
               .catch((error: Error) => {
                 setLoading(false);
-                displayError(error);
+                displayError(error, nukeUser);
               });
           },
         },
@@ -73,15 +73,19 @@ const ProfileDetailsScreen = ({ route }) => {
     );
   };
 
-  useEffect(() => {
+  const handleGetUser = () => {
     getUser(user.UserID)
       .then((pulledUser: User) => {
         setViewedUser(pulledUser);
       })
       .catch((error: Error) => {
-        displayError(error);
+        displayError(error, handleGetUser);
         navigation.goBack();
       });
+  }
+
+  useEffect(() => {
+    handleGetUser();
   }, []);
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>

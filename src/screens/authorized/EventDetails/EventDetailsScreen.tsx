@@ -87,15 +87,7 @@ const EventDetailsScreen = ({ route }) => {
 
   // Update the previous screen event cards
 
-  const addUserJoin = async () => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserJoin: true,
-        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-      },
-    });
+  const handleAddUserJoin = () => {
     addUserJoinEvent(
       userToken.UserAccessToken,
       currentUser.UserID,
@@ -109,19 +101,24 @@ const EventDetailsScreen = ({ route }) => {
           NumJoins: eventIDToEvent[eventID].NumJoins - 1,
         },
       });
-      displayError(error);
+      displayError(error, handleAddUserJoin);
     });
-  };
+  }
 
-  const addUserShoutout = () => {
+  const addUserJoin = async () => {
     updateEventIDToEvent({
       id: eventID,
       event: {
         ...eventIDToEvent[eventID],
-        UserShoutout: true,
-        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
+        UserJoin: true,
+        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
       },
     });
+    handleAddUserJoin();
+  };
+
+
+  const handleAddUserShoutoutEvent = () => {
     addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
     .catch((error: Error) => {
       updateEventIDToEvent({
@@ -132,8 +129,20 @@ const EventDetailsScreen = ({ route }) => {
           NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
         },
       });
-      displayError(error);
+      displayError(error, handleAddUserShoutoutEvent);
     });
+  }
+
+  const addUserShoutout = () => {
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserShoutout: true,
+        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
+      },
+    });
+    handleAddUserShoutoutEvent();
   };
 
   const removeUserJoin = () => {
@@ -152,7 +161,7 @@ const EventDetailsScreen = ({ route }) => {
         setLoading(false);
       })
       .catch((error: Error) => {
-        displayError(error);
+        displayError(error, removeUserJoin);
         setLoading(false);
       });
   };
@@ -176,7 +185,7 @@ const EventDetailsScreen = ({ route }) => {
         setLoading(false);
       })
       .catch((error: Error) => {
-        displayError(error);
+        displayError(error, removeUserShoutout);
         setLoading(false);
       });
   };
@@ -220,7 +229,7 @@ const EventDetailsScreen = ({ route }) => {
               })
               .catch((error: Error) => {
                 setLoading(false);
-                displayError(error);
+                displayError(error, onDeleteEventPressed);
               });
           },
         },
@@ -243,8 +252,7 @@ const EventDetailsScreen = ({ route }) => {
     setDescriptionExpanded(!descriptionExpanded);
   };
 
-  const pullData = async () => {
-    var gotError = false;
+  const handleGetEvent = (gotError: boolean) => {
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
@@ -253,11 +261,14 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: Error) => {
         if (!gotError) {
           gotError = true;
-          displayError(error);
+          displayError(error, () => handleGetEvent(gotError));
           navigation.goBack();
         }
       });
+    return gotError;
+  }
 
+  const handleGetEventInterestsByEventId = (gotError: boolean) => {
     getEventInterestsByEventId(eventID, userToken.UserAccessToken)
       .then((tags: Interest[]) => {
         updateEventIDToInterests({ id: eventID, interests: tags });
@@ -266,11 +277,14 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: Error) => {
         if (!gotError) {
           gotError = true;
-          displayError(error);
+          displayError(error, () => handleGetEventInterestsByEventId(gotError));
           navigation.goBack();
         }
       });
+    return gotError;
+  }
 
+  const handleGetEventHostByEventId = (gotError: boolean) => {
     getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
         setHost(pulledHost);
@@ -279,10 +293,17 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: Error) => {
         if (!gotError) {
           gotError = true;
-          displayError(error);
+          displayError(error, () => handleGetEventHostByEventId(gotError));
           navigation.goBack();
         }
       });
+  }
+
+  const pullData = async () => {
+    var gotError = false;
+    gotError = handleGetEvent(gotError);
+    gotError = handleGetEventInterestsByEventId(gotError);
+    handleGetEventHostByEventId(gotError)
   };
 
   const onRefresh = async () => {

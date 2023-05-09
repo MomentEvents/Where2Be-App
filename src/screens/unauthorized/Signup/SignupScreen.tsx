@@ -56,7 +56,7 @@ const SignupScreen = () => {
     userSignup(username, displayName, password, selectedSchool.SchoolID)
       .then(() => setLoading(false))
       .catch((error) => {
-        displayError(error);
+        displayError(error, onSignup);
         setLoading(false);
       });
   };

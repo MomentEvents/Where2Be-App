@@ -66,8 +66,20 @@ export function formatError(name: string, message: string): Error {
  * Return -
  * a boolean which if true, means the string is only alphanumeric or if false, is not alpanumeric
  */
-export function displayError(error: Error): boolean {
-  Alert.alert(error.name, error.message);
+export function displayError(error: Error, retryCallback?: () => void): boolean {
+  if (error.name === 'Network error' && retryCallback) {
+    Alert.alert(
+      error.name,
+      error.message,
+      [
+        { text: 'Retry', onPress: retryCallback },
+        { text: 'Cancel', onPress: () => {} },
+      ]
+    );
+  } else {
+    Alert.alert(error.name, error.message);
+  }
+  
   return true;
 }
 

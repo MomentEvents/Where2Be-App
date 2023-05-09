@@ -17,7 +17,6 @@ import { displayError } from "../helpers/helpers";
 import { appVersionText } from "../constants/texts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-// import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +36,7 @@ export const ScreenProvider = ({ children }) => {
     console.log("Loading assets");
     await Font.loadAsync(customFonts)
       .then(() => setAssetsLoaded(true))
-      .catch((error: Error) => displayError(error));
+      .catch((error: Error) => displayError(error, loadAssets));
   };
 
   const onDiscordClick = () => {

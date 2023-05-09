@@ -47,12 +47,11 @@ const AccountSettingsScreen = () => {
                     setLoading(false);
                   })
                   .catch((error: Error) => {
-                    displayError(error);
-                    setLoading(false);
+                    throw error;
                   });
               })
               .catch((error: Error) => {
-                displayError(error);
+                displayError(error, onDeleteAccountClick);
                 setLoading(false);
               });
           },

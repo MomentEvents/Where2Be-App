@@ -68,6 +68,21 @@ const EditProfileScreen = ({ route }) => {
   const [displayName, setDisplayName] = useState(user.DisplayName);
   const [username, setUsername] = useState(user.Username);
 
+  const handleUpdateUser = (createdUserBase64: User) => {
+    updateUser(userToken.UserAccessToken, createdUserBase64)
+      .then((pulledUser: User) => {
+        setLoading(false);
+        if (isSelf) {
+          setCurrentUser(pulledUser);
+        }
+        navigation.goBack();
+      })
+      .catch((error: Error) => {
+        displayError(error, () => handleUpdateUser(createdUserBase64));
+        setLoading(false);
+      });
+  }
+
   const handleSubmit = () => {
     if (displayName === "") {
       Alert.alert("Input Error", "Please enter a valid display name");
@@ -90,18 +105,7 @@ const EditProfileScreen = ({ route }) => {
     const createdUserBase64 = { ...createdUser };
     createdUserBase64.Picture = base64Image;
     setLoading(true);
-    updateUser(userToken.UserAccessToken, createdUserBase64)
-      .then((pulledUser: User) => {
-        setLoading(false);
-        if (isSelf) {
-          setCurrentUser(pulledUser);
-        }
-        navigation.goBack();
-      })
-      .catch((error: Error) => {
-        displayError(error);
-        setLoading(false);
-      });
+    handleUpdateUser(createdUserBase64);
   };
 
   return (

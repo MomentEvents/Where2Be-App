@@ -48,7 +48,7 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
+              displayError(error, pullData);
               setIsRefreshing(false);
             })
         : getUserHostedFutureEvents(
@@ -60,7 +60,7 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
+              displayError(error, pullData);
               setIsRefreshing(false);
             });
     } else {
@@ -76,7 +76,7 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
+              displayError(error, pullData);
               setIsRefreshing(false);
             })
         : getUserHostedPastEvents(
@@ -88,7 +88,7 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
+              displayError(error, pullData);
               setIsRefreshing(false);
             });
     }

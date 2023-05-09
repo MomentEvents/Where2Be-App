@@ -72,7 +72,7 @@ const SettingsScreen = () => {
                 setLoading(false);
               })
               .catch((error: Error) => {
-                displayError(error);
+                displayError(error, onLogoutClick);
                 setLoading(false);
               });
           },
