@@ -120,7 +120,6 @@ const EventDetailsScreen = ({ route }) => {
         NumJoins: eventIDToEvent[eventID].NumJoins + 1,
       },
     });
-<<<<<<< HEAD
     handleAddUserJoin();
   };
 
@@ -128,13 +127,6 @@ const EventDetailsScreen = ({ route }) => {
   const handleAddUserShoutoutEvent = () => {
     addUserShoutoutEvent(userToken.UserAccessToken, currentUser.UserID, eventID)
     .catch((error: Error) => {
-=======
-    addUserShoutoutEvent(
-      userToken.UserAccessToken,
-      currentUser.UserID,
-      eventID
-    ).catch((error: Error) => {
->>>>>>> main
       updateEventIDToEvent({
         id: eventID,
         event: {
