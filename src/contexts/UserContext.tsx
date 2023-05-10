@@ -97,6 +97,7 @@ export const UserProvider = ({ children }) => {
   }
 
   const clientFollowUser = async (userID: string): Promise<void> => {
+    console.log("Follow user hit")
     updateUserIDToUser({
       id: userID,
       user: {
@@ -134,6 +135,8 @@ export const UserProvider = ({ children }) => {
   };
 
   const clientUnfollowUser = async (userID: string): Promise<void> => {
+    console.log("Unfollow user hit")
+
     updateUserIDToUser({
       id: userID,
       user: {

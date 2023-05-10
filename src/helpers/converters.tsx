@@ -100,9 +100,9 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
     Username: pulledUser.username,
     Picture: pulledUser.picture,
     VerifiedOrganization: pulledUser.verified_organization,
-    UserFollow: false, // FXCHANGETHIS
-    NumFollowers: 0,
-    NumFollowing: 0,
+    UserFollow: pulledUser.user_follow, // FXCHANGETHIS
+    NumFollowers: pulledUser.num_followers,
+    NumFollowing: pulledUser.num_following,
   };
 
   // check for null or undefined values in formattedUser

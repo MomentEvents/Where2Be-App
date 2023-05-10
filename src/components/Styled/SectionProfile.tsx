@@ -16,8 +16,7 @@ import { deleteUser } from "../../services/UserService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons'; 
-
+import { MaterialIcons } from "@expo/vector-icons";
 
 type SectionProfileProps = {
   user: User;
@@ -26,9 +25,14 @@ type SectionProfileProps = {
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
-  const [isFollowed, setIsFollowed] = useState(false);
+  const {
+    userIDToUser,
+    updateUserIDToUser,
+    clientFollowUser,
+    clientUnfollowUser,
+  } = useContext(UserContext);
   const navigation = useNavigation<any>();
-  const {currentUserID} = useContext(UserContext)
+  const { currentUserID } = useContext(UserContext);
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -37,14 +41,18 @@ const SectionProfile = (props: SectionProfileProps) => {
       />
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row" }}>
-        <McText h3 style={styles.displayNameContainer}>
+          <McText h3 style={styles.displayNameContainer}>
             {props.user.DisplayName}
-            {props.user.VerifiedOrganization && 
+            {props.user.VerifiedOrganization && (
               <View style={{ paddingLeft: 3 }}>
-                <MaterialIcons name="verified" size={18} color={COLORS.purple} />
-              </View>}
+                <MaterialIcons
+                  name="verified"
+                  size={18}
+                  color={COLORS.purple}
+                />
+              </View>
+            )}
           </McText>
-          
         </View>
         <View style={{ flexDirection: "row" }}>
           <McText body3 style={styles.usernameContainer}>
@@ -67,19 +75,38 @@ const SectionProfile = (props: SectionProfileProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setIsFollowed(!isFollowed);
+            userIDToUser[props.user.UserID].UserFollow
+              ? clientUnfollowUser(props.user.UserID)
+              : clientFollowUser(props.user.UserID);
           }}
+          disabled={
+            !userIDToUser[props.user.UserID] &&
+            (userIDToUser[props.user.UserID].UserFollow == null ||
+              userIDToUser[props.user.UserID].UserFollow == undefined)
+          }
         >
-          {props.canFollow && (
+          {props.canFollow &&
+          userIDToUser[props.user.UserID] &&
+          (userIDToUser[props.user.UserID].UserFollow == undefined ||
+            userIDToUser[props.user.UserID].UserFollow == null) ? (
             <View style={styles.editProfileButtonContainer}>
-              {isFollowed ? (
+              {userIDToUser[props.user.UserID].UserFollow ? (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Ionicons style={{marginRight: 5}} name="checkmark-sharp" size={22} color="white" />
+                  <Ionicons
+                    style={{ marginRight: 5 }}
+                    name="checkmark-sharp"
+                    size={22}
+                    color="white"
+                  />
                   <McText h3>Following</McText>
                 </View>
               ) : (
                 <McText h3>Follow</McText>
               )}
+            </View>
+          ) : (
+            <View style={styles.editProfileButtonContainer}>
+              <McText h3>Follow</McText>
             </View>
           )}
         </TouchableOpacity>
@@ -138,6 +165,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: SIZES.width - 170,
     backgroundColor: COLORS.gray1,
+  },
+  loadingFollowButton: {
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginTop: 10,
+    marginBottom: 15,
+    width: SIZES.width - 170,
+    backgroundColor: COLORS.black,
+    borderWidth: 3,
+    borderColor: COLORS.lightGray,
   },
   nukeProfileButtonContainer: {
     borderRadius: 5,

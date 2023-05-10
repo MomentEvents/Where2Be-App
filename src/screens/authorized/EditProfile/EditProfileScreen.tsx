@@ -95,7 +95,7 @@ const EditProfileScreen = ({ route }) => {
     createdUserBase64.Picture = base64Image;
     setLoading(true);
     updateUser(userToken.UserAccessToken, createdUserBase64)
-      .then((pulledUser: User) => {
+      .then(() => {
         setLoading(false);
         updateUserIDToUser({id: createdUser.UserID, user: createdUser})
         navigation.goBack();

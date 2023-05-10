@@ -40,6 +40,7 @@ const ProfileDetailsScreen = ({ route }) => {
   const [viewedUser, setViewedUser] = useState<User>(user);
   const { isAdmin, userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
+  const {userIDToUser, updateUserIDToUser} = useContext(UserContext)
 
   const nukeUser = () => {
     Alert.alert(
@@ -74,9 +75,11 @@ const ProfileDetailsScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    getUser(user.UserID)
+    getUser(userToken.UserAccessToken, user.UserID)
       .then((pulledUser: User) => {
+        console.log(JSON.stringify(pulledUser))
         setViewedUser(pulledUser);
+        updateUserIDToUser({id: pulledUser.UserID, user: pulledUser})
       })
       .catch((error: Error) => {
         displayError(error);

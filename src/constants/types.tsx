@@ -62,17 +62,23 @@ export type SchoolResponse = {
   longitude: number;
 }
 
-export type User = {
+export interface User {
   UserID: string;
   DisplayName: string;
   Username: string;
   Picture: string;
   VerifiedOrganization: boolean;
-  UserFollow: boolean;
-  NumFollowers: number;
-  NumFollowing: number;
+  UserFollow?: boolean;
+  NumFollowers?: number;
+  NumFollowing?: number;
   Email?: string;
 }
+
+// TODO: Create a UserDetailed object which has the UserFollow, NumFollowers, NumFollowing
+
+// export interface UserDetailed implements User {
+  
+// }
 
 export type UserResponse = {
   user_id: string;
@@ -80,6 +86,8 @@ export type UserResponse = {
   username: string;
   picture: string;
   verified_organization: boolean;
-  user_follow: boolean;
+  user_follow?: boolean;
+  num_followers?: number;
+  num_following?: number;
   email?: string;
 }

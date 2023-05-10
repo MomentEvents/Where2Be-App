@@ -11,9 +11,16 @@ import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
  *
  * Gets a user by its id
  */
-export async function getUser(UserID: string): Promise<User> {
-  const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
-    method: "GET",
+export async function getUser(
+  userAccessToken: string,
+  userID: string
+): Promise<User> {
+  const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user_access_token: userAccessToken }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not fetch user by user id");
   });
@@ -68,7 +75,7 @@ export async function updateUser(
   userAccessToken: string,
 
   updatedUser: User
-): Promise<User> {
+): Promise<void> {
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -94,10 +101,7 @@ export async function updateUser(
     throw formatError("Error " + response.status, message);
   }
 
-  const pulledUser: UserResponse = await response.json();
-  const convertedUser: User = userResponseToUser(pulledUser);
-
-  return convertedUser;
+  return Promise.resolve()
 }
 
 export async function deleteUser(
@@ -308,6 +312,27 @@ export async function followUser(
   toUserID: string
 ): Promise<void> {
 
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/follow/user_id/${toUserID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_follow: true,
+      }),
+    }
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could follow user");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
+
 
 }
 
@@ -316,6 +341,25 @@ export async function unfollowUser(
   userID: string,
   toUserID: string
 ): Promise<void> {
-
   
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/follow/user_id/${toUserID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_follow: false,
+      }),
+    }
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could unfollow user");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
 }

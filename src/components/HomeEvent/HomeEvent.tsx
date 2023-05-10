@@ -43,7 +43,7 @@ const HomeEvent = (props: HomeEventProps) => {
   }, []);
 
   return (
-    <View>
+    <View key={props.user.UserID + "HomeEvent" + props.event.EventID}>
       <View
         style={{
           paddingVertical: 10,
@@ -82,17 +82,17 @@ const HomeEvent = (props: HomeEventProps) => {
             {userIDToUser[props.user.UserID]
               ? userIDToUser[props.user.UserID].DisplayName
               : props.user.DisplayName}
-            {userIDToUser[props.user.UserID] &&
-              userIDToUser[props.user.UserID].VerifiedOrganization && (
-                <View style={{ paddingLeft: 3 }}>
-                  <MaterialIcons
-                    name="verified"
-                    size={18}
-                    color={COLORS.purple}
-                  />
-                </View>
-              )}
           </McText>
+          {userIDToUser[props.user.UserID] &&
+            userIDToUser[props.user.UserID].VerifiedOrganization && (
+              <View style={{ paddingLeft: 3 }}>
+                <MaterialIcons
+                  name="verified"
+                  size={18}
+                  color={COLORS.purple}
+                />
+              </View>
+            )}
         </TouchableOpacity>
       </View>
       <HomeEventCard event={props.event} host={props.user} />
