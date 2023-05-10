@@ -1,5 +1,5 @@
 // PUT YOUR LOCALHOST IP ADDRESS HERE WHERE THE API CONTAINER IS RUNNING
-const localhost = "http://192.168.1.23:8080";
+const localhost = "http://192.168.1.67:8080";
 const production = "https://api.momentevents.app";
 
 const server = __DEV__ ? localhost : production

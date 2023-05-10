@@ -2,7 +2,7 @@ import { momentAPI } from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
-import { EventResponse } from "../constants/types";
+import { EventResponse, User } from "../constants/types";
 import { eventResponseToEvent, eventResponseToEvents } from "../helpers/converters";
 
 /******************************************************
@@ -400,4 +400,36 @@ export async function getAllSchoolEventsCategorized(
   }
 
   return Promise.resolve(categoryMap);
+}
+
+export async function getAllHomePageEventsWithHosts(userAccessToken: string, schoolID: string): Promise<[User, Event][]> {
+
+  // Get home events and hosts through API response
+  const response = await fetch(
+    momentAPI + `/event/school_id/${schoolID}/home`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        school_id: schoolID
+      }),
+    }
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get all categorized events");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
+
+  const responseJSON = await response.json();
+  console.log(JSON.stringify(responseJSON))
+  // Convert eventresponse[] to events
+
+  return null
+  // Convert userresponse[] to users
 }
