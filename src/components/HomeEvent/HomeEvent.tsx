@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { User, Event, COLORS, SCREENS } from "../../constants";
 import { McText } from "../Styled";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +20,7 @@ import {
 } from "../../services/UserService";
 import { EventContext } from "../../contexts/EventContext";
 import { UserContext } from "../../contexts/UserContext";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type HomeEventProps = {
   event: Event;
@@ -29,11 +30,17 @@ type HomeEventProps = {
 const HomeEvent = (props: HomeEventProps) => {
   const navigation = useNavigation<any>();
 
+  const { userIDToUser, updateUserIDToUser } = useContext(UserContext);
+
   const onHostUsernamePressed = () => {
     navigation.push(SCREENS.ProfileDetails, {
       user: props.user,
     });
   };
+
+  useEffect(() => {
+    updateUserIDToUser({ id: props.user.UserID, user: props.user });
+  }, []);
 
   return (
     <View>
@@ -50,6 +57,7 @@ const HomeEvent = (props: HomeEventProps) => {
             flexDirection: "row",
             alignItems: "center",
             marginLeft: 20,
+            marginRight: 65,
           }}
           onPress={() => {
             onHostUsernamePressed();
@@ -57,7 +65,11 @@ const HomeEvent = (props: HomeEventProps) => {
         >
           <Image
             style={styles.hostProfilePic}
-            source={{ uri: props.user.Picture }}
+            source={{
+              uri: userIDToUser[props.user.UserID]
+                ? userIDToUser[props.user.UserID].Picture
+                : props.user.Picture,
+            }}
           ></Image>
           <McText
             h4
@@ -67,7 +79,19 @@ const HomeEvent = (props: HomeEventProps) => {
               color: COLORS.white,
             }}
           >
-            {props.user.DisplayName}
+            {userIDToUser[props.user.UserID]
+              ? userIDToUser[props.user.UserID].DisplayName
+              : props.user.DisplayName}
+            {userIDToUser[props.user.UserID] &&
+              userIDToUser[props.user.UserID].VerifiedOrganization && (
+                <View style={{ paddingLeft: 3 }}>
+                  <MaterialIcons
+                    name="verified"
+                    size={18}
+                    color={COLORS.purple}
+                  />
+                </View>
+              )}
           </McText>
         </TouchableOpacity>
       </View>
