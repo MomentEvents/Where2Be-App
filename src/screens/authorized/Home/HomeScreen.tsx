@@ -78,7 +78,7 @@ const HomeScreen = () => {
           />
         )}
         {eventsAndHosts && eventsAndHosts.map((value) => {
-          return <HomeEvent event={value[1]} user={value[0]}></HomeEvent>;
+          return <HomeEvent key={"homescreeneventcard"+value[1].EventID} event={value[1]} user={value[0]}></HomeEvent>;
         })}
       </ScrollView>
       <TouchableOpacity

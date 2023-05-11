@@ -45,7 +45,7 @@ export const EventProvider = ({ children }) => {
     map: { [key: string]: Event },
     action: { id: string; event: Event }
   ) {
-    map[action.id] = action.event;
+    map[action.id] = {...map[action.id], ...action.event};
     map = { ...map };
     return map;
   }

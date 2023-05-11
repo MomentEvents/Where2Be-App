@@ -38,7 +38,7 @@ const ProfileDetailsScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { user }: ProfileDetailsRouteParams = route.params;
   const [viewedUser, setViewedUser] = useState<User>(user);
-  const { isAdmin, userToken } = useContext(UserContext);
+  const { isAdmin, userToken, currentUserID } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const {userIDToUser, updateUserIDToUser} = useContext(UserContext)
 
@@ -77,9 +77,11 @@ const ProfileDetailsScreen = ({ route }) => {
   useEffect(() => {
     getUser(userToken.UserAccessToken, user.UserID)
       .then((pulledUser: User) => {
+        console.log("GOT USER\n\n")
         console.log(JSON.stringify(pulledUser))
         setViewedUser(pulledUser);
         updateUserIDToUser({id: pulledUser.UserID, user: pulledUser})
+        console.log(JSON.stringify(userIDToUser[user.UserID]))
       })
       .catch((error: Error) => {
         displayError(error);
@@ -109,7 +111,7 @@ const ProfileDetailsScreen = ({ route }) => {
           hideBottomUnderline={true}
         />
       )}
-      <SectionProfile user={user} canEditProfile={isAdmin} canFollow={true}/>
+      <SectionProfile user={user} canEditProfile={isAdmin || currentUserID === user.UserID} canFollow={currentUserID !== user.UserID}/>
       <EventToggler
         selectedUser={user}
         eventsToPull={EVENT_TOGGLER.HostedEvents}

@@ -86,9 +86,9 @@ const SectionProfile = (props: SectionProfileProps) => {
           }
         >
           {props.canFollow &&
-          userIDToUser[props.user.UserID] &&
-          (userIDToUser[props.user.UserID].UserFollow == undefined ||
-            userIDToUser[props.user.UserID].UserFollow == null) ? (
+          (userIDToUser[props.user.UserID] &&
+          (userIDToUser[props.user.UserID].UserFollow !== undefined &&
+            userIDToUser[props.user.UserID].UserFollow !== null) ? (
             <View style={styles.editProfileButtonContainer}>
               {userIDToUser[props.user.UserID].UserFollow ? (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -105,9 +105,9 @@ const SectionProfile = (props: SectionProfileProps) => {
               )}
             </View>
           ) : (
-            <View style={styles.editProfileButtonContainer}>
-              <McText h3>Follow</McText>
-            </View>
+            <View style={styles.loadingFollowButton}>
+              <McText h3>Loading</McText>
+            </View>)
           )}
         </TouchableOpacity>
       </View>

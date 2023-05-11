@@ -6,6 +6,7 @@ type ProfileViewerProps = {
     user: User;
 
 }
+// TODO: Recreate the profile screen with follower count and following count, with categorized date page
 const ProfileViewer = () => {
   return (
     <ScrollView>

@@ -74,12 +74,6 @@ export interface User {
   Email?: string;
 }
 
-// TODO: Create a UserDetailed object which has the UserFollow, NumFollowers, NumFollowing
-
-// export interface UserDetailed implements User {
-  
-// }
-
 export type UserResponse = {
   user_id: string;
   display_name: string;

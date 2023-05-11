@@ -91,12 +91,12 @@ export const UserProvider = ({ children }) => {
     map: { [key: string]: User },
     action: { id: string; user: User }
   ) {
-    map[action.id] = action.user;
+    map[action.id] = {...map[action.id], ...action.user};
     map = { ...map };
     return map;
   }
 
-  const clientFollowUser = async (userID: string): Promise<void> => {
+  const clientUnfollowUser = async (userID: string): Promise<void> => {
     console.log("Follow user hit")
     updateUserIDToUser({
       id: userID,
@@ -134,7 +134,7 @@ export const UserProvider = ({ children }) => {
     })
   };
 
-  const clientUnfollowUser = async (userID: string): Promise<void> => {
+  const clientFollowUser = async (userID: string): Promise<void> => {
     console.log("Unfollow user hit")
 
     updateUserIDToUser({

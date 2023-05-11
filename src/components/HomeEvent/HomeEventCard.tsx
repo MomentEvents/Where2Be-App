@@ -70,8 +70,7 @@ const HomeEventCard = ({
       return;
     }
     navigation.push(SCREENS.EventDetails, {
-      eventID: event.EventID,
-      passedUser: host
+      eventID: event.EventID
     });
     // Navigate to event details page
   };
@@ -102,6 +101,7 @@ const HomeEventCard = ({
       }}
     >
       <View
+          key={"HomeEventCard"+event.EventID}
         style={{
           height: cardHeight,
           width: cardWidth,

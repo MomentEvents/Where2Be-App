@@ -100,11 +100,17 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
     Username: pulledUser.username,
     Picture: pulledUser.picture,
     VerifiedOrganization: pulledUser.verified_organization,
-    UserFollow: pulledUser.user_follow, // FXCHANGETHIS
-    NumFollowers: pulledUser.num_followers,
-    NumFollowing: pulledUser.num_following,
   };
 
+  if(pulledUser.user_follow !== undefined && pulledUser.user_follow !== null){
+    formattedUser.UserFollow = pulledUser.user_follow
+  }
+  if(pulledUser.num_followers !== undefined && pulledUser.num_followers !== null){
+    formattedUser.NumFollowers = pulledUser.num_followers
+  }
+  if(pulledUser.num_following !== undefined && pulledUser.num_following !== null){
+    formattedUser.NumFollowing = pulledUser.num_following
+  }
   // check for null or undefined values in formattedUser
   const keysConvert = Object.keys(formattedUser);
   for (const key of keysConvert) {
