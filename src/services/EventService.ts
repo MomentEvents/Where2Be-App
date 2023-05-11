@@ -2,8 +2,12 @@ import { momentAPI } from "../constants/server";
 import { Event, Interest } from "../constants";
 import { formatError } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
-import { EventResponse } from "../constants/types";
-import { eventResponseToEvent, eventResponseToEvents } from "../helpers/converters";
+import { EventResponse, User, UserResponse } from "../constants/types";
+import {
+  eventResponseToEvent,
+  eventResponseToEvents,
+  userResponseToUser,
+} from "../helpers/converters";
 
 /******************************************************
  * getEvent
@@ -41,7 +45,7 @@ export async function getEvent(
 /******************************************************
  * createEvent
  *
- * Creates an event and links it to a school based on what school the 
+ * Creates an event and links it to a school based on what school the
  * user from userAccessToken is in
  */
 export async function createEvent(
@@ -60,7 +64,7 @@ export async function createEvent(
   formData.append("visibility", createdEvent.Visibility);
   formData.append(
     "interest_ids",
-    JSON.stringify(interests.map((interest) => interest.Name))
+    JSON.stringify(interests.map((interest) => interest.InterestID))
   );
   formData.append("picture", createdEvent.Picture);
 
@@ -285,7 +289,6 @@ export async function getUserHostedFutureEvents(
   const pulledEvents: EventResponse[] = await response.json();
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
-
   return convertedEvents;
 }
 
@@ -328,28 +331,29 @@ export async function getUserHostedPastEvents(
   return convertedEvents;
 }
 
-
 export async function searchSchoolEvents(
   userAccessToken: string,
   schoolID: string,
   query: string
 ): Promise<Event[]> {
-
-  if(query === "" || !query){
-    return []
+  if (query === "" || !query) {
+    return [];
   }
 
   console.log("Call to EventService: searchSchoolEvents");
-  const response = await fetch(momentAPI + `/event/school_id/${schoolID}/search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      query: query
-    }),
-  }).catch((error: Error) => {
+  const response = await fetch(
+    momentAPI + `/event/school_id/${schoolID}/search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        query: query,
+      }),
+    }
+  ).catch((error: Error) => {
     throw formatError("Network error", "Could not get all school events");
   });
 
@@ -395,9 +399,60 @@ export async function getAllSchoolEventsCategorized(
   const categoryMap: { [key: string]: Event[] } = {};
 
   for (const categoryToEvents in responseJSON) {
-    const convertedEvents: Event[] = eventResponseToEvents(responseJSON[categoryToEvents]);
-    categoryMap[categoryToEvents] = convertedEvents
+    const convertedEvents: Event[] = eventResponseToEvents(
+      responseJSON[categoryToEvents]
+    );
+    categoryMap[categoryToEvents] = convertedEvents;
   }
 
   return Promise.resolve(categoryMap);
+}
+
+export async function getAllHomePageEventsWithHosts(
+  userAccessToken: string,
+  schoolID: string
+): Promise<[User, Event][]> {
+  // Get home events and hosts through API response
+  const response = await fetch(
+    momentAPI + `/event/school_id/${schoolID}/home`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        school_id: schoolID,
+      }),
+    }
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get all categorized events");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
+
+  const responseJSON: [{ host: UserResponse; event: EventResponse }] =
+    await response.json();
+
+  const returnedData: [User, Event][] = [];
+
+  responseJSON.forEach((value) => {
+    if (!value.host) {
+      console.warn("Error in getting a host for a home page event!");
+    }
+    if (!value.event) {
+      console.warn(
+        "Error in getting a home page event when a host for it exists!"
+      );
+    }
+    returnedData.push([
+      userResponseToUser(value.host),
+      eventResponseToEvent(value.event),
+    ]);
+  });
+  
+  return returnedData;
 }

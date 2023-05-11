@@ -39,7 +39,6 @@ const EventCard = ({
   height,
   showRelativeTime,
 }: EventCardProps) => {
-  const { userToken, currentUser, isLoggedIn } = useContext(UserContext);
   const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
   const navigation = useNavigation<any>();
 

@@ -26,6 +26,7 @@ import { useNavigation } from "@react-navigation/native";
 
 type EventViewerProps = {
   school: School;
+  bottomSpaceNotViewable?: Boolean;
 };
 const EventViewer = (props: EventViewerProps) => {
   const navigation = useNavigation<any>();
@@ -103,48 +104,48 @@ const EventViewer = (props: EventViewerProps) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       refreshControl={
-        <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          tintColor={COLORS.white}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
+        />
       }
       style={{ backgroundColor: COLORS.black }}
     >
       {isLoadingEvents && !isRefreshing && (
         // LOAD THIS
-        <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} size={"small"} />
+        <ActivityIndicator
+          color={COLORS.white}
+          style={{ marginTop: 20 }}
+          size={"small"}
+        />
       )}
-      {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
-        <View style={{marginTop: 20, alignItems: "center"}}>
-          <McText h3>No upcoming events!</McText>
-        </View>
-      )}
-      {Object.keys(categoryNameToEventsMap).map((key, index) =>
-        key === "Featured" ? (
-          <View style={{marginTop: 10}} key={"Featured" + key + index}>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.EventID}
-              data={Object.values(categoryNameToEventsMap[key])}
-              renderItem={_renderBigEventCards}
-              style={styles.flatlistContainer}
-            />
+      {!isLoadingEvents &&
+        !isRefreshing &&
+        Object.keys(categoryNameToEventsMap).length === 0 && (
+          <View style={{ marginTop: 20, alignItems: "center" }}>
+            <McText h3>No upcoming events!</McText>
           </View>
-        ) : (
-          <View key={key + index}>
-            <McText h2 style={styles.categoryTitle}>
-              {key}
-            </McText>
+        )}
+      {Object.keys(categoryNameToEventsMap).map((key, index) => (
+        <View key={key + index}>
+          <McText h2 style={styles.categoryTitle}>
+            {key}
+          </McText>
 
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={Object.values(categoryNameToEventsMap[key])}
-              renderItem={_renderSmallEventCards}
-              style={styles.flatlistContainer}
-            />
-          </View>
-        )
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={Object.values(categoryNameToEventsMap[key])}
+            renderItem={_renderSmallEventCards}
+            style={styles.flatlistContainer}
+          />
+        </View>
+      ))}
+      {props.bottomSpaceNotViewable && (
+        <View style={{ height: SIZES.bottomBarHeight + 90 }} />
       )}
-      <View style={{ height: SIZES.bottomBarHeight + 110 }} />
+      <View style={{ height: 20 }} />
     </ScrollView>
   );
 };

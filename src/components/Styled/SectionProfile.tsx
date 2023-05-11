@@ -7,7 +7,7 @@ import {
   Touchable,
   Alert,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
 import { UserContext } from "../../contexts/UserContext";
@@ -15,16 +15,24 @@ import { ScreenContext } from "../../contexts/ScreenContext";
 import { deleteUser } from "../../services/UserService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type SectionProfileProps = {
   user: User;
   canEditProfile: boolean;
+  canFollow: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
-  const { currentUser } = useContext(UserContext);
+  const {
+    userIDToUser,
+    updateUserIDToUser,
+    clientFollowUser,
+    clientUnfollowUser,
+  } = useContext(UserContext);
   const navigation = useNavigation<any>();
+  const { currentUserID } = useContext(UserContext);
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -35,10 +43,15 @@ const SectionProfile = (props: SectionProfileProps) => {
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
             {props.user.DisplayName}
-            {props.user.VerifiedOrganization && 
+            {props.user.VerifiedOrganization && (
               <View style={{ paddingLeft: 3 }}>
-                <MaterialIcons name="verified" size={18} color={COLORS.purple} />
-              </View>}
+                <MaterialIcons
+                  name="verified"
+                  size={18}
+                  color={COLORS.purple}
+                />
+              </View>
+            )}
           </McText>
         </View>
         <View style={{ flexDirection: "row" }}>
@@ -50,7 +63,7 @@ const SectionProfile = (props: SectionProfileProps) => {
           onPress={() => {
             navigation.navigate(SCREENS.EditProfile, {
               user: props.user,
-              isSelf: props.user.UserID === currentUser.UserID,
+              isSelf: props.user.UserID === currentUserID,
             });
           }}
         >
@@ -58,6 +71,43 @@ const SectionProfile = (props: SectionProfileProps) => {
             <View style={styles.editProfileButtonContainer}>
               <McText h3>Edit Profile</McText>
             </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            userIDToUser[props.user.UserID].UserFollow
+              ? clientUnfollowUser(props.user.UserID)
+              : clientFollowUser(props.user.UserID);
+          }}
+          disabled={
+            !userIDToUser[props.user.UserID] &&
+            (userIDToUser[props.user.UserID].UserFollow == null ||
+              userIDToUser[props.user.UserID].UserFollow == undefined)
+          }
+        >
+          {props.canFollow &&
+          (userIDToUser[props.user.UserID] &&
+          (userIDToUser[props.user.UserID].UserFollow !== undefined &&
+            userIDToUser[props.user.UserID].UserFollow !== null) ? (
+            <View style={styles.editProfileButtonContainer}>
+              {userIDToUser[props.user.UserID].UserFollow ? (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Ionicons
+                    style={{ marginRight: 5 }}
+                    name="checkmark-sharp"
+                    size={22}
+                    color="white"
+                  />
+                  <McText h3>Following</McText>
+                </View>
+              ) : (
+                <McText h3>Follow</McText>
+              )}
+            </View>
+          ) : (
+            <View style={styles.loadingFollowButton}>
+              <McText h3>Loading</McText>
+            </View>)
           )}
         </TouchableOpacity>
       </View>
@@ -115,6 +165,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: SIZES.width - 170,
     backgroundColor: COLORS.gray1,
+  },
+  loadingFollowButton: {
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginTop: 10,
+    marginBottom: 15,
+    width: SIZES.width - 170,
+    backgroundColor: COLORS.black,
+    borderWidth: 3,
+    borderColor: COLORS.lightGray,
   },
   nukeProfileButtonContainer: {
     borderRadius: 5,

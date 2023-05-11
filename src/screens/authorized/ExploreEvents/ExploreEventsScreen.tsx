@@ -25,6 +25,8 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from '@expo/vector-icons'; 
+
 type RouteParams = {
   school: School;
 };
@@ -34,18 +36,8 @@ const ExploreEvents = ({ route }) => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Explore Events"} />
+      <SectionHeader title={"Explore Events"} rightButtonOnClick={() => navigation.push(SCREENS.Search)} rightButtonSVG={<MaterialIcons name="search" size={28} color="white"/>}/>
       <EventViewer school={currentSchool}/>
-      <TouchableOpacity
-        style={styles.hoverButtonContainer}
-        onPressOut={() => {
-          navigation.navigate(SCREENS.CreateEvent);
-        }}
-      >
-        <GradientButton style={styles.hoverButtonIconContainer}>
-          <icons.plus height="50%" width="50%"></icons.plus>
-        </GradientButton>
-      </TouchableOpacity>
     </MobileSafeView>
   );
 };

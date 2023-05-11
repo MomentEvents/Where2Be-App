@@ -23,7 +23,7 @@ import { ScreenContext } from "../../../contexts/ScreenContext";
 
 const AccountSettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
-  const { userToken, currentUser } = useContext(UserContext);
+  const { userToken, currentUserID } = useContext(UserContext);
   const navigation = useNavigation<any>();
   const { setLoading } = useContext(ScreenContext);
 
@@ -40,7 +40,7 @@ const AccountSettingsScreen = () => {
           text: "Yes",
           onPress: () => {
             setLoading(true);
-            deleteUser(userToken.UserAccessToken, currentUser.UserID)
+            deleteUser(userToken.UserAccessToken, currentUserID)
               .then(() => {
                 userLogout()
                   .then(() => {

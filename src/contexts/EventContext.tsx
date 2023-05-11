@@ -1,6 +1,9 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import { Event, Interest } from "../constants";
 import { min } from "moment";
+import { displayError } from "../helpers/helpers";
+import { addUserJoinEvent, addUserShoutoutEvent, removeUserJoinEvent, removeUserShoutoutEvent } from "../services/UserService";
+import { UserContext } from "./UserContext";
 
 type EventContextType = {
   eventIDToEvent: { [key: string]: Event };
@@ -13,14 +16,22 @@ type EventContextType = {
     id: string;
     interests: Interest[];
   }>;
+  clientAddUserJoin: (eventID: string) => void;
+  clientAddUserShoutout: (eventID: string) => void;
+  clientRemoveUserJoin: (eventID: string) => void;
+  clientRemoveUserShoutout: (eventID: string) => void;
+
 };
 
 export const EventContext = createContext<EventContextType>({
   eventIDToEvent: null,
   updateEventIDToEvent: null,
-
   eventIDToInterests: null,
   updateEventIDToInterests: null,
+  clientAddUserJoin: null,
+  clientAddUserShoutout: null,
+  clientRemoveUserJoin: null,
+  clientRemoveUserShoutout: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
@@ -28,51 +39,120 @@ export const EventProvider = ({ children }) => {
     setInterestsMap,
     {}
   );
+  const {userToken, currentUserID} = useContext(UserContext)
 
   function setEventMap(
     map: { [key: string]: Event },
     action: { id: string; event: Event }
   ) {
-    map[action.id] = action.event;
+    map[action.id] = {...map[action.id], ...action.event};
     map = { ...map };
     return map;
   }
 
-  function setDidJoinMap(
-    map: { [key: string]: boolean },
-    action: { id: string; didJoin: boolean }
-  ) {
-    map[action.id] = action.didJoin;
-    map = { ...map };
-    return map;
-  }
+  const clientAddUserJoin = (eventID: string) => {
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserJoin: true,
+        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
+      },
+    });
+    addUserJoinEvent(
+      userToken.UserAccessToken,
+      currentUserID,
+      eventID
+    ).catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserJoin: false,
+          NumJoins: eventIDToEvent[eventID].NumJoins - 1,
+        },
+      });
+      displayError(error);
+    });
+  };
 
-  function setJoinsMap(
-    map: { [key: string]: number },
-    action: { id: string; joins: number }
-  ) {
-    map[action.id] = action.joins;
-    map = { ...map };
-    return map;
-  }
+  const clientAddUserShoutout = (eventID: string) => {
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserShoutout: true,
+        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
+      },
+    });
+    addUserShoutoutEvent(
+      userToken.UserAccessToken,
+      currentUserID,
+      eventID
+    ).catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserShoutout: false,
+          NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
+        },
+      });
+      displayError(error);
+    });
+  };
 
-  function setDidShoutoutMap(
-    map: { [key: string]: boolean },
-    action: { id: string; didShoutout: boolean }
-  ) {
-    map[action.id] = action.didShoutout;
-    map = { ...map };
-    return map;
-  }
+  const clientRemoveUserJoin = (eventID: string) => {
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserJoin: false,
+        NumJoins: eventIDToEvent[eventID].NumJoins - 1,
+      },
+    });
+    removeUserJoinEvent(
+      userToken.UserAccessToken,
+      currentUserID,
+      eventID
+    ).catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserJoin: false,
+          NumJoins: eventIDToEvent[eventID].NumJoins + 1,
+        },
+      });
+      displayError(error);
+    });
+  };
 
-  function setShoutoutsMap(
-    map: { [key: string]: number },
-    action: { id: string; shoutouts: number }
-  ) {
-    map[action.id] = action.shoutouts;
-    map = { ...map };
-    return map;
-  }
+  const clientRemoveUserShoutout = (eventID: string) => {
+    updateEventIDToEvent({
+      id: eventID,
+      event: {
+        ...eventIDToEvent[eventID],
+        UserShoutout: false,
+        NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
+      },
+    });
+    removeUserShoutoutEvent(
+      userToken.UserAccessToken,
+      currentUserID,
+      eventID
+    ).catch((error: Error) => {
+      updateEventIDToEvent({
+        id: eventID,
+        event: {
+          ...eventIDToEvent[eventID],
+          UserShoutout: false,
+          NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
+        },
+      });
+      displayError(error);
+    });
+  };
 
   function setInterestsMap(
     map: { [key: string]: Interest[] },
@@ -90,6 +170,10 @@ export const EventProvider = ({ children }) => {
         updateEventIDToEvent,
         eventIDToInterests,
         updateEventIDToInterests,
+        clientAddUserJoin,
+        clientAddUserShoutout,
+        clientRemoveUserJoin,
+        clientRemoveUserShoutout,
       }}
     >
       {children}

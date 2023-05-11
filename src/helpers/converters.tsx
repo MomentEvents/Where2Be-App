@@ -11,6 +11,17 @@ import {
 import { formatError } from "./helpers";
 
 export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
+
+  // check for null or undefined values in pulledEvent
+  const keys = Object.keys(pulledEvent);
+  for (const key of keys) {
+    if (pulledEvent[key] === null || pulledEvent[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined when converting to Event. EventID is ${pulledEvent.event_id}`
+      );
+    }
+  }
+
   var timestamp = Date.parse(pulledEvent.start_date_time);
   if (isNaN(timestamp)) {
     throw formatError(
@@ -29,7 +40,7 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
   } else {
     parsedEndDateTime = new Date(timestamp);
   }
-
+  
   const formattedEvent: Event = {
     EventID: pulledEvent.event_id,
     Title: pulledEvent.title,
@@ -43,7 +54,18 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     NumShoutouts: pulledEvent.num_shoutouts,
     UserJoin: pulledEvent.user_join,
     UserShoutout: pulledEvent.user_shoutout,
+    HostUserID: pulledEvent.host_user_id,
   };
+
+  // check for null or undefined values in formattedEvent
+  const convertedKeys = Object.keys(formattedEvent);
+  for (const key of convertedKeys) {
+    if (formattedEvent[key] === null || formattedEvent[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined when converting to Event. EventID is ${formattedEvent.EventID}`
+      );
+    }
+  }
 
   return formattedEvent;
 };
@@ -61,13 +83,43 @@ export const eventResponseToEvents = (
 };
 
 export const userResponseToUser = (pulledUser: UserResponse): User => {
+
+  // check for null or undefined values in pulledUser
+  const keys = Object.keys(pulledUser);
+  for (const key of keys) {
+    if (pulledUser[key] === null || pulledUser[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined in UserResponse with user_id ${pulledUser.user_id}`
+      );
+    }
+  }
+
   const formattedUser: User = {
     UserID: pulledUser.user_id,
     DisplayName: pulledUser.display_name,
     Username: pulledUser.username,
     Picture: pulledUser.picture,
-    VerifiedOrganization: pulledUser.verified_organization
+    VerifiedOrganization: pulledUser.verified_organization,
   };
+
+  if(pulledUser.user_follow !== undefined && pulledUser.user_follow !== null){
+    formattedUser.UserFollow = pulledUser.user_follow
+  }
+  if(pulledUser.num_followers !== undefined && pulledUser.num_followers !== null){
+    formattedUser.NumFollowers = pulledUser.num_followers
+  }
+  if(pulledUser.num_following !== undefined && pulledUser.num_following !== null){
+    formattedUser.NumFollowing = pulledUser.num_following
+  }
+  // check for null or undefined values in formattedUser
+  const keysConvert = Object.keys(formattedUser);
+  for (const key of keysConvert) {
+    if (formattedUser[key] === null || formattedUser[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined when converting to User. UserID is ${formattedUser.UserID}`
+      );
+    }
+  }
   return formattedUser;
 };
 
@@ -84,10 +136,28 @@ export const userResponseToUsers = (pulledUsers: UserResponse[]): User[] => {
 export const interestResponseToInterest = (
   pulledInterest: InterestResponse
 ): Interest => {
+  const keysConvert = Object.keys(pulledInterest);
+  for (const key of keysConvert) {
+    if (pulledInterest[key] === null || pulledInterest[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined for InterestResponse. interest_id is ${pulledInterest.interest_id}`
+      );
+    }
+  }
+
   const formattedInterest: Interest = {
     InterestID: pulledInterest.interest_id,
     Name: pulledInterest.name,
   };
+
+  const keys = Object.keys(formattedInterest);
+  for (const key of keys) {
+    if (formattedInterest[key] === null || formattedInterest[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined when converting to Interest. InterestID is ${formattedInterest.InterestID}`
+      );
+    }
+  }
 
   return formattedInterest;
 };
@@ -107,11 +177,31 @@ export const interestResponseToInterests = (
 export const schoolResponseToSchool = (
   pulledSchool: SchoolResponse
 ): School => {
+
+  const keys = Object.keys(pulledSchool);
+  for (const key of keys) {
+    if (pulledSchool[key] === null || pulledSchool[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined for SchoolResponse. school_id is ${pulledSchool.school_id}`
+      );
+    }
+  }
   const formattedSchool: School = {
     SchoolID: pulledSchool.school_id,
     Name: pulledSchool.name,
     Abbreviation: pulledSchool.abbreviation,
+    Latitude: pulledSchool.latitude,
+    Longitude: pulledSchool.longitude
   };
+
+  const keysConvert = Object.keys(pulledSchool);
+  for (const key of keysConvert) {
+    if (pulledSchool[key] === null || pulledSchool[key] === undefined) {
+      console.warn(
+        `${key} is null or undefined when converting to School. SchoolID is ${formattedSchool.SchoolID}`
+      );
+    }
+  }
 
   return formattedSchool;
 };

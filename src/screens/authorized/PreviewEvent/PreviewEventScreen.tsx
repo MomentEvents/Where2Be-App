@@ -31,7 +31,7 @@ import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
@@ -41,7 +41,7 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { isLoggedIn, userToken, currentUser } = useContext(UserContext);
+  const { isLoggedIn, userToken, currentUserID, userIDToUser } = useContext(UserContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -270,12 +270,12 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  maxWidth: "80%",
                 }}
               >
                 <Image
                   style={styles.hostProfilePic}
-                  source={{ uri: currentUser.Picture }}
+                  source={{ uri: userIDToUser[currentUserID].Picture }}
                 ></Image>
                 <McText
                   h4
@@ -285,15 +285,24 @@ const EventDetailsScreen = ({ route }) => {
                     color: COLORS.white,
                   }}
                 >
-                  {currentUser === null ? (
+                  {userIDToUser[currentUserID] === null ? (
                     <ActivityIndicator
                       color={COLORS.white}
                       style={{ marginLeft: 10 }}
                     />
                   ) : (
-                    currentUser.DisplayName
+                    userIDToUser[currentUserID].DisplayName
                   )}
                 </McText>
+                {userIDToUser[currentUserID] && userIDToUser[currentUserID].VerifiedOrganization && (
+                  <View style={{ paddingLeft: 3 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
               </View>
             </HostSection>
 

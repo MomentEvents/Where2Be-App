@@ -1,9 +1,9 @@
-export interface Token {
+export type Token = {
   UserAccessToken: string;
   Expiration: Date;
 }
 
-export interface Event {
+export type Event = {
   EventID: string;
   Title: string;
   Description: string;
@@ -16,9 +16,10 @@ export interface Event {
   NumShoutouts: number;
   UserJoin: boolean;
   UserShoutout: boolean;
+  HostUserID: string;
 }
 
-export interface EventResponse {
+export type EventResponse = {
   event_id: string;
   title: string;
   description: string;
@@ -31,29 +32,34 @@ export interface EventResponse {
   num_shoutouts: number;
   user_join: boolean;
   user_shoutout: boolean;
+  host_user_id: string;
 }
 
-export interface Interest {
+export type Interest = {
   InterestID: string;
   Name: string;
 }
 
-export interface InterestResponse {
+export type InterestResponse = {
   interest_id: string;
   name: string;
 }
 
 
-export interface School {
+export type School =  {
   SchoolID: string;
   Name: string;
   Abbreviation: string;
+  Latitude: number;
+  Longitude: number;
 }
 
-export interface SchoolResponse {
+export type SchoolResponse = {
   school_id: string;
   name: string;
   abbreviation: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface User {
@@ -62,12 +68,20 @@ export interface User {
   Username: string;
   Picture: string;
   VerifiedOrganization: boolean;
+  UserFollow?: boolean;
+  NumFollowers?: number;
+  NumFollowing?: number;
+  Email?: string;
 }
 
-export interface UserResponse {
+export type UserResponse = {
   user_id: string;
   display_name: string;
   username: string;
   picture: string;
   verified_organization: boolean;
+  user_follow?: boolean;
+  num_followers?: number;
+  num_following?: number;
+  email?: string;
 }

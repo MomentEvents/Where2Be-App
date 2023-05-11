@@ -9,7 +9,7 @@
  * AuthContext.
  */
 
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useReducer } from "react";
 import { User, School, Token } from "../constants";
 import {
   checkIfUserAccessTokenIsAdmin,
@@ -18,7 +18,15 @@ import {
   validateTokenExpirationAndUpdate,
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
-import { getUserByUserAccessToken } from "../services/UserService";
+import {
+  addUserJoinEvent,
+  addUserShoutoutEvent,
+  followUser,
+  getUserByUserAccessToken,
+  removeUserJoinEvent,
+  removeUserShoutoutEvent,
+  unfollowUser,
+} from "../services/UserService";
 import { displayError } from "../helpers/helpers";
 import { appVersion } from "../constants/texts";
 import {
@@ -28,8 +36,8 @@ import {
 
 type UserContextType = {
   userToken: Token;
-  currentUser: User;
-  setCurrentUser: React.Dispatch<React.SetStateAction<User>>;
+  currentUserID: string;
+  setCurrentUserID: React.Dispatch<React.SetStateAction<string>>;
   currentSchool: School;
   setCurrentSchool: React.Dispatch<React.SetStateAction<School>>;
   isUserContextLoaded: boolean;
@@ -39,11 +47,17 @@ type UserContextType = {
   isAdmin: boolean;
   pullTokenFromServer: () => void;
   serverError: boolean;
+  userIDToUser: {[key: string]: User};
+  updateUserIDToUser: React.Dispatch<{
+    id: string;
+    user: User;
+  }>;
+  clientFollowUser: (userID: string) => Promise<void>;
+  clientUnfollowUser: (userID: string) => Promise<void>;
+  
 };
 export const UserContext = createContext<UserContextType>({
   userToken: null,
-  currentUser: null,
-  setCurrentUser: null,
   currentSchool: null,
   setCurrentSchool: null,
   isUserContextLoaded: null,
@@ -53,17 +67,111 @@ export const UserContext = createContext<UserContextType>({
   isAdmin: null,
   pullTokenFromServer: null,
   serverError: false,
+  currentUserID: null,
+  setCurrentUserID: null,
+  userIDToUser: null,
+  updateUserIDToUser: null,
+  clientFollowUser: null,
+  clientUnfollowUser: null,
 });
 
 export const UserProvider = ({ children }) => {
   const [userToken, setUserToken] = useState<Token>(null);
-  const [currentUser, setCurrentUser] = useState<User>(null);
+  const [currentUserID, setCurrentUserID] = useState<string>(null);
   const [currentSchool, setCurrentSchool] = useState<School>(null);
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [serverError, setServerError] = useState<boolean>(false);
+
+  const [userIDToUser, updateUserIDToUser] = useReducer(setUserMap, {});
+
+  function setUserMap(
+    map: { [key: string]: User },
+    action: { id: string; user: User }
+  ) {
+    map[action.id] = {...map[action.id], ...action.user};
+    map = { ...map };
+    return map;
+  }
+
+  const clientUnfollowUser = async (userID: string): Promise<void> => {
+    console.log("Follow user hit")
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[currentUserID],
+        NumFollowing: userIDToUser[userID].NumFollowing - 1,
+      },
+    });
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[userID],
+        UserFollow: false,
+        NumFollowers: userIDToUser[userID].NumFollowers - 1,
+      },
+    });
+
+    unfollowUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+      displayError(error);
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[currentUserID],
+          NumFollowing: userIDToUser[userID].NumFollowing + 1,
+        },
+      });
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[userID],
+          UserFollow: true,
+          NumFollowers: userIDToUser[userID].NumFollowers + 1,
+        },
+      });
+    })
+  };
+
+  const clientFollowUser = async (userID: string): Promise<void> => {
+    console.log("Unfollow user hit")
+
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[currentUserID],
+        NumFollowing: userIDToUser[userID].NumFollowing + 1,
+      },
+    });
+    updateUserIDToUser({
+      id: userID,
+      user: {
+        ...userIDToUser[userID],
+        UserFollow: true,
+        NumFollowers: userIDToUser[userID].NumFollowers + 1,
+      },
+    });
+
+    followUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+      displayError(error);
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[currentUserID],
+          NumFollowing: userIDToUser[userID].NumFollowing - 1,
+        },
+      });
+      updateUserIDToUser({
+        id: userID,
+        user: {
+          ...userIDToUser[userID],
+          UserFollow: false,
+          NumFollowers: userIDToUser[userID].NumFollowers - 1,
+        },
+      });
+    })
+  };
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
@@ -98,14 +206,14 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     // This runs for user login.
     // This doesn't work when user log out, because
-    // when userToken, currentUser, or currentSchool
+    // when userToken, currentUserID, or currentSchool
     // becomes null, it throws an error in the main app.
     // So, syncUserContextWithToken() should be called outside
-    if (userToken && currentUser && currentSchool) {
+    if (userToken && currentUserID && currentSchool) {
       getPushNotificationToken().then((token: string) => {
         registerPushNotificationToken(
           userToken.UserAccessToken,
-          currentUser.UserID,
+          currentUserID,
           token
         )
           .then(() =>
@@ -119,7 +227,7 @@ export const UserProvider = ({ children }) => {
     } else {
       setIsLoggedIn(false);
     }
-  }, [userToken, currentUser, currentSchool]);
+  }, [userToken, currentUserID, currentSchool]);
 
   // This should be done every now and then to see if the token
   // Is valid. SHOULD ONLY BE RUN WHEN isLoggedIn IS TRUE
@@ -153,7 +261,7 @@ export const UserProvider = ({ children }) => {
     if (token === null) {
       setIsLoggedIn(false);
       setUserToken(null);
-      setCurrentUser(null);
+      setCurrentUserID(null);
       setCurrentSchool(null);
       logout();
       return;
@@ -178,13 +286,14 @@ export const UserProvider = ({ children }) => {
     ).catch((error: Error) => {
       setIsLoggedIn(false);
       setUserToken(null);
-      setCurrentUser(null);
+      setCurrentUserID(null);
       setCurrentSchool(null);
       logout();
       throw error;
     });
     setUserToken(token);
-    setCurrentUser(pulledUser);
+    updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
+    setCurrentUserID(pulledUser.UserID);
     setCurrentSchool(pulledSchool);
     setIsLoggedIn(true);
     console.log("Finished setting context variables");
@@ -193,8 +302,6 @@ export const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        currentUser,
-        setCurrentUser,
         userToken,
         currentSchool,
         setCurrentSchool,
@@ -205,6 +312,12 @@ export const UserProvider = ({ children }) => {
         isAdmin,
         pullTokenFromServer,
         serverError,
+        currentUserID,
+        setCurrentUserID,
+        userIDToUser,
+        updateUserIDToUser,
+        clientFollowUser,
+        clientUnfollowUser,
       }}
     >
       {children}
