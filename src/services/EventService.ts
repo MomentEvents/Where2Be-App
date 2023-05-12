@@ -8,6 +8,8 @@ import {
   eventResponseToEvents,
   userResponseToUser,
 } from "../helpers/converters";
+import * as Localization from "expo-localization";
+import { Calendar } from "expo-localization";
 
 /******************************************************
  * getEvent
@@ -263,6 +265,9 @@ export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
+  const calendar: Calendar[] = Localization.getCalendars();
+  const timezone = calendar[0].timeZone;
+
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
     {
@@ -411,7 +416,7 @@ export async function getAllSchoolEventsCategorized(
 export async function getAllHomePageEventsWithHosts(
   userAccessToken: string,
   schoolID: string
-): Promise<[User, Event][]> {
+): Promise<[{ Host: User; Event: Event }][]> {
   // Get home events and hosts through API response
   const response = await fetch(
     momentAPI + `/event/school_id/${schoolID}/home`,
@@ -437,7 +442,7 @@ export async function getAllHomePageEventsWithHosts(
   const responseJSON: [{ host: UserResponse; event: EventResponse }] =
     await response.json();
 
-  const returnedData: [User, Event][] = [];
+  const returnedData: [{ Host: User; Event: Event }][] = [];
 
   responseJSON.forEach((value) => {
     if (!value.host) {
@@ -449,10 +454,12 @@ export async function getAllHomePageEventsWithHosts(
       );
     }
     returnedData.push([
-      userResponseToUser(value.host),
-      eventResponseToEvent(value.event),
+      {
+        Host: userResponseToUser(value.host),
+        Event: eventResponseToEvent(value.event),
+      },
     ]);
   });
-  
+
   return returnedData;
 }
