@@ -8,8 +8,8 @@ import {
   eventResponseToEvents,
   userResponseToUser,
 } from "../helpers/converters";
-import * as Localization from "expo-localization";
-import { Calendar } from "expo-localization";
+// import * as Localization from "expo-localization";
+// import { Calendar } from "expo-localization";
 
 /******************************************************
  * getEvent
@@ -265,8 +265,8 @@ export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
-  const calendar: Calendar[] = Localization.getCalendars();
-  const timezone = calendar[0].timeZone;
+  // const calendar: Calendar[] = Localization.getCalendars();
+  // const timezone = calendar[0].timeZone;
 
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
