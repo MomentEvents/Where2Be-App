@@ -23,6 +23,7 @@ import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
+import RetryButton from "../RetryButton";
 
 type EventViewerProps = {
   school: School;
@@ -36,6 +37,9 @@ const EventViewer = (props: EventViewerProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
+
+  const [showRetry, setShowRetry] = useState<boolean>(false);
+
   const pullData = async () => {
     getAllSchoolEventsCategorized(
       isLoggedIn ? userToken.UserAccessToken : undefined,
@@ -48,7 +52,10 @@ const EventViewer = (props: EventViewerProps) => {
       })
       .catch((error: Error) => {
         setIsRefreshing(false);
-        displayError(error);
+        setShowRetry(true);
+        if (error.name.startsWith('Error')){
+          displayError(error);
+        }
       });
   };
 
@@ -100,52 +107,60 @@ const EventViewer = (props: EventViewerProps) => {
   }, []);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-      style={{ backgroundColor: COLORS.black }}
-    >
-      {isLoadingEvents && !isRefreshing && (
-        // LOAD THIS
-        <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} size={"small"} />
-      )}
-      {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
-        <View style={{marginTop: 20, alignItems: "center"}}>
-          <McText h3>No upcoming events!</McText>
-        </View>
-      )}
-      {Object.keys(categoryNameToEventsMap).map((key, index) =>
-        key === "Featured" ? (
-          <View style={{marginTop: 10}} key={"Featured" + key + index}>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.EventID}
-              data={Object.values(categoryNameToEventsMap[key])}
-              renderItem={_renderBigEventCards}
-              style={styles.flatlistContainer}
-            />
-          </View>
-        ) : (
-          <View key={key + index}>
-            <McText h2 style={styles.categoryTitle}>
-              {key}
-            </McText>
+    <>
+    {
+      showRetry? (
+        <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} backgroundColor={COLORS.trueBlack} extraStyle={{ marginTop: 20 }}/>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
+          }
+          style={{ backgroundColor: COLORS.black }}
+        >
+          {isLoadingEvents && !isRefreshing && (
+            // LOAD THIS
+            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} size={"small"} />
+          )}
+          {!isLoadingEvents && !isRefreshing && Object.keys(categoryNameToEventsMap).length === 0 && (
+            <View style={{marginTop: 20, alignItems: "center"}}>
+              <McText h3>No upcoming events!</McText>
+            </View>
+          )}
+          {Object.keys(categoryNameToEventsMap).map((key, index) =>
+            key === "Featured" ? (
+              <View style={{marginTop: 10}} key={"Featured" + key + index}>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item) => item.EventID}
+                  data={Object.values(categoryNameToEventsMap[key])}
+                  renderItem={_renderBigEventCards}
+                  style={styles.flatlistContainer}
+                />
+              </View>
+            ) : (
+              <View key={key + index}>
+                <McText h2 style={styles.categoryTitle}>
+                  {key}
+                </McText>
 
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={Object.values(categoryNameToEventsMap[key])}
-              renderItem={_renderSmallEventCards}
-              style={styles.flatlistContainer}
-            />
-          </View>
-        )
-      )}
-      <View style={{ height: SIZES.bottomBarHeight + 110 }} />
-    </ScrollView>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={Object.values(categoryNameToEventsMap[key])}
+                  renderItem={_renderSmallEventCards}
+                  style={styles.flatlistContainer}
+                />
+              </View>
+            )
+          )}
+          <View style={{ height: SIZES.bottomBarHeight + 110 }} />
+        </ScrollView>
+      )
+    }
+    </>
   );
 };
 

@@ -44,6 +44,7 @@ import {
 } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import RetryButton from "../../../components/RetryButton";
 
 type routeParametersType = {
   eventID: string;
@@ -90,6 +91,8 @@ const EventDetailsScreen = ({ route }) => {
   const [didFetchHost, setDidFetchHost] = useState<boolean>(false);
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
+
+  const [showRetry, setShowRetry] = useState<boolean>(false);
 
   // Update the previous screen event cards
 
@@ -252,18 +255,29 @@ const EventDetailsScreen = ({ route }) => {
     setDescriptionExpanded(!descriptionExpanded);
   };
 
+  const handleGetEventHostByEventId = () => {
+    getEventHostByEventId(userToken.UserAccessToken, eventID)
+    .then((pulledHost: User) => {
+      setHost(pulledHost);
+      setDidFetchHost(true);
+    })
+    .catch((error: Error) => {
+      setShowRetry(true);
+      if (error.name.startsWith('Error')){
+        displayError(error);
+      }
+    });
+  }
+
   const pullData = async () => {
-    var gotError = false;
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
         setDidFetchEvent(true);
       })
       .catch((error: Error) => {
-        if (!gotError) {
-          gotError = true;
+        if (error.name.startsWith('Error')){
           displayError(error);
-          navigation.goBack();
         }
       });
 
@@ -273,26 +287,13 @@ const EventDetailsScreen = ({ route }) => {
         setDidFetchInterests(true);
       })
       .catch((error: Error) => {
-        if (!gotError) {
-          gotError = true;
+        if (error.name.startsWith('Error')){
           displayError(error);
-          navigation.goBack();
         }
       });
 
     if (!passedUser) {
-      getEventHostByEventId(userToken.UserAccessToken, eventID)
-        .then((pulledHost: User) => {
-          setHost(pulledHost);
-          setDidFetchHost(true);
-        })
-        .catch((error: Error) => {
-          if (!gotError) {
-            gotError = true;
-            displayError(error);
-            navigation.goBack();
-          }
-        });
+      handleGetEventHostByEventId();
     } else {
       setHost(passedUser);
     }
@@ -536,49 +537,50 @@ const EventDetailsScreen = ({ route }) => {
               </ScrollView>
             </InterestSection>
 
-            <HostSection>
-              <TouchableOpacity
-                style={{
-                  maxWidth: "80%",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-                onPress={() => {
-                  onHostPressed();
-                }}
-              >
-                <Image
-                  style={styles.hostProfilePic}
-                  source={{ uri: !host ? null : host.Picture }}
-                ></Image>
-                <McText
-                  h4
-                  numberOfLines={1}
+            {showRetry? (
+              <RetryButton setShowRetry={setShowRetry} retryCallBack={handleGetEventHostByEventId} backgroundColor={COLORS.black} extraStyle={{marginBottom: 10}}/>
+            ) : (
+              <HostSection>
+                <TouchableOpacity
                   style={{
-                    letterSpacing: 1,
-                    color: COLORS.white,
+                    maxWidth: "80%",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  onPress={() => {
+                    onHostPressed();
                   }}
                 >
-                  {!host ? (
-                    <ActivityIndicator
-                      color={COLORS.white}
-                      style={{ marginLeft: 10 }}
-                    />
-                  ) : (
-                    host.DisplayName
+                  <Image
+                    style={styles.hostProfilePic}
+                    source={{ uri: !host ? null : host.Picture }}
+                  ></Image>
+                  <McText
+                    h4
+                    numberOfLines={1}
+                    style={{
+                      letterSpacing: 1,
+                      color: COLORS.white,
+                    }}
+                  >
+                    {!host ? (
+                      <ActivityIndicator color={COLORS.white} style={{ marginLeft: 10 }} />
+                    ) : (
+                      host.DisplayName
+                    )}
+                  </McText>
+                  {host && host.VerifiedOrganization && (
+                    <View style={{ paddingLeft: 3 }}>
+                      <MaterialIcons
+                        name="verified"
+                        size={18}
+                        color={COLORS.purple}
+                      />
+                    </View>
                   )}
-                </McText>
-                {host && host.VerifiedOrganization && (
-                  <View style={{ paddingLeft: 3 }}>
-                    <MaterialIcons
-                      name="verified"
-                      size={18}
-                      color={COLORS.purple}
-                    />
-                  </View>
-                )}
-              </TouchableOpacity>
-            </HostSection>
+                </TouchableOpacity>
+              </HostSection> 
+            )}
             <View>
               <DescriptionSection>
                 <View

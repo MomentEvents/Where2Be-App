@@ -29,6 +29,7 @@ import UserResult from "./UserResult/UserResult";
 import EventResult from "./EventResult/EventResult";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import RetryButton from "../../components/RetryButton";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
@@ -43,7 +44,10 @@ const SearchToggler = () => {
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
+  const [showRetry, setShowRetry] = useState<boolean>(false);
+
   const onSearchTextChanged = (newText: string) => {
+    setShowRetry(false);
     if (newText == searchTextRef.current){
       return;
     }
@@ -58,6 +62,7 @@ const SearchToggler = () => {
   const pullData = async () => {
     newTextRef.current = searchTextRef.current;
     const newText = newTextRef.current;
+    var displayingError = false;
 
     // getting events
     searchSchoolEvents(userToken.UserAccessToken, currentSchool.SchoolID, newText)
@@ -69,7 +74,12 @@ const SearchToggler = () => {
         setPulledEvents(events);
       })
       .catch((error: Error) => {
-        console.warn(error);
+        setPulledEvents([]);
+        setShowRetry(true);
+        if (!displayingError && error.name.startsWith('Error')){
+          displayingError = true;
+          displayError(error);
+        }
       });
 
     // getting users
@@ -82,7 +92,12 @@ const SearchToggler = () => {
         setPulledUsers(users);
       })
       .catch((error: Error) => {
-        console.warn(error);
+        setPulledUsers([]);
+        setShowRetry(true);
+        if (!displayingError && error.name.startsWith('Error')){
+          displayingError = true;
+          displayError(error);
+        }
       });
   };
 
@@ -175,6 +190,7 @@ const SearchToggler = () => {
           </McText>
         </TouchableOpacity>
       </View>
+      { showRetry && <RetryButton setShowRetry={setShowRetry} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} backgroundColor={COLORS.black} extraStyle={{marginTop: 20}} /> }
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={"always"}

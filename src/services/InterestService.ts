@@ -41,6 +41,12 @@ export async function getEventInterestsByEventId(
   eventID: string,
   userAccessToken: string
 ): Promise<Interest[]> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get event interests");
+  }
   const response = await fetch(momentAPI + `/interest/event_id/${eventID}`, {
     method: "POST",
     headers: {

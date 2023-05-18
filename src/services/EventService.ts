@@ -14,6 +14,12 @@ export async function getEvent(
   eventID: string,
   userAccessToken: string
 ): Promise<Event> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get event");
+  }
   console.log("useraccesstoken is" + userAccessToken);
   const response = await fetch(momentAPI + `/event/event_id/${eventID}`, {
     method: "POST",
@@ -179,6 +185,12 @@ export async function getUserJoinedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get user joined future events");
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_future`,
     {
@@ -220,6 +232,12 @@ export async function getUserJoinedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get user joined past events");
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_past`,
     {
@@ -259,6 +277,12 @@ export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get user hosted future events");
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
     {
@@ -302,6 +326,12 @@ export async function getUserHostedPastEvents(
   userAccessToken: string,
   userID: string
 ): Promise<Event[]> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get user hosted past events");
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_past`,
     {
@@ -339,6 +369,12 @@ export async function searchSchoolEvents(
     return []
   }
 
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get all school events");
+  }
   console.log("Call to EventService: searchSchoolEvents");
   const response = await fetch(momentAPI + `/event/school_id/${schoolID}/search`, {
     method: "POST",
@@ -370,7 +406,11 @@ export async function getAllSchoolEventsCategorized(
 ): Promise<{ [key: string]: Event[] }> {
   console.log("Call to EventService: getAllSchoolEventsCategorized");
   console.log("UserAccessToken: " + userAccessToken);
-
+  if (new Date().getSeconds()%2 != 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 != 0) {
+    throw formatError("Network error", "Could not get all categorized events");
+  }
   const response = await fetch(
     momentAPI + `/event/school_id/${schoolID}/categorized`,
     {

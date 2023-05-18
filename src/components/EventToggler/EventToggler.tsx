@@ -21,6 +21,8 @@ import {
 import EventCard from "../EventCard";
 import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
+import { Ionicons } from '@expo/vector-icons';
+import RetryButton from "../RetryButton";
 
 type EventTogglerProps = {
   selectedUser: User;
@@ -35,6 +37,8 @@ const EventToggler = (props: EventTogglerProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
+  const [showRetry, setShowRetry] = useState<boolean>(false);
+
   const pullData = async () => {
     if (isFutureToggle) {
       // getting future events
@@ -48,8 +52,11 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.name.startsWith('Error')){
+                displayError(error);
+              }
             })
         : getUserHostedFutureEvents(
             userToken.UserAccessToken,
@@ -60,8 +67,11 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.name.startsWith('Error')){
+                displayError(error);
+              }
             });
     } else {
       // getting past events
@@ -76,8 +86,11 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.name.startsWith('Error')){
+                displayError(error);
+              }
             })
         : getUserHostedPastEvents(
             userToken.UserAccessToken,
@@ -88,8 +101,11 @@ const EventToggler = (props: EventTogglerProps) => {
               setIsRefreshing(false);
             })
             .catch((error: Error) => {
-              displayError(error);
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.name.startsWith('Error')){
+                displayError(error);
+              }
             });
     }
   };
@@ -172,7 +188,6 @@ const EventToggler = (props: EventTogglerProps) => {
           </McText>
         </TouchableOpacity>
       </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -197,7 +212,11 @@ const EventToggler = (props: EventTogglerProps) => {
             )
           ) : (
             // LOAD THIS
-            !isRefreshing && <ActivityIndicator color={COLORS.white}style={{ marginTop: 20 }} />
+            !isRefreshing && showRetry? (
+              <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} backgroundColor={COLORS.black} extraStyle={{ marginTop: 20 }}/>
+            ) : (
+              !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+            )
           )
         ) : pulledPastEvents ? (
           pulledPastEvents.length !== 0 ? (
@@ -215,7 +234,11 @@ const EventToggler = (props: EventTogglerProps) => {
           )
         ) : (
           // LOAD THIS
-          !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+          !isRefreshing && showRetry? (
+            <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} backgroundColor={COLORS.black} extraStyle={{ marginTop: 20 }}/>
+          ) : (
+            !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+          )
         )}
         <View style={{height: SIZES.bottomBarHeight + 10}}/>
       </ScrollView>

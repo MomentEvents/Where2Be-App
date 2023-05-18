@@ -130,6 +130,11 @@ export async function getEventHostByEventId(
   userAccessToken: string,
   eventID: string
 ): Promise<User> {
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    throw formatError("Network error", "Could not fetch event host");
+  }
   const response = await fetch(momentAPI + `/user/event_id/${eventID}/host`, {
     method: "POST",
     headers: {
@@ -275,6 +280,13 @@ export async function searchSchoolUsers(
 
   if(query === "" || !query){
     return []
+  }
+
+  if (new Date().getSeconds()%3 == 0){
+    throw formatError("Error ", "test");
+  } else if (new Date().getSeconds()%2 == 0) {
+    console.log("network error");
+    throw formatError("Network error", "Could not get all school users");
   }
 
   const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
