@@ -110,7 +110,7 @@ const EventViewer = (props: EventViewerProps) => {
     <>
     {
       showRetry? (
-        <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} backgroundColor={COLORS.trueBlack} extraStyle={{ marginTop: 20 }}/>
+        <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20, backgroundColor: COLORS.trueBlack }}/>
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}

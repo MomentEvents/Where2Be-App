@@ -190,7 +190,7 @@ const SearchToggler = () => {
           </McText>
         </TouchableOpacity>
       </View>
-      { showRetry && <RetryButton setShowRetry={setShowRetry} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} backgroundColor={COLORS.black} extraStyle={{marginTop: 20}} /> }
+      { showRetry && <RetryButton setShowRetry={setShowRetry} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} style={{ alignItems: 'center', justifyContent: 'center',  marginTop: 20, backgroundColor:COLORS.black }} /> }
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={"always"}

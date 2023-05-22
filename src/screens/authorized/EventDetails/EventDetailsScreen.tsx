@@ -538,7 +538,7 @@ const EventDetailsScreen = ({ route }) => {
             </InterestSection>
 
             {showRetry? (
-              <RetryButton setShowRetry={setShowRetry} retryCallBack={handleGetEventHostByEventId} backgroundColor={COLORS.black} extraStyle={{marginBottom: 10}}/>
+              <RetryButton setShowRetry={setShowRetry} retryCallBack={handleGetEventHostByEventId} style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10, backgroundColor: COLORS.black }}/>
             ) : (
               <HostSection>
                 <TouchableOpacity
