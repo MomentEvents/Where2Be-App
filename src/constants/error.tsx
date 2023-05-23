@@ -1,4 +1,4 @@
-class CustomError extends Error {
+export class CustomError extends Error {
     shouldDisplay: boolean;
   
     constructor(name: string, message: string, shouldDisplay: boolean) {
@@ -8,7 +8,7 @@ class CustomError extends Error {
     }
 }
   
-class NetworkError extends CustomError {
+export class NetworkError extends CustomError {
     constructor(message: string) {
       super('Network error', message, false);
     }

@@ -45,6 +45,7 @@ import {
 import Hyperlink from "react-native-hyperlink";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import RetryButton from "../../../components/RetryButton";
+import { CustomError } from "../../../constants/error";
 
 type routeParametersType = {
   eventID: string;

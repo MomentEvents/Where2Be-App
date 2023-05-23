@@ -30,6 +30,7 @@ import EventResult from "./EventResult/EventResult";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import RetryButton from "../../components/RetryButton";
+import { CustomError } from "../../constants/error";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);

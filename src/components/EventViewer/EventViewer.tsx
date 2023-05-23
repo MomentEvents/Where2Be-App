@@ -24,6 +24,7 @@ import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import RetryButton from "../RetryButton";
+import { CustomError } from "../../constants/error";
 
 type EventViewerProps = {
   school: School;

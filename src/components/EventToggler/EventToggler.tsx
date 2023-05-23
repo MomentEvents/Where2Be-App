@@ -23,6 +23,7 @@ import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
 import { Ionicons } from '@expo/vector-icons';
 import RetryButton from "../RetryButton";
+import { CustomError } from "../../constants/error";
 
 type EventTogglerProps = {
   selectedUser: User;

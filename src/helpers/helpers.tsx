@@ -1,4 +1,5 @@
 import { Event } from "../constants";
+import { CustomError, NetworkError } from "../constants/error";
 
 /***********************************
  * checkIfStringIsEmail
