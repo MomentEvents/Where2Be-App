@@ -261,9 +261,9 @@ const EventDetailsScreen = ({ route }) => {
       setHost(pulledHost);
       setDidFetchHost(true);
     })
-    .catch((error: Error) => {
+    .catch((error: CustomError) => {
       setShowRetry(true);
-      if (error.name.startsWith('Error')){
+      if (error.shouldDisplay){
         displayError(error);
       }
     });
@@ -275,8 +275,8 @@ const EventDetailsScreen = ({ route }) => {
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
         setDidFetchEvent(true);
       })
-      .catch((error: Error) => {
-        if (error.name.startsWith('Error')){
+      .catch((error: CustomError) => {
+        if (error.shouldDisplay){
           displayError(error);
         }
       });
@@ -286,8 +286,8 @@ const EventDetailsScreen = ({ route }) => {
         updateEventIDToInterests({ id: eventID, interests: tags });
         setDidFetchInterests(true);
       })
-      .catch((error: Error) => {
-        if (error.name.startsWith('Error')){
+      .catch((error: CustomError) => {
+        if (error.shouldDisplay){
           displayError(error);
         }
       });

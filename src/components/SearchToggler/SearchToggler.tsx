@@ -73,10 +73,10 @@ const SearchToggler = () => {
         }
         setPulledEvents(events);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         setPulledEvents([]);
         setShowRetry(true);
-        if (!displayingError && error.name.startsWith('Error')){
+        if (!displayingError && error.shouldDisplay){
           displayingError = true;
           displayError(error);
         }
@@ -91,10 +91,10 @@ const SearchToggler = () => {
         }
         setPulledUsers(users);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         setPulledUsers([]);
         setShowRetry(true);
-        if (!displayingError && error.name.startsWith('Error')){
+        if (!displayingError && error.shouldDisplay){
           displayingError = true;
           displayError(error);
         }

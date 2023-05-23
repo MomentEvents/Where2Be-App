@@ -50,10 +50,10 @@ const EventViewer = (props: EventViewerProps) => {
         setIsRefreshing(false);
         setCategoryNameToEventsMap(map);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         setIsRefreshing(false);
         setShowRetry(true);
-        if (error.name.startsWith('Error')){
+        if (error.shouldDisplay){
           displayError(error);
         }
       });

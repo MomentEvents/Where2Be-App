@@ -51,10 +51,10 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledFutureEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.name.startsWith('Error')){
+              if (error.shouldDisplay){
                 displayError(error);
               }
             })
@@ -66,10 +66,10 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledFutureEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.name.startsWith('Error')){
+              if (error.shouldDisplay){
                 displayError(error);
               }
             });
@@ -85,10 +85,10 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.name.startsWith('Error')){
+              if (error.shouldDisplay){
                 displayError(error);
               }
             })
@@ -100,10 +100,10 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.name.startsWith('Error')){
+              if (error.shouldDisplay){
                 displayError(error);
               }
             });
