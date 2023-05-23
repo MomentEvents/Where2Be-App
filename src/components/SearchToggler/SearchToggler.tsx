@@ -69,7 +69,7 @@ const SearchToggler = () => {
         setPulledEvents(events);
       })
       .catch((error: Error) => {
-        console.warn(error);
+        console.log(error);
       });
 
     // getting users
@@ -82,7 +82,7 @@ const SearchToggler = () => {
         setPulledUsers(users);
       })
       .catch((error: Error) => {
-        console.warn(error);
+        console.log(error);
       });
   };
 

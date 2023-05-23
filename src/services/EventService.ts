@@ -446,10 +446,10 @@ export async function getAllHomePageEventsWithHosts(
 
   responseJSON.forEach((value) => {
     if (!value.host) {
-      console.warn("Error in getting a host for a home page event!");
+      console.log("Error in getting a host for a home page event!");
     }
     if (!value.event) {
-      console.warn(
+      console.log(
         "Error in getting a home page event when a host for it exists!"
       );
     }

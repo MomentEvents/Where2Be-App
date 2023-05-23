@@ -16,7 +16,7 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
   const keys = Object.keys(pulledEvent);
   for (const key of keys) {
     if (pulledEvent[key] === null || pulledEvent[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined when converting to Event. EventID is ${pulledEvent.event_id}`
       );
     }
@@ -61,7 +61,7 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
   const convertedKeys = Object.keys(formattedEvent);
   for (const key of convertedKeys) {
     if (formattedEvent[key] === null || formattedEvent[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined when converting to Event. EventID is ${formattedEvent.EventID}`
       );
     }
@@ -88,7 +88,7 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
   const keys = Object.keys(pulledUser);
   for (const key of keys) {
     if (pulledUser[key] === null || pulledUser[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined in UserResponse with user_id ${pulledUser.user_id}`
       );
     }
@@ -115,7 +115,7 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
   const keysConvert = Object.keys(formattedUser);
   for (const key of keysConvert) {
     if (formattedUser[key] === null || formattedUser[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined when converting to User. UserID is ${formattedUser.UserID}`
       );
     }
@@ -139,7 +139,7 @@ export const interestResponseToInterest = (
   const keysConvert = Object.keys(pulledInterest);
   for (const key of keysConvert) {
     if (pulledInterest[key] === null || pulledInterest[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined for InterestResponse. interest_id is ${pulledInterest.interest_id}`
       );
     }
@@ -153,7 +153,7 @@ export const interestResponseToInterest = (
   const keys = Object.keys(formattedInterest);
   for (const key of keys) {
     if (formattedInterest[key] === null || formattedInterest[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined when converting to Interest. InterestID is ${formattedInterest.InterestID}`
       );
     }
@@ -181,7 +181,7 @@ export const schoolResponseToSchool = (
   const keys = Object.keys(pulledSchool);
   for (const key of keys) {
     if (pulledSchool[key] === null || pulledSchool[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined for SchoolResponse. school_id is ${pulledSchool.school_id}`
       );
     }
@@ -197,7 +197,7 @@ export const schoolResponseToSchool = (
   const keysConvert = Object.keys(pulledSchool);
   for (const key of keysConvert) {
     if (pulledSchool[key] === null || pulledSchool[key] === undefined) {
-      console.warn(
+      console.log(
         `${key} is null or undefined when converting to School. SchoolID is ${formattedSchool.SchoolID}`
       );
     }
