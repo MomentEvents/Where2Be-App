@@ -11,9 +11,16 @@ import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
  *
  * Gets a user by its id
  */
-export async function getUser(UserID: string): Promise<User> {
-  const response = await fetch(momentAPI + `/user/user_id/${UserID}`, {
-    method: "GET",
+ export async function getUser(
+  userAccessToken: string,
+  userID: string
+): Promise<User> {
+  const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user_access_token: userAccessToken }),
   })
 
   const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id");
@@ -21,6 +28,8 @@ export async function getUser(UserID: string): Promise<User> {
 
   return convertedUser;
 }
+
+
 
 /******************************************************
  * getUserByUserAccessToken
@@ -222,16 +231,19 @@ export async function searchSchoolUsers(
     return []
   }
 
-  const response = await fetch(momentAPI + `/user/school_id/${schoolID}/search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      query: query
-    }),
-  })
+  const response = await fetch(
+    momentAPI + `/user/school_id/${schoolID}/search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        query: query,
+      }),
+    }
+  )
 
   const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get all school users");
   const convertedUsers: User[] = userResponseToUsers(pulledUsers)
