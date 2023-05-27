@@ -45,8 +45,8 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       base64: true,
     });
 
-    if (!result.cancelled) {
-      const { uri, base64 } = result as ImageInfo;
+    if (!result.canceled) {
+      const { uri, base64 } = result.assets[0];
       didPick = true;
       imgUri = uri;
       imgBase64 = base64;
