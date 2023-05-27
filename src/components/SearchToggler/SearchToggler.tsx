@@ -48,7 +48,6 @@ const SearchToggler = () => {
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const onSearchTextChanged = (newText: string) => {
-    setShowRetry(false);
     if (newText == searchTextRef.current){
       return;
     }

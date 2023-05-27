@@ -32,23 +32,23 @@ type ProfileDetailsRouteParams = {
   User: User;
 };
 const MyProfileScreen = ({ route }) => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUserID, userIDToUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
-        title={"Hosted Events"}
+        title={"Profile"}
         rightButtonSVG={<icons.settings />}
         rightButtonOnClick={() => {
           navigation.navigate(SCREENS.Settings);
         }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={currentUser} canEditProfile={true} />
+      <SectionProfile user={userIDToUser[currentUserID]} canEditProfile={true} canFollow={false}/>
       <View style={{ flex: 1 }}>
         <EventToggler
-          selectedUser={currentUser}
+          selectedUser={userIDToUser[currentUserID]}
           eventsToPull={EVENT_TOGGLER.HostedEvents}
         />
       </View>

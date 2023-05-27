@@ -11,7 +11,7 @@ import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
  *
  * Gets a user by its id
  */
- export async function getUser(
+export async function getUser(
   userAccessToken: string,
   userID: string
 ): Promise<User> {
@@ -24,12 +24,10 @@ import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
   })
 
   const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id");
-  const convertedUser: User = userResponseToUser(pulledUser)
+  const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
 }
-
-
 
 /******************************************************
  * getUserByUserAccessToken
@@ -61,7 +59,7 @@ export async function updateUser(
   userAccessToken: string,
 
   updatedUser: User
-): Promise<User> {
+): Promise<void> {
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -80,10 +78,9 @@ export async function updateUser(
     }
   )
 
-  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not update user");
-  const convertedUser: User = userResponseToUser(pulledUser);
+  responseHandler<void>(response, "Could not update user");
 
-  return convertedUser;
+  return Promise.resolve()
 }
 
 export async function deleteUser(
@@ -91,7 +88,6 @@ export async function deleteUser(
 
   userID: string
 ): Promise<void> {
-  
   const response = await fetch(momentAPI + `/user/user_id/${userID}`, {
     method: "DELETE",
     headers: {
@@ -219,7 +215,6 @@ export async function removeUserShoutoutEvent(
   responseHandler<void>(response, "Could not remove shoutout");
 }
 
-
 export async function searchSchoolUsers(
   userAccessToken: string,
   schoolID: string,
@@ -227,8 +222,8 @@ export async function searchSchoolUsers(
 ): Promise<User[]> {
   console.log("Call to UserService: searchSchoolUsers");
 
-  if(query === "" || !query){
-    return []
+  if (query === "" || !query) {
+    return [];
   }
 
   const response = await fetch(
@@ -246,7 +241,53 @@ export async function searchSchoolUsers(
   )
 
   const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get all school users");
-  const convertedUsers: User[] = userResponseToUsers(pulledUsers)
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers);
 
   return convertedUsers;
+}
+
+export async function followUser(
+  userAccessToken: string,
+  userID: string,
+  toUserID: string
+): Promise<void> {
+
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/follow/user_id/${toUserID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_follow: true,
+      }),
+    }
+  )
+
+  responseHandler<void>(response, "Could follow user");
+}
+
+export async function unfollowUser(
+  userAccessToken: string,
+  userID: string,
+  toUserID: string
+): Promise<void> {
+  
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/follow/user_id/${toUserID}`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_follow: false,
+      }),
+    }
+  )
+
+  responseHandler<void>(response, "Could unfollow user");
 }
