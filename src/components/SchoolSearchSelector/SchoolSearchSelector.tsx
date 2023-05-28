@@ -18,6 +18,8 @@ import {
 } from "../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
+import RetryButton from "../../components/RetryButton";
+import { CustomError } from "../../constants/error";
 
 type SchoolSelectorProps = {
   onSelectSchool: (school: School) => void;
@@ -43,9 +45,11 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
 
   const [componentLoaded, setComponentLoaded] = useState<boolean>(false);
 
+  const [showRetry, setShowRetry] = useState<boolean>(false);
+
   const populateSchools = async (): Promise<void> => {
     const pulledSchools: School[] = await getAllSchools().catch(
-      (error: Error) => {
+      (error: CustomError) => {
         throw error;
       }
     );
@@ -71,8 +75,19 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
     setSchoolMap(schoolMapTemp);
   };
 
+  const handlePopulateSchools = () => {
+    populateSchools().catch(
+      (error: CustomError) => {
+        setShowRetry(true);
+        if (error.shouldDisplay){
+          displayError(error);
+        }
+      }
+    );
+  }
+
   useEffect(() => {
-    populateSchools().catch((error: Error) => displayError(error));
+    handlePopulateSchools();
   }, []);
 
   useEffect(() => {
@@ -133,7 +148,11 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           />
         ) : (
           // LOAD THIS
-          <ActivityIndicator color={COLORS.white} size="small" />
+          showRetry? (
+            <RetryButton setShowRetry={setShowRetry} retryCallBack={handlePopulateSchools} style={{ alignItems: 'center', justifyContent: 'center' }}/>
+          ) : (
+            <ActivityIndicator color={COLORS.white} size="small" />
+          )
         )}
       </View>
     );

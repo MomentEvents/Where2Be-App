@@ -1,5 +1,6 @@
 import { Interest, InterestResponse } from "./../constants/types";
 import { momentAPI } from "../constants/server";
+import { CustomError, NetworkError } from "../constants/error";
 import { formatError, responseHandler } from "../helpers/helpers";
 import { interestResponseToInterests } from "../helpers/converters";
 

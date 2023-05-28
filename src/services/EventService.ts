@@ -1,5 +1,6 @@
 import { momentAPI } from "../constants/server";
 import { Event, Interest } from "../constants";
+import { CustomError, NetworkError } from "../constants/error";
 import { formatError, responseHandler } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
 import { EventResponse, User, UserResponse } from "../constants/types";
@@ -47,6 +48,7 @@ export async function createEvent(
   createdEvent: Event,
   interests: Interest[]
 ): Promise<string> {
+
   const formData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", createdEvent.Title);

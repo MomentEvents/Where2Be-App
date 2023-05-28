@@ -45,7 +45,8 @@ const SearchToggler = () => {
 
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
 
-  const [showRetry, setShowRetry] = useState<boolean>(false);
+  const [showRetryEvent, setShowRetryEvent] = useState<boolean>(false);
+  const [showRetryUser, setShowRetryUser] = useState<boolean>(false);
 
   const onSearchTextChanged = (newText: string) => {
     if (newText == searchTextRef.current){
@@ -75,7 +76,7 @@ const SearchToggler = () => {
       })
       .catch((error: CustomError) => {
         setPulledEvents([]);
-        setShowRetry(true);
+        setShowRetryEvent(true);
         if (!displayingError && error.shouldDisplay){
           displayingError = true;
           displayError(error);
@@ -93,7 +94,7 @@ const SearchToggler = () => {
       })
       .catch((error: CustomError) => {
         setPulledUsers([]);
-        setShowRetry(true);
+        setShowRetryUser(true);
         if (!displayingError && error.shouldDisplay){
           displayingError = true;
           displayError(error);
@@ -190,7 +191,8 @@ const SearchToggler = () => {
           </McText>
         </TouchableOpacity>
       </View>
-      { showRetry && <RetryButton setShowRetry={setShowRetry} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} style={{ alignItems: 'center', justifyContent: 'center',  marginTop: 20, backgroundColor:COLORS.black }} /> }
+      { isEventsToggle && showRetryEvent && <RetryButton setShowRetry={setShowRetryEvent} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} style={{ alignItems: 'center', justifyContent: 'center',  marginTop: 20 }} /> }
+      { !isEventsToggle && showRetryUser && <RetryButton setShowRetry={setShowRetryUser} retryCallBack={() => {pullData(); setPulledEvents(null); setPulledUsers(null);}} style={{ alignItems: 'center', justifyContent: 'center',  marginTop: 20 }} /> }
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={"always"}

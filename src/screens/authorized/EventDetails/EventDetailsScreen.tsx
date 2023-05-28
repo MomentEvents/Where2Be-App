@@ -49,6 +49,8 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
+import RetryButton from "../../../components/RetryButton";
+import { CustomError } from "../../../constants/error";
 
 type routeParametersType = {
   eventID: string;

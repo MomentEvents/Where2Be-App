@@ -19,6 +19,8 @@ import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
 import { displayError } from "../../../helpers/helpers";
+import RetryButton from "../../../components/RetryButton";
+import { CustomError } from "../../../constants/error";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -28,6 +30,8 @@ const HomeScreen = () => {
   const [eventsAndHosts, setEventsAndHosts] = useState<[User, Event][]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const pullData = async () => {
     getAllHomePageEventsWithHosts(
@@ -39,9 +43,12 @@ const HomeScreen = () => {
         setIsRefreshing(false);
         setEventsAndHosts(data);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
+        setShowRetry(true);
         setIsRefreshing(false);
-        displayError(error);
+        if (error.shouldDisplay){
+          displayError(error);
+        }
       });
   };
   const onRefresh = () => {
@@ -69,7 +76,8 @@ const HomeScreen = () => {
         }
         style={{ backgroundColor: COLORS.black }}
       >
-        {isLoading && !isRefreshing && (
+        { showRetry && <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20 }}/>}
+        {isLoading && !isRefreshing && !showRetry && (
           // LOAD THIS
           <ActivityIndicator
             color={COLORS.white}

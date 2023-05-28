@@ -213,7 +213,7 @@ const EventToggler = (props: EventTogglerProps) => {
           ) : (
             // LOAD THIS
             !isRefreshing && showRetry? (
-              <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20, backgroundColor: COLORS.black }} />
+              <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20 }} />
             ) : (
               !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
             )
@@ -235,7 +235,7 @@ const EventToggler = (props: EventTogglerProps) => {
         ) : (
           // LOAD THIS
           !isRefreshing && showRetry? (
-            <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20, backgroundColor: COLORS.black }} />
+            <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20 }} />
           ) : (
             !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
           )
