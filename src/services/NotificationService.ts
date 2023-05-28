@@ -1,6 +1,8 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Text, View, Button, Platform } from "react-native";
+import { momentAPI } from "../constants/server";
+import { formatError } from "../helpers/helpers";
 
 export async function getPushNotificationToken(): Promise<string> {
   let token: string = null;
@@ -40,10 +42,31 @@ export async function registerPushNotificationToken(
   userAccessToken: string,
   userID: string,
   notificationToken: string
-): Promise<void> {}
+): Promise<void> {
+  const response = await fetch(momentAPI + `/notification/user_id/${userID}/add_token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+      push_token: notificationToken,
+      push_type: "Expo"
+    }),
+  }).catch((error: Error) => {
+    throw formatError("Network error", "Could upload push token");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
+}
 
 export async function unregisterPushNotificationToken(
   userAccessToken: string,
   userID: string,
   notificationToken: string
-): Promise<void> {}
+): Promise<void> {
+
+}
