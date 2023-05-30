@@ -1,6 +1,5 @@
 export type Token = {
   UserAccessToken: string;
-  Expiration: Date;
 }
 
 export type Event = {

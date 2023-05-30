@@ -15,7 +15,7 @@ import {
   checkIfUserAccessTokenIsAdmin,
   getServerStatus,
   logout,
-  validateTokenExpirationAndUpdate,
+  getTokenAndValidate,
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
 import {
@@ -175,7 +175,7 @@ export const UserProvider = ({ children }) => {
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
-      await validateTokenExpirationAndUpdate().catch((error: Error) => {
+      await getTokenAndValidate().catch((error: Error) => {
         setServerError(true);
         displayError(error);
         return null;
@@ -237,17 +237,8 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    const currentTime = Date.now();
-    if (
-      userToken === null ||
-      (userToken !== null && userToken.Expiration.getTime() >= currentTime)
-    ) {
-      // No token to be found or token has not expired yet
-      return;
-    }
-
     // Token has expired.
-    const returnedToken: Token = await validateTokenExpirationAndUpdate().catch(
+    const returnedToken: Token = await getTokenAndValidate().catch(
       (error: Error) => {
         displayError(error);
         return null;

@@ -1,6 +1,7 @@
 import { getUserByUserAccessToken } from "./UserService";
 import { momentAPI, momentAPIVersionless } from "../constants/server";
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   checkIfStringIsEmail,
   checkIfStringIsAlphanumeric,
@@ -10,9 +11,16 @@ import {
 import { Token, User } from "../constants";
 
 const USERACCESSTOKEN_STORAGE = "UserAccessToken";
-const EXPIRATION_STORAGE = "Expiration";
-
-const MINUTES_TO_UPDATE_TOKEN = 10;
+const FIRST_TIME_INSTALL = {
+  KEY: "FIRST_TIME_INSTALL_KEY",
+  YES: "FIRST_TIME_INSTALL_YES",
+  NO: "FIRST_TIME_INSTALL_NO"
+}
+const FIRST_TIME_LOGIN = {
+  KEY: "FIRST_TIME_LOGIN_KEY",
+  YES: "FIRST_TIME_LOGIN_YES",
+  NO: "FIRST_TIME_LOGIN_NO"
+}
 
 /******************************************************
  * login
@@ -191,13 +199,7 @@ export async function logout(): Promise<void> {
  * The token to use
  */
 function createTokenFromUserAccessToken(userAccessToken: string): Token {
-  var expiration = new Date(Date.now() + MINUTES_TO_UPDATE_TOKEN * 60000);
-  const token = { UserAccessToken: userAccessToken, Expiration: expiration };
-  console.log("createTokenFromUserAccessToken() call.\nUser Access Token:");
-  console.log(token.UserAccessToken);
-  console.log("Expiration:");
-  console.log(token.Expiration.toISOString());
-  console.log();
+  const token: Token  = { UserAccessToken: userAccessToken };
   return token;
 }
 
@@ -215,14 +217,8 @@ function createTokenFromUserAccessToken(userAccessToken: string): Token {
 async function writeToken(newToken: Token): Promise<void> {
   console.log("writeToken() call.\nUser Access Token:");
   console.log(newToken.UserAccessToken);
-  console.log("Expiration:");
-  console.log(newToken.Expiration);
   console.log();
   await SecureStore.setItemAsync(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
-  await SecureStore.setItemAsync(
-    EXPIRATION_STORAGE,
-    newToken.Expiration.toISOString()
-  );
 }
 
 /******************************************************
@@ -236,21 +232,15 @@ async function writeToken(newToken: Token): Promise<void> {
 async function getToken(): Promise<Token> {
   console.log("getToken() call.\nUser Access Token:");
   console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
-  console.log("Expiration:");
-  console.log(await SecureStore.getItemAsync(EXPIRATION_STORAGE));
   const userAccessToken: string = await SecureStore.getItemAsync(
     USERACCESSTOKEN_STORAGE
   );
-  const expirationString: string = await SecureStore.getItemAsync(
-    EXPIRATION_STORAGE
-  );
 
-  if (userAccessToken == null || expirationString == null) {
+  if (userAccessToken == null) {
     return Promise.resolve(null);
   }
-  const token = {
-    UserAccessToken: userAccessToken,
-    Expiration: new Date(expirationString),
+  const token: Token = {
+    UserAccessToken: userAccessToken
   };
   return Promise.resolve(token);
 }
@@ -266,10 +256,7 @@ async function getToken(): Promise<Token> {
 export async function deleteToken(): Promise<void> {
   console.log("deleteToken() call.\nUser Access Token:");
   console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
-  console.log("Expiration:");
-  console.log(await SecureStore.getItemAsync(EXPIRATION_STORAGE));
   await SecureStore.deleteItemAsync(USERACCESSTOKEN_STORAGE);
-  await SecureStore.deleteItemAsync(EXPIRATION_STORAGE);
 }
 
 /******************************************************
@@ -285,40 +272,58 @@ export async function deleteToken(): Promise<void> {
  * Return -
  * none
  */
-export async function validateTokenExpirationAndUpdate(): Promise<Token> {
-  console.log("Entering validateTokenExpirationAndUpdate");
-  const currentTime = Date.now();
+export async function getTokenAndValidate(): Promise<Token> {
 
-  const storageToken = await getToken();
+  const storageToken: Token = await getToken();
 
-  console.log("Storage Token");
-  console.log(storageToken);
-  if (storageToken == null) {
-    // Token was not retrieved. User not logged in. Remove context variables and return resolved promise
-    console.log("Storage Token is null");
+  if (!storageToken) {
     return Promise.resolve(null);
   }
 
-  var newToken: Token = null;
-  if (storageToken.Expiration.getTime() < currentTime) {
-    // Storage token is there, and it is not expired. We update the token
-    newToken = createTokenFromUserAccessToken(storageToken.UserAccessToken);
-  } else {
-    newToken = storageToken;
+  if(checkIfFirstInstall()){
+    await deleteToken();
+    return Promise.resolve(null)
   }
 
-  const pulledUser: User | Error = await getUserByUserAccessToken(
-    storageToken.UserAccessToken
-  ).catch((error: Error) => {
-    return error;
-  });
+  return Promise.resolve(storageToken);
+}
 
-  if (pulledUser instanceof Error) {
-    return Promise.resolve(null);
+export async function checkIfFirstInstall(): Promise<boolean> {
+  const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY)
+
+  if(status == null || status == undefined || status == FIRST_TIME_INSTALL.NO){
+    return false;
   }
 
-  writeToken(newToken);
-  return Promise.resolve(newToken);
+  return true
+}
+
+export async function updateFirstInstall(status: boolean): Promise<void> {
+  if(status){
+    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.YES)
+  }
+  else {
+    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.NO)
+  }
+}
+
+export async function checkIfFirstLogin(): Promise<boolean> {
+  const status = await AsyncStorage.getItem(FIRST_TIME_LOGIN.KEY)
+
+  if(status == null || status == undefined || status == FIRST_TIME_LOGIN.NO){
+    return false;
+  }
+
+  return true
+}
+
+export async function updateFirstLogin(status: boolean): Promise<void> {
+  if(status){
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.YES)
+  }
+  else {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.NO)
+  }
 }
 
 /******************************************************
