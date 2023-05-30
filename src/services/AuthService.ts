@@ -291,7 +291,7 @@ export async function getTokenAndValidate(): Promise<Token> {
 export async function checkIfFirstInstall(): Promise<boolean> {
   const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY)
 
-  if(status == null || status == undefined || status == FIRST_TIME_INSTALL.NO){
+  if(status == null || status == undefined || status == FIRST_TIME_INSTALL.YES){
     return false;
   }
 
@@ -310,7 +310,7 @@ export async function updateFirstInstall(status: boolean): Promise<void> {
 export async function checkIfFirstLogin(): Promise<boolean> {
   const status = await AsyncStorage.getItem(FIRST_TIME_LOGIN.KEY)
 
-  if(status == null || status == undefined || status == FIRST_TIME_LOGIN.NO){
+  if(status == null || status == undefined || status == FIRST_TIME_LOGIN.YES){
     return false;
   }
 
