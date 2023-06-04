@@ -241,6 +241,7 @@ export async function deleteToken(): Promise<void> {
 }
 
 
+
 export async function getTokenAndValidate(): Promise<Token> {
   const storageToken: Token = await getToken();
 
@@ -248,9 +249,8 @@ export async function getTokenAndValidate(): Promise<Token> {
     return Promise.resolve(null);
   }
 
-  if(checkIfFirstInstall()){
-    // TODO: DELETE THIS
-    // await deleteToken();
+  if(await checkIfFirstInstall()){
+    await deleteToken();
     return Promise.resolve(null)
   }
 
@@ -263,7 +263,7 @@ export async function checkIfFirstInstall(): Promise<boolean> {
   const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY)
 
   console.log("CHECKIFFIRSTINSTALL call. " + status)
-  if(!status || status === FIRST_TIME_INSTALL.YES){
+  if(status == null || status == undefined || status === FIRST_TIME_INSTALL.YES){
     return true;
   }
 
