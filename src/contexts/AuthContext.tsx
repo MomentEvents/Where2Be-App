@@ -9,7 +9,8 @@ type AuthContextType = {
     username: string,
     displayName: string,
     password: string,
-    schoolID: string
+    schoolID: string,
+    email: string
   ) => Promise<void>;
   userLogout: () => Promise<void>;
 };
@@ -38,18 +39,10 @@ export const AuthProvider = ({ children }) => {
     username: string,
     displayName: string,
     password: string,
-    schoolID: string
+    schoolID: string,
+    email: string,
   ) => {
-    await setContextVarsBasedOnToken(
-      await signup(username, displayName, password, schoolID).catch(
-        (error) => {
-          throw error;
-        }
-      )
-    ).catch((error) => {
-      displayError(error);
-      return null;
-    });
+    await signup(username, displayName, password, schoolID, email)
   };
 
   const userLogout = async () => {

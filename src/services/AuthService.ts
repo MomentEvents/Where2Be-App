@@ -49,21 +49,17 @@ export async function login(
     throw formatError("Input error", "Please enter a valid password");
   }
 
-  // usercred = usercred.toLowerCase();
-
   if (checkIfStringIsEmail(usercred.toLowerCase())) {
     throw formatError("Input error", "Email login is not supported yet");
   }
 
-  // DO LOGIN HERE
-
-  const response = await fetch(momentAPI + `/auth/login/username`, {
+  const response = await fetch(momentAPI + `/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username: usercred,
+      usercred: usercred,
       password: password,
     }),
   }).catch((error: Error) => {
@@ -108,11 +104,13 @@ export async function signup(
   username: string,
   displayName: string,
   password: string,
-  schoolID: string
-): Promise<Token> {
+  schoolID: string,
+  email: string,
+): Promise<void> {
   if (!checkIfStringIsReadable(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
   }
+
   if (
     displayName === "" ||
     !displayName ||
@@ -124,17 +122,13 @@ export async function signup(
       "Please enter non-empty values before signing up"
     );
   }
-  // if (!checkIfStringIsReadable(displayName)) {
-  //   throw formatError("Input error", "Please have a readable display name");
-  // }
-  // if (!checkIfStringIsAlphanumeric(username)) {
-  //   throw formatError("Input error", "Please enter an alphanumeric username");
-  // }
   if (schoolID === "" || !schoolID) {
     throw formatError("Input error", "Please enter a valid school");
   }
 
-  // DO SIGNUP HERE
+  if(!checkIfStringIsEmail(email) || email === ""){
+    throw formatError("Input error", "Please enter a valid email");
+  }
 
   const response = await fetch(momentAPI + `/auth/signup`, {
     method: "POST",
@@ -146,6 +140,7 @@ export async function signup(
       display_name: displayName,
       password: password,
       school_id: schoolID,
+      email: email
     }),
   }).catch((error: Error) => {
     throw formatError("Network error", "Could not signup");
@@ -155,17 +150,6 @@ export async function signup(
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
-
-  const data = await response.json();
-
-  const createdToken: Token = createTokenFromUserAccessToken(
-    data["user_access_token"]
-  );
-  writeToken(createdToken);
-
-  console.log(createdToken);
-
-  return Promise.resolve(createdToken);
 }
 
 /******************************************************

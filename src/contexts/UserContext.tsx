@@ -16,6 +16,7 @@ import {
   getServerStatus,
   logout,
   getTokenAndValidate,
+  updateFirstInstall,
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
 import {
@@ -184,6 +185,7 @@ export const UserProvider = ({ children }) => {
       setServerError(true);
       displayError(error);
     });
+    updateFirstInstall(false)
     setIsUserContextLoaded(true);
   };
 
