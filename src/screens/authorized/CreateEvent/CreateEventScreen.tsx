@@ -51,6 +51,7 @@ type EditEventScreenParams = {
 const CreateEventScreen = ({ route }) => {
   const navigation = useNavigation<any>();
 
+  const {currentUserID, setCurrentUserID} = useContext(UserContext)
   const [title, setTitle] = useState<string>();
   const [location, setLocation] = useState<string>();
   const [image, setImage] = useState<string>();
@@ -92,6 +93,7 @@ const CreateEventScreen = ({ route }) => {
       NumShoutouts: 0,
       UserJoin: false,
       UserShoutout: false,
+      HostUserID: currentUserID,
     };
 
     if (!checkIfEventIsFormatted(createdEvent)) {

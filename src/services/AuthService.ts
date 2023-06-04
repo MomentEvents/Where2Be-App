@@ -49,10 +49,6 @@ export async function login(
     throw formatError("Input error", "Please enter a valid password");
   }
 
-  if (checkIfStringIsEmail(usercred.toLowerCase())) {
-    throw formatError("Input error", "Email login is not supported yet");
-  }
-
   const response = await fetch(momentAPI + `/auth/login`, {
     method: "POST",
     headers: {
@@ -75,6 +71,7 @@ export async function login(
   const createdToken: Token = createTokenFromUserAccessToken(
     data["user_access_token"]
   );
+  console.log("ABOUT TO WRITE TOKEN")
   writeToken(createdToken);
 
   console.log(createdToken);
@@ -243,21 +240,8 @@ export async function deleteToken(): Promise<void> {
   await SecureStore.deleteItemAsync(USERACCESSTOKEN_STORAGE);
 }
 
-/******************************************************
- * validateTokenExpirationAndUpdate
- *
- * Validates the token first in the Context, then in the
- * storage. At the end of the function call, UserContext
- * will be filled and the storage will be update
- *
- * Parameters -
- * none
- *
- * Return -
- * none
- */
-export async function getTokenAndValidate(): Promise<Token> {
 
+export async function getTokenAndValidate(): Promise<Token> {
   const storageToken: Token = await getToken();
 
   if (!storageToken) {
@@ -265,9 +249,12 @@ export async function getTokenAndValidate(): Promise<Token> {
   }
 
   if(checkIfFirstInstall()){
-    await deleteToken();
+    // TODO: DELETE THIS
+    // await deleteToken();
     return Promise.resolve(null)
   }
+
+  console.log("ACTUALLY RETURNING TOKEN FROM getTokenAndValidate")
 
   return Promise.resolve(storageToken);
 }
@@ -275,11 +262,12 @@ export async function getTokenAndValidate(): Promise<Token> {
 export async function checkIfFirstInstall(): Promise<boolean> {
   const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY)
 
-  if(status == null || status == undefined || status == FIRST_TIME_INSTALL.YES){
-    return false;
+  console.log("CHECKIFFIRSTINSTALL call. " + status)
+  if(!status || status === FIRST_TIME_INSTALL.YES){
+    return true;
   }
 
-  return true
+  return false
 }
 
 export async function updateFirstInstall(status: boolean): Promise<void> {
@@ -295,10 +283,10 @@ export async function checkIfFirstLogin(): Promise<boolean> {
   const status = await AsyncStorage.getItem(FIRST_TIME_LOGIN.KEY)
 
   if(status == null || status == undefined || status == FIRST_TIME_LOGIN.YES){
-    return false;
+    return true;
   }
 
-  return true
+  return false
 }
 
 export async function updateFirstLogin(status: boolean): Promise<void> {
