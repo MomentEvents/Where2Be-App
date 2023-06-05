@@ -45,7 +45,7 @@ export async function getUserByUserAccessToken(
   userID: string,
 ): Promise<User> {
   const response = await fetch(
-    momentAPI + `/user/user_id/${userID}/user_access_token/${userAccessToken}`,
+    momentAPI + `/user/user_access_token/${userAccessToken}`,
     {
       method: "GET",
     }
