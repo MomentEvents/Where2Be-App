@@ -41,10 +41,11 @@ export async function getUser(
  * Gets a user by its user access token
  */
 export async function getUserByUserAccessToken(
-  userAccessToken: string
+  userAccessToken: string,
+  userID: string,
 ): Promise<User> {
   const response = await fetch(
-    momentAPI + `/user/user_access_token/${userAccessToken}`,
+    momentAPI + `/user/user_id/${userID}/user_access_token/${userAccessToken}`,
     {
       method: "GET",
     }

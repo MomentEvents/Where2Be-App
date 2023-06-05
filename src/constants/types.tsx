@@ -1,4 +1,5 @@
 export type Token = {
+  UserID: string;
   UserAccessToken: string;
 }
 

@@ -15,7 +15,7 @@ import {
   checkIfUserAccessTokenIsAdmin,
   getServerStatus,
   logout,
-  getTokenAndValidate,
+  getStoredToken,
   updateFirstInstall,
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
@@ -176,7 +176,7 @@ export const UserProvider = ({ children }) => {
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
-      await getTokenAndValidate().catch((error: Error) => {
+      await getStoredToken().catch((error: Error) => {
         setServerError(true);
         displayError(error);
         return null;
@@ -240,7 +240,7 @@ export const UserProvider = ({ children }) => {
     }
 
     // Token has expired.
-    const returnedToken: Token = await getTokenAndValidate().catch(
+    const returnedToken: Token = await getStoredToken().catch(
       (error: Error) => {
         displayError(error);
         return null;
@@ -269,7 +269,8 @@ export const UserProvider = ({ children }) => {
       });
 
     const pulledUser: User = await getUserByUserAccessToken(
-      token.UserAccessToken
+      token.UserAccessToken,
+      token.UserID
     ).catch((error: Error) => {
       throw error;
     });

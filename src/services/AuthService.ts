@@ -1,4 +1,3 @@
-import { getUserByUserAccessToken } from "./UserService";
 import { momentAPI, momentAPIVersionless } from "../constants/server";
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,7 +9,7 @@ import {
 } from "../helpers/helpers";
 import { Token, User } from "../constants";
 
-const USERACCESSTOKEN_STORAGE = "UserAccessToken";
+const TOKEN_STORAGE = "UserAccessToken";
 const FIRST_TIME_INSTALL = {
   KEY: "FIRST_TIME_INSTALL_KEY",
   YES: "FIRST_TIME_INSTALL_YES",
@@ -68,7 +67,11 @@ export async function login(
   }
   const data = await response.json();
 
-  const createdToken: Token = createTokenFromUserAccessToken(
+  if(!data["user_id"] || !data["user_access_token"]){
+    throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
+  }
+  const createdToken: Token = createToken(
+    data["user_id"],
     data["user_access_token"]
   );
   console.log("ABOUT TO WRITE TOKEN")
@@ -179,8 +182,8 @@ export async function logout(): Promise<void> {
  * Return -
  * The token to use
  */
-function createTokenFromUserAccessToken(userAccessToken: string): Token {
-  const token: Token  = { UserAccessToken: userAccessToken };
+function createToken(userID: string, userAccessToken: string): Token {
+  const token: Token  = { UserID: userID, UserAccessToken: userAccessToken };
   return token;
 }
 
@@ -197,9 +200,9 @@ function createTokenFromUserAccessToken(userAccessToken: string): Token {
  */
 async function writeToken(newToken: Token): Promise<void> {
   console.log("writeToken() call.\nUser Access Token:");
-  console.log(newToken.UserAccessToken);
+  console.log(JSON.stringify(newToken));
   console.log();
-  await SecureStore.setItemAsync(USERACCESSTOKEN_STORAGE, newToken.UserAccessToken);
+  await SecureStore.setItemAsync(TOKEN_STORAGE, JSON.stringify(newToken));
 }
 
 /******************************************************
@@ -212,17 +215,15 @@ async function writeToken(newToken: Token): Promise<void> {
  */
 async function getToken(): Promise<Token> {
   console.log("getToken() call.\nUser Access Token:");
-  console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
-  const userAccessToken: string = await SecureStore.getItemAsync(
-    USERACCESSTOKEN_STORAGE
-  );
+  console.log(await SecureStore.getItemAsync(TOKEN_STORAGE));
+  const token: Token = JSON.parse(await SecureStore.getItemAsync(
+    TOKEN_STORAGE
+  ));
 
-  if (userAccessToken == null) {
+  if (!token) {
     return Promise.resolve(null);
   }
-  const token: Token = {
-    UserAccessToken: userAccessToken
-  };
+
   return Promise.resolve(token);
 }
 
@@ -236,13 +237,13 @@ async function getToken(): Promise<Token> {
  */
 export async function deleteToken(): Promise<void> {
   console.log("deleteToken() call.\nUser Access Token:");
-  console.log(await SecureStore.getItemAsync(USERACCESSTOKEN_STORAGE));
-  await SecureStore.deleteItemAsync(USERACCESSTOKEN_STORAGE);
+  console.log(JSON.stringify(await SecureStore.getItemAsync(TOKEN_STORAGE)));
+  await SecureStore.deleteItemAsync(TOKEN_STORAGE);
 }
 
 
 
-export async function getTokenAndValidate(): Promise<Token> {
+export async function getStoredToken(): Promise<Token> {
   const storageToken: Token = await getToken();
 
   if (!storageToken) {
@@ -253,8 +254,6 @@ export async function getTokenAndValidate(): Promise<Token> {
     await deleteToken();
     return Promise.resolve(null)
   }
-
-  console.log("ACTUALLY RETURNING TOKEN FROM getTokenAndValidate")
 
   return Promise.resolve(storageToken);
 }
