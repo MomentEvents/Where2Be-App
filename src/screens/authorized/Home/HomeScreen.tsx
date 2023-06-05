@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
   const { currentSchool, userToken } = useContext(UserContext);
 
-  const [eventsAndHosts, setEventsAndHosts] = useState<[User, Event][]>();
+  const [eventsAndHosts, setEventsAndHosts] = useState<[{Host: User, Event: Event}][]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -78,7 +78,7 @@ const HomeScreen = () => {
           />
         )}
         {eventsAndHosts && eventsAndHosts.map((value) => {
-          return <HomeEvent key={"homescreeneventcard"+value[1].EventID} event={value[1]} user={value[0]}></HomeEvent>;
+          return <HomeEvent key={"homescreeneventcard"+value[0].Event.EventID} event={value[0].Event} user={value[0].Host}></HomeEvent>;
         })}
       </ScrollView>
       <TouchableOpacity

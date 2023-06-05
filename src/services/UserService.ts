@@ -41,7 +41,8 @@ export async function getUser(
  * Gets a user by its user access token
  */
 export async function getUserByUserAccessToken(
-  userAccessToken: string
+  userAccessToken: string,
+  userID: string,
 ): Promise<User> {
   const response = await fetch(
     momentAPI + `/user/user_access_token/${userAccessToken}`,
@@ -362,4 +363,33 @@ export async function unfollowUser(
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
+}
+
+export async function getUserEmail(
+  userAccessToken: string,
+  userID: string,
+): Promise<string> {
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/get_email`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  ).catch((error: Error) => {
+    throw formatError("Network error", "Could not get email");
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw formatError("Error " + response.status, message);
+  }
+
+  const responseJSON: {email: string} = await response.json()
+
+  return responseJSON.email
 }

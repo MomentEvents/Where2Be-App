@@ -32,7 +32,7 @@ const SectionProfile = (props: SectionProfileProps) => {
     clientUnfollowUser,
   } = useContext(UserContext);
   const navigation = useNavigation<any>();
-  const { currentUserID } = useContext(UserContext);
+  const { userToken } = useContext(UserContext);
   return (
     <View style={styles.profileContainer}>
       <Image
@@ -63,7 +63,7 @@ const SectionProfile = (props: SectionProfileProps) => {
           onPress={() => {
             navigation.navigate(SCREENS.EditProfile, {
               user: props.user,
-              isSelf: props.user.UserID === currentUserID,
+              isSelf: props.user.UserID === userToken.UserID,
             });
           }}
         >

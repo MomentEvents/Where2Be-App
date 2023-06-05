@@ -25,6 +25,7 @@ import SectionHeader from "../Styled/SectionHeader";
 type EventTogglerProps = {
   selectedUser: User;
   eventsToPull: string;
+  setIsRefreshing?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const EventToggler = (props: EventTogglerProps) => {
   const { userToken } = useContext(UserContext);
@@ -100,6 +101,12 @@ const EventToggler = (props: EventTogglerProps) => {
     pullData();
   };
 
+  useEffect(() => {
+    if (props.setIsRefreshing) {
+      props.setIsRefreshing(isRefreshing);
+    }
+  }, [isRefreshing]);
+
   const renderEventCard = (event: Event) => {
     return (
       <View
@@ -131,7 +138,7 @@ const EventToggler = (props: EventTogglerProps) => {
   }, [isFutureToggle]);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
@@ -143,9 +150,11 @@ const EventToggler = (props: EventTogglerProps) => {
             alignItems: "center",
             justifyContent: "center",
             borderWidth: isFutureToggle ? 1 : 0,
-            borderColor: 'transparent',
-            borderBottomColor: isFutureToggle ? COLORS.purple : COLORS.trueBlack,
-            backgroundColor: 'transparent',
+            borderColor: "transparent",
+            borderBottomColor: isFutureToggle
+              ? COLORS.purple
+              : COLORS.trueBlack,
+            backgroundColor: "transparent",
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(true)}
@@ -159,9 +168,11 @@ const EventToggler = (props: EventTogglerProps) => {
             alignItems: "center",
             justifyContent: "center",
             borderWidth: !isFutureToggle ? 1 : 0,
-            borderColor: 'transparent',
-            borderBottomColor: isFutureToggle ? COLORS.trueBlack : COLORS.purple,
-            backgroundColor: 'transparent',
+            borderColor: "transparent",
+            borderBottomColor: isFutureToggle
+              ? COLORS.trueBlack
+              : COLORS.purple,
+            backgroundColor: "transparent",
             ...styles.toggleButton,
           }}
           onPress={() => setIsFutureToggle(false)}
@@ -175,10 +186,15 @@ const EventToggler = (props: EventTogglerProps) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl tintColor={COLORS.white} refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={COLORS.white}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
         }
-        style={{backgroundColor: COLORS.black}}
+        style={{ backgroundColor: COLORS.black }}
       >
+        
         {isFutureToggle ? (
           pulledFutureEvents ? (
             pulledFutureEvents.length !== 0 ? (
@@ -196,7 +212,12 @@ const EventToggler = (props: EventTogglerProps) => {
             )
           ) : (
             // LOAD THIS
-            !isRefreshing && <ActivityIndicator color={COLORS.white}style={{ marginTop: 20 }} />
+            !isRefreshing && (
+              <ActivityIndicator
+                color={COLORS.white}
+                style={{ marginTop: 20 }}
+              />
+            )
           )
         ) : pulledPastEvents ? (
           pulledPastEvents.length !== 0 ? (
@@ -214,9 +235,11 @@ const EventToggler = (props: EventTogglerProps) => {
           )
         ) : (
           // LOAD THIS
-          !isRefreshing && <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+          !isRefreshing && (
+            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+          )
         )}
-        <View style={{height: SIZES.bottomBarHeight + 10}}/>
+        <View style={{ height: SIZES.bottomBarHeight + 10 }} />
       </ScrollView>
     </View>
   );
@@ -225,8 +248,6 @@ const EventToggler = (props: EventTogglerProps) => {
 export default EventToggler;
 
 const styles = StyleSheet.create({
-  
-  
   buttonToggleContainer: {
     flexDirection: "row",
     backgroundColor: COLORS.trueBlack,

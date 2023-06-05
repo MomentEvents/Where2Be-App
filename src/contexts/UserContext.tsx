@@ -15,7 +15,8 @@ import {
   checkIfUserAccessTokenIsAdmin,
   getServerStatus,
   logout,
-  validateTokenExpirationAndUpdate,
+  getStoredToken,
+  updateFirstInstall,
 } from "../services/AuthService";
 import { getSchoolByUserId } from "../services/SchoolService";
 import {
@@ -36,8 +37,6 @@ import {
 
 type UserContextType = {
   userToken: Token;
-  currentUserID: string;
-  setCurrentUserID: React.Dispatch<React.SetStateAction<string>>;
   currentSchool: School;
   setCurrentSchool: React.Dispatch<React.SetStateAction<School>>;
   isUserContextLoaded: boolean;
@@ -67,8 +66,6 @@ export const UserContext = createContext<UserContextType>({
   isAdmin: null,
   pullTokenFromServer: null,
   serverError: false,
-  currentUserID: null,
-  setCurrentUserID: null,
   userIDToUser: null,
   updateUserIDToUser: null,
   clientFollowUser: null,
@@ -77,7 +74,6 @@ export const UserContext = createContext<UserContextType>({
 
 export const UserProvider = ({ children }) => {
   const [userToken, setUserToken] = useState<Token>(null);
-  const [currentUserID, setCurrentUserID] = useState<string>(null);
   const [currentSchool, setCurrentSchool] = useState<School>(null);
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);
@@ -101,7 +97,7 @@ export const UserProvider = ({ children }) => {
     updateUserIDToUser({
       id: userID,
       user: {
-        ...userIDToUser[currentUserID],
+        ...userIDToUser[userToken.UserID],
         NumFollowing: userIDToUser[userID].NumFollowing - 1,
       },
     });
@@ -114,12 +110,12 @@ export const UserProvider = ({ children }) => {
       },
     });
 
-    unfollowUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+    unfollowUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
       displayError(error);
       updateUserIDToUser({
         id: userID,
         user: {
-          ...userIDToUser[currentUserID],
+          ...userIDToUser[userToken.UserID],
           NumFollowing: userIDToUser[userID].NumFollowing + 1,
         },
       });
@@ -140,7 +136,7 @@ export const UserProvider = ({ children }) => {
     updateUserIDToUser({
       id: userID,
       user: {
-        ...userIDToUser[currentUserID],
+        ...userIDToUser[userToken.UserID],
         NumFollowing: userIDToUser[userID].NumFollowing + 1,
       },
     });
@@ -153,12 +149,12 @@ export const UserProvider = ({ children }) => {
       },
     });
 
-    followUser(userToken.UserAccessToken, currentUserID, userID).catch((error: Error) => {
+    followUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
       displayError(error);
       updateUserIDToUser({
         id: userID,
         user: {
-          ...userIDToUser[currentUserID],
+          ...userIDToUser[userToken.UserID],
           NumFollowing: userIDToUser[userID].NumFollowing - 1,
         },
       });
@@ -175,15 +171,17 @@ export const UserProvider = ({ children }) => {
 
   const fillUserData = async () => {
     await setContextVarsBasedOnToken(
-      await validateTokenExpirationAndUpdate().catch((error: Error) => {
+      await getStoredToken().catch((error: Error) => {
         setServerError(true);
         displayError(error);
         return null;
       })
     ).catch((error: Error) => {
+      logout()
       setServerError(true);
       displayError(error);
     });
+    updateFirstInstall(false)
     setIsUserContextLoaded(true);
   };
 
@@ -206,14 +204,14 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     // This runs for user login.
     // This doesn't work when user log out, because
-    // when userToken, currentUserID, or currentSchool
+    // when userToken  or currentSchool
     // becomes null, it throws an error in the main app.
     // So, syncUserContextWithToken() should be called outside
-    if (userToken && currentUserID && currentSchool) {
+    if (userToken && userToken.UserAccessToken && userToken.UserID && currentSchool) {
       getPushNotificationToken().then((token: string) => {
         registerPushNotificationToken(
           userToken.UserAccessToken,
-          currentUserID,
+          userToken.UserID,
           token
         )
           .then(() =>
@@ -227,7 +225,7 @@ export const UserProvider = ({ children }) => {
     } else {
       setIsLoggedIn(false);
     }
-  }, [userToken, currentUserID, currentSchool]);
+  }, [userToken, currentSchool]);
 
   // This should be done every now and then to see if the token
   // Is valid. SHOULD ONLY BE RUN WHEN isLoggedIn IS TRUE
@@ -237,17 +235,8 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    const currentTime = Date.now();
-    if (
-      userToken === null ||
-      (userToken !== null && userToken.Expiration.getTime() >= currentTime)
-    ) {
-      // No token to be found or token has not expired yet
-      return;
-    }
-
     // Token has expired.
-    const returnedToken: Token = await validateTokenExpirationAndUpdate().catch(
+    const returnedToken: Token = await getStoredToken().catch(
       (error: Error) => {
         displayError(error);
         return null;
@@ -261,7 +250,6 @@ export const UserProvider = ({ children }) => {
     if (token === null) {
       setIsLoggedIn(false);
       setUserToken(null);
-      setCurrentUserID(null);
       setCurrentSchool(null);
       logout();
       return;
@@ -276,7 +264,8 @@ export const UserProvider = ({ children }) => {
       });
 
     const pulledUser: User = await getUserByUserAccessToken(
-      token.UserAccessToken
+      token.UserAccessToken,
+      token.UserID
     ).catch((error: Error) => {
       throw error;
     });
@@ -286,14 +275,12 @@ export const UserProvider = ({ children }) => {
     ).catch((error: Error) => {
       setIsLoggedIn(false);
       setUserToken(null);
-      setCurrentUserID(null);
       setCurrentSchool(null);
       logout();
       throw error;
     });
     setUserToken(token);
     updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
-    setCurrentUserID(pulledUser.UserID);
     setCurrentSchool(pulledSchool);
     setIsLoggedIn(true);
     console.log("Finished setting context variables");
@@ -312,8 +299,6 @@ export const UserProvider = ({ children }) => {
         isAdmin,
         pullTokenFromServer,
         serverError,
-        currentUserID,
-        setCurrentUserID,
         userIDToUser,
         updateUserIDToUser,
         clientFollowUser,

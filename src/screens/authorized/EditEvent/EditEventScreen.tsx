@@ -128,6 +128,7 @@ const EditEventScreen = ({ route }) => {
       NumShoutouts: eventIDToEvent[eventID].NumShoutouts,
       UserJoin: eventIDToEvent[eventID].UserJoin,
       UserShoutout: eventIDToEvent[eventID].UserShoutout,
+      HostUserID: eventIDToEvent[eventID].HostUserID,
     };
 
     if (!checkIfEventIsFormatted(updatedEvent)) {
@@ -160,9 +161,7 @@ const EditEventScreen = ({ route }) => {
       displayError(
         formatError(
           "Input error",
-          "Please select at most " +
-            CONSTRAINTS.Event.Interest.Max +
-            " tag."
+          "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."
         )
       );
       return;
@@ -171,9 +170,7 @@ const EditEventScreen = ({ route }) => {
       displayError(
         formatError(
           "Input error",
-          "Please select at least " +
-            CONSTRAINTS.Event.Interest.Min +
-            " tag."
+          "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."
         )
       );
       return;

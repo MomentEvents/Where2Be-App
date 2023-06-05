@@ -53,7 +53,7 @@ const IntroduceEventsScreen = ({ route }) => {
           navigation.goBack();
         }}
       />
-      <EventViewer school={school}></EventViewer>
+      <EventViewer school={school} isHoverButtonVisible={true}></EventViewer>
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={navigateToLogin}

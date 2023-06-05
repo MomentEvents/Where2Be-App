@@ -26,7 +26,7 @@ import { useNavigation } from "@react-navigation/native";
 
 type EventViewerProps = {
   school: School;
-  bottomSpaceNotViewable?: Boolean;
+  isHoverButtonVisible?: Boolean;
 };
 const EventViewer = (props: EventViewerProps) => {
   const navigation = useNavigation<any>();
@@ -142,7 +142,7 @@ const EventViewer = (props: EventViewerProps) => {
           />
         </View>
       ))}
-      {props.bottomSpaceNotViewable && (
+      {props.isHoverButtonVisible && (
         <View style={{ height: SIZES.bottomBarHeight + 90 }} />
       )}
       <View style={{ height: 20 }} />

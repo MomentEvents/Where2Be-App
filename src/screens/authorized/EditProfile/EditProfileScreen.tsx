@@ -60,7 +60,7 @@ const EditProfileScreen = ({ route }) => {
   const { user, isSelf }: EditProfileParams = route.params;
 
   const navigation = useNavigation<any>();
-  const { currentUserID, updateUserIDToUser, userToken } = useContext(UserContext);
+  const { updateUserIDToUser, userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);

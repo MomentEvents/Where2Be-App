@@ -1,6 +1,6 @@
 export type Token = {
+  UserID: string;
   UserAccessToken: string;
-  Expiration: Date;
 }
 
 export type Event = {
@@ -71,7 +71,7 @@ export interface User {
   UserFollow?: boolean;
   NumFollowers?: number;
   NumFollowing?: number;
-  Email?: string;
+  NumEvents?: number;
 }
 
 export type UserResponse = {
@@ -83,5 +83,5 @@ export type UserResponse = {
   user_follow?: boolean;
   num_followers?: number;
   num_following?: number;
-  email?: string;
+  num_events?: number;
 }

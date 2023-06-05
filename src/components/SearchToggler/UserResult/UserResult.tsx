@@ -1,19 +1,36 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, User } from "../../../constants";
 import { McText } from "../../Styled";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { UserContext } from "../../../contexts/UserContext";
 
 type UserResultProps = {
   user: User;
 };
 const UserResult = (props: UserResultProps) => {
   const navigation = useNavigation<any>();
+  const {userIDToUser, updateUserIDToUser} = useContext(UserContext)
+  const [fetchedUser, setFetchedUser] = useState(false)
   const onUserPress = () => {
     navigation.push(SCREENS.ProfileDetails, { user: props.user });
   };
 
+  const pullData = async () => {
+    updateUserIDToUser({ id: props.user.UserID, user: props.user });
+    setFetchedUser(true);
+  };
+
+  // First time being loaded and rendered
+  useEffect(() => {
+    pullData();
+  }, []);
+
+  if (!fetchedUser || !userIDToUser[props.user.UserID]) {
+    return <View />;
+  }
+  
   return (
     <View
       style={{

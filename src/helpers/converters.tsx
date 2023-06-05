@@ -111,6 +111,9 @@ export const userResponseToUser = (pulledUser: UserResponse): User => {
   if(pulledUser.num_following !== undefined && pulledUser.num_following !== null){
     formattedUser.NumFollowing = pulledUser.num_following
   }
+  if(pulledUser.num_events !== undefined && pulledUser.num_events !== null){
+    formattedUser.NumEvents = pulledUser.num_events
+  }
   // check for null or undefined values in formattedUser
   const keysConvert = Object.keys(formattedUser);
   for (const key of keysConvert) {
