@@ -71,7 +71,6 @@ export interface User {
   UserFollow?: boolean;
   NumFollowers?: number;
   NumFollowing?: number;
-  Email?: string;
 }
 
 export type UserResponse = {
@@ -83,5 +82,4 @@ export type UserResponse = {
   user_follow?: boolean;
   num_followers?: number;
   num_following?: number;
-  email?: string;
 }
