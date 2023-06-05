@@ -40,7 +40,9 @@ const ProfileDetailsScreen = ({ route }) => {
   const [viewedUser, setViewedUser] = useState<User>(user);
   const { isAdmin, userToken, currentUserID } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
-  const {userIDToUser, updateUserIDToUser} = useContext(UserContext)
+  const { userIDToUser, updateUserIDToUser } = useContext(UserContext);
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const nukeUser = () => {
     Alert.alert(
@@ -74,20 +76,30 @@ const ProfileDetailsScreen = ({ route }) => {
     );
   };
 
-  useEffect(() => {
+  const pullData = () => {
     getUser(userToken.UserAccessToken, user.UserID)
       .then((pulledUser: User) => {
-        console.log("GOT USER\n\n")
-        console.log(JSON.stringify(pulledUser))
+        console.log("GOT USER\n\n");
+        console.log(JSON.stringify(pulledUser));
         setViewedUser(pulledUser);
-        updateUserIDToUser({id: pulledUser.UserID, user: pulledUser})
-        console.log(JSON.stringify(userIDToUser[user.UserID]))
+        updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
       })
       .catch((error: Error) => {
         displayError(error);
         navigation.goBack();
       });
+  };
+
+  useEffect(() => {
+    pullData();
   }, []);
+
+  useEffect(() => {
+    if (isRefreshing) {
+      pullData();
+    }
+  }, [isRefreshing]);
+
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       {isAdmin ? (
@@ -111,10 +123,15 @@ const ProfileDetailsScreen = ({ route }) => {
           hideBottomUnderline={true}
         />
       )}
-      <SectionProfile user={user} canEditProfile={isAdmin || currentUserID === user.UserID} canFollow={currentUserID !== user.UserID}/>
+      <SectionProfile
+        user={user}
+        canEditProfile={isAdmin || currentUserID === user.UserID}
+        canFollow={currentUserID !== user.UserID}
+      />
       <EventToggler
         selectedUser={user}
         eventsToPull={EVENT_TOGGLER.HostedEvents}
+        setIsRefreshing={setIsRefreshing}
       />
     </MobileSafeView>
   );
