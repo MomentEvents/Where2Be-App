@@ -200,7 +200,7 @@ function createToken(userID: string, userAccessToken: string): Token {
  * none
  */
 async function writeToken(newToken: Token): Promise<void> {
-  console.log("writeToken() call.\nUser Access Token:");
+  console.log("writeToken() call.\nToken:");
   console.log(JSON.stringify(newToken));
   console.log();
   await SecureStore.setItemAsync(TOKEN_STORAGE, JSON.stringify(newToken));
