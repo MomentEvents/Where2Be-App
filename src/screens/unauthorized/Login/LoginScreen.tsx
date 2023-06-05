@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   KeyboardAvoidingView,
   SafeAreaView,
@@ -22,6 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { resetPassword } from "../../../services/AuthService";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -48,6 +50,33 @@ const LoginScreen = () => {
   const onNavigateBack = () => {
     navigation.pop();
   };
+
+  const onForgotPassword = () => {
+    Alert.prompt(
+      'Input email',
+      "To reset an account's password, type the email of the account",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Submit',
+          onPress: (email) => {
+            setLoading(true)
+            resetPassword(email).then(() => {
+              setLoading(false)
+              Alert.alert("Link sent", "Check your email inbox for a password reset link")
+            }).catch((error: Error) => {
+              displayError(error)
+              setLoading(false)
+            })
+          },
+        },
+      ],
+      'plain-text',
+    );
+  }
 
   return (
     <MobileSafeView style={styles.container}>
@@ -89,19 +118,12 @@ const LoginScreen = () => {
           }}
         >
           <McText
-            style={{ textAlign: "center", width: SIZES.width - 80 }}
+            style={{ textAlign: "center", width: SIZES.width - 80, textDecorationLine: "underline" }}
             body6
             color={COLORS.gray}
+            onPress={onForgotPassword}
           >
-            Forgot your password?{" "}
-            <McText
-              onPress={() => openURL("https://momentevents.app/contact")}
-              body6
-              color={COLORS.gray}
-              style={{ textDecorationLine: "underline" }}
-            >
-              Contact us
-            </McText>
+            Forgot your password?
           </McText>
         </View>
         <TouchableOpacity onPress={onLogin}>
@@ -167,6 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: COLORS.purple,
-    marginBottom: 60,
+    marginTop: 40,
+    marginBottom: 40,
   },
 });

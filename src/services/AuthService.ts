@@ -356,23 +356,19 @@ export async function checkIfUserAccessTokenIsAdmin(
   return Promise.resolve(responseJSON.is_admin);
 }
 
-export async function changePassword(
-  userAccessToken: string,
-  oldPassword: string,
-  newPassword: string
+export async function resetPassword(
+  email: string
 ): Promise<void> {
-  const response = await fetch(momentAPI + `/auth/change_password`, {
+  const response = await fetch(momentAPI + `/auth/reset_password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      user_access_token: userAccessToken,
-      old_password: oldPassword,
-      new_password: newPassword
+      email: email
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Unable to change password");
+    throw formatError("Network error", "Unable to reset password");
   });
 
   if (!response.ok) {

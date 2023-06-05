@@ -17,6 +17,5 @@ export const SCREENS = {
     Settings: "SettingsScreen",
     EditMyPassword: "EditMyPasswordScreen",
     AccountSettings: "AccountSettingsScreen",
-    ChangePassword: "ChangePasswordScreen",
     Home: "HomeScreen",
 }
