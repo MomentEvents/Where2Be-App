@@ -24,7 +24,7 @@ import { resetPassword } from "../../../services/AuthService";
 
 const AccountSettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
-  const { userToken, currentUserID } = useContext(UserContext);
+  const { userToken } = useContext(UserContext);
   const navigation = useNavigation<any>();
   const { setLoading } = useContext(ScreenContext);
 
@@ -41,7 +41,7 @@ const AccountSettingsScreen = () => {
           text: "Yes",
           onPress: () => {
             setLoading(true);
-            deleteUser(userToken.UserAccessToken, currentUserID)
+            deleteUser(userToken.UserAccessToken, userToken.UserID)
               .then(() => {
                 userLogout()
                   .then(() => {

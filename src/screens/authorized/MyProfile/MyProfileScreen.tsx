@@ -32,7 +32,7 @@ type ProfileDetailsRouteParams = {
   User: User;
 };
 const MyProfileScreen = ({ route }) => {
-  const { currentUserID, userIDToUser } = useContext(UserContext);
+  const { userToken, userIDToUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
 
   return (
@@ -45,10 +45,10 @@ const MyProfileScreen = ({ route }) => {
         }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={userIDToUser[currentUserID]} canEditProfile={true} canFollow={false}/>
+      <SectionProfile user={userIDToUser[userToken.UserID]} canEditProfile={true} canFollow={false}/>
       <View style={{ flex: 1 }}>
         <EventToggler
-          selectedUser={userIDToUser[currentUserID]}
+          selectedUser={userIDToUser[userToken.UserID]}
           eventsToPull={EVENT_TOGGLER.HostedEvents}
         />
       </View>

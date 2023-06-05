@@ -31,7 +31,7 @@ import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const MyCalendarScreen = ({ route }) => {
-  const { currentUserID, userIDToUser } = useContext(UserContext);
+  const { userToken, userIDToUser } = useContext(UserContext);
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
@@ -42,7 +42,7 @@ const MyCalendarScreen = ({ route }) => {
       />
       <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         <EventToggler
-          selectedUser={userIDToUser[currentUserID]}
+          selectedUser={userIDToUser[userToken.UserID]}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
         />
       </View>

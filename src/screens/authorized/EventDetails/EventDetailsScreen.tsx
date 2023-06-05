@@ -55,7 +55,7 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, currentUserID, isAdmin, userIDToUser, updateUserIDToUser } = useContext(UserContext);
+  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
 
   // Props from previous event card to update
@@ -265,8 +265,8 @@ const EventDetailsScreen = ({ route }) => {
       return;
     }
     console.log("Host UserID is " + host.UserID);
-    console.log("Current user UserID is " + currentUserID);
-    setIsHost(host.UserID == currentUserID || isAdmin);
+    console.log("Current user UserID is " + userToken.UserID);
+    setIsHost(host.UserID == userToken.UserID || isAdmin);
   }, [host]);
 
   return (

@@ -38,7 +38,7 @@ const ProfileDetailsScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { user }: ProfileDetailsRouteParams = route.params;
   const [viewedUser, setViewedUser] = useState<User>(user);
-  const { isAdmin, userToken, currentUserID } = useContext(UserContext);
+  const { isAdmin, userToken, } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const { userIDToUser, updateUserIDToUser } = useContext(UserContext);
 
@@ -125,8 +125,8 @@ const ProfileDetailsScreen = ({ route }) => {
       )}
       <SectionProfile
         user={user}
-        canEditProfile={isAdmin || currentUserID === user.UserID}
-        canFollow={currentUserID !== user.UserID}
+        canEditProfile={isAdmin || userToken.UserID === user.UserID}
+        canFollow={userToken.UserID !== user.UserID}
       />
       <EventToggler
         selectedUser={user}

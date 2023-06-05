@@ -51,7 +51,7 @@ type EditEventScreenParams = {
 const CreateEventScreen = ({ route }) => {
   const navigation = useNavigation<any>();
 
-  const {currentUserID, setCurrentUserID} = useContext(UserContext)
+  const { userToken } = useContext(UserContext);
   const [title, setTitle] = useState<string>();
   const [location, setLocation] = useState<string>();
   const [image, setImage] = useState<string>();
@@ -93,7 +93,7 @@ const CreateEventScreen = ({ route }) => {
       NumShoutouts: 0,
       UserJoin: false,
       UserShoutout: false,
-      HostUserID: currentUserID,
+      HostUserID: userToken.UserID,
     };
 
     if (!checkIfEventIsFormatted(createdEvent)) {
@@ -122,11 +122,21 @@ const CreateEventScreen = ({ route }) => {
     }
 
     if (selectedInterests.size > CONSTRAINTS.Event.Interest.Max) {
-      displayError(formatError("Input error", "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."));
+      displayError(
+        formatError(
+          "Input error",
+          "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."
+        )
+      );
       return;
     }
     if (selectedInterests.size < CONSTRAINTS.Event.Interest.Min) {
-      displayError(formatError("Input error", "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."));
+      displayError(
+        formatError(
+          "Input error",
+          "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."
+        )
+      );
       return;
     }
     console.log(createdEvent);

@@ -41,7 +41,7 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { isLoggedIn, userToken, currentUserID, userIDToUser } = useContext(UserContext);
+  const { isLoggedIn, userToken, userIDToUser } = useContext(UserContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -275,7 +275,7 @@ const EventDetailsScreen = ({ route }) => {
               >
                 <Image
                   style={styles.hostProfilePic}
-                  source={{ uri: userIDToUser[currentUserID].Picture }}
+                  source={{ uri: userIDToUser[userToken.UserID].Picture }}
                 ></Image>
                 <McText
                   h4
@@ -285,16 +285,16 @@ const EventDetailsScreen = ({ route }) => {
                     color: COLORS.white,
                   }}
                 >
-                  {userIDToUser[currentUserID] === null ? (
+                  {userIDToUser[userToken.UserID] === null ? (
                     <ActivityIndicator
                       color={COLORS.white}
                       style={{ marginLeft: 10 }}
                     />
                   ) : (
-                    userIDToUser[currentUserID].DisplayName
+                    userIDToUser[userToken.UserID].DisplayName
                   )}
                 </McText>
-                {userIDToUser[currentUserID] && userIDToUser[currentUserID].VerifiedOrganization && (
+                {userIDToUser[userToken.UserID] && userIDToUser[userToken.UserID].VerifiedOrganization && (
                   <View style={{ paddingLeft: 3 }}>
                     <MaterialIcons
                       name="verified"

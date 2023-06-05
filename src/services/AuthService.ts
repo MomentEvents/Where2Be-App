@@ -165,7 +165,8 @@ export async function signup(
  * None
  */
 export async function logout(): Promise<void> {
-  if ((await getToken()) !== null) {
+  const token = await getToken()
+  if (token !== null && token !== undefined) {
     deleteToken();
   }
   return Promise.resolve();
