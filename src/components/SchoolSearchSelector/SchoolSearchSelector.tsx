@@ -18,6 +18,7 @@ import {
 } from "../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type SchoolSelectorProps = {
   onSelectSchool: (school: School) => void;
@@ -40,6 +41,8 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   const [schoolMap, setSchoolMap] = useState<{ [key: string]: School }>(
     undefined
   );
+
+  const insets = useSafeAreaInsets();
 
   const [componentLoaded, setComponentLoaded] = useState<boolean>(false);
 
@@ -104,7 +107,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             data={selectionData}
             optionContainerStyle={{
               backgroundColor: "rgba(60,60,60,0.9)",
-              marginTop: SIZES.topBarHeight + 10,
+              marginTop: insets.top + 10,
             }}
             optionTextStyle={{
               color: COLORS.white,
@@ -116,7 +119,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             }}
             cancelStyle={{
               backgroundColor: "rgba(60,60,60,0.9)",
-              marginBottom: SIZES.bottomBarHeight + 10,
+              marginBottom: insets.bottom + 10,
             }}
             onChange={(option) => {
               props.onSelectSchool(schoolMap[option.key]);
@@ -161,7 +164,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           data={selectionData}
           optionContainerStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
-            marginTop: SIZES.topBarHeight + 10,
+            marginTop: insets.top + 10,
           }}
           optionTextStyle={{
             color: COLORS.white,
@@ -173,7 +176,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           }}
           cancelStyle={{
             backgroundColor: "rgba(60,60,60,0.9)",
-            marginBottom: SIZES.bottomBarHeight + 10,
+            marginBottom: insets.bottom + 10,
           }}
           onChange={(option) => {
             props.onSelectSchool(schoolMap[option.key]);

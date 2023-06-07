@@ -38,9 +38,8 @@ const ProfileDetailsScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { user }: ProfileDetailsRouteParams = route.params;
   const [viewedUser, setViewedUser] = useState<User>(user);
-  const { isAdmin, userToken, } = useContext(UserContext);
+  const { isAdmin, userToken, userIDToUser, updateUserIDToUser } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
-  const { userIDToUser, updateUserIDToUser } = useContext(UserContext);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -124,7 +123,7 @@ const ProfileDetailsScreen = ({ route }) => {
         />
       )}
       <SectionProfile
-        user={user}
+        userID={user.UserID}
         canEditProfile={isAdmin || userToken.UserID === user.UserID}
         canFollow={userToken.UserID !== user.UserID}
       />

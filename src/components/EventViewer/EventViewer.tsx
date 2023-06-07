@@ -23,12 +23,14 @@ import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type EventViewerProps = {
   school: School;
   isHoverButtonVisible?: Boolean;
 };
 const EventViewer = (props: EventViewerProps) => {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   const { isLoggedIn, userToken } = useContext(UserContext);
   const [categoryNameToEventsMap, setCategoryNameToEventsMap] = useState<{
@@ -143,7 +145,7 @@ const EventViewer = (props: EventViewerProps) => {
         </View>
       ))}
       {props.isHoverButtonVisible && (
-        <View style={{ height: SIZES.bottomBarHeight + 90 }} />
+        <View style={{ height: insets.bottom + 90 }} />
       )}
       <View style={{ height: 20 }} />
     </ScrollView>

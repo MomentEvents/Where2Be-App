@@ -11,6 +11,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,9 +37,9 @@ const TabIcon = ({ focused, icon }) => {
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <MaterialCommunityIcons name="compass-outline" size={32} color="white" />
+            <MaterialCommunityIcons name="compass-outline" size={30} color="white" />
           ) : (
-            <MaterialCommunityIcons name="compass-outline" size={32} color="gray" />
+            <MaterialCommunityIcons name="compass-outline" size={30} color="gray" />
           )}
         </View>
       );
@@ -70,6 +71,8 @@ const TabIcon = ({ focused, icon }) => {
 };
 
 const TabNavigator = ({ params }) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       //tabBarOptions={{ showLabel: false }}
@@ -83,13 +86,13 @@ const TabNavigator = ({ params }) => {
           opacity: 1,
           borderTopColor: COLORS.gray2,
           borderTopWidth: StyleSheet.hairlineWidth,
-          height: SIZES.tabBarHeight,
+          height: SIZES.tabBarHeight + insets.bottom,
           borderTopRightRadius: 0,
           borderTopLeftRadius: 0,
         },
         tabBarItemStyle: {
           display: "flex",
-          paddingTop: 8,
+          paddingTop: 5,
         },
       }}
     >

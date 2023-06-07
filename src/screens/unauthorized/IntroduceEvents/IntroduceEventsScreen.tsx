@@ -18,7 +18,7 @@ import {
   School,
   icons,
 } from "../../../constants";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { Event } from "../../../constants";
 import { getAllInterests } from "../../../services/InterestService";
 import { displayError } from "../../../helpers/helpers";
@@ -37,6 +37,7 @@ type RouteParams = {
 };
 const IntroduceEventsScreen = ({ route }) => {
   const { school }: RouteParams = route.params;
+  const insets = useSafeAreaInsets();
 
   const navigation = useNavigation<any>();
 
@@ -55,7 +56,7 @@ const IntroduceEventsScreen = ({ route }) => {
       />
       <EventViewer school={school} isHoverButtonVisible={true}></EventViewer>
       <TouchableOpacity
-        style={styles.hoverButtonContainer}
+        style={{bottom: insets.bottom + 30, ...styles.hoverButtonContainer}}
         onPressOut={navigateToLogin}
       >
         <GradientButton style={styles.hoverButtonIconContainer}>
@@ -84,7 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "absolute",
     right: 30,
-    bottom: 30 + SIZES.bottomBarHeight,
     borderRadius: 10,
   },
   hoverButtonIconContainer: {

@@ -2,6 +2,8 @@ import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../constants";
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 type MobileSafeViewProps = {
   children;
@@ -10,16 +12,16 @@ type MobileSafeViewProps = {
   isTopViewable?: boolean;
 };
 const MobileSafeView = (props: MobileSafeViewProps) => {
-  
+  const insets = useSafeAreaInsets();
   if (props.isBottomViewable || props.isTopViewable) {
     return (
       <View style={[props.style, styles.container]}>
         {!props.isTopViewable && (
-          <View style={[styles.topBarContainer]} />
+          <View style={{height: insets.top, ...styles.topBarContainer}} />
         )}
-        <View style={[styles.container]}>{props.children}</View>
+        <View style={{...styles.container}}>{props.children}</View>
         {!props.isBottomViewable && (
-          <View style={[styles.bottomBarContainer]} />
+          <View style={{height: insets.bottom, ...styles.bottomBarContainer}} />
         )}
       </View>
     );
@@ -39,14 +41,8 @@ const styles = StyleSheet.create({
   },
   topBarContainer: {
     width: "100%",
-    height: SIZES.topBarHeight,
   },
   bottomBarContainer: {
     width: "100%",
-    height: SIZES.bottomBarHeight,
-  },
-  tabBarContainer: {
-    width: "100%",
-    height: SIZES.tabBarHeight - SIZES.bottomBarHeight,
   }
 });

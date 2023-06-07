@@ -63,9 +63,7 @@ export const SIZES = {
   // app dimensions
   width,
   height,
-  tabBarHeight: 50 + (Platform.OS === 'ios' ? 24 : 0),
-  topBarHeight: Platform.OS === 'ios' ? 44 : 24,
-  bottomBarHeight: Platform.OS === 'ios' ? 24 : 0,
+  tabBarHeight: 35,
 };
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},

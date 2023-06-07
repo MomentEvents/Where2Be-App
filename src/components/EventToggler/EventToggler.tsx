@@ -21,6 +21,7 @@ import {
 import EventCard from "../EventCard";
 import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type EventTogglerProps = {
   selectedUser: User;
@@ -35,6 +36,8 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
+
+  const insets = useSafeAreaInsets();
 
   const pullData = async () => {
     if (isFutureToggle) {
@@ -239,7 +242,7 @@ const EventToggler = (props: EventTogglerProps) => {
             <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
           )
         )}
-        <View style={{ height: SIZES.bottomBarHeight + 10 }} />
+        <View style={{ height: insets.bottom + 10 }} />
       </ScrollView>
     </View>
   );

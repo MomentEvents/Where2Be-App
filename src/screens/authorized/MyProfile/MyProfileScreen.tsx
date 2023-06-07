@@ -28,9 +28,6 @@ import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 
-type ProfileDetailsRouteParams = {
-  User: User;
-};
 const MyProfileScreen = ({ route }) => {
   const { userToken, userIDToUser } = useContext(UserContext);
   const navigation = useNavigation<any>();
@@ -45,7 +42,7 @@ const MyProfileScreen = ({ route }) => {
         }}
         hideBottomUnderline={true}
       />
-      <SectionProfile user={userIDToUser[userToken.UserID]} canEditProfile={true} canFollow={false}/>
+      <SectionProfile userID={userToken.UserID} canEditProfile={true} canFollow={false}/>
       <View style={{ flex: 1 }}>
         <EventToggler
           selectedUser={userIDToUser[userToken.UserID]}

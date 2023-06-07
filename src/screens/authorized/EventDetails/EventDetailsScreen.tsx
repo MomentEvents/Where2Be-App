@@ -27,7 +27,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import {
   addUserJoinEvent,
@@ -55,7 +58,8 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } = useContext(UserContext);
+  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
+    useContext(UserContext);
   const navigation = useNavigation<any>();
 
   // Props from previous event card to update
@@ -98,6 +102,8 @@ const EventDetailsScreen = ({ route }) => {
   const [didFetchHost, setDidFetchHost] = useState<boolean>(false);
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
+
+  const insets = useSafeAreaInsets();
 
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
   // This updates the event counter and the boolean in case there is a discrepency.
@@ -221,7 +227,7 @@ const EventDetailsScreen = ({ route }) => {
     getEventHostByEventId(userToken.UserAccessToken, eventID)
       .then((pulledHost: User) => {
         setHost(pulledHost);
-        updateUserIDToUser({id: pulledHost.UserID, user: pulledHost})
+        updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
         setDidFetchHost(true);
       })
       .catch((error: Error) => {
@@ -246,8 +252,8 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    if(eventIDToEvent[eventID]){
-      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID])
+    if (eventIDToEvent[eventID]) {
+      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID]);
     }
     pullData();
   }, []);
@@ -319,7 +325,7 @@ const EventDetailsScreen = ({ route }) => {
               <View
                 style={{
                   flex: 1,
-                  marginTop: SIZES.topBarHeight,
+                  marginTop: insets.top,
                 }}
               >
                 <ImageHeaderSection>
@@ -485,7 +491,12 @@ const EventDetailsScreen = ({ route }) => {
               >
                 <Image
                   style={styles.hostProfilePic}
-                  source={{ uri: !host ? null : host.Picture }}
+                  source={{
+                    uri:
+                      host && userIDToUser[host.UserID]
+                        ? userIDToUser[host.UserID].Picture
+                        : null,
+                  }}
                 ></Image>
                 <McText
                   h4
@@ -495,24 +506,26 @@ const EventDetailsScreen = ({ route }) => {
                     color: COLORS.white,
                   }}
                 >
-                  {!host ? (
+                  {host && userIDToUser[host.UserID] ? (
+                    userIDToUser[host.UserID].DisplayName
+                  ) : (
                     <ActivityIndicator
                       color={COLORS.white}
                       style={{ marginLeft: 10 }}
                     />
-                  ) : (
-                    host.DisplayName
                   )}
                 </McText>
-                {host && host.VerifiedOrganization && (
-                  <View style={{ paddingLeft: 3 }}>
-                    <MaterialIcons
-                      name="verified"
-                      size={18}
-                      color={COLORS.purple}
-                    />
-                  </View>
-                )}
+                {host &&
+                  userIDToUser[host.UserID] &&
+                  userIDToUser[host.UserID].VerifiedOrganization && (
+                    <View style={{ paddingLeft: 3 }}>
+                      <MaterialIcons
+                        name="verified"
+                        size={18}
+                        color={COLORS.purple}
+                      />
+                    </View>
+                  )}
               </TouchableOpacity>
             </HostSection>
             <View>
@@ -630,13 +643,15 @@ const EventDetailsScreen = ({ route }) => {
             <SectionFooter>
               <View
                 style={{
-                  height: 170 + SIZES.bottomBarHeight,
+                  height: 170 + insets.bottom,
                 }}
               ></View>
             </SectionFooter>
           </View>
         </ScrollView>
-        <View style={styles.userControlContainer}>
+        <View
+          style={{ ...styles.userControlContainer, bottom: insets.bottom + 10 }}
+        >
           {eventIDToEvent[eventID] ? (
             <UserOptionsSection>
               <View
@@ -796,7 +811,6 @@ const styles = StyleSheet.create({
   userControlContainer: {
     flex: 1,
     position: "absolute",
-    bottom: SIZES.bottomBarHeight + 10,
     left: 10,
     right: 10,
     height: 110,

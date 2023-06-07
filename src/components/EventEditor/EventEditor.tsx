@@ -17,6 +17,7 @@ import styled from "styled-components/native";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { convertDateToUTC } from "../../helpers/helpers";
 import { CONSTRAINTS } from "../../constants/constraints";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type EventEditorProps = {
     title: string,
@@ -39,6 +40,7 @@ type EventEditorProps = {
     setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>
 }
 const EventEditor = (props: EventEditorProps) => {
+  const insets = useSafeAreaInsets();
 
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
@@ -199,7 +201,7 @@ const EventEditor = (props: EventEditorProps) => {
             </View>
           </SectionInputs>
         </View>
-        <View style={{height: SIZES.bottomBarHeight}}/>
+        <View style={{height: insets.bottom }}/>
       </KeyboardAwareScrollView>
       <DateTimePickerModal
         isVisible={openedDatePicker}

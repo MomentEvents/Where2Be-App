@@ -7,7 +7,7 @@ import {
   Touchable,
   Alert,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
 import { McText } from "./styled";
 import { UserContext } from "../../contexts/UserContext";
@@ -19,9 +19,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 type SectionProfileProps = {
-  user: User;
+  userID: string;
   canEditProfile: boolean;
   canFollow: boolean;
+  showStatistics?: boolean;
 };
 
 const SectionProfile = (props: SectionProfileProps) => {
@@ -33,17 +34,27 @@ const SectionProfile = (props: SectionProfileProps) => {
   } = useContext(UserContext);
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
+
+  if(!userIDToUser[props.userID]){
+    return <></>
+  }
+
   return (
     <View style={styles.profileContainer}>
       <Image
         style={styles.imageContainer}
-        source={{ uri: props.user.Picture }}
+        source={{ uri: userIDToUser[props.userID].Picture }}
       />
+      <View style={{flexDirection: "row"}}>
+        <TouchableOpacity disabled={true}>
+
+        </TouchableOpacity>
+      </View>
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row" }}>
           <McText h3 style={styles.displayNameContainer}>
-            {props.user.DisplayName}
-            {props.user.VerifiedOrganization && (
+            {userIDToUser[props.userID].DisplayName}
+            {userIDToUser[props.userID].VerifiedOrganization && (
               <View style={{ paddingLeft: 3 }}>
                 <MaterialIcons
                   name="verified"
@@ -56,14 +67,14 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <View style={{ flexDirection: "row" }}>
           <McText body3 style={styles.usernameContainer}>
-            @{props.user.Username}
+            @{userIDToUser[props.userID].Username}
           </McText>
         </View>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate(SCREENS.EditProfile, {
-              user: props.user,
-              isSelf: props.user.UserID === userToken.UserID,
+              user: userIDToUser[props.userID],
+              isSelf: userIDToUser[props.userID].UserID === userToken.UserID,
             });
           }}
         >
@@ -75,22 +86,22 @@ const SectionProfile = (props: SectionProfileProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            userIDToUser[props.user.UserID].UserFollow
-              ? clientUnfollowUser(props.user.UserID)
-              : clientFollowUser(props.user.UserID);
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow
+              ? clientUnfollowUser(userIDToUser[props.userID].UserID)
+              : clientFollowUser(userIDToUser[props.userID].UserID);
           }}
           disabled={
-            !userIDToUser[props.user.UserID] &&
-            (userIDToUser[props.user.UserID].UserFollow == null ||
-              userIDToUser[props.user.UserID].UserFollow == undefined)
+            !userIDToUser[userIDToUser[props.userID].UserID] ||
+            (userIDToUser[userIDToUser[props.userID].UserID].UserFollow == null ||
+              userIDToUser[userIDToUser[props.userID].UserID].UserFollow == undefined)
           }
         >
           {props.canFollow &&
-          (userIDToUser[props.user.UserID] &&
-          (userIDToUser[props.user.UserID].UserFollow !== undefined &&
-            userIDToUser[props.user.UserID].UserFollow !== null) ? (
+          (userIDToUser[userIDToUser[props.userID].UserID] &&
+          (userIDToUser[userIDToUser[props.userID].UserID].UserFollow !== undefined &&
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !== null) ? (
             <View style={styles.editProfileButtonContainer}>
-              {userIDToUser[props.user.UserID].UserFollow ? (
+              {userIDToUser[userIDToUser[props.userID].UserID].UserFollow ? (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Ionicons
                     style={{ marginRight: 5 }}

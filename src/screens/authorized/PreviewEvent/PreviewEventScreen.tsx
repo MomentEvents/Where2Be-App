@@ -20,7 +20,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
@@ -55,6 +55,8 @@ const EventDetailsScreen = ({ route }) => {
     eventIDToInterests,
     updateEventIDToInterests,
   } = useContext(EventContext);
+
+  const insets = useSafeAreaInsets();
 
   const navigation = useNavigation<any>();
 
@@ -391,7 +393,7 @@ const EventDetailsScreen = ({ route }) => {
             </View>
           </View>
         </View>
-        <View style={{ height: SIZES.bottomBarHeight + 10 }} />
+        <View style={{ height: insets.bottom + 10 }} />
       </ScrollView>
     </MobileSafeView>
   );
