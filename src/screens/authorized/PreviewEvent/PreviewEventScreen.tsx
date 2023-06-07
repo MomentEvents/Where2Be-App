@@ -177,7 +177,7 @@ const EventDetailsScreen = ({ route }) => {
                           style={{ marginRight: 8 }}
                         />
                         <McText
-                          h4
+                          h5
                           style={{
                             letterSpacing: 0.1,
                             color: COLORS.lightGray,
@@ -198,7 +198,7 @@ const EventDetailsScreen = ({ route }) => {
                         >
                           <icons.time_eventdetails style={{ marginRight: 8 }} />
                           <McText
-                            h4
+                            h5
                             style={{
                               letterSpacing: 0.1,
                               color: COLORS.lightGray,

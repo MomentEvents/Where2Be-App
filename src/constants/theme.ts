@@ -1,9 +1,14 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-export const CUSTOMFONT_REGULAR = 'ProductSans-Regular';
-export const CUSTOMFONT_BOLD = 'ProductSans-Bold';
-export const CUSTOMFONT_BLACK = 'ProductSans-Black';
+export const CUSTOMFONT_BLACK = 'CustomFont-Black';
+export const CUSTOMFONT_EXTRABOLD = 'CustomFont-ExtraBold';
+export const CUSTOMFONT_BOLD = 'CustomFont-Bold';
+export const CUSTOMFONT_SEMIBOLD = 'CustomFont-SemiBold';
+export const CUSTOMFONT_REGULAR = 'CustomFont-Regular';
+export const CUSTOMFONT_THIN = 'CustomFont-Thin';
+export const CUSTOMFONT_LIGHT = 'CustomFont-Light';
+export const CUSTOMFONT_EXTRALIGHT = 'CustomFont-ExtraLight';
 
 export const COLORS = {
   default: '#FFFFFF',

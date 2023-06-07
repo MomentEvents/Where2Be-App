@@ -41,7 +41,7 @@ export async function login(
   if (
     !usercred || usercred === ""
   ) {
-    throw formatError("Input error", "Please enter a valid username");
+    throw formatError("Input error", "Please enter a valid username or password");
   }
 
   if (!password || password === "") {

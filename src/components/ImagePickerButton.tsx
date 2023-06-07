@@ -31,7 +31,7 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      Alert.alert("Permission error", "Moment does not have access to your photos. Please enable them in settings.")
+      Alert.alert("Permission error", "Where2Be does not have access to your photos. Please enable them in settings.")
       return;
     }
     var didPick = false;

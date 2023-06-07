@@ -57,7 +57,7 @@ const HomeScreen = () => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Moment @ " + currentSchool.Abbreviation} />
+      <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={

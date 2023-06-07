@@ -91,7 +91,7 @@ const LoginScreen = () => {
         </View>
         <View style={styles.welcomeTextContainer}>
           <McText h1 style={styles.welcomeText}>
-            Welcome to Moment!
+            Welcome back!
           </McText>
         </View>
         <TextInput

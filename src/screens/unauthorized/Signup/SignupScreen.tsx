@@ -151,7 +151,7 @@ const SignupScreen = () => {
           <>
             <View style={styles.welcomeTextContainer}>
               <McText h1 style={styles.welcomeText}>
-                Welcome to Moment!
+                Create an account
               </McText>
             </View>
             <TextInput

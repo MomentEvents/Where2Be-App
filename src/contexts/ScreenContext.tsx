@@ -87,10 +87,10 @@ export const ScreenProvider = ({ children }) => {
               alignItems: "center",
             }}
           >
-            <icons.moment
+            <icons.where2be
               width="70%"
               style={{ marginBottom: 50 }}
-            ></icons.moment>
+            ></icons.where2be>
           </View>
           <View
             style={{

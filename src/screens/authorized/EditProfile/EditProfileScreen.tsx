@@ -23,7 +23,6 @@ import {
 import styled from "styled-components/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { FONTS, SIZES, COLORS, icons, images, User } from "../../../constants";

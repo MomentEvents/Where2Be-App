@@ -31,6 +31,7 @@ import activecheckmark from "../../assets/icons/svgicons/activejoin.svg"
 import inactiveshoutout from "../../assets/icons/svgicons/inactiveshoutout.svg";
 import activeshoutout from "../../assets/icons/svgicons/activeshoutout.svg"
 import moment from "../../assets/icons/svgicons/moment.svg"
+import where2be from "../../assets/icons/svgicons/where2be.svg"
 import backarrow from "../../assets/icons/svgicons/backarrow.svg"
 import plus from "../../assets/icons/svgicons/plus.svg"
 import calendar_eventdetails from "../../assets/icons/svgicons/eventdetails/calendar_eventdetails.svg"
@@ -127,5 +128,6 @@ export default {
   time_eventdetails,
   visibility_eventdetails,
   trash,
-  website
+  website,
+  where2be
 };
