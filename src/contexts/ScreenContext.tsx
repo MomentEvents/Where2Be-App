@@ -89,7 +89,7 @@ export const ScreenProvider = ({ children }) => {
           >
             <icons.where2be
               width="70%"
-              style={{ marginBottom: 50 }}
+              style={{ marginBottom: 80 }}
             ></icons.where2be>
           </View>
           <View

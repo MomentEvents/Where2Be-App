@@ -60,7 +60,7 @@ const SelectSchoolScreen = ({ route }) => {
           alignItems: "center",
         }}
       >
-        <icons.where2be width="70%" style={{ marginBottom: 50 }}></icons.where2be>
+        <icons.where2be width="70%" style={{ marginBottom: 80 }}></icons.where2be>
       </View>
       <View
         style={{

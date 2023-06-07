@@ -151,7 +151,7 @@ const SignupScreen = () => {
           <>
             <View style={styles.welcomeTextContainer}>
               <McText h1 style={styles.welcomeText}>
-                Create an account
+                Create account
               </McText>
             </View>
             <TextInput
