@@ -1,5 +1,5 @@
-# Moment-App
-This contains the codebase for Moment
+# Where2Be-App
+This contains the codebase for the frontend application of Where2Be
 
 # How to run the app
 
