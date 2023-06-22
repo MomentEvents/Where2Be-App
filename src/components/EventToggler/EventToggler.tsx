@@ -257,7 +257,6 @@ const EventToggler = (props: EventTogglerProps) => {
               onRefresh={onRefresh}
             />
           }
-          contentContainerStyle={{flex: 1}}
           style={{ backgroundColor: COLORS.black }}
         >
           {isFutureToggle ? (
