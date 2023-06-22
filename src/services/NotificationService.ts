@@ -54,7 +54,7 @@ export async function registerPushNotificationToken(
       push_type: "Expo"
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could upload push token");
+    throw formatError("Network error", "Could not upload push token");
   });
 
   if (!response.ok) {

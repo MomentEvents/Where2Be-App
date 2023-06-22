@@ -42,14 +42,14 @@ const ProfileViewer = (props: ProfileViewerProps) => {
   const [eventsRefreshing, setEventsRefreshing] = useState(false);
 
   useEffect(() => {
-    setIsRefreshing(eventsRefreshing || userRefreshing)
-  }, [userRefreshing, eventsRefreshing])
+    setIsRefreshing(eventsRefreshing || userRefreshing);
+  }, [userRefreshing, eventsRefreshing]);
 
   const onRefresh = () => {
-    setDidPullUser(false)
-    setUserRefreshing(true)
-    setEventsRefreshing(true)
-  }
+    setDidPullUser(false);
+    setUserRefreshing(true);
+    setEventsRefreshing(true);
+  };
   const nukeUser = () => {
     Alert.alert(
       "Nuke user",
@@ -88,8 +88,8 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         console.log("GOT USER\n\n");
         console.log(JSON.stringify(pulledUser));
         updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
-        setUserRefreshing(false)
-        setDidPullUser(true)
+        setUserRefreshing(false);
+        setDidPullUser(true);
       })
       .catch((error: Error) => {
         displayError(error);
@@ -128,12 +128,14 @@ const ProfileViewer = (props: ProfileViewerProps) => {
       ) : (
         <SectionHeader
           title={userIDToUser[props.userID].Username}
-          leftButtonSVG={<icons.backarrow />}
+          leftButtonSVG={!props.showSettings ? <icons.backarrow /> : undefined}
           leftButtonOnClick={() => {
-            navigation.goBack();
+            if (!props.showSettings) {
+              navigation.goBack();
+            }
           }}
           hideBottomUnderline={true}
-          rightButtonSVG={props.showSettings ? <icons.settings /> : <></>}
+          rightButtonSVG={props.showSettings ? <icons.settings /> : undefined}
           rightButtonOnClick={() => {
             if (props.showSettings) {
               navigation.navigate(SCREENS.Settings);
@@ -142,13 +144,13 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         />
       )}
       <ScrollView
-      style={{backgroundColor: COLORS.black}}
+        style={{ backgroundColor: COLORS.black }}
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            style={{backgroundColor: COLORS.trueBlack}}
+            style={{ backgroundColor: COLORS.trueBlack }}
           />
         }
       >
