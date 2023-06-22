@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Alert,
-  RefreshControl,
   ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";

@@ -199,7 +199,7 @@ const EventToggler = (props: EventTogglerProps) => {
         </TouchableOpacity>
       </View>
       {checkIfValidRefreshingProps() ? (
-        <View style={{ flex: 1,  backgroundColor: isRefreshing ? COLORS.trueBlack : COLORS.black }}>
+        <View style={{ flex: 1,  backgroundColor: COLORS.black }}>
           {isFutureToggle ? (
             pulledFutureEvents ? (
               pulledFutureEvents.length !== 0 ? (

@@ -1,13 +1,6 @@
 import {
-  ActivityIndicator,
-  Button,
-  Image,
   Platform,
-  RefreshControl,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";

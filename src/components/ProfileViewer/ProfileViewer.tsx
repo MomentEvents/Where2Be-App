@@ -38,6 +38,7 @@ const ProfileViewer = (props: ProfileViewerProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [userRefreshing, setUserRefreshing] = useState(false);
+  const [didPullUser, setDidPullUser] = useState(false);
   const [eventsRefreshing, setEventsRefreshing] = useState(false);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const ProfileViewer = (props: ProfileViewerProps) => {
   }, [userRefreshing, eventsRefreshing])
 
   const onRefresh = () => {
+    setDidPullUser(false)
     setUserRefreshing(true)
     setEventsRefreshing(true)
   }
@@ -87,6 +89,7 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         console.log(JSON.stringify(pulledUser));
         updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
         setUserRefreshing(false)
+        setDidPullUser(true)
       })
       .catch((error: Error) => {
         displayError(error);
@@ -139,18 +142,20 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         />
       )}
       <ScrollView
+      style={{backgroundColor: COLORS.black}}
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
             refreshing={isRefreshing}
             onRefresh={onRefresh}
+            style={{backgroundColor: COLORS.trueBlack}}
           />
         }
       >
         <SectionProfile
           userID={props.userID}
           canEditProfile={isAdmin || userToken.UserID === props.userID}
-          canFollow={userToken.UserID !== props.userID}
+          canFollow={didPullUser && userToken.UserID !== props.userID}
         />
         <EventToggler
           selectedUserID={props.userID}

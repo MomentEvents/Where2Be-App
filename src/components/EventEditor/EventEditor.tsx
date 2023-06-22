@@ -201,7 +201,7 @@ const EventEditor = (props: EventEditorProps) => {
             </View>
           </SectionInputs>
         </View>
-        <View style={{height: insets.bottom }}/>
+        <View style={{height: insets.bottom + 10}}/>
       </KeyboardAwareScrollView>
       <DateTimePickerModal
         isVisible={openedDatePicker}

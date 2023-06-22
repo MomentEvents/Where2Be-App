@@ -1,12 +1,5 @@
 import {
   StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  ScrollView,
-  RefreshControl,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
