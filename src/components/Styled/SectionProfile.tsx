@@ -97,7 +97,7 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <View style={{ marginRight: 30 }}>
           <McText numberOfLines={1} h4 style={styles.displayNameContainer}>
-            {"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"}
+            {userIDToUser[props.userID].DisplayName}
             {userIDToUser[props.userID].VerifiedOrganization && (
               <View style={{ paddingLeft: 3 }}>
                 <MaterialIcons

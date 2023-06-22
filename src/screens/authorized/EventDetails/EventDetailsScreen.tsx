@@ -146,6 +146,13 @@ const EventDetailsScreen = ({ route }) => {
               .then(() => {
                 setLoading(false);
                 updateEventIDToEvent({ id: eventID, event: undefined });
+                updateUserIDToUser({
+                  id: userToken.UserID,
+                  user: {
+                    ...userIDToUser[userToken.UserID],
+                    NumEvents: userIDToUser[userToken.UserID].NumEvents - 1,
+                  },
+                });
                 navigation.goBack();
               })
               .catch((error: Error) => {

@@ -20,7 +20,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { McIcon, McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
@@ -31,7 +34,11 @@ import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
 
 type routeParametersType = {
@@ -41,7 +48,8 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { isLoggedIn, userToken, userIDToUser } = useContext(UserContext);
+  const { isLoggedIn, userToken, userIDToUser, updateUserIDToUser } =
+    useContext(UserContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -79,6 +87,13 @@ const EventDetailsScreen = ({ route }) => {
     createEvent(userToken.UserAccessToken, createdEventBase64, interests)
       .then((eventID: string) => {
         setLoading(false);
+        updateUserIDToUser({
+          id: userToken.UserID,
+          user: {
+            ...userIDToUser[userToken.UserID],
+            NumEvents: userIDToUser[userToken.UserID].NumEvents + 1,
+          },
+        });
         updateEventIDToEvent({ id: eventID, event: createdEvent });
         navigation.popToTop();
         navigation.push(SCREENS.EventDetails, { eventID: eventID });
@@ -296,15 +311,16 @@ const EventDetailsScreen = ({ route }) => {
                     userIDToUser[userToken.UserID].DisplayName
                   )}
                 </McText>
-                {userIDToUser[userToken.UserID] && userIDToUser[userToken.UserID].VerifiedOrganization && (
-                  <View style={{ paddingLeft: 3 }}>
-                    <MaterialIcons
-                      name="verified"
-                      size={18}
-                      color={COLORS.purple}
-                    />
-                  </View>
-                )}
+                {userIDToUser[userToken.UserID] &&
+                  userIDToUser[userToken.UserID].VerifiedOrganization && (
+                    <View style={{ paddingLeft: 3 }}>
+                      <MaterialIcons
+                        name="verified"
+                        size={18}
+                        color={COLORS.purple}
+                      />
+                    </View>
+                  )}
               </View>
             </HostSection>
 
@@ -385,8 +401,7 @@ const EventDetailsScreen = ({ route }) => {
                   >
                     {createdEvent === undefined
                       ? null
-                      : createdEvent.Visibility
-                    }
+                      : createdEvent.Visibility}
                   </McText>
                 </View>
               </VisibilitySection>
