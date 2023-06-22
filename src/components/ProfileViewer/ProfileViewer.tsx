@@ -1,4 +1,11 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -30,6 +37,17 @@ const ProfileViewer = (props: ProfileViewerProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const [userRefreshing, setUserRefreshing] = useState(false);
+  const [eventsRefreshing, setEventsRefreshing] = useState(false);
+
+  useEffect(() => {
+    setIsRefreshing(eventsRefreshing || userRefreshing)
+  }, [userRefreshing, eventsRefreshing])
+
+  const onRefresh = () => {
+    setUserRefreshing(true)
+    setEventsRefreshing(true)
+  }
   const nukeUser = () => {
     Alert.alert(
       "Nuke user",
@@ -68,6 +86,7 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         console.log("GOT USER\n\n");
         console.log(JSON.stringify(pulledUser));
         updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
+        setUserRefreshing(false)
       })
       .catch((error: Error) => {
         displayError(error);
@@ -86,7 +105,7 @@ const ProfileViewer = (props: ProfileViewerProps) => {
   }, [isRefreshing]);
 
   if (!props.userID) {
-    console.warn("FATAL ERROR: NO USER ID PASSED INTO PROFILE VIEWER")
+    console.warn("FATAL ERROR: NO USER ID PASSED INTO PROFILE VIEWER");
     return <></>;
   }
 
@@ -119,16 +138,27 @@ const ProfileViewer = (props: ProfileViewerProps) => {
           }}
         />
       )}
-      <SectionProfile
-        userID={props.userID}
-        canEditProfile={isAdmin || userToken.UserID === props.userID}
-        canFollow={userToken.UserID !== props.userID}
-      />
-      <EventToggler
-        selectedUserID={props.userID}
-        eventsToPull={EVENT_TOGGLER.HostedEvents}
-        setIsRefreshing={setIsRefreshing}
-      />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.white}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <SectionProfile
+          userID={props.userID}
+          canEditProfile={isAdmin || userToken.UserID === props.userID}
+          canFollow={userToken.UserID !== props.userID}
+        />
+        <EventToggler
+          selectedUserID={props.userID}
+          eventsToPull={EVENT_TOGGLER.HostedEvents}
+          isRefreshing={eventsRefreshing}
+          setIsRefreshing={setEventsRefreshing}
+        />
+      </ScrollView>
     </MobileSafeView>
   );
 };

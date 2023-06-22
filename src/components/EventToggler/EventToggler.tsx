@@ -199,8 +199,7 @@ const EventToggler = (props: EventTogglerProps) => {
         </TouchableOpacity>
       </View>
       {checkIfValidRefreshingProps() ? (
-        <View>
-          {" "}
+        <View style={{ flex: 1,  backgroundColor: isRefreshing ? COLORS.trueBlack : COLORS.black }}>
           {isFutureToggle ? (
             pulledFutureEvents ? (
               pulledFutureEvents.length !== 0 ? (
@@ -217,7 +216,7 @@ const EventToggler = (props: EventTogglerProps) => {
                 </View>
               )
             ) : (
-              !isRefreshing && (
+              (
                 <ActivityIndicator
                   color={COLORS.white}
                   style={{ marginTop: 20 }}
@@ -239,7 +238,7 @@ const EventToggler = (props: EventTogglerProps) => {
               </View>
             )
           ) : (
-            !isRefreshing && (
+            (
               <ActivityIndicator
                 color={COLORS.white}
                 style={{ marginTop: 20 }}
@@ -258,6 +257,7 @@ const EventToggler = (props: EventTogglerProps) => {
               onRefresh={onRefresh}
             />
           }
+          contentContainerStyle={{flex: 1}}
           style={{ backgroundColor: COLORS.black }}
         >
           {isFutureToggle ? (
