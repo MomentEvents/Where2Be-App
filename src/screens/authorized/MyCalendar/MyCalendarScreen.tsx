@@ -42,7 +42,7 @@ const MyCalendarScreen = ({ route }) => {
       />
       <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         <EventToggler
-          selectedUser={userIDToUser[userToken.UserID]}
+          selectedUserID={userToken.UserID}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
         />
       </View>

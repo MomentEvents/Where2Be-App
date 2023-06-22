@@ -24,8 +24,9 @@ import SectionHeader from "../Styled/SectionHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type EventTogglerProps = {
-  selectedUser: User;
+  selectedUserID: string;
   eventsToPull: string;
+  isRefreshing?: boolean;
   setIsRefreshing?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const EventToggler = (props: EventTogglerProps) => {
@@ -34,7 +35,19 @@ const EventToggler = (props: EventTogglerProps) => {
   const [pulledPastEvents, setPulledPastEvents] = useState<Event[]>(null);
   const [pulledFutureEvents, setPulledFutureEvents] = useState<Event[]>(null);
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const checkIfValidRefreshingProps = () => {
+    return (
+      props.isRefreshing !== undefined &&
+      props.isRefreshing !== null &&
+      props.setIsRefreshing !== undefined &&
+      props.setIsRefreshing !== null
+    );
+  };
+
+  const [isRefreshing, setIsRefreshing] = checkIfValidRefreshingProps()
+    ? [props.isRefreshing, props.setIsRefreshing]
+    : useState(false);
+
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
   const insets = useSafeAreaInsets();
@@ -45,7 +58,7 @@ const EventToggler = (props: EventTogglerProps) => {
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
         ? getUserJoinedFutureEvents(
             userToken.UserAccessToken,
-            props.selectedUser.UserID
+            props.selectedUserID
           )
             .then((events: Event[]) => {
               setPulledFutureEvents(events);
@@ -57,7 +70,7 @@ const EventToggler = (props: EventTogglerProps) => {
             })
         : getUserHostedFutureEvents(
             userToken.UserAccessToken,
-            props.selectedUser.UserID
+            props.selectedUserID
           )
             .then((events: Event[]) => {
               setPulledFutureEvents(events);
@@ -73,7 +86,7 @@ const EventToggler = (props: EventTogglerProps) => {
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
         ? getUserJoinedPastEvents(
             userToken.UserAccessToken,
-            props.selectedUser.UserID
+            props.selectedUserID
           )
             .then((events: Event[]) => {
               setPulledPastEvents(events);
@@ -85,7 +98,7 @@ const EventToggler = (props: EventTogglerProps) => {
             })
         : getUserHostedPastEvents(
             userToken.UserAccessToken,
-            props.selectedUser.UserID
+            props.selectedUserID
           )
             .then((events: Event[]) => {
               setPulledPastEvents(events);
@@ -105,8 +118,8 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   useEffect(() => {
-    if (props.setIsRefreshing) {
-      props.setIsRefreshing(isRefreshing);
+    if (isRefreshing) {
+      onRefresh();
     }
   }, [isRefreshing]);
 
@@ -116,7 +129,7 @@ const EventToggler = (props: EventTogglerProps) => {
         style={{ alignItems: "center", marginTop: 15 }}
         key={
           event.EventID +
-          props.selectedUser.UserID +
+          props.selectedUserID +
           props.eventsToPull +
           " Event"
         }
@@ -185,23 +198,35 @@ const EventToggler = (props: EventTogglerProps) => {
           </McText>
         </TouchableOpacity>
       </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            tintColor={COLORS.white}
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        style={{ backgroundColor: COLORS.black }}
-      >
-        
-        {isFutureToggle ? (
-          pulledFutureEvents ? (
-            pulledFutureEvents.length !== 0 ? (
-              pulledFutureEvents.map((event: Event) => renderEventCard(event))
+      {checkIfValidRefreshingProps() ? (
+        <View>
+          {" "}
+          {isFutureToggle ? (
+            pulledFutureEvents ? (
+              pulledFutureEvents.length !== 0 ? (
+                pulledFutureEvents.map((event: Event) => renderEventCard(event))
+              ) : (
+                <View
+                  style={{
+                    marginTop: 20,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <McText h3>No events to display!</McText>
+                </View>
+              )
+            ) : (
+              !isRefreshing && (
+                <ActivityIndicator
+                  color={COLORS.white}
+                  style={{ marginTop: 20 }}
+                />
+              )
+            )
+          ) : pulledPastEvents ? (
+            pulledPastEvents.length !== 0 ? (
+              pulledPastEvents.map((event: Event) => renderEventCard(event))
             ) : (
               <View
                 style={{
@@ -214,36 +239,75 @@ const EventToggler = (props: EventTogglerProps) => {
               </View>
             )
           ) : (
-            // LOAD THIS
             !isRefreshing && (
               <ActivityIndicator
                 color={COLORS.white}
                 style={{ marginTop: 20 }}
               />
             )
-          )
-        ) : pulledPastEvents ? (
-          pulledPastEvents.length !== 0 ? (
-            pulledPastEvents.map((event: Event) => renderEventCard(event))
+          )}
+          <View style={{ height: insets.bottom + 10 }} />
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              tintColor={COLORS.white}
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          style={{ backgroundColor: COLORS.black }}
+        >
+          {isFutureToggle ? (
+            pulledFutureEvents ? (
+              pulledFutureEvents.length !== 0 ? (
+                pulledFutureEvents.map((event: Event) => renderEventCard(event))
+              ) : (
+                <View
+                  style={{
+                    marginTop: 20,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <McText h3>No events to display!</McText>
+                </View>
+              )
+            ) : (
+              !isRefreshing && (
+                <ActivityIndicator
+                  color={COLORS.white}
+                  style={{ marginTop: 20 }}
+                />
+              )
+            )
+          ) : pulledPastEvents ? (
+            pulledPastEvents.length !== 0 ? (
+              pulledPastEvents.map((event: Event) => renderEventCard(event))
+            ) : (
+              <View
+                style={{
+                  marginTop: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <McText h3>No events to display!</McText>
+              </View>
+            )
           ) : (
-            <View
-              style={{
-                marginTop: 20,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <McText h3>No events to display!</McText>
-            </View>
-          )
-        ) : (
-          // LOAD THIS
-          !isRefreshing && (
-            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
-          )
-        )}
-        <View style={{ height: insets.bottom + 10 }} />
-      </ScrollView>
+            !isRefreshing && (
+              <ActivityIndicator
+                color={COLORS.white}
+                style={{ marginTop: 20 }}
+              />
+            )
+          )}
+          <View style={{ height: insets.bottom + 10 }} />
+        </ScrollView>
+      )}
     </View>
   );
 };

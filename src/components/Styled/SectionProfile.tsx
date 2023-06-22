@@ -35,8 +35,21 @@ const SectionProfile = (props: SectionProfileProps) => {
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
 
-  if(!userIDToUser[props.userID]){
-    return <></>
+  function formatNumber(num: number) {
+    if (num >= 1000000000) {
+      return "1B+";
+    }
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+    }
+    return num;
+  }
+
+  if (!userIDToUser[props.userID]) {
+    return <></>;
   }
 
   return (
@@ -45,15 +58,46 @@ const SectionProfile = (props: SectionProfileProps) => {
         style={styles.imageContainer}
         source={{ uri: userIDToUser[props.userID].Picture }}
       />
-      <View style={{flexDirection: "row"}}>
-        <TouchableOpacity disabled={true}>
-
-        </TouchableOpacity>
-      </View>
       <View style={styles.infoContainer}>
-        <View style={{ flexDirection: "row" }}>
-          <McText h3 style={styles.displayNameContainer}>
-            {userIDToUser[props.userID].DisplayName}
+        <View
+          style={{
+            flexDirection: "row",
+            marginBottom: 10,
+            justifyContent: "space-between",
+          }}
+        >
+          <TouchableOpacity disabled={true}>
+            <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
+              {formatNumber(userIDToUser[props.userID].NumEvents)}
+            </McText>
+            <McText numberOfLines={1} body6>
+              {userIDToUser[props.userID].NumEvents === 1 ? "Event" : "Events"}
+            </McText>
+          </TouchableOpacity>
+          <TouchableOpacity disabled={true}>
+            <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
+              {formatNumber(userIDToUser[props.userID].NumFollowers)}
+            </McText>
+            <McText numberOfLines={1} body6>
+              {userIDToUser[props.userID].NumFollowers === 1
+                ? "Follower"
+                : "Followers"}
+            </McText>
+          </TouchableOpacity>
+          <TouchableOpacity disabled={true}>
+            <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
+              {formatNumber(userIDToUser[props.userID].NumFollowing)}
+            </McText>
+            <McText numberOfLines={1} body6>
+              {userIDToUser[props.userID].NumFollowing === 1
+                ? "Following"
+                : "Following"}
+            </McText>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginRight: 30 }}>
+          <McText numberOfLines={1} h4 style={styles.displayNameContainer}>
+            {"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"}
             {userIDToUser[props.userID].VerifiedOrganization && (
               <View style={{ paddingLeft: 3 }}>
                 <MaterialIcons
@@ -63,11 +107,6 @@ const SectionProfile = (props: SectionProfileProps) => {
                 />
               </View>
             )}
-          </McText>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <McText body3 style={styles.usernameContainer}>
-            @{userIDToUser[props.userID].Username}
           </McText>
         </View>
         <TouchableOpacity
@@ -80,7 +119,7 @@ const SectionProfile = (props: SectionProfileProps) => {
         >
           {props.canEditProfile && (
             <View style={styles.editProfileButtonContainer}>
-              <McText h3>Edit Profile</McText>
+              <McText h4>Edit Profile</McText>
             </View>
           )}
         </TouchableOpacity>
@@ -92,34 +131,38 @@ const SectionProfile = (props: SectionProfileProps) => {
           }}
           disabled={
             !userIDToUser[userIDToUser[props.userID].UserID] ||
-            (userIDToUser[userIDToUser[props.userID].UserID].UserFollow == null ||
-              userIDToUser[userIDToUser[props.userID].UserID].UserFollow == undefined)
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow ==
+              null ||
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow ==
+              undefined
           }
         >
           {props.canFollow &&
-          (userIDToUser[userIDToUser[props.userID].UserID] &&
-          (userIDToUser[userIDToUser[props.userID].UserID].UserFollow !== undefined &&
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !== null) ? (
-            <View style={styles.editProfileButtonContainer}>
-              {userIDToUser[userIDToUser[props.userID].UserID].UserFollow ? (
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Ionicons
-                    style={{ marginRight: 5 }}
-                    name="checkmark-sharp"
-                    size={22}
-                    color="white"
-                  />
-                  <McText h3>Following</McText>
-                </View>
-              ) : (
-                <McText h3>Follow</McText>
-              )}
-            </View>
-          ) : (
-            <View style={styles.loadingFollowButton}>
-              <McText h3>Loading</McText>
-            </View>)
-          )}
+            (userIDToUser[userIDToUser[props.userID].UserID] &&
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !==
+              undefined &&
+            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !==
+              null ? (
+              <View style={styles.editProfileButtonContainer}>
+                {userIDToUser[userIDToUser[props.userID].UserID].UserFollow ? (
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Ionicons
+                      style={{ marginRight: 5 }}
+                      name="checkmark-sharp"
+                      size={22}
+                      color="white"
+                    />
+                    <McText h4>Following</McText>
+                  </View>
+                ) : (
+                  <McText h4>Follow</McText>
+                )}
+              </View>
+            ) : (
+              <View style={styles.loadingFollowButton}>
+                <McText h4>Loading</McText>
+              </View>
+            ))}
         </TouchableOpacity>
       </View>
     </View>

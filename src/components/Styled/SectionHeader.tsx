@@ -36,7 +36,7 @@ const SectionHeader = (props: sectionHeaderProps) => {
           {props.leftButtonSVG}
         </TouchableOpacity>
       ) : null}
-      <McText h1 style={{ flex: 1 }}>
+      <McText numberOfLines={1} h2 style={{ flex: 1 }}>
         {props.title}
       </McText>
       {props.rightButtonSVG && props.rightButtonOnClick ? (
