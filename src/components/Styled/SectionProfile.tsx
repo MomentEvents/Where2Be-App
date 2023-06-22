@@ -95,19 +95,20 @@ const SectionProfile = (props: SectionProfileProps) => {
             </McText>
           </TouchableOpacity>
         </View>
-        <View style={{ marginRight: 30 }}>
-          <McText numberOfLines={1} h4 style={styles.displayNameContainer}>
+        <View style={{ marginRight: 50, flexDirection: "row" }}>
+          <McText
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            h4
+            style={styles.displayNameContainer}
+          >
             {userIDToUser[props.userID].DisplayName}
-            {userIDToUser[props.userID].VerifiedOrganization && (
-              <View style={{ paddingLeft: 3 }}>
-                <MaterialIcons
-                  name="verified"
-                  size={18}
-                  color={COLORS.purple}
-                />
-              </View>
-            )}
           </McText>
+          {userIDToUser[props.userID].VerifiedOrganization && (
+            <View style={{ paddingLeft: 5 }}>
+              <MaterialIcons name="verified" size={18} color={COLORS.purple} />
+            </View>
+          )}
         </View>
         <TouchableOpacity
           onPress={() => {
