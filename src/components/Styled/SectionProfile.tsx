@@ -70,7 +70,7 @@ const SectionProfile = (props: SectionProfileProps) => {
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
               {formatNumber(userIDToUser[props.userID].NumEvents)}
             </McText>
-            <McText numberOfLines={1} body6>
+            <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumEvents === 1 ? "Event" : "Events"}
             </McText>
           </TouchableOpacity>
@@ -78,7 +78,7 @@ const SectionProfile = (props: SectionProfileProps) => {
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
               {formatNumber(userIDToUser[props.userID].NumFollowers)}
             </McText>
-            <McText numberOfLines={1} body6>
+            <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumFollowers === 1
                 ? "Follower"
                 : "Followers"}
@@ -88,7 +88,7 @@ const SectionProfile = (props: SectionProfileProps) => {
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
               {formatNumber(userIDToUser[props.userID].NumFollowing)}
             </McText>
-            <McText numberOfLines={1} body6>
+            <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumFollowing === 1
                 ? "Following"
                 : "Following"}

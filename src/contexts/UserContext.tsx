@@ -95,10 +95,10 @@ export const UserProvider = ({ children }) => {
   const clientUnfollowUser = async (userID: string): Promise<void> => {
     console.log("Follow user hit")
     updateUserIDToUser({
-      id: userID,
+      id: userToken.UserID,
       user: {
         ...userIDToUser[userToken.UserID],
-        NumFollowing: userIDToUser[userID].NumFollowing - 1,
+        NumFollowing: userIDToUser[userToken.UserID].NumFollowing - 1,
       },
     });
     updateUserIDToUser({
@@ -113,10 +113,10 @@ export const UserProvider = ({ children }) => {
     unfollowUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
       displayError(error);
       updateUserIDToUser({
-        id: userID,
+        id: userToken.UserID,
         user: {
           ...userIDToUser[userToken.UserID],
-          NumFollowing: userIDToUser[userID].NumFollowing + 1,
+          NumFollowing: userIDToUser[userToken.UserID].NumFollowing + 1,
         },
       });
       updateUserIDToUser({
@@ -134,10 +134,10 @@ export const UserProvider = ({ children }) => {
     console.log("Unfollow user hit")
 
     updateUserIDToUser({
-      id: userID,
+      id: userToken.UserID,
       user: {
         ...userIDToUser[userToken.UserID],
-        NumFollowing: userIDToUser[userID].NumFollowing + 1,
+        NumFollowing: userIDToUser[userToken.UserID].NumFollowing + 1,
       },
     });
     updateUserIDToUser({
@@ -152,10 +152,10 @@ export const UserProvider = ({ children }) => {
     followUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
       displayError(error);
       updateUserIDToUser({
-        id: userID,
+        id: userToken.UserID,
         user: {
           ...userIDToUser[userToken.UserID],
-          NumFollowing: userIDToUser[userID].NumFollowing - 1,
+          NumFollowing: userIDToUser[userToken.UserID].NumFollowing - 1,
         },
       });
       updateUserIDToUser({
