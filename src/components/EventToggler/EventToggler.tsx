@@ -22,6 +22,9 @@ import EventCard from "../EventCard";
 import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from '@expo/vector-icons';
+import RetryButton from "../RetryButton";
+import { CustomError } from "../../constants/error";
 
 type EventTogglerProps = {
   selectedUserID: string;
@@ -51,6 +54,7 @@ const EventToggler = (props: EventTogglerProps) => {
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
   const insets = useSafeAreaInsets();
+  const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const pullData = async () => {
     if (isFutureToggle) {
@@ -64,9 +68,12 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledFutureEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
-              displayError(error);
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.shouldDisplay){
+                displayError(error);
+              }
             })
         : getUserHostedFutureEvents(
             userToken.UserAccessToken,
@@ -76,9 +83,12 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledFutureEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
-              displayError(error);
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.shouldDisplay){
+                displayError(error);
+              }
             });
     } else {
       // getting past events
@@ -92,9 +102,12 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
-              displayError(error);
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.shouldDisplay){
+                displayError(error);
+              }
             })
         : getUserHostedPastEvents(
             userToken.UserAccessToken,
@@ -104,9 +117,12 @@ const EventToggler = (props: EventTogglerProps) => {
               setPulledPastEvents(events);
               setIsRefreshing(false);
             })
-            .catch((error: Error) => {
-              displayError(error);
+            .catch((error: CustomError) => {
               setIsRefreshing(false);
+              setShowRetry(true);
+              if (error.shouldDisplay){
+                displayError(error);
+              }
             });
     }
   };

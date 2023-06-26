@@ -18,6 +18,8 @@ import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import InterestButton from "./components/InterestButton";
 import { GestureObjects } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gestureObjects";
+import RetryButton from "../RetryButton";
+import { CustomError } from "../../constants/error";
 
 type InterestSelectorProps = {
   selectedInterests: Set<Interest>;
@@ -29,6 +31,8 @@ const InterestSelector = (props: InterestSelectorProps) => {
     [key: string]: Interest;
   }>(null);
   const { currentSchool } = useContext(UserContext);
+
+  const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const pullData = async () => {
     getAllInterests(currentSchool.SchoolID)
@@ -52,8 +56,11 @@ const InterestSelector = (props: InterestSelectorProps) => {
         setInterestIDToInterestMap(interestIDToInterestMapTemp);
         console.log(selectedInterestsTemp)
       })
-      .catch((error: Error) => {
-        displayError(error);
+      .catch((error: CustomError) => {
+        setShowRetry(true);
+        if (error.shouldDisplay){
+          displayError(error);
+        }
       });
   };
 
@@ -76,7 +83,11 @@ const InterestSelector = (props: InterestSelectorProps) => {
         ))
       ) : (
         // LOAD THIS
-        <ActivityIndicator color={COLORS.white} />
+        showRetry? (
+          <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center' }}/>
+        ) : (
+          <ActivityIndicator color={COLORS.white} />
+        )
       )}
     </View>
   );

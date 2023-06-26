@@ -1,4 +1,5 @@
 import { Event } from "../constants";
+import { CustomError, NetworkError } from "../constants/error";
 
 /***********************************
  * checkIfStringIsEmail
@@ -178,4 +179,17 @@ export function showCancelablePopup(
     ],
     { cancelable: false }
   );
+}
+
+export async function responseHandler<CustomType>(response: Response, message: string): Promise<CustomType> {
+  if (response == undefined){
+    throw new NetworkError(message);
+  }
+  if (!response.ok) {
+    const responseMessage = await response.text();
+    throw new CustomError("Error " + response.status, responseMessage, true);
+  }
+
+  const responseJSON = await response.json();
+  return responseJSON as CustomType;
 }

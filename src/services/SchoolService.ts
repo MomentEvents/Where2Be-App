@@ -1,5 +1,6 @@
 import { momentAPI } from "../constants/server";
-import { formatError } from "../helpers/helpers";
+import { CustomError, NetworkError } from "../constants/error";
+import { formatError, responseHandler } from "../helpers/helpers";
 import { School } from "../constants/types";
 import { SchoolResponse } from "../constants/types";
 import { schoolResponseToSchool, schoolResponseToSchools } from "../helpers/converters";
@@ -12,16 +13,9 @@ import { schoolResponseToSchool, schoolResponseToSchools } from "../helpers/conv
 export async function getAllSchools(): Promise<School[]> {
   const response = await fetch(momentAPI + `/school`, {
     method: "GET",
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all schools");
-  });
+  })
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledSchools: SchoolResponse[] = await response.json();
+  const pulledSchools: SchoolResponse[] = await responseHandler<SchoolResponse[]>(response, "Could not get all schools");
   const convertedSchools: School[] = schoolResponseToSchools(pulledSchools)
 
   return convertedSchools;
@@ -37,16 +31,9 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
 
   const response = await fetch(momentAPI + `/school/user_id/${UserID}`, {
     method: "GET",
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get school user's school");
-  });
+  })
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledSchool: SchoolResponse = await response.json();
+  const pulledSchool: SchoolResponse = await responseHandler<SchoolResponse>(response, "Could not get school user's school");
   const convertedSchool: School = schoolResponseToSchool(pulledSchool)
 
   return convertedSchool;
