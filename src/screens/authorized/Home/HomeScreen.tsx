@@ -21,6 +21,7 @@ import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
 import { displayError } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
+import { McText } from "../../../components/Styled";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -85,6 +86,7 @@ const HomeScreen = () => {
             size={"small"}
           />
         )}
+        {eventsAndHosts && eventsAndHosts.length === 0 && <McText h3 style={{textAlign: "center", marginTop: 20}}>Nothing to see here yet!</McText>}
         {eventsAndHosts && eventsAndHosts.map((value) => {
           return <HomeEvent key={"homescreeneventcard"+value[0].Event.EventID} event={value[0].Event} user={value[0].Host}></HomeEvent>;
         })}
