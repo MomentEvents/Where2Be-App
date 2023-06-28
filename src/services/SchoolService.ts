@@ -15,7 +15,7 @@ export async function getAllSchools(): Promise<School[]> {
     method: "GET",
   })
 
-  const pulledSchools: SchoolResponse[] = await responseHandler<SchoolResponse[]>(response, "Could not get all schools");
+  const pulledSchools: SchoolResponse[] = await responseHandler<SchoolResponse[]>(response, "Could not get all schools", true);
   const convertedSchools: School[] = schoolResponseToSchools(pulledSchools)
 
   return convertedSchools;
@@ -33,7 +33,7 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
     method: "GET",
   })
 
-  const pulledSchool: SchoolResponse = await responseHandler<SchoolResponse>(response, "Could not get school user's school");
+  const pulledSchool: SchoolResponse = await responseHandler<SchoolResponse>(response, "Could not get school user's school", true);
   const convertedSchool: School = schoolResponseToSchool(pulledSchool)
 
   return convertedSchool;

@@ -24,7 +24,7 @@ export async function getUser(
     body: JSON.stringify({ user_access_token: userAccessToken }),
   })
 
-  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id");
+  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id", true);
   const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
@@ -46,7 +46,7 @@ export async function getUserByUserAccessToken(
     }
   )
 
-  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not get user by user access token");
+  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not get user by user access token", true);
   const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
@@ -80,7 +80,7 @@ export async function updateUser(
     }
   )
 
-  responseHandler<void>(response, "Could not update user");
+  responseHandler<void>(response, "Could not update user", false);
 
   return Promise.resolve()
 }
@@ -100,7 +100,7 @@ export async function deleteUser(
     }),
   })
 
-  responseHandler<void>(response, "Could not delete user");
+  responseHandler<void>(response, "Could not delete user", false);
 
   return Promise.resolve();
 }
@@ -119,7 +119,7 @@ export async function getEventHostByEventId(
     }),
   })
 
-  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch event host");
+  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch event host", true);
   const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
@@ -145,7 +145,7 @@ export async function addUserJoinEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not add join");
+  responseHandler<void>(response, "Could not add join", false);
 }
 
 export async function removeUserJoinEvent(
@@ -168,7 +168,7 @@ export async function removeUserJoinEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not remove join");
+  responseHandler<void>(response, "Could not remove join", false);
 }
 
 export async function addUserShoutoutEvent(
@@ -191,7 +191,7 @@ export async function addUserShoutoutEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not add shoutout");
+  responseHandler<void>(response, "Could not add shoutout", false);
 }
 
 export async function removeUserShoutoutEvent(
@@ -214,7 +214,7 @@ export async function removeUserShoutoutEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not remove shoutout");
+  responseHandler<void>(response, "Could not remove shoutout", false);
 }
 
 export async function searchSchoolUsers(
@@ -242,7 +242,7 @@ export async function searchSchoolUsers(
     }
   )
 
-  const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get all school users");
+  const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get all school users", true);
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);
 
   return convertedUsers;
@@ -268,7 +268,7 @@ export async function followUser(
     }
   )
 
-  responseHandler<void>(response, "Could follow user");
+  responseHandler<void>(response, "Could follow user", false);
 }
 
 export async function unfollowUser(
@@ -291,7 +291,7 @@ export async function unfollowUser(
     }
   )
 
-  responseHandler<void>(response, "Could unfollow user");
+  responseHandler<void>(response, "Could unfollow user", false);
 }
 
 export async function getUserEmail(

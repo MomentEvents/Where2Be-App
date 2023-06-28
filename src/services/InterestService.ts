@@ -17,7 +17,7 @@ export async function getAllInterests(schoolID: string): Promise<Interest[]> {
     method: "GET",
   })
 
-  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get all interests");
+  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get all interests", true);
   const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
   return convertedInterests;
@@ -45,7 +45,7 @@ export async function getEventInterestsByEventId(
     }),
   })
 
-  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get event interests");
+  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get event interests", true);
   const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
   return convertedInterests;

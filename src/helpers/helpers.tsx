@@ -181,13 +181,17 @@ export function showCancelablePopup(
   );
 }
 
-export async function responseHandler<CustomType>(response: Response, message: string): Promise<CustomType> {
+export async function responseHandler<CustomType>(response: Response, message: string, doParseData: boolean): Promise<CustomType> {
   if (response == undefined){
     throw new NetworkError(message);
   }
   if (!response.ok) {
     const responseMessage = await response.text();
     throw new CustomError("Error " + response.status, responseMessage, true);
+  }
+
+  if(!doParseData){
+    return
   }
 
   const responseJSON = await response.json();

@@ -32,7 +32,7 @@ export async function getEvent(
     }),
   })
 
-  const pulledEvent: EventResponse = await responseHandler<EventResponse>(response, "Could not get event");
+  const pulledEvent: EventResponse = await responseHandler<EventResponse>(response, "Could not get event", true);
   const convertedEvent: Event = eventResponseToEvent(pulledEvent);
 
   return convertedEvent;
@@ -73,7 +73,7 @@ export async function createEvent(
     body: formData,
   })
 
-  const data = await responseHandler<EventResponse>(response, "Could not create event");
+  const data = await responseHandler<EventResponse>(response, "Could not create event", true);
 
   return data["event_id"];
 }
@@ -117,7 +117,7 @@ export async function updateEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not update event");
+  responseHandler<void>(response, "Could not update event", true);
 
   return Promise.resolve();
 }
@@ -146,7 +146,7 @@ export async function deleteEvent(
     }),
   })
 
-  responseHandler<void>(response, "Could not delete event");
+  responseHandler<void>(response, "Could not delete event", true);
 
   return Promise.resolve();
 }
@@ -176,7 +176,7 @@ export async function getUserJoinedFutureEvents(
     }
   )
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined future events");
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined future events", true);
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -207,7 +207,7 @@ export async function getUserJoinedPastEvents(
     }
   )
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined past events");
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined past events", true);
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -242,7 +242,7 @@ export async function getUserHostedFutureEvents(
     }
   )
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted future events");
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted future events", true);
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -274,7 +274,7 @@ export async function getUserHostedPastEvents(
     }
   )
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted past events");
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted past events", true);
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -304,7 +304,7 @@ export async function searchSchoolEvents(
     }
   )
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get all school events");
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get all school events", true);
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -330,7 +330,7 @@ export async function getAllSchoolEventsCategorized(
     }
   )
 
-  const responseJSON = await responseHandler<{}>(response, "Could not get all categorized events");
+  const responseJSON = await responseHandler<{}>(response, "Could not get all categorized events", true);
   const categoryMap: { [key: string]: Event[] } = {};
 
   for (const categoryToEvents in responseJSON) {
@@ -363,7 +363,7 @@ export async function getAllHomePageEventsWithHosts(
   )
   
   const responseJSON: [{ host: UserResponse; event: EventResponse }] =
-    await responseHandler<[{ host: UserResponse; event: EventResponse }]>(response, "Could not get all categorized events");
+    await responseHandler<[{ host: UserResponse; event: EventResponse }]>(response, "Could not get all categorized events", true);
 
   const returnedData: [{ Host: User; Event: Event }][] = [];
 

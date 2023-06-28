@@ -52,7 +52,7 @@ const UserResult = (props: UserResultProps) => {
               borderWidth: StyleSheet.hairlineWidth,
               borderColor: COLORS.white,
             }}
-            source={{ uri: props.user.Picture }}
+            source={{ uri: userIDToUser[props.user.UserID].Picture }}
           />
           <View
             style={{
@@ -64,15 +64,15 @@ const UserResult = (props: UserResultProps) => {
           >
             <View style={{ flexDirection:'row', alignItems: 'center'}}>
               <McText h3 numberOfLines={1}>
-                {props.user.DisplayName}
+                {userIDToUser[props.user.UserID].DisplayName}
               </McText>
-              {props.user.VerifiedOrganization &&
+              {userIDToUser[props.user.UserID].VerifiedOrganization &&
                 <View style={{ paddingLeft: 3 }}>
                   <MaterialIcons name="verified" size={18} color={COLORS.purple} /> 
                 </View>}
             </View>
             <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
-                @{props.user.Username}
+                @{userIDToUser[props.user.UserID].Username}
             </McText>
           </View>
         </View>
