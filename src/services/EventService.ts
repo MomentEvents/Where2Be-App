@@ -90,6 +90,7 @@ export async function updateEvent(
   updatedInterests: Interest[]
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string if it exists
+  console.log(JSON.stringify(updatedInterests))
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", updatedEvent.Title);
@@ -100,7 +101,7 @@ export async function updateEvent(
   formData.append("visibility", updatedEvent.Visibility);
   formData.append(
     "interest_ids",
-    JSON.stringify(updatedInterests.map((interest) => interest.Name))
+    JSON.stringify(updatedInterests.map((interest) => interest.InterestID))
   );
   formData.append("picture", updatedEvent.Picture);
 
@@ -117,7 +118,10 @@ export async function updateEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not update event", true);
+  console.log("UPDATING EVENT")
+  console.log("RESPONSE IS " + JSON.stringify(response))
+
+  await responseHandler<void>(response, "Could not update event", false);
 
   return Promise.resolve();
 }
@@ -146,7 +150,7 @@ export async function deleteEvent(
     }),
   })
 
-  responseHandler<void>(response, "Could not delete event", true);
+  await responseHandler<void>(response, "Could not delete event", false);
 
   return Promise.resolve();
 }

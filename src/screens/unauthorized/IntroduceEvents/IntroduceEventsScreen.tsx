@@ -12,14 +12,6 @@ import {
   icons,
 } from "../../../constants";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { Event } from "../../../constants";
-import { getAllInterests } from "../../../services/InterestService";
-import { displayError } from "../../../helpers/helpers";
-import EventCard from "../../../components/EventCard";
-import { McIcon, McText } from "../../../components/Styled";
-import styled from "styled-components/native";
-import GradientBackground from "../../../components/Styled/GradientBackground";
-import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "../../../components/Styled/GradientButton";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";

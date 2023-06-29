@@ -42,6 +42,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import EventEditor from "../../../components/EventEditor/EventEditor";
 import { useNavigation } from "@react-navigation/native";
 import { CONSTRAINTS } from "../../../constants/constraints";
+import { CustomError } from "../../../constants/error";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -188,7 +189,7 @@ const EditEventScreen = ({ route }) => {
         setLoading(false);
         navigation.goBack();
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         displayError(error);
         setLoading(false);
       });

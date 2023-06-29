@@ -71,7 +71,7 @@ const UserResult = (props: UserResultProps) => {
                   <MaterialIcons name="verified" size={18} color={COLORS.purple} /> 
                 </View>}
             </View>
-            <McText b5 numberOfLines={1} style={{color: COLORS.gray}}>
+            <McText body5 numberOfLines={1} style={{color: COLORS.gray}}>
                 @{userIDToUser[props.user.UserID].Username}
             </McText>
           </View>

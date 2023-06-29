@@ -12,7 +12,7 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { SIZES, COLORS, SCREENS, User } from "../../constants";
-import { McText, McIcon } from "./../Styled";
+import { McText } from "./../Styled";
 import "react-native-gesture-handler";
 import { Event } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";

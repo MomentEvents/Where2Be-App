@@ -11,7 +11,7 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { SIZES, COLORS, SCREENS } from "../constants";
-import { McText, McIcon } from "./Styled";
+import { McText } from "./Styled";
 import "react-native-gesture-handler";
 import { Event, User } from "../constants";
 import { UserContext } from "../contexts/UserContext";

@@ -56,6 +56,7 @@ const HomeScreen = () => {
     setIsRefreshing(true);
     setEventsAndHosts(undefined);
     setIsLoading(true);
+    setShowRetry(false)
     pullData();
   };
 

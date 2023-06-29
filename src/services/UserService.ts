@@ -80,7 +80,7 @@ export async function updateUser(
     }
   )
 
-  responseHandler<void>(response, "Could not update user", false);
+  await responseHandler<void>(response, "Could not update user", false);
 
   return Promise.resolve()
 }
@@ -100,7 +100,7 @@ export async function deleteUser(
     }),
   })
 
-  responseHandler<void>(response, "Could not delete user", false);
+  await responseHandler<void>(response, "Could not delete user", false);
 
   return Promise.resolve();
 }
@@ -145,7 +145,7 @@ export async function addUserJoinEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not add join", false);
+  await responseHandler<void>(response, "Could not add join", false);
 }
 
 export async function removeUserJoinEvent(
@@ -168,7 +168,7 @@ export async function removeUserJoinEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not remove join", false);
+  await responseHandler<void>(response, "Could not remove join", false);
 }
 
 export async function addUserShoutoutEvent(
@@ -191,7 +191,7 @@ export async function addUserShoutoutEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not add shoutout", false);
+  await responseHandler<void>(response, "Could not add shoutout", false);
 }
 
 export async function removeUserShoutoutEvent(
@@ -214,7 +214,7 @@ export async function removeUserShoutoutEvent(
     }
   )
 
-  responseHandler<void>(response, "Could not remove shoutout", false);
+  await responseHandler<void>(response, "Could not remove shoutout", false);
 }
 
 export async function searchSchoolUsers(
@@ -268,7 +268,7 @@ export async function followUser(
     }
   )
 
-  responseHandler<void>(response, "Could follow user", false);
+  await responseHandler<void>(response, "Could follow user", false);
 }
 
 export async function unfollowUser(
@@ -291,7 +291,7 @@ export async function unfollowUser(
     }
   )
 
-  responseHandler<void>(response, "Could unfollow user", false);
+  await responseHandler<void>(response, "Could unfollow user", false);
 }
 
 export async function getUserEmail(

@@ -15,7 +15,7 @@ import { Event } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
-import { McIcon, McText } from "../../../components/Styled";
+import { McText } from "../../../components/Styled";
 import moment from "moment";
 import styled from "styled-components/native";
 import {

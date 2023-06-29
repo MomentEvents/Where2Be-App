@@ -182,7 +182,7 @@ export function showCancelablePopup(
 }
 
 export async function responseHandler<CustomType>(response: Response, message: string, doParseData: boolean): Promise<CustomType> {
-  if (response == undefined){
+  if (true){
     throw new NetworkError(message);
   }
   if (!response.ok) {

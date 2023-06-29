@@ -24,6 +24,8 @@ import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { CustomError } from "../../constants/error";
+import RetryButton from "../RetryButton";
 
 type EventViewerProps = {
   school: School;
@@ -37,6 +39,8 @@ const EventViewer = (props: EventViewerProps) => {
     [key: string]: Event[];
   }>({});
 
+  const [showRetry, setShowRetry] = useState(false);
+
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
   const pullData = async () => {
@@ -49,9 +53,12 @@ const EventViewer = (props: EventViewerProps) => {
         setIsRefreshing(false);
         setCategoryNameToEventsMap(map);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
+        if (error.shouldDisplay) {
+          displayError(error);
+        }
+        setShowRetry(true);
         setIsRefreshing(false);
-        displayError(error);
       });
   };
 
@@ -96,6 +103,7 @@ const EventViewer = (props: EventViewerProps) => {
     setCategoryNameToEventsMap({});
     setIsLoadingEvents(true);
     pullData();
+    setShowRetry(false);
   };
 
   useEffect(() => {
@@ -114,7 +122,19 @@ const EventViewer = (props: EventViewerProps) => {
       }
       style={{ backgroundColor: COLORS.black }}
     >
-      {isLoadingEvents && !isRefreshing && (
+      {showRetry && (
+        <RetryButton
+          setShowRetry={setShowRetry}
+          retryCallBack={pullData}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        />
+      )}
+
+      {!showRetry && isLoadingEvents && !isRefreshing && (
         // LOAD THIS
         <ActivityIndicator
           color={COLORS.white}
