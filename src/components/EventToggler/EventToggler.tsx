@@ -22,7 +22,7 @@ import EventCard from "../EventCard";
 import { McText } from "../Styled";
 import SectionHeader from "../Styled/SectionHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import RetryButton from "../RetryButton";
 import { CustomError } from "../../constants/error";
 
@@ -57,6 +57,7 @@ const EventToggler = (props: EventTogglerProps) => {
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const pullData = async () => {
+    setShowRetry(false);
     if (isFutureToggle) {
       // getting future events
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
@@ -71,7 +72,7 @@ const EventToggler = (props: EventTogglerProps) => {
             .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.shouldDisplay){
+              if (error.shouldDisplay) {
                 displayError(error);
               }
             })
@@ -86,7 +87,7 @@ const EventToggler = (props: EventTogglerProps) => {
             .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.shouldDisplay){
+              if (error.shouldDisplay) {
                 displayError(error);
               }
             });
@@ -105,7 +106,7 @@ const EventToggler = (props: EventTogglerProps) => {
             .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.shouldDisplay){
+              if (error.shouldDisplay) {
                 displayError(error);
               }
             })
@@ -120,7 +121,7 @@ const EventToggler = (props: EventTogglerProps) => {
             .catch((error: CustomError) => {
               setIsRefreshing(false);
               setShowRetry(true);
-              if (error.shouldDisplay){
+              if (error.shouldDisplay) {
                 displayError(error);
               }
             });
@@ -128,6 +129,7 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   const onRefresh = async () => {
+    setShowRetry(false);
     isFutureToggle ? setPulledFutureEvents(null) : setPulledPastEvents(null);
     setIsRefreshing(true);
     pullData();
@@ -144,10 +146,7 @@ const EventToggler = (props: EventTogglerProps) => {
       <View
         style={{ alignItems: "center", marginTop: 15 }}
         key={
-          event.EventID +
-          props.selectedUserID +
-          props.eventsToPull +
-          " Event"
+          event.EventID + props.selectedUserID + props.eventsToPull + " Event"
         }
       >
         <EventCard
@@ -215,11 +214,44 @@ const EventToggler = (props: EventTogglerProps) => {
         </TouchableOpacity>
       </View>
       {checkIfValidRefreshingProps() ? (
-        <View style={{ flex: 1,  backgroundColor: COLORS.black }}>
-          {isFutureToggle ? (
-            pulledFutureEvents ? (
-              pulledFutureEvents.length !== 0 ? (
-                pulledFutureEvents.map((event: Event) => renderEventCard(event))
+        showRetry ? (
+          <RetryButton
+            setShowRetry={setShowRetry}
+            retryCallBack={pullData}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          />
+        ) : (
+          <View style={{ flex: 1, backgroundColor: COLORS.black }}>
+            {isFutureToggle ? (
+              pulledFutureEvents ? (
+                pulledFutureEvents.length !== 0 ? (
+                  pulledFutureEvents.map((event: Event) =>
+                    renderEventCard(event)
+                  )
+                ) : (
+                  <View
+                    style={{
+                      marginTop: 20,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <McText h3>No events to display!</McText>
+                  </View>
+                )
+              ) : (
+                <ActivityIndicator
+                  color={COLORS.white}
+                  style={{ marginTop: 20 }}
+                />
+              )
+            ) : pulledPastEvents ? (
+              pulledPastEvents.length !== 0 ? (
+                pulledPastEvents.map((event: Event) => renderEventCard(event))
               ) : (
                 <View
                   style={{
@@ -232,37 +264,14 @@ const EventToggler = (props: EventTogglerProps) => {
                 </View>
               )
             ) : (
-              (
-                <ActivityIndicator
-                  color={COLORS.white}
-                  style={{ marginTop: 20 }}
-                />
-              )
-            )
-          ) : pulledPastEvents ? (
-            pulledPastEvents.length !== 0 ? (
-              pulledPastEvents.map((event: Event) => renderEventCard(event))
-            ) : (
-              <View
-                style={{
-                  marginTop: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <McText h3>No events to display!</McText>
-              </View>
-            )
-          ) : (
-            (
               <ActivityIndicator
                 color={COLORS.white}
                 style={{ marginTop: 20 }}
               />
-            )
-          )}
-          <View style={{ height: insets.bottom + 10 }} />
-        </View>
+            )}
+            <View style={{ height: insets.bottom + 10 }} />
+          </View>
+        )
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -275,7 +284,17 @@ const EventToggler = (props: EventTogglerProps) => {
           }
           style={{ backgroundColor: COLORS.black }}
         >
-          {isFutureToggle ? (
+          {showRetry ? (
+            <RetryButton
+              setShowRetry={setShowRetry}
+              retryCallBack={pullData}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 20,
+              }}
+            />
+          ) : isFutureToggle ? (
             pulledFutureEvents ? (
               pulledFutureEvents.length !== 0 ? (
                 pulledFutureEvents.map((event: Event) => renderEventCard(event))

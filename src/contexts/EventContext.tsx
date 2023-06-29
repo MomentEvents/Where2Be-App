@@ -72,7 +72,6 @@ export const EventProvider = ({ children }) => {
           NumJoins: eventIDToEvent[eventID].NumJoins - 1,
         },
       });
-      displayError(error);
     });
   };
 
@@ -98,7 +97,6 @@ export const EventProvider = ({ children }) => {
           NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
         },
       });
-      displayError(error);
     });
   };
 
@@ -124,7 +122,6 @@ export const EventProvider = ({ children }) => {
           NumJoins: eventIDToEvent[eventID].NumJoins + 1,
         },
       });
-      displayError(error);
     });
   };
 
@@ -150,7 +147,6 @@ export const EventProvider = ({ children }) => {
           NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
         },
       });
-      displayError(error);
     });
   };
 

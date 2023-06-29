@@ -31,7 +31,8 @@ import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { icons } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
-
+import { CustomError } from "../../constants/error";
+import RetryButton from "../RetryButton";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
@@ -39,6 +40,7 @@ const SearchToggler = () => {
   const [pulledUsers, setPulledUsers] = useState<User[]>(null);
   const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
 
+  const [showRetry, setShowRetry] = useState(false);
   const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
 
   const searchTextRef = useRef<string>("");
@@ -49,25 +51,30 @@ const SearchToggler = () => {
   const navigation = useNavigation<any>();
 
   const onSearchTextChanged = (newText: string) => {
+    setShowRetry(false);
     if (newText == searchTextRef.current) {
       return;
     }
+
+    newText = newText.trim();
     setPulledEvents(newText === "" ? [] : null);
     setPulledUsers(newText === "" ? [] : null);
     searchTextRef.current = newText;
     clearTimeout(timeoutId);
+    if (newText === "") {
+      return;
+    }
     const newTimeoutId = setTimeout(() => pullData(), 500);
     setTimeoutId(newTimeoutId);
   };
 
-  const onBackPressed =() => {
-    navigation.pop()
-  }
+  const onBackPressed = () => {
+    navigation.pop();
+  };
 
   const pullData = async () => {
     newTextRef.current = searchTextRef.current;
     const newText = newTextRef.current;
-
     // getting events
     searchSchoolEvents(
       userToken.UserAccessToken,
@@ -83,7 +90,8 @@ const SearchToggler = () => {
         }
         setPulledEvents(events);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
+        setShowRetry(true);
         console.log(error);
       });
 
@@ -102,7 +110,8 @@ const SearchToggler = () => {
         }
         setPulledUsers(users);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
+        setShowRetry(true);
         console.log(error);
       });
   };
@@ -128,11 +137,18 @@ const SearchToggler = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.black }}>
-      <View style={{ backgroundColor: COLORS.trueBlack, flexDirection: "row", paddingVertical: 10, }}>
-        <TouchableOpacity onPress={onBackPressed}
+      <View
+        style={{
+          backgroundColor: COLORS.trueBlack,
+          flexDirection: "row",
+          paddingVertical: 10,
+        }}
+      >
+        <TouchableOpacity
+          onPress={onBackPressed}
           style={{
             marginVertical: 15,
-            marginLeft: 20
+            marginLeft: 20,
           }}
         >
           <icons.backarrow />
@@ -213,29 +229,41 @@ const SearchToggler = () => {
         keyboardShouldPersistTaps={"always"}
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >
-        <View style={{ height: 10 }} />
-        <View style={{ flex: 1 }}>
-          {isEventsToggle ? (
-            pulledEvents ? (
-              pulledEvents.map((event: Event) => renderEventResult(event))
+        {showRetry && (
+          <RetryButton
+            setShowRetry={setShowRetry}
+            retryCallBack={pullData}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          />
+        )}
+        {!showRetry && (
+          <View style={{ flex: 1, marginTop: 10 }}>
+            {isEventsToggle ? (
+              pulledEvents ? (
+                pulledEvents.map((event: Event) => renderEventResult(event))
+              ) : (
+                <ActivityIndicator
+                  style={{ marginTop: 10 }}
+                  color={COLORS.white}
+                  size="small"
+                />
+              )
+            ) : pulledUsers ? (
+              pulledUsers.map((user: User) => renderUserResult(user))
             ) : (
               <ActivityIndicator
                 style={{ marginTop: 10 }}
                 color={COLORS.white}
                 size="small"
               />
-            )
-          ) : pulledUsers ? (
-            pulledUsers.map((user: User) => renderUserResult(user))
-          ) : (
-            <ActivityIndicator
-              style={{ marginTop: 10 }}
-              color={COLORS.white}
-              size="small"
-            />
-          )}
-          <View style={{ height: 20 }} />
-        </View>
+            )}
+            <View style={{ height: 20 }} />
+          </View>
+        )}
       </ScrollView>
     </View>
   );

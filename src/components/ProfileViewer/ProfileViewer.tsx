@@ -24,6 +24,8 @@ import EventToggler from "../EventToggler/EventToggler";
 import MobileSafeView from "../Styled/MobileSafeView";
 import SectionHeader from "../Styled/SectionHeader";
 import SectionProfile from "../Styled/SectionProfile";
+import { CustomError } from "../../constants/error";
+import RetryButton from "../RetryButton";
 
 type ProfileViewerProps = {
   userID: string;
@@ -41,12 +43,15 @@ const ProfileViewer = (props: ProfileViewerProps) => {
   const [didPullUser, setDidPullUser] = useState(false);
   const [eventsRefreshing, setEventsRefreshing] = useState(false);
 
+  const [showRetry, setShowRetry] = useState(false);
+
   useEffect(() => {
-    setIsRefreshing(eventsRefreshing || userRefreshing);
+    setIsRefreshing(userRefreshing || eventsRefreshing);
   }, [userRefreshing, eventsRefreshing]);
 
   const onRefresh = () => {
     setDidPullUser(false);
+    setShowRetry(false);
     setUserRefreshing(true);
     setEventsRefreshing(true);
   };
@@ -91,9 +96,12 @@ const ProfileViewer = (props: ProfileViewerProps) => {
         setUserRefreshing(false);
         setDidPullUser(true);
       })
-      .catch((error: Error) => {
-        displayError(error);
-        navigation.goBack();
+      .catch((error: CustomError) => {
+        if (error.shouldDisplay) {
+          displayError(error);
+        }
+        setUserRefreshing(false);
+        setShowRetry(true)
       });
   };
 
@@ -159,12 +167,25 @@ const ProfileViewer = (props: ProfileViewerProps) => {
           canEditProfile={isAdmin || userToken.UserID === props.userID}
           canFollow={didPullUser && userToken.UserID !== props.userID}
         />
-        <EventToggler
-          selectedUserID={props.userID}
-          eventsToPull={EVENT_TOGGLER.HostedEvents}
-          isRefreshing={eventsRefreshing}
-          setIsRefreshing={setEventsRefreshing}
-        />
+        {showRetry && (
+          <RetryButton
+            setShowRetry={setShowRetry}
+            retryCallBack={pullData}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          />
+        )}
+        {!showRetry && (
+          <EventToggler
+            selectedUserID={props.userID}
+            eventsToPull={EVENT_TOGGLER.HostedEvents}
+            isRefreshing={eventsRefreshing}
+            setIsRefreshing={setEventsRefreshing}
+          />
+        )}
       </ScrollView>
     </MobileSafeView>
   );
