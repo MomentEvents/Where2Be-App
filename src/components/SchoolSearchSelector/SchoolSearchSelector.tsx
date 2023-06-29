@@ -79,15 +79,13 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   };
 
   const handlePopulateSchools = () => {
-    populateSchools().catch(
-      (error: CustomError) => {
-        setShowRetry(true);
-        if (error.shouldDisplay){
-          displayError(error);
-        }
+    populateSchools().catch((error: CustomError) => {
+      setShowRetry(true);
+      if (error.shouldDisplay) {
+        displayError(error);
       }
-    );
-  }
+    });
+  };
 
   useEffect(() => {
     handlePopulateSchools();
@@ -149,13 +147,15 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             initValueTextStyle={props.textStyle}
             maxLines={props.maxLines}
           />
+        ) : // LOAD THIS
+        showRetry ? (
+          <RetryButton
+            setShowRetry={setShowRetry}
+            retryCallBack={handlePopulateSchools}
+            style={{ alignItems: "center", justifyContent: "center" }}
+          />
         ) : (
-          // LOAD THIS
-          showRetry? (
-            <RetryButton setShowRetry={setShowRetry} retryCallBack={handlePopulateSchools} style={{ alignItems: 'center', justifyContent: 'center' }}/>
-          ) : (
-            <ActivityIndicator color={COLORS.white} size="small" />
-          )
+          <ActivityIndicator color={COLORS.white} size="small" />
         )}
       </View>
     );
@@ -210,8 +210,13 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           initValueTextStyle={props.textStyle}
           maxLines={props.maxLines}
         />
+      ) : showRetry ? (
+        <RetryButton
+          setShowRetry={setShowRetry}
+          retryCallBack={handlePopulateSchools}
+          style={{ alignItems: "center", justifyContent: "center" }}
+        />
       ) : (
-        // LOAD THIS
         <ActivityIndicator
           style={{ padding: 8 }}
           color={COLORS.white}
