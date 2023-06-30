@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { COLORS, EVENT_TOGGLER, SCREENS, User, icons } from "../../../constants";
-import ProfileViewer from "../../../components/ProfileViewer/ProfileViewer";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect } from "react";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";

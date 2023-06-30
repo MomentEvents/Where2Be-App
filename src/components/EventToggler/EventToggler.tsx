@@ -48,11 +48,9 @@ const EventToggler = (props: EventTogglerProps) => {
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const [userPulled, setUserPulled] = useState(false);
-  const [eventsPulled, setEventsPulled] = useState(false);
 
   const pullData = async () => {
     setUserPulled(false);
-    setEventsPulled(false);
     setShowRetry(false);
     if (props.showProfileSection) {
       getUser(userToken.UserAccessToken, props.selectedUserID)
@@ -73,89 +71,69 @@ const EventToggler = (props: EventTogglerProps) => {
     } else {
       setUserPulled(true);
     }
-    if (isFutureToggle) {
-      // getting future events
-      props.eventsToPull === EVENT_TOGGLER.JoinedEvents
-        ? getUserJoinedFutureEvents(
-            userToken.UserAccessToken,
-            props.selectedUserID
-          )
-            .then((events: Event[]) => {
-              setPulledFutureEvents(events);
-              setIsRefreshing(false);
-            })
-            .catch((error: CustomError) => {
-              setIsRefreshing(false);
-              setShowRetry(true);
-              if (error.shouldDisplay) {
-                displayError(error);
-              }
-            })
-            .finally(() => {
-              setEventsPulled(true);
-            })
-        : getUserHostedFutureEvents(
-            userToken.UserAccessToken,
-            props.selectedUserID
-          )
-            .then((events: Event[]) => {
-              setPulledFutureEvents(events);
-              setIsRefreshing(false);
-            })
-            .catch((error: CustomError) => {
-              setIsRefreshing(false);
-              setShowRetry(true);
-              if (error.shouldDisplay) {
-                displayError(error);
-              }
-            })
-            .finally(() => {
-              setEventsPulled(true);
-            });
-    } else {
-      props.eventsToPull === EVENT_TOGGLER.JoinedEvents
-        ? getUserJoinedPastEvents(
-            userToken.UserAccessToken,
-            props.selectedUserID
-          )
-            .then((events: Event[]) => {
-              setPulledPastEvents(events);
-              setIsRefreshing(false);
-            })
-            .catch((error: CustomError) => {
-              setIsRefreshing(false);
-              setShowRetry(true);
-              if (error.shouldDisplay) {
-                displayError(error);
-              }
-            })
-            .finally(() => {
-              setEventsPulled(true);
-            })
-        : getUserHostedPastEvents(
-            userToken.UserAccessToken,
-            props.selectedUserID
-          )
-            .then((events: Event[]) => {
-              setPulledPastEvents(events);
-              setIsRefreshing(false);
-            })
-            .catch((error: CustomError) => {
-              setIsRefreshing(false);
-              setShowRetry(true);
-              if (error.shouldDisplay) {
-                displayError(error);
-              }
-            })
-            .finally(() => {
-              setEventsPulled(true);
-            });
-    }
+
+    props.eventsToPull === EVENT_TOGGLER.JoinedEvents
+      ? getUserJoinedFutureEvents(
+          userToken.UserAccessToken,
+          props.selectedUserID
+        )
+          .then((events: Event[]) => {
+            setPulledFutureEvents(events);
+            setIsRefreshing(false);
+          })
+          .catch((error: CustomError) => {
+            setIsRefreshing(false);
+            setShowRetry(true);
+            if (error.shouldDisplay) {
+              displayError(error);
+            }
+          })
+      : getUserHostedFutureEvents(
+          userToken.UserAccessToken,
+          props.selectedUserID
+        )
+          .then((events: Event[]) => {
+            setPulledFutureEvents(events);
+            setIsRefreshing(false);
+          })
+          .catch((error: CustomError) => {
+            setIsRefreshing(false);
+            setShowRetry(true);
+            if (error.shouldDisplay) {
+              displayError(error);
+            }
+          });
+    props.eventsToPull === EVENT_TOGGLER.JoinedEvents
+      ? getUserJoinedPastEvents(userToken.UserAccessToken, props.selectedUserID)
+          .then((events: Event[]) => {
+            setPulledPastEvents(events);
+            setIsRefreshing(false);
+          })
+          .catch((error: CustomError) => {
+            setIsRefreshing(false);
+            setShowRetry(true);
+            if (error.shouldDisplay) {
+              displayError(error);
+            }
+          })
+      : getUserHostedPastEvents(userToken.UserAccessToken, props.selectedUserID)
+          .then((events: Event[]) => {
+            setPulledPastEvents(events);
+            setIsRefreshing(false);
+          })
+          .catch((error: CustomError) => {
+            setIsRefreshing(false);
+            setShowRetry(true);
+            if (error.shouldDisplay) {
+              displayError(error);
+            }
+          });
   };
 
   const onRefresh = async () => {
     setShowRetry(false);
-    isFutureToggle ? setPulledFutureEvents(null) : setPulledPastEvents(null);
+    setPulledFutureEvents(null);
+    setPulledPastEvents(null);
     setIsRefreshing(true);
     pullData();
   };
@@ -180,18 +158,14 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   useEffect(() => {
-    if (isFutureToggle && !pulledFutureEvents) {
-      pullData();
-    } else if (!isFutureToggle && !pulledPastEvents) {
-      pullData();
-    }
-  }, [isFutureToggle]);
+    pullData();
+  }, []);
 
   useEffect(() => {
     if (isRefreshing) {
-      setIsRefreshing(!(userPulled && eventsPulled));
+      setIsRefreshing(!userPulled);
     }
-  }, [userPulled, eventsPulled]);
+  }, [userPulled]);
 
   return (
     <View style={{ flex: 1 }}>

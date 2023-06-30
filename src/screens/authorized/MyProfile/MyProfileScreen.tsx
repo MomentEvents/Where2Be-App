@@ -1,5 +1,4 @@
 import { COLORS, EVENT_TOGGLER, SCREENS, User, icons } from "../../../constants";
-import ProfileViewer from "../../../components/ProfileViewer/ProfileViewer";
 import { UserContext } from "../../../contexts/UserContext";
 import { useContext } from "react";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
