@@ -1,8 +1,4 @@
-import {
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
@@ -37,6 +33,7 @@ const MyCalendarScreen = ({ route }) => {
         <EventToggler
           selectedUserID={userToken.UserID}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
+          showProfileSection={false}
         />
       </View>
     </MobileSafeView>

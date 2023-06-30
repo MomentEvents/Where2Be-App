@@ -82,7 +82,7 @@ const HomeScreen = () => {
         data={eventsAndHosts}
         keyExtractor={(item) => "homescreeneventcard" + item[0].Event.EventID}
         ListEmptyComponent={() => (
-          <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
+          !isLoading && !isRefreshing && !showRetry && <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
             Nothing to see here yet!
           </McText>
         )}

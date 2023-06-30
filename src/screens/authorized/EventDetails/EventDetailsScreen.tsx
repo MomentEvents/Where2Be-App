@@ -114,7 +114,7 @@ const EventDetailsScreen = ({ route }) => {
   const onHostPressed = () => {
     if (host) {
       navigation.push(SCREENS.ProfileDetails, {
-        user: host,
+        userID: host.UserID,
       });
     }
   };

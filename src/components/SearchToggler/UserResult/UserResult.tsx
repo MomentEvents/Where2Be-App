@@ -14,7 +14,7 @@ const UserResult = (props: UserResultProps) => {
   const {userIDToUser, updateUserIDToUser} = useContext(UserContext)
   const [fetchedUser, setFetchedUser] = useState(false)
   const onUserPress = () => {
-    navigation.push(SCREENS.ProfileDetails, { user: props.user });
+    navigation.push(SCREENS.ProfileDetails, { userID: props.user.UserID });
   };
 
   const pullData = async () => {

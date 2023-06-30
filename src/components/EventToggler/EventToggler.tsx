@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
@@ -25,39 +25,54 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import RetryButton from "../RetryButton";
 import { CustomError } from "../../constants/error";
+import { getUser } from "../../services/UserService";
+import SectionProfile from "../Styled/SectionProfile";
 
 type EventTogglerProps = {
   selectedUserID: string;
+  showProfileSection: boolean;
   eventsToPull: string;
-  isRefreshing?: boolean;
-  setIsRefreshing?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 const EventToggler = (props: EventTogglerProps) => {
-  const { userToken } = useContext(UserContext);
+  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
+    useContext(UserContext);
 
   const [pulledPastEvents, setPulledPastEvents] = useState<Event[]>(null);
   const [pulledFutureEvents, setPulledFutureEvents] = useState<Event[]>(null);
-
-  const checkIfValidRefreshingProps = () => {
-    return (
-      props.isRefreshing !== undefined &&
-      props.isRefreshing !== null &&
-      props.setIsRefreshing !== undefined &&
-      props.setIsRefreshing !== null
-    );
-  };
-
-  const [isRefreshing, setIsRefreshing] = checkIfValidRefreshingProps()
-    ? [props.isRefreshing, props.setIsRefreshing]
-    : useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
   const insets = useSafeAreaInsets();
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
+  const [userPulled, setUserPulled] = useState(false);
+  const [eventsPulled, setEventsPulled] = useState(false);
+
   const pullData = async () => {
+    setUserPulled(false);
+    setEventsPulled(false);
     setShowRetry(false);
+    if (props.showProfileSection) {
+      getUser(userToken.UserAccessToken, props.selectedUserID)
+        .then((pulledUser: User) => {
+          console.log("GOT USER\n\n");
+          console.log(JSON.stringify(pulledUser));
+          updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
+        })
+        .catch((error: CustomError) => {
+          if (error.shouldDisplay) {
+            displayError(error);
+          }
+          setShowRetry(true);
+        })
+        .finally(() => {
+          setUserPulled(true);
+        });
+    } else {
+      setUserPulled(true);
+    }
     if (isFutureToggle) {
       // getting future events
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
@@ -76,6 +91,9 @@ const EventToggler = (props: EventTogglerProps) => {
                 displayError(error);
               }
             })
+            .finally(() => {
+              setEventsPulled(true);
+            })
         : getUserHostedFutureEvents(
             userToken.UserAccessToken,
             props.selectedUserID
@@ -90,10 +108,11 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.shouldDisplay) {
                 displayError(error);
               }
+            })
+            .finally(() => {
+              setEventsPulled(true);
             });
     } else {
-      // getting past events
-
       props.eventsToPull === EVENT_TOGGLER.JoinedEvents
         ? getUserJoinedPastEvents(
             userToken.UserAccessToken,
@@ -110,6 +129,9 @@ const EventToggler = (props: EventTogglerProps) => {
                 displayError(error);
               }
             })
+            .finally(() => {
+              setEventsPulled(true);
+            })
         : getUserHostedPastEvents(
             userToken.UserAccessToken,
             props.selectedUserID
@@ -124,6 +146,9 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.shouldDisplay) {
                 displayError(error);
               }
+            })
+            .finally(() => {
+              setEventsPulled(true);
             });
     }
   };
@@ -134,12 +159,6 @@ const EventToggler = (props: EventTogglerProps) => {
     setIsRefreshing(true);
     pullData();
   };
-
-  useEffect(() => {
-    if (isRefreshing) {
-      onRefresh();
-    }
-  }, [isRefreshing]);
 
   const renderEventCard = (event: Event) => {
     return (
@@ -168,53 +187,79 @@ const EventToggler = (props: EventTogglerProps) => {
     }
   }, [isFutureToggle]);
 
+  useEffect(() => {
+    if (isRefreshing) {
+      setIsRefreshing(!(userPulled && eventsPulled));
+    }
+  }, [userPulled, eventsPulled]);
+
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
-          ...styles.buttonToggleContainer,
-        }}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.white}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            style={{ backgroundColor: COLORS.trueBlack }}
+          />
+        }
+        style={{ backgroundColor: COLORS.black }}
       >
-        <TouchableOpacity
+        {props.showProfileSection && (
+          <SectionProfile
+            userID={props.selectedUserID}
+            canEditProfile={
+              isAdmin || userToken.UserID === props.selectedUserID
+            }
+            canFollow={userPulled && userToken.UserID !== props.selectedUserID}
+          />
+        )}
+        <View
           style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: isFutureToggle ? 1 : 0,
-            borderColor: "transparent",
-            borderBottomColor: isFutureToggle
-              ? COLORS.purple
-              : COLORS.trueBlack,
-            backgroundColor: "transparent",
-            ...styles.toggleButton,
+            backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
+            ...styles.buttonToggleContainer,
           }}
-          onPress={() => setIsFutureToggle(true)}
         >
-          <McText h3 color={isFutureToggle ? COLORS.purple : COLORS.white}>
-            Upcoming
-          </McText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: !isFutureToggle ? 1 : 0,
-            borderColor: "transparent",
-            borderBottomColor: isFutureToggle
-              ? COLORS.trueBlack
-              : COLORS.purple,
-            backgroundColor: "transparent",
-            ...styles.toggleButton,
-          }}
-          onPress={() => setIsFutureToggle(false)}
-        >
-          <McText h3 color={!isFutureToggle ? COLORS.purple : COLORS.white}>
-            Previous
-          </McText>
-        </TouchableOpacity>
-      </View>
-      {checkIfValidRefreshingProps() ? (
-        showRetry ? (
+          <TouchableOpacity
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: isFutureToggle ? 1 : 0,
+              borderColor: "transparent",
+              borderBottomColor: isFutureToggle
+                ? COLORS.purple
+                : COLORS.trueBlack,
+              backgroundColor: "transparent",
+              ...styles.toggleButton,
+            }}
+            onPress={() => setIsFutureToggle(true)}
+          >
+            <McText h3 color={isFutureToggle ? COLORS.purple : COLORS.white}>
+              Upcoming
+            </McText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: !isFutureToggle ? 1 : 0,
+              borderColor: "transparent",
+              borderBottomColor: isFutureToggle
+                ? COLORS.trueBlack
+                : COLORS.purple,
+              backgroundColor: "transparent",
+              ...styles.toggleButton,
+            }}
+            onPress={() => setIsFutureToggle(false)}
+          >
+            <McText h3 color={!isFutureToggle ? COLORS.purple : COLORS.white}>
+              Previous
+            </McText>
+          </TouchableOpacity>
+        </View>
+        {showRetry ? (
           <RetryButton
             setShowRetry={setShowRetry}
             retryCallBack={pullData}
@@ -224,102 +269,10 @@ const EventToggler = (props: EventTogglerProps) => {
               marginTop: 20,
             }}
           />
-        ) : (
-          <View style={{ flex: 1, backgroundColor: COLORS.black }}>
-            {isFutureToggle ? (
-              pulledFutureEvents ? (
-                pulledFutureEvents.length !== 0 ? (
-                  pulledFutureEvents.map((event: Event) =>
-                    renderEventCard(event)
-                  )
-                ) : (
-                  <View
-                    style={{
-                      marginTop: 20,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <McText h3>No events to display!</McText>
-                  </View>
-                )
-              ) : (
-                <ActivityIndicator
-                  color={COLORS.white}
-                  style={{ marginTop: 20 }}
-                />
-              )
-            ) : pulledPastEvents ? (
-              pulledPastEvents.length !== 0 ? (
-                pulledPastEvents.map((event: Event) => renderEventCard(event))
-              ) : (
-                <View
-                  style={{
-                    marginTop: 20,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <McText h3>No events to display!</McText>
-                </View>
-              )
-            ) : (
-              <ActivityIndicator
-                color={COLORS.white}
-                style={{ marginTop: 20 }}
-              />
-            )}
-            <View style={{ height: insets.bottom + 10 }} />
-          </View>
-        )
-      ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              tintColor={COLORS.white}
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          style={{ backgroundColor: COLORS.black }}
-        >
-          {showRetry ? (
-            <RetryButton
-              setShowRetry={setShowRetry}
-              retryCallBack={pullData}
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 20,
-              }}
-            />
-          ) : isFutureToggle ? (
-            pulledFutureEvents ? (
-              pulledFutureEvents.length !== 0 ? (
-                pulledFutureEvents.map((event: Event) => renderEventCard(event))
-              ) : (
-                <View
-                  style={{
-                    marginTop: 20,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <McText h3>No events to display!</McText>
-                </View>
-              )
-            ) : (
-              !isRefreshing && (
-                <ActivityIndicator
-                  color={COLORS.white}
-                  style={{ marginTop: 20 }}
-                />
-              )
-            )
-          ) : pulledPastEvents ? (
-            pulledPastEvents.length !== 0 ? (
-              pulledPastEvents.map((event: Event) => renderEventCard(event))
+        ) : isFutureToggle ? (
+          pulledFutureEvents ? (
+            pulledFutureEvents.length !== 0 ? (
+              pulledFutureEvents.map((event: Event) => renderEventCard(event))
             ) : (
               <View
                 style={{
@@ -338,10 +291,28 @@ const EventToggler = (props: EventTogglerProps) => {
                 style={{ marginTop: 20 }}
               />
             )
-          )}
-          <View style={{ height: insets.bottom + 10 }} />
-        </ScrollView>
-      )}
+          )
+        ) : pulledPastEvents ? (
+          pulledPastEvents.length !== 0 ? (
+            pulledPastEvents.map((event: Event) => renderEventCard(event))
+          ) : (
+            <View
+              style={{
+                marginTop: 20,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <McText h3>No events to display!</McText>
+            </View>
+          )
+        ) : (
+          !isRefreshing && (
+            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
+          )
+        )}
+        <View style={{ height: insets.bottom + 10 }} />
+      </ScrollView>
     </View>
   );
 };

@@ -34,7 +34,7 @@ const HomeEvent = (props: HomeEventProps) => {
 
   const onHostUsernamePressed = () => {
     navigation.push(SCREENS.ProfileDetails, {
-      user: props.user,
+      userID: props.user.UserID,
     });
   };
 
