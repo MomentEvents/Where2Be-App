@@ -27,6 +27,7 @@ import RetryButton from "../RetryButton";
 import { CustomError } from "../../constants/error";
 import { getUser } from "../../services/UserService";
 import SectionProfile from "../Styled/SectionProfile";
+import { FlatList } from "react-native";
 
 type EventTogglerProps = {
   selectedUserID: string;
@@ -49,6 +50,61 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const [userPulled, setUserPulled] = useState(false);
 
+  const ListHeader = () => (
+    <>
+      {props.showProfileSection && (
+        <SectionProfile
+          userID={props.selectedUserID}
+          canEditProfile={isAdmin || userToken.UserID === props.selectedUserID}
+          canFollow={userPulled && userToken.UserID !== props.selectedUserID}
+        />
+      )}
+      <View
+        style={{
+          backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
+          ...styles.buttonToggleContainer,
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: isFutureToggle ? 1 : 0,
+            borderColor: "transparent",
+            borderBottomColor: isFutureToggle
+              ? COLORS.purple
+              : COLORS.trueBlack,
+            backgroundColor: "transparent",
+            ...styles.toggleButton,
+          }}
+          onPress={() => setIsFutureToggle(true)}
+        >
+          <McText h3 color={isFutureToggle ? COLORS.purple : COLORS.white}>
+            Upcoming
+          </McText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: !isFutureToggle ? 1 : 0,
+            borderColor: "transparent",
+            borderBottomColor: isFutureToggle
+              ? COLORS.trueBlack
+              : COLORS.purple,
+            backgroundColor: "transparent",
+            ...styles.toggleButton,
+          }}
+          onPress={() => setIsFutureToggle(false)}
+        >
+          <McText h3 color={!isFutureToggle ? COLORS.purple : COLORS.white}>
+            Previous
+          </McText>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+
   const pullData = async () => {
     setUserPulled(false);
     setShowRetry(false);
@@ -57,7 +113,7 @@ const EventToggler = (props: EventTogglerProps) => {
         .then((pulledUser: User) => {
           console.log("GOT USER\n\n");
           console.log(JSON.stringify(pulledUser));
-          setUserPulled(true)
+          setUserPulled(true);
           updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
         })
         .catch((error: CustomError) => {
@@ -65,7 +121,7 @@ const EventToggler = (props: EventTogglerProps) => {
             displayError(error);
           }
           setShowRetry(true);
-        })
+        });
     } else {
       setUserPulled(true);
     }
@@ -167,8 +223,10 @@ const EventToggler = (props: EventTogglerProps) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <FlatList
+        data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
+        ListHeaderComponent={ListHeader}
+        renderItem={({ item }) => renderEventCard(item)}
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
@@ -178,113 +236,41 @@ const EventToggler = (props: EventTogglerProps) => {
           />
         }
         style={{ backgroundColor: COLORS.black }}
-      >
-        {props.showProfileSection && (
-          <SectionProfile
-            userID={props.selectedUserID}
-            canEditProfile={
-              isAdmin || userToken.UserID === props.selectedUserID
-            }
-            canFollow={userPulled && userToken.UserID !== props.selectedUserID}
-          />
-        )}
-        <View
-          style={{
-            backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
-            ...styles.buttonToggleContainer,
-          }}
-        >
-          <TouchableOpacity
+        ListEmptyComponent={
+          <View
             style={{
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: isFutureToggle ? 1 : 0,
-              borderColor: "transparent",
-              borderBottomColor: isFutureToggle
-                ? COLORS.purple
-                : COLORS.trueBlack,
-              backgroundColor: "transparent",
-              ...styles.toggleButton,
-            }}
-            onPress={() => setIsFutureToggle(true)}
-          >
-            <McText h3 color={isFutureToggle ? COLORS.purple : COLORS.white}>
-              Upcoming
-            </McText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: !isFutureToggle ? 1 : 0,
-              borderColor: "transparent",
-              borderBottomColor: isFutureToggle
-                ? COLORS.trueBlack
-                : COLORS.purple,
-              backgroundColor: "transparent",
-              ...styles.toggleButton,
-            }}
-            onPress={() => setIsFutureToggle(false)}
-          >
-            <McText h3 color={!isFutureToggle ? COLORS.purple : COLORS.white}>
-              Previous
-            </McText>
-          </TouchableOpacity>
-        </View>
-        {showRetry ? (
-          <RetryButton
-            setShowRetry={setShowRetry}
-            retryCallBack={pullData}
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
               marginTop: 20,
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
-        ) : isFutureToggle ? (
-          pulledFutureEvents ? (
-            pulledFutureEvents.length !== 0 ? (
-              pulledFutureEvents.map((event: Event) => renderEventCard(event))
-            ) : (
-              <View
-                style={{
-                  marginTop: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <McText h3>No events to display!</McText>
-              </View>
-            )
-          ) : (
-            !isRefreshing && (
-              <ActivityIndicator
-                color={COLORS.white}
-                style={{ marginTop: 20 }}
+          >
+            {showRetry && (
+              <RetryButton
+                setShowRetry={setShowRetry}
+                retryCallBack={pullData}
               />
-            )
-          )
-        ) : pulledPastEvents ? (
-          pulledPastEvents.length !== 0 ? (
-            pulledPastEvents.map((event: Event) => renderEventCard(event))
-          ) : (
-            <View
-              style={{
-                marginTop: 20,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <McText h3>No events to display!</McText>
-            </View>
-          )
-        ) : (
-          !isRefreshing && (
-            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
-          )
-        )}
-        <View style={{ height: insets.bottom + 10 }} />
-      </ScrollView>
+            )}
+            {!showRetry &&
+              isFutureToggle &&
+              (pulledFutureEvents ? (
+                <McText h3>No events to display!</McText>
+              ) : (
+                <ActivityIndicator color={COLORS.white} size={"small"} />
+              ))}
+            {!showRetry &&
+              !isFutureToggle &&
+              (pulledPastEvents ? (
+                <McText h3>No events to display!</McText>
+              ) : (
+                <ActivityIndicator color={COLORS.white} size={"small"} />
+              ))}
+          </View>
+        }
+        ListFooterComponent={<View style={{ height: insets.bottom + 10 }} />}
+        keyExtractor={(item) =>
+          item.EventID + props.selectedUserID + props.eventsToPull + " Event"
+        }
+      />
     </View>
   );
 };
