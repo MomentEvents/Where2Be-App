@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -49,6 +50,11 @@ const EventToggler = (props: EventTogglerProps) => {
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const [userPulled, setUserPulled] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const canLoadPastData = useRef(true);
+  const canLoadFutureData = useRef(true);
 
   const ListHeader = () => (
     <>
@@ -104,6 +110,102 @@ const EventToggler = (props: EventTogglerProps) => {
       </View>
     </>
   );
+
+  const loadMoreData = async () => {
+    if (
+      (isFutureToggle && !canLoadFutureData.current) ||
+      (!isFutureToggle && !canLoadPastData.current)
+    ) {
+      return;
+    }
+
+    if (!isLoading) {
+      setIsLoading(true);
+      let cursor: { eventID: string; date: Date } = null;
+
+      if (isFutureToggle) {
+        if (pulledFutureEvents && pulledFutureEvents.length > 0) {
+          const date =
+            pulledFutureEvents[pulledFutureEvents.length - 1].StartDateTime;
+          const eventID =
+            pulledFutureEvents[pulledFutureEvents.length - 1].EventID;
+          cursor = {
+            eventID: eventID,
+            date: date,
+          };
+        }
+      } else {
+        if (pulledPastEvents && pulledPastEvents.length > 0) {
+          const date =
+            pulledPastEvents[pulledPastEvents.length - 1].StartDateTime;
+          const eventID = pulledPastEvents[pulledPastEvents.length - 1].EventID;
+          cursor = {
+            eventID: eventID,
+            date: date,
+          };
+        }
+      }
+
+      if (cursor) {
+        // Only proceed if cursor is not null
+        try {
+          let additionalEvents = null;
+          if (isFutureToggle && canLoadFutureData.current) {
+            if (props.eventsToPull === EVENT_TOGGLER.JoinedEvents) {
+              additionalEvents = await getUserJoinedFutureEvents(
+                userToken.UserAccessToken,
+                props.selectedUserID,
+                cursor
+              );
+            } else {
+              additionalEvents = await getUserHostedFutureEvents(
+                userToken.UserAccessToken,
+                props.selectedUserID,
+                cursor
+              );
+            }
+            setPulledFutureEvents((currentEvents) => [
+              ...currentEvents,
+              ...additionalEvents,
+            ]);
+          } else if (!isFutureToggle && canLoadPastData.current) {
+            if (props.eventsToPull === EVENT_TOGGLER.JoinedEvents) {
+              additionalEvents = await getUserJoinedPastEvents(
+                userToken.UserAccessToken,
+                props.selectedUserID,
+                cursor
+              );
+            } else {
+              additionalEvents = await getUserHostedPastEvents(
+                userToken.UserAccessToken,
+                props.selectedUserID,
+                cursor
+              );
+            }
+            setPulledPastEvents((currentEvents) => [
+              ...currentEvents,
+              ...additionalEvents,
+            ]);
+          }
+          console.log(JSON.stringify(additionalEvents));
+          if (additionalEvents.length === 0) {
+            console.log("CANT GO INTO DATA ANYMORE");
+            if (isFutureToggle) {
+              canLoadFutureData.current = false;
+            } else {
+              canLoadPastData.current = false;
+            }
+          }
+        } catch (error) {
+          if (error.shouldDisplay) {
+            displayError(error);
+          }
+        }
+      }
+
+      setIsLoading(false);
+    }
+  };
 
   const pullData = async () => {
     setUserPulled(false);
@@ -185,6 +287,7 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   const onRefresh = async () => {
+    console.log("SETTING REFRESH");
     setShowRetry(false);
     setPulledFutureEvents(null);
     setPulledPastEvents(null);
@@ -266,7 +369,19 @@ const EventToggler = (props: EventTogglerProps) => {
               ))}
           </View>
         }
-        ListFooterComponent={<View style={{ height: insets.bottom + 10 }} />}
+        ListFooterComponent={() =>
+          isLoading ? (
+            <ActivityIndicator
+              style={{ marginTop: 10, marginBottom: insets.bottom + 30 }}
+              size="small"
+              color={COLORS.white}
+            />
+          ) : (
+            <View style={{ height: insets.bottom + 10 }} />
+          )
+        }
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.6} // triggers when user scrolls to 50% from the bottom of the list
         keyExtractor={(item) =>
           item.EventID + props.selectedUserID + props.eventsToPull + " Event"
         }

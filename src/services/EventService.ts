@@ -9,6 +9,7 @@ import {
   eventResponseToEvents,
   userResponseToUser,
 } from "../helpers/converters";
+import { Alert } from "react-native";
 // import * as Localization from "expo-localization";
 // import { Calendar } from "expo-localization";
 
@@ -178,13 +179,13 @@ export async function getUserJoinedFutureEvents(
   const body: {
     user_access_token: string;
     cursor_event_id?: string;
-    cursor_event_date_time?: string;
+    cursor_start_date_time?: string;
   } = {
     user_access_token: userAccessToken,
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_event_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date.toISOString();
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_future`,
@@ -223,13 +224,13 @@ export async function getUserJoinedPastEvents(
   const body: {
     user_access_token: string;
     cursor_event_id?: string;
-    cursor_event_date_time?: string;
+    cursor_start_date_time?: string;
   } = {
     user_access_token: userAccessToken,
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_event_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date.toISOString();
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_past`,
@@ -269,13 +270,13 @@ export async function getUserHostedFutureEvents(
   const body: {
     user_access_token: string;
     cursor_event_id?: string;
-    cursor_event_date_time?: string;
+    cursor_start_date_time?: string;
   } = {
     user_access_token: userAccessToken,
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_event_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date.toISOString();
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
@@ -315,15 +316,14 @@ export async function getUserHostedPastEvents(
   const body: {
     user_access_token: string;
     cursor_event_id?: string;
-    cursor_event_date_time?: string;
+    cursor_start_date_time?: string;
   } = {
     user_access_token: userAccessToken,
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_event_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date.toISOString();
   }
-
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_past`,
     {
