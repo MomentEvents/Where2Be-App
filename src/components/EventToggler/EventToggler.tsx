@@ -197,9 +197,7 @@ const EventToggler = (props: EventTogglerProps) => {
             }
           }
         } catch (error) {
-          if (error.shouldDisplay) {
-            displayError(error);
-          }
+          console.warn(error)
         }
       }
 
@@ -287,11 +285,12 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   const onRefresh = async () => {
-    console.log("SETTING REFRESH");
     setShowRetry(false);
     setPulledFutureEvents(null);
     setPulledPastEvents(null);
     setIsRefreshing(true);
+    canLoadFutureData.current = true;
+    canLoadPastData.current = true;
     pullData();
   };
 
