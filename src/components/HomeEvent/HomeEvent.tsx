@@ -39,7 +39,9 @@ const HomeEvent = (props: HomeEventProps) => {
   };
 
   useEffect(() => {
-    updateUserIDToUser({ id: props.user.UserID, user: props.user });
+    if (!userIDToUser[props.user.UserID]) {
+      updateUserIDToUser({ id: props.user.UserID, user: props.user });
+    }
   }, []);
 
   return (
@@ -56,8 +58,8 @@ const HomeEvent = (props: HomeEventProps) => {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            marginLeft: 20,
-            marginRight: 65,
+            paddingLeft: 20,
+            paddingRight: 80,
           }}
           onPress={() => {
             onHostUsernamePressed();
@@ -77,6 +79,7 @@ const HomeEvent = (props: HomeEventProps) => {
             style={{
               letterSpacing: 1,
               color: COLORS.white,
+              marginRight: 10,
             }}
           >
             {userIDToUser[props.user.UserID]
@@ -85,7 +88,7 @@ const HomeEvent = (props: HomeEventProps) => {
           </McText>
           {userIDToUser[props.user.UserID] &&
             userIDToUser[props.user.UserID].VerifiedOrganization && (
-              <View style={{ paddingLeft: 3 }}>
+              <View>
                 <MaterialIcons
                   name="verified"
                   size={18}

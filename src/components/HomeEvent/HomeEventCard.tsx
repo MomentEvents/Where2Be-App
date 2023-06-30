@@ -38,7 +38,7 @@ const HomeEventCard = ({
   width,
   height,
   showRelativeTime,
-  host
+  host,
 }: EventCardProps) => {
   const {
     eventIDToEvent,
@@ -52,8 +52,6 @@ const HomeEventCard = ({
   const navigation = useNavigation<any>();
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
-  const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
-  const [fetchedDidUserJoin, setFetchedDidUserJoin] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -70,13 +68,15 @@ const HomeEventCard = ({
       return;
     }
     navigation.push(SCREENS.EventDetails, {
-      eventID: event.EventID
+      eventID: event.EventID,
     });
     // Navigate to event details page
   };
 
   const pullData = async () => {
-    updateEventIDToEvent({ id: event.EventID, event: event });
+    if (!eventIDToEvent[event.EventID]) {
+      updateEventIDToEvent({ id: event.EventID, event: event });
+    }
     setFetchedEvent(true);
   };
 
@@ -101,7 +101,7 @@ const HomeEventCard = ({
       }}
     >
       <View
-          key={"HomeEventCard"+event.EventID}
+        key={"HomeEventCard" + event.EventID}
         style={{
           height: cardHeight,
           width: cardWidth,

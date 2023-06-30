@@ -68,7 +68,9 @@ const EventCard = ({
   };
 
   const pullData = async () => {
-    updateEventIDToEvent({ id: event.EventID, event: event });
+    if(!eventIDToEvent[event.EventID]){
+      updateEventIDToEvent({ id: event.EventID, event: event });
+    }
     setFetchedEvent(true);
   };
 
