@@ -57,6 +57,7 @@ const EventToggler = (props: EventTogglerProps) => {
         .then((pulledUser: User) => {
           console.log("GOT USER\n\n");
           console.log(JSON.stringify(pulledUser));
+          setUserPulled(true)
           updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
         })
         .catch((error: CustomError) => {
@@ -65,9 +66,6 @@ const EventToggler = (props: EventTogglerProps) => {
           }
           setShowRetry(true);
         })
-        .finally(() => {
-          setUserPulled(true);
-        });
     } else {
       setUserPulled(true);
     }
