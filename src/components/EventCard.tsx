@@ -43,9 +43,6 @@ const EventCard = ({
   const navigation = useNavigation<any>();
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
-  const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
-  const [fetchedDidUserJoin, setFetchedDidUserJoin] = useState(false);
-
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const cardWidth = width ? width : isBigCard ? 330 : 160;
