@@ -30,9 +30,13 @@ export async function getEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  })
+  });
 
-  const pulledEvent: EventResponse = await responseHandler<EventResponse>(response, "Could not get event", true);
+  const pulledEvent: EventResponse = await responseHandler<EventResponse>(
+    response,
+    "Could not get event",
+    true
+  );
   const convertedEvent: Event = eventResponseToEvent(pulledEvent);
 
   return convertedEvent;
@@ -50,7 +54,6 @@ export async function createEvent(
   createdEvent: Event,
   interests: Interest[]
 ): Promise<string> {
-
   const formData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", createdEvent.Title);
@@ -71,9 +74,13 @@ export async function createEvent(
       "Content-Type": "multipart/form-data",
     },
     body: formData,
-  })
+  });
 
-  const data = await responseHandler<EventResponse>(response, "Could not create event", true);
+  const data = await responseHandler<EventResponse>(
+    response,
+    "Could not create event",
+    true
+  );
 
   return data["event_id"];
 }
@@ -90,7 +97,7 @@ export async function updateEvent(
   updatedInterests: Interest[]
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string if it exists
-  console.log(JSON.stringify(updatedInterests))
+  console.log(JSON.stringify(updatedInterests));
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", updatedEvent.Title);
@@ -116,10 +123,10 @@ export async function updateEvent(
       },
       body: formData,
     }
-  )
+  );
 
-  console.log("UPDATING EVENT")
-  console.log("RESPONSE IS " + JSON.stringify(response))
+  console.log("UPDATING EVENT");
+  console.log("RESPONSE IS " + JSON.stringify(response));
 
   await responseHandler<void>(response, "Could not update event", false);
 
@@ -148,7 +155,7 @@ export async function deleteEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  })
+  });
 
   await responseHandler<void>(response, "Could not delete event", false);
 
@@ -165,8 +172,20 @@ export async function deleteEvent(
  */
 export async function getUserJoinedFutureEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_event_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_event_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_future`,
     {
@@ -174,13 +193,15 @@ export async function getUserJoinedFutureEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  )
+  );
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined future events", true);
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user joined future events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -196,8 +217,20 @@ export async function getUserJoinedFutureEvents(
  */
 export async function getUserJoinedPastEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_event_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_event_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_past`,
     {
@@ -205,13 +238,15 @@ export async function getUserJoinedPastEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  )
+  );
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user joined past events", true);
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user joined past events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -228,11 +263,20 @@ export async function getUserJoinedPastEvents(
 
 export async function getUserHostedFutureEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
-  // const calendar: Calendar[] = Localization.getCalendars();
-  // const timezone = calendar[0].timeZone;
-
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_event_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_event_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
     {
@@ -240,13 +284,15 @@ export async function getUserHostedFutureEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  )
+  );
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted future events", true);
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user hosted future events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -263,8 +309,21 @@ export async function getUserHostedFutureEvents(
 
 export async function getUserHostedPastEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_event_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_event_date_time = cursor.date.toISOString();
+  }
+
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_past`,
     {
@@ -272,13 +331,15 @@ export async function getUserHostedPastEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  )
+  );
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get user hosted past events", true);
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user hosted past events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -306,9 +367,13 @@ export async function searchSchoolEvents(
         query: query,
       }),
     }
-  )
+  );
 
-  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(response, "Could not get all school events", true);
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get all school events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -332,9 +397,13 @@ export async function getAllSchoolEventsCategorized(
         user_access_token: userAccessToken ? userAccessToken : null,
       }),
     }
-  )
+  );
 
-  const responseJSON = await responseHandler<{}>(response, "Could not get all categorized events", true);
+  const responseJSON = await responseHandler<{}>(
+    response,
+    "Could not get all categorized events",
+    true
+  );
   const categoryMap: { [key: string]: Event[] } = {};
 
   for (const categoryToEvents in responseJSON) {
@@ -364,10 +433,14 @@ export async function getAllHomePageEventsWithHosts(
         school_id: schoolID,
       }),
     }
-  )
-  
+  );
+
   const responseJSON: [{ host: UserResponse; event: EventResponse }] =
-    await responseHandler<[{ host: UserResponse; event: EventResponse }]>(response, "Could not get all categorized events", true);
+    await responseHandler<[{ host: UserResponse; event: EventResponse }]>(
+      response,
+      "Could not get all categorized events",
+      true
+    );
 
   const returnedData: [{ Host: User; Event: Event }][] = [];
 
