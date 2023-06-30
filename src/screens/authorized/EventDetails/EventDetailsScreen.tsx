@@ -96,6 +96,7 @@ const EventDetailsScreen = ({ route }) => {
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const useRefRefreshing = useRef(false);
 
   const [didFetchEvent, setDidFetchEvent] = useState<boolean>(false);
   const [didFetchInterests, setDidFetchInterests] = useState<boolean>(false);
@@ -112,7 +113,7 @@ const EventDetailsScreen = ({ route }) => {
   let beforeLoadShoutout = useRef<boolean>(undefined);
 
   const onHostPressed = () => {
-    if (host) {
+    if (host && userIDToUser[host.UserID]) {
       navigation.push(SCREENS.ProfileDetails, {
         userID: host.UserID,
       });
@@ -218,37 +219,51 @@ const EventDetailsScreen = ({ route }) => {
         }
       });
 
-    getEventInterestsByEventId(eventID, userToken.UserAccessToken)
-      .then((tags: Interest[]) => {
-        updateEventIDToInterests({ id: eventID, interests: tags });
-        setDidFetchInterests(true);
-      })
-      .catch((error: Error) => {
-        if (!gotError) {
-          gotError = true;
-          displayError(error);
-          navigation.goBack();
-        }
-      });
+    if (!eventIDToInterests[eventID] || useRefRefreshing.current) {
+      getEventInterestsByEventId(eventID, userToken.UserAccessToken)
+        .then((tags: Interest[]) => {
+          updateEventIDToInterests({ id: eventID, interests: tags });
+          setDidFetchInterests(true);
+        })
+        .catch((error: Error) => {
+          if (!gotError) {
+            gotError = true;
+            displayError(error);
+            navigation.goBack();
+          }
+        });
+    } else {
+      setDidFetchInterests(true)
+    }
 
-    getEventHostByEventId(userToken.UserAccessToken, eventID)
-      .then((pulledHost: User) => {
-        setHost(pulledHost);
-        updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
-        setDidFetchHost(true);
-      })
-      .catch((error: Error) => {
-        if (!gotError) {
-          gotError = true;
-          displayError(error);
-          navigation.goBack();
-        }
-      });
+    if (
+      (eventIDToEvent[eventID].HostUserID &&
+        !userIDToUser[eventIDToEvent[eventID].HostUserID]) ||
+      useRefRefreshing.current
+    ) {
+      getEventHostByEventId(userToken.UserAccessToken, eventID)
+        .then((pulledHost: User) => {
+          setHost(pulledHost);
+          updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
+          setDidFetchHost(true);
+        })
+        .catch((error: Error) => {
+          if (!gotError) {
+            gotError = true;
+            displayError(error);
+            navigation.goBack();
+          }
+        });
+    } else {
+      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID]);
+      setDidFetchHost(true);
+    }
   };
 
   const onRefresh = async () => {
     beforeLoadJoin.current = undefined;
     beforeLoadShoutout.current = undefined;
+    useRefRefreshing.current = true;
     setIsRefreshing(true);
     setHost(undefined);
     setDidFetchHost(false);
@@ -268,6 +283,7 @@ const EventDetailsScreen = ({ route }) => {
   useEffect(() => {
     if (didFetchHost && didFetchEvent && didFetchInterests) {
       setIsRefreshing(false);
+      useRefRefreshing.current = false;
     }
   }, [didFetchHost, didFetchEvent, didFetchInterests]);
 
@@ -513,14 +529,9 @@ const EventDetailsScreen = ({ route }) => {
                     color: COLORS.white,
                   }}
                 >
-                  {host && userIDToUser[host.UserID] ? (
-                    userIDToUser[host.UserID].DisplayName
-                  ) : (
-                    <ActivityIndicator
-                      color={COLORS.white}
-                      style={{ marginLeft: 10 }}
-                    />
-                  )}
+                  {host && userIDToUser[host.UserID]
+                    ? userIDToUser[host.UserID].DisplayName
+                    : "..."}
                 </McText>
                 {host &&
                   userIDToUser[host.UserID] &&
