@@ -1,6 +1,7 @@
 import { Interest, InterestResponse } from "./../constants/types";
 import { momentAPI } from "../constants/server";
-import { formatError } from "../helpers/helpers";
+import { CustomError, NetworkError } from "../constants/error";
+import { formatError, responseHandler } from "../helpers/helpers";
 import { interestResponseToInterests } from "../helpers/converters";
 
 /******************************************************
@@ -14,16 +15,9 @@ import { interestResponseToInterests } from "../helpers/converters";
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
   const response = await fetch(momentAPI + `/interest`, {
     method: "GET",
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all interests");
-  });
+  })
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledInterests: InterestResponse[] = await response.json();
+  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get all interests", true);
   const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
   return convertedInterests;
@@ -49,16 +43,9 @@ export async function getEventInterestsByEventId(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get event interests");
-  });
+  })
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledInterests: InterestResponse[] = await response.json();
+  const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get event interests", true);
   const convertedInterests: Interest[] = interestResponseToInterests(pulledInterests)
 
   return convertedInterests;

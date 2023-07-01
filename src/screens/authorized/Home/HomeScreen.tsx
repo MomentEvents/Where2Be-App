@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -19,15 +20,21 @@ import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
 import { displayError } from "../../../helpers/helpers";
+import RetryButton from "../../../components/RetryButton";
+import { CustomError } from "../../../constants/error";
+import { McText } from "../../../components/Styled";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
 
   const { currentSchool, userToken } = useContext(UserContext);
 
-  const [eventsAndHosts, setEventsAndHosts] = useState<[{Host: User, Event: Event}][]>();
+  const [eventsAndHosts, setEventsAndHosts] =
+    useState<[{ Host: User; Event: Event }][]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const pullData = async () => {
     getAllHomePageEventsWithHosts(
@@ -39,15 +46,19 @@ const HomeScreen = () => {
         setIsRefreshing(false);
         setEventsAndHosts(data);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
+        setShowRetry(true);
         setIsRefreshing(false);
-        displayError(error);
+        if (error.shouldDisplay) {
+          displayError(error);
+        }
       });
   };
   const onRefresh = () => {
     setIsRefreshing(true);
     setEventsAndHosts(undefined);
     setIsLoading(true);
+    setShowRetry(false);
     pullData();
   };
 
@@ -58,7 +69,7 @@ const HomeScreen = () => {
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
-      <ScrollView
+      <FlatList
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -68,19 +79,45 @@ const HomeScreen = () => {
           />
         }
         style={{ backgroundColor: COLORS.black }}
-      >
-        {isLoading && !isRefreshing && (
-          // LOAD THIS
-          <ActivityIndicator
-            color={COLORS.white}
-            style={{ marginTop: 20 }}
-            size={"small"}
+        data={eventsAndHosts}
+        keyExtractor={(item) => "homescreeneventcard" + item[0].Event.EventID}
+        ListEmptyComponent={() => (
+          !isLoading && !isRefreshing && !showRetry && <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
+            Nothing to see here yet!
+          </McText>
+        )}
+        ListHeaderComponent={() =>
+          showRetry && (
+            <RetryButton
+              setShowRetry={setShowRetry}
+              retryCallBack={pullData}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 20,
+              }}
+            />
+          )
+        }
+        ListFooterComponent={() =>
+          isLoading &&
+          !isRefreshing &&
+          !showRetry && (
+            <ActivityIndicator
+              color={COLORS.white}
+              style={{ marginTop: 20 }}
+              size={"small"}
+            />
+          )
+        }
+        renderItem={({ item }) => (
+          <HomeEvent
+            key={"homescreeneventcard" + item[0].Event.EventID}
+            event={item[0].Event}
+            user={item[0].Host}
           />
         )}
-        {eventsAndHosts && eventsAndHosts.map((value) => {
-          return <HomeEvent key={"homescreeneventcard"+value[0].Event.EventID} event={value[0].Event} user={value[0].Host}></HomeEvent>;
-        })}
-      </ScrollView>
+      />
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={() => {

@@ -6,6 +6,7 @@ import {
   checkIfStringIsAlphanumeric,
   formatError,
   checkIfStringIsReadable,
+  responseHandler,
 } from "../helpers/helpers";
 import { Token, User } from "../constants";
 
@@ -368,14 +369,7 @@ export async function resetPassword(
     body: JSON.stringify({
       email: email
     }),
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Unable to reset password");
-  });
+  })
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  return Promise.resolve()
+  await responseHandler<void>(response, "Could not send password reset email", false)
 }

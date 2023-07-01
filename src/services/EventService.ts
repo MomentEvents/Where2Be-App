@@ -1,6 +1,7 @@
 import { momentAPI } from "../constants/server";
 import { Event, Interest } from "../constants";
-import { formatError } from "../helpers/helpers";
+import { CustomError, NetworkError } from "../constants/error";
+import { formatError, responseHandler } from "../helpers/helpers";
 import { confirmButtonStyles } from "react-native-modal-datetime-picker";
 import { EventResponse, User, UserResponse } from "../constants/types";
 import {
@@ -8,6 +9,7 @@ import {
   eventResponseToEvents,
   userResponseToUser,
 } from "../helpers/converters";
+import { Alert } from "react-native";
 // import * as Localization from "expo-localization";
 // import { Calendar } from "expo-localization";
 
@@ -29,16 +31,13 @@ export async function getEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not get event");
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvent: EventResponse = await response.json();
+  const pulledEvent: EventResponse = await responseHandler<EventResponse>(
+    response,
+    "Could not get event",
+    true
+  );
   const convertedEvent: Event = eventResponseToEvent(pulledEvent);
 
   return convertedEvent;
@@ -76,16 +75,13 @@ export async function createEvent(
       "Content-Type": "multipart/form-data",
     },
     body: formData,
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not create event");
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const data = await response.json();
+  const data = await responseHandler<EventResponse>(
+    response,
+    "Could not create event",
+    true
+  );
 
   return data["event_id"];
 }
@@ -102,6 +98,7 @@ export async function updateEvent(
   updatedInterests: Interest[]
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string if it exists
+  console.log(JSON.stringify(updatedInterests));
   const formData: FormData = new FormData();
   formData.append("user_access_token", userAccessToken);
   formData.append("title", updatedEvent.Title);
@@ -112,7 +109,7 @@ export async function updateEvent(
   formData.append("visibility", updatedEvent.Visibility);
   formData.append(
     "interest_ids",
-    JSON.stringify(updatedInterests.map((interest) => interest.Name))
+    JSON.stringify(updatedInterests.map((interest) => interest.InterestID))
   );
   formData.append("picture", updatedEvent.Picture);
 
@@ -127,14 +124,12 @@ export async function updateEvent(
       },
       body: formData,
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not update event");
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
+  console.log("UPDATING EVENT");
+  console.log("RESPONSE IS " + JSON.stringify(response));
+
+  await responseHandler<void>(response, "Could not update event", false);
 
   return Promise.resolve();
 }
@@ -161,14 +156,9 @@ export async function deleteEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  }).catch((error: Error) => {
-    throw formatError("Network error", "Could not delete event");
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
+  await responseHandler<void>(response, "Could not delete event", false);
 
   return Promise.resolve();
 }
@@ -183,8 +173,20 @@ export async function deleteEvent(
  */
 export async function getUserJoinedFutureEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_start_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_start_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_future`,
     {
@@ -192,23 +194,15 @@ export async function getUserJoinedFutureEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  ).catch((error: Error) => {
-    throw formatError(
-      "Network error",
-      "Could not get user joined future events"
-    );
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvents: EventResponse[] = await response.json();
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user joined future events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -224,8 +218,20 @@ export async function getUserJoinedFutureEvents(
  */
 export async function getUserJoinedPastEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_start_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_start_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_past`,
     {
@@ -233,20 +239,15 @@ export async function getUserJoinedPastEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get user joined past events");
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvents: EventResponse[] = await response.json();
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user joined past events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -263,11 +264,20 @@ export async function getUserJoinedPastEvents(
 
 export async function getUserHostedFutureEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
-  // const calendar: Calendar[] = Localization.getCalendars();
-  // const timezone = calendar[0].timeZone;
-
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_start_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_start_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
     {
@@ -275,23 +285,15 @@ export async function getUserHostedFutureEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  ).catch((error: Error) => {
-    throw formatError(
-      "Network error",
-      "Could not get user hosted future events"
-    );
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvents: EventResponse[] = await response.json();
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user hosted future events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -308,8 +310,20 @@ export async function getUserHostedFutureEvents(
 
 export async function getUserHostedPastEvents(
   userAccessToken: string,
-  userID: string
+  userID: string,
+  cursor?: { eventID: string; date: Date }
 ): Promise<Event[]> {
+  const body: {
+    user_access_token: string;
+    cursor_event_id?: string;
+    cursor_start_date_time?: string;
+  } = {
+    user_access_token: userAccessToken,
+  };
+  if (cursor) {
+    body.cursor_event_id = cursor.eventID;
+    body.cursor_start_date_time = cursor.date.toISOString();
+  }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_past`,
     {
@@ -317,20 +331,15 @@ export async function getUserHostedPastEvents(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-      }),
+      body: JSON.stringify(body),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get user hosted past events");
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvents: EventResponse[] = await response.json();
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get user hosted past events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -358,16 +367,13 @@ export async function searchSchoolEvents(
         query: query,
       }),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all school events");
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const pulledEvents: EventResponse[] = await response.json();
+  const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
+    response,
+    "Could not get all school events",
+    true
+  );
   const convertedEvents: Event[] = eventResponseToEvents(pulledEvents);
 
   return convertedEvents;
@@ -391,16 +397,13 @@ export async function getAllSchoolEventsCategorized(
         user_access_token: userAccessToken ? userAccessToken : null,
       }),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all categorized events");
-  });
+  );
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const responseJSON = await response.json();
+  const responseJSON = await responseHandler<{}>(
+    response,
+    "Could not get all categorized events",
+    true
+  );
   const categoryMap: { [key: string]: Event[] } = {};
 
   for (const categoryToEvents in responseJSON) {
@@ -430,17 +433,14 @@ export async function getAllHomePageEventsWithHosts(
         school_id: schoolID,
       }),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get all categorized events");
-  });
-
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
+  );
 
   const responseJSON: [{ host: UserResponse; event: EventResponse }] =
-    await response.json();
+    await responseHandler<[{ host: UserResponse; event: EventResponse }]>(
+      response,
+      "Could not get all categorized events",
+      true
+    );
 
   const returnedData: [{ Host: User; Event: Event }][] = [];
 

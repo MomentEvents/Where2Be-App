@@ -11,7 +11,7 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { SIZES, COLORS, SCREENS } from "../constants";
-import { McText, McIcon } from "./Styled";
+import { McText } from "./Styled";
 import "react-native-gesture-handler";
 import { Event, User } from "../constants";
 import { UserContext } from "../contexts/UserContext";
@@ -43,9 +43,6 @@ const EventCard = ({
   const navigation = useNavigation<any>();
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
-  const [fetchedDidUserShoutout, setFetchedDidUserShoutout] = useState(false);
-  const [fetchedDidUserJoin, setFetchedDidUserJoin] = useState(false);
-
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const cardWidth = width ? width : isBigCard ? 330 : 160;
@@ -68,7 +65,9 @@ const EventCard = ({
   };
 
   const pullData = async () => {
-    updateEventIDToEvent({ id: event.EventID, event: event });
+    if(!eventIDToEvent[event.EventID]){
+      updateEventIDToEvent({ id: event.EventID, event: event });
+    }
     setFetchedEvent(true);
   };
 

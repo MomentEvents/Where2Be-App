@@ -51,7 +51,7 @@ const EventResult = (props: EventResultProps) => {
               borderWidth: StyleSheet.hairlineWidth,
               borderColor: COLORS.white,
             }}
-            source={{ uri: props.event.Picture }}
+            source={{ uri: eventIDToEvent[props.event.EventID].Picture }}
           />
           <View
             style={{
@@ -73,7 +73,7 @@ const EventResult = (props: EventResultProps) => {
             >
               <icons.pickdate width={25} height={12} />
               <McText body5 style={{ marginRight: 25 }} numberOfLines={1}>
-                {moment(props.event.StartDateTime).format("MMM DD[,] YYYY") +
+                {moment(eventIDToEvent[props.event.EventID].StartDateTime).format("MMM DD[,] YYYY") +
                   " at " +
                   moment(eventIDToEvent[props.event.EventID].StartDateTime).format("h:mm a")}
               </McText>
