@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
+import { unregisterPushNotificationToken } from "../services/NotificationService";
 
 type AuthContextType = {
   userLogin: (usercred: string, password: string) => Promise<void>;
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 
   const userLogout = async () => {
     await logout();
-    setContextVarsBasedOnToken(null);
+    await setContextVarsBasedOnToken(null);
   };
 
   return (

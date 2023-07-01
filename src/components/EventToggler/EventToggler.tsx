@@ -52,6 +52,7 @@ const EventToggler = (props: EventTogglerProps) => {
   const [userPulled, setUserPulled] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
+  const isLoadingRef = useRef(false)
 
   const canLoadPastData = useRef(true);
   const canLoadFutureData = useRef(true);
@@ -119,8 +120,9 @@ const EventToggler = (props: EventTogglerProps) => {
       return;
     }
 
-    if (!isLoading) {
+    if (!isLoadingRef.current) {
       setIsLoading(true);
+      isLoadingRef.current = true
       let cursor: { eventID: string; date: Date } = null;
 
       if (isFutureToggle) {
@@ -202,6 +204,7 @@ const EventToggler = (props: EventTogglerProps) => {
       }
 
       setIsLoading(false);
+      isLoadingRef.current = false;
     }
   };
 
@@ -380,7 +383,7 @@ const EventToggler = (props: EventTogglerProps) => {
           )
         }
         onEndReached={loadMoreData}
-        onEndReachedThreshold={0.6} // triggers when user scrolls to 50% from the bottom of the list
+        onEndReachedThreshold={0.8}
         keyExtractor={(item) =>
           item.EventID + props.selectedUserID + props.eventsToPull + " Event"
         }
