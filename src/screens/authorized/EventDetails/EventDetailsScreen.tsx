@@ -52,6 +52,8 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
+import RetryButton from "../../../components/RetryButton";
+import { CustomError } from "../../../constants/error";
 
 type routeParametersType = {
   eventID: string;
@@ -103,6 +105,8 @@ const EventDetailsScreen = ({ route }) => {
   const [didFetchHost, setDidFetchHost] = useState<boolean>(false);
 
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
+
+  const [showRetry, setShowRetry] = useState(false);
 
   const insets = useSafeAreaInsets();
 
@@ -209,32 +213,35 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
-        setDidFetchEvent(true);
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         if (!gotError) {
           gotError = true;
-          displayError(error);
-          navigation.goBack();
-        }
-      });
-
-    if (!eventIDToInterests[eventID] || useRefRefreshing.current) {
-      getEventInterestsByEventId(eventID, userToken.UserAccessToken)
-        .then((tags: Interest[]) => {
-          updateEventIDToInterests({ id: eventID, interests: tags });
-          setDidFetchInterests(true);
-        })
-        .catch((error: Error) => {
-          if (!gotError) {
-            gotError = true;
+          if (error.shouldDisplay) {
             displayError(error);
-            navigation.goBack();
           }
-        });
-    } else {
-      setDidFetchInterests(true)
-    }
+          setShowRetry(true);
+        }
+      })
+      .finally(() => {
+        setDidFetchEvent(true);
+      });
+    getEventInterestsByEventId(eventID, userToken.UserAccessToken)
+      .then((tags: Interest[]) => {
+        updateEventIDToInterests({ id: eventID, interests: tags });
+      })
+      .catch((error: CustomError) => {
+        if (!gotError) {
+          gotError = true;
+          if (error.shouldDisplay) {
+            displayError(error);
+          }
+          setShowRetry(true);
+        }
+      })
+      .finally(() => {
+        setDidFetchInterests(true);
+      });
 
     if (
       (eventIDToEvent[eventID].HostUserID &&
@@ -245,14 +252,18 @@ const EventDetailsScreen = ({ route }) => {
         .then((pulledHost: User) => {
           setHost(pulledHost);
           updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
-          setDidFetchHost(true);
         })
-        .catch((error: Error) => {
+        .catch((error: CustomError) => {
           if (!gotError) {
             gotError = true;
-            displayError(error);
-            navigation.goBack();
+            if (error.shouldDisplay) {
+              displayError(error);
+            }
+            setShowRetry(true);
           }
+        })
+        .finally(() => {
+          setDidFetchHost(true);
         });
     } else {
       setHost(userIDToUser[eventIDToEvent[eventID].HostUserID]);
@@ -264,8 +275,8 @@ const EventDetailsScreen = ({ route }) => {
     beforeLoadJoin.current = undefined;
     beforeLoadShoutout.current = undefined;
     useRefRefreshing.current = true;
-    setIsRefreshing(true);
     setHost(undefined);
+    setShowRetry(false);
     setDidFetchHost(false);
     setDidFetchInterests(false);
     setDidFetchEvent(false);
@@ -326,7 +337,10 @@ const EventDetailsScreen = ({ route }) => {
             <RefreshControl
               tintColor={COLORS.white}
               refreshing={isRefreshing}
-              onRefresh={onRefresh}
+              onRefresh={() => {
+                setIsRefreshing(true);
+                onRefresh();
+              }}
             />
           }
           showsVerticalScrollIndicator={false}
@@ -672,139 +686,148 @@ const EventDetailsScreen = ({ route }) => {
         >
           {eventIDToEvent[eventID] ? (
             <UserOptionsSection>
-              <View
-                style={{
-                  alignItems: "center",
-                  paddingHorizontal: 20,
-                }}
-              >
-                <GradientButton
-                  style={{
-                    width: 58,
-                    height: 58,
-                    borderRadius: 80,
-                    marginBottom: 5,
-                  }}
-                >
-                  <TouchableOpacity
+              {showRetry ? (
+                <RetryButton
+                  setShowRetry={setShowRetry}
+                  retryCallBack={onRefresh}
+                />
+              ) : (
+                <>
+                  <View
                     style={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: 80,
-                      marginBottom: 5,
-                      backgroundColor: eventIDToEvent[eventID].UserJoin
-                        ? "transparent"
-                        : COLORS.white,
-                      // borderWidth: StyleSheet.hairlineWidth,
-                      // borderColor: COLORS.white,
-                      justifyContent: "center",
                       alignItems: "center",
+                      paddingHorizontal: 20,
                     }}
-                    onPress={
-                      eventIDToEvent[eventID].UserJoin
-                        ? () => {
-                            if (!didFetchEvent) {
-                              beforeLoadJoin.current = false;
-                            }
-                            removeUserJoin(eventID);
-                          }
-                        : () => {
-                            if (!didFetchEvent) {
-                              beforeLoadJoin.current = true;
-                            }
-                            addUserJoin(eventID);
-                          }
-                    }
                   >
-                    {eventIDToEvent[eventID].UserJoin ? (
-                      <icons.activecheckmark width={30} />
-                    ) : (
-                      <icons.inactivecheckmark width={30} />
-                    )}
-                  </TouchableOpacity>
-                </GradientButton>
-                <McText
-                  body2
-                  style={{
-                    color: eventIDToEvent[eventID].UserJoin
-                      ? COLORS.darkPurple
-                      : COLORS.white,
-                  }}
-                >
-                  {eventIDToEvent[eventID].NumJoins}
-                </McText>
-              </View>
-              <View
-                style={{
-                  alignItems: "center",
-                  paddingHorizontal: 20,
-                  shadowColor: "#B66DFF",
-                  shadowRadius: 10,
-                  // shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
-                  // shadowOffset: { width: 0, height: 0 },
-                }}
-              >
-                <GradientButton
-                  style={{
-                    width: 58,
-                    height: 58,
-                    borderRadius: 80,
-                    marginBottom: 5,
-                  }}
-                >
-                  <TouchableOpacity
+                    <GradientButton
+                      style={{
+                        width: 58,
+                        height: 58,
+                        borderRadius: 80,
+                        marginBottom: 5,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          width: 58,
+                          height: 58,
+                          borderRadius: 80,
+                          marginBottom: 5,
+                          backgroundColor: eventIDToEvent[eventID].UserJoin
+                            ? "transparent"
+                            : COLORS.white,
+                          // borderWidth: StyleSheet.hairlineWidth,
+                          // borderColor: COLORS.white,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        onPress={
+                          eventIDToEvent[eventID].UserJoin
+                            ? () => {
+                                if (!didFetchEvent) {
+                                  beforeLoadJoin.current = false;
+                                }
+                                removeUserJoin(eventID);
+                              }
+                            : () => {
+                                if (!didFetchEvent) {
+                                  beforeLoadJoin.current = true;
+                                }
+                                addUserJoin(eventID);
+                              }
+                        }
+                      >
+                        {eventIDToEvent[eventID].UserJoin ? (
+                          <icons.activecheckmark width={30} />
+                        ) : (
+                          <icons.inactivecheckmark width={30} />
+                        )}
+                      </TouchableOpacity>
+                    </GradientButton>
+                    <McText
+                      body2
+                      style={{
+                        color: eventIDToEvent[eventID].UserJoin
+                          ? COLORS.darkPurple
+                          : COLORS.white,
+                      }}
+                    >
+                      {eventIDToEvent[eventID].NumJoins}
+                    </McText>
+                  </View>
+                  <View
                     style={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: 80,
-                      backgroundColor: eventIDToEvent[eventID].UserShoutout
-                        ? "transparent"
-                        : COLORS.white,
-                      // borderWidth: StyleSheet.hairlineWidth,
-                      // borderColor: COLORS.white,
-                      justifyContent: "center",
                       alignItems: "center",
+                      paddingHorizontal: 20,
+                      shadowColor: "#B66DFF",
+                      shadowRadius: 10,
+                      // shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
+                      // shadowOffset: { width: 0, height: 0 },
                     }}
-                    onPress={
-                      eventIDToEvent[eventID].UserShoutout
-                        ? () => {
-                            if (!didFetchEvent) {
-                              beforeLoadShoutout.current = false;
-                            }
-                            removeUserShoutout(eventID);
-                          }
-                        : () => {
-                            if (!didFetchEvent) {
-                              beforeLoadShoutout.current = true;
-                            }
-                            addUserShoutout(eventID);
-                          }
-                    }
                   >
-                    {eventIDToEvent[eventID].UserShoutout ? (
-                      <icons.activeshoutout
-                        style={{ marginRight: 2 }}
-                        width={30}
-                      />
-                    ) : (
-                      <icons.inactiveshoutout
-                        style={{ marginRight: 2 }}
-                        width={30}
-                      />
-                    )}
-                  </TouchableOpacity>
-                </GradientButton>
-                <McText
-                  body2
-                  style={{
-                    color: eventIDToEvent[eventID].UserShoutout
-                      ? COLORS.darkPurple
-                      : COLORS.white,
-                  }}
-                >
-                  {eventIDToEvent[eventID].NumShoutouts}
-                </McText>
-              </View>
+                    <GradientButton
+                      style={{
+                        width: 58,
+                        height: 58,
+                        borderRadius: 80,
+                        marginBottom: 5,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          width: 58,
+                          height: 58,
+                          borderRadius: 80,
+                          backgroundColor: eventIDToEvent[eventID].UserShoutout
+                            ? "transparent"
+                            : COLORS.white,
+                          // borderWidth: StyleSheet.hairlineWidth,
+                          // borderColor: COLORS.white,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        onPress={
+                          eventIDToEvent[eventID].UserShoutout
+                            ? () => {
+                                if (!didFetchEvent) {
+                                  beforeLoadShoutout.current = false;
+                                }
+                                removeUserShoutout(eventID);
+                              }
+                            : () => {
+                                if (!didFetchEvent) {
+                                  beforeLoadShoutout.current = true;
+                                }
+                                addUserShoutout(eventID);
+                              }
+                        }
+                      >
+                        {eventIDToEvent[eventID].UserShoutout ? (
+                          <icons.activeshoutout
+                            style={{ marginRight: 2 }}
+                            width={30}
+                          />
+                        ) : (
+                          <icons.inactiveshoutout
+                            style={{ marginRight: 2 }}
+                            width={30}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </GradientButton>
+                    <McText
+                      body2
+                      style={{
+                        color: eventIDToEvent[eventID].UserShoutout
+                          ? COLORS.darkPurple
+                          : COLORS.white,
+                      }}
+                    >
+                      {eventIDToEvent[eventID].NumShoutouts}
+                    </McText>
+                  </View>
+                </>
+              )}
             </UserOptionsSection>
           ) : (
             <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />

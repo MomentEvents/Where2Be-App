@@ -268,7 +268,7 @@ export async function followUser(
     }
   )
 
-  await responseHandler<void>(response, "Could follow user", false);
+  await responseHandler<void>(response, "Could not follow user", false);
 }
 
 export async function unfollowUser(
@@ -291,7 +291,7 @@ export async function unfollowUser(
     }
   )
 
-  await responseHandler<void>(response, "Could unfollow user", false);
+  await responseHandler<void>(response, "Could not unfollow user", false);
 }
 
 export async function getUserEmail(
@@ -309,16 +309,9 @@ export async function getUserEmail(
         user_access_token: userAccessToken,
       }),
     }
-  ).catch((error: Error) => {
-    throw formatError("Network error", "Could not get email");
-  });
+  )
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const responseJSON: {email: string} = await response.json()
+  const responseJSON: {email: string} = await responseHandler<{email: string}>(response, "Could not get user email", true);
 
   return responseJSON.email
 }

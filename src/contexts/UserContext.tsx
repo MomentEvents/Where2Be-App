@@ -34,6 +34,7 @@ import {
   getPushNotificationToken,
   registerPushNotificationToken,
 } from "../services/NotificationService";
+import { CustomError } from "../constants/error";
 
 type UserContextType = {
   userToken: Token;
@@ -110,8 +111,7 @@ export const UserProvider = ({ children }) => {
       },
     });
 
-    unfollowUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
-      displayError(error);
+    unfollowUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: CustomError) => {
       updateUserIDToUser({
         id: userToken.UserID,
         user: {
@@ -149,8 +149,7 @@ export const UserProvider = ({ children }) => {
       },
     });
 
-    followUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: Error) => {
-      displayError(error);
+    followUser(userToken.UserAccessToken, userToken.UserID, userID).catch((error: CustomError) => {
       updateUserIDToUser({
         id: userToken.UserID,
         user: {
