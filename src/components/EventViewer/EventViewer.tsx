@@ -72,7 +72,7 @@ const EventViewer = (props: EventViewerProps) => {
             event={item}
             isBigCard={true}
             onClick={() => {
-              navigation.navigate(SCREENS.Login);
+              navigation.push(SCREENS.Login);
             }}
           />
         )}
@@ -90,7 +90,7 @@ const EventViewer = (props: EventViewerProps) => {
             event={item}
             isBigCard={false}
             onClick={() => {
-              navigation.navigate(SCREENS.Login);
+              navigation.push(SCREENS.Login);
             }}
           />
         )}

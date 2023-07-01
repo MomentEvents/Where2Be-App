@@ -19,6 +19,7 @@ import SettingsScreen from "../screens/authorized/Settings/SettingsScreen";
 import AccountSettingsScreen from "../screens/authorized/AccountSettings/AccountSettingsScreen";
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
+import AccountFollowListScreen from "../screens/authorized/AccountFollowList/AccountFollowListScreen";
 
 const Stack = createStackNavigator();
 
@@ -68,6 +69,7 @@ const AppStack = () => {
       <Stack.Screen name={SCREENS.AccountSettings} component={AccountSettingsScreen}/>
       <Stack.Screen name={SCREENS.Search} component={SearchScreen}/>
       <Stack.Screen name={SCREENS.Home} component={HomeScreen}/>
+      <Stack.Screen name={SCREENS.AccountFollowList} component={AccountFollowListScreen}/>
     </Stack.Navigator>
   );
 };

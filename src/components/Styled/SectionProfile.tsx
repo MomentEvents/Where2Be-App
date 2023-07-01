@@ -17,6 +17,7 @@ import { displayError } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FOLLOW_LIST } from "../../constants/components";
 
 type SectionProfileProps = {
   userID: string;
@@ -74,7 +75,12 @@ const SectionProfile = (props: SectionProfileProps) => {
               {userIDToUser[props.userID].NumEvents === 1 ? "Event" : "Events"}
             </McText>
           </TouchableOpacity>
-          <TouchableOpacity disabled={true}>
+          <TouchableOpacity
+            onPress={() => navigation.push(SCREENS.AccountFollowList, {
+              followType: FOLLOW_LIST.Followers,
+              userID: props.userID,
+            })}
+          >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
               {formatNumber(userIDToUser[props.userID].NumFollowers)}
             </McText>
@@ -84,7 +90,12 @@ const SectionProfile = (props: SectionProfileProps) => {
                 : "Followers"}
             </McText>
           </TouchableOpacity>
-          <TouchableOpacity disabled={true}>
+          <TouchableOpacity
+            onPress={() => navigation.push(SCREENS.AccountFollowList, {
+              followType: FOLLOW_LIST.Following,
+              userID: props.userID,
+            })}
+          >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
               {formatNumber(userIDToUser[props.userID].NumFollowing)}
             </McText>
@@ -112,7 +123,7 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate(SCREENS.EditProfile, {
+            navigation.push(SCREENS.EditProfile, {
               user: userIDToUser[props.userID],
               isSelf: userIDToUser[props.userID].UserID === userToken.UserID,
             });

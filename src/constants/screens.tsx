@@ -18,4 +18,5 @@ export const SCREENS = {
     EditMyPassword: "EditMyPasswordScreen",
     AccountSettings: "AccountSettingsScreen",
     Home: "HomeScreen",
+    AccountFollowList: "AccountFollowListScreen"
 }

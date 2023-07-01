@@ -141,7 +141,7 @@ const CreateEventScreen = ({ route }) => {
     }
     console.log(createdEvent);
 
-    navigation.navigate(SCREENS.PreviewEvent, {
+    navigation.push(SCREENS.PreviewEvent, {
       createdEvent: createdEvent,
       base64Image: base64Image,
       interests: Array.from(selectedInterests),

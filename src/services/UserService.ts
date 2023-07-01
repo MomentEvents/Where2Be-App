@@ -315,3 +315,53 @@ export async function getUserEmail(
 
   return responseJSON.email
 }
+
+export async function getUserFollowers(
+  userAccessToken: string,
+  userID: string,
+  cursorUserID?: string,
+): Promise<User[]> {
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/followers`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        user_id_cursor: cursorUserID,
+      }),
+    }
+  )
+
+  const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get followers", true);
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers);
+
+  return convertedUsers;
+}
+
+export async function getUserFollowing(
+  userAccessToken: string,
+  userID: string,
+  cursorUserID?: string,
+): Promise<User[]> {
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/following`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        user_id_cursor: cursorUserID,
+      }),
+    }
+  )
+
+  const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get following list", true);
+  const convertedUsers: User[] = userResponseToUsers(pulledUsers);
+
+  return convertedUsers;
+}

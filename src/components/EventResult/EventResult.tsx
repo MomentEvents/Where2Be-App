@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { COLORS, SCREENS, Event, icons, SIZES } from "../../../constants";
-import { McText } from "../../Styled";
+import { COLORS, SCREENS, Event, icons, SIZES } from "../../constants";
+import { McText } from "../Styled";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
-import { EventContext } from "../../../contexts/EventContext";
+import { EventContext } from "../../contexts/EventContext";
 
 type EventResultProps = {
   event: Event;

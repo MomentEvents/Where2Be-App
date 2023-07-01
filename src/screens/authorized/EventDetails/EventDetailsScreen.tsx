@@ -128,7 +128,7 @@ const EventDetailsScreen = ({ route }) => {
     if (!eventIDToEvent[eventID]) {
       return;
     }
-    navigation.navigate(SCREENS.EditEvent, {
+    navigation.push(SCREENS.EditEvent, {
       eventID: eventID,
     });
   };
