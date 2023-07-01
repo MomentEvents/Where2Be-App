@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { COLORS, SCREENS, User } from "../../../constants";
-import { McText } from "../../Styled";
+import { COLORS, SCREENS, User } from "../../constants";
+import { McText } from "../Styled";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons'; 
-import { UserContext } from "../../../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 type UserResultProps = {
   user: User;

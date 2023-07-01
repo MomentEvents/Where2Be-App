@@ -3,7 +3,7 @@ export const EVENT_TOGGLER = {
     HostedEvents: "Hosted Events",
 }
 
-export const FOLLOWER_LIST = {
+export const FOLLOW_LIST = {
     Followers: "Followers",
     Following: "Following"
 }
