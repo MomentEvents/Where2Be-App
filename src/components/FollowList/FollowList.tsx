@@ -106,7 +106,9 @@ const FollowList = (props: FollowListProps) => {
             canLoadMoreData.current = false;
           }
         } catch (error) {
-          console.warn(error);
+          if (error.shouldDisplay) {
+            console.warn(error);
+          }
         }
       }
       setIsLoading(false);
