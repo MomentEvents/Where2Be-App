@@ -27,7 +27,7 @@ const IntroduceEventsScreen = ({ route }) => {
   const navigation = useNavigation<any>();
 
   const navigateToLogin = (): void => {
-    navigation.navigate(SCREENS.Login);
+    navigation.push(SCREENS.Login);
   };
 
   return (

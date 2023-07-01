@@ -52,7 +52,7 @@ const EventToggler = (props: EventTogglerProps) => {
   const [userPulled, setUserPulled] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const isLoadingRef = useRef(false)
+  const isLoadingRef = useRef(false);
 
   const canLoadPastData = useRef(true);
   const canLoadFutureData = useRef(true);
@@ -122,7 +122,7 @@ const EventToggler = (props: EventTogglerProps) => {
 
     if (!isLoadingRef.current) {
       setIsLoading(true);
-      isLoadingRef.current = true
+      isLoadingRef.current = true;
       let cursor: { eventID: string; date: Date } = null;
 
       if (isFutureToggle) {
@@ -199,7 +199,9 @@ const EventToggler = (props: EventTogglerProps) => {
             }
           }
         } catch (error) {
-          console.warn(error)
+          if (error.shouldDisplay) {
+            console.warn(error);
+          }
         }
       }
 

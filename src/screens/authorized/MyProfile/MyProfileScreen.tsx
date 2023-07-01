@@ -28,7 +28,7 @@ const MyProfileScreen = ({ route }) => {
         hideBottomUnderline={true}
         rightButtonSVG={<icons.settings />}
         rightButtonOnClick={() => {
-          navigation.navigate(SCREENS.Settings);
+          navigation.push(SCREENS.Settings);
         }}
       />
       <EventToggler

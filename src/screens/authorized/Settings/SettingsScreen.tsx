@@ -51,7 +51,7 @@ const SettingsScreen = () => {
   };
 
   const onAccountSettingsClick = () => {
-    navigation.navigate(SCREENS.AccountSettings);
+    navigation.push(SCREENS.AccountSettings);
   };
 
   const onLogoutClick = () => {

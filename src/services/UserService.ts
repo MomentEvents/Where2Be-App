@@ -329,7 +329,8 @@ export async function getUserFollowers(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_access_token: userAccessToken
+        user_access_token: userAccessToken,
+        user_id_cursor: cursorUserID,
       }),
     }
   )

@@ -35,7 +35,7 @@ const SelectSchoolScreen = ({ route }) => {
   const navigation = useNavigation<any>();
 
   const onNavigateLogin = () => {
-    navigation.navigate(SCREENS.Login);
+    navigation.push(SCREENS.Login);
   };
 
   const onDiscordClick = () => {
@@ -73,7 +73,7 @@ const SelectSchoolScreen = ({ route }) => {
           <SchoolSearchSelector
             onSelectSchool={(school: School) => {
               setSchool(school);
-              navigation.navigate(SCREENS.IntroduceEvents, { school: school });
+              navigation.push(SCREENS.IntroduceEvents, { school: school });
             }}
             textStyle={{
               color: COLORS.white,

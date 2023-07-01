@@ -121,7 +121,7 @@ const HomeScreen = () => {
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={() => {
-          navigation.navigate(SCREENS.CreateEvent);
+          navigation.push(SCREENS.CreateEvent);
         }}
       >
         <GradientButton style={styles.hoverButtonIconContainer}>
