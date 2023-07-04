@@ -50,17 +50,17 @@ const SignupWelcomeScreen = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={{
-            borderRadius: 10,
+            borderRadius: 5,
             backgroundColor: COLORS.purple,
             paddingVertical: 10,
             paddingHorizontal: 20,
           }}
           onPress={onNextClick}
         >
-          <McText h3>Let's go!</McText>
+          <McText h4>Let's go!</McText>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginTop: 20 }} onPress={onNavigateLogin}>
-          <McText body3>I already have an account</McText>
+          <McText body3 style={{textAlign: "center"}}>I already have an account</McText>
         </TouchableOpacity>
       </View>
     </MobileSafeView>
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   titleTextContainer: {
-    flex: 2,
     justifyContent: "flex-end",
     alignItems: "center",
   },
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonContainer: {
-    flex: 2,
+    marginTop: 80,
     justifyContent: "flex-end",
     alignItems: "center",
   },
