@@ -297,7 +297,7 @@ export async function unfollowUser(
 export async function getUserEmail(
   userAccessToken: string,
   userID: string,
-): Promise<string> {
+): Promise<{email: string, email_verified: boolean}> {
   const response = await fetch(
     momentAPI + `/user/user_id/${userID}/get_email`,
     {
@@ -311,9 +311,9 @@ export async function getUserEmail(
     }
   )
 
-  const responseJSON: {email: string} = await responseHandler<{email: string}>(response, "Could not get user email", true);
+  const responseJSON: {email: string, email_verified: boolean} = await responseHandler<{email: string, email_verified: boolean}>(response, "Could not get user email", true);
 
-  return responseJSON.email
+  return responseJSON
 }
 
 export async function getUserFollowers(

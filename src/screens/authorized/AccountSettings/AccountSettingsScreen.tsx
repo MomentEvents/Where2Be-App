@@ -66,12 +66,12 @@ const AccountSettingsScreen = () => {
   const onPressChangePassword = () => {
     setLoading(true);
     getUserEmail(userToken.UserAccessToken, userToken.UserID)
-      .then((email) => {
+      .then((info) => {
         setLoading(false);
         Alert.alert(
           "Reset password",
           "Are you sure you want to reset your password? You will be emailed a password reset link at " +
-            email,
+            info.email,
           [
             {
               text: "Cancel",
@@ -81,7 +81,7 @@ const AccountSettingsScreen = () => {
               text: "Yes",
               onPress: () => {
                 setLoading(true);
-                resetPassword(email)
+                resetPassword(info.email)
                   .then(() => {
                     Alert.alert("Link sent", "Check your email inbox for a password reset link")
                     setLoading(false);
