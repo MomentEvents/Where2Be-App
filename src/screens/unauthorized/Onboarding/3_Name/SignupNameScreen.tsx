@@ -53,7 +53,7 @@ const SignupNameScreen = () => {
             <icons.backarrow />
           </TouchableOpacity>
           <TouchableOpacity onPress={onNextClick}>
-            <McText h4>Next</McText>
+            <McText h3>Next</McText>
           </TouchableOpacity>
         </View>
         <View style={styles.imageContainer}>

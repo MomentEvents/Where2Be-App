@@ -28,7 +28,7 @@ const SignupSelectSchoolScreen = () => {
 
   const onNextClick = () => {
     if (!currentSchoolRef.current) {
-      Alert.alert("Please select a university");
+      Alert.alert("Please select a school");
       return;
     }
     setSignupValues({ ...signupValues, SchoolID: currentSchoolRef.current.SchoolID });
@@ -41,7 +41,7 @@ const SignupSelectSchoolScreen = () => {
           <icons.backarrow />
         </TouchableOpacity>
         <TouchableOpacity onPress={onNextClick}>
-          <McText h4>Next</McText>
+          <McText h3>Next</McText>
         </TouchableOpacity>
       </View>
       <View style={styles.imageContainer}>
