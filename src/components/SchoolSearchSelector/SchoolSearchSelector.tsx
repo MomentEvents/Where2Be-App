@@ -6,6 +6,7 @@ import {
   Switch,
   ActivityIndicator,
   SafeAreaView,
+  Keyboard,
 } from "react-native";
 import ModalSelector from "./components";
 import { getAllSchools } from "../../services/SchoolService";
