@@ -30,7 +30,7 @@ const HomeScreen = () => {
   const { currentSchool, userToken } = useContext(UserContext);
 
   const [eventsAndHosts, setEventsAndHosts] =
-    useState<[{ Host: User; Event: Event }][]>();
+    useState<[{ Host: User; Event: Event, Reason: string }][]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -115,6 +115,7 @@ const HomeScreen = () => {
             key={"homescreeneventcard" + item[0].Event.EventID}
             event={item[0].Event}
             user={item[0].Host}
+            reason={item[0].Reason}
           />
         )}
       />

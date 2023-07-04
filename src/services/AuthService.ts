@@ -107,7 +107,7 @@ export async function signup(
   password: string,
   schoolID: string,
   email: string,
-): Promise<void> {
+): Promise<Token> {
   if (!checkIfStringIsReadable(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
   }
@@ -151,6 +151,22 @@ export async function signup(
     const message = await response.text();
     throw formatError("Error " + response.status, message);
   }
+
+  const data = await response.json()
+
+  if(!data["user_id"] || !data["user_access_token"]){
+    throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
+  }
+  const createdToken: Token = createToken(
+    data["user_id"],
+    data["user_access_token"]
+  );
+  console.log("ABOUT TO WRITE TOKEN")
+  writeToken(createdToken);
+
+  console.log(createdToken);
+
+  return Promise.resolve(createdToken);
 }
 
 /******************************************************
