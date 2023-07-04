@@ -1,34 +1,52 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import React, { useContext, useRef } from "react";
 import MobileSafeView from "../../../../components/Styled/MobileSafeView";
 import { COLORS, SCREENS, School, icons } from "../../../../constants";
 import { McText } from "../../../../components/Styled";
-import { schoolLandmark } from "../../../../constants/images";
+import { IMAGES } from "../../../../constants/images";
 import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { CUSTOMFONT_BOLD } from "../../../../constants/theme";
 
-const SignupWelcomeScreen = () => {
+const SignupSelectSchoolScreen = () => {
   const navigator = useNavigation<any>();
 
-  const {signupValuesRef} = useContext(AuthContext)
+  const { signupValues, setSignupValues } = useContext(AuthContext);
 
+  const currentSchoolRef = useRef<School>(undefined);
   const onNavigateBack = () => {
     navigator.goBack();
   };
 
   const onNextClick = () => {
+    if (!currentSchoolRef.current) {
+      Alert.alert("Please select a university");
+      return;
+    }
+    setSignupValues({ ...signupValues, SchoolID: currentSchoolRef.current.SchoolID });
     navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
   };
   return (
     <MobileSafeView style={styles.container}>
-      <TouchableOpacity onPress={onNavigateBack}>
-        <icons.backarrow />
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TouchableOpacity onPress={onNavigateBack}>
+          <icons.backarrow />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onNextClick}>
+          <McText h4>Next</McText>
+        </TouchableOpacity>
+      </View>
       <View style={styles.imageContainer}>
         <Image
-          source={schoolLandmark}
+          source={IMAGES.schoolLandmark}
           style={styles.image}
           resizeMode="contain"
         />
@@ -38,7 +56,7 @@ const SignupWelcomeScreen = () => {
           Your Campus, Your Events
         </McText>
         <McText style={styles.descriptionText} h4>
-          Please select your university to unlock a world of events{" "}
+          Select your university to unlock a world of events{" "}
           <McText h4 color={COLORS.purple}>
             tailored just for you
           </McText>
@@ -48,8 +66,7 @@ const SignupWelcomeScreen = () => {
       <View style={styles.buttonContainer}>
         <SchoolSearchSelector
           onSelectSchool={(school: School) => {
-            signupValuesRef.current.SchoolID = school.SchoolID;
-            onNextClick();
+            currentSchoolRef.current = school;
           }}
           textStyle={{
             color: COLORS.white,
@@ -65,7 +82,11 @@ const SignupWelcomeScreen = () => {
           }}
           initialText={"Select your school"}
         />
-        <McText style={{ marginTop: 20, textAlign: "center" }} color={COLORS.gray} body5>
+        <McText
+          style={{ marginTop: 20, textAlign: "center" }}
+          color={COLORS.gray}
+          body5
+        >
           Don't see your school? Contact us on discord or email
           team@where2be.app!
         </McText>
@@ -74,7 +95,7 @@ const SignupWelcomeScreen = () => {
   );
 };
 
-export default SignupWelcomeScreen;
+export default SignupSelectSchoolScreen;
 
 const styles = StyleSheet.create({
   container: {

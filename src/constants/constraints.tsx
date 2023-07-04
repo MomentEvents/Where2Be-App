@@ -20,7 +20,7 @@ export const CONSTRAINTS = {
     User: {
         DisplayName: {
             Max: 30,
-            Min: 0,
+            Min: 3,
         },
         Username: {
             Max: 30,

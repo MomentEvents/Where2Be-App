@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
@@ -15,20 +15,22 @@ type AuthContextType = {
     email: string
   ) => Promise<void>;
   userLogout: () => Promise<void>;
-  signupValuesRef: React.MutableRefObject<SignupValues>;
+  signupValues: SignupValues;
+  setSignupValues: React.Dispatch<React.SetStateAction<SignupValues>>
 };
 
 export const AuthContext = createContext<AuthContextType>({
   userLogin: null,
   userSignup: null,
   userLogout: null,
-  signupValuesRef: null,
+  signupValues: null,
+  setSignupValues: null,
 });
 
 export const AuthProvider = ({ children }) => {
   const { setContextVarsBasedOnToken } = useContext(UserContext);
 
-  const signupValuesRef = useRef<SignupValues>({
+  const [signupValues, setSignupValues] = useState<SignupValues>({
     SchoolID: undefined,
     Name: undefined,
     Email: undefined,
@@ -64,13 +66,13 @@ export const AuthProvider = ({ children }) => {
       displayError(error);
       return null;
     });
-    signupValuesRef.current = {
+    setSignupValues({
       SchoolID: undefined,
       Name: undefined,
       Email: undefined,
       Username: undefined,
       Password: undefined,
-    };
+    });
   };
 
   const userLogout = async () => {
@@ -84,7 +86,8 @@ export const AuthProvider = ({ children }) => {
         userLogin,
         userSignup,
         userLogout,
-        signupValuesRef,
+        signupValues,
+        setSignupValues
       }}
     >
       {children}

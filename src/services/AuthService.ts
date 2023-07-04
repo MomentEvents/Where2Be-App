@@ -389,3 +389,35 @@ export async function resetPassword(
 
   await responseHandler<void>(response, "Could not send password reset email", false)
 }
+
+export async function checkEmailAvailability(
+  email: string
+): Promise<void> {
+  const response = await fetch(momentAPI + `/auth/check_email_availability`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email
+    }),
+  })
+
+  await responseHandler<void>(response, "Could not check email availability", false)
+}
+
+export async function checkUsernameAvailability(
+  username: string
+): Promise<void> {
+  const response = await fetch(momentAPI + `/auth/check_username_availability`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: username
+    }),
+  })
+
+  await responseHandler<void>(response, "Could not check username availability", false)
+}

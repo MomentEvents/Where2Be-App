@@ -3,7 +3,7 @@ import React from "react";
 import MobileSafeView from "../../../../components/Styled/MobileSafeView";
 import { COLORS, SCREENS, icons } from "../../../../constants";
 import { McText } from "../../../../components/Styled";
-import { happyStudents } from "../../../../constants/images";
+import { IMAGES } from "../../../../constants/images";
 import { useNavigation } from "@react-navigation/native";
 
 const SignupWelcomeScreen = () => {
@@ -17,16 +17,18 @@ const SignupWelcomeScreen = () => {
   };
 
   const onNextClick = () => {
-    navigator.push(SCREENS.Onboarding.SignupSchoolScreen)
-  }
+    navigator.push(SCREENS.Onboarding.SignupSchoolScreen);
+  };
   return (
     <MobileSafeView style={styles.container}>
-      <TouchableOpacity onPress={onNavigateBack}>
-        <icons.backarrow />
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TouchableOpacity onPress={onNavigateBack}>
+          <icons.backarrow />
+        </TouchableOpacity>
+      </View>
       <View style={styles.imageContainer}>
         <Image
-          source={happyStudents}
+          source={IMAGES.happyStudents}
           style={styles.image}
           resizeMode="contain"
         />
@@ -60,7 +62,9 @@ const SignupWelcomeScreen = () => {
           <McText h4>Let's go!</McText>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginTop: 20 }} onPress={onNavigateLogin}>
-          <McText body3 style={{textAlign: "center"}}>I already have an account</McText>
+          <McText body3 style={{ textAlign: "center" }}>
+            I already have an account
+          </McText>
         </TouchableOpacity>
       </View>
     </MobileSafeView>
