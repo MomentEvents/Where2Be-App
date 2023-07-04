@@ -43,7 +43,7 @@ const SignupUsernameScreen = () => {
     usernameRef.current = usernameRef.current.trim();
     if (usernameRef.current.length < CONSTRAINTS.User.Username.Min) {
       Alert.alert(
-        "Please enter a name that is longer than " +
+        "Please enter a username that is longer than " +
           (CONSTRAINTS.User.Username.Min - 1) +
           " characters."
       );
@@ -53,7 +53,7 @@ const SignupUsernameScreen = () => {
 
     checkUsernameAvailability(usernameRef.current)
       .then(() => {
-        setSignupValues({ ...signupValues, Name: usernameRef.current });
+        setSignupValues({ ...signupValues, Username: usernameRef.current });
         navigator.navigate(SCREENS.Onboarding.SignupEmailScreen);
       })
       .catch((error: CustomError) => {
@@ -103,7 +103,7 @@ const SignupUsernameScreen = () => {
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}
             onChangeText={(newText) => (usernameRef.current = newText)}
-            maxLength={CONSTRAINTS.User.DisplayName.Max}
+            maxLength={CONSTRAINTS.User.Username.Max}
           />
         </View>
       </MobileSafeView>
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 10,
   },
   image: {
     width: "100%",
