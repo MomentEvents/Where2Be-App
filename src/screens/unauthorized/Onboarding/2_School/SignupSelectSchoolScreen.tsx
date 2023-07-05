@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { CUSTOMFONT_BOLD } from "../../../../constants/theme";
+import { AntDesign } from "@expo/vector-icons";
 
 const SignupSelectSchoolScreen = () => {
   const navigator = useNavigation<any>();
@@ -31,19 +32,14 @@ const SignupSelectSchoolScreen = () => {
       Alert.alert("Please select a school");
       return;
     }
-    setSignupValues({ ...signupValues, SchoolID: currentSchoolRef.current.SchoolID });
+    setSignupValues({
+      ...signupValues,
+      SchoolID: currentSchoolRef.current.SchoolID,
+    });
     navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
   };
   return (
     <MobileSafeView style={styles.container}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <TouchableOpacity onPress={onNavigateBack}>
-          <icons.backarrow />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onNextClick}>
-          <McText h3>Next</McText>
-        </TouchableOpacity>
-      </View>
       <View style={styles.imageContainer}>
         <Image
           source={IMAGES.schoolLandmark}
@@ -91,6 +87,33 @@ const SignupSelectSchoolScreen = () => {
           team@where2be.app!
         </McText>
       </View>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 25,
+          justifyContent: "space-between",
+        }}
+      >
+        <TouchableOpacity
+          style={{ backgroundColor: COLORS.gray, borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14}}
+          onPress={onNavigateBack}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <AntDesign name="caretleft" size={24} color="white" />
+            <McText h4>Back</McText>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ backgroundColor: COLORS.gray, borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14 }}
+          onPress={onNextClick}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <McText h4>Next</McText>
+
+            <AntDesign name="caretright" size={24} color="white" />
+          </View>
+        </TouchableOpacity>
+      </View>
     </MobileSafeView>
   );
 };
@@ -101,7 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.trueBlack,
-    paddingBottom: 60,
+    paddingBottom: 30,
     paddingTop: 20,
     paddingHorizontal: 30,
   },

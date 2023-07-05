@@ -31,6 +31,7 @@ import {
   checkIfStringIsEmail,
   displayError,
 } from "../../../../helpers/helpers";
+import { AntDesign } from "@expo/vector-icons";
 
 const SignupFinalScreen = () => {
   const navigator = useNavigation<any>();
@@ -72,11 +73,6 @@ const SignupFinalScreen = () => {
   };
   return (
     <MobileSafeView style={styles.container}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <TouchableOpacity onPress={onNavigateBack}>
-          <icons.backarrow />
-        </TouchableOpacity>
-      </View>
       <View style={styles.imageContainer}>
         <Image
           source={IMAGES.graduation}
@@ -110,6 +106,28 @@ const SignupFinalScreen = () => {
           <McText h4>Create Account</McText>
         </TouchableOpacity>
       </View>
+      <View
+          style={{
+            flexDirection: "row",
+            marginTop: 60,
+            justifyContent: "space-between",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.gray,
+              borderRadius: 5,
+              paddingVertical: 10,
+              paddingHorizontal: 14,
+            }}
+            onPress={onNavigateBack}
+          >
+            <View style={{ flexDirection: "row" }}>
+              <AntDesign name="caretleft" size={24} color="white" />
+              <McText h4>Back</McText>
+            </View>
+          </TouchableOpacity>
+        </View>
     </MobileSafeView>
   );
 };
@@ -120,7 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.trueBlack,
-    paddingBottom: 100,
+    paddingBottom: 30,
     paddingTop: 20,
     paddingHorizontal: 30,
   },
