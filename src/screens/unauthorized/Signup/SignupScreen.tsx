@@ -73,26 +73,26 @@ const SignupScreen = () => {
   };
 
   const onTermsOfServiceClick = () => {
-    const supported = Linking.canOpenURL("https://momentevents.app/terms");
+    const supported = Linking.canOpenURL("https://where2be.app/terms");
 
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://momentevents.app/terms");
+      Linking.openURL("https://where2be.app/terms");
     } else {
-      Alert.alert(`Unable to open link: ${"https://momentevents.app/terms"}`);
+      Alert.alert(`Unable to open link: ${"https://where2be.app/terms"}`);
     }
   };
 
   const onPrivacyPolicyClick = () => {
-    const supported = Linking.canOpenURL("https://momentevents.app/privacy");
+    const supported = Linking.canOpenURL("https://where2be.app/privacy");
 
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://momentevents.app/privacy");
+      Linking.openURL("https://where2be.app/privacy");
     } else {
-      Alert.alert(`Unable to open link: ${"https://momentevents.app/privacy"}`);
+      Alert.alert(`Unable to open link: ${"https://where2be.app/privacy"}`);
     }
   };
 

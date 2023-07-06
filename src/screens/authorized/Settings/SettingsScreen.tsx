@@ -28,25 +28,25 @@ const SettingsScreen = () => {
   const onChangePasswordClick = () => {};
 
   const onWebsiteClick = () => {
-    const supported = Linking.canOpenURL("https://momentevents.app");
+    const supported = Linking.canOpenURL("https://where2be.app");
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://momentevents.app");
+      Linking.openURL("https://where2be.app");
     } else {
-      Alert.alert(`Unable to open link: ${"https://momentevents.app"}`);
+      Alert.alert(`Unable to open link: ${"https://where2be.app"}`);
     }
   };
 
   const onContactSupportClick = () => {
-    const supported = Linking.canOpenURL("https://momentevents.app/discord");
+    const supported = Linking.canOpenURL("https://where2be.app/discord");
 
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://momentevents.app/discord");
+      Linking.openURL("https://where2be.app/discord");
     } else {
-      Alert.alert(`Unable to open link: ${"https://momentevents.app/discord"}`);
+      Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
     }
   };
 
@@ -67,6 +67,7 @@ const SettingsScreen = () => {
           text: "Yes",
           onPress: () => {
             console.log("Yes Pressed");
+            setLoading(true)
             userLogout()
               .then(() => {
                 setLoading(false);

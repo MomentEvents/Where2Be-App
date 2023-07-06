@@ -41,14 +41,14 @@ export const ScreenProvider = ({ children }) => {
   };
 
   const onDiscordClick = () => {
-    const supported = Linking.canOpenURL("https://momentevents.app/discord");
+    const supported = Linking.canOpenURL("https://where2be.app/discord");
 
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://momentevents.app/discord");
+      Linking.openURL("https://where2be.app/discord");
     } else {
-      Alert.alert(`Unable to open link: ${"https://momentevents.app/discord"}`);
+      Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
     }
   };
 
