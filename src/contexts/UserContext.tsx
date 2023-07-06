@@ -208,6 +208,9 @@ export const UserProvider = ({ children }) => {
     // So, syncUserContextWithToken() should be called outside
     if (userToken && userToken.UserAccessToken && userToken.UserID && currentSchool) {
       getPushNotificationToken().then((token: string) => {
+        if(!token){
+          return
+        }
         registerPushNotificationToken(
           userToken.UserAccessToken,
           userToken.UserID,

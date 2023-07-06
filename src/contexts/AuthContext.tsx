@@ -2,7 +2,7 @@ import { createContext, useContext, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
-import { unregisterPushNotificationToken } from "../services/NotificationService";
+import { getPushNotificationToken, unregisterPushNotificationToken } from "../services/NotificationService";
 import { SignupValues } from "../constants/types";
 
 type AuthContextType = {
@@ -28,7 +28,7 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }) => {
-  const { setContextVarsBasedOnToken } = useContext(UserContext);
+  const { setContextVarsBasedOnToken, userToken } = useContext(UserContext);
 
   const [signupValues, setSignupValues] = useState<SignupValues>({
     SchoolID: undefined,
@@ -76,6 +76,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const userLogout = async () => {
+    const token = await getPushNotificationToken()
+    await unregisterPushNotificationToken(userToken.UserAccessToken, userToken.UserID, token)
     await logout();
     await setContextVarsBasedOnToken(null);
   };
