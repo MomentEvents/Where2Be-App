@@ -25,6 +25,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 type HomeEventProps = {
   event: Event;
   user: User;
+  reason: string;
 };
 
 const HomeEvent = (props: HomeEventProps) => {
@@ -98,7 +99,7 @@ const HomeEvent = (props: HomeEventProps) => {
             )}
         </TouchableOpacity>
       </View>
-      <HomeEventCard event={props.event} host={props.user} />
+      <HomeEventCard event={props.event} host={props.user} reason={props.reason}/>
     </View>
   );
 };

@@ -53,8 +53,6 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     borderRadius: 90,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
   },

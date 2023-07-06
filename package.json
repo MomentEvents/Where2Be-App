@@ -80,13 +80,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
-    "@types/react": "^18.0.21",
+    "@types/react": "~18.0.27",
     "@types/react-native": "^0.70.4",
     "@types/react-native-modern-datepicker": "^1.0.1",
     "@types/react-native-vector-icons": "^6.4.13",
     "@types/styled-components": "^5.1.26",
     "react-native-svg-transformer": "^1.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.9.4"
   },
   "private": true
 }

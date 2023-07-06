@@ -44,7 +44,7 @@ const LoginScreen = () => {
   };
 
   const onNavigateSignup = () => {
-    navigation.navigate(SCREENS.Signup);
+    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
   };
 
   const onNavigateBack = () => {

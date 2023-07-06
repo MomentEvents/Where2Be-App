@@ -20,6 +20,13 @@ import AccountSettingsScreen from "../screens/authorized/AccountSettings/Account
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import AccountFollowListScreen from "../screens/authorized/AccountFollowList/AccountFollowListScreen";
+import SignupWelcomeScreen from "../screens/unauthorized/Onboarding/1_Welcome/SignupWelcomeScreen";
+import SignupSelectSchoolScreen from "../screens/unauthorized/Onboarding/2_School/SignupSelectSchoolScreen";
+import SignupNameScreen from "../screens/unauthorized/Onboarding/3_Name/SignupNameScreen";
+import SignupUsernameScreen from "../screens/unauthorized/Onboarding/4_Username/SignupUsernameScreen";
+import SignupEmailScreen from "../screens/unauthorized/Onboarding/5_Email/SignupEmailScreen";
+import SignupPasswordScreen from "../screens/unauthorized/Onboarding/6_Password/SignupPasswordScreen";
+import SignupFinalScreen from "../screens/unauthorized/Onboarding/7_Final/SignupFinalScreen";
 
 const Stack = createStackNavigator();
 
@@ -45,6 +52,13 @@ const AuthStack = () => {
       <Stack.Screen name={SCREENS.IntroduceEvents} component={IntroduceEventsScreen} />
       <Stack.Screen name={SCREENS.Login} component={LoginScreen}/>
       <Stack.Screen name={SCREENS.Signup} component={SignupScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupWelcomeScreen} component={SignupWelcomeScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupSchoolScreen} component={SignupSelectSchoolScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupNameScreen} component={SignupNameScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupUsernameScreen} component={SignupUsernameScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupEmailScreen} component={SignupEmailScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupPasswordScreen} component={SignupPasswordScreen}/>
+      <Stack.Screen name={SCREENS.Onboarding.SignupFinalScreen} component={SignupFinalScreen}/>
     </Stack.Navigator>
   );
 };

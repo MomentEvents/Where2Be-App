@@ -1,8 +1,9 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
-import { unregisterPushNotificationToken } from "../services/NotificationService";
+import { getPushNotificationToken, unregisterPushNotificationToken } from "../services/NotificationService";
+import { SignupValues } from "../constants/types";
 
 type AuthContextType = {
   userLogin: (usercred: string, password: string) => Promise<void>;
@@ -14,16 +15,28 @@ type AuthContextType = {
     email: string
   ) => Promise<void>;
   userLogout: () => Promise<void>;
+  signupValues: SignupValues;
+  setSignupValues: React.Dispatch<React.SetStateAction<SignupValues>>
 };
 
 export const AuthContext = createContext<AuthContextType>({
   userLogin: null,
   userSignup: null,
   userLogout: null,
+  signupValues: null,
+  setSignupValues: null,
 });
 
 export const AuthProvider = ({ children }) => {
-  const { setContextVarsBasedOnToken } = useContext(UserContext);
+  const { setContextVarsBasedOnToken, userToken } = useContext(UserContext);
+
+  const [signupValues, setSignupValues] = useState<SignupValues>({
+    SchoolID: undefined,
+    Name: undefined,
+    Email: undefined,
+    Username: undefined,
+    Password: undefined,
+  });
 
   const userLogin = async (usercred: string, password: string) => {
     await setContextVarsBasedOnToken(
@@ -41,12 +54,30 @@ export const AuthProvider = ({ children }) => {
     displayName: string,
     password: string,
     schoolID: string,
-    email: string,
+    email: string
   ) => {
-    await signup(username, displayName, password, schoolID, email)
+    await setContextVarsBasedOnToken(
+      await signup(username, displayName, password, schoolID, email).catch(
+        (error: Error) => {
+          throw error;
+        }
+      )
+    ).catch((error: Error) => {
+      displayError(error);
+      return null;
+    });
+    setSignupValues({
+      SchoolID: undefined,
+      Name: undefined,
+      Email: undefined,
+      Username: undefined,
+      Password: undefined,
+    });
   };
 
   const userLogout = async () => {
+    const token = await getPushNotificationToken()
+    await unregisterPushNotificationToken(userToken.UserAccessToken, userToken.UserID, token)
     await logout();
     await setContextVarsBasedOnToken(null);
   };
@@ -57,6 +88,8 @@ export const AuthProvider = ({ children }) => {
         userLogin,
         userSignup,
         userLogout,
+        signupValues,
+        setSignupValues
       }}
     >
       {children}

@@ -35,7 +35,11 @@ const SelectSchoolScreen = ({ route }) => {
   const navigation = useNavigation<any>();
 
   const onNavigateLogin = () => {
-    navigation.push(SCREENS.Login);
+    navigation.navigate(SCREENS.Login);
+  };
+
+  const onNavigateSignup = () => {
+    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
   };
 
   const onDiscordClick = () => {
@@ -60,7 +64,10 @@ const SelectSchoolScreen = ({ route }) => {
           alignItems: "center",
         }}
       >
-        <icons.where2be width="70%" style={{ marginBottom: 80 }}></icons.where2be>
+        <icons.where2be
+          width="70%"
+          style={{ marginBottom: 80 }}
+        ></icons.where2be>
       </View>
       <View
         style={{
@@ -69,11 +76,11 @@ const SelectSchoolScreen = ({ route }) => {
           width: "70%",
         }}
       >
-        <View style={{ alignItems: "center", justifyContent: "flex-start" }}>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start" }}>
           <SchoolSearchSelector
             onSelectSchool={(school: School) => {
               setSchool(school);
-              navigation.push(SCREENS.IntroduceEvents, { school: school });
+              navigation.navigate(SCREENS.IntroduceEvents, { school: school });
             }}
             textStyle={{
               color: COLORS.white,
@@ -91,12 +98,18 @@ const SelectSchoolScreen = ({ route }) => {
             maxHeight={130}
           />
         </View>
-        <View style={{ alignItems: "center" }}>
+        <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
-            <McText body3>Log in or Sign up</McText>
+            <McText body3>Sign in</McText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ alignSelf: "center", marginTop: 20, marginBottom: 20 }}
+            onPress={onNavigateSignup}
+          >
+            <McText body3>Create an account</McText>
           </TouchableOpacity>
         </View>
       </View>

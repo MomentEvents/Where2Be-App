@@ -27,7 +27,6 @@ const MyCalendarScreen = ({ route }) => {
       <SectionHeader
         title={"Joined Events"}
         hideBottomUnderline={true}
-        style={{ paddingBottom: Platform.OS === "ios" ? 17 : 24 }}
       />
       <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         <EventToggler

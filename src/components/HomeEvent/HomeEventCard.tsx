@@ -22,23 +22,21 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 type EventCardProps = {
-  onClick?: () => void;
   event: Event;
-  isBigCard?: boolean;
   width?: number;
   height?: number;
   showRelativeTime?: boolean;
   host: User;
+  reason: string;
 };
 
 const HomeEventCard = ({
-  onClick,
   event,
-  isBigCard,
   width,
   height,
   showRelativeTime,
   host,
+  reason,
 }: EventCardProps) => {
   const {
     eventIDToEvent,
@@ -63,10 +61,6 @@ const HomeEventCard = ({
   const cardBorderColor = COLORS.gray2;
 
   const onPressCard = () => {
-    if (onClick !== undefined) {
-      onClick();
-      return;
-    }
     navigation.push(SCREENS.EventDetails, {
       eventID: event.EventID,
     });
@@ -108,6 +102,11 @@ const HomeEventCard = ({
           borderRadius: cardBorderRadius,
         }}
       >
+        {reason && <View style={{ position: "absolute", zIndex: 10, width: cardWidth, paddingVertical: 5, paddingHorizontal: 20, backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
+          <McText body4 numberOfLines={1}>
+            {reason}
+          </McText>
+        </View>}
         <Image
           source={{ uri: eventIDToEvent[event.EventID].Picture }}
           style={{

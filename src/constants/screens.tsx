@@ -18,5 +18,14 @@ export const SCREENS = {
     EditMyPassword: "EditMyPasswordScreen",
     AccountSettings: "AccountSettingsScreen",
     Home: "HomeScreen",
-    AccountFollowList: "AccountFollowListScreen"
+    AccountFollowList: "AccountFollowListScreen",
+    Onboarding: {
+        SignupWelcomeScreen: "SignupWelcomeScreen",
+        SignupSchoolScreen: "SignupSchoolScreen",
+        SignupNameScreen: "SignupNameScreen",
+        SignupUsernameScreen: "SignupUsernameScreen",
+        SignupEmailScreen: "SignupEmailScreen",
+        SignupPasswordScreen: "SignupPasswordScreen",
+        SignupFinalScreen: "SignupFinalScreen",
+    }
 }

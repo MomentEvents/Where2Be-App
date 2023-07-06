@@ -1,7 +1,7 @@
 export type Token = {
   UserID: string;
   UserAccessToken: string;
-}
+};
 
 export type Event = {
   EventID: string;
@@ -17,7 +17,7 @@ export type Event = {
   UserJoin: boolean;
   UserShoutout: boolean;
   HostUserID: string;
-}
+};
 
 export type EventResponse = {
   event_id: string;
@@ -33,26 +33,25 @@ export type EventResponse = {
   user_join: boolean;
   user_shoutout: boolean;
   host_user_id: string;
-}
+};
 
 export type Interest = {
   InterestID: string;
   Name: string;
-}
+};
 
 export type InterestResponse = {
   interest_id: string;
   name: string;
-}
+};
 
-
-export type School =  {
+export type School = {
   SchoolID: string;
   Name: string;
   Abbreviation: string;
   Latitude: number;
   Longitude: number;
-}
+};
 
 export type SchoolResponse = {
   school_id: string;
@@ -60,7 +59,7 @@ export type SchoolResponse = {
   abbreviation: string;
   latitude: number;
   longitude: number;
-}
+};
 
 export interface User {
   UserID: string;
@@ -84,4 +83,12 @@ export type UserResponse = {
   num_followers?: number;
   num_following?: number;
   num_events?: number;
-}
+};
+
+export type SignupValues = {
+  SchoolID: string;
+  Name: string;
+  Username: string;
+  Email: string;
+  Password: string;
+};
