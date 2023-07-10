@@ -90,8 +90,8 @@ const TabNavigator = ({ params }) => {
       // The notification's data is where you put your own custom payload
       const { data } = notification.request.content;
 
-      if(data["action"] === "ViewEventDetails"){
-        navigation.push(SCREENS.EventDetails, {eventID: data["event_id"]})
+      if(data.action === "ViewEventDetails"){
+        navigation.push(SCREENS.EventDetails, {eventID: data.event_id})
       }
 
       console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data))
