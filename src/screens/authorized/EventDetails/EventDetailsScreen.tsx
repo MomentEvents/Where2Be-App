@@ -213,6 +213,31 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
+        if (
+          (!userIDToUser[pulledEvent.HostUserID]) ||
+          useRefRefreshing.current
+        ) {
+          getEventHostByEventId(userToken.UserAccessToken, eventID)
+            .then((pulledHost: User) => {
+              setHost(pulledHost);
+              updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
+            })
+            .catch((error: CustomError) => {
+              if (!gotError) {
+                gotError = true;
+                if (error.shouldDisplay) {
+                  displayError(error);
+                }
+                setShowRetry(true);
+              }
+            })
+            .finally(() => {
+              setDidFetchHost(true);
+            });
+        } else {
+          setHost(userIDToUser[pulledEvent.HostUserID]);
+          setDidFetchHost(true);
+        }
       })
       .catch((error: CustomError) => {
         if (!gotError) {
@@ -242,33 +267,6 @@ const EventDetailsScreen = ({ route }) => {
       .finally(() => {
         setDidFetchInterests(true);
       });
-
-    if (
-      (eventIDToEvent[eventID].HostUserID &&
-        !userIDToUser[eventIDToEvent[eventID].HostUserID]) ||
-      useRefRefreshing.current
-    ) {
-      getEventHostByEventId(userToken.UserAccessToken, eventID)
-        .then((pulledHost: User) => {
-          setHost(pulledHost);
-          updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
-        })
-        .catch((error: CustomError) => {
-          if (!gotError) {
-            gotError = true;
-            if (error.shouldDisplay) {
-              displayError(error);
-            }
-            setShowRetry(true);
-          }
-        })
-        .finally(() => {
-          setDidFetchHost(true);
-        });
-    } else {
-      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID]);
-      setDidFetchHost(true);
-    }
   };
 
   const onRefresh = async () => {
