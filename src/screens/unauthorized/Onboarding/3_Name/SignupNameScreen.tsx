@@ -22,6 +22,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CONSTRAINTS } from "../../../../constants/constraints";
 import { AntDesign } from "@expo/vector-icons";
+import { McTextInput } from "../../../../components/Styled/styled";
 
 const SignupNameScreen = () => {
   const navigator = useNavigation<any>();
@@ -73,7 +74,7 @@ const SignupNameScreen = () => {
           </McText>
         </View>
         <View style={styles.userInputContainer}>
-          <TextInput
+          <McTextInput
             placeholder={"My name is..."}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}

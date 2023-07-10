@@ -18,6 +18,7 @@ import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { convertDateToUTC } from "../../helpers/helpers";
 import { CONSTRAINTS } from "../../constants/constraints";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { McTextInput } from "../Styled/styled";
 
 type EventEditorProps = {
     title: string,
@@ -89,7 +90,7 @@ const EventEditor = (props: EventEditorProps) => {
               <McText h3>Title</McText>
             </View>
 
-            <TextInput
+            <McTextInput
               placeholder={"Enter your event's title"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
@@ -104,7 +105,7 @@ const EventEditor = (props: EventEditorProps) => {
               <McText h3>Description</McText>
             </View>
 
-            <TextInput
+            <McTextInput
               placeholder={"Enter your event's description"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
@@ -125,17 +126,17 @@ const EventEditor = (props: EventEditorProps) => {
                 setOpenedDatePicker(true);
               }}
             >
-              <Text style={styles.timeInputText}>
+              <McText style={styles.timeInputText}>
                 {props.date ? (
-                  <Text style={styles.timeInputText}>
+                  <McText style={styles.timeInputText}>
                     {moment.utc(props.date).local().format("ll")}
-                  </Text>
+                  </McText>
                 ) : (
-                  <Text style={styles.timeInputInactiveText}>
+                  <McText style={styles.timeInputInactiveText}>
                     Pick your event's date
-                  </Text>
+                  </McText>
                 )}
-              </Text>
+              </McText>
             </TouchableOpacity>
 
             <View style={styles.titleContainer}>
@@ -151,11 +152,11 @@ const EventEditor = (props: EventEditorProps) => {
                 }}
               >
                 {props.startTime ? (
-                  <Text style={styles.timeInputText}>
+                  <McText style={styles.timeInputText}>
                     {moment.utc(props.startTime).local().format("LT")}
-                  </Text>
+                  </McText>
                 ) : (
-                  <Text style={styles.timeInputInactiveText}>Start</Text>
+                  <McText style={styles.timeInputInactiveText}>Start</McText>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
@@ -165,11 +166,11 @@ const EventEditor = (props: EventEditorProps) => {
                 }}
               >
                 {props.endTime ? (
-                  <Text style={styles.timeInputText}>
+                  <McText style={styles.timeInputText}>
                     {moment.utc(props.endTime).local().format("LT")}
-                  </Text>
+                  </McText>
                 ) : (
-                  <Text style={styles.timeInputInactiveText}>End</Text>
+                  <McText style={styles.timeInputInactiveText}>End</McText>
                 )}
               </TouchableOpacity>
             </View>
@@ -179,7 +180,7 @@ const EventEditor = (props: EventEditorProps) => {
               <McText h3>Location</McText>
             </View>
 
-            <TextInput
+            <McTextInput
               placeholder={"Enter your event's location"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}

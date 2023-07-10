@@ -26,6 +26,7 @@ import { checkUsernameAvailability } from "../../../../services/AuthService";
 import { CustomError } from "../../../../constants/error";
 import { displayError } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
+import { McTextInput } from "../../../../components/Styled/styled";
 
 const SignupUsernameScreen = () => {
   const navigator = useNavigation<any>();
@@ -91,7 +92,7 @@ const SignupUsernameScreen = () => {
           </McText>
         </View>
         <View style={styles.userInputContainer}>
-          <TextInput
+          <McTextInput
             placeholder={"Username"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}

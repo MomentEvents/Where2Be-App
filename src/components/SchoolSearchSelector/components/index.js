@@ -272,7 +272,10 @@ export default class ModalSelector extends React.Component {
   renderSection = (section) => {
     const optionComponent = this.props.componentExtractor(section);
     let component = optionComponent || (
-      <Text style={[styles.sectionTextStyle, this.props.sectionTextStyle]}>
+      <Text
+        allowFontScaling={false}
+        style={[styles.sectionTextStyle, this.props.sectionTextStyle]}
+      >
         {this.props.labelExtractor(section)}
       </Text>
     );
@@ -294,6 +297,7 @@ export default class ModalSelector extends React.Component {
 
     let component = optionComponent || (
       <Text
+        allowFontScaling={false}
         style={[
           styles.optionTextStyle,
           this.props.optionTextStyle,
@@ -461,6 +465,7 @@ export default class ModalSelector extends React.Component {
             {search && (
               <View style={[styles.searchStyle, searchStyle]}>
                 <TextInput
+                  allowFontScaling={false}
                   style={searchTextStyle}
                   placeholder={searchText}
                   placeholderTextColor={COLORS.lightGray}
@@ -498,6 +503,7 @@ export default class ModalSelector extends React.Component {
             >
               <View style={[styles.cancelStyle, cancelStyle]}>
                 <Text
+                  allowFontScaling={false}
                   style={[styles.cancelTextStyle, cancelTextStyle]}
                   {...this.props.cancelTextPassThruProps}
                 >
@@ -519,27 +525,27 @@ export default class ModalSelector extends React.Component {
       this.props.initValue === this.state.selected
         ? [styles.initValueTextStyle, this.props.initValueTextStyle]
         : [styles.selectTextStyle, this.props.selectTextStyle];
-    return (
-      this.props.maxLines ? (
-        <View style={[styles.selectStyle, this.props.selectStyle]}>
-          <Text
-            numberOfLines={this.props.maxLines}
-            style={initSelectStyle}
-            {...this.props.selectTextPassThruProps}
-          >
-            {this.state.selected}
-          </Text>
-        </View>
-      ) : (
-        <View style={[styles.selectStyle, this.props.selectStyle]}>
-          <Text
-            style={initSelectStyle}
-            {...this.props.selectTextPassThruProps}
-          >
-            {this.state.selected}
-          </Text>
-        </View>
-      )
+    return this.props.maxLines ? (
+      <View style={[styles.selectStyle, this.props.selectStyle]}>
+        <Text
+          allowFontScaling={false}
+          numberOfLines={this.props.maxLines}
+          style={initSelectStyle}
+          {...this.props.selectTextPassThruProps}
+        >
+          {this.state.selected}
+        </Text>
+      </View>
+    ) : (
+      <View style={[styles.selectStyle, this.props.selectStyle]}>
+        <Text
+          allowFontScaling={false}
+          style={initSelectStyle}
+          {...this.props.selectTextPassThruProps}
+        >
+          {this.state.selected}
+        </Text>
+      </View>
     );
   };
 

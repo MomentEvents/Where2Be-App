@@ -47,6 +47,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { CONSTRAINTS } from "../../../constants/constraints";
+import { McTextInput } from "../../../components/Styled/styled";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -142,7 +143,7 @@ const EditProfileScreen = ({ route }) => {
                 Name
               </McText>
             </View>
-            <TextInput
+            <McTextInput
               value={displayName}
               placeholder={"Enter your display name"}
               placeholderTextColor={COLORS.gray}
@@ -163,7 +164,7 @@ const EditProfileScreen = ({ route }) => {
                 Username
               </McText>
             </View>
-            <TextInput
+            <McTextInput
               value={username}
               placeholder={"Enter your username"}
               placeholderTextColor={COLORS.gray}

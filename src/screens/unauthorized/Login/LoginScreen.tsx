@@ -24,6 +24,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { resetPassword } from "../../../services/AuthService";
+import { McTextInput } from "../../../components/Styled/styled";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -94,14 +95,14 @@ const LoginScreen = () => {
             Welcome back!
           </McText>
         </View>
-        <TextInput
+        <McTextInput
           placeholder={"Username / Email"}
           placeholderTextColor={COLORS.gray}
           style={styles.textInputContainer}
           onChangeText={(newText) => setUsercred(newText)}
           maxLength={CONSTRAINTS.User.Username.Max}
         />
-        <TextInput
+        <McTextInput
           placeholder={"Password"}
           placeholderTextColor={COLORS.gray}
           style={styles.textInputContainer}

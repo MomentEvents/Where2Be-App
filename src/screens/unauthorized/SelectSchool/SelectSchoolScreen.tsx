@@ -114,9 +114,9 @@ const SelectSchoolScreen = ({ route }) => {
         </View>
       </View>
       <View style={{ padding: 5 }}>
-        <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
+        <McText style={{ fontSize: 12, color: COLORS.gray1 }}>
           {appVersionText} | Join our{" "}
-          <Text
+          <McText
             onPress={onDiscordClick}
             style={{
               fontSize: 12,
@@ -125,9 +125,9 @@ const SelectSchoolScreen = ({ route }) => {
             }}
           >
             Discord server
-          </Text>
+          </McText>
           !
-        </Text>
+        </McText>
       </View>
     </SafeAreaView>
   );

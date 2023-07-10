@@ -33,6 +33,7 @@ import { icons } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { CustomError } from "../../constants/error";
 import RetryButton from "../RetryButton";
+import { McTextInput } from "../Styled/styled";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
@@ -165,7 +166,7 @@ const SearchToggler = () => {
             alignSelf: "center",
           }}
         >
-          <TextInput
+          <McTextInput
             placeholder="Search"
             onChangeText={onSearchTextChanged}
             style={{
