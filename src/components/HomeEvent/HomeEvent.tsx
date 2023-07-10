@@ -98,10 +98,20 @@ const HomeEvent = (props: HomeEventProps) => {
   return (
     <View key={props.user.UserID + "HomeEvent" + props.event.EventID}>
       {isHidden ? (
-        <View style={{ paddingVertical: 10, paddingHorizontal: 20, backgroundColor: COLORS.gray1 }}>
-          <McText body4 color={COLORS.white}>You set this event to be hidden</McText>
+        <View
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            backgroundColor: COLORS.gray1,
+          }}
+        >
+          <McText body4 color={COLORS.white}>
+            You set this event to be hidden
+          </McText>
           <TouchableOpacity onPress={handleUndoNotInterested}>
-            <McText h4 color={COLORS.white}>Undo</McText>
+            <McText h4 color={COLORS.white}>
+              Undo
+            </McText>
           </TouchableOpacity>
         </View>
       ) : (
@@ -115,59 +125,53 @@ const HomeEvent = (props: HomeEventProps) => {
               flex: 1,
               flexDirection: "row",
               alignItems: "center",
+              paddingHorizontal: 20,
             }}
           >
-            <View
+            <TouchableOpacity
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                paddingLeft: 20,
                 flex: 1,
+                marginRight: 80,
+              }}
+              onPress={() => {
+                onHostUsernamePressed();
               }}
             >
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-                onPress={() => {
-                  onHostUsernamePressed();
+              <Image
+                style={styles.hostProfilePic}
+                source={{
+                  uri: userIDToUser[props.user.UserID]
+                    ? userIDToUser[props.user.UserID].Picture
+                    : props.user.Picture,
+                }}
+              />
+              <McText
+                h4
+                numberOfLines={1}
+                style={{
+                  letterSpacing: 1,
+                  color: COLORS.white,
+                  marginRight: 10,
                 }}
               >
-                <Image
-                  style={styles.hostProfilePic}
-                  source={{
-                    uri: userIDToUser[props.user.UserID]
-                      ? userIDToUser[props.user.UserID].Picture
-                      : props.user.Picture,
-                  }}
-                ></Image>
-                <McText
-                  h4
-                  numberOfLines={1}
-                  style={{
-                    letterSpacing: 1,
-                    color: COLORS.white,
-                    marginRight: 10,
-                  }}
-                >
-                  {userIDToUser[props.user.UserID]
-                    ? userIDToUser[props.user.UserID].DisplayName
-                    : props.user.DisplayName}
-                </McText>
-                {userIDToUser[props.user.UserID] &&
-                  userIDToUser[props.user.UserID].VerifiedOrganization && (
-                    <View style={{ marginRight: 20 }}>
-                      <MaterialIcons
-                        name="verified"
-                        size={18}
-                        color={COLORS.purple}
-                      />
-                    </View>
-                  )}
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              onPress={onOptionsPressed}
-              style={{ marginRight: 20 }}
-            >
+                {userIDToUser[props.user.UserID]
+                  ? userIDToUser[props.user.UserID].DisplayName
+                  : props.user.DisplayName}
+              </McText>
+              {userIDToUser[props.user.UserID] &&
+                userIDToUser[props.user.UserID].VerifiedOrganization && (
+                  <View style={{ marginRight: 20 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onOptionsPressed}>
               <Entypo name="dots-three-horizontal" size={24} color="white" />
             </TouchableOpacity>
           </View>
