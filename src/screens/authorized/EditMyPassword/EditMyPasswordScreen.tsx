@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { McText } from '../../../components/Styled'
 
 const EditMyPasswordScreen = () => {
   return (
     <View>
-      <Text>EditMyPasswordScreen</Text>
+      <McText>EditMyPasswordScreen</McText>
     </View>
   )
 }

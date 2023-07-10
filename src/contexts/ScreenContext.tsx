@@ -16,6 +16,7 @@ import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { appVersionText } from "../constants/texts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { McText } from "../components/Styled";
 
 // import { displayError } from "../helpers/helpers";
 
@@ -107,9 +108,9 @@ export const ScreenProvider = ({ children }) => {
             )}
           </View>
           <View style={{ padding: 5 }}>
-            <Text style={{ fontSize: 12, color: COLORS.gray1 }}>
+            <McText style={{ fontSize: 12, color: COLORS.gray1 }}>
               {appVersionText} | Join our{" "}
-              <Text
+              <McText
                 onPress={onDiscordClick}
                 style={{
                   fontSize: 12,
@@ -118,9 +119,9 @@ export const ScreenProvider = ({ children }) => {
                 }}
               >
                 Discord server
-              </Text>
+              </McText>
               !
-            </Text>
+            </McText>
           </View>
         </SafeAreaView>
       )}
