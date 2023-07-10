@@ -290,11 +290,11 @@ const EventDetailsScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    if (didFetchHost && didFetchEvent && didFetchInterests) {
+    if (didFetchEvent && didFetchInterests) {
       setIsRefreshing(false);
       useRefRefreshing.current = false;
     }
-  }, [didFetchHost, didFetchEvent, didFetchInterests]);
+  }, [didFetchEvent, didFetchInterests]);
 
   useEffect(() => {
     console.log("going into host use effect");
