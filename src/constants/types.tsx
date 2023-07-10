@@ -92,3 +92,7 @@ export type SignupValues = {
   Email: string;
   Password: string;
 };
+
+export type NotificationPreferences = {
+  DoNotifyFollowing: boolean;
+}

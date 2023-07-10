@@ -27,5 +27,6 @@ export const SCREENS = {
         SignupEmailScreen: "SignupEmailScreen",
         SignupPasswordScreen: "SignupPasswordScreen",
         SignupFinalScreen: "SignupFinalScreen",
-    }
+    },
+    NotificationsSettings: "NotificationSettings"
 }

@@ -102,6 +102,10 @@ const AccountSettingsScreen = () => {
       });
   };
 
+  const onPressNotificationSettings = () => {
+    navigation.navigate(SCREENS.NotificationsSettings)
+  }
+
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
@@ -112,6 +116,24 @@ const AccountSettingsScreen = () => {
         }}
       />
       <ScrollView>
+      <TouchableOpacity onPress={onPressNotificationSettings}>
+          <View style={styles.buttonContainer}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="bell-outline"
+                size={28}
+                color="white"
+              />
+            </View>
+            <McText h3>Notifications</McText>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onPressChangePassword}>
           <View style={styles.buttonContainer}>
             <View
@@ -161,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.trueBlack,
   },
   buttonContainer: {
-    width: SIZES.width,
+    flex:1,
     flexDirection: "row",
     marginLeft: 15,
     paddingVertical: 10,

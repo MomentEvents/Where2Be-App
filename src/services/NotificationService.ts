@@ -1,8 +1,9 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { Text, View, Button, Platform } from "react-native";
+import { Text, View, Button, Platform, Alert, Linking } from "react-native";
 import { momentAPI } from "../constants/server";
 import { formatError, responseHandler } from "../helpers/helpers";
+import { NotificationPreferences } from "../constants/types";
 
 export async function getPushNotificationToken(): Promise<string> {
   let token: string = null;
@@ -15,9 +16,17 @@ export async function getPushNotificationToken(): Promise<string> {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert(
-        "To receive push notifications, enable them in settings and restart the app."
-      );
+      Alert.alert("Please enable push notifications", "This allows you to better connect with your campus! You can disable specific notifications if needed in settings.", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Go to Settings",
+          onPress: () => Linking.openURL("app-settings:"),
+        },
+      ]);
       return null;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
@@ -43,23 +52,30 @@ export async function registerPushNotificationToken(
   userID: string,
   notificationToken: string
 ): Promise<void> {
-  if(!notificationToken){
-    return
+  if (!notificationToken) {
+    return;
   }
-  
-  const response = await fetch(momentAPI + `/notification/user_id/${userID}/add_token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      push_token: notificationToken,
-      push_type: "Expo"
-    }),
-  })
 
-  await responseHandler<void>(response, "Unable to register push notifications. Please try again later", false)
+  const response = await fetch(
+    momentAPI + `/notification/user_id/${userID}/add_token`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        push_token: notificationToken,
+        push_type: "Expo",
+      }),
+    }
+  );
+
+  await responseHandler<void>(
+    response,
+    "Unable to register push notifications. Please try again later",
+    false
+  );
 }
 
 export async function unregisterPushNotificationToken(
@@ -67,22 +83,82 @@ export async function unregisterPushNotificationToken(
   userID: string,
   notificationToken: string
 ): Promise<void> {
-
-  if(!notificationToken){
-    return
+  if (!notificationToken) {
+    return;
   }
 
-  const response = await fetch(momentAPI + `/notification/user_id/${userID}/remove_token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_access_token: userAccessToken,
-      push_token: notificationToken,
-      push_type: "Expo"
-    }),
-  })
+  const response = await fetch(
+    momentAPI + `/notification/user_id/${userID}/remove_token`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        push_token: notificationToken,
+        push_type: "Expo",
+      }),
+    }
+  );
 
-  await responseHandler<void>(response, "Cannot unregister push notifications. Please try again", false)
+  await responseHandler<void>(
+    response,
+    "Cannot get push notification settings",
+    true
+  );
+}
+
+export async function getNotificationPreferences(
+  userAccessToken: string,
+  userID: string
+): Promise<NotificationPreferences> {
+  const response = await fetch(
+    momentAPI + `/notification/user_id/${userID}/get_preferences`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+      }),
+    }
+  );
+
+  const notificationPreferences =
+    await responseHandler<NotificationPreferences>(
+      response,
+      "Cannot get push notification preferences",
+      true
+    );
+
+  console.log(JSON.stringify(notificationPreferences));
+  return notificationPreferences;
+}
+
+export async function setNotificationPreferences(
+  userAccessToken: string,
+  userID: string,
+  preferences: NotificationPreferences
+): Promise<void> {
+  const response = await fetch(
+    momentAPI + `/notification/user_id/${userID}/set_preferences`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        preferences: preferences,
+      }),
+    }
+  );
+
+  await responseHandler<void>(
+    response,
+    "Cannot set push notification preferences",
+    false
+  );
 }

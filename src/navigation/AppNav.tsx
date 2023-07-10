@@ -27,6 +27,7 @@ import SignupUsernameScreen from "../screens/unauthorized/Onboarding/4_Username/
 import SignupEmailScreen from "../screens/unauthorized/Onboarding/5_Email/SignupEmailScreen";
 import SignupPasswordScreen from "../screens/unauthorized/Onboarding/6_Password/SignupPasswordScreen";
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/7_Final/SignupFinalScreen";
+import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 
 const Stack = createStackNavigator();
 
@@ -84,6 +85,7 @@ const AppStack = () => {
       <Stack.Screen name={SCREENS.Search} component={SearchScreen}/>
       <Stack.Screen name={SCREENS.Home} component={HomeScreen}/>
       <Stack.Screen name={SCREENS.AccountFollowList} component={AccountFollowListScreen}/>
+      <Stack.Screen name={SCREENS.NotificationsSettings} component={NotificationsSettingsScreen}/>
     </Stack.Navigator>
   );
 };
