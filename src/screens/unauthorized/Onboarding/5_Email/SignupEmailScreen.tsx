@@ -32,6 +32,7 @@ import {
   displayError,
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
+import { McTextInput } from "../../../../components/Styled/styled";
 
 const SignupEmailScreen = () => {
   const navigator = useNavigation<any>();
@@ -92,7 +93,7 @@ const SignupEmailScreen = () => {
           </McText>
         </View>
         <View style={styles.userInputContainer}>
-          <TextInput
+          <McTextInput
             placeholder={"Email"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}

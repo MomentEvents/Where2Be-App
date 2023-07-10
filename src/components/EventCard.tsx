@@ -58,8 +58,7 @@ const EventCard = ({
       return;
     }
     navigation.push(SCREENS.EventDetails, {
-      eventID: event.EventID,
-      passedUser: user? user : null,
+      eventID: event.EventID
     });
     // Navigate to event details page
   };

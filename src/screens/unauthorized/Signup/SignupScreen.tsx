@@ -32,6 +32,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { McTextInput } from "../../../components/Styled/styled";
 
 const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
@@ -154,27 +155,27 @@ const SignupScreen = () => {
                 Create account
               </McText>
             </View>
-            <TextInput
+            <McTextInput
               placeholder={"Name"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setDisplayName(newText)}
               maxLength={CONSTRAINTS.User.DisplayName.Max}
             />
-            <TextInput
+            <McTextInput
               placeholder={"Username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setUsername(newText)}
               maxLength={CONSTRAINTS.User.Username.Max}
             />
-            <TextInput
+            <McTextInput
               placeholder={"Email"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
               onChangeText={(newText) => setEmail(newText)}
             />
-            <TextInput
+            <McTextInput
               placeholder={"Password"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
@@ -182,7 +183,7 @@ const SignupScreen = () => {
               secureTextEntry={true}
               maxLength={CONSTRAINTS.User.Password.Max}
             />
-            <TextInput
+            <McTextInput
               placeholder={"Confirm Password"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}

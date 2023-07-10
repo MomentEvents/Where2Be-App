@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -12,6 +12,8 @@ import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Notifications from 'expo-notifications';
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -71,6 +73,37 @@ const TabIcon = ({ focused, icon }) => {
 };
 
 const TabNavigator = ({ params }) => {
+
+  const navigation = useNavigation<any>()
+
+  useEffect(() => {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received in foreground:', notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification
+    const responseSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      const { notification } = response;
+      console.log('User interacted with this notification:', notification);
+
+      // The notification's data is where you put your own custom payload
+      const { data } = notification.request.content;
+
+      if(data["action"] === "ViewEventDetails"){
+        navigation.push(SCREENS.EventDetails, {eventID: data["event_id"]})
+      }
+
+      console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data))
+    });
+
+    return () => {
+      // Clean up on unmount
+      Notifications.removeNotificationSubscription(foregroundSubscription);
+      Notifications.removeNotificationSubscription(responseSubscription);
+    };
+  }, []);
+  
   const insets = useSafeAreaInsets();
 
   return (

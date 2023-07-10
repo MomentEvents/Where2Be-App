@@ -294,6 +294,52 @@ export async function unfollowUser(
   await responseHandler<void>(response, "Could not unfollow user", false);
 }
 
+export async function setNotInterestedInEvent(
+  userAccessToken: string,
+  userID: string,
+  eventID: string,
+): Promise<void> {
+  
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/not_interested`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_not_interested: true,
+      }),
+    }
+  )
+
+  await responseHandler<void>(response, "Could not set uninterested in event", false);
+}
+
+export async function undoNotInterestedInEvent(
+  userAccessToken: string,
+  userID: string,
+  eventID: string,
+): Promise<void> {
+  
+  const response = await fetch(
+    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/not_interested`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_access_token: userAccessToken,
+        did_not_interested: false,
+      }),
+    }
+  )
+
+  await responseHandler<void>(response, "Could not set undo not interested in event", false);
+}
+
 export async function getUserEmail(
   userAccessToken: string,
   userID: string,

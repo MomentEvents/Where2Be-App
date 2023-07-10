@@ -32,6 +32,7 @@ import {
   displayError,
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
+import { McTextInput } from "../../../../components/Styled/styled";
 
 const SignupPasswordScreen = () => {
   const navigator = useNavigation<any>();
@@ -89,14 +90,14 @@ const SignupPasswordScreen = () => {
           </McText>
         </View>
         <View style={styles.userInputContainer}>
-          <TextInput
+          <McTextInput
             placeholder={"Password"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}
             secureTextEntry={true}
             onChangeText={(newText) => (passwordRef.current = newText)}
           />
-          <TextInput
+          <McTextInput
             placeholder={"Confirm Password"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}

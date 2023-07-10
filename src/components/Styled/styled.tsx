@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Text, TextProps, TextStyle } from 'react-native';
+import { Text, TextInput, TextInputProps, TextProps, TextStyle } from 'react-native';
 import { COLORS, FONTS } from "../../constants";
 
 interface McTextProps extends TextProps {
@@ -39,7 +39,18 @@ const McText: FC<McTextProps> = ({
 
   const combinedStyle = { color, ...fontSize, ...style };
 
-  return <Text style={combinedStyle} {...props} />;
+  return <Text allowFontScaling={false} style={combinedStyle} {...props} />;
 };
 
-export { McText };
+interface McTextInputProps extends TextInputProps {
+  style?: TextStyle
+}
+
+const McTextInput: FC<McTextInputProps> = ({
+  ...props
+}) => {
+
+  return <TextInput allowFontScaling={false} style={props.style} {...props} />;
+};
+
+export { McText, McTextInput };
