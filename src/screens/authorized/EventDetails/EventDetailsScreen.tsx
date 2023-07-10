@@ -738,9 +738,17 @@ const EventDetailsScreen = ({ route }) => {
                         }
                       >
                         {eventIDToEvent[eventID].UserJoin ? (
-                          <icons.activecheckmark width={30} />
+                          <Ionicons
+                            name="checkmark-sharp"
+                            size={38}
+                            color="white"
+                          />
                         ) : (
-                          <icons.inactivecheckmark width={30} />
+                          <Ionicons
+                            name="checkmark-outline"
+                            size={38}
+                            color="black"
+                          />
                         )}
                       </TouchableOpacity>
                     </GradientButton>
@@ -803,14 +811,16 @@ const EventDetailsScreen = ({ route }) => {
                         }
                       >
                         {eventIDToEvent[eventID].UserShoutout ? (
-                          <icons.activeshoutout
-                            style={{ marginRight: 2 }}
-                            width={30}
+                          <Ionicons
+                            name="ios-megaphone"
+                            size={32}
+                            color="white"
                           />
                         ) : (
-                          <icons.inactiveshoutout
-                            style={{ marginRight: 2 }}
-                            width={30}
+                          <Ionicons
+                            name="ios-megaphone-outline"
+                            size={32}
+                            color="black"
                           />
                         )}
                       </TouchableOpacity>
