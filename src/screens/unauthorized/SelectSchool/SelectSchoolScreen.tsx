@@ -76,7 +76,13 @@ const SelectSchoolScreen = ({ route }) => {
           width: "70%",
         }}
       >
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start" }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+        >
           <SchoolSearchSelector
             onSelectSchool={(school: School) => {
               setSchool(school);
@@ -98,7 +104,9 @@ const SelectSchoolScreen = ({ route }) => {
             maxHeight={130}
           />
         </View>
-        <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{ flex: 2, justifyContent: "center", alignItems: "center" }}
+        >
           <TouchableOpacity
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
@@ -114,9 +122,13 @@ const SelectSchoolScreen = ({ route }) => {
         </View>
       </View>
       <View style={{ padding: 5 }}>
-        <McText style={{ fontSize: 12, color: COLORS.gray1 }}>
+        <Text
+          allowFontScaling={false}
+          style={{ fontSize: 12, color: COLORS.gray1 }}
+        >
           {appVersionText} | Join our{" "}
-          <McText
+          <Text
+            allowFontScaling={false}
             onPress={onDiscordClick}
             style={{
               fontSize: 12,
@@ -125,9 +137,9 @@ const SelectSchoolScreen = ({ route }) => {
             }}
           >
             Discord server
-          </McText>
+          </Text>
           !
-        </McText>
+        </Text>
       </View>
     </SafeAreaView>
   );

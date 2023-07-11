@@ -108,9 +108,9 @@ export const ScreenProvider = ({ children }) => {
             )}
           </View>
           <View style={{ padding: 5 }}>
-            <McText style={{ fontSize: 12, color: COLORS.gray1 }}>
+            <Text allowFontScaling={false} style={{ fontSize: 12, color: COLORS.gray1 }}>
               {appVersionText} | Join our{" "}
-              <McText
+              <Text allowFontScaling={false}
                 onPress={onDiscordClick}
                 style={{
                   fontSize: 12,
@@ -119,9 +119,9 @@ export const ScreenProvider = ({ children }) => {
                 }}
               >
                 Discord server
-              </McText>
+              </Text>
               !
-            </McText>
+            </Text>
           </View>
         </SafeAreaView>
       )}

@@ -589,7 +589,7 @@ const EventDetailsScreen = ({ route }) => {
                   </Hyperlink>
 
                   {lengthMoreText ? (
-                    <McText
+                    <McText body4
                       onPress={descriptionToggleNumberOfLines}
                       style={{
                         lineHeight: 22,

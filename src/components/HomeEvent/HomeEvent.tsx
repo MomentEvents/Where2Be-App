@@ -23,7 +23,7 @@ import {
 } from "../../services/UserService";
 import { EventContext } from "../../contexts/EventContext";
 import { UserContext } from "../../contexts/UserContext";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { CustomError } from "../../constants/error";
 
@@ -171,8 +171,12 @@ const HomeEvent = (props: HomeEventProps) => {
                   </View>
                 )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={onOptionsPressed}>
-              <Entypo name="dots-three-horizontal" size={24} color="white" />
+            <TouchableOpacity onPress={handleNotInterested}>
+              <MaterialCommunityIcons
+                name="window-close"
+                size={28}
+                color="white"
+              />
             </TouchableOpacity>
           </View>
           <HomeEventCard
