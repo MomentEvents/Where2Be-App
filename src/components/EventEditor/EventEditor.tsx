@@ -214,7 +214,7 @@ const EventEditor = (props: EventEditorProps) => {
                 style={{
                   borderRadius: 5,
                   marginLeft: 3,
-                  backgroundColor: props.doNotify ? COLORS.gray : COLORS.gray2,
+                  backgroundColor: props.doNotify ? COLORS.purple : COLORS.gray2,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
