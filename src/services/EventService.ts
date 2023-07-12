@@ -31,6 +31,8 @@ export async function getEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch(() => {
+    return undefined
   });
 
   const pulledEvent: EventResponse = await responseHandler<EventResponse>(
@@ -77,6 +79,8 @@ export async function createEvent(
       "Content-Type": "multipart/form-data",
     },
     body: formData,
+  }).catch(() => {
+    return undefined
   });
 
   const data = await responseHandler<EventResponse>(
@@ -128,7 +132,9 @@ export async function updateEvent(
       },
       body: formData,
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   console.log("UPDATING EVENT");
   console.log("RESPONSE IS " + JSON.stringify(response));
@@ -160,6 +166,8 @@ export async function deleteEvent(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch(() => {
+    return undefined
   });
 
   await responseHandler<void>(response, "Could not delete event", false);
@@ -200,7 +208,9 @@ export async function getUserJoinedFutureEvents(
       },
       body: JSON.stringify(body),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
     response,
@@ -245,7 +255,9 @@ export async function getUserJoinedPastEvents(
       },
       body: JSON.stringify(body),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
     response,
@@ -291,7 +303,9 @@ export async function getUserHostedFutureEvents(
       },
       body: JSON.stringify(body),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
     response,
@@ -337,7 +351,9 @@ export async function getUserHostedPastEvents(
       },
       body: JSON.stringify(body),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
     response,
@@ -371,7 +387,9 @@ export async function searchSchoolEvents(
         query: query,
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
     response,
@@ -401,7 +419,9 @@ export async function getAllSchoolEventsCategorized(
         user_access_token: userAccessToken ? userAccessToken : null,
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const responseJSON = await responseHandler<{}>(
     response,
@@ -437,7 +457,9 @@ export async function getAllHomePageEventsWithHosts(
         school_id: schoolID,
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const responseJSON: [{ host: UserResponse; event: EventResponse, reason: string }] =
     await responseHandler<[{ host: UserResponse; event: EventResponse, reason: string }]>(

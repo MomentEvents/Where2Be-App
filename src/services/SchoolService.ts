@@ -13,6 +13,8 @@ import { schoolResponseToSchool, schoolResponseToSchools } from "../helpers/conv
 export async function getAllSchools(): Promise<School[]> {
   const response = await fetch(momentAPI + `/school`, {
     method: "GET",
+  }).catch(() => {
+    return undefined
   })
 
   const pulledSchools: SchoolResponse[] = await responseHandler<SchoolResponse[]>(response, "Could not get all schools", true);
@@ -31,6 +33,8 @@ export async function getSchoolByUserId(UserID: string): Promise<School> {
 
   const response = await fetch(momentAPI + `/school/user_id/${UserID}`, {
     method: "GET",
+  }).catch(() => {
+    return undefined
   })
 
   const pulledSchool: SchoolResponse = await responseHandler<SchoolResponse>(response, "Could not get school user's school", true);

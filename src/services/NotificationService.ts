@@ -69,7 +69,9 @@ export async function registerPushNotificationToken(
         push_type: "Expo",
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   await responseHandler<void>(
     response,
@@ -100,12 +102,14 @@ export async function unregisterPushNotificationToken(
         push_type: "Expo",
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   await responseHandler<void>(
     response,
     "Cannot get push notification settings",
-    true
+    false
   );
 }
 
@@ -124,7 +128,9 @@ export async function getNotificationPreferences(
         user_access_token: userAccessToken,
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   const notificationPreferences =
     await responseHandler<NotificationPreferences>(
@@ -154,7 +160,9 @@ export async function setNotificationPreferences(
         preferences: preferences,
       }),
     }
-  );
+  ).catch(() => {
+    return undefined
+  });
 
   await responseHandler<void>(
     response,

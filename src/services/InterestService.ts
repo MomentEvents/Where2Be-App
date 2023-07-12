@@ -15,6 +15,8 @@ import { interestResponseToInterests } from "../helpers/converters";
 export async function getAllInterests(schoolID: string): Promise<Interest[]> {
   const response = await fetch(momentAPI + `/interest`, {
     method: "GET",
+  }).catch(() => {
+    return undefined
   })
 
   const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get all interests", true);
@@ -43,6 +45,8 @@ export async function getEventInterestsByEventId(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch(() => {
+    return undefined
   })
 
   const pulledInterests: InterestResponse[] = await responseHandler<InterestResponse[]>(response, "Could not get event interests", true);

@@ -22,6 +22,8 @@ export async function getUser(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ user_access_token: userAccessToken }),
+  }).catch(() => {
+    return undefined
   })
 
   const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id", true);
@@ -44,7 +46,9 @@ export async function getUserByUserAccessToken(
     {
       method: "GET",
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not get user by user access token", true);
   const convertedUser: User = userResponseToUser(pulledUser);
@@ -78,7 +82,9 @@ export async function updateUser(
       },
       body: formData,
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not update user", false);
 
@@ -98,6 +104,8 @@ export async function deleteUser(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch(() => {
+    return undefined
   })
 
   await responseHandler<void>(response, "Could not delete user", false);
@@ -117,6 +125,8 @@ export async function getEventHostByEventId(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
+  }).catch(() => {
+    return undefined
   })
 
   const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch event host", true);
@@ -143,7 +153,9 @@ export async function addUserJoinEvent(
         did_join: true,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not add join", false);
 }
@@ -166,7 +178,9 @@ export async function removeUserJoinEvent(
         did_join: false,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not remove join", false);
 }
@@ -189,7 +203,9 @@ export async function addUserShoutoutEvent(
         did_shoutout: true,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not add shoutout", false);
 }
@@ -212,7 +228,9 @@ export async function removeUserShoutoutEvent(
         did_shoutout: false,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not remove shoutout", false);
 }
@@ -240,7 +258,9 @@ export async function searchSchoolUsers(
         query: query,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get all school users", true);
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);
@@ -266,7 +286,9 @@ export async function followUser(
         did_follow: true,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not follow user", false);
 }
@@ -289,7 +311,9 @@ export async function unfollowUser(
         did_follow: false,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not unfollow user", false);
 }
@@ -312,7 +336,9 @@ export async function setNotInterestedInEvent(
         did_not_interested: true,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not set uninterested in event", false);
 }
@@ -335,7 +361,9 @@ export async function undoNotInterestedInEvent(
         did_not_interested: false,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   await responseHandler<void>(response, "Could not set undo not interested in event", false);
 }
@@ -355,7 +383,9 @@ export async function getUserEmail(
         user_access_token: userAccessToken,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   const responseJSON: {email: string, email_verified: boolean} = await responseHandler<{email: string, email_verified: boolean}>(response, "Could not get user email", true);
 
@@ -379,7 +409,9 @@ export async function getUserFollowers(
         user_id_cursor: cursorUserID,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get followers", true);
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);
@@ -404,7 +436,9 @@ export async function getUserFollowing(
         user_id_cursor: cursorUserID,
       }),
     }
-  )
+  ).catch(() => {
+    return undefined
+  })
 
   const pulledUsers: UserResponse[] = await responseHandler<UserResponse[]>(response, "Could not get following list", true);
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);

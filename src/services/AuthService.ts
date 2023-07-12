@@ -59,14 +59,10 @@ export async function login(
       password: password,
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could not login");
+    return undefined;
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-  const data = await response.json();
+  const data = await responseHandler<{"user_id": string, "user_access_token": string}>(response, "Could not login", true)
 
   if(!data["user_id"] || !data["user_access_token"]){
     throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
@@ -144,15 +140,10 @@ export async function signup(
       email: email
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Could not signup");
+    return undefined
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  const data = await response.json()
+  const data = await responseHandler<{"user_id": string, "user_access_token": string}>(response, "Could not signup", true)
 
   if(!data["user_id"] || !data["user_access_token"]){
     throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
@@ -338,15 +329,10 @@ export async function getServerStatus(version: string): Promise<void> {
       app_version: version,
     }),
   }).catch((error: Error) => {
-    throw formatError("Unable to connect to server", "Please try again later");
+    return undefined
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
-
-  return Promise.resolve();
+  await responseHandler<void>(response, "Could not get server status", false)
 }
 
 export async function checkIfUserAccessTokenIsAdmin(
@@ -361,17 +347,12 @@ export async function checkIfUserAccessTokenIsAdmin(
       user_access_token: userAccessToken,
     }),
   }).catch((error: Error) => {
-    throw formatError("Network error", "Unable to check if user is admin");
+    return undefined
   });
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw formatError("Error " + response.status, message);
-  }
+  const data = await responseHandler<{"is_admin": boolean}>(response, "Could not check if user is admin", true)
 
-  const responseJSON = await response.json();
-
-  return Promise.resolve(responseJSON.is_admin);
+  return Promise.resolve(data.is_admin);
 }
 
 export async function resetPassword(
@@ -385,6 +366,8 @@ export async function resetPassword(
     body: JSON.stringify({
       email: email
     }),
+  }).catch(() => {
+    return undefined
   })
 
   await responseHandler<void>(response, "Could not send password reset email", false)
@@ -401,6 +384,8 @@ export async function checkEmailAvailability(
     body: JSON.stringify({
       email: email
     }),
+  }).catch(() => {
+    return undefined
   })
 
   await responseHandler<void>(response, "Could not check email availability", false)
@@ -417,6 +402,8 @@ export async function checkUsernameAvailability(
     body: JSON.stringify({
       username: username
     }),
+  }).catch(() => {
+    return undefined
   })
 
   await responseHandler<void>(response, "Could not check username availability", false)
