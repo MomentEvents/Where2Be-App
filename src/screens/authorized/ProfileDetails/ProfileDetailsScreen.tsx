@@ -16,6 +16,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { displayError } from "../../../helpers/helpers";
 import { deleteUser } from "../../../services/UserService";
 import EventToggler from "../../../components/EventToggler/EventToggler";
+import { Feather } from "@expo/vector-icons";
 
 type ProfileDetailsRouteParams = {
   userID: string;
@@ -71,7 +72,7 @@ const ProfileDetailsScreen = ({ route }) => {
           userIDToUser[userID] ? userIDToUser[userID].Username : "Loading..."
         }
         hideBottomUnderline={true}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => navigation.goBack()}
         rightButtonSVG={isAdmin ? <icons.trash /> : undefined}
         rightButtonOnClick={() => {

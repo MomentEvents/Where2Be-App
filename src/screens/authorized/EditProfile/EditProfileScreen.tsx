@@ -48,6 +48,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { McTextInput } from "../../../components/Styled/styled";
+import { Feather } from "@expo/vector-icons";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -110,7 +111,7 @@ const EditProfileScreen = ({ route }) => {
     <MobileSafeView style={styles.container}>
       <SectionHeader
         title={"Edit Profile"}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => navigation.goBack()}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>

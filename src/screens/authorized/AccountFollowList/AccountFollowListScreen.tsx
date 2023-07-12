@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
@@ -24,7 +24,7 @@ const AccountFollowListScreen = ({ route }) => {
         leftButtonOnClick={() => {
           navigation.goBack();
         }}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
       />
       <FollowList followType={followType} userID={userID} />
     </MobileSafeView>

@@ -43,6 +43,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import EventEditor from "../../../components/EventEditor/EventEditor";
 import { useNavigation } from "@react-navigation/native";
 import { CONSTRAINTS } from "../../../constants/constraints";
+import { Feather } from "@expo/vector-icons";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -157,7 +158,7 @@ const CreateEventScreen = ({ route }) => {
         leftButtonOnClick={() => {
           navigation.goBack();
         }}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         rightButtonOnClick={() => {
           onSubmit();
         }}

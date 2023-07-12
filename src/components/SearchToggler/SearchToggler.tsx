@@ -34,6 +34,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CustomError } from "../../constants/error";
 import RetryButton from "../RetryButton";
 import { McTextInput } from "../Styled/styled";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
@@ -152,7 +153,7 @@ const SearchToggler = () => {
             marginLeft: 20,
           }}
         >
-          <icons.backarrow />
+          <Feather name="arrow-left" size={28} color="white" />
         </TouchableOpacity>
         <View
           style={{

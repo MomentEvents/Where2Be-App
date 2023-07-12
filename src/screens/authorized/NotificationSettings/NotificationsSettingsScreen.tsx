@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, Switch, View } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { McText } from "../../../components/Styled";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
@@ -52,7 +52,7 @@ const NotificationsSettingsScreen = () => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Notifications"}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => {
           navigation.goBack();
         }}

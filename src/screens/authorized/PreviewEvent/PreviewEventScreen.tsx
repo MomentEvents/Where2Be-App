@@ -33,6 +33,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import {
+  Feather,
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -67,7 +68,8 @@ const EventDetailsScreen = ({ route }) => {
 
   const navigation = useNavigation<any>();
 
-  const { createdEvent, interests, base64Image, doNotifyFollowers } = propsFromEventCard;
+  const { createdEvent, interests, base64Image, doNotifyFollowers } =
+    propsFromEventCard;
 
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
@@ -83,7 +85,12 @@ const EventDetailsScreen = ({ route }) => {
     setLoading(true);
     const createdEventBase64 = { ...createdEvent };
     createdEventBase64.Picture = base64Image;
-    createEvent(userToken.UserAccessToken, createdEventBase64, interests, doNotifyFollowers)
+    createEvent(
+      userToken.UserAccessToken,
+      createdEventBase64,
+      interests,
+      doNotifyFollowers
+    )
       .then((eventID: string) => {
         setLoading(false);
         updateUserIDToUser({
@@ -118,7 +125,7 @@ const EventDetailsScreen = ({ route }) => {
       <SectionHeader
         title={"Preview Event"}
         leftButtonOnClick={onBackPressed}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         rightButtonOnClick={onSubmit}
         rightButtonSVG={
           <McText h3 color={COLORS.purple}>
@@ -159,15 +166,19 @@ const EventDetailsScreen = ({ route }) => {
                       setImageViewVisible(true);
                     }}
                     style={{
-                      width: 40,
                       height: 40,
+                      width: 40,
                       backgroundColor: "rgba(0,0,0,0.5)",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: 13,
                     }}
                   >
-                    <Ionicons name="md-expand" size={24} color="white" />
+                    <MaterialCommunityIcons
+                      name="arrow-expand"
+                      size={23}
+                      color="white"
+                    />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>
@@ -349,7 +360,8 @@ const EventDetailsScreen = ({ route }) => {
                   </McText>
                 </Hyperlink>
                 {lengthMoreText ? (
-                  <McText body4
+                  <McText
+                    body4
                     onPress={descriptionToggleNumberOfLines}
                     style={{
                       lineHeight: 22,

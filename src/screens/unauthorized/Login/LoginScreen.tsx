@@ -25,6 +25,7 @@ import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { resetPassword } from "../../../services/AuthService";
 import { McTextInput } from "../../../components/Styled/styled";
+import { Feather } from "@expo/vector-icons";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -87,7 +88,7 @@ const LoginScreen = () => {
       >
         <View style={styles.backarrowContainer}>
           <TouchableOpacity onPress={onNavigateBack}>
-            <icons.backarrow />
+          <Feather name="arrow-left" size={28} color="white" />
           </TouchableOpacity>
         </View>
         <View style={styles.welcomeTextContainer}>

@@ -5,6 +5,7 @@ import { COLORS, SCREENS, icons } from "../../../../constants";
 import { McText } from "../../../../components/Styled";
 import { IMAGES } from "../../../../constants/images";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
 const SignupWelcomeScreen = () => {
   const navigator = useNavigation<any>();
@@ -23,7 +24,7 @@ const SignupWelcomeScreen = () => {
     <MobileSafeView style={styles.container}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TouchableOpacity onPress={onNavigateBack}>
-          <icons.backarrow />
+        <Feather name="arrow-left" size={28} color="white" />
         </TouchableOpacity>
       </View>
       <View style={styles.imageContainer}>

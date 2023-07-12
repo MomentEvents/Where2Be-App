@@ -16,7 +16,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { displayError } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import * as Updates from "expo-updates"
@@ -105,7 +105,7 @@ const SettingsScreen = () => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Settings"}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => {
           navigation.goBack();
         }}

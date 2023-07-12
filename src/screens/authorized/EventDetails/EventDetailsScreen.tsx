@@ -47,6 +47,7 @@ import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
 import {
+  Feather,
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -377,7 +378,7 @@ const EventDetailsScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <icons.backarrow width={24} />
+                    <Feather name="arrow-left" size={28} color="white" />
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -385,15 +386,15 @@ const EventDetailsScreen = ({ route }) => {
                       setImageViewVisible(true);
                     }}
                     style={{
-                      width: 40,
                       height: 40,
+                      width: 40,
                       backgroundColor: "rgba(0,0,0,0.5)",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: 13,
                     }}
                   >
-                    <Ionicons name="md-expand" size={24} color="white" />
+                    <MaterialCommunityIcons name="arrow-expand" size={23} color="white" />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>

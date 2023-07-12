@@ -17,6 +17,7 @@ import SectionHeader from "../../../components/Styled/SectionHeader";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 type RouteParams = {
   school: School;
 };
@@ -34,7 +35,7 @@ const IntroduceEventsScreen = ({ route }) => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Explore Events"}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => {
           navigation.goBack();
         }}

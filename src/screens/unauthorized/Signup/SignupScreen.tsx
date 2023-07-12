@@ -31,7 +31,7 @@ import SchoolSearchSelector from "../../../components/SchoolSearchSelector/Schoo
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { McTextInput } from "../../../components/Styled/styled";
 
 const SignupScreen = () => {
@@ -110,7 +110,7 @@ const SignupScreen = () => {
       >
         <View style={styles.backarrowContainer}>
           <TouchableOpacity onPress={onNavigateBack}>
-            <icons.backarrow />
+          <Feather name="arrow-left" size={28} color="white" />
           </TouchableOpacity>
         </View>
         {displayCheckEmail ? (

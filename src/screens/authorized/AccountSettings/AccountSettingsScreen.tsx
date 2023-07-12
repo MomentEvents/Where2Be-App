@@ -16,7 +16,7 @@ import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteUser, getUserEmail } from "../../../services/UserService";
 import { displayError } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
@@ -110,7 +110,7 @@ const AccountSettingsScreen = () => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Account"}
-        leftButtonSVG={<icons.backarrow />}
+        leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => {
           navigation.goBack();
         }}
