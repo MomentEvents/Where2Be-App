@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Linking,
 } from "react-native";
 import React, { useContext, useRef } from "react";
 import MobileSafeView from "../../../../components/Styled/MobileSafeView";
@@ -18,6 +19,7 @@ import { AuthContext } from "../../../../contexts/AuthContext";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,
+  SIZES,
 } from "../../../../constants/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CONSTRAINTS } from "../../../../constants/constraints";
@@ -42,6 +44,30 @@ const SignupFinalScreen = () => {
 
   const onNavigateBack = () => {
     navigator.goBack();
+  };
+
+  const onTermsOfServiceClick = () => {
+    const supported = Linking.canOpenURL("https://where2be.app/terms");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://where2be.app/terms");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://where2be.app/terms"}`);
+    }
+  };
+
+  const onPrivacyPolicyClick = () => {
+    const supported = Linking.canOpenURL("https://where2be.app/privacy");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      Linking.openURL("https://where2be.app/privacy");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://where2be.app/privacy"}`);
+    }
   };
 
   const onCreateAccountClick = () => {
@@ -85,12 +111,45 @@ const SignupFinalScreen = () => {
           Let the Adventure Begin!
         </McText>
         <McText style={styles.descriptionText} h4>
-          You're all set! Start
-          exploring events, connecting with fellow students, and{" "}
+          You're all set! Start exploring events, connecting with fellow
+          students, and{" "}
           <McText color={COLORS.purple} h4>
             making unforgettable memories on your campus
           </McText>
           .
+        </McText>
+      </View>
+      <View
+        style={{
+          marginTop: 30,
+          alignSelf: "center",
+          width: "80%",
+          alignItems: "center",
+        }}
+      >
+        <McText
+          style={{ textAlign: "center"}}
+          body6
+          color={COLORS.gray}
+        >
+          By creating an account, you agree to our{" "}
+          <McText
+            onPress={onTermsOfServiceClick}
+            body6
+            color={COLORS.gray}
+            style={{ textDecorationLine: "underline" }}
+          >
+            Terms of Service
+          </McText>{" "}
+          and{" "}
+          <McText
+            onPress={onPrivacyPolicyClick}
+            body6
+            color={COLORS.gray}
+            style={{ textDecorationLine: "underline" }}
+          >
+            Privacy Policy
+          </McText>
         </McText>
       </View>
       <View style={styles.userInputContainer}>
@@ -107,27 +166,27 @@ const SignupFinalScreen = () => {
         </TouchableOpacity>
       </View>
       <View
+        style={{
+          flexDirection: "row",
+          marginTop: 60,
+          justifyContent: "space-between",
+        }}
+      >
+        <TouchableOpacity
           style={{
-            flexDirection: "row",
-            marginTop: 60,
-            justifyContent: "space-between",
+            backgroundColor: COLORS.gray,
+            borderRadius: 5,
+            paddingVertical: 10,
+            paddingHorizontal: 14,
           }}
+          onPress={onNavigateBack}
         >
-          <TouchableOpacity
-            style={{
-              backgroundColor: COLORS.gray,
-              borderRadius: 5,
-              paddingVertical: 10,
-              paddingHorizontal: 14,
-            }}
-            onPress={onNavigateBack}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <AntDesign name="caretleft" size={24} color="white" />
-              <McText h4>Back</McText>
-            </View>
-          </TouchableOpacity>
-        </View>
+          <View style={{ flexDirection: "row" }}>
+            <AntDesign name="caretleft" size={24} color="white" />
+            <McText h4>Back</McText>
+          </View>
+        </TouchableOpacity>
+      </View>
     </MobileSafeView>
   );
 };
