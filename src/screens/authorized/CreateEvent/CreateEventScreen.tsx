@@ -63,6 +63,7 @@ const CreateEventScreen = ({ route }) => {
   const [selectedInterests, setSelectedInterests] = useState(
     new Set<Interest>()
   );
+  const [doNotifyFollowers, setDoNotifyFollowers] = useState(true);
 
   const onSubmit = () => {
     if (!date || !start || !end) {
@@ -145,6 +146,7 @@ const CreateEventScreen = ({ route }) => {
       createdEvent: createdEvent,
       base64Image: base64Image,
       interests: Array.from(selectedInterests),
+      doNotifyFollowers: doNotifyFollowers,
     });
   };
 
@@ -184,6 +186,9 @@ const CreateEventScreen = ({ route }) => {
         setEndTime={setEnd}
         selectedInterests={selectedInterests}
         setSelectedInterests={setSelectedInterests}
+        doNotify={doNotifyFollowers}
+        setDoNotify={setDoNotifyFollowers}
+        notifyText={"Notify followers"}
       />
     </MobileSafeView>
   );

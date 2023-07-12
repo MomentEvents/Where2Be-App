@@ -53,7 +53,8 @@ export async function createEvent(
   userAccessToken: string,
 
   createdEvent: Event,
-  interests: Interest[]
+  interests: Interest[],
+  doNotifyFollowers: boolean,
 ): Promise<string> {
   const formData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -68,6 +69,7 @@ export async function createEvent(
     JSON.stringify(interests.map((interest) => interest.InterestID))
   );
   formData.append("picture", createdEvent.Picture);
+  formData.append("ping_followers", JSON.stringify(doNotifyFollowers));
 
   const response = await fetch(momentAPI + `/event/create_event`, {
     method: "POST",
@@ -93,9 +95,9 @@ export async function createEvent(
  */
 export async function updateEvent(
   userAccessToken: string,
-
   updatedEvent: Event,
-  updatedInterests: Interest[]
+  updatedInterests: Interest[],
+  doNotifyJoinedUsers: boolean,
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string if it exists
   console.log(JSON.stringify(updatedInterests));
@@ -112,6 +114,8 @@ export async function updateEvent(
     JSON.stringify(updatedInterests.map((interest) => interest.InterestID))
   );
   formData.append("picture", updatedEvent.Picture);
+
+  formData.append("ping_joined_users", JSON.stringify(doNotifyJoinedUsers));
 
   console.log(updatedEvent.Picture);
 

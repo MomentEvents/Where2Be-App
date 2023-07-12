@@ -43,6 +43,7 @@ type routeParametersType = {
   createdEvent: Event;
   base64Image: string;
   interests: Interest[];
+  doNotifyFollowers: boolean;
 };
 
 const EventDetailsScreen = ({ route }) => {
@@ -66,7 +67,7 @@ const EventDetailsScreen = ({ route }) => {
 
   const navigation = useNavigation<any>();
 
-  const { createdEvent, interests, base64Image } = propsFromEventCard;
+  const { createdEvent, interests, base64Image, doNotifyFollowers } = propsFromEventCard;
 
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
@@ -82,7 +83,7 @@ const EventDetailsScreen = ({ route }) => {
     setLoading(true);
     const createdEventBase64 = { ...createdEvent };
     createdEventBase64.Picture = base64Image;
-    createEvent(userToken.UserAccessToken, createdEventBase64, interests)
+    createEvent(userToken.UserAccessToken, createdEventBase64, interests, doNotifyFollowers)
       .then((eventID: string) => {
         setLoading(false);
         updateUserIDToUser({

@@ -77,6 +77,8 @@ const EditEventScreen = ({ route }) => {
     new Set<Interest>(eventIDToInterests[eventID])
   );
 
+  const [doNotifyJoinedUsers, setDoNotifyJoinedUsers] = useState(false)
+
   const [openedStartTimePicker, setOpenedStartTimePicker] =
     useState<boolean>(false);
   const [openedEndTimePicker, setOpenedEndTimePicker] =
@@ -182,7 +184,7 @@ const EditEventScreen = ({ route }) => {
     const arrayInterests: Interest[] = Array.from(selectedInterests);
     const updatedEventBase64 = { ...updatedEvent };
     updatedEventBase64.Picture = base64Image;
-    updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests)
+    updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests, doNotifyJoinedUsers)
       .then(() => {
         updateEventIDToEvent({ id: eventID, event: updatedEvent });
         updateEventIDToInterests({ id: eventID, interests: arrayInterests });
@@ -230,8 +232,7 @@ const EditEventScreen = ({ route }) => {
         endTime={end}
         setEndTime={setEnd}
         selectedInterests={selectedInterests}
-        setSelectedInterests={setSelectedInterests}
-      />
+        setSelectedInterests={setSelectedInterests} doNotify={doNotifyJoinedUsers} setDoNotify={setDoNotifyJoinedUsers} notifyText={"Notify joined users"}      />
     </MobileSafeView>
   );
 };

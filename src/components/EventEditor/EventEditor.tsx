@@ -19,27 +19,31 @@ import { convertDateToUTC } from "../../helpers/helpers";
 import { CONSTRAINTS } from "../../constants/constraints";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { McTextInput } from "../Styled/styled";
+import { Ionicons } from "@expo/vector-icons";
 
 type EventEditorProps = {
-    title: string,
-    setTitle: React.Dispatch<React.SetStateAction<string>>,
-    location: string,
-    setLocation: React.Dispatch<React.SetStateAction<string>>,
-    image: string,
-    setImage: React.Dispatch<React.SetStateAction<string>>,
-    base64Image: string,
-    setBase64Image: React.Dispatch<React.SetStateAction<string>>,
-    date: Date,
-    setDate: React.Dispatch<React.SetStateAction<Date>>,
-    description: string,
-    setDescription: React.Dispatch<React.SetStateAction<string>>,
-    startTime: Date,
-    setStartTime: React.Dispatch<React.SetStateAction<Date>>,
-    endTime: Date,
-    setEndTime: React.Dispatch<React.SetStateAction<Date>>,
-    selectedInterests: Set<Interest>,
-    setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>
-}
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  location: string;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
+  image: string;
+  setImage: React.Dispatch<React.SetStateAction<string>>;
+  base64Image: string;
+  setBase64Image: React.Dispatch<React.SetStateAction<string>>;
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  startTime: Date;
+  setStartTime: React.Dispatch<React.SetStateAction<Date>>;
+  endTime: Date;
+  setEndTime: React.Dispatch<React.SetStateAction<Date>>;
+  selectedInterests: Set<Interest>;
+  setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>;
+  doNotify: boolean;
+  setDoNotify: React.Dispatch<React.SetStateAction<boolean>>;
+  notifyText: string;
+};
 const EventEditor = (props: EventEditorProps) => {
   const insets = useSafeAreaInsets();
 
@@ -66,8 +70,8 @@ const EventEditor = (props: EventEditorProps) => {
     setOpenedDatePicker(false);
   };
   return (
-    <View style={{flex: 1}}>
-      <KeyboardAwareScrollView style={{backgroundColor: COLORS.black }}>
+    <View style={{ flex: 1 }}>
+      <KeyboardAwareScrollView style={{ backgroundColor: COLORS.black }}>
         <View style={styles.scrollViewContainer}>
           <SectionInputs>
             <View style={styles.titleContainer}>
@@ -200,9 +204,33 @@ const EventEditor = (props: EventEditorProps) => {
                 setSelectedInterests={props.setSelectedInterests}
               />
             </View>
+            <View style={styles.checkboxContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  props.setDoNotify((currentNotify) => {
+                    return !currentNotify;
+                  })
+                }
+                style={{
+                  borderRadius: 5,
+                  marginLeft: 3,
+                  backgroundColor: props.doNotify ? COLORS.gray : COLORS.gray2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name={"checkmark-sharp"}
+                  size={24}
+                  color={props.doNotify ? COLORS.white : COLORS.gray2}
+                />
+              </TouchableOpacity>
+              <McText h3 style={{ marginLeft: 16 }}>{props.notifyText}</McText>
+            </View>
           </SectionInputs>
         </View>
-        <View style={{height: insets.bottom + 10}}/>
+
+        <View style={{ height: insets.bottom + 10 }} />
       </KeyboardAwareScrollView>
       <DateTimePickerModal
         isVisible={openedDatePicker}
@@ -240,6 +268,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.trueBlack,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
   },
   scrollViewContainer: {
     marginHorizontal: 20,
