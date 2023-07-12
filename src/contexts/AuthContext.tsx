@@ -3,7 +3,7 @@ import { UserContext } from "./UserContext";
 import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
 import { getPushNotificationToken, unregisterPushNotificationToken } from "../services/NotificationService";
-import { SignupValues } from "../constants/types";
+import { SignupValues, Token } from "../constants/types";
 
 type AuthContextType = {
   userLogin: (usercred: string, password: string) => Promise<void>;
@@ -39,14 +39,8 @@ export const AuthProvider = ({ children }) => {
   });
 
   const userLogin = async (usercred: string, password: string) => {
-    await setContextVarsBasedOnToken(
-      await login(usercred, password).catch((error: Error) => {
-        throw error;
-      })
-    ).catch((error: Error) => {
-      displayError(error);
-      return null;
-    });
+    const token: Token = await login(usercred, password);
+    await setContextVarsBasedOnToken(token)
   };
 
   const userSignup = async (
@@ -56,16 +50,8 @@ export const AuthProvider = ({ children }) => {
     schoolID: string,
     email: string
   ) => {
-    await setContextVarsBasedOnToken(
-      await signup(username, displayName, password, schoolID, email).catch(
-        (error: Error) => {
-          throw error;
-        }
-      )
-    ).catch((error: Error) => {
-      displayError(error);
-      return null;
-    });
+    const token: Token = await signup(username, displayName, password, schoolID, email)
+    await setContextVarsBasedOnToken(token)
     setSignupValues({
       SchoolID: undefined,
       Name: undefined,

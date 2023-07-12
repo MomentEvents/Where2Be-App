@@ -17,9 +17,10 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import * as Updates from "expo-updates"
+import { CustomError } from "../../../constants/error";
 
 const SettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
@@ -90,8 +91,13 @@ const SettingsScreen = () => {
               .then(() => {
                 setLoading(false);
               })
-              .catch((error: Error) => {
-                displayError(error);
+              .catch((error: CustomError) => {
+                if(error.showBugReportDialog){
+                  showBugReportPopup(error)
+                }
+                else {
+                  displayError(error);
+                }
                 setLoading(false);
               });
           },

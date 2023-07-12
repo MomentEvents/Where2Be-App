@@ -21,7 +21,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
-import { displayError } from "../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
@@ -54,7 +54,10 @@ const EventViewer = (props: EventViewerProps) => {
         setCategoryNameToEventsMap(map);
       })
       .catch((error: CustomError) => {
-        if (error.shouldDisplay) {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else if (error.shouldDisplay) {
           displayError(error);
         }
         setShowRetry(true);

@@ -39,6 +39,7 @@ import {
   checkIfStringIsAlphanumeric,
   checkIfStringIsReadable,
   displayError,
+  showBugReportPopup,
 } from "../../../helpers/helpers";
 import { updateUser } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
@@ -49,6 +50,7 @@ import { ScreenContext } from "../../../contexts/ScreenContext";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
+import { CustomError } from "../../../constants/error";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -101,8 +103,13 @@ const EditProfileScreen = ({ route }) => {
         updateUserIDToUser({id: createdUser.UserID, user: createdUser})
         navigation.goBack();
       })
-      .catch((error: Error) => {
-        displayError(error);
+      .catch((error: CustomError) => {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else{
+          displayError(error);
+        }
         setLoading(false);
       });
   };

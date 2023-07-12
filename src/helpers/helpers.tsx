@@ -1,5 +1,5 @@
 import { Event } from "../constants";
-import { CustomError, NetworkError } from "../constants/error";
+import { ServerError, CustomError, NetworkError, UserError } from "../constants/error";
 
 /***********************************
  * checkIfStringIsEmail
@@ -186,8 +186,12 @@ export async function responseHandler<CustomType>(response: Response, message: s
     throw new NetworkError(message);
   }
   if (!response.ok) {
-    const responseMessage = await response.text();
-    throw new CustomError("Error " + response.status, responseMessage, true);
+    let responseMessage = await response.text();
+    if(response.status === 500){
+      responseMessage = message + "\n\nPlease send a bug report :) We'll fix it ASAP!"
+      throw new ServerError(responseMessage)
+    }
+    throw new UserError("Error " + response.status, responseMessage);
   }
 
   if(!doParseData){
@@ -196,4 +200,55 @@ export async function responseHandler<CustomType>(response: Response, message: s
 
   const responseJSON = await response.json();
   return responseJSON as CustomType;
+}
+
+export function showBugReportPopup(error: ServerError){
+  Alert.alert(
+    error.name,
+    error.message,
+    [
+      {
+        text: 'Send bug report',
+        onPress: () => Linking.openURL('https://where2be.app/discord'),
+      },
+      {
+        text: 'Not now',
+        style: 'cancel',
+      },
+    ],
+  );
+}
+
+export function showAppFeedbackPopup(){
+  Alert.alert(
+    'Send App Feedback',
+    'We would love to hear what you think of Where2Be!',
+    [
+      {
+        text: 'Send feedback',
+        onPress: () => Linking.openURL('https://where2be.app/feedback'),
+      },
+      {
+        text: 'Not now',
+        style: 'cancel',
+      },
+    ],
+  );
+}
+
+export function discordInvitePopup(){
+  Alert.alert(
+    'Welcome to Where2Be!',
+    'Join our Discord to get the latest updates',
+    [
+      {
+        text: 'Join our Discord',
+        onPress: () => Linking.openURL('https://where2be.app/discord'),
+      },
+      {
+        text: 'Not now',
+        style: 'cancel',
+      },
+    ],
+  );
 }

@@ -30,6 +30,7 @@ import { CustomError } from "../../../../constants/error";
 import {
   checkIfStringIsEmail,
   displayError,
+  showBugReportPopup,
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { McTextInput } from "../../../../components/Styled/styled";
@@ -61,7 +62,12 @@ const SignupEmailScreen = () => {
         navigator.navigate(SCREENS.Onboarding.SignupPasswordScreen);
       })
       .catch((error: CustomError) => {
-        displayError(error);
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else {
+          displayError(error);
+        }
       })
       .finally(() => {
         setLoading(false);

@@ -40,7 +40,7 @@ import {
   removeUserShoutoutEvent,
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError, formatError } from "../../../helpers/helpers";
+import { displayError, formatError, showBugReportPopup } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
@@ -161,9 +161,14 @@ const EventDetailsScreen = ({ route }) => {
                 });
                 navigation.goBack();
               })
-              .catch((error: Error) => {
+              .catch((error: CustomError) => {
+                if(error.showBugReportDialog){
+                  showBugReportPopup(error)
+                }
+                else{
+                  displayError(error);
+                }
                 setLoading(false);
-                displayError(error);
               });
           },
         },
@@ -226,7 +231,10 @@ const EventDetailsScreen = ({ route }) => {
             .catch((error: CustomError) => {
               if (!gotError) {
                 gotError = true;
-                if (error.shouldDisplay) {
+                if(error.showBugReportDialog){
+                  showBugReportPopup(error)
+                }
+                else if (error.shouldDisplay) {
                   displayError(error);
                 }
                 setShowRetry(true);
@@ -243,7 +251,10 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: CustomError) => {
         if (!gotError) {
           gotError = true;
-          if (error.shouldDisplay) {
+          if(error.showBugReportDialog){
+            showBugReportPopup(error)
+          }
+          else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);
@@ -259,7 +270,10 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: CustomError) => {
         if (!gotError) {
           gotError = true;
-          if (error.shouldDisplay) {
+          if(error.showBugReportDialog){
+            showBugReportPopup(error)
+          }
+          else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);

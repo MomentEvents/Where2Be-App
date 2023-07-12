@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
@@ -49,7 +49,10 @@ const HomeScreen = () => {
       .catch((error: CustomError) => {
         setShowRetry(true);
         setIsRefreshing(false);
-        if (error.shouldDisplay) {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else if (error.shouldDisplay) {
           displayError(error);
         }
       });

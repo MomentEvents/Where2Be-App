@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { Event, Interest } from "../constants";
-import { min } from "moment";
-import { displayError } from "../helpers/helpers";
 import { addUserJoinEvent, addUserShoutoutEvent, removeUserJoinEvent, removeUserShoutoutEvent } from "../services/UserService";
 import { UserContext } from "./UserContext";
+import { CustomError } from "../constants/error";
+import { showBugReportPopup } from "../helpers/helpers";
 
 type EventContextType = {
   eventIDToEvent: { [key: string]: Event };
@@ -63,7 +63,10 @@ export const EventProvider = ({ children }) => {
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    ).catch((error: Error) => {
+    ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       updateEventIDToEvent({
         id: eventID,
         event: {
@@ -88,7 +91,10 @@ export const EventProvider = ({ children }) => {
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    ).catch((error: Error) => {
+    ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       updateEventIDToEvent({
         id: eventID,
         event: {
@@ -113,7 +119,10 @@ export const EventProvider = ({ children }) => {
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    ).catch((error: Error) => {
+    ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       updateEventIDToEvent({
         id: eventID,
         event: {
@@ -138,7 +147,10 @@ export const EventProvider = ({ children }) => {
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    ).catch((error: Error) => {
+    ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       updateEventIDToEvent({
         id: eventID,
         event: {

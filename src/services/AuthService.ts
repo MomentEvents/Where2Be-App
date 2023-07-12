@@ -58,7 +58,7 @@ export async function login(
       usercred: usercred,
       password: password,
     }),
-  }).catch((error: Error) => {
+  }).catch(() => {
     return undefined;
   });
 
@@ -139,7 +139,7 @@ export async function signup(
       school_id: schoolID,
       email: email
     }),
-  }).catch((error: Error) => {
+  }).catch(() => {
     return undefined
   });
 
@@ -328,7 +328,7 @@ export async function getServerStatus(version: string): Promise<void> {
     body: JSON.stringify({
       app_version: version,
     }),
-  }).catch((error: Error) => {
+  }).catch(() => {
     return undefined
   });
 
@@ -346,7 +346,7 @@ export async function checkIfUserAccessTokenIsAdmin(
     body: JSON.stringify({
       user_access_token: userAccessToken,
     }),
-  }).catch((error: Error) => {
+  }).catch(() => {
     return undefined
   });
 

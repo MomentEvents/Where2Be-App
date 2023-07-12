@@ -18,7 +18,11 @@ import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { COLORS, FONTS, SCREENS, SIZES, icons } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
-import { displayError, openURL } from "../../../helpers/helpers";
+import {
+  displayError,
+  openURL,
+  showBugReportPopup,
+} from "../../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { CONSTRAINTS } from "../../../constants/constraints";
@@ -26,6 +30,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { resetPassword } from "../../../services/AuthService";
 import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
+import { CustomError } from "../../../constants/error";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -39,8 +44,12 @@ const LoginScreen = () => {
     setLoading(true);
     userLogin(usercred, password)
       .then(() => setLoading(false))
-      .catch((error) => {
-        displayError(error);
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
+          displayError(error);
+        }
         setLoading(false);
       });
   };
@@ -55,30 +64,39 @@ const LoginScreen = () => {
 
   const onForgotPassword = () => {
     Alert.prompt(
-      'Input email',
+      "Input email",
       "To reset an account's password, type the email of the account",
       [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          style: "cancel",
         },
         {
-          text: 'Submit',
+          text: "Submit",
           onPress: (email) => {
-            setLoading(true)
-            resetPassword(email).then(() => {
-              setLoading(false)
-              Alert.alert("Link sent", "Check your email inbox for a password reset link")
-            }).catch((error: Error) => {
-              displayError(error)
-              setLoading(false)
-            })
+            setLoading(true);
+            resetPassword(email)
+              .then(() => {
+                setLoading(false);
+                Alert.alert(
+                  "Link sent",
+                  "Check your email inbox for a password reset link"
+                );
+              })
+              .catch((error: CustomError) => {
+                if (error.showBugReportDialog) {
+                  showBugReportPopup(error);
+                } else {
+                  displayError(error);
+                }
+                setLoading(false);
+              });
           },
         },
       ],
-      'plain-text',
+      "plain-text"
     );
-  }
+  };
 
   return (
     <MobileSafeView style={styles.container}>
@@ -88,7 +106,7 @@ const LoginScreen = () => {
       >
         <View style={styles.backarrowContainer}>
           <TouchableOpacity onPress={onNavigateBack}>
-          <Feather name="arrow-left" size={28} color="white" />
+            <Feather name="arrow-left" size={28} color="white" />
           </TouchableOpacity>
         </View>
         <View style={styles.welcomeTextContainer}>
@@ -120,7 +138,11 @@ const LoginScreen = () => {
           }}
         >
           <McText
-            style={{ textAlign: "center", width: SIZES.width - 80, textDecorationLine: "underline" }}
+            style={{
+              textAlign: "center",
+              width: SIZES.width - 80,
+              textDecorationLine: "underline",
+            }}
             body6
             color={COLORS.gray}
             onPress={onForgotPassword}

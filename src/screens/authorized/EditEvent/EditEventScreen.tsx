@@ -35,6 +35,7 @@ import {
   convertToStartTimeEndTime,
   displayError,
   formatError,
+  showBugReportPopup,
 } from "../../../helpers/helpers";
 import { updateEvent } from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
@@ -193,7 +194,12 @@ const EditEventScreen = ({ route }) => {
         navigation.goBack();
       })
       .catch((error: CustomError) => {
-        displayError(error);
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else{
+          displayError(error);
+        }
         setLoading(false);
       });
   };

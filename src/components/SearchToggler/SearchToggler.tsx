@@ -13,7 +13,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
-import { displayError } from "../../helpers/helpers";
 import {
   searchSchoolEvents,
   getUserHostedFutureEvents,
@@ -35,6 +34,7 @@ import { CustomError } from "../../constants/error";
 import RetryButton from "../RetryButton";
 import { McTextInput } from "../Styled/styled";
 import { AntDesign, Feather } from "@expo/vector-icons";
+import { showBugReportPopup } from "../../helpers/helpers";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
@@ -93,6 +93,9 @@ const SearchToggler = () => {
         setPulledEvents(events);
       })
       .catch((error: CustomError) => {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
         setShowRetry(true);
         console.log(error);
       });
@@ -113,6 +116,9 @@ const SearchToggler = () => {
         setPulledUsers(users);
       })
       .catch((error: CustomError) => {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
         setShowRetry(true);
         console.log(error);
       });

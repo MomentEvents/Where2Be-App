@@ -6,46 +6,64 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { icons, COLORS, SIZES } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
-import { getNotificationPreferences, setNotificationPreferences } from "../../../services/NotificationService";
+import {
+  getNotificationPreferences,
+  setNotificationPreferences,
+} from "../../../services/NotificationService";
 import { UserContext } from "../../../contexts/UserContext";
 import { NotificationPreferences } from "../../../constants/types";
 import { CustomError } from "../../../constants/error";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 
 const NotificationsSettingsScreen = () => {
   const { userToken } = useContext(UserContext);
-  const {setLoading} = useContext(ScreenContext)
+  const { setLoading } = useContext(ScreenContext);
   const navigation = useNavigation<any>();
   const [followedUsersEnabled, setFollowedUsersEnabled] = useState(false);
 
   const onSubmit = () => {
-    setLoading(true)
+    setLoading(true);
     const preferences: NotificationPreferences = {
-        DoNotifyFollowing: followedUsersEnabled
-    }
-    setNotificationPreferences(userToken.UserAccessToken, userToken.UserID, preferences).then(() => {
-        navigation.pop()
-    }).catch((error: CustomError) => {
-        displayError(error)
-    }).finally(() => {
-        setLoading(false)
-    })
-  }
+      DoNotifyFollowing: followedUsersEnabled,
+    };
+    setNotificationPreferences(
+      userToken.UserAccessToken,
+      userToken.UserID,
+      preferences
+    )
+      .then(() => {
+        navigation.pop();
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
+          displayError(error);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    setLoading(true)
-    getNotificationPreferences(
-      userToken.UserAccessToken,
-      userToken.UserID
-    ).then((preferences: NotificationPreferences) => {
-        setFollowedUsersEnabled(preferences.DoNotifyFollowing)
-    }).catch((error: CustomError) => {
-        displayError(error)
-        navigation.pop()
-    }).finally(() => {
-        setLoading(false)
-    });
+    setLoading(true);
+    getNotificationPreferences(userToken.UserAccessToken, userToken.UserID)
+      .then((preferences: NotificationPreferences) => {
+        setFollowedUsersEnabled(preferences.DoNotifyFollowing);
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
+          displayError(error);
+        }
+        navigation.pop();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -57,13 +75,13 @@ const NotificationsSettingsScreen = () => {
           navigation.goBack();
         }}
         rightButtonOnClick={() => {
-            onSubmit();
-          }}
-          rightButtonSVG={
-            <McText h3 color={COLORS.purple}>
-              Save
-            </McText>
-          }
+          onSubmit();
+        }}
+        rightButtonSVG={
+          <McText h3 color={COLORS.purple}>
+            Save
+          </McText>
+        }
       />
       <ScrollView>
         <View style={styles.buttonContainer}>

@@ -6,17 +6,24 @@ import {
   Text,
   View,
 } from "react-native";
-import { COLORS, EVENT_TOGGLER, SCREENS, User, icons } from "../../../constants";
+import {
+  COLORS,
+  EVENT_TOGGLER,
+  SCREENS,
+  User,
+  icons,
+} from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect } from "react";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { deleteUser } from "../../../services/UserService";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import { Feather } from "@expo/vector-icons";
+import { CustomError } from "../../../constants/error";
 
 type ProfileDetailsRouteParams = {
   userID: string;
@@ -50,9 +57,13 @@ const ProfileDetailsScreen = ({ route }) => {
                 setLoading(false);
                 navigation.popToTop();
               })
-              .catch((error: Error) => {
+              .catch((error: CustomError) => {
                 setLoading(false);
-                displayError(error);
+                if (error.showBugReportDialog) {
+                  showBugReportPopup(error);
+                } else {
+                  displayError(error);
+                }
               });
           },
         },

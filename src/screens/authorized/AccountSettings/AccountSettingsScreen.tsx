@@ -18,9 +18,10 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteUser, getUserEmail } from "../../../services/UserService";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { resetPassword } from "../../../services/AuthService";
+import { CustomError } from "../../../constants/error";
 
 const AccountSettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
@@ -47,13 +48,23 @@ const AccountSettingsScreen = () => {
                   .then(() => {
                     setLoading(false);
                   })
-                  .catch((error: Error) => {
-                    displayError(error);
+                  .catch((error: CustomError) => {
+                    if(error.showBugReportDialog){
+                      showBugReportPopup(error)
+                    }
+                    else{
+                      displayError(error);
+                    }
                     setLoading(false);
                   });
               })
-              .catch((error: Error) => {
-                displayError(error);
+              .catch((error: CustomError) => {
+                if(error.showBugReportDialog){
+                  showBugReportPopup(error)
+                }
+                else{
+                  displayError(error);
+                }
                 setLoading(false);
               });
           },
@@ -86,8 +97,13 @@ const AccountSettingsScreen = () => {
                     Alert.alert("Link sent", "Check your email inbox for a password reset link")
                     setLoading(false);
                   })
-                  .catch((error: Error) => {
-                    displayError(error);
+                  .catch((error: CustomError) => {
+                    if(error.showBugReportDialog){
+                      showBugReportPopup(error)
+                    }
+                    else{
+                      displayError(error);
+                    }
                     setLoading(false);
                   });
               },
@@ -96,9 +112,14 @@ const AccountSettingsScreen = () => {
           { cancelable: false }
         );
       })
-      .catch((error: Error) => {
+      .catch((error: CustomError) => {
         setLoading(false);
-        displayError(error);
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else{
+          displayError(error);
+        }
       });
   };
 

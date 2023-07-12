@@ -12,7 +12,7 @@ import { User, Event, COLORS, SCREENS } from "../../constants";
 import { McText } from "../Styled";
 import { useNavigation } from "@react-navigation/native";
 import HomeEventCard from "./HomeEventCard";
-import { displayError } from "../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import {
   addUserJoinEvent,
   addUserShoutoutEvent,
@@ -55,6 +55,9 @@ const HomeEvent = (props: HomeEventProps) => {
       userToken.UserID,
       props.event.EventID
     ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       setIsHidden(true);
     });
   };
@@ -66,6 +69,9 @@ const HomeEvent = (props: HomeEventProps) => {
       userToken.UserID,
       props.event.EventID
     ).catch((error: CustomError) => {
+      if(error.showBugReportDialog){
+        showBugReportPopup(error)
+      }
       setIsHidden(false);
     });
   };

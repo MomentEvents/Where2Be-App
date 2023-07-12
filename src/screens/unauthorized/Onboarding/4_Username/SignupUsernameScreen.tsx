@@ -24,7 +24,7 @@ import { CONSTRAINTS } from "../../../../constants/constraints";
 import { ScreenContext } from "../../../../contexts/ScreenContext";
 import { checkUsernameAvailability } from "../../../../services/AuthService";
 import { CustomError } from "../../../../constants/error";
-import { displayError } from "../../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { McTextInput } from "../../../../components/Styled/styled";
 
@@ -59,7 +59,12 @@ const SignupUsernameScreen = () => {
         navigator.navigate(SCREENS.Onboarding.SignupEmailScreen);
       })
       .catch((error: CustomError) => {
-        displayError(error);
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else{
+          displayError(error);
+        }
       })
       .finally(() => {
         setLoading(false);

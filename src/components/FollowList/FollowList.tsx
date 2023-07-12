@@ -12,7 +12,7 @@ import { COLORS, User } from "../../constants";
 import { getUserFollowers, getUserFollowing } from "../../services/UserService";
 import { UserContext } from "../../contexts/UserContext";
 import { CustomError } from "../../constants/error";
-import { displayError } from "../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import RetryButton from "../RetryButton";
 import { McText } from "../Styled";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -46,7 +46,10 @@ const FollowList = (props: FollowListProps) => {
           setUsers(users);
         })
         .catch((error: CustomError) => {
-          if (error.shouldDisplay) {
+          if(error.showBugReportDialog){
+            showBugReportPopup(error)
+          }
+          else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);
@@ -58,7 +61,10 @@ const FollowList = (props: FollowListProps) => {
           setUsers(users);
         })
         .catch((error: CustomError) => {
-          if (error.shouldDisplay) {
+          if(error.showBugReportDialog){
+            showBugReportPopup(error)
+          }
+          else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);

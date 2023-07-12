@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
-import { displayError } from "../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import {
   getUserHostedFutureEvents,
   getUserHostedPastEvents,
@@ -213,6 +213,8 @@ const EventToggler = (props: EventTogglerProps) => {
   const pullData = async () => {
     setUserPulled(false);
     setShowRetry(false);
+    let errorThrown = false;
+
     if (props.showProfileSection) {
       getUser(userToken.UserAccessToken, props.selectedUserID)
         .then((pulledUser: User) => {
@@ -222,8 +224,13 @@ const EventToggler = (props: EventTogglerProps) => {
           updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
         })
         .catch((error: CustomError) => {
-          if (error.shouldDisplay) {
-            displayError(error);
+          if (!errorThrown) {
+            errorThrown = true;
+            if (error.showBugReportDialog) {
+              showBugReportPopup(error);
+            } else if (error.shouldDisplay) {
+              displayError(error);
+            }
           }
           setShowRetry(true);
         });
@@ -243,8 +250,13 @@ const EventToggler = (props: EventTogglerProps) => {
           .catch((error: CustomError) => {
             setIsRefreshing(false);
             setShowRetry(true);
-            if (error.shouldDisplay) {
-              displayError(error);
+            if (!errorThrown) {
+              errorThrown = true;
+              if (error.showBugReportDialog) {
+                showBugReportPopup(error);
+              } else if (error.shouldDisplay) {
+                displayError(error);
+              }
             }
           })
       : getUserHostedFutureEvents(
@@ -258,8 +270,13 @@ const EventToggler = (props: EventTogglerProps) => {
           .catch((error: CustomError) => {
             setIsRefreshing(false);
             setShowRetry(true);
-            if (error.shouldDisplay) {
-              displayError(error);
+            if (!errorThrown) {
+              errorThrown = true;
+              if (error.showBugReportDialog) {
+                showBugReportPopup(error);
+              } else if (error.shouldDisplay) {
+                displayError(error);
+              }
             }
           });
     props.eventsToPull === EVENT_TOGGLER.JoinedEvents
@@ -271,8 +288,13 @@ const EventToggler = (props: EventTogglerProps) => {
           .catch((error: CustomError) => {
             setIsRefreshing(false);
             setShowRetry(true);
-            if (error.shouldDisplay) {
-              displayError(error);
+            if (!errorThrown) {
+              errorThrown = true;
+              if (error.showBugReportDialog) {
+                showBugReportPopup(error);
+              } else if (error.shouldDisplay) {
+                displayError(error);
+              }
             }
           })
       : getUserHostedPastEvents(userToken.UserAccessToken, props.selectedUserID)
@@ -283,8 +305,13 @@ const EventToggler = (props: EventTogglerProps) => {
           .catch((error: CustomError) => {
             setIsRefreshing(false);
             setShowRetry(true);
-            if (error.shouldDisplay) {
-              displayError(error);
+            if (!errorThrown) {
+              errorThrown = true;
+              if (error.showBugReportDialog) {
+                showBugReportPopup(error);
+              } else if (error.shouldDisplay) {
+                displayError(error);
+              }
             }
           });
   };

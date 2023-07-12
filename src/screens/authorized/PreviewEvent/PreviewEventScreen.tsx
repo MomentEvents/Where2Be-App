@@ -24,7 +24,7 @@ import {
 } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError } from "../../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import { createEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
@@ -39,6 +39,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Hyperlink from "react-native-hyperlink";
+import { CustomError } from "../../../constants/error";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -104,8 +105,12 @@ const EventDetailsScreen = ({ route }) => {
         navigation.popToTop();
         navigation.push(SCREENS.EventDetails, { eventID: eventID });
       })
-      .catch((error: Error) => {
-        displayError(error);
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
+          displayError(error);
+        }
         setLoading(false);
       });
   };

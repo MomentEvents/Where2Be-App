@@ -2,7 +2,6 @@ import { useState } from "react";
 import { SafeAreaView, TouchableOpacity, StyleSheet } from "react-native";
 import { COLORS, Interest } from "../../../constants";
 import { McText } from "../../Styled";
-import { displayError, formatError } from "../../../helpers/helpers";
 
 type InterestButtonProps = {
   tag: Interest;

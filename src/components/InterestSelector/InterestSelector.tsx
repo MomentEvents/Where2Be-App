@@ -13,7 +13,7 @@ import {
   getAllInterests,
   getEventInterestsByEventId,
 } from "../../services/InterestService";
-import { displayError } from "../../helpers/helpers";
+import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import InterestButton from "./components/InterestButton";
@@ -58,7 +58,10 @@ const InterestSelector = (props: InterestSelectorProps) => {
       })
       .catch((error: CustomError) => {
         setShowRetry(true);
-        if (error.shouldDisplay){
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else if (error.shouldDisplay) {
           displayError(error);
         }
       });

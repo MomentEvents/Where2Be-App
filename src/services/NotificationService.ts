@@ -75,7 +75,7 @@ export async function registerPushNotificationToken(
 
   await responseHandler<void>(
     response,
-    "Unable to register push notifications. Please try again later",
+    "Unable to register push notifications",
     false
   );
 }
@@ -108,7 +108,7 @@ export async function unregisterPushNotificationToken(
 
   await responseHandler<void>(
     response,
-    "Cannot get push notification settings",
+    "Cannot unregister push notification",
     false
   );
 }
