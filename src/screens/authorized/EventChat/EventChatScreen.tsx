@@ -215,7 +215,7 @@ const EventChatScreen = ({ route }) => {
         }}
       >
         {messages.length === 0 && pulledFirebaseMessages && (
-          <McText h2 style={{ textAlign: "center", marginTop: 20 }}>
+          <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
             No updates yet!
           </McText>
         )}
