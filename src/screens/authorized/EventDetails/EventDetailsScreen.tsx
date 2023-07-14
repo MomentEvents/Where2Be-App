@@ -507,13 +507,12 @@ const EventDetailsScreen = ({ route }) => {
                 style={{
                   padding: 10,
                   flexDirection: "row",
-                  borderColor: COLORS.gray,
                   borderRadius: 5,
                   alignSelf: "flex-start",
                   marginTop: 20,
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: COLORS.gray2,
+                  backgroundColor: COLORS.purple,
                 }}
                 onPress={onChatPressed}
               >

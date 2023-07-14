@@ -174,7 +174,6 @@ const EventChatScreen = ({ route }) => {
           ? "Write an event update"
           : "Only hosts can write updates"
       }
-      composerHeight="auto"
       textInputStyle={{
         color: COLORS.white,
         backgroundColor: COLORS.gray2,
