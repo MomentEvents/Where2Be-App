@@ -28,6 +28,7 @@ import SignupEmailScreen from "../screens/unauthorized/Onboarding/5_Email/Signup
 import SignupPasswordScreen from "../screens/unauthorized/Onboarding/6_Password/SignupPasswordScreen";
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/7_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
+import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -86,6 +87,7 @@ const AppStack = () => {
       <Stack.Screen name={SCREENS.Home} component={HomeScreen}/>
       <Stack.Screen name={SCREENS.AccountFollowList} component={AccountFollowListScreen}/>
       <Stack.Screen name={SCREENS.NotificationsSettings} component={NotificationsSettingsScreen}/>
+      <Stack.Screen name={SCREENS.EventChat} component={EventChatScreen}/>
     </Stack.Navigator>
   );
 };

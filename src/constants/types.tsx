@@ -96,3 +96,9 @@ export type SignupValues = {
 export type NotificationPreferences = {
   DoNotifyFollowing: boolean;
 }
+
+export type FirebaseEventMessage = {
+  user_id: string,
+  message: string,
+  timestamp: string,
+}

@@ -40,7 +40,11 @@ import {
   removeUserShoutoutEvent,
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError, formatError, showBugReportPopup } from "../../../helpers/helpers";
+import {
+  displayError,
+  formatError,
+  showBugReportPopup,
+} from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
@@ -162,10 +166,9 @@ const EventDetailsScreen = ({ route }) => {
                 navigation.goBack();
               })
               .catch((error: CustomError) => {
-                if(error.showBugReportDialog){
-                  showBugReportPopup(error)
-                }
-                else{
+                if (error.showBugReportDialog) {
+                  showBugReportPopup(error);
+                } else {
                   displayError(error);
                 }
                 setLoading(false);
@@ -179,6 +182,10 @@ const EventDetailsScreen = ({ route }) => {
 
   const onBackPressed = () => {
     navigation.goBack();
+  };
+
+  const onChatPressed = () => {
+    navigation.push(SCREENS.EventChat, { eventID: eventID });
   };
 
   // For description expansion
@@ -219,10 +226,7 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
-        if (
-          (!userIDToUser[pulledEvent.HostUserID]) ||
-          useRefRefreshing.current
-        ) {
+        if (!userIDToUser[pulledEvent.HostUserID] || useRefRefreshing.current) {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
               setHost(pulledHost);
@@ -231,10 +235,9 @@ const EventDetailsScreen = ({ route }) => {
             .catch((error: CustomError) => {
               if (!gotError) {
                 gotError = true;
-                if(error.showBugReportDialog){
-                  showBugReportPopup(error)
-                }
-                else if (error.shouldDisplay) {
+                if (error.showBugReportDialog) {
+                  showBugReportPopup(error);
+                } else if (error.shouldDisplay) {
                   displayError(error);
                 }
                 setShowRetry(true);
@@ -251,10 +254,9 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: CustomError) => {
         if (!gotError) {
           gotError = true;
-          if(error.showBugReportDialog){
-            showBugReportPopup(error)
-          }
-          else if (error.shouldDisplay) {
+          if (error.showBugReportDialog) {
+            showBugReportPopup(error);
+          } else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);
@@ -270,10 +272,9 @@ const EventDetailsScreen = ({ route }) => {
       .catch((error: CustomError) => {
         if (!gotError) {
           gotError = true;
-          if(error.showBugReportDialog){
-            showBugReportPopup(error)
-          }
-          else if (error.shouldDisplay) {
+          if (error.showBugReportDialog) {
+            showBugReportPopup(error);
+          } else if (error.shouldDisplay) {
             displayError(error);
           }
           setShowRetry(true);
@@ -408,7 +409,11 @@ const EventDetailsScreen = ({ route }) => {
                       borderRadius: 13,
                     }}
                   >
-                    <MaterialCommunityIcons name="arrow-expand" size={23} color="white" />
+                    <MaterialCommunityIcons
+                      name="arrow-expand"
+                      size={23}
+                      color="white"
+                    />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>
@@ -485,16 +490,43 @@ const EventDetailsScreen = ({ route }) => {
           </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>
-              <McText
-                h1
+              <View style={{ flex: 1 }}>
+                <McText
+                  h1
+                  style={{
+                    marginTop: 10,
+                    marginRight: 10,
+                  }}
+                >
+                  {eventIDToEvent[eventID] === undefined
+                    ? null
+                    : eventIDToEvent[eventID].Title}
+                </McText>
+              </View>
+              <TouchableOpacity
                 style={{
-                  marginTop: 10,
+                  padding: 10,
+                  flexDirection: "row",
+                  borderColor: COLORS.gray,
+                  borderRadius: 5,
+                  alignSelf: "flex-start",
+                  marginTop: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: COLORS.gray2,
                 }}
+                onPress={onChatPressed}
               >
-                {eventIDToEvent[eventID] === undefined
-                  ? null
-                  : eventIDToEvent[eventID].Title}
-              </McText>
+                <Ionicons
+                  style={{ marginRight: 10 }}
+                  name="chatbox"
+                  size={20}
+                  color="white"
+                />
+                <McText h5 color={COLORS.white}>
+                  Chat
+                </McText>
+              </TouchableOpacity>
             </TitleSection>
             <InterestSection>
               <ScrollView
@@ -604,7 +636,8 @@ const EventDetailsScreen = ({ route }) => {
                   </Hyperlink>
 
                   {lengthMoreText ? (
-                    <McText body4
+                    <McText
+                      body4
                       onPress={descriptionToggleNumberOfLines}
                       style={{
                         lineHeight: 22,
