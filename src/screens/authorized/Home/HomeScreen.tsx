@@ -83,7 +83,7 @@ const HomeScreen = () => {
         }
         style={{ backgroundColor: COLORS.black }}
         data={eventsAndHosts}
-        keyExtractor={(item) => "homescreeneventcard" + item[0].Event.EventID}
+        keyExtractor={(item, index) => "homescreeneventcard" + index + item[0].Event.EventID}
         ListEmptyComponent={() => (
           !isLoading && !isRefreshing && !showRetry && <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
             Nothing to see here yet!
@@ -115,7 +115,6 @@ const HomeScreen = () => {
         }
         renderItem={({ item }) => (
           <HomeEvent
-            key={"homescreeneventcard" + item[0].Event.EventID}
             event={item[0].Event}
             user={item[0].Host}
             reason={item[0].Reason}

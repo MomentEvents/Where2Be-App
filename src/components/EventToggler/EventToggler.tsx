@@ -330,9 +330,6 @@ const EventToggler = (props: EventTogglerProps) => {
     return (
       <View
         style={{ alignItems: "center", marginTop: 15 }}
-        key={
-          event.EventID + props.selectedUserID + props.eventsToPull + " Event"
-        }
       >
         <EventCard
           width={SIZES.width - 40}
@@ -413,8 +410,8 @@ const EventToggler = (props: EventTogglerProps) => {
         }
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.8}
-        keyExtractor={(item) =>
-          item.EventID + props.selectedUserID + props.eventsToPull + " Event"
+        keyExtractor={(item, index) =>
+          item.EventID + props.selectedUserID + props.eventsToPull + " Event" + index
         }
       />
     </View>

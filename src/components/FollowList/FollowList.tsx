@@ -171,7 +171,7 @@ const FollowList = (props: FollowListProps) => {
         }
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.8}
-        keyExtractor={(item) => item.UserID + "Flatlist result"}
+        keyExtractor={(item, index) => item.UserID + "Flatlist result" + index}
       />
     </View>
   );
