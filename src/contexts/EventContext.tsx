@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 import { Event, Interest } from "../constants";
 import { addUserJoinEvent, addUserShoutoutEvent, removeUserJoinEvent, removeUserShoutoutEvent } from "../services/UserService";
 import { UserContext } from "./UserContext";
@@ -20,7 +20,8 @@ type EventContextType = {
   clientAddUserShoutout: (eventID: string) => void;
   clientRemoveUserJoin: (eventID: string) => void;
   clientRemoveUserShoutout: (eventID: string) => void;
-
+  joinedEventsIDs: string[];
+  setJoinedEventsIDs: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export const EventContext = createContext<EventContextType>({
@@ -32,6 +33,8 @@ export const EventContext = createContext<EventContextType>({
   clientAddUserShoutout: null,
   clientRemoveUserJoin: null,
   clientRemoveUserShoutout: null,
+  joinedEventsIDs: null,
+  setJoinedEventsIDs: null,
 });
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
@@ -40,6 +43,9 @@ export const EventProvider = ({ children }) => {
     {}
   );
   const {userToken} = useContext(UserContext)
+  
+  const [joinedEventsIDs, setJoinedEventsIDs] = useState<string[]>()
+
 
   function setEventMap(
     map: { [key: string]: Event },
@@ -182,6 +188,8 @@ export const EventProvider = ({ children }) => {
         clientAddUserShoutout,
         clientRemoveUserJoin,
         clientRemoveUserShoutout,
+        joinedEventsIDs, 
+        setJoinedEventsIDs,
       }}
     >
       {children}
