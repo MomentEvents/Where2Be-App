@@ -16,6 +16,7 @@ import {
 
 import styles from "./style";
 import { COLORS } from "../../../constants/theme";
+import { McText } from "../../Styled";
 
 let componentIndex = 0;
 
@@ -339,6 +340,7 @@ export default class ModalSelector extends React.Component {
   renderFlatlistOption =
     (filteredData) =>
     ({ item, index }) => {
+      console.log(filteredData.length);
       if (item.section) {
         return this.renderSection(item);
       }
@@ -417,16 +419,23 @@ export default class ModalSelector extends React.Component {
 
     const filteredData = this.onSearchFilterer(data);
 
-    let options = filteredData.map((item, index) => {
-      if (item.section) {
-        return this.renderSection(item);
-      }
-      return this.renderOption(
-        item,
-        index === filteredData.length - 1,
-        index === 0
+    let options =
+      filteredData.length === 0 ? (
+        <McText style={{ textAlign: "center" }} h4>
+          No Results Found!
+        </McText>
+      ) : (
+        filteredData.map((item, index) => {
+          if (item.section) {
+            return this.renderSection(item);
+          }
+          return this.renderOption(
+            item,
+            index === filteredData.length - 1,
+            index === 0
+          );
+        })
       );
-    });
 
     let Overlay = View;
     let overlayProps = {
@@ -482,6 +491,11 @@ export default class ModalSelector extends React.Component {
                 accessibilityLabel={scrollViewAccessibilityLabel}
                 keyExtractor={this.props.keyExtractor}
                 renderItem={this.renderFlatlistOption(filteredData)}
+                ListEmptyComponent={
+                  <McText style={{ textAlign: "center" }} h4>
+                    No Results Found!
+                  </McText>
+                }
               />
             ) : (
               <ScrollView

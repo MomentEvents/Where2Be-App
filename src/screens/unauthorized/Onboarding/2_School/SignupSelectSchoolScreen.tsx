@@ -76,6 +76,7 @@ const SignupSelectSchoolScreen = () => {
             borderRadius: 5,
             borderWidth: 0,
           }}
+          
           initialText={"Select your school"}
         />
         <McText

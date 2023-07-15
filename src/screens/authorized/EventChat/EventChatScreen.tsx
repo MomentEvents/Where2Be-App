@@ -10,6 +10,7 @@ import {
   View,
   ActivityIndicator,
   Alert,
+  Keyboard,
 } from "react-native";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { COLORS, FONTS } from "../../../constants";
@@ -49,6 +50,27 @@ const EventChatScreen = ({ route }) => {
   const { eventIDToEvent } = useContext(EventContext);
   const { userToken } = useContext(UserContext);
   const insets = useSafeAreaInsets();
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const [pulledFirebaseMessages, setPulledFirebaseMessages] =
     useState<FirebaseEventMessage[]>();
@@ -89,12 +111,11 @@ const EventChatScreen = ({ route }) => {
       {...props}
       containerStyle={{
         backgroundColor: COLORS.black,
-        paddingTop: 6,
+        paddingTop: 2,
         paddingHorizontal: 20,
       }}
       primaryStyle={{ alignItems: "center" }}
-      renderSend={renderSend}
-    />
+      renderSend={renderSend}/>
   );
 
   const renderSend = (props) => (
@@ -113,37 +134,39 @@ const EventChatScreen = ({ route }) => {
     </Send>
   );
 
-  const renderMessage = (props) => <Message {...props} />;
+  const renderMessage = (props) => (
+    <Message {...props} containerStyle={{ padding: 10}} />
+  );
 
-  // const renderBubble = (props) => (
-  //   <Bubble
-  //     {...props}
-  //     // renderTime={() => <Text>Time</Text>}
-  //     // renderTicks={() => <Text>Ticks</Text>}
-  //     containerStyle={{
-  //       left: { borderColor: 'teal', borderWidth: 8 },
-  //       right: {},
-  //     }}
-  //     wrapperStyle={{
-  //       left: { borderColor: 'tomato', borderWidth: 4 },
-  //       right: {},
-  //     }}
-  //     bottomContainerStyle={{
-  //       left: { borderColor: 'purple', borderWidth: 4 },
-  //       right: {},
-  //     }}
-  //     tickStyle={{}}
-  //     usernameStyle={{ color: 'tomato', fontWeight: '100' }}
-  //     containerToNextStyle={{
-  //       left: { borderColor: 'navy', borderWidth: 4 },
-  //       right: {},
-  //     }}
-  //     containerToPreviousStyle={{
-  //       left: { borderColor: 'mediumorchid', borderWidth: 4 },
-  //       right: {},
-  //     }}
-  //   />
-  // );
+  const renderBubble = (props) => (
+    <Bubble
+      {...props}
+      // renderTime={() => <Text>Time</Text>}
+      // renderTicks={() => <Text>Ticks</Text>}
+      containerStyle={{
+        left: { borderColor: 'teal', borderWidth: 8 },
+        right: {},
+      }}
+      wrapperStyle={{
+        left: { borderColor: 'tomato', borderWidth: 4 },
+        right: {},
+      }}
+      bottomContainerStyle={{
+        left: { borderColor: 'purple', borderWidth: 4 },
+        right: {},
+      }}
+      tickStyle={{}}
+      usernameStyle={{ color: 'tomato', fontWeight: '100' }}
+      containerToNextStyle={{
+        left: { borderColor: 'navy', borderWidth: 4 },
+        right: {},
+      }}
+      containerToPreviousStyle={{
+        left: { borderColor: 'mediumorchid', borderWidth: 4 },
+        right: {},
+      }}
+    />
+  );
 
   const renderMessageText = (props) => (
     <MessageText
@@ -157,6 +180,7 @@ const EventChatScreen = ({ route }) => {
         right: { color: COLORS.white },
       }}
       customTextStyle={{
+        padding: 5,
         fontSize: 16,
         fontFamily: CUSTOMFONT_SEMIBOLD,
         lineHeight: 20,
@@ -177,10 +201,11 @@ const EventChatScreen = ({ route }) => {
       textInputStyle={{
         color: COLORS.white,
         backgroundColor: COLORS.gray2,
-        borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 15,
         borderColor: COLORS.gray1,
-        paddingTop: 8.5,
+        justifyContent: "center",
+        textAlignVertical: "center",
+        paddingTop: 10,
         paddingHorizontal: 12,
         alignSelf: "center",
         marginLeft: 0,
@@ -189,9 +214,6 @@ const EventChatScreen = ({ route }) => {
           eventIDToEvent[eventID].HostUserID !== userToken.UserID
             ? CUSTOMFONT_BOLD
             : CUSTOMFONT_LIGHT,
-        fontSize: 15,
-        alignItems: "center",
-        justifyContent: "center",
       }}
     />
   );
@@ -211,7 +233,7 @@ const EventChatScreen = ({ route }) => {
         style={{
           flex: 1,
           backgroundColor: COLORS.black,
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + 10,
         }}
       >
         {messages.length === 0 && pulledFirebaseMessages && (
@@ -235,7 +257,7 @@ const EventChatScreen = ({ route }) => {
           renderInputToolbar={renderInputToolbar}
           renderMessage={renderMessage}
           renderMessageText={renderMessageText}
-          // renderBubble={renderBubble}
+          renderBubble={renderBubble}
         />
       </View>
     </MobileSafeView>
@@ -251,17 +273,6 @@ const styles = StyleSheet.create({
   chatContainer: {
     flex: 1,
     backgroundColor: COLORS.black,
-  },
-  writeMessageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 10,
-  },
-  inputField: {
-    flex: 1,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 5,
   },
 });
 

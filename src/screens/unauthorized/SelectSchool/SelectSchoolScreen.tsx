@@ -15,7 +15,6 @@ import {
   FONTS,
   icons,
   SIZES,
-  images,
   School,
   SCREENS,
 } from "../../../constants";
@@ -91,6 +90,7 @@ const SelectSchoolScreen = ({ route }) => {
             textStyle={{
               color: COLORS.white,
               fontFamily: CUSTOMFONT_BOLD,
+              fontSize: 20,
               paddingHorizontal: 10,
               paddingVertical: 3,
             }}
@@ -101,7 +101,6 @@ const SelectSchoolScreen = ({ route }) => {
               borderWidth: 0,
             }}
             initialText={"Select your school"}
-            maxHeight={130}
           />
         </View>
         <View
@@ -111,13 +110,13 @@ const SelectSchoolScreen = ({ route }) => {
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
-            <McText body3>Sign in</McText>
+            <McText body4>Sign in</McText>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ alignSelf: "center", marginTop: 20, marginBottom: 20 }}
             onPress={onNavigateSignup}
           >
-            <McText body3>Create an account</McText>
+            <McText body4>Create an account</McText>
           </TouchableOpacity>
         </View>
       </View>

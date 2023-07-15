@@ -22,19 +22,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import RetryButton from "../../components/RetryButton";
 import { CustomError } from "../../constants/error";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { McText } from "../Styled";
 
 type SchoolSelectorProps = {
   onSelectSchool: (school: School) => void;
   textStyle: any;
   buttonStyle: any;
   initialText: string;
-  maxHeight?: number;
   maxLines?: number;
-};
-
-type SchoolSelectorState = {
-  selectionData: [{ key: string; label: string }];
-  textInputValue: string;
 };
 
 const SchoolSearchSelector = (props: SchoolSelectorProps) => {
@@ -42,7 +37,6 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
 
   const [selectionData, setSelectionData] =
     useState<[{ key?: string; label?: string }]>(null);
-  const [textInputValue, setTextInputValue] = useState<string>("");
   const [schoolMap, setSchoolMap] = useState<{ [key: string]: School }>(
     undefined
   );
@@ -100,72 +94,8 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
     console.log(schoolMap !== null && selectionData !== null);
   }, [schoolMap, selectionData]);
 
-  if (props.maxHeight) {
-    return (
-      <View style={{ height: props.maxHeight }}>
-        {componentLoaded ? (
-          <ModalSelector
-            renderItem={(item) => {
-              return <></>;
-            }}
-            frozenSearch={true}
-            searchStyle={{
-              backgroundColor: "rgba(90,90,90,0.5)",
-              paddingHorizontal: 10,
-              marginTop: 10,
-              marginBottom: 20,
-              borderWidth: 0,
-            }}
-            searchTextStyle={{
-              color: COLORS.lightGray,
-              fontFamily: CUSTOMFONT_REGULAR,
-              fontSize: 15,
-            }}
-            data={selectionData}
-            optionContainerStyle={{
-              backgroundColor: "rgba(60,60,60,0.9)",
-              marginTop: insets.top + 10,
-            }}
-            optionTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
-            }}
-            cancelTextStyle={{
-              color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
-            }}
-            cancelStyle={{
-              backgroundColor: "rgba(60,60,60,0.9)",
-              marginBottom: insets.bottom + 10,
-            }}
-            onChange={(option) => {
-              props.onSelectSchool(schoolMap[option.key]);
-            }}
-            // Initial Text
-            initValue={props.initialText}
-            // Text style
-            selectTextStyle={props.textStyle}
-            // Button
-            selectStyle={props.buttonStyle}
-            // Text style
-            initValueTextStyle={props.textStyle}
-            maxLines={props.maxLines}
-          />
-        ) : // LOAD THIS
-        showRetry ? (
-          <RetryButton
-            setShowRetry={setShowRetry}
-            retryCallBack={handlePopulateSchools}
-            style={{ alignItems: "center", justifyContent: "center" }}
-          />
-        ) : (
-          <ActivityIndicator color={COLORS.white} size="small" />
-        )}
-      </View>
-    );
-  }
   return (
-    <View style={{ justifyContent: "center" }}>
+    <View style={{ justifyContent: "center"}}>
       {componentLoaded ? (
         <ModalSelector
           renderItem={(item) => {
@@ -245,6 +175,17 @@ const styles = StyleSheet.create({
     top: 0,
     height: "100%",
   },
+  EmptytextHeader: {
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+},
+EmptyMassage: {
+   color:'red',
+    fontWeight: '700',
+    fontSize: 16,
+    fontStyle: 'normal',
+},
 });
 
 export default SchoolSearchSelector;
