@@ -31,6 +31,7 @@ import { resetPassword } from "../../../services/AuthService";
 import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
+import { analytics } from "../../../services/FirebaseService";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
@@ -40,7 +41,10 @@ const LoginScreen = () => {
   const [usercred, setUsercred] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const onLogin = () => {
+  const onLogin = async() => {
+    await analytics().logEvent('test', {
+      'test': true,
+    })
     setLoading(true);
     userLogin(usercred, password)
       .then(() => setLoading(false))

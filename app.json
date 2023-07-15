@@ -27,14 +27,16 @@
       },
       "supportsTablet": false,
       "bundleIdentifier": "com.momentevents.moment",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "googleServicesFile": "./assets/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.momentevents.moment"
+      "package": "com.momentevents.moment",
+      "googleServicesFile": "./assets/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,6 +50,9 @@
         {
           "photosPermission": "Moment accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "@react-native-firebase/app"
       ]
     ],
     "extra": {
