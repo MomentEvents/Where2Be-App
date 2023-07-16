@@ -17,11 +17,15 @@ const InterestButton = (props: InterestButtonProps) => {
   const _onPress = () => {
     if(toggle){
         // We are removing an item
-        props.selectedInterests.delete(props.tag)
+        // props.selectedInterests.delete(props.tag)
+
+        props.setSelectedInterests(new Set<Interest>([]))
     }
     else{
         // We are adding an item
-        props.selectedInterests.add(props.tag)
+        // props.selectedInterests.add(props.tag)
+
+        props.setSelectedInterests(new Set<Interest>([props.tag]))
     }
     setToggle(!toggle);
   };
