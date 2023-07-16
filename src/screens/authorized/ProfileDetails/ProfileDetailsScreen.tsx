@@ -96,6 +96,7 @@ const ProfileDetailsScreen = ({ route }) => {
         selectedUserID={userID}
         eventsToPull={EVENT_TOGGLER.HostedEvents}
         showProfileSection={true}
+        doReloadIfChanged={false}
       />
     </MobileSafeView>
   );

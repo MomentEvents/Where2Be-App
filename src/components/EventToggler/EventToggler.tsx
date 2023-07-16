@@ -29,16 +29,21 @@ import { CustomError } from "../../constants/error";
 import { getUser } from "../../services/UserService";
 import SectionProfile from "../Styled/SectionProfile";
 import { FlatList } from "react-native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { EventContext } from "../../contexts/EventContext";
 
 type EventTogglerProps = {
   selectedUserID: string;
   showProfileSection: boolean;
   eventsToPull: string;
+  doReloadIfChanged: boolean;
 };
 
 const EventToggler = (props: EventTogglerProps) => {
   const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
+
+    const {didHostedEventsChangeRef, didJoinedEventsChangeRef} = useContext(EventContext)
 
   const [pulledPastEvents, setPulledPastEvents] = useState<Event[]>(null);
   const [pulledFutureEvents, setPulledFutureEvents] = useState<Event[]>(null);
@@ -56,6 +61,32 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const canLoadPastData = useRef(true);
   const canLoadFutureData = useRef(true);
+
+  const isFocused = useIsFocused();
+
+  // Run this whenever the list is outdated and the user focuses on the app again.
+  
+  useEffect(() => {
+    if (isFocused) {
+      let doPull = false;
+      if(props.eventsToPull === EVENT_TOGGLER.HostedEvents && didHostedEventsChangeRef.current){
+        didHostedEventsChangeRef.current = false;
+        doPull = true;
+      }
+      else if(props.eventsToPull === EVENT_TOGGLER.JoinedEvents && didJoinedEventsChangeRef.current){
+        didJoinedEventsChangeRef.current = false;
+        doPull = true;
+      }
+      if(doPull){
+        setShowRetry(false);
+        setPulledFutureEvents(null);
+        canLoadFutureData.current = true;
+        setPulledPastEvents(null);
+        canLoadPastData.current = true;
+        pullData(false);
+      }
+    }
+  }, [isFocused]);
 
   const ListHeader = () => (
     <>
@@ -210,7 +241,7 @@ const EventToggler = (props: EventTogglerProps) => {
     }
   };
 
-  const pullData = async () => {
+  const pullData = async (pullUser: boolean) => {
     setUserPulled(false);
     setShowRetry(false);
     let errorThrown = false;
@@ -323,7 +354,7 @@ const EventToggler = (props: EventTogglerProps) => {
     setIsRefreshing(true);
     canLoadFutureData.current = true;
     canLoadPastData.current = true;
-    pullData();
+    pullData(true);
   };
 
   const renderEventCard = (event: Event) => {
@@ -343,7 +374,7 @@ const EventToggler = (props: EventTogglerProps) => {
   };
 
   useEffect(() => {
-    pullData();
+    pullData(true);
   }, []);
 
   useEffect(() => {
@@ -378,7 +409,7 @@ const EventToggler = (props: EventTogglerProps) => {
             {showRetry && (
               <RetryButton
                 setShowRetry={setShowRetry}
-                retryCallBack={pullData}
+                retryCallBack={() => pullData(true)}
               />
             )}
             {!showRetry &&

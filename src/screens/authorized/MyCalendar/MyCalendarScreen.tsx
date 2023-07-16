@@ -24,15 +24,13 @@ const MyCalendarScreen = ({ route }) => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader
-        title={"Joined Events"}
-        hideBottomUnderline={true}
-      />
+      <SectionHeader title={"Joined Events"} hideBottomUnderline={true} />
       <View style={{ flex: 1, backgroundColor: COLORS.black }}>
         <EventToggler
           selectedUserID={userToken.UserID}
           eventsToPull={EVENT_TOGGLER.JoinedEvents}
           showProfileSection={false}
+          doReloadIfChanged={true}
         />
       </View>
     </MobileSafeView>

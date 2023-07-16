@@ -52,6 +52,9 @@ const EventDetailsScreen = ({ route }) => {
   const { isLoggedIn, userToken, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
 
+  const { didHostedEventsChangeRef } =
+    useContext(EventContext);
+
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
 
@@ -102,6 +105,7 @@ const EventDetailsScreen = ({ route }) => {
           },
         });
         updateEventIDToEvent({ id: eventID, event: createdEvent });
+        didHostedEventsChangeRef.current = true;
         navigation.popToTop();
         navigation.push(SCREENS.EventDetails, { eventID: eventID });
       })

@@ -1,4 +1,10 @@
-import { COLORS, EVENT_TOGGLER, SCREENS, User, icons } from "../../../constants";
+import {
+  COLORS,
+  EVENT_TOGGLER,
+  SCREENS,
+  User,
+  icons,
+} from "../../../constants";
 import { UserContext } from "../../../contexts/UserContext";
 import { useContext } from "react";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
@@ -35,6 +41,7 @@ const MyProfileScreen = ({ route }) => {
         selectedUserID={userToken.UserID}
         eventsToPull={EVENT_TOGGLER.HostedEvents}
         showProfileSection={true}
+        doReloadIfChanged={true}
       />
     </MobileSafeView>
   );

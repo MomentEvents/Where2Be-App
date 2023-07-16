@@ -31,17 +31,8 @@ type EventContextType = {
   clientAddUserShoutout: (eventID: string) => void;
   clientRemoveUserJoin: (eventID: string) => void;
   clientRemoveUserShoutout: (eventID: string) => void;
-  selfHostedPastEventIDs: string[];
-  selfHostedFutureEventIDs: string[];
-  selfJoinedPastEventIDs: string[];
-  selfJoinedFutureEventIDs: string[];
-  handleUpdateEventList(
-    eventIDs: string[],
-    doAdd: boolean,
-    isFuture: boolean,
-    operation: "PushToEnd" | "Clear",
-    eventType: "Joined" | "Hosted"
-  ): void;
+  didJoinedEventsChangeRef: React.MutableRefObject<boolean>;
+  didHostedEventsChangeRef: React.MutableRefObject<boolean>;
 };
 
 export const EventContext = createContext<EventContextType>({
@@ -53,221 +44,21 @@ export const EventContext = createContext<EventContextType>({
   clientAddUserShoutout: null,
   clientRemoveUserJoin: null,
   clientRemoveUserShoutout: null,
-  selfHostedPastEventIDs: null,
-  selfHostedFutureEventIDs: null,
-  selfJoinedPastEventIDs: null,
-  selfJoinedFutureEventIDs: null,
-  handleUpdateEventList: null,
+  didJoinedEventsChangeRef: null,
+  didHostedEventsChangeRef: null,
 });
+
 export const EventProvider = ({ children }) => {
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
   const [eventIDToInterests, updateEventIDToInterests] = useReducer(
     setInterestsMap,
     {}
   );
+
+  const didJoinedEventsChangeRef = useRef(false);
+  const didHostedEventsChangeRef = useRef(false);
+
   const { userToken } = useContext(UserContext);
-
-  const [selfHostedPastEventIDs, setSelfHostedPastEventIDs] =
-    useState<string[]>();
-  const [selfHostedFutureEventIDs, setSelfHostedFutureEventIDs] =
-    useState<string[]>();
-  const [selfJoinedPastEventIDs, setSelfJoinedPastEventIDs] =
-    useState<string[]>();
-  const [selfJoinedFutureEventIDs, setSelfJoinedFutureEventIDs] =
-    useState<string[]>();
-
-  function handleUpdateEventList(
-    eventIDs: string[],
-    doAdd: boolean,
-    isFuture: boolean,
-    operation: "PushToEnd" | "Clear",
-    eventType: "Joined" | "Hosted"
-  ) {
-    // This whole function could probably be written better but this works for now
-
-    // If you wanna rewrite this you're the goat
-
-    if (operation === "Clear") {
-      if (eventType === "Joined" && isFuture) {
-        setSelfJoinedFutureEventIDs(undefined);
-      } else if (eventType === "Joined" && !isFuture) {
-        setSelfJoinedPastEventIDs(undefined);
-      } else if (eventType === "Hosted" && isFuture) {
-        setSelfHostedFutureEventIDs(undefined);
-      } else if (eventType === "Hosted" && !isFuture) {
-        setSelfHostedPastEventIDs(undefined);
-      }
-      return;
-    }
-
-    if (operation === "PushToEnd") {
-      if (eventType === "Joined") {
-        if (isFuture) {
-          if (selfJoinedFutureEventIDs) {
-            setSelfJoinedFutureEventIDs((previousList) => {
-              return previousList.concat(eventIDs);
-            });
-          } else {
-            setSelfJoinedFutureEventIDs(eventIDs);
-          }
-        } else {
-          // is past
-          if (selfJoinedPastEventIDs) {
-            setSelfJoinedPastEventIDs((previousList) => {
-              return previousList.concat(eventIDs);
-            });
-          } else {
-            setSelfJoinedPastEventIDs(eventIDs);
-          }
-        }
-      } else if (eventType === "Hosted") {
-        if (isFuture) {
-          if (selfHostedFutureEventIDs) {
-            setSelfHostedFutureEventIDs((previousList) => {
-              return previousList.concat(eventIDs);
-            });
-          } else {
-            setSelfHostedFutureEventIDs(eventIDs);
-          }
-        } else {
-          // is past
-          if (selfHostedPastEventIDs) {
-            setSelfHostedPastEventIDs((previousList) => {
-              return previousList.concat(eventIDs);
-            });
-          } else {
-            setSelfHostedPastEventIDs(eventIDs);
-          }
-        }
-      }
-      return;
-    }
-
-    if (eventIDs.length !== 1) {
-      console.warn(
-        "handleUpdateJoinedEventList improper use",
-        "eventIDs length when pushToEnd is false must be 1"
-      );
-      return;
-    }
-
-    const eventID = eventIDs[0];
-
-    if (!doAdd) {
-      if (eventType === "Joined") {
-        if (isFuture && selfJoinedFutureEventIDs) {
-          const filteredArray = selfJoinedFutureEventIDs.filter(
-            (item) => item !== eventID
-          );
-          setSelfJoinedFutureEventIDs(filteredArray);
-        } else if (!isFuture && selfJoinedPastEventIDs) {
-          // is past
-          const filteredArray = selfJoinedPastEventIDs.filter(
-            (item) => item !== eventID
-          );
-          setSelfJoinedPastEventIDs(filteredArray);
-        }
-      } else if (eventType === "Hosted") {
-        if (isFuture && selfHostedFutureEventIDs) {
-          const filteredArray = selfHostedFutureEventIDs.filter(
-            (item) => item !== eventID
-          );
-          setSelfHostedFutureEventIDs(filteredArray);
-        } else if (!isFuture && selfHostedPastEventIDs) {
-          // is past
-          const filteredArray = selfHostedPastEventIDs.filter(
-            (item) => item !== eventID
-          );
-          setSelfHostedPastEventIDs(filteredArray);
-        }
-      }
-      return;
-    }
-
-    if (!eventIDToEvent[eventID]) {
-      // Unknown error. Just put event into beginning of list
-      if (eventType === "Joined" && isFuture && selfJoinedFutureEventIDs) {
-        selfJoinedFutureEventIDs.unshift(eventID);
-      } else if (
-        eventType === "Joined" &&
-        !isFuture &&
-        selfJoinedPastEventIDs
-      ) {
-        selfJoinedPastEventIDs.unshift(eventID);
-      } else if (
-        eventType === "Hosted" &&
-        isFuture &&
-        selfHostedFutureEventIDs
-      ) {
-        selfHostedFutureEventIDs.unshift(eventID);
-      } else if (
-        eventType === "Hosted" &&
-        !isFuture &&
-        selfHostedPastEventIDs
-      ) {
-        selfHostedPastEventIDs.unshift(eventID);
-      }
-      return;
-    }
-
-    let eventIDList = null;
-
-    if (eventType === "Joined" && isFuture) {
-      eventIDList = selfJoinedFutureEventIDs;
-    } else if (eventType === "Joined" && !isFuture) {
-      eventIDList = selfJoinedPastEventIDs;
-    } else if (eventType === "Hosted" && isFuture) {
-      eventIDList = selfHostedFutureEventIDs;
-    } else if (eventType === "Hosted" && !isFuture) {
-      eventIDList = selfHostedPastEventIDs;
-    }
-
-    if (!eventIDList) {
-      return;
-    }
-
-    try {
-      let didInsert = false;
-      for (var i = 0; i < eventIDList.length - 1; i++) {
-        if (
-          isFuture &&
-          eventIDToEvent[eventIDList[i]].StartDateTime <=
-            eventIDToEvent[eventID].StartDateTime &&
-          eventIDToEvent[eventIDList[i + 1]].StartDateTime >
-            eventIDToEvent[eventID].StartDateTime
-        ) {
-          eventIDList.splice(i + 1, 0, eventID);
-          didInsert = true;
-          break;
-        } else if (
-          !isFuture &&
-          eventIDToEvent[eventIDList[i]].StartDateTime >
-            eventIDToEvent[eventID].StartDateTime &&
-          eventIDToEvent[eventIDList[i + 1]].StartDateTime <=
-            eventIDToEvent[eventID].StartDateTime
-        ) {
-          eventIDList.splice(i + 1, 0, eventID);
-          didInsert = true;
-          break;
-        }
-      }
-      if (!didInsert) {
-        eventIDList.push(eventID);
-        didInsert = true;
-      }
-      if (eventType === "Joined" && isFuture) {
-        setSelfJoinedFutureEventIDs(eventIDList);
-      } else if (eventType === "Joined" && !isFuture) {
-        setSelfJoinedPastEventIDs(eventIDList);
-      } else if (eventType === "Hosted" && isFuture) {
-        setSelfHostedFutureEventIDs(eventIDList);
-      } else if (eventType === "Hosted" && !isFuture) {
-        setSelfHostedPastEventIDs(eventIDList);
-      }
-    } catch (e) {
-      console.warn("UNABLE TO ADD EVENTID TO SELF LIST\n\n" + e);
-    }
-  }
 
   function setEventMap(
     map: { [key: string]: Event },
@@ -287,23 +78,23 @@ export const EventProvider = ({ children }) => {
         NumJoins: eventIDToEvent[eventID].NumJoins + 1,
       },
     });
-    addUserJoinEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
-      eventID
-    ).catch((error: CustomError) => {
-      if (error.showBugReportDialog) {
-        showBugReportPopup(error);
-      }
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserJoin: false,
-          NumJoins: eventIDToEvent[eventID].NumJoins - 1,
-        },
+    addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+      .then(() => {
+        didJoinedEventsChangeRef.current = true;
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        }
+        updateEventIDToEvent({
+          id: eventID,
+          event: {
+            ...eventIDToEvent[eventID],
+            UserJoin: false,
+            NumJoins: eventIDToEvent[eventID].NumJoins - 1,
+          },
+        });
       });
-    });
   };
 
   const clientAddUserShoutout = (eventID: string) => {
@@ -343,23 +134,24 @@ export const EventProvider = ({ children }) => {
         NumJoins: eventIDToEvent[eventID].NumJoins - 1,
       },
     });
-    removeUserJoinEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
-      eventID
-    ).catch((error: CustomError) => {
-      if (error.showBugReportDialog) {
-        showBugReportPopup(error);
-      }
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserJoin: false,
-          NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-        },
+    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+      .then(() => {
+        // We'll still keep the user's personal calendar the same in case the user is on the calendar screen and wants to keep it on the calendar
+        // didJoinedEventsChangeRef.current = true;
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        }
+        updateEventIDToEvent({
+          id: eventID,
+          event: {
+            ...eventIDToEvent[eventID],
+            UserJoin: false,
+            NumJoins: eventIDToEvent[eventID].NumJoins + 1,
+          },
+        });
       });
-    });
   };
 
   const clientRemoveUserShoutout = (eventID: string) => {
@@ -410,11 +202,8 @@ export const EventProvider = ({ children }) => {
         clientAddUserShoutout,
         clientRemoveUserJoin,
         clientRemoveUserShoutout,
-        selfHostedPastEventIDs,
-        selfHostedFutureEventIDs,
-        selfJoinedPastEventIDs,
-        selfJoinedFutureEventIDs,
-        handleUpdateEventList
+        didJoinedEventsChangeRef,
+        didHostedEventsChangeRef,
       }}
     >
       {children}
