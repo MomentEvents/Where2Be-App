@@ -142,6 +142,7 @@ const CreateEventScreen = ({ route }) => {
       return;
     }
     console.log(createdEvent);
+    console.log(selectedInterests)
 
     navigation.push(SCREENS.PreviewEvent, {
       createdEvent: createdEvent,

@@ -8,61 +8,42 @@ type InterestButtonProps = {
   selectedInterests: Set<Interest>;
   setSelectedInterests: React.Dispatch<React.SetStateAction<Set<Interest>>>;
 };
-const InterestButton = (props: InterestButtonProps) => {
 
-  const [toggle, setToggle] = useState<boolean>(
-    props.selectedInterests.has(props.tag)
+const InterestButton = (props: InterestButtonProps) => {
+  const isSelected = Array.from(props.selectedInterests).some(
+    (item) => item.InterestID === props.tag.InterestID
   );
 
   const _onPress = () => {
-    if(toggle){
-        // We are removing an item
-        // props.selectedInterests.delete(props.tag)
-
-        props.setSelectedInterests(new Set<Interest>([]))
+    if (isSelected) {
+      props.setSelectedInterests(new Set());
+    } else {
+      props.setSelectedInterests(new Set([props.tag]));
     }
-    else{
-        // We are adding an item
-        // props.selectedInterests.add(props.tag)
-
-        props.setSelectedInterests(new Set<Interest>([props.tag]))
-    }
-    setToggle(!toggle);
   };
 
   return (
-      <TouchableOpacity
-        onPress={() => {
-          _onPress();
-        }}
-        style={{
-          height: 32,
-          borderRadius: 5,
-          marginVertical: 4,
-          marginHorizontal: 4,
-          paddingHorizontal: 10,
-          backgroundColor: toggle
-            ? COLORS.purple
-            : COLORS.input,
-          opacity: 0.9,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <McText h5 style={{ letterSpacing: 0.4 }}>
-          {props.tag.Name}
-        </McText>
-      </TouchableOpacity>
+    <TouchableOpacity
+      onPress={_onPress}
+      style={{
+        height: 32,
+        borderRadius: 5,
+        marginVertical: 4,
+        marginHorizontal: 4,
+        paddingHorizontal: 10,
+        opacity: 0.9,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: isSelected
+          ? COLORS.purple
+          : COLORS.input,
+      }}
+    >
+      <McText h5 style={{ letterSpacing: 0.4 }}>
+        {props.tag.Name}
+      </McText>
+    </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-    backgroundColor: "transparent",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-});
 
 export default InterestButton;
