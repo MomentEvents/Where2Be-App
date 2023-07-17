@@ -6,6 +6,8 @@ import {
   UserError,
 } from "../constants/error";
 
+import backendConfig from "../../backendconfig.json"
+
 /***********************************
  * checkIfStringIsEmail
  *
@@ -195,13 +197,16 @@ export async function responseHandler<CustomType>(
     throw new NetworkError(message);
   }
   if (!response.ok) {
-    let responseMessage = await response.text();
     if (response.status === 500) {
-      responseMessage =
+      let serverResponseMessage =
         message + "\n\nPlease send a bug report :) We'll fix it ASAP!";
-      throw new ServerError(responseMessage);
+      if(backendConfig["env"] === "dev"){
+        serverResponseMessage += await response.text()
+        }
+      throw new ServerError(serverResponseMessage);
     }
-    throw new UserError("Error " + response.status, responseMessage);
+    let userResponseMessage = await response.text();
+    throw new UserError("Error " + response.status, userResponseMessage);
   }
 
   if (!doParseData) {

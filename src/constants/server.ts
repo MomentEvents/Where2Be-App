@@ -1,9 +1,7 @@
-// PUT YOUR LOCALHOST IP ADDRESS HERE WHERE THE API CONTAINER IS RUNNING
-const localhost = "http://192.168.1.149:8080";
-const production = "https://api.momentevents.app";
+import backendConfig from "../../backendconfig.json"
 
-const server = __DEV__ ? localhost : production
-const version = "/v1.0.1";
+const server = backendConfig[backendConfig["env"]].apiUrl
+const version = backendConfig[backendConfig["env"]].apiVersion
 
-export const momentAPIVersionless = localhost;
+export const momentAPIVersionless = server;
 export const momentAPI = momentAPIVersionless + version;

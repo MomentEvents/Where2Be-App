@@ -23,6 +23,8 @@ import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
+import CardsSwipe from 'react-native-cards-swipe';
+
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -30,11 +32,13 @@ const HomeScreen = () => {
   const { currentSchool, userToken } = useContext(UserContext);
 
   const [eventsAndHosts, setEventsAndHosts] =
-    useState<[{ Host: User; Event: Event, Reason: string }][]>();
+    useState<[{ Host: User; Event: Event; Reason: string }][]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [showRetry, setShowRetry] = useState<boolean>(false);
+
+  const [isCardView, setIsCardView] = useState<boolean>(true);
 
   const pullData = async () => {
     getAllHomePageEventsWithHosts(
@@ -49,10 +53,9 @@ const HomeScreen = () => {
       .catch((error: CustomError) => {
         setShowRetry(true);
         setIsRefreshing(false);
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
-        }
-        else if (error.shouldDisplay) {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else if (error.shouldDisplay) {
           displayError(error);
         }
       });
@@ -71,26 +74,29 @@ const HomeScreen = () => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            tintColor={COLORS.white}
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
+      <SectionHeader
+        title={"Where2Be @ " + currentSchool.Abbreviation}
+        rightButtonOnClick={() => {
+          setIsCardView((value) => !value);
+        }}
+        rightButtonSVG={
+          <View
+            style={{
+              borderRadius: 5,
+              paddingHorizontal: 20,
+              paddingVertical: 5,
+              backgroundColor: isCardView ? COLORS.purple : COLORS.gray,
+            }}
+          >
+            <McText style={{ textAlign: "center" }} h4>
+              {isCardView ? "Cards" : "List"}
+            </McText>
+          </View>
         }
-        style={{ backgroundColor: COLORS.black }}
-        data={eventsAndHosts}
-        keyExtractor={(item, index) => "homescreeneventcard" + index + item[0].Event.EventID}
-        ListEmptyComponent={() => (
-          !isLoading && !isRefreshing && !showRetry && <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
-            Nothing to see here yet!
-          </McText>
-        )}
-        ListHeaderComponent={() =>
-          showRetry && (
+      />
+      {isCardView ? (
+        <View style={{ flex: 1 }}>
+          {showRetry && (
             <RetryButton
               setShowRetry={setShowRetry}
               retryCallBack={pullData}
@@ -100,27 +106,95 @@ const HomeScreen = () => {
                 marginTop: 20,
               }}
             />
-          )
-        }
-        ListFooterComponent={() =>
-          isLoading &&
-          !isRefreshing &&
-          !showRetry && (
+          )}
+          {!isLoading && !isRefreshing && !showRetry && (
+            <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
+              Nothing to see here yet!
+            </McText>
+          )}
+          {isLoading && !isRefreshing && !showRetry && (
             <ActivityIndicator
               color={COLORS.white}
               style={{ marginTop: 20 }}
               size={"small"}
             />
-          )
-        }
-        renderItem={({ item }) => (
-          <HomeEvent
-            event={item[0].Event}
-            user={item[0].Host}
-            reason={item[0].Reason}
-          />
-        )}
-      />
+          )}
+
+          {eventsAndHosts && (
+            <CardsSwipe
+              cards={eventsAndHosts}
+              renderCard={(card) => {
+                return (
+                  <HomeEvent
+                    event={card[0].Event}
+                    user={card[0].Host}
+                    reason={card[0].Reason}
+                  />
+                );
+              }}
+              onSwiped={(cardIndex) => {
+                console.log(cardIndex);
+              }}
+            />
+          )}
+        </View>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              tintColor={COLORS.white}
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          style={{ backgroundColor: COLORS.black }}
+          data={eventsAndHosts}
+          keyExtractor={(item, index) =>
+            "homescreeneventcard" + index + item[0].Event.EventID
+          }
+          ListEmptyComponent={() =>
+            !isLoading &&
+            !isRefreshing &&
+            !showRetry && (
+              <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
+                Nothing to see here yet!
+              </McText>
+            )
+          }
+          ListHeaderComponent={() =>
+            showRetry && (
+              <RetryButton
+                setShowRetry={setShowRetry}
+                retryCallBack={pullData}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: 20,
+                }}
+              />
+            )
+          }
+          ListFooterComponent={() =>
+            isLoading &&
+            !isRefreshing &&
+            !showRetry && (
+              <ActivityIndicator
+                color={COLORS.white}
+                style={{ marginTop: 20 }}
+                size={"small"}
+              />
+            )
+          }
+          renderItem={({ item }) => (
+            <HomeEvent
+              event={item[0].Event}
+              user={item[0].Host}
+              reason={item[0].Reason}
+            />
+          )}
+        />
+      )}
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={() => {
