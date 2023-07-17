@@ -54,13 +54,13 @@ const EventChatScreen = ({ route }) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       () => {
         setKeyboardVisible(true); // or some other action
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      "keyboardDidHide",
       () => {
         setKeyboardVisible(false); // or some other action
       }
@@ -110,12 +110,16 @@ const EventChatScreen = ({ route }) => {
     <InputToolbar
       {...props}
       containerStyle={{
+        opacity: !eventIDToEvent[eventID] && eventIDToEvent[eventID].HostUserID === userToken.UserID
+        ? 1
+        : 0,
         backgroundColor: COLORS.black,
         paddingTop: 2,
         paddingHorizontal: 20,
       }}
       primaryStyle={{ alignItems: "center" }}
-      renderSend={renderSend}/>
+      renderSend={renderSend}
+    />
   );
 
   const renderSend = (props) => (
@@ -135,7 +139,7 @@ const EventChatScreen = ({ route }) => {
   );
 
   const renderMessage = (props) => (
-    <Message {...props} containerStyle={{ padding: 10}} />
+    <Message {...props} containerStyle={{ padding: 10 }} />
   );
 
   const renderBubble = (props) => (
@@ -144,25 +148,25 @@ const EventChatScreen = ({ route }) => {
       // renderTime={() => <Text>Time</Text>}
       // renderTicks={() => <Text>Ticks</Text>}
       containerStyle={{
-        left: { borderColor: 'teal', borderWidth: 8 },
+        left: { borderColor: "teal", borderWidth: 8 },
         right: {},
       }}
       wrapperStyle={{
-        left: { borderColor: 'tomato', borderWidth: 4 },
+        left: { borderColor: "tomato", borderWidth: 4 },
         right: {},
       }}
       bottomContainerStyle={{
-        left: { borderColor: 'purple', borderWidth: 4 },
+        left: { borderColor: "purple", borderWidth: 4 },
         right: {},
       }}
       tickStyle={{}}
-      usernameStyle={{ color: 'tomato', fontWeight: '100' }}
+      usernameStyle={{ color: "tomato", fontWeight: "100" }}
       containerToNextStyle={{
-        left: { borderColor: 'navy', borderWidth: 4 },
+        left: { borderColor: "navy", borderWidth: 4 },
         right: {},
       }}
       containerToPreviousStyle={{
-        left: { borderColor: 'mediumorchid', borderWidth: 4 },
+        left: { borderColor: "mediumorchid", borderWidth: 4 },
         right: {},
       }}
     />
@@ -191,13 +195,7 @@ const EventChatScreen = ({ route }) => {
   const renderComposer = (props) => (
     <Composer
       {...props}
-      placeholder={
-        !eventIDToEvent[eventID]
-          ? "Loading"
-          : eventIDToEvent[eventID].HostUserID === userToken.UserID
-          ? "Write an event update"
-          : "Only hosts can write updates"
-      }
+      placeholder={"Write an event update"}
       textInputStyle={{
         color: COLORS.white,
         backgroundColor: COLORS.gray2,

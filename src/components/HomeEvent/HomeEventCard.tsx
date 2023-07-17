@@ -16,7 +16,7 @@ import { McText } from "./../Styled";
 import "react-native-gesture-handler";
 import { Event } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
-import { displayError } from "../../helpers/helpers";
+import { displayError, truncateNumber } from "../../helpers/helpers";
 import { EventContext } from "../../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -54,7 +54,7 @@ const HomeEventCard = ({
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const cardWidth = SIZES.width;
-  const cardHeight = 300;
+  const cardHeight = SIZES.width;
 
   const cardBorderRadius = 0;
   const cardBorderWidth = 0;
@@ -97,32 +97,28 @@ const HomeEventCard = ({
       <View
         key={"HomeEventCard" + event.EventID}
         style={{
-          height: cardHeight,
-          width: cardWidth,
           borderRadius: cardBorderRadius,
         }}
       >
-        {reason && <View style={{ position: "absolute", zIndex: 10, width: cardWidth, paddingVertical: 5, paddingHorizontal: 20, backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
-          <McText body4 numberOfLines={1}>
-            {reason}
-          </McText>
-        </View>}
+        {reason && (
+          <View
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              width: cardWidth,
+              paddingVertical: 5,
+              paddingHorizontal: 20,
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+            }}
+          >
+            <McText body4 numberOfLines={1}>
+              {reason}
+            </McText>
+          </View>
+        )}
         <Image
           source={{ uri: eventIDToEvent[event.EventID].Picture }}
           style={{
-            height: cardHeight,
-            width: cardWidth,
-            borderRadius: cardBorderRadius,
-            borderWidth: cardBorderWidth,
-            borderColor: cardBorderColor,
-          }}
-        />
-        <View
-          style={{
-            flex: 1,
-            position: "absolute",
-            top: 0,
-            left: 0,
             height: cardHeight,
             width: cardWidth,
             borderRadius: cardBorderRadius,
@@ -143,8 +139,8 @@ const HomeEventCard = ({
           <LinearGradient
             colors={[
               "transparent",
-              COLORS.transparentBlack,
-              COLORS.transparentBlack,
+              COLORS.trueBlack,
+              COLORS.trueBlack,
             ]}
             start={{ x: 0, y: 0.4 }}
             end={{ x: 0, y: 1.3 }}
@@ -250,7 +246,7 @@ const HomeEventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToEvent[event.EventID].NumJoins}
+                    {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
                   </McText>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -281,12 +277,34 @@ const HomeEventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToEvent[event.EventID].NumShoutouts}
+                    {truncateNumber(eventIDToEvent[event.EventID].NumShoutouts)}
                   </McText>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
+          <View
+            style={{
+              backgroundColor: COLORS.trueBlack,
+              paddingTop: 10,
+              paddingBottom: 20,
+              paddingHorizontal: 10,
+            }}
+          ></View>
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 15,
+            paddingBottom: 30,
+            backgroundColor: COLORS.trueBlack,
+          }}
+        >
+          <McText body4 numberOfLines={2}>
+            <McText h4>Event Description: </McText>
+            {event.Description.length === 0
+              ? "N/A"
+              : event.Description}
+          </McText>
         </View>
       </View>
     </TouchableHighlight>

@@ -44,6 +44,7 @@ import {
   displayError,
   formatError,
   showBugReportPopup,
+  truncateNumber,
 } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import { deleteEvent, getEvent } from "../../../services/EventService";
@@ -805,7 +806,7 @@ const EventDetailsScreen = ({ route }) => {
                           : COLORS.white,
                       }}
                     >
-                      {eventIDToEvent[eventID].NumJoins}
+                      {truncateNumber(eventIDToEvent[eventID].NumJoins)}
                     </McText>
                   </View>
                   <View
@@ -878,7 +879,7 @@ const EventDetailsScreen = ({ route }) => {
                           : COLORS.white,
                       }}
                     >
-                      {eventIDToEvent[eventID].NumShoutouts}
+                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}
                     </McText>
                   </View>
                 </>

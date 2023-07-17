@@ -1,5 +1,10 @@
 import { Event } from "../constants";
-import { ServerError, CustomError, NetworkError, UserError } from "../constants/error";
+import {
+  ServerError,
+  CustomError,
+  NetworkError,
+  UserError,
+} from "../constants/error";
 
 /***********************************
  * checkIfStringIsEmail
@@ -161,7 +166,7 @@ export function openURL(url: string): void {
 export function showCancelablePopup(
   title: string,
   description: string,
-  onYesFunction: () => {},
+  onYesFunction: () => {}
 ): void {
   Alert.alert(
     "Log out",
@@ -173,7 +178,7 @@ export function showCancelablePopup(
       {
         text: "Yes",
         onPress: () => {
-          onYesFunction()
+          onYesFunction();
         },
       },
     ],
@@ -181,74 +186,91 @@ export function showCancelablePopup(
   );
 }
 
-export async function responseHandler<CustomType>(response: Response, message: string, doParseData: boolean): Promise<CustomType> {
-  if (response == undefined){
+export async function responseHandler<CustomType>(
+  response: Response,
+  message: string,
+  doParseData: boolean
+): Promise<CustomType> {
+  if (response == undefined) {
     throw new NetworkError(message);
   }
   if (!response.ok) {
     let responseMessage = await response.text();
-    if(response.status === 500){
-      responseMessage = message + "\n\nPlease send a bug report :) We'll fix it ASAP!"
-      throw new ServerError(responseMessage)
+    if (response.status === 500) {
+      responseMessage =
+        message + "\n\nPlease send a bug report :) We'll fix it ASAP!";
+      throw new ServerError(responseMessage);
     }
     throw new UserError("Error " + response.status, responseMessage);
   }
 
-  if(!doParseData){
-    return
+  if (!doParseData) {
+    return;
   }
 
   const responseJSON = await response.json();
   return responseJSON as CustomType;
 }
 
-export function showBugReportPopup(error: ServerError){
+export function showBugReportPopup(error: ServerError) {
+  Alert.alert(error.name, error.message, [
+    {
+      text: "Send bug report",
+      onPress: () => Linking.openURL("https://where2be.app/discord"),
+    },
+    {
+      text: "Not now",
+      style: "cancel",
+    },
+  ]);
+}
+
+export function showAppFeedbackPopup() {
   Alert.alert(
-    error.name,
-    error.message,
+    "Send App Feedback",
+    "We would love to hear what you think of Where2Be!",
     [
       {
-        text: 'Send bug report',
-        onPress: () => Linking.openURL('https://where2be.app/discord'),
+        text: "Send feedback",
+        onPress: () => Linking.openURL("https://where2be.app/feedback"),
       },
       {
-        text: 'Not now',
-        style: 'cancel',
+        text: "Not now",
+        style: "cancel",
       },
-    ],
+    ]
   );
 }
 
-export function showAppFeedbackPopup(){
+export function discordInvitePopup() {
   Alert.alert(
-    'Send App Feedback',
-    'We would love to hear what you think of Where2Be!',
+    "Welcome to Where2Be!",
+    "Join our Discord to get the latest updates",
     [
       {
-        text: 'Send feedback',
-        onPress: () => Linking.openURL('https://where2be.app/feedback'),
+        text: "Join our Discord",
+        onPress: () => Linking.openURL("https://where2be.app/discord"),
       },
       {
-        text: 'Not now',
-        style: 'cancel',
+        text: "Not now",
+        style: "cancel",
       },
-    ],
+    ]
   );
 }
 
-export function discordInvitePopup(){
-  Alert.alert(
-    'Welcome to Where2Be!',
-    'Join our Discord to get the latest updates',
-    [
-      {
-        text: 'Join our Discord',
-        onPress: () => Linking.openURL('https://where2be.app/discord'),
-      },
-      {
-        text: 'Not now',
-        style: 'cancel',
-      },
-    ],
-  );
+export function truncateNumber(num: number): string {
+  if (num === undefined || num === null) {
+    return undefined;
+  }
+  if (num >= 1000000000) {
+    return "1B+";
+  }
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return num.toString();
 }

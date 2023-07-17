@@ -121,12 +121,14 @@ const HomeEvent = (props: HomeEventProps) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <>
+        <View>
           <View
             style={{
-              paddingVertical: 10,
-              borderTopWidth: 1,
+              paddingTop: 10,
+              paddingBottom: 10,
               borderColor: COLORS.gray1,
+              borderTopWidth: 1,
+              backgroundColor: COLORS.black,
               flex: 1,
               flexDirection: "row",
               alignItems: "center",
@@ -189,7 +191,7 @@ const HomeEvent = (props: HomeEventProps) => {
             host={props.user}
             reason={props.reason}
           />
-        </>
+        </View>
       )}
     </View>
   );

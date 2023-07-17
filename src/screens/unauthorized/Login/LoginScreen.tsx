@@ -163,7 +163,7 @@ const LoginScreen = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onNavigateSignup}>
-          <McText body3>Don't have an account?</McText>
+          <McText body4>Don't have an account?</McText>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
     </MobileSafeView>

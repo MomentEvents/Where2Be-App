@@ -15,7 +15,7 @@ import { McText } from "./Styled";
 import "react-native-gesture-handler";
 import { Event, User } from "../constants";
 import { UserContext } from "../contexts/UserContext";
-import { displayError } from "../helpers/helpers";
+import { displayError, truncateNumber } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -229,7 +229,7 @@ const EventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToEvent[event.EventID].NumJoins}
+                    {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
                   </McText>
                   <Ionicons
                     name="md-megaphone-outline"
@@ -251,7 +251,7 @@ const EventCard = ({
                         : COLORS.lightGray,
                     }}
                   >
-                    {eventIDToEvent[event.EventID].NumShoutouts}
+                    {truncateNumber(eventIDToEvent[event.EventID].NumShoutouts)}
                   </McText>
                 </View>
               </View>
@@ -385,7 +385,7 @@ const EventCard = ({
                     : COLORS.lightGray,
                 }}
               >
-                {eventIDToEvent[event.EventID].NumJoins}
+                {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
               </McText>
               <Ionicons
                 name="md-megaphone-outline"
@@ -407,7 +407,7 @@ const EventCard = ({
                     : COLORS.lightGray,
                 }}
               >
-                {eventIDToEvent[event.EventID].NumShoutouts}
+                {truncateNumber(eventIDToEvent[event.EventID].NumShoutouts)}
               </McText>
             </View>
           </View>

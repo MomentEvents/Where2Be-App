@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FOLLOW_LIST } from "../../constants/components";
+import { truncateNumber } from "../../helpers/helpers";
 
 type SectionProfileProps = {
   userID: string;
@@ -32,19 +33,6 @@ const SectionProfile = (props: SectionProfileProps) => {
   } = useContext(UserContext);
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
-
-  function formatNumber(num: number) {
-    if (num >= 1000000000) {
-      return "1B+";
-    }
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-    }
-    return num;
-  }
 
   if (!userIDToUser[props.userID]) {
     return <></>;
@@ -66,7 +54,7 @@ const SectionProfile = (props: SectionProfileProps) => {
         >
           <TouchableOpacity disabled={true}>
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {formatNumber(userIDToUser[props.userID].NumEvents)}
+              {truncateNumber(userIDToUser[props.userID].NumEvents)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumEvents === 1 ? "Event" : "Events"}
@@ -79,7 +67,7 @@ const SectionProfile = (props: SectionProfileProps) => {
             })}
           >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {formatNumber(userIDToUser[props.userID].NumFollowers)}
+              {truncateNumber(userIDToUser[props.userID].NumFollowers)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumFollowers === 1
@@ -94,7 +82,7 @@ const SectionProfile = (props: SectionProfileProps) => {
             })}
           >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {formatNumber(userIDToUser[props.userID].NumFollowing)}
+              {truncateNumber(userIDToUser[props.userID].NumFollowing)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
               {userIDToUser[props.userID].NumFollowing === 1
