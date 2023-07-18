@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import GradientButton from "../../../components/Styled/GradientButton";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
@@ -26,6 +26,7 @@ import { McText } from "../../../components/Styled";
 import CardsSwipe from "react-native-cards-swipe";
 import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { setViewedEvents } from "../../../services/UserService";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -63,12 +64,35 @@ const HomeScreen = () => {
     SIZES.sectionHeaderHeight -
     120;
 
+  const homeCardWidth = SIZES.width;
+
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50, // The item is considered visible when 50% of its area is visible
     minimumViewTime: 300, // Minimum milliseconds the item is considered visible after the viewability event fires
   };
 
-  const sendViewedEvents = () => {};
+  const sendViewedEvents = () => {
+    try {
+      // To avoid race conditions
+      const sentQueuedEventIDs = queuedEventIDs.current;
+
+      console.log("Queued EventIDs: ", sentQueuedEventIDs);
+
+      setViewedEvents(
+        userToken.UserAccessToken,
+        userToken.UserID,
+        sentQueuedEventIDs
+      )
+        .then(() => {
+          queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
+        })
+        .catch((error: CustomError) => {
+          console.warn(error);
+        });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   useEffect(() => {
     if (isFocused) {
@@ -79,7 +103,7 @@ const HomeScreen = () => {
       // Calculate the difference in minutes
       const minutesDiff = Math.floor(timeDiff / (1000 * 60));
 
-      console.log(minutesDiff + " minutes elapsed since last pull")
+      console.log(minutesDiff + " minutes elapsed since last pull");
       if (minutesDiff > 10) {
         console.log("Repulling events");
         onRefresh();
@@ -93,20 +117,20 @@ const HomeScreen = () => {
       if (viewableItems.length === 0) {
         return;
       }
-      const viewedEventID = viewableItems[0].item.Event.EventID;
+      const viewedEvent = viewableItems[0].item.Event
 
-      console.log(viewedEventID);
+      console.log(viewedEvent.EventID);
 
-      if (!viewedEventIDs.current[viewedEventID]) {
-        viewedEventIDs.current[viewedEventID] = true;
-        queuedEventIDs.current.push(viewedEventID)
+      if (!viewedEventIDs.current[viewedEvent.EventID] && !viewedEvent.UserViewed) {
+        viewedEventIDs.current[viewedEvent.EventID] = true;
+        queuedEventIDs.current.push(viewedEvent.EventID);
 
         // Update API to say that user viewed the event
         console.log(
-          "user has viewed event " + viewedEventID + " for the first time!"
+          "user has viewed event " + viewedEvent.EventID + " for the first time!"
         );
         clearTimeout(timeoutId.current);
-        const newTimeoutId = setTimeout(() => sendViewedEvents(), 10000);
+        const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
         timeoutId.current = newTimeoutId;
       }
 
@@ -119,6 +143,7 @@ const HomeScreen = () => {
   }).current;
 
   const pullData = async () => {
+    lastPulled.current = new Date();
     getAllHomePageEventsWithHosts(
       userToken.UserAccessToken,
       currentSchool.SchoolID
@@ -142,9 +167,22 @@ const HomeScreen = () => {
     setEventsAndHosts(undefined);
     setIsLoading(true);
     setShowRetry(false);
-    viewedEventIDs.current = {}
+    viewedEventIDs.current = {};
     pullData();
   };
+
+  const renderItem = ({ item }) => (
+    <HomeEvent
+      event={item.Event}
+      user={item.Host}
+      reason={item.Reason}
+      height={homeCardHeight}
+      width={homeCardWidth}
+    />
+  );
+
+  const keyExtractor = (item, index) =>
+    "homescreeneventcard" + index + item.Event.EventID;
 
   useEffect(() => {
     pullData();
@@ -153,6 +191,14 @@ const HomeScreen = () => {
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
+      {isLoading && !isRefreshing && !showRetry && (
+        <ActivityIndicator
+          color={COLORS.white}
+          style={{ marginTop: 20 }}
+          size={"small"}
+        />
+      )}
+
       <FlatList
         pagingEnabled
         showsVerticalScrollIndicator={false}
@@ -166,20 +212,8 @@ const HomeScreen = () => {
             }}
           />
         }
-        style={{ backgroundColor: COLORS.black }}
         data={eventsAndHosts}
-        keyExtractor={(item, index) =>
-          "homescreeneventcard" + index + item.Event.EventID
-        }
-        ListEmptyComponent={() =>
-          !isLoading &&
-          !isRefreshing &&
-          !showRetry && (
-            <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
-              Nothing to see here yet!
-            </McText>
-          )
-        }
+        keyExtractor={keyExtractor}
         ListHeaderComponent={() =>
           showRetry && (
             <RetryButton
@@ -194,27 +228,49 @@ const HomeScreen = () => {
           )
         }
         ListFooterComponent={() =>
-          isLoading &&
+          !isLoading &&
           !isRefreshing &&
           !showRetry && (
-            <ActivityIndicator
-              color={COLORS.white}
-              style={{ marginTop: 20 }}
-              size={"small"}
-            />
+            <View
+              style={{
+                width: homeCardWidth,
+                height: homeCardHeight,
+                backgroundColor: COLORS.trueBlack,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingBottom: 140,
+              }}
+            >
+              <McText h2>You're all caught up!</McText>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Feather
+                  name="aperture"
+                  size={homeCardWidth - 200}
+                  color="white"
+                />
+              </View>
+              {/* <TouchableOpacity style={styles.submitButton}>
+                    <McText
+                      h3
+                      style={{
+                        color: COLORS.white,
+                      }}
+                    >
+                      See what's p
+                    </McText>
+                </TouchableOpacity> */}
+            </View>
           )
         }
         snapToInterval={homeCardHeight}
         decelerationRate={0}
-        renderItem={({ item }) => (
-          <HomeEvent
-            event={item.Event}
-            user={item.Host}
-            reason={item.Reason}
-            height={homeCardHeight}
-            width={SIZES.width}
-          />
-        )}
+        renderItem={renderItem}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
       />
@@ -254,5 +310,11 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     alignItems: "center",
     justifyContent: "center",
+  },
+  submitButton: {
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: COLORS.purple,
   },
 });

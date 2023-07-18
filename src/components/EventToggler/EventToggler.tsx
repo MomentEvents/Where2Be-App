@@ -376,6 +376,10 @@ const EventToggler = (props: EventTogglerProps) => {
     );
   };
 
+  const renderItem = ({item}) => renderEventCard(item);
+  const keyExtractor =(item, index) =>
+    item.EventID + props.selectedUserID + props.eventsToPull + " Event" + index
+
   useEffect(() => {
     pullData(true);
   }, []);
@@ -391,7 +395,7 @@ const EventToggler = (props: EventTogglerProps) => {
       <FlatList
         data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
         ListHeaderComponent={ListHeader}
-        renderItem={({ item }) => renderEventCard(item)}
+        renderItem={renderItem}
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
@@ -444,9 +448,7 @@ const EventToggler = (props: EventTogglerProps) => {
         }
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.8}
-        keyExtractor={(item, index) =>
-          item.EventID + props.selectedUserID + props.eventsToPull + " Event" + index
-        }
+        keyExtractor={keyExtractor}
       />
     </View>
   );

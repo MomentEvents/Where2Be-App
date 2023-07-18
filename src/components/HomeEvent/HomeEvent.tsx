@@ -106,7 +106,7 @@ const HomeEvent = (props: HomeEventProps) => {
   }, []);
 
   return (
-    <View style={{height: props.height, width: props.width}}>
+    <View style={{ height: props.height, width: props.width }}>
       {isHidden ? (
         <View
           style={{
@@ -192,7 +192,13 @@ const HomeEvent = (props: HomeEventProps) => {
               />
             </TouchableOpacity>
           </View>
-          <HomeEventCard width={props.width} height={props.height - usernameHeight} event={props.event} host={props.user} reason={props.reason}/>
+          <HomeEventCard
+            width={props.width}
+            height={props.height - usernameHeight}
+            event={props.event}
+            host={props.user}
+            reason={props.reason}
+          />
         </View>
       )}
     </View>

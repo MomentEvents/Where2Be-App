@@ -54,10 +54,9 @@ const EventViewer = (props: EventViewerProps) => {
         setCategoryNameToEventsMap(map);
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
-        }
-        else if (error.shouldDisplay) {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else if (error.shouldDisplay) {
           displayError(error);
         }
         setShowRetry(true);
@@ -113,6 +112,11 @@ const EventViewer = (props: EventViewerProps) => {
     pullData();
   }, []);
 
+  const _smallKeyExtractor = (item, index) =>
+    item.EventID + index + "Smallcard";
+
+  const _bigKeyExtractor = (item, index) => item.EventID + index + "Bigcard";
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -152,21 +156,34 @@ const EventViewer = (props: EventViewerProps) => {
             <McText h3>No upcoming events!</McText>
           </View>
         )}
-      {Object.keys(categoryNameToEventsMap).map((key, index) => (
-        <View key={key + index}>
-          <McText h2 style={styles.categoryTitle}>
-            {key}
-          </McText>
+      {Object.keys(categoryNameToEventsMap).map((key, index) =>
+        key === "Featured" ? (
+          <View key={key + index}><FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={Object.values(categoryNameToEventsMap[key])}
+              keyExtractor={_bigKeyExtractor}
+              renderItem={_renderBigEventCards}
+              style={styles.flatlistContainer}
+            />
+          </View>
+        ) : (
+          <View key={key + index}>
+            <McText h2 style={styles.categoryTitle}>
+              {key}
+            </McText>
 
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={Object.values(categoryNameToEventsMap[key])}
-            renderItem={_renderSmallEventCards}
-            style={styles.flatlistContainer}
-          />
-        </View>
-      ))}
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={Object.values(categoryNameToEventsMap[key])}
+              keyExtractor={_smallKeyExtractor}
+              renderItem={_renderSmallEventCards}
+              style={styles.flatlistContainer}
+            />
+          </View>
+        )
+      )}
       {props.isHoverButtonVisible && (
         <View style={{ height: insets.bottom + 90 }} />
       )}

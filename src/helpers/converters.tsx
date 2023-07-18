@@ -40,6 +40,8 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
   } else {
     parsedEndDateTime = new Date(timestamp);
   }
+
+  
   
   const formattedEvent: Event = {
     EventID: pulledEvent.event_id,
@@ -56,6 +58,10 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     UserShoutout: pulledEvent.user_shoutout,
     HostUserID: pulledEvent.host_user_id,
   };
+
+  if(pulledEvent.user_viewed !== undefined && pulledEvent.user_viewed !== null){
+    formattedEvent.UserViewed = pulledEvent.user_viewed
+  }
 
   // check for null or undefined values in formattedEvent
   const convertedKeys = Object.keys(formattedEvent);

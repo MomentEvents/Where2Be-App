@@ -368,14 +368,14 @@ export async function undoNotInterestedInEvent(
   await responseHandler<void>(response, "Could not set undo not interested in event", false);
 }
 
-export async function setViewedEvent(
+export async function setViewedEvents(
   userAccessToken: string,
   userID: string,
-  eventID: string,
+  eventIDs: string[],
 ): Promise<void> {
   
   const response = await fetch(
-    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/viewed`,
+    momentAPI + `/user/user_id/${userID}/set_viewed_events`,
     {
       method: "UPDATE",
       headers: {
@@ -383,7 +383,7 @@ export async function setViewedEvent(
       },
       body: JSON.stringify({
         user_access_token: userAccessToken,
-        did_viewed: true,
+        event_ids: eventIDs
       }),
     }
   ).catch(() => {
@@ -391,31 +391,6 @@ export async function setViewedEvent(
   })
 
   await responseHandler<void>(response, "Could not set viewed event", false);
-}
-
-export async function undoViewedEvent(
-  userAccessToken: string,
-  userID: string,
-  eventID: string,
-): Promise<void> {
-  
-  const response = await fetch(
-    momentAPI + `/user/user_id/${userID}/event_id/${eventID}/viewed`,
-    {
-      method: "UPDATE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-        did_viewed: false,
-      }),
-    }
-  ).catch(() => {
-    return undefined
-  })
-
-  await responseHandler<void>(response, "Could not set undo viewed for event", false);
 }
 
 export async function getUserEmail(

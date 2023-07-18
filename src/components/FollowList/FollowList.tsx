@@ -130,11 +130,13 @@ const FollowList = (props: FollowListProps) => {
     );
   };
 
+  const renderItem = ({item}) => renderUserResult(item);
+
   return (
     <View style={styles.container}>
       <FlatList
         data={users}
-        renderItem={({ item }) => renderUserResult(item)}
+        renderItem={renderItem}
         style={{ backgroundColor: COLORS.black }}
         ListEmptyComponent={
           <View

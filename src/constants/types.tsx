@@ -17,6 +17,7 @@ export type Event = {
   UserJoin: boolean;
   UserShoutout: boolean;
   HostUserID: string;
+  UserViewed?: boolean;
 };
 
 export type EventResponse = {
@@ -33,6 +34,7 @@ export type EventResponse = {
   user_join: boolean;
   user_shoutout: boolean;
   host_user_id: string;
+  user_viewed?: boolean;
 };
 
 export type Interest = {
