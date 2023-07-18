@@ -64,6 +64,7 @@ export const SIZES = {
   width,
   height,
   tabBarHeight: 35,
+  sectionHeaderHeight: 55,
 };
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},

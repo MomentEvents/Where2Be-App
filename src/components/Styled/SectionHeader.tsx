@@ -13,9 +13,11 @@ type sectionHeaderProps = {
   style?;
 };
 const SectionHeader = (props: sectionHeaderProps) => {
+  const headerHeight = SIZES.sectionHeaderHeight;
   return (
     <View
       style={{
+        height: headerHeight,
         paddingHorizontal: 20,
         paddingVertical: 6,
         alignItems: "center",

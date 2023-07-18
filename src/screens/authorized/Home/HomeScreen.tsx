@@ -24,11 +24,15 @@ import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
 import CardsSwipe from "react-native-cards-swipe";
+import InterestSelector from "../../../components/InterestSelector/InterestSelector";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
 
   const { currentSchool, userToken } = useContext(UserContext);
+
+  const insets = useSafeAreaInsets()
 
   const [eventsAndHosts, setEventsAndHosts] =
     useState<[{ Host: User; Event: Event; Reason: string }][]>();
@@ -38,6 +42,8 @@ const HomeScreen = () => {
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
   const [isCardView, setIsCardView] = useState<boolean>(true);
+
+  const homeCardHeight = SIZES.height - insets.top - insets.bottom - SIZES.tabBarHeight - SIZES.sectionHeaderHeight - 120;
 
   const pullData = async () => {
     getAllHomePageEventsWithHosts(
@@ -75,23 +81,6 @@ const HomeScreen = () => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={"Where2Be @ " + currentSchool.Abbreviation}
-        rightButtonOnClick={() => {
-          setIsCardView((value) => !value);
-        }}
-        rightButtonSVG={
-          <View
-            style={{
-              borderRadius: 5,
-              paddingHorizontal: 20,
-              paddingVertical: 5,
-              backgroundColor: isCardView ? COLORS.purple : COLORS.gray,
-            }}
-          >
-            <McText style={{ textAlign: "center" }} h4>
-              {isCardView ? "Cards" : "List"}
-            </McText>
-          </View>
-        }
       />
       <FlatList
         pagingEnabled
@@ -142,11 +131,13 @@ const HomeScreen = () => {
             />
           )
         }
+        snapToInterval={homeCardHeight}
+        decelerationRate={0}
         renderItem={({ item }) => (
           <HomeEvent
             event={item[0].Event}
             user={item[0].Host}
-            reason={item[0].Reason} height={SIZES.width} width={SIZES.width}/>
+            reason={item[0].Reason} height={homeCardHeight} width={SIZES.width}/>
         )}
       />
       <TouchableOpacity

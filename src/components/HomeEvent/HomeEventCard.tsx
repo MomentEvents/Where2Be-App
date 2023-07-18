@@ -97,9 +97,9 @@ const HomeEventCard = ({
       }}
     >
       <View
-        key={"HomeEventCard" + event.EventID}
         style={{
           borderRadius: cardBorderRadius,
+          flex: 1,
           height: cardHeight,
           width: cardWidth,
         }}
@@ -120,24 +120,21 @@ const HomeEventCard = ({
             </McText>
           </View>
         )}
-        <Image
+        <ImageBackground
           source={{ uri: eventIDToEvent[event.EventID].Picture }}
           style={{
-            height: cardHeight,
-            width: cardWidth,
+            flex: 1,
+            width: "100%",
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
-          }}
-        />
+          }}>
         <View
           style={{
             flex: 1,
-            position: "absolute",
             top: cardBorderWidth,
             left: cardBorderWidth,
-            width: cardWidth - cardBorderWidth * 2,
-            height: cardHeight - cardBorderWidth * 2,
+            width: "100%",
           }}
         >
           <LinearGradient
@@ -153,6 +150,7 @@ const HomeEventCard = ({
 
           <View
             style={{
+              flex: 1,
               flexDirection: "column",
               justifyContent: "flex-end",
               position: "absolute",
@@ -296,6 +294,8 @@ const HomeEventCard = ({
             }}
           ></View>
         </View>
+          </ImageBackground>
+
         <View
           style={{
             paddingHorizontal: 15,
