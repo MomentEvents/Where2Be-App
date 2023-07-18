@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import EventViewer from "../../../components/EventViewer/EventViewer";
 import GradientButton from "../../../components/Styled/GradientButton";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { COLORS, SCREENS, User, Event, icons, SIZES } from "../../../constants";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
@@ -30,12 +30,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
 
+  const viewedEventIDs = useRef<{
+    [key: string]: boolean;
+  }>({});
+
   const { currentSchool, userToken } = useContext(UserContext);
 
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
   const [eventsAndHosts, setEventsAndHosts] =
-    useState<[{ Host: User; Event: Event; Reason: string }][]>();
+    useState<{ Host: User; Event: Event; Reason: string }[]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -43,7 +47,76 @@ const HomeScreen = () => {
 
   const [isCardView, setIsCardView] = useState<boolean>(true);
 
-  const homeCardHeight = SIZES.height - insets.top - insets.bottom - SIZES.tabBarHeight - SIZES.sectionHeaderHeight - 120;
+  const timeoutId = useRef<NodeJS.Timeout>(null);
+
+  const queuedEventIDs = useRef<string[]>([]);
+
+  const lastPulled = useRef<Date>(new Date());
+
+  const isFocused = useIsFocused();
+
+  const homeCardHeight =
+    SIZES.height -
+    insets.top -
+    insets.bottom -
+    SIZES.tabBarHeight -
+    SIZES.sectionHeaderHeight -
+    120;
+
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50, // The item is considered visible when 50% of its area is visible
+    minimumViewTime: 300, // Minimum milliseconds the item is considered visible after the viewability event fires
+  };
+
+  const sendViewedEvents = () => {};
+
+  useEffect(() => {
+    if (isFocused) {
+      const timeDiff = Math.abs(
+        new Date().getTime() - lastPulled.current.getTime()
+      );
+
+      // Calculate the difference in minutes
+      const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+
+      console.log(minutesDiff + " minutes elapsed since last pull")
+      if (minutesDiff > 10) {
+        console.log("Repulling events");
+        onRefresh();
+        lastPulled.current = new Date();
+      }
+    }
+  }, [isFocused]);
+
+  const onViewableItemsChanged = useRef(({ viewableItems }) => {
+    try {
+      if (viewableItems.length === 0) {
+        return;
+      }
+      const viewedEventID = viewableItems[0].item.Event.EventID;
+
+      console.log(viewedEventID);
+
+      if (!viewedEventIDs.current[viewedEventID]) {
+        viewedEventIDs.current[viewedEventID] = true;
+        queuedEventIDs.current.push(viewedEventID)
+
+        // Update API to say that user viewed the event
+        console.log(
+          "user has viewed event " + viewedEventID + " for the first time!"
+        );
+        clearTimeout(timeoutId.current);
+        const newTimeoutId = setTimeout(() => sendViewedEvents(), 10000);
+        timeoutId.current = newTimeoutId;
+      }
+
+      // You can put your logic here.
+      // viewableItems is an array of objects, each object represents a visible item.
+      // Each object in viewableItems has an item property that refers to the actual data item in your data array
+    } catch (error) {
+      console.warn(error);
+    }
+  }).current;
 
   const pullData = async () => {
     getAllHomePageEventsWithHosts(
@@ -66,10 +139,10 @@ const HomeScreen = () => {
       });
   };
   const onRefresh = () => {
-    setIsRefreshing(true);
     setEventsAndHosts(undefined);
     setIsLoading(true);
     setShowRetry(false);
+    viewedEventIDs.current = {}
     pullData();
   };
 
@@ -79,24 +152,24 @@ const HomeScreen = () => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader
-        title={"Where2Be @ " + currentSchool.Abbreviation}
-      />
+      <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
       <FlatList
         pagingEnabled
-      
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
             refreshing={isRefreshing}
-            onRefresh={onRefresh}
+            onRefresh={() => {
+              setIsRefreshing(true);
+              onRefresh();
+            }}
           />
         }
         style={{ backgroundColor: COLORS.black }}
         data={eventsAndHosts}
         keyExtractor={(item, index) =>
-          "homescreeneventcard" + index + item[0].Event.EventID
+          "homescreeneventcard" + index + item.Event.EventID
         }
         ListEmptyComponent={() =>
           !isLoading &&
@@ -135,10 +208,15 @@ const HomeScreen = () => {
         decelerationRate={0}
         renderItem={({ item }) => (
           <HomeEvent
-            event={item[0].Event}
-            user={item[0].Host}
-            reason={item[0].Reason} height={homeCardHeight} width={SIZES.width}/>
+            event={item.Event}
+            user={item.Host}
+            reason={item.Reason}
+            height={homeCardHeight}
+            width={SIZES.width}
+          />
         )}
+        viewabilityConfig={viewabilityConfig}
+        onViewableItemsChanged={onViewableItemsChanged}
       />
       <TouchableOpacity
         style={styles.hoverButtonContainer}

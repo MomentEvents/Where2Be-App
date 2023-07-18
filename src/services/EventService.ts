@@ -443,7 +443,7 @@ export async function getAllSchoolEventsCategorized(
 export async function getAllHomePageEventsWithHosts(
   userAccessToken: string,
   schoolID: string
-): Promise<[{ Host: User; Event: Event, Reason: string }][]> {
+): Promise<{ Host: User; Event: Event, Reason: string }[]> {
   // Get home events and hosts through API response
   const response = await fetch(
     momentAPI + `/event/school_id/${schoolID}/home`,
@@ -468,7 +468,7 @@ export async function getAllHomePageEventsWithHosts(
       true
     );
 
-  const returnedData: [{ Host: User; Event: Event; Reason: string }][] = [];
+  const returnedData: { Host: User; Event: Event; Reason: string }[] = [];
 
   responseJSON.forEach((value) => {
     if (!value.host) {
@@ -479,13 +479,13 @@ export async function getAllHomePageEventsWithHosts(
         "Error in getting a home page event when a host for it exists!"
       );
     }
-    returnedData.push([
+    returnedData.push(
       {
         Host: userResponseToUser(value.host),
         Event: eventResponseToEvent(value.event),
         Reason: value.reason,
       },
-    ]);
+    );
   });
 
   return returnedData;

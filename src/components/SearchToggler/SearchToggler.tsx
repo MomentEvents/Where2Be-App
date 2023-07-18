@@ -48,7 +48,7 @@ const SearchToggler = () => {
   const searchTextRef = useRef<string>("");
   const newTextRef = useRef<string>("");
 
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>(null);
+  const timeoutId = useRef<NodeJS.Timeout>(null);
 
   const navigation = useNavigation<any>();
 
@@ -62,12 +62,12 @@ const SearchToggler = () => {
     setPulledEvents(newText === "" ? [] : null);
     setPulledUsers(newText === "" ? [] : null);
     searchTextRef.current = newText;
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId.current);
     if (newText === "") {
       return;
     }
     const newTimeoutId = setTimeout(() => pullData(), 500);
-    setTimeoutId(newTimeoutId);
+    timeoutId.current = newTimeoutId;
   };
 
   const onBackPressed = () => {

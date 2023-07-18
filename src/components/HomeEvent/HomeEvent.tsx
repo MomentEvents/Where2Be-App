@@ -112,7 +112,7 @@ const HomeEvent = (props: HomeEventProps) => {
           style={{
             paddingVertical: 10,
             paddingHorizontal: 20,
-            backgroundColor: COLORS.gray1,
+            backgroundColor: COLORS.black,
             flex: 1,
           }}
         >
