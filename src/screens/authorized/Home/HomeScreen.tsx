@@ -14,7 +14,7 @@ import EventViewer from "../../../components/EventViewer/EventViewer";
 import GradientButton from "../../../components/Styled/GradientButton";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
-import { COLORS, SCREENS, User, Event, icons } from "../../../constants";
+import { COLORS, SCREENS, User, Event, icons, SIZES } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
@@ -23,8 +23,7 @@ import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
-import CardsSwipe from 'react-native-cards-swipe';
-
+import CardsSwipe from "react-native-cards-swipe";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -94,9 +93,33 @@ const HomeScreen = () => {
           </View>
         }
       />
-      {isCardView ? (
-        <View style={{ flex: 1 }}>
-          {showRetry && (
+      <FlatList
+        pagingEnabled
+      
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.white}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        style={{ backgroundColor: COLORS.black }}
+        data={eventsAndHosts}
+        keyExtractor={(item, index) =>
+          "homescreeneventcard" + index + item[0].Event.EventID
+        }
+        ListEmptyComponent={() =>
+          !isLoading &&
+          !isRefreshing &&
+          !showRetry && (
+            <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
+              Nothing to see here yet!
+            </McText>
+          )
+        }
+        ListHeaderComponent={() =>
+          showRetry && (
             <RetryButton
               setShowRetry={setShowRetry}
               retryCallBack={pullData}
@@ -106,95 +129,26 @@ const HomeScreen = () => {
                 marginTop: 20,
               }}
             />
-          )}
-          {!isLoading && !isRefreshing && !showRetry && (
-            <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
-              Nothing to see here yet!
-            </McText>
-          )}
-          {isLoading && !isRefreshing && !showRetry && (
+          )
+        }
+        ListFooterComponent={() =>
+          isLoading &&
+          !isRefreshing &&
+          !showRetry && (
             <ActivityIndicator
               color={COLORS.white}
               style={{ marginTop: 20 }}
               size={"small"}
             />
-          )}
-
-          {eventsAndHosts && (
-            <CardsSwipe
-              cards={eventsAndHosts}
-              renderCard={(card) => {
-                return (
-                  <HomeEvent
-                    event={card[0].Event}
-                    user={card[0].Host}
-                    reason={card[0].Reason}
-                  />
-                );
-              }}
-              onSwiped={(cardIndex) => {
-                console.log(cardIndex);
-              }}
-            />
-          )}
-        </View>
-      ) : (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              tintColor={COLORS.white}
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          style={{ backgroundColor: COLORS.black }}
-          data={eventsAndHosts}
-          keyExtractor={(item, index) =>
-            "homescreeneventcard" + index + item[0].Event.EventID
-          }
-          ListEmptyComponent={() =>
-            !isLoading &&
-            !isRefreshing &&
-            !showRetry && (
-              <McText h3 style={{ textAlign: "center", marginTop: 20 }}>
-                Nothing to see here yet!
-              </McText>
-            )
-          }
-          ListHeaderComponent={() =>
-            showRetry && (
-              <RetryButton
-                setShowRetry={setShowRetry}
-                retryCallBack={pullData}
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: 20,
-                }}
-              />
-            )
-          }
-          ListFooterComponent={() =>
-            isLoading &&
-            !isRefreshing &&
-            !showRetry && (
-              <ActivityIndicator
-                color={COLORS.white}
-                style={{ marginTop: 20 }}
-                size={"small"}
-              />
-            )
-          }
-          renderItem={({ item }) => (
-            <HomeEvent
-              event={item[0].Event}
-              user={item[0].Host}
-              reason={item[0].Reason}
-            />
-          )}
-        />
-      )}
+          )
+        }
+        renderItem={({ item }) => (
+          <HomeEvent
+            event={item[0].Event}
+            user={item[0].Host}
+            reason={item[0].Reason} height={SIZES.width} width={SIZES.width}/>
+        )}
+      />
       <TouchableOpacity
         style={styles.hoverButtonContainer}
         onPressOut={() => {

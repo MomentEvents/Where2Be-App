@@ -53,8 +53,8 @@ const HomeEventCard = ({
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = SIZES.width;
-  const cardHeight = SIZES.width;
+  const cardWidth = width ? width : SIZES.width;
+  const cardHeight = height ? height : SIZES.width;
 
   const cardBorderRadius = 0;
   const cardBorderWidth = 0;
@@ -92,12 +92,16 @@ const HomeEventCard = ({
       onPress={onPressCard}
       style={{
         borderRadius: cardBorderRadius,
+        height: cardHeight,
+        width: cardWidth,
       }}
     >
       <View
         key={"HomeEventCard" + event.EventID}
         style={{
           borderRadius: cardBorderRadius,
+          height: cardHeight,
+          width: cardWidth,
         }}
       >
         {reason && (

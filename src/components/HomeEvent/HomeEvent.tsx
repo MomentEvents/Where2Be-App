@@ -31,10 +31,14 @@ type HomeEventProps = {
   event: Event;
   user: User;
   reason: string;
+  height: number;
+  width: number;
 };
 
 const HomeEvent = (props: HomeEventProps) => {
   const navigation = useNavigation<any>();
+
+  const usernameHeight = 52;
 
   const { userIDToUser, updateUserIDToUser, userToken } =
     useContext(UserContext);
@@ -55,8 +59,8 @@ const HomeEvent = (props: HomeEventProps) => {
       userToken.UserID,
       props.event.EventID
     ).catch((error: CustomError) => {
-      if(error.showBugReportDialog){
-        showBugReportPopup(error)
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
       }
       setIsHidden(true);
     });
@@ -69,8 +73,8 @@ const HomeEvent = (props: HomeEventProps) => {
       userToken.UserID,
       props.event.EventID
     ).catch((error: CustomError) => {
-      if(error.showBugReportDialog){
-        showBugReportPopup(error)
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
       }
       setIsHidden(false);
     });
@@ -102,13 +106,14 @@ const HomeEvent = (props: HomeEventProps) => {
   }, []);
 
   return (
-    <View key={props.user.UserID + "HomeEvent" + props.event.EventID}>
+    <View style={{height: props.height, width: props.width}}>
       {isHidden ? (
         <View
           style={{
             paddingVertical: 10,
             paddingHorizontal: 20,
             backgroundColor: COLORS.gray1,
+            flex: 1,
           }}
         >
           <McText body4 color={COLORS.white}>
@@ -121,9 +126,10 @@ const HomeEvent = (props: HomeEventProps) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <View
             style={{
+              height: usernameHeight,
               paddingTop: 10,
               paddingBottom: 10,
               borderColor: COLORS.gray1,
@@ -186,11 +192,7 @@ const HomeEvent = (props: HomeEventProps) => {
               />
             </TouchableOpacity>
           </View>
-          <HomeEventCard
-            event={props.event}
-            host={props.user}
-            reason={props.reason}
-          />
+          <HomeEventCard width={props.width} height={props.height - usernameHeight} event={props.event} host={props.user} reason={props.reason}/>
         </View>
       )}
     </View>
