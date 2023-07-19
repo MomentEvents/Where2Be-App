@@ -117,17 +117,22 @@ const HomeScreen = () => {
       if (viewableItems.length === 0) {
         return;
       }
-      const viewedEvent = viewableItems[0].item.Event
+      const viewedEvent = viewableItems[0].item.Event;
 
       console.log(viewedEvent.EventID);
 
-      if (!viewedEventIDs.current[viewedEvent.EventID] && !viewedEvent.UserViewed) {
+      if (
+        !viewedEventIDs.current[viewedEvent.EventID] &&
+        !viewedEvent.UserViewed
+      ) {
         viewedEventIDs.current[viewedEvent.EventID] = true;
         queuedEventIDs.current.push(viewedEvent.EventID);
 
         // Update API to say that user viewed the event
         console.log(
-          "user has viewed event " + viewedEvent.EventID + " for the first time!"
+          "user has viewed event " +
+            viewedEvent.EventID +
+            " for the first time!"
         );
         clearTimeout(timeoutId.current);
         const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
@@ -212,9 +217,11 @@ const HomeScreen = () => {
             }}
           />
         }
-        getItemLayout={(data, index) => (
-          {length: homeCardHeight, offset: homeCardHeight * index, index}
-        )}
+        getItemLayout={(data, index) => ({
+          length: homeCardHeight,
+          offset: homeCardHeight * index,
+          index,
+        })}
         windowSize={5}
         data={eventsAndHosts}
         keyExtractor={keyExtractor}
@@ -259,21 +266,11 @@ const HomeScreen = () => {
                   color="white"
                 />
               </View>
-              {/* <TouchableOpacity style={styles.submitButton}>
-                    <McText
-                      h3
-                      style={{
-                        color: COLORS.white,
-                      }}
-                    >
-                      See what's p
-                    </McText>
-                </TouchableOpacity> */}
             </View>
           )
         }
         snapToInterval={homeCardHeight}
-        decelerationRate={0}
+        decelerationRate="fast"
         renderItem={renderItem}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
