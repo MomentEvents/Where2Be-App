@@ -96,7 +96,7 @@ const SignupSelectSchoolScreen = () => {
         }}
       >
         <TouchableOpacity
-          style={{ backgroundColor: COLORS.gray, borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14}}
+          style={{ borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14}}
           onPress={onNavigateBack}
         >
           <View style={{ flexDirection: "row" }}>
@@ -105,7 +105,7 @@ const SignupSelectSchoolScreen = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ backgroundColor: COLORS.gray, borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14 }}
+          style={{ borderRadius: 5, paddingVertical: 10, paddingHorizontal: 14 }}
           onPress={onNextClick}
         >
           <View style={{ flexDirection: "row" }}>

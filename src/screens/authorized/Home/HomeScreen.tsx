@@ -212,6 +212,10 @@ const HomeScreen = () => {
             }}
           />
         }
+        getItemLayout={(data, index) => (
+          {length: homeCardHeight, offset: homeCardHeight * index, index}
+        )}
+        windowSize={5}
         data={eventsAndHosts}
         keyExtractor={keyExtractor}
         ListHeaderComponent={() =>

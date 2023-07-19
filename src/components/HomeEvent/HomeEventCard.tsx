@@ -304,7 +304,6 @@ const HomeEventCard = ({
           }}
         >
           <McText body4 numberOfLines={2}>
-            <McText h4>Event Description: </McText>
             {event.Description.length === 0
               ? "N/A"
               : eventIDToEvent[event.EventID].Description}

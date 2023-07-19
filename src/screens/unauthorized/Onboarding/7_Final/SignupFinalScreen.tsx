@@ -174,7 +174,6 @@ const SignupFinalScreen = () => {
       >
         <TouchableOpacity
           style={{
-            backgroundColor: COLORS.gray,
             borderRadius: 5,
             paddingVertical: 10,
             paddingHorizontal: 14,

@@ -115,7 +115,6 @@ const SignupEmailScreen = () => {
         >
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.gray,
               borderRadius: 5,
               paddingVertical: 10,
               paddingHorizontal: 14,
@@ -129,7 +128,6 @@ const SignupEmailScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.gray,
               borderRadius: 5,
               paddingVertical: 10,
               paddingHorizontal: 14,

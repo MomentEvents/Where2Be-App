@@ -63,6 +63,10 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     formattedEvent.UserViewed = pulledEvent.user_viewed
   }
 
+  if(pulledEvent.user_follow_host !== undefined && pulledEvent.user_follow_host !== null){
+    formattedEvent.UserFollowHost = pulledEvent.user_follow_host
+  }
+
   // check for null or undefined values in formattedEvent
   const convertedKeys = Object.keys(formattedEvent);
   for (const key of convertedKeys) {

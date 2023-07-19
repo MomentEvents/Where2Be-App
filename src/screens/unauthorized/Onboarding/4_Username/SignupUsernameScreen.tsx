@@ -114,7 +114,6 @@ const SignupUsernameScreen = () => {
         >
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.gray,
               borderRadius: 5,
               paddingVertical: 10,
               paddingHorizontal: 14,
@@ -128,7 +127,6 @@ const SignupUsernameScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.gray,
               borderRadius: 5,
               paddingVertical: 10,
               paddingHorizontal: 14,

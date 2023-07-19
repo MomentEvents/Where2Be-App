@@ -64,6 +64,9 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const isFocused = useIsFocused();
 
+  const cardWidth = SIZES.width - 40;
+  const cardHeight = SIZES.height * 0.3;
+
   // Run this whenever the list is outdated and the user focuses on the app again.
   
   useEffect(() => {
@@ -393,6 +396,10 @@ const EventToggler = (props: EventTogglerProps) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        getItemLayout={(data, index) => (
+          {length: cardHeight, offset: cardHeight * index, index}
+        )}
+        windowSize={5}
         data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
         ListHeaderComponent={ListHeader}
         renderItem={renderItem}
