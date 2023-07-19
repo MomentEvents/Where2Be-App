@@ -58,11 +58,7 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     UserShoutout: pulledEvent.user_shoutout,
     HostUserID: pulledEvent.host_user_id,
   };
-
-  if(pulledEvent.user_viewed !== undefined && pulledEvent.user_viewed !== null){
-    formattedEvent.UserViewed = pulledEvent.user_viewed
-  }
-
+  
   if(pulledEvent.user_follow_host !== undefined && pulledEvent.user_follow_host !== null){
     formattedEvent.UserFollowHost = pulledEvent.user_follow_host
   }

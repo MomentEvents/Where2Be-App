@@ -52,6 +52,8 @@ const HomeScreen = () => {
 
   const queuedEventIDs = useRef<string[]>([]);
 
+  const eventViewIndex = useRef<number>();
+
   const lastPulled = useRef<Date>(new Date());
 
   const isFocused = useIsFocused();
@@ -71,28 +73,28 @@ const HomeScreen = () => {
     minimumViewTime: 300, // Minimum milliseconds the item is considered visible after the viewability event fires
   };
 
-  const sendViewedEvents = () => {
-    try {
-      // To avoid race conditions
-      const sentQueuedEventIDs = queuedEventIDs.current;
+  // const sendViewedEvents = () => {
+  //   try {
+  //     // To avoid race conditions
+  //     const sentQueuedEventIDs = queuedEventIDs.current;
 
-      console.log("Queued EventIDs: ", sentQueuedEventIDs);
+  //     console.log("Queued EventIDs: ", sentQueuedEventIDs);
 
-      setViewedEvents(
-        userToken.UserAccessToken,
-        userToken.UserID,
-        sentQueuedEventIDs
-      )
-        .then(() => {
-          queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
-        })
-        .catch((error: CustomError) => {
-          console.warn(error);
-        });
-    } catch (e) {
-      console.warn(e);
-    }
-  };
+  //     setViewedEvents(
+  //       userToken.UserAccessToken,
+  //       userToken.UserID,
+  //       sentQueuedEventIDs
+  //     )
+  //       .then(() => {
+  //         queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
+  //       })
+  //       .catch((error: CustomError) => {
+  //         console.warn(error);
+  //       });
+  //   } catch (e) {
+  //     console.warn(e);
+  //   }
+  // };
 
   useEffect(() => {
     if (isFocused) {
@@ -112,43 +114,107 @@ const HomeScreen = () => {
     }
   }, [isFocused]);
 
+  const CaughtUpCard = (props: { doPaddingBottom: boolean }) => {
+    return (
+      <View
+        style={{
+          width: homeCardWidth,
+          height: homeCardHeight,
+          backgroundColor: COLORS.trueBlack,
+          alignItems: "center",
+          justifyContent: "center",
+          paddingBottom: props.doPaddingBottom ? 140 : 30,
+          paddingTop: 30,
+          paddingHorizontal: 30,
+        }}
+      >
+        <McText h2>You're all caught up!</McText>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Feather name="aperture" size={homeCardWidth - 200} color="white" />
+        </View>
+      </View>
+    );
+  };
+
   const onViewableItemsChanged = useRef(({ viewableItems }) => {
-    try {
-      if (viewableItems.length === 0) {
-        return;
-      }
-      const viewedEvent = viewableItems[0].item.Event;
+    // try {
+    //   if (viewableItems.length === 0) {
+    //     return;
+    //   }
+    //   const viewedEvent = viewableItems[0].item.Event;
 
-      console.log(viewedEvent.EventID);
+    //   console.log(viewedEvent.EventID);
 
-      if (
-        !viewedEventIDs.current[viewedEvent.EventID] &&
-        !viewedEvent.UserViewed
-      ) {
-        viewedEventIDs.current[viewedEvent.EventID] = true;
-        queuedEventIDs.current.push(viewedEvent.EventID);
+    //   if (
+    //     !viewedEventIDs.current[viewedEvent.EventID] &&
+    //     !viewedEvent.UserViewed
+    //   ) {
+    //     viewedEventIDs.current[viewedEvent.EventID] = true;
+    //     queuedEventIDs.current.push(viewedEvent.EventID);
 
-        // Update API to say that user viewed the event
-        console.log(
-          "user has viewed event " +
-            viewedEvent.EventID +
-            " for the first time!"
-        );
-        clearTimeout(timeoutId.current);
-        const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
-        timeoutId.current = newTimeoutId;
-      }
+    //     // Update API to say that user viewed the event
+    //     console.log(
+    //       "user has viewed event " +
+    //         viewedEvent.EventID +
+    //         " for the first time!"
+    //     );
+    //     clearTimeout(timeoutId.current);
+    //     const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
+    //     timeoutId.current = newTimeoutId;
+    //   }
 
-      // You can put your logic here.
-      // viewableItems is an array of objects, each object represents a visible item.
-      // Each object in viewableItems has an item property that refers to the actual data item in your data array
-    } catch (error) {
-      console.warn(error);
-    }
+    //   // You can put your logic here.
+    //   // viewableItems is an array of objects, each object represents a visible item.
+    //   // Each object in viewableItems has an item property that refers to the actual data item in your data array
+    // } catch (error) {
+    //   console.warn(error);
+    // }
   }).current;
+
+  // const formatEvents = (
+  //   data: {
+  //     Host: User;
+  //     Event: Event;
+  //     Reason: string;
+  //   }[]
+  // ) => {
+  //   const viewedEvents: {
+  //     Host: User;
+  //     Event: Event;
+  //     Reason: string;
+  //   }[] = [];
+  //   const nonViewedEvents: {
+  //     Host: User;
+  //     Event: Event;
+  //     Reason: string;
+  //   }[] = [];
+
+  //   for (var i = 0; i < data.length; i++) {
+  //     if (data[i].Event.UserViewed) {
+  //       viewedEvents.push(data[i]);
+  //     } else {
+  //       nonViewedEvents.push(data[i]);
+  //     }
+  //   }
+
+  //   eventViewIndex.current = nonViewedEvents.length - 1;
+
+  //   console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
+  //   console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
+  //   console.log("\n\n\n CURRENTVIEWINDEX: " + eventViewIndex.current);
+  //   const newArray = nonViewedEvents.concat(viewedEvents);
+  //   setEventsAndHosts(newArray);
+  // };
 
   const pullData = async () => {
     lastPulled.current = new Date();
+    eventViewIndex.current = undefined;
     getAllHomePageEventsWithHosts(
       userToken.UserAccessToken,
       currentSchool.SchoolID
@@ -176,18 +242,22 @@ const HomeScreen = () => {
     pullData();
   };
 
-  const renderItem = ({ item }) => (
-    <HomeEvent
-      event={item.Event}
-      user={item.Host}
-      reason={item.Reason}
-      height={homeCardHeight}
-      width={homeCardWidth}
-    />
-  );
-
   const keyExtractor = (item, index) =>
     "homescreeneventcard" + index + item.Event.EventID;
+
+  const getReasonByEvent = (event: Event, defaultReason: string): string => {
+    // if (event.UserFollowHost && !event.UserViewed) {
+    //   return "A new event from an account you follow";
+    // }
+    if (event.UserFollowHost) {
+      return "From an account you follow";
+    }
+    // if (!event.UserViewed) {
+    //   return "An event you have not seen before";
+    // }
+
+    return defaultReason;
+  };
 
   useEffect(() => {
     pullData();
@@ -204,9 +274,29 @@ const HomeScreen = () => {
         />
       )}
 
+      {showRetry && (
+        <RetryButton
+          setShowRetry={setShowRetry}
+          retryCallBack={pullData}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        />
+      )}
+
       <FlatList
         pagingEnabled
         showsVerticalScrollIndicator={false}
+        // ListEmptyComponent={
+        //   !isLoading && <CaughtUpCard doPaddingBottom={false} />
+        // }
+        // ListHeaderComponent={
+        //   eventViewIndex.current === -1 && (
+        //     <CaughtUpCard doPaddingBottom={false} />
+        //   )
+        // }
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
@@ -225,55 +315,25 @@ const HomeScreen = () => {
         windowSize={5}
         data={eventsAndHosts}
         keyExtractor={keyExtractor}
-        ListHeaderComponent={() =>
-          showRetry && (
-            <RetryButton
-              setShowRetry={setShowRetry}
-              retryCallBack={pullData}
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 20,
-              }}
-            />
-          )
-        }
-        ListFooterComponent={() =>
-          !isLoading &&
-          !isRefreshing &&
-          !showRetry && (
-            <View
-              style={{
-                width: homeCardWidth,
-                height: homeCardHeight,
-                backgroundColor: COLORS.trueBlack,
-                alignItems: "center",
-                justifyContent: "center",
-                paddingBottom: 140,
-              }}
-            >
-              <McText h2>You're all caught up!</McText>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Feather
-                  name="aperture"
-                  size={homeCardWidth - 200}
-                  color="white"
-                />
-              </View>
-            </View>
-          )
-        }
         snapToInterval={homeCardHeight}
         decelerationRate="fast"
-        renderItem={renderItem}
+        renderItem={({ item, index }) => (
+          <View>
+            <HomeEvent
+              event={item.Event}
+              user={item.Host}
+              reason={getReasonByEvent(item.Event, item.Reason)}
+              height={homeCardHeight}
+              width={homeCardWidth}
+            />
+            {/* {eventViewIndex.current === index && (
+              <CaughtUpCard doPaddingBottom={false} />
+            )} */}
+          </View>
+        )}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
+        ListFooterComponent={!isLoading && <CaughtUpCard doPaddingBottom={true}/>}
       />
       <TouchableOpacity
         style={styles.hoverButtonContainer}

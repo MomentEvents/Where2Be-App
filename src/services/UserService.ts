@@ -368,30 +368,32 @@ export async function undoNotInterestedInEvent(
   await responseHandler<void>(response, "Could not set undo not interested in event", false);
 }
 
-export async function setViewedEvents(
-  userAccessToken: string,
-  userID: string,
-  eventIDs: string[],
-): Promise<void> {
-  
-  const response = await fetch(
-    momentAPI + `/user/user_id/${userID}/set_viewed_events`,
-    {
-      method: "UPDATE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_access_token: userAccessToken,
-        event_ids: eventIDs
-      }),
-    }
-  ).catch(() => {
-    return undefined
-  })
+// THIS IS TO BE IMPLEMENTED LATER WHEN WE HAVE THE DATABASE CAPACITY TO STORE IF A USER HAS VIEWED AN EVENT
 
-  await responseHandler<void>(response, "Could not set viewed event", false);
-}
+// export async function setViewedEvents(
+//   userAccessToken: string,
+//   userID: string,
+//   eventIDs: string[],
+// ): Promise<void> {
+  
+//   const response = await fetch(
+//     momentAPI + `/user/user_id/${userID}/set_viewed_events`,
+//     {
+//       method: "UPDATE",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         user_access_token: userAccessToken,
+//         event_ids: eventIDs
+//       }),
+//     }
+//   ).catch(() => {
+//     return undefined
+//   })
+
+//   await responseHandler<void>(response, "Could not set viewed event", false);
+// }
 
 export async function getUserEmail(
   userAccessToken: string,
