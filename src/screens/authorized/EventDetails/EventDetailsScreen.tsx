@@ -420,9 +420,9 @@ const EventDetailsScreen = ({ route }) => {
                 </ImageHeaderSection>
                 <ImageFooterSection>
                   <LinearGradient
-                    colors={["transparent", COLORS.black]}
+                    colors={["transparent", COLORS.trueBlack]}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: .9 }}
+                    end={{ x: 0, y: 0.9 }}
                     style={{
                       width: "100%",
                       height: 120,
@@ -437,7 +437,12 @@ const EventDetailsScreen = ({ route }) => {
                           width: "100%",
                         }}
                       >
-                        <Feather name="calendar" size={24} color={COLORS.purple} style={{marginRight: 8}}/>
+                        <Feather
+                          name="calendar"
+                          size={24}
+                          color={COLORS.purple}
+                          style={{ marginRight: 8 }}
+                        />
                         <McText
                           body4
                           style={{
@@ -533,83 +538,28 @@ const EventDetailsScreen = ({ route }) => {
                 </McText>
               </TouchableOpacity> */}
             </TitleSection>
-            <InterestSection>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                {eventIDToInterests[eventID]
-                  ? eventIDToInterests[eventID].map((taglist) => (
-                      <View
-                        key={taglist.InterestID}
-                        style={{
-                          borderRadius: 20,
-                          paddingVertical: 5,
-                          paddingHorizontal: 15,
-                          marginRight: 10,
-                          backgroundColor: COLORS.input,
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <McText
-                          h4
-                          color={COLORS.lightGray}
-                          style={{ letterSpacing: 0.8 }}
-                        >
-                          {taglist === undefined ? null : taglist.Name}
-                        </McText>
-                      </View>
-                    ))
-                  : null}
-              </ScrollView>
-            </InterestSection>
 
-            <HostSection>
-              <TouchableOpacity
+            <LocationSection>
+              <Ionicons
+                name="location-outline"
+                size={16}
+                style={{ marginRight: 5 }}
+                color={COLORS.lightGray}
+              />
+              <McText
+                h5
                 style={{
-                  maxWidth: "80%",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-                onPress={() => {
-                  onHostPressed();
+                  letterSpacing: 0.5,
+                  marginTop: -1,
+                  color: COLORS.lightGray,
                 }}
               >
-                <Image
-                  style={styles.hostProfilePic}
-                  source={{
-                    uri:
-                      host && userIDToUser[host.UserID]
-                        ? userIDToUser[host.UserID].Picture
-                        : null,
-                  }}
-                ></Image>
-                <McText
-                  h4
-                  numberOfLines={1}
-                  style={{
-                    letterSpacing: 1,
-                    color: COLORS.white,
-                  }}
-                >
-                  {host && userIDToUser[host.UserID]
-                    ? userIDToUser[host.UserID].DisplayName
-                    : "..."}
-                </McText>
-                {host &&
-                  userIDToUser[host.UserID] &&
-                  userIDToUser[host.UserID].VerifiedOrganization && (
-                    <View style={{ paddingLeft: 3 }}>
-                      <MaterialIcons
-                        name="verified"
-                        size={18}
-                        color={COLORS.purple}
-                      />
-                    </View>
-                  )}
-              </TouchableOpacity>
-            </HostSection>
+                {eventIDToEvent[eventID] === undefined
+                  ? null
+                  : eventIDToEvent[eventID].Location}
+              </McText>
+            </LocationSection>
+
             <View>
               <DescriptionSection>
                 <View
@@ -617,7 +567,7 @@ const EventDetailsScreen = ({ route }) => {
                     marginBottom: 8,
                     marginTop: 8,
                     marginRight: 12,
-                    marginLeft: 12,
+                    marginLeft: 7,
                   }}
                 >
                   <Hyperlink
@@ -656,26 +606,85 @@ const EventDetailsScreen = ({ route }) => {
                   ) : null}
                 </View>
               </DescriptionSection>
-              <LocationSection>
-                <Ionicons
-                  name="location-outline"
-                  size={16}
-                  style={{ marginHorizontal: 8 }}
-                  color={COLORS.lightGray}
-                />
-                <McText
-                  h5
+
+              <HostSection>
+                <TouchableOpacity
                   style={{
-                    letterSpacing: 0.5,
-                    marginTop: -1,
-                    color: COLORS.lightGray,
+                    maxWidth: "80%",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  onPress={() => {
+                    onHostPressed();
                   }}
                 >
-                  {eventIDToEvent[eventID] === undefined
-                    ? null
-                    : eventIDToEvent[eventID].Location}
-                </McText>
-              </LocationSection>
+                  <Image
+                    style={styles.hostProfilePic}
+                    source={{
+                      uri:
+                        host && userIDToUser[host.UserID]
+                          ? userIDToUser[host.UserID].Picture
+                          : null,
+                    }}
+                  ></Image>
+                  <McText
+                    h4
+                    numberOfLines={1}
+                    style={{
+                      letterSpacing: 1,
+                      color: COLORS.white,
+                    }}
+                  >
+                    {host && userIDToUser[host.UserID]
+                      ? userIDToUser[host.UserID].DisplayName
+                      : "..."}
+                  </McText>
+                  {host &&
+                    userIDToUser[host.UserID] &&
+                    userIDToUser[host.UserID].VerifiedOrganization && (
+                      <View style={{ paddingLeft: 3 }}>
+                        <MaterialIcons
+                          name="verified"
+                          size={18}
+                          color={COLORS.purple}
+                        />
+                      </View>
+                    )}
+                </TouchableOpacity>
+              </HostSection>
+
+              <InterestSection>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {eventIDToInterests[eventID]
+                    ? eventIDToInterests[eventID].map((taglist) => (
+                        <View
+                          key={taglist.InterestID}
+                          style={{
+                            borderRadius: 20,
+                            paddingVertical: 5,
+                            paddingHorizontal: 15,
+                            marginRight: 10,
+                            backgroundColor: COLORS.input,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <McText
+                            h4
+                            color={COLORS.lightGray}
+                            style={{ letterSpacing: 0.8 }}
+                          >
+                            {taglist === undefined ? null : taglist.Name}
+                          </McText>
+                        </View>
+                      ))
+                    : null}
+                </ScrollView>
+              </InterestSection>
+
               <VisibilitySection>
                 <MaterialCommunityIcons
                   name="map-search"
@@ -837,7 +846,7 @@ const EventDetailsScreen = ({ route }) => {
                           width: 58,
                           height: 58,
                           borderRadius: 80,
-                          backgroundColor: eventIDToEvent[eventID].UserShoutout 
+                          backgroundColor: eventIDToEvent[eventID].UserShoutout
                             ? "transparent"
                             : COLORS.white,
                           // borderWidth: StyleSheet.hairlineWidth,
@@ -862,17 +871,9 @@ const EventDetailsScreen = ({ route }) => {
                         }
                       >
                         {eventIDToEvent[eventID].UserShoutout ? (
-              <AntDesign
-              name="retweet"
-                            size={32}
-                            color="white"
-                          />
+                          <AntDesign name="retweet" size={32} color="white" />
                         ) : (
-                          <AntDesign
-                          name="retweet"
-                            size={32}
-                            color="black"
-                          />
+                          <AntDesign name="retweet" size={32} color="black" />
                         )}
                       </TouchableOpacity>
                     </GradientButton>
@@ -884,7 +885,8 @@ const EventDetailsScreen = ({ route }) => {
                           : COLORS.white,
                       }}
                     >
-                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)} Retweets
+                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}{" "}
+                      {eventIDToEvent[eventID].NumShoutouts === 1 ? "Retweet" : "Retweets"}
                     </McText>
                   </View>
                 </>
@@ -904,7 +906,7 @@ export default EventDetailsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   scrollcontainer: {
     marginLeft: 20,
@@ -929,13 +931,13 @@ const styles = StyleSheet.create({
     width: 35,
     borderRadius: 30,
     marginRight: 10,
-    borderWidth: 1,
+    borderWidth: 0.2,
     borderColor: COLORS.lightGray,
     justifyContent: "center",
     alignItems: "center",
   },
   edit: {
-    backgroundColor: COLORS.purple,
+    backgroundColor: COLORS.gray2,
     width: 120,
     padding: 8,
     borderRadius: 5,
@@ -988,7 +990,7 @@ const InterestSection = styled.View`
 
 const HostSection = styled.View`
   flex-direction: row;
-  margin: 5px 0px 10px 10px;
+  margin: 10px 0px 0px 0px;
 `;
 
 const DescriptionSection = styled.View`
@@ -1007,7 +1009,7 @@ const LocationSection = styled.View`
 
 const VisibilitySection = styled.View`
   flex-direction: row;
-  margin: 5px 20px 5px 0px;
+  margin: 5px 20px 10px 0px;
   border-radius: 10px;
   align-items: center;
 `;

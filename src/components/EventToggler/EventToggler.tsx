@@ -411,7 +411,7 @@ const EventToggler = (props: EventTogglerProps) => {
             style={{ backgroundColor: COLORS.trueBlack }}
           />
         }
-        style={{ backgroundColor: COLORS.black }}
+        style={{ backgroundColor: COLORS.trueBlack }}
         ListEmptyComponent={
           <View
             style={{

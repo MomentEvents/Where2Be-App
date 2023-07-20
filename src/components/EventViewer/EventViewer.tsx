@@ -39,8 +39,8 @@ const EventViewer = (props: EventViewerProps) => {
     [key: string]: Event[];
   }>({});
 
-  const smallEventCardWidth = 270;
-  const smallEventCardHeight = 250;
+  const smallEventCardWidth = SIZES.width - 100;
+  const smallEventCardHeight = SIZES.width - 120;
 
   const [showRetry, setShowRetry] = useState(false);
 
@@ -75,8 +75,6 @@ const EventViewer = (props: EventViewerProps) => {
         ) : (
           <EventCard
             event={item}
-            width={smallEventCardWidth}
-            height={smallEventCardHeight}
             isBigCard={true}
             onClick={() => {
               navigation.push(SCREENS.Onboarding.SignupWelcomeScreen);
@@ -91,11 +89,13 @@ const EventViewer = (props: EventViewerProps) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
         {isLoggedIn ? (
-          <EventCard event={item} isBigCard={false} />
+          <EventCard event={item} isBigCard={false} width={smallEventCardWidth}
+          height={smallEventCardHeight}/>
         ) : (
           <EventCard
             event={item}
-            isBigCard={false}
+            width={smallEventCardWidth}
+            height={smallEventCardHeight}
             onClick={() => {
               navigation.push(SCREENS.Onboarding.SignupWelcomeScreen);
             }}
