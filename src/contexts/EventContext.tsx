@@ -49,6 +49,9 @@ export const EventContext = createContext<EventContextType>({
 });
 
 export const EventProvider = ({ children }) => {
+
+  const newPostedEventIDRef = useRef<string>();
+
   const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
   const [eventIDToInterests, updateEventIDToInterests] = useReducer(
     setInterestsMap,
