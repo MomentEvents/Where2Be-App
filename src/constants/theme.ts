@@ -44,9 +44,9 @@ export const SIZES = {
 
   // font sizes
   large: 40,
-  h1: 30,
+  h1: 28,
   h2: 24,
-  h3: 20,
+  h3: 18,
   h4: 16,
   h5: 14,
   h6: 13,
@@ -69,10 +69,10 @@ export const SIZES = {
 export const FONTS = {
   f0: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.large},
   small: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.small},
-  h1: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h1},
-  h2: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h2},
-  h3: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h3},
-  h4: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h4},
+  h1: { fontFamily: CUSTOMFONT_SEMIBOLD, fontSize: SIZES.h1},
+  h2: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.h2},
+  h3: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.h3},
+  h4: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.h4},
   h5: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h5},
   h6: { fontFamily: CUSTOMFONT_BOLD, fontSize: SIZES.h6},
   body1: { fontFamily: CUSTOMFONT_REGULAR, fontSize: SIZES.body1},

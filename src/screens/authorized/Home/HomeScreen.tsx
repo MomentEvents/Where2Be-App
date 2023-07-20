@@ -26,7 +26,6 @@ import { McText } from "../../../components/Styled";
 import CardsSwipe from "react-native-cards-swipe";
 import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setViewedEvents } from "../../../services/UserService";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -136,7 +135,7 @@ const HomeScreen = () => {
             justifyContent: "center",
           }}
         >
-          <Feather name="aperture" size={homeCardWidth - 200} color="white" />
+          <Feather name="aperture" size={homeCardWidth - 300} color="white" />
         </View>
       </View>
     );
@@ -326,9 +325,6 @@ const HomeScreen = () => {
               height={homeCardHeight}
               width={homeCardWidth}
             />
-            {/* {eventViewIndex.current === index && (
-              <CaughtUpCard doPaddingBottom={false} />
-            )} */}
           </View>
         )}
         viewabilityConfig={viewabilityConfig}

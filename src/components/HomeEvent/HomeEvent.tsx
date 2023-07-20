@@ -106,7 +106,7 @@ const HomeEvent = (props: HomeEventProps) => {
   }, []);
 
   return (
-    <View style={{ height: props.height, width: props.width }}>
+    <View style={{height: props.height, width: props.width, overflow: "hidden" }}>
       {isHidden ? (
         <View
           style={{
@@ -132,9 +132,6 @@ const HomeEvent = (props: HomeEventProps) => {
               height: usernameHeight,
               paddingTop: 10,
               paddingBottom: 10,
-              borderColor: COLORS.gray1,
-              borderTopWidth: 1,
-              backgroundColor: COLORS.black,
               flex: 1,
               flexDirection: "row",
               alignItems: "center",

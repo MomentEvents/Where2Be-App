@@ -421,7 +421,7 @@ const EventDetailsScreen = ({ route }) => {
                   <LinearGradient
                     colors={["transparent", COLORS.black]}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
+                    end={{ x: 0, y: .9 }}
                     style={{
                       width: "100%",
                       height: 120,
@@ -436,11 +436,9 @@ const EventDetailsScreen = ({ route }) => {
                           width: "100%",
                         }}
                       >
-                        <icons.calendar_eventdetails
-                          style={{ marginRight: 8 }}
-                        />
+                        <Feather name="calendar" size={24} color={COLORS.purple} style={{marginRight: 8}}/>
                         <McText
-                          h5
+                          body4
                           style={{
                             letterSpacing: 0.1,
                             color: COLORS.lightGray,
@@ -455,13 +453,19 @@ const EventDetailsScreen = ({ route }) => {
                         <View
                           style={{
                             position: "absolute",
+                            alignItems: "center",
                             right: 0,
                             flexDirection: "row",
                           }}
                         >
-                          <icons.time_eventdetails style={{ marginRight: 8 }} />
+                          <Feather
+                            style={{ marginRight: 8 }}
+                            name="clock"
+                            size={24}
+                            color={COLORS.purple}
+                          />
                           <McText
-                            h5
+                            body4
                             style={{
                               letterSpacing: 0.1,
                               color: COLORS.lightGray,
@@ -504,7 +508,7 @@ const EventDetailsScreen = ({ route }) => {
                     : eventIDToEvent[eventID].Title}
                 </McText>
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   padding: 10,
                   flexDirection: "row",
@@ -526,7 +530,7 @@ const EventDetailsScreen = ({ route }) => {
                 <McText h5 color={COLORS.white}>
                   Chat
                 </McText>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </TitleSection>
             <InterestSection>
               <ScrollView
@@ -538,7 +542,7 @@ const EventDetailsScreen = ({ route }) => {
                       <View
                         key={taglist.InterestID}
                         style={{
-                          borderRadius: 5,
+                          borderRadius: 20,
                           paddingVertical: 5,
                           paddingHorizontal: 15,
                           marginRight: 10,
@@ -987,7 +991,6 @@ const HostSection = styled.View`
 `;
 
 const DescriptionSection = styled.View`
-  background-color: ${COLORS.input};
   border-radius: 5px;
   margin: 5px 0px 0px 0px;
   opacity: 1;

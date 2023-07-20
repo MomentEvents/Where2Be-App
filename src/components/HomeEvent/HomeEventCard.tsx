@@ -303,11 +303,11 @@ const HomeEventCard = ({
             backgroundColor: COLORS.trueBlack,
           }}
         >
-          <McText body4 numberOfLines={2}>
+          {/* <McText body4 numberOfLines={2}>
             {event.Description.length === 0
               ? "N/A"
               : eventIDToEvent[event.EventID].Description}
-          </McText>
+          </McText> */}
         </View>
       </View>
     </TouchableHighlight>
