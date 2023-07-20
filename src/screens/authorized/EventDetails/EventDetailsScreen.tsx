@@ -804,14 +804,14 @@ const EventDetailsScreen = ({ route }) => {
                       </TouchableOpacity>
                     </GradientButton>
                     <McText
-                      body2
+                      body4
                       style={{
                         color: eventIDToEvent[eventID].UserJoin
                           ? COLORS.darkPurple
                           : COLORS.white,
                       }}
                     >
-                      {truncateNumber(eventIDToEvent[eventID].NumJoins)}
+                      {truncateNumber(eventIDToEvent[eventID].NumJoins)} Going
                     </McText>
                   </View>
                   <View
@@ -837,7 +837,7 @@ const EventDetailsScreen = ({ route }) => {
                           width: 58,
                           height: 58,
                           borderRadius: 80,
-                          backgroundColor: eventIDToEvent[eventID].UserShoutout
+                          backgroundColor: eventIDToEvent[eventID].UserShoutout 
                             ? "transparent"
                             : COLORS.white,
                           // borderWidth: StyleSheet.hairlineWidth,
@@ -877,14 +877,14 @@ const EventDetailsScreen = ({ route }) => {
                       </TouchableOpacity>
                     </GradientButton>
                     <McText
-                      body2
+                      body4
                       style={{
                         color: eventIDToEvent[eventID].UserShoutout
                           ? COLORS.darkPurple
                           : COLORS.white,
                       }}
                     >
-                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}
+                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)} Retweets
                     </McText>
                   </View>
                 </>

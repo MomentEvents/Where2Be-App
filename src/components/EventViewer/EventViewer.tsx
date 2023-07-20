@@ -132,7 +132,7 @@ const EventViewer = (props: EventViewerProps) => {
           onRefresh={onRefresh}
         />
       }
-      style={{ backgroundColor: COLORS.black }}
+      style={{ backgroundColor: COLORS.trueBlack }}
     >
       {showRetry && (
         <RetryButton
@@ -205,9 +205,9 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 10,
     marginLeft: 20,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   flatlistContainer: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
 });

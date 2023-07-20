@@ -317,15 +317,13 @@ const HomeScreen = () => {
         snapToInterval={homeCardHeight}
         decelerationRate="fast"
         renderItem={({ item, index }) => (
-          <View>
-            <HomeEvent
-              event={item.Event}
-              user={item.Host}
-              reason={getReasonByEvent(item.Event, item.Reason)}
-              height={homeCardHeight}
-              width={homeCardWidth}
-            />
-          </View>
+          <HomeEvent
+            event={item.Event}
+            user={item.Host}
+            reason={getReasonByEvent(item.Event, item.Reason)}
+            height={homeCardHeight}
+            width={homeCardWidth}
+          />
         )}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}

@@ -184,8 +184,8 @@ const HomeEvent = (props: HomeEventProps) => {
             <TouchableOpacity onPress={handleNotInterested}>
               <MaterialCommunityIcons
                 name="window-close"
-                size={28}
-                color="white"
+                size={20}
+                color="gray"
               />
             </TouchableOpacity>
           </View>
