@@ -39,6 +39,9 @@ const EventViewer = (props: EventViewerProps) => {
     [key: string]: Event[];
   }>({});
 
+  const smallEventCardWidth = 270;
+  const smallEventCardHeight = 250;
+
   const [showRetry, setShowRetry] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -72,6 +75,8 @@ const EventViewer = (props: EventViewerProps) => {
         ) : (
           <EventCard
             event={item}
+            width={smallEventCardWidth}
+            height={smallEventCardHeight}
             isBigCard={true}
             onClick={() => {
               navigation.push(SCREENS.Onboarding.SignupWelcomeScreen);
@@ -178,6 +183,7 @@ const EventViewer = (props: EventViewerProps) => {
               showsHorizontalScrollIndicator={false}
               data={Object.values(categoryNameToEventsMap[key])}
               keyExtractor={_smallKeyExtractor}
+
               renderItem={_renderSmallEventCards}
               style={styles.flatlistContainer}
             />

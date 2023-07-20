@@ -52,6 +52,7 @@ import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
 import {
+  AntDesign,
   Feather,
   Ionicons,
   MaterialCommunityIcons,
@@ -861,14 +862,14 @@ const EventDetailsScreen = ({ route }) => {
                         }
                       >
                         {eventIDToEvent[eventID].UserShoutout ? (
-                          <Ionicons
-                            name="ios-megaphone"
+              <AntDesign
+              name="retweet"
                             size={32}
                             color="white"
                           />
                         ) : (
-                          <Ionicons
-                            name="ios-megaphone-outline"
+                          <AntDesign
+                          name="retweet"
                             size={32}
                             color="black"
                           />

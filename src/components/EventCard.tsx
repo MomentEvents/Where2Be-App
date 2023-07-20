@@ -19,6 +19,7 @@ import { displayError, truncateNumber } from "../helpers/helpers";
 import { EventContext } from "../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { AntDesign } from "@expo/vector-icons";
 
 type EventCardProps = {
   onClick?: () => void;
@@ -45,10 +46,17 @@ const EventCard = ({
   const [fetchedEvent, setFetchedEvent] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-  const cardWidth = width ? width : isBigCard ? 330 : 160;
-  const cardHeight = height ? height : isBigCard ? 240 : 210;
+  let cardWidth = width ? width : isBigCard ? 330 : 270;
+  let cardHeight = height ? height : isBigCard ? 240 : 250;
 
-  const cardBorderRadius = 7;
+  if(cardWidth < 0){
+    cardWidth = 40;
+  }
+  if(cardHeight < 0){
+    cardHeight = 40
+  }
+
+  const cardBorderRadius = 10;
   const cardBorderWidth = 1;
   const cardBorderColor = COLORS.gray2;
 
@@ -231,8 +239,8 @@ const EventCard = ({
                   >
                     {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
                   </McText>
-                  <Ionicons
-                    name="md-megaphone-outline"
+                  <AntDesign
+                    name="retweet"
                     size={15}
                     color={
                       eventIDToEvent[event.EventID].UserShoutout
@@ -387,8 +395,8 @@ const EventCard = ({
               >
                 {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
               </McText>
-              <Ionicons
-                name="md-megaphone-outline"
+              <AntDesign
+                name="retweet"
                 size={13}
                 color={
                   eventIDToEvent[event.EventID].UserShoutout

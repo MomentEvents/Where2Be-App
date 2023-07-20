@@ -370,7 +370,7 @@ const EventToggler = (props: EventTogglerProps) => {
       >
         <EventCard
           width={SIZES.width - 40}
-          height={SIZES.height * 0.3}
+          height={SIZES.width - 145}
           event={event}
           isBigCard={true}
           showRelativeTime={true}

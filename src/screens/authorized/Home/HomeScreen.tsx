@@ -135,7 +135,7 @@ const HomeScreen = () => {
             justifyContent: "center",
           }}
         >
-          <Feather name="aperture" size={homeCardWidth - 300} color="white" />
+          <Feather name="aperture" size={homeCardWidth - 200} color="white" />
         </View>
       </View>
     );
