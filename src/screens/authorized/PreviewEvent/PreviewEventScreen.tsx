@@ -52,8 +52,7 @@ const EventDetailsScreen = ({ route }) => {
   const { isLoggedIn, userToken, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
 
-  const { didHostedEventsChangeRef } =
-    useContext(EventContext);
+  const { didHostedEventsChangeRef } = useContext(EventContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -153,133 +152,277 @@ const EventDetailsScreen = ({ route }) => {
         onRequestClose={() => setImageViewVisible(false)}
       />
       <ScrollView
-        style={{ flex: 1, backgroundColor: COLORS.black }}
+        style={{ flex: 1, backgroundColor: COLORS.trueBlack }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ position: "relative" }}>
-          <TouchableOpacity onPress={() => setImageViewVisible(true)}>
-            <ImageBackground
-              resizeMode="cover"
-              source={{
-                uri: createdEvent.Picture,
-              }}
-              style={{
-                width: "100%",
-                height: SIZES.height * 0.3,
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                <ImageHeaderSection>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setImageViewVisible(true);
-                    }}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 13,
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="arrow-expand"
-                      size={23}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </ImageHeaderSection>
-                <ImageFooterSection>
-                  <LinearGradient
-                    colors={["transparent", COLORS.black]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{
-                      width: "100%",
-                      height: 120,
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <FooterContentView>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          width: "100%",
-                        }}
-                      >
-                        <icons.calendar_eventdetails
-                          style={{ marginRight: 8 }}
-                        />
-                        <McText
-                          h5
-                          style={{
-                            letterSpacing: 0.1,
-                            color: COLORS.lightGray,
-                          }}
-                        >
-                          {createdEvent === undefined
-                            ? null
-                            : moment(createdEvent.StartDateTime).format(
-                                "MMM DD[,] YYYY"
-                              )}
-                        </McText>
+        <View style={{ height: "100%", position: "relative" }}>
+          <ScrollView
+            contentContainerStyle={{
+              backgroundColor: "transparent",
+            }}
+            style={{
+              backgroundColor: "transparent",
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <TouchableOpacity onPress={() => setImageViewVisible(true)}>
+              <ImageBackground
+                resizeMode="cover"
+                source={{
+                  uri: createdEvent.Picture,
+                }}
+                style={{
+                  width: "100%",
+                  height: SIZES.height * 0.45,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  <ImageHeaderSection>
+                    <TouchableOpacity
+                      style={{
+                        width: 56,
+                        height: 40,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 13,
+                        opacity: 0,
+                      }}
+                      disabled={true}
+                    >
+                      <Feather name="arrow-left" size={28} color="white" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        setImageViewVisible(true);
+                      }}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 13,
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="arrow-expand"
+                        size={23}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </ImageHeaderSection>
+                  <ImageFooterSection>
+                    <LinearGradient
+                      colors={["transparent", COLORS.trueBlack]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 0, y: 0.9 }}
+                      style={{
+                        width: "100%",
+                        height: 120,
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <FooterContentView>
                         <View
                           style={{
-                            position: "absolute",
-                            right: 0,
                             flexDirection: "row",
+                            alignItems: "center",
+                            width: "100%",
                           }}
                         >
-                          <icons.time_eventdetails style={{ marginRight: 8 }} />
+                          <Feather
+                            name="calendar"
+                            size={24}
+                            color={COLORS.purple}
+                            style={{ marginRight: 8 }}
+                          />
                           <McText
-                            h5
+                            body4
                             style={{
                               letterSpacing: 0.1,
                               color: COLORS.lightGray,
                             }}
                           >
-                            {createdEvent === undefined
-                              ? null
-                              : moment(createdEvent.StartDateTime).format(
-                                  "h:mm a"
-                                ) +
-                                " - " +
-                                moment(createdEvent.EndDateTime).format(
-                                  "h:mm a"
-                                )}
+                            {moment(createdEvent.StartDateTime).format(
+                              "MMM DD[,] YYYY"
+                            )}
                           </McText>
+                          <View
+                            style={{
+                              position: "absolute",
+                              alignItems: "center",
+                              right: 0,
+                              flexDirection: "row",
+                            }}
+                          >
+                            <Feather
+                              style={{ marginRight: 8 }}
+                              name="clock"
+                              size={24}
+                              color={COLORS.purple}
+                            />
+                            <McText
+                              body4
+                              style={{
+                                letterSpacing: 0.1,
+                                color: COLORS.lightGray,
+                              }}
+                            >
+                              {createdEvent.EndDateTime
+                                ? moment(createdEvent.StartDateTime).format(
+                                    "h:mm a"
+                                  ) +
+                                  " - " +
+                                  moment(createdEvent.EndDateTime).format(
+                                    "h:mm a"
+                                  )
+                                : moment(createdEvent.StartDateTime).format(
+                                    "h:mm a"
+                                  )}
+                            </McText>
+                          </View>
                         </View>
-                      </View>
-                    </FooterContentView>
-                  </LinearGradient>
-                </ImageFooterSection>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
-          <View style={styles.scrollcontainer}>
-            <TitleSection>
-              <McText
-                h1
-                style={{
-                  marginTop: 10,
-                }}
-              >
-                {createdEvent === undefined ? null : createdEvent.Title}
-              </McText>
-            </TitleSection>
-            <InterestSection>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                {interests
-                  ? interests.map((taglist) => (
+                      </FooterContentView>
+                    </LinearGradient>
+                  </ImageFooterSection>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+            <View style={styles.scrollcontainer}>
+              <TitleSection>
+                <View style={{ flex: 1 }}>
+                  <McText
+                    h1
+                    style={{
+                      marginTop: 10,
+                      marginRight: 10,
+                    }}
+                  >
+                    {createdEvent.Title}
+                  </McText>
+                </View>
+              </TitleSection>
+
+              <LocationSection>
+                <Ionicons
+                  name="location-outline"
+                  size={16}
+                  style={{ marginRight: 5 }}
+                  color={COLORS.lightGray}
+                />
+                <McText
+                  h5
+                  style={{
+                    letterSpacing: 0.5,
+                    marginTop: -1,
+                    color: COLORS.lightGray,
+                  }}
+                >
+                  {createdEvent.Location}
+                </McText>
+              </LocationSection>
+
+              <View>
+                <DescriptionSection>
+                  <View
+                    style={{
+                      marginBottom: 8,
+                      marginTop: 8,
+                      marginRight: 12,
+                      marginLeft: 7,
+                    }}
+                  >
+                    <Hyperlink
+                      linkDefault={true}
+                      linkStyle={{ textDecorationLine: "underline" }}
+                    >
+                      <McText
+                        onTextLayout={descriptionOnExpand}
+                        numberOfLines={descriptionExpanded ? undefined : 3}
+                        body3
+                        style={{
+                          letterSpacing: 0.7,
+                          color: COLORS.lightGray,
+                        }}
+                        selectable={true}
+                      >
+                        {createdEvent.Description}
+                      </McText>
+                    </Hyperlink>
+
+                    {lengthMoreText ? (
+                      <McText
+                        body4
+                        onPress={descriptionToggleNumberOfLines}
+                        style={{
+                          lineHeight: 22,
+                          marginTop: 10,
+                          color: COLORS.gray,
+                          letterSpacing: 0.3,
+                        }}
+                      >
+                        {descriptionExpanded ? "Read less..." : "Read more..."}
+                      </McText>
+                    ) : null}
+                  </View>
+                </DescriptionSection>
+
+                <HostSection>
+                  <TouchableOpacity
+                    style={{
+                      maxWidth: "80%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                    disabled={true}
+                  >
+                    <Image
+                      style={styles.hostProfilePic}
+                      source={{
+                        uri: userIDToUser[userToken.UserID]
+                          ? userIDToUser[userToken.UserID].Picture
+                          : null,
+                      }}
+                    ></Image>
+                    <McText
+                      h4
+                      numberOfLines={1}
+                      style={{
+                        letterSpacing: 1,
+                        color: COLORS.white,
+                      }}
+                    >
+                      {userIDToUser[userToken.UserID].DisplayName}
+                    </McText>
+                    {userIDToUser[userToken.UserID] &&
+                      userIDToUser[userToken.UserID].VerifiedOrganization && (
+                        <View style={{ paddingLeft: 3 }}>
+                          <MaterialIcons
+                            name="verified"
+                            size={18}
+                            color={COLORS.purple}
+                          />
+                        </View>
+                      )}
+                  </TouchableOpacity>
+                </HostSection>
+
+                <InterestSection>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                    {interests.map((taglist) => (
                       <View
                         key={taglist.InterestID}
                         style={{
-                          borderRadius: 5,
+                          borderRadius: 20,
                           paddingVertical: 5,
                           paddingHorizontal: 15,
                           marginRight: 10,
@@ -296,137 +439,33 @@ const EventDetailsScreen = ({ route }) => {
                           {taglist === undefined ? null : taglist.Name}
                         </McText>
                       </View>
-                    ))
-                  : null}
-              </ScrollView>
-            </InterestSection>
+                    ))}
+                  </ScrollView>
+                </InterestSection>
 
-            <HostSection>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  maxWidth: "80%",
-                }}
-              >
-                <Image
-                  style={styles.hostProfilePic}
-                  source={{ uri: userIDToUser[userToken.UserID].Picture }}
-                ></Image>
-                <McText
-                  h4
-                  numberOfLines={1}
-                  style={{
-                    letterSpacing: 1,
-                    color: COLORS.white,
-                  }}
-                >
-                  {userIDToUser[userToken.UserID] === null ? (
-                    <ActivityIndicator
-                      color={COLORS.white}
-                      style={{ marginLeft: 10 }}
-                    />
-                  ) : (
-                    userIDToUser[userToken.UserID].DisplayName
-                  )}
-                </McText>
-                {userIDToUser[userToken.UserID] &&
-                  userIDToUser[userToken.UserID].VerifiedOrganization && (
-                    <View style={{ paddingLeft: 3 }}>
-                      <MaterialIcons
-                        name="verified"
-                        size={18}
-                        color={COLORS.purple}
-                      />
-                    </View>
-                  )}
+                <VisibilitySection>
+                  <MaterialCommunityIcons
+                    name="map-search"
+                    size={16}
+                    style={{ marginHorizontal: 8 }}
+                    color={COLORS.lightGray}
+                  />
+                  <View>
+                    <McText
+                      body5
+                      numberOfLines={1}
+                      style={{
+                        letterSpacing: 1,
+                        color: COLORS.lightGray,
+                      }}
+                    >
+                      {createdEvent.Visibility}
+                    </McText>
+                  </View>
+                </VisibilitySection>
               </View>
-            </HostSection>
-
-            <DescriptionSection>
-              <View
-                style={{
-                  marginBottom: 8,
-                  marginTop: 8,
-                  marginRight: 12,
-                  marginLeft: 12,
-                }}
-              >
-                <Hyperlink
-                  linkDefault={true}
-                  linkStyle={{ textDecorationLine: "underline" }}
-                >
-                  <McText
-                    onTextLayout={descriptionOnExpand}
-                    numberOfLines={descriptionExpanded ? undefined : 3}
-                    body3
-                    style={{ letterSpacing: 0.7, color: COLORS.lightGray }}
-                    selectable={true}
-                  >
-                    {createdEvent === undefined
-                      ? null
-                      : createdEvent.Description}
-                  </McText>
-                </Hyperlink>
-                {lengthMoreText ? (
-                  <McText
-                    body4
-                    onPress={descriptionToggleNumberOfLines}
-                    style={{
-                      lineHeight: 22,
-                      marginTop: 10,
-                      color: COLORS.gray,
-                      letterSpacing: 0.3,
-                    }}
-                  >
-                    {descriptionExpanded ? "Read less..." : "Read more..."}
-                  </McText>
-                ) : null}
-              </View>
-            </DescriptionSection>
-            <View>
-              <LocationSection>
-                <Ionicons
-                  name="location-outline"
-                  size={16}
-                  style={{ marginHorizontal: 8 }}
-                  color={COLORS.lightGray}
-                />
-                <McText
-                  h5
-                  style={{
-                    letterSpacing: 0.5,
-                    marginTop: -1,
-                    color: COLORS.lightGray,
-                  }}
-                >
-                  {createdEvent === undefined ? null : createdEvent.Location}
-                </McText>
-              </LocationSection>
-              <VisibilitySection>
-                <MaterialCommunityIcons
-                  name="map-search"
-                  size={16}
-                  style={{ marginHorizontal: 8 }}
-                  color={COLORS.lightGray}
-                />
-                <View>
-                  <McText
-                    body5
-                    numberOfLines={1}
-                    style={{
-                      letterSpacing: 1,
-                      color: COLORS.lightGray,
-                    }}
-                  >
-                    {createdEvent === undefined
-                      ? null
-                      : createdEvent.Visibility}
-                  </McText>
-                </View>
-              </VisibilitySection>
             </View>
-          </View>
+          </ScrollView>
         </View>
         <View style={{ height: insets.bottom + 10 }} />
       </ScrollView>
@@ -445,21 +484,54 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
   },
+  userControlContainer: {
+    flex: 1,
+    position: "absolute",
+    left: 10,
+    right: 10,
+    height: 110,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(100,100,100,.95)",
+    backgroundColor: "rgba(40,40,40,.95)",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 8,
+  },
   hostProfilePic: {
     height: 35,
     width: 35,
     borderRadius: 30,
     marginRight: 10,
-    borderWidth: 1,
-    borderColor: COLORS.white,
+    borderWidth: 0.2,
+    borderColor: COLORS.lightGray,
     justifyContent: "center",
     alignItems: "center",
+  },
+  edit: {
+    backgroundColor: COLORS.gray2,
+    width: 120,
+    padding: 8,
+    borderRadius: 5,
+    alignItems: "center",
+    height: 35,
+    marginRight: 10,
+    justifyContent: "center",
+  },
+  delete: {
+    backgroundColor: COLORS.red,
+    width: 140,
+    padding: 8,
+    borderRadius: 5,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
 const ImageHeaderSection = styled.View`
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 20px;
   margin-left: 30px;
   margin-right: 30px;
@@ -490,11 +562,10 @@ const InterestSection = styled.View`
 
 const HostSection = styled.View`
   flex-direction: row;
-  margin: 5px 0px 10px 10px;
+  margin: 10px 0px 0px 0px;
 `;
 
 const DescriptionSection = styled.View`
-  background-color: ${COLORS.input};
   border-radius: 5px;
   margin: 5px 0px 0px 0px;
   opacity: 1;
@@ -510,7 +581,26 @@ const LocationSection = styled.View`
 
 const VisibilitySection = styled.View`
   flex-direction: row;
-  margin: 5px 20px 5px 0px;
+  margin: 5px 20px 10px 0px;
   border-radius: 10px;
   align-items: center;
+`;
+
+const EditOrDeleteEventSection = styled.View`
+  flex-direction: row;
+  margin: 10px 0px 0px 0px;
+  border-radius: 10px;
+  align-items: center;
+`;
+
+const SectionFooter = styled.View`
+  background-color: transparent;
+  justify-content: space-between;
+`;
+
+const UserOptionsSection = styled.View`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;

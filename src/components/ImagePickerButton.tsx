@@ -62,7 +62,7 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: COLORS.black,
+        backgroundColor: COLORS.trueBlack,
         borderRadius: 5,
         alignItems: "center",
         justifyContent: "center",
