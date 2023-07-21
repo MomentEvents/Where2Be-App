@@ -54,6 +54,7 @@ const SettingsScreen = () => {
 
   const onCheckForUpdatesClick = async () => {
     setLoading(true)
+    console.log("Checking updates")
     try {
       const update = await Updates.checkForUpdateAsync();
       if(update.isAvailable){

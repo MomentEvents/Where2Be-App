@@ -171,6 +171,7 @@ const EventViewer = (props: EventViewerProps) => {
               data={Object.values(categoryNameToEventsMap[key])}
               keyExtractor={_bigKeyExtractor}
               renderItem={_renderBigEventCards}
+              windowSize={2}
               style={styles.flatlistContainer}
             />
           </View>
@@ -185,7 +186,7 @@ const EventViewer = (props: EventViewerProps) => {
               showsHorizontalScrollIndicator={false}
               data={Object.values(categoryNameToEventsMap[key])}
               keyExtractor={_smallKeyExtractor}
-
+              windowSize={4}
               renderItem={_renderSmallEventCards}
               style={styles.flatlistContainer}
             />

@@ -41,11 +41,12 @@ type EventTogglerProps = {
 };
 
 const EventToggler = (props: EventTogglerProps) => {
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
   const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
 
-    const {didHostedEventsChangeRef, didJoinedEventsChangeRef} = useContext(EventContext)
+  const { didHostedEventsChangeRef, didJoinedEventsChangeRef } =
+    useContext(EventContext);
 
   const [pulledPastEvents, setPulledPastEvents] = useState<Event[]>(null);
   const [pulledFutureEvents, setPulledFutureEvents] = useState<Event[]>(null);
@@ -70,22 +71,27 @@ const EventToggler = (props: EventTogglerProps) => {
   const cardHeight = SIZES.height * 0.3;
 
   // Run this whenever the list is outdated and the user focuses on the app again.
-  
+
   useEffect(() => {
     if (isFocused) {
-      if(props.selectedUserID !== userToken.UserID){
-        return
+      if (props.selectedUserID !== userToken.UserID) {
+        return;
       }
       let doPull = false;
-      if(props.eventsToPull === EVENT_TOGGLER.HostedEvents && didHostedEventsChangeRef.current){
+      if (
+        props.eventsToPull === EVENT_TOGGLER.HostedEvents &&
+        didHostedEventsChangeRef.current
+      ) {
         didHostedEventsChangeRef.current = false;
         doPull = true;
-      }
-      else if(props.eventsToPull === EVENT_TOGGLER.JoinedEvents && didJoinedEventsChangeRef.current){
+      } else if (
+        props.eventsToPull === EVENT_TOGGLER.JoinedEvents &&
+        didJoinedEventsChangeRef.current
+      ) {
         didJoinedEventsChangeRef.current = false;
         doPull = true;
       }
-      if(doPull){
+      if (doPull) {
         setShowRetry(false);
         setPulledFutureEvents(null);
         canLoadFutureData.current = true;
@@ -107,7 +113,6 @@ const EventToggler = (props: EventTogglerProps) => {
       )}
       <View
         style={{
-          backgroundColor: isFutureToggle ? COLORS.black : COLORS.white,
           ...styles.buttonToggleContainer,
         }}
       >
@@ -260,7 +265,10 @@ const EventToggler = (props: EventTogglerProps) => {
           console.log("GOT USER\n\n");
           console.log(JSON.stringify(pulledUser));
           setUserPulled(true);
-          updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
+          updateUserIDToUser({
+            id: pulledUser.UserID,
+            user: { ...userIDToUser[pulledUser.UserID], ...pulledUser },
+          });
         })
         .catch((error: CustomError) => {
           if (!errorThrown) {
@@ -367,23 +375,20 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const renderEventCard = (event: Event) => {
     return (
-      <View
-        style={{ alignItems: "center", marginTop: 15 }}
-      >
+      <View style={{ alignItems: "center", marginTop: 15 }}>
         <EventCard
           width={SIZES.width - 40}
           height={SIZES.width - 145}
           event={event}
           isBigCard={true}
-          showRelativeTime={true}
         />
       </View>
     );
   };
 
-  const renderItem = ({item}) => renderEventCard(item);
-  const keyExtractor =(item, index) =>
-    item.EventID + props.selectedUserID + props.eventsToPull + " Event" + index
+  const renderItem = ({ item }) => renderEventCard(item);
+  const keyExtractor = (item, index) =>
+    item.EventID + props.selectedUserID + props.eventsToPull + " Event" + index;
 
   useEffect(() => {
     pullData(true);
@@ -398,9 +403,11 @@ const EventToggler = (props: EventTogglerProps) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        getItemLayout={(data, index) => (
-          {length: cardHeight, offset: cardHeight * index, index}
-        )}
+        getItemLayout={(data, index) => ({
+          length: cardHeight,
+          offset: cardHeight * index,
+          index,
+        })}
         windowSize={5}
         data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
         ListHeaderComponent={ListHeader}

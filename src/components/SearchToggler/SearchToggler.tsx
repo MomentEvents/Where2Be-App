@@ -144,7 +144,7 @@ const SearchToggler = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.black }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
       <View
         style={{
           backgroundColor: COLORS.trueBlack,
@@ -165,7 +165,7 @@ const SearchToggler = () => {
           style={{
             flex: 1,
             backgroundColor: "rgba(80,80,80,.90)",
-            borderRadius: 10,
+            borderRadius: 20,
             paddingHorizontal: 15,
             paddingVertical: 10,
             marginHorizontal: 20,

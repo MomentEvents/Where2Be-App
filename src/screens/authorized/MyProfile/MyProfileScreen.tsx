@@ -20,6 +20,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import EventToggler from "../../../components/EventToggler/EventToggler";
+import React from "react";
 
 const MyProfileScreen = ({ route }) => {
   const navigation = useNavigation<any>();

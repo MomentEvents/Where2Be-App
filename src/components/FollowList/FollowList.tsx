@@ -139,7 +139,7 @@ const FollowList = (props: FollowListProps) => {
       <FlatList
         data={users}
         renderItem={renderItem}
-        style={{ backgroundColor: COLORS.black }}
+        style={{ backgroundColor: COLORS.trueBlack }}
         ListEmptyComponent={
           <View
             style={{
@@ -186,6 +186,6 @@ export default FollowList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
 });

@@ -171,7 +171,7 @@ export default SectionProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
   profileContainer: {
     backgroundColor: COLORS.trueBlack,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     marginBottom: 20,
-    borderColor: COLORS.white,
+    borderColor: COLORS.gray2,
   },
   infoContainer: {
     paddingTop: 15,

@@ -39,7 +39,6 @@ const UserResult = (props: UserResultProps) => {
         paddingHorizontal: 15,
         marginLeft:10,
         justifyContent: "center",
-        backgroundColor: COLORS.black
       }}
     >
       <TouchableOpacity onPress={onUserPress}>
@@ -50,7 +49,7 @@ const UserResult = (props: UserResultProps) => {
               width: 70,
               borderRadius: 50,
               borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.white,
+              borderColor: COLORS.gray2,
             }}
             source={{ uri: userIDToUser[props.user.UserID].Picture }}
           />

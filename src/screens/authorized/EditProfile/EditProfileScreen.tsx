@@ -51,6 +51,7 @@ import { CONSTRAINTS } from "../../../constants/constraints";
 import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -63,7 +64,10 @@ const EditProfileScreen = ({ route }) => {
   const { user, isSelf }: EditProfileParams = route.params;
 
   const navigation = useNavigation<any>();
-  const { updateUserIDToUser, userToken } = useContext(UserContext);
+  const { showErrorAlert } = useContext(AlertContext);
+
+  const { userIDToUser, updateUserIDToUser, userToken } =
+    useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
@@ -84,10 +88,13 @@ const EditProfileScreen = ({ route }) => {
 
     // Update information
 
+    const formattedUsername = username.trim().toLowerCase();
+    const formattedDisplayName = displayName.trim();
+
     const createdUser: User = {
       UserID: user.UserID,
-      DisplayName: displayName,
-      Username: username,
+      DisplayName: formattedDisplayName,
+      Username: formattedUsername,
       Picture: image,
       VerifiedOrganization: user.VerifiedOrganization,
       UserFollow: user.UserFollow,
@@ -101,14 +108,17 @@ const EditProfileScreen = ({ route }) => {
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
-        updateUserIDToUser({ id: createdUser.UserID, user: createdUser });
+        updateUserIDToUser({
+          id: createdUser.UserID,
+          user: { ...userIDToUser[createdUser.UserID], ...createdUser },
+        });
         navigation.goBack();
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error);
+          showErrorAlert(error);
         }
         setLoading(false);
       });

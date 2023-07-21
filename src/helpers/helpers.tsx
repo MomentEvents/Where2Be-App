@@ -75,6 +75,7 @@ export function formatError(name: string, message: string): Error {
  * a boolean which if true, means the string is only alphanumeric or if false, is not alpanumeric
  */
 export function displayError(error: Error): boolean {
+  Alert.alert(error.name, error.message)
   return true;
 }
 

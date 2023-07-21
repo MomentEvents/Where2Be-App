@@ -390,8 +390,16 @@ const EventCard = ({
                       alignItems: "center",
                     }}
                   >
-                    <McText body4 color={COLORS.purple}>
-                      {moment(
+                    <McText body4 color={COLORS.purple} numberOfLines={1}>
+                    {isBigCard ? (isWithin24hours(eventIDToEvent[event.EventID].StartDateTime) ? moment(
+                          eventIDToEvent[event.EventID].StartDateTime
+                        ).fromNow() : moment(
+                          eventIDToEvent[event.EventID].StartDateTime
+                        ).format("h:mm a")
+                        + " - " +
+                        moment(
+                          eventIDToEvent[event.EventID].EndDateTime
+                        ).format("h:mm a")) : moment(
                         eventIDToEvent[event.EventID].StartDateTime
                       ).format("h:mm a")}
                     </McText>

@@ -236,7 +236,8 @@ const EventDetailsScreen = ({ route }) => {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
               setHost(pulledHost);
-              updateUserIDToUser({ id: pulledHost.UserID, user: pulledHost });
+              updateUserIDToUser({ id: pulledHost.UserID, user: { ...userIDToUser[pulledHost.UserID], ...pulledHost },
+              });
             })
             .catch((error: CustomError) => {
               if (!gotError) {

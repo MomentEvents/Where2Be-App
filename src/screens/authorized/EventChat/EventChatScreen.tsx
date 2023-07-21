@@ -36,6 +36,7 @@ import {
   CUSTOMFONT_THIN,
 } from "../../../constants/theme";
 import { McText } from "../../../components/Styled";
+import React from "react";
 
 // IMPORTANT NOTE: EVENT DETAILS MUST BE NAVIGATED FIRST AND THEN PUSH EVENTCHATSCREEN
 // THIS IS TO CHECK IF A USER IS THE HOST OF THE EVENT
@@ -113,7 +114,7 @@ const EventChatScreen = ({ route }) => {
         opacity: !eventIDToEvent[eventID] && eventIDToEvent[eventID].HostUserID === userToken.UserID
         ? 1
         : 0,
-        backgroundColor: COLORS.black,
+        backgroundColor: COLORS.trueBlack,
         paddingTop: 2,
         paddingHorizontal: 20,
       }}
@@ -230,7 +231,7 @@ const EventChatScreen = ({ route }) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: COLORS.black,
+          backgroundColor: COLORS.trueBlack,
           paddingBottom: insets.bottom + 10,
         }}
       >
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
   },
   chatContainer: {
     flex: 1,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.trueBlack,
   },
 });
 

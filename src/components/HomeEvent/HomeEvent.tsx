@@ -69,14 +69,17 @@ const HomeEvent = (props: HomeEventProps) => {
             hideAlert();
           }}
         >
-          <McText h4 style={{ color: COLORS.white, textDecorationLine: "underline" }}>
+          <McText
+            h4
+            style={{ color: COLORS.white, textDecorationLine: "underline" }}
+          >
             Undo
           </McText>
         </TouchableOpacity>
       </>,
       5
     );
-    props.handleNotInterested(props.event.EventID)
+    props.handleNotInterested(props.event.EventID);
     setNotInterestedInEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -89,7 +92,7 @@ const HomeEvent = (props: HomeEventProps) => {
   };
 
   const handleUndoNotInterested = () => {
-    props.handleUndoNotInterested(props.event.EventID)
+    props.handleUndoNotInterested(props.event.EventID);
     undoNotInterestedInEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -103,7 +106,10 @@ const HomeEvent = (props: HomeEventProps) => {
 
   useEffect(() => {
     if (!userIDToUser[props.user.UserID]) {
-      updateUserIDToUser({ id: props.user.UserID, user: props.user });
+      updateUserIDToUser({
+        id: props.user.UserID,
+        user: { ...userIDToUser[props.user.UserID], ...props.user },
+      });
     }
     if (!eventIDToEvent[props.event.EventID]) {
       updateEventIDToEvent({ id: props.event.EventID, event: props.event });
@@ -190,7 +196,7 @@ const styles = StyleSheet.create({
     width: 35,
     borderRadius: 30,
     marginRight: 10,
-    borderWidth: .2,
+    borderWidth: 0.2,
     borderColor: COLORS.gray,
     justifyContent: "center",
     alignItems: "center",

@@ -38,7 +38,6 @@ const EventResult = (props: EventResultProps) => {
         paddingHorizontal: 15,
         marginLeft: 10,
         justifyContent: "center",
-        backgroundColor: COLORS.black,
       }}
     >
       <TouchableOpacity onPress={onEventPress}>
@@ -49,7 +48,7 @@ const EventResult = (props: EventResultProps) => {
               width: 70,
               borderRadius: 10,
               borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.white,
+              borderColor: COLORS.gray2,
             }}
             source={{ uri: eventIDToEvent[props.event.EventID].Picture }}
           />
