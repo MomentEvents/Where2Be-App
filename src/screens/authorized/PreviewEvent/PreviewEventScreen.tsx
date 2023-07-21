@@ -52,7 +52,7 @@ const EventDetailsScreen = ({ route }) => {
   const { isLoggedIn, userToken, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
 
-  const { didHostedEventsChangeRef } = useContext(EventContext);
+  const { didHostedEventsChangeRef, newPostedEventHomePageRef } = useContext(EventContext);
 
   // Props from previous event card to update
   const propsFromEventCard: routeParametersType = route.params;
@@ -96,6 +96,7 @@ const EventDetailsScreen = ({ route }) => {
     )
       .then((eventID: string) => {
         setLoading(false);
+        const eventWithID = {...createdEvent, EventID: eventID}
         updateUserIDToUser({
           id: userToken.UserID,
           user: {
@@ -103,7 +104,8 @@ const EventDetailsScreen = ({ route }) => {
             NumEvents: userIDToUser[userToken.UserID].NumEvents + 1,
           },
         });
-        updateEventIDToEvent({ id: eventID, event: createdEvent });
+        newPostedEventHomePageRef.current = eventWithID
+        updateEventIDToEvent({ id: eventID, event: eventWithID });
         didHostedEventsChangeRef.current = true;
         navigation.popToTop();
         navigation.push(SCREENS.EventDetails, { eventID: eventID });
@@ -467,7 +469,7 @@ const EventDetailsScreen = ({ route }) => {
             </View>
           </ScrollView>
         </View>
-        <View style={{ height: insets.bottom + 10 }} />
+        <View style={{ height: insets.bottom + 20 }} />
       </ScrollView>
     </MobileSafeView>
   );

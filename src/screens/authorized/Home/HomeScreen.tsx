@@ -34,6 +34,7 @@ const HomeScreen = () => {
   const { showErrorAlert } = useContext(AlertContext);
 
   const { newPostedEventHomePageRef } = useContext(EventContext);
+  const flatListRef = useRef<FlatList>(null);
 
   const viewedEventIDs = useRef<{
     [key: string]: boolean;
@@ -140,6 +141,9 @@ const HomeScreen = () => {
           eventsAndHosts.unshift(newHostEvent)
           setEventsAndHosts(newList)
           newPostedEventHomePageRef.current = null;
+          if (flatListRef.current) {
+            flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+          }
         } catch (e) {
           console.warn("ERROR PUTTING EVENT ON HOME PAGE: ", e)
         }
@@ -316,6 +320,7 @@ const HomeScreen = () => {
       )}
 
       <FlatList
+        ref={flatListRef}
         pagingEnabled
         showsVerticalScrollIndicator={false}
         // ListEmptyComponent={
