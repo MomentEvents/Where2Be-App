@@ -87,9 +87,10 @@ export const UserProvider = ({ children }) => {
     map: { [key: string]: User },
     action: { id: string; user: User }
   ) {
-    map[action.id] = { ...map[action.id], ...action.user };
-    map = { ...map };
-    return map;
+    return {
+      ...map,
+      [action.id]: action.user
+    };
   }
 
   const clientUnfollowUser = async (userID: string): Promise<void> => {

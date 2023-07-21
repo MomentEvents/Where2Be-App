@@ -34,6 +34,8 @@ const HomeScreen = () => {
     [key: string]: boolean;
   }>({});
 
+  const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
+
   const { currentSchool, userToken } = useContext(UserContext);
 
   const insets = useSafeAreaInsets();
@@ -70,6 +72,18 @@ const HomeScreen = () => {
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50, // The item is considered visible when 50% of its area is visible
     minimumViewTime: 300, // Minimum milliseconds the item is considered visible after the viewability event fires
+  };
+
+  const handleNotInterested = (eventID: string) => {
+    // Add the eventID to the hiddenEvents state
+    setHiddenEvents((prevHiddenEvents) => [...prevHiddenEvents, eventID]);
+  };
+
+  const handleUndoNotInterested = (eventID: string) => {
+    // Remove the eventID from the hiddenEvents state
+    setHiddenEvents((prevHiddenEvents) =>
+      prevHiddenEvents.filter((id) => id !== eventID)
+    );
   };
 
   // const sendViewedEvents = () => {
@@ -312,7 +326,9 @@ const HomeScreen = () => {
           index,
         })}
         windowSize={5}
-        data={eventsAndHosts}
+        data={eventsAndHosts?.filter(
+          (item) => !hiddenEvents.includes(item.Event.EventID)
+        )}
         keyExtractor={keyExtractor}
         snapToInterval={homeCardHeight}
         decelerationRate="fast"
@@ -323,6 +339,8 @@ const HomeScreen = () => {
             reason={getReasonByEvent(item.Event, item.Reason)}
             height={homeCardHeight}
             width={homeCardWidth}
+            handleNotInterested={handleNotInterested}
+            handleUndoNotInterested={handleUndoNotInterested}
           />
         )}
         viewabilityConfig={viewabilityConfig}

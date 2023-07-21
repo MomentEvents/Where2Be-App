@@ -37,6 +37,8 @@ type HomeEventProps = {
   reason: string;
   height: number;
   width: number;
+  handleNotInterested: (eventID: string) => void;
+  handleUndoNotInterested: (eventID: string) => void;
 };
 
 const HomeEvent = (props: HomeEventProps) => {
@@ -47,71 +49,7 @@ const HomeEvent = (props: HomeEventProps) => {
     useContext(UserContext);
   const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
 
-  const [isHidden, setIsHidden] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const slideAnimation = useRef(new Animated.Value(-100)).current;
-
   let timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    if (modalVisible) {
-      Animated.timing(slideAnimation, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
-      timeoutRef.current = setTimeout(() => {
-        // Start animation to pan the modal up when the timer finishes
-        Animated.timing(slideAnimation, {
-          toValue: -100,
-          duration: 200,
-          useNativeDriver: false,
-        }).start(() => {
-          // Only set modalVisible to false when the pan up animation finishes
-          setModalVisible(false);
-        });
-      }, 5000);
-    } else {
-      Animated.timing(slideAnimation, {
-        toValue: -100,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    }
-  }, [modalVisible]);
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        // Update the slide animation value based on how far the user has swiped
-        if (gestureState.dy < 0) {
-          slideAnimation.setValue(gestureState.dy);
-        }
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        // Check for swipes with y velocity greater than a threshold
-        if (gestureState.vy < -0.5 || gestureState.dy < -100) {
-          Animated.timing(slideAnimation, {
-            toValue: -500,
-            duration: 200,
-            useNativeDriver: false,
-          }).start(() => {
-            setModalVisible(false);
-          });
-        } else {
-          Animated.timing(slideAnimation, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: false,
-          }).start();
-        }
-      },
-    })
-  ).current;
 
   const onHostUsernamePressed = () => {
     navigation.push(SCREENS.ProfileDetails, {
@@ -138,7 +76,7 @@ const HomeEvent = (props: HomeEventProps) => {
       </>,
       5
     );
-    setIsHidden(true);
+    props.handleNotInterested(props.event.EventID)
     setNotInterestedInEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -151,8 +89,7 @@ const HomeEvent = (props: HomeEventProps) => {
   };
 
   const handleUndoNotInterested = () => {
-    setIsHidden(false);
-    setModalVisible(false);
+    props.handleUndoNotInterested(props.event.EventID)
     undoNotInterestedInEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -172,33 +109,6 @@ const HomeEvent = (props: HomeEventProps) => {
       updateEventIDToEvent({ id: props.event.EventID, event: props.event });
     }
   }, []);
-
-  if (isHidden) {
-    return (
-      <Modal animationType="none" transparent={true} visible={modalVisible}>
-        <Animated.View
-          style={{
-            transform: [{ translateY: slideAnimation }],
-            paddingBottom: 30,
-            paddingTop: insets.top + 30,
-            backgroundColor: COLORS.black,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          {...panResponder.panHandlers}
-        >
-          <McText body5 style={{ color: COLORS.white }}>
-            You set this event to be hidden
-          </McText>
-          <TouchableOpacity onPress={handleUndoNotInterested}>
-            <McText h6 style={{ color: COLORS.white }}>
-              Undo
-            </McText>
-          </TouchableOpacity>
-        </Animated.View>
-      </Modal>
-    );
-  }
 
   return (
     <View

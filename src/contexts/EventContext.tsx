@@ -65,9 +65,10 @@ export const EventProvider = ({ children }) => {
     map: { [key: string]: Event },
     action: { id: string; event: Event }
   ) {
-    map[action.id] = { ...map[action.id], ...action.event };
-    map = { ...map };
-    return map;
+    return {
+      ...map,
+      [action.id]: { ...map[action.id], ...action.event }
+    };
   }
 
   const clientAddUserJoin = (eventID: string) => {
@@ -187,9 +188,10 @@ export const EventProvider = ({ children }) => {
     map: { [key: string]: Interest[] },
     action: { id: string; interests: Interest[] }
   ) {
-    map[action.id] = action.interests;
-    map = { ...map };
-    return map;
+    return {
+      ...map,
+      [action.id]: action.interests
+    };
   }
 
   return (
