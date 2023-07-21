@@ -62,6 +62,7 @@ import Hyperlink from "react-native-hyperlink";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { AlertContext } from "../../../contexts/AlertContext";
+import EventPreviewer from "../../../components/EventPreviewer/EventPreviewer";
 
 type routeParametersType = {
   eventID: string;
@@ -97,8 +98,7 @@ const EventDetailsScreen = ({ route }) => {
     );
   }
 
-  const {showErrorAlert} = useContext(AlertContext)
-  
+  const { showErrorAlert } = useContext(AlertContext);
 
   const [host, setHost] = useState<User>(undefined);
 
@@ -246,6 +246,7 @@ const EventDetailsScreen = ({ route }) => {
                 } else if (error.shouldDisplay) {
                   showErrorAlert(error);
                 }
+                setIsHost(false)
                 setShowRetry(true);
               }
             })
@@ -265,6 +266,7 @@ const EventDetailsScreen = ({ route }) => {
           } else if (error.shouldDisplay) {
             showErrorAlert(error);
           }
+          setIsHost(false)
           setShowRetry(true);
         }
       })
@@ -283,6 +285,7 @@ const EventDetailsScreen = ({ route }) => {
           } else if (error.shouldDisplay) {
             showErrorAlert(error);
           }
+          setIsHost(false)
           setShowRetry(true);
         }
       })
@@ -329,578 +332,200 @@ const EventDetailsScreen = ({ route }) => {
     setIsHost(host.UserID == userToken.UserID || isAdmin);
   }, [host]);
 
+
   return (
     <View style={styles.container}>
-      <ImageView
-        images={[
-          {
-            uri:
-              eventIDToEvent[eventID] === undefined
-                ? null
-                : eventIDToEvent[eventID].Picture,
-          },
-        ]}
-        imageIndex={0}
-        visible={imageViewVisible}
-        backgroundColor="#101010"
-        onRequestClose={() => setImageViewVisible(false)}
-      />
-      <View style={{ height: "100%", position: "relative" }}>
-        <ScrollView
-          contentContainerStyle={{
-            backgroundColor: "transparent",
-          }}
-          style={{
-            backgroundColor: "transparent",
-          }}
-          refreshControl={
-            <RefreshControl
-              tintColor={COLORS.white}
-              refreshing={isRefreshing}
-              onRefresh={() => {
-                setIsRefreshing(true);
-                onRefresh();
-              }}
-            />
-          }
-          showsVerticalScrollIndicator={false}
-        >
-          <TouchableOpacity onPress={() => setImageViewVisible(true)}>
-            <ImageBackground
-              resizeMode="cover"
-              source={{
-                uri:
-                  eventIDToEvent[eventID] === undefined
-                    ? null
-                    : eventIDToEvent[eventID].Picture,
-              }}
-              style={{
-                width: "100%",
-                height: SIZES.height * 0.45,
-              }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  marginTop: insets.top,
-                }}
-              >
-                <ImageHeaderSection>
-                  <TouchableOpacity
-                    onPress={() => {
-                      onBackPressed();
-                    }}
-                    style={{
-                      width: 56,
-                      height: 40,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 13,
-                    }}
-                  >
-                    <Feather name="arrow-left" size={28} color="white" />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      setImageViewVisible(true);
-                    }}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 13,
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="arrow-expand"
-                      size={23}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </ImageHeaderSection>
-                <ImageFooterSection>
-                  <LinearGradient
-                    colors={["transparent", COLORS.trueBlack]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 0.9 }}
-                    style={{
-                      width: "100%",
-                      height: 120,
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <FooterContentView>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          width: "100%",
-                        }}
-                      >
-                        <Feather
-                          name="calendar"
-                          size={24}
-                          color={COLORS.purple}
-                          style={{ marginRight: 8 }}
-                        />
-                        <McText
-                          body4
-                          style={{
-                            letterSpacing: 0.1,
-                            color: COLORS.lightGray,
-                          }}
-                        >
-                          {eventIDToEvent[eventID] === undefined
-                            ? null
-                            : moment(
-                                eventIDToEvent[eventID].StartDateTime
-                              ).format("MMM DD[,] YYYY")}
-                        </McText>
-                        <View
-                          style={{
-                            position: "absolute",
-                            alignItems: "center",
-                            right: 0,
-                            flexDirection: "row",
-                          }}
-                        >
-                          <Feather
-                            style={{ marginRight: 8 }}
-                            name="clock"
-                            size={24}
-                            color={COLORS.purple}
-                          />
-                          <McText
-                            body4
-                            style={{
-                              letterSpacing: 0.1,
-                              color: COLORS.lightGray,
-                            }}
-                          >
-                            {eventIDToEvent[eventID] === undefined
-                              ? null
-                              : eventIDToEvent[eventID].EndDateTime
-                              ? moment(
-                                  eventIDToEvent[eventID].StartDateTime
-                                ).format("h:mm a") +
-                                " - " +
-                                moment(
-                                  eventIDToEvent[eventID].EndDateTime
-                                ).format("h:mm a")
-                              : moment(
-                                  eventIDToEvent[eventID].StartDateTime
-                                ).format("h:mm a")}
-                          </McText>
-                        </View>
-                      </View>
-                    </FooterContentView>
-                  </LinearGradient>
-                </ImageFooterSection>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
-          <View style={styles.scrollcontainer}>
-            <TitleSection>
-              <View style={{ flex: 1 }}>
-                <McText
-                  h1
-                  style={{
-                    marginTop: 10,
-                    marginRight: 10,
-                  }}
-                >
-                  {eventIDToEvent[eventID] === undefined
-                    ? null
-                    : eventIDToEvent[eventID].Title}
-                </McText>
-              </View>
-              {/* <TouchableOpacity
-                style={{
-                  padding: 10,
-                  flexDirection: "row",
-                  borderRadius: 5,
-                  alignSelf: "flex-start",
-                  marginTop: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: COLORS.purple,
-                }}
-                onPress={onChatPressed}
-              >
-                <Ionicons
-                  style={{ marginRight: 10 }}
-                  name="chatbox"
-                  size={20}
-                  color="white"
-                />
-                <McText h5 color={COLORS.white}>
-                  Chat
-                </McText>
-              </TouchableOpacity> */}
-            </TitleSection>
-
-            <LocationSection>
-              <Ionicons
-                name="location-outline"
-                size={16}
-                style={{ marginRight: 5 }}
-                color={COLORS.lightGray}
-              />
-              <McText
-                h5
-                style={{
-                  letterSpacing: 0.5,
-                  marginTop: -1,
-                  color: COLORS.lightGray,
-                }}
-              >
-                {eventIDToEvent[eventID] === undefined
-                  ? null
-                  : eventIDToEvent[eventID].Location}
-              </McText>
-            </LocationSection>
-
-            <View>
-              <DescriptionSection>
-                <View
-                  style={{
-                    marginBottom: 8,
-                    marginTop: 8,
-                    marginRight: 12,
-                    marginLeft: 7,
-                  }}
-                >
-                  <Hyperlink
-                    linkDefault={true}
-                    linkStyle={{ textDecorationLine: "underline" }}
-                  >
-                    <McText
-                      onTextLayout={descriptionOnExpand}
-                      numberOfLines={descriptionExpanded ? undefined : 3}
-                      body3
+      <EventPreviewer
+        event={eventIDToEvent[eventID]}
+        interests={eventIDToInterests[eventID]}
+        host={
+          eventIDToEvent[eventID] && eventIDToEvent[eventID].HostUserID
+            ? userIDToUser[eventIDToEvent[eventID].HostUserID]
+            : null
+        }
+        backButtonEnabled={true}
+        hostClickEnabled={true}
+        paddingTopEnabled={true}
+        userControlElement={
+          <View
+            style={{
+              ...styles.userControlContainer,
+              bottom: insets.bottom + 10,
+            }}
+          >
+            {eventIDToEvent[eventID] ? (
+              <UserOptionsSection>
+                {showRetry ? (
+                  <RetryButton
+                    setShowRetry={setShowRetry}
+                    retryCallBack={onRefresh}
+                  />
+                ) : (
+                  <>
+                    <View
                       style={{
-                        letterSpacing: 0.7,
-                        color: COLORS.lightGray,
-                      }}
-                      selectable={true}
-                    >
-                      {eventIDToEvent[eventID] === undefined
-                        ? null
-                        : eventIDToEvent[eventID].Description}
-                    </McText>
-                  </Hyperlink>
-
-                  {lengthMoreText ? (
-                    <McText
-                      body4
-                      onPress={descriptionToggleNumberOfLines}
-                      style={{
-                        lineHeight: 22,
-                        marginTop: 10,
-                        color: COLORS.gray,
-                        letterSpacing: 0.3,
+                        alignItems: "center",
+                        paddingHorizontal: 20,
                       }}
                     >
-                      {descriptionExpanded ? "Read less..." : "Read more..."}
-                    </McText>
-                  ) : null}
-                </View>
-              </DescriptionSection>
-
-              <HostSection>
-                <TouchableOpacity
-                  style={{
-                    maxWidth: "80%",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                  onPress={() => {
-                    onHostPressed();
-                  }}
-                >
-                  <Image
-                    style={styles.hostProfilePic}
-                    source={{
-                      uri:
-                        host && userIDToUser[host.UserID]
-                          ? userIDToUser[host.UserID].Picture
-                          : null,
-                    }}
-                  ></Image>
-                  <McText
-                    h4
-                    numberOfLines={1}
-                    style={{
-                      letterSpacing: 1,
-                      color: COLORS.white,
-                    }}
-                  >
-                    {host && userIDToUser[host.UserID]
-                      ? userIDToUser[host.UserID].DisplayName
-                      : "..."}
-                  </McText>
-                  {host &&
-                    userIDToUser[host.UserID] &&
-                    userIDToUser[host.UserID].VerifiedOrganization && (
-                      <View style={{ paddingLeft: 3 }}>
-                        <MaterialIcons
-                          name="verified"
-                          size={18}
-                          color={COLORS.purple}
-                        />
-                      </View>
-                    )}
-                </TouchableOpacity>
-              </HostSection>
-
-              <InterestSection>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {eventIDToInterests[eventID]
-                    ? eventIDToInterests[eventID].map((taglist) => (
-                        <View
-                          key={taglist.InterestID}
-                          style={{
-                            borderRadius: 20,
-                            paddingVertical: 5,
-                            paddingHorizontal: 15,
-                            marginRight: 10,
-                            backgroundColor: COLORS.input,
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <McText
-                            h4
-                            color={COLORS.lightGray}
-                            style={{ letterSpacing: 0.8 }}
-                          >
-                            {taglist === undefined ? null : taglist.Name}
-                          </McText>
-                        </View>
-                      ))
-                    : null}
-                </ScrollView>
-              </InterestSection>
-
-              <VisibilitySection>
-                <MaterialCommunityIcons
-                  name="map-search"
-                  size={16}
-                  style={{ marginHorizontal: 8 }}
-                  color={COLORS.lightGray}
-                />
-                <View>
-                  <McText
-                    body5
-                    numberOfLines={1}
-                    style={{
-                      letterSpacing: 1,
-                      color: COLORS.lightGray,
-                    }}
-                  >
-                    {eventIDToEvent[eventID] === undefined
-                      ? null
-                      : eventIDToEvent[eventID].Visibility}
-                  </McText>
-                </View>
-              </VisibilitySection>
-            </View>
-            {isHost &&
-              eventIDToInterests[eventID] &&
-              eventIDToEvent[eventID] && (
-                <>
-                  <EditOrDeleteEventSection>
-                    <TouchableOpacity
-                      style={styles.edit}
-                      onPress={() => {
-                        onEditEventPressed();
-                      }}
-                    >
-                      <McText h5>Edit this Event</McText>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.delete}
-                      onPress={() => {
-                        onDeleteEventPressed();
-                      }}
-                    >
-                      <McText h5>Delete this Event</McText>
-                    </TouchableOpacity>
-                  </EditOrDeleteEventSection>
-                </>
-              )}
-            <SectionFooter>
-              <View
-                style={{
-                  height: 170 + insets.bottom,
-                }}
-              ></View>
-            </SectionFooter>
-          </View>
-        </ScrollView>
-        <View
-          style={{ ...styles.userControlContainer, bottom: insets.bottom + 10 }}
-        >
-          {eventIDToEvent[eventID] ? (
-            <UserOptionsSection>
-              {showRetry ? (
-                <RetryButton
-                  setShowRetry={setShowRetry}
-                  retryCallBack={onRefresh}
-                />
-              ) : (
-                <>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      paddingHorizontal: 20,
-                    }}
-                  >
-                    <GradientButton
-                      style={{
-                        width: 58,
-                        height: 58,
-                        borderRadius: 80,
-                        marginBottom: 5,
-                      }}
-                    >
-                      <TouchableOpacity
+                      <GradientButton
                         style={{
                           width: 58,
                           height: 58,
                           borderRadius: 80,
                           marginBottom: 5,
-                          backgroundColor: eventIDToEvent[eventID].UserJoin
-                            ? "transparent"
-                            : COLORS.white,
-                          // borderWidth: StyleSheet.hairlineWidth,
-                          // borderColor: COLORS.white,
-                          justifyContent: "center",
-                          alignItems: "center",
                         }}
-                        onPress={
-                          eventIDToEvent[eventID].UserJoin
-                            ? () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadJoin.current = false;
-                                }
-                                removeUserJoin(eventID);
-                              }
-                            : () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadJoin.current = true;
-                                }
-                                addUserJoin(eventID);
-                              }
-                        }
                       >
-                        {eventIDToEvent[eventID].UserJoin ? (
-                          <Ionicons
-                            name="checkmark-sharp"
-                            size={38}
-                            color="white"
-                          />
-                        ) : (
-                          <Ionicons
-                            name="checkmark-outline"
-                            size={38}
-                            color="black"
-                          />
-                        )}
-                      </TouchableOpacity>
-                    </GradientButton>
-                    <McText
-                      body4
+                        <TouchableOpacity
+                          style={{
+                            width: 58,
+                            height: 58,
+                            borderRadius: 80,
+                            marginBottom: 5,
+                            backgroundColor: eventIDToEvent[eventID].UserJoin
+                              ? "transparent"
+                              : COLORS.white,
+                            // borderWidth: StyleSheet.hairlineWidth,
+                            // borderColor: COLORS.white,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onPress={
+                            eventIDToEvent[eventID].UserJoin
+                              ? () => {
+                                  if (!didFetchEvent) {
+                                    beforeLoadJoin.current = false;
+                                  }
+                                  removeUserJoin(eventID);
+                                }
+                              : () => {
+                                  if (!didFetchEvent) {
+                                    beforeLoadJoin.current = true;
+                                  }
+                                  addUserJoin(eventID);
+                                }
+                          }
+                        >
+                          {eventIDToEvent[eventID].UserJoin ? (
+                            <Ionicons
+                              name="checkmark-sharp"
+                              size={38}
+                              color="white"
+                            />
+                          ) : (
+                            <Ionicons
+                              name="checkmark-outline"
+                              size={38}
+                              color="black"
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </GradientButton>
+                      <McText
+                        body4
+                        style={{
+                          color: eventIDToEvent[eventID].UserJoin
+                            ? COLORS.darkPurple
+                            : COLORS.white,
+                        }}
+                      >
+                        {truncateNumber(eventIDToEvent[eventID].NumJoins)} Going
+                      </McText>
+                    </View>
+                    <View
                       style={{
-                        color: eventIDToEvent[eventID].UserJoin
-                          ? COLORS.darkPurple
-                          : COLORS.white,
+                        alignItems: "center",
+                        paddingHorizontal: 20,
+                        shadowColor: "#B66DFF",
+                        shadowRadius: 10,
+                        // shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
+                        // shadowOffset: { width: 0, height: 0 },
                       }}
                     >
-                      {truncateNumber(eventIDToEvent[eventID].NumJoins)} Going
-                    </McText>
-                  </View>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      paddingHorizontal: 20,
-                      shadowColor: "#B66DFF",
-                      shadowRadius: 10,
-                      // shadowOpacity: eventIDToDidShoutout[eventID] ? 1 : 0,
-                      // shadowOffset: { width: 0, height: 0 },
-                    }}
-                  >
-                    <GradientButton
-                      style={{
-                        width: 58,
-                        height: 58,
-                        borderRadius: 80,
-                        marginBottom: 5,
-                      }}
-                    >
-                      <TouchableOpacity
+                      <GradientButton
                         style={{
                           width: 58,
                           height: 58,
                           borderRadius: 80,
-                          backgroundColor: eventIDToEvent[eventID].UserShoutout
-                            ? "transparent"
-                            : COLORS.white,
-                          // borderWidth: StyleSheet.hairlineWidth,
-                          // borderColor: COLORS.white,
-                          justifyContent: "center",
-                          alignItems: "center",
+                          marginBottom: 5,
                         }}
-                        onPress={
-                          eventIDToEvent[eventID].UserShoutout
-                            ? () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadShoutout.current = false;
-                                }
-                                removeUserShoutout(eventID);
-                              }
-                            : () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadShoutout.current = true;
-                                }
-                                addUserShoutout(eventID);
-                              }
-                        }
                       >
-                        {eventIDToEvent[eventID].UserShoutout ? (
-                          <AntDesign name="retweet" size={32} color="white" />
-                        ) : (
-                          <AntDesign name="retweet" size={32} color="black" />
-                        )}
-                      </TouchableOpacity>
-                    </GradientButton>
-                    <McText
-                      body4
-                      style={{
-                        color: eventIDToEvent[eventID].UserShoutout
-                          ? COLORS.darkPurple
-                          : COLORS.white,
-                      }}
-                    >
-                      {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}{" "}
-                      {eventIDToEvent[eventID].NumShoutouts === 1 ? "Retweet" : "Retweets"}
-                    </McText>
-                  </View>
-                </>
-              )}
-            </UserOptionsSection>
-          ) : (
-            <ActivityIndicator color={COLORS.white} style={{ marginTop: 20 }} />
-          )}
-        </View>
-      </View>
+                        <TouchableOpacity
+                          style={{
+                            width: 58,
+                            height: 58,
+                            borderRadius: 80,
+                            backgroundColor: eventIDToEvent[eventID]
+                              .UserShoutout
+                              ? "transparent"
+                              : COLORS.white,
+                            // borderWidth: StyleSheet.hairlineWidth,
+                            // borderColor: COLORS.white,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onPress={
+                            eventIDToEvent[eventID].UserShoutout
+                              ? () => {
+                                  if (!didFetchEvent) {
+                                    beforeLoadShoutout.current = false;
+                                  }
+                                  removeUserShoutout(eventID);
+                                }
+                              : () => {
+                                  if (!didFetchEvent) {
+                                    beforeLoadShoutout.current = true;
+                                  }
+                                  addUserShoutout(eventID);
+                                }
+                          }
+                        >
+                          {eventIDToEvent[eventID].UserShoutout ? (
+                            <AntDesign name="retweet" size={32} color="white" />
+                          ) : (
+                            <AntDesign name="retweet" size={32} color="black" />
+                          )}
+                        </TouchableOpacity>
+                      </GradientButton>
+                      <McText
+                        body4
+                        style={{
+                          color: eventIDToEvent[eventID].UserShoutout
+                            ? COLORS.darkPurple
+                            : COLORS.white,
+                        }}
+                      >
+                        {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}{" "}
+                        {eventIDToEvent[eventID].NumShoutouts === 1
+                          ? "Retweet"
+                          : "Retweets"}
+                      </McText>
+                    </View>
+                  </>
+                )}
+              </UserOptionsSection>
+            ) : (
+              <ActivityIndicator
+                color={COLORS.white}
+                style={{ marginTop: 20 }}
+              />
+            )}
+          </View>
+        }
+        refreshControl={
+          <RefreshControl
+            tintColor={COLORS.white}
+            refreshing={isRefreshing}
+            onRefresh={() => {
+              setIsRefreshing(true);
+              onRefresh();
+            }}
+          />
+        }
+        showModeratorFeatures={
+          isHost
+        }
+      />
     </View>
   );
 };
