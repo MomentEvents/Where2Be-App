@@ -111,8 +111,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 updateUserIDToUser({
                   id: props.event.HostUserID,
                   user: {
-                    ...userIDToUser[userToken.UserID],
-                    NumEvents: userIDToUser[userToken.UserID].NumEvents - 1,
+                    ...userIDToUser[props.event.HostUserID],
+                    NumEvents: userIDToUser[props.event.HostUserID].NumEvents - 1,
                   },
                 });
                 navigation.goBack();
