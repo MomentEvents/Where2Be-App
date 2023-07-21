@@ -24,6 +24,7 @@ import { deleteUser } from "../../../services/UserService";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
+import React from "react";
 
 type ProfileDetailsRouteParams = {
   userID: string;

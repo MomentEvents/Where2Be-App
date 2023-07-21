@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from "react";
+import { Component, useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -23,6 +23,8 @@ import RetryButton from "../../components/RetryButton";
 import { CustomError } from "../../constants/error";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { McText } from "../Styled";
+import { AlertContext } from "../../contexts/AlertContext";
+import React from "react";
 
 type SchoolSelectorProps = {
   onSelectSchool: (school: School) => void;
@@ -33,7 +35,10 @@ type SchoolSelectorProps = {
 };
 
 const SchoolSearchSelector = (props: SchoolSelectorProps) => {
+  
   const insets = useSafeAreaInsets();
+
+  const {showErrorAlert} = useContext(AlertContext)
 
   const [selectionData, setSelectionData] =
     useState<[{ key?: string; label?: string }]>(null);
@@ -80,7 +85,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
         showBugReportPopup(error)
       }
       else if (error.shouldDisplay) {
-        displayError(error);
+        showErrorAlert(error);
       }
     });
   };

@@ -74,6 +74,7 @@ export const UserContext = createContext<UserContextType>({
 
 export const UserProvider = ({ children }) => {
   const [userToken, setUserToken] = useState<Token>(null);
+  
   const [currentSchool, setCurrentSchool] = useState<School>(null);
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);

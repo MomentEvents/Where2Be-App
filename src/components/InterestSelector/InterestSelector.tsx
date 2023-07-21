@@ -20,6 +20,7 @@ import InterestButton from "./components/InterestButton";
 import { GestureObjects } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gestureObjects";
 import RetryButton from "../RetryButton";
 import { CustomError } from "../../constants/error";
+import { AlertContext } from "../../contexts/AlertContext";
 
 type InterestSelectorProps = {
   selectedInterests: Set<Interest>;
@@ -27,6 +28,8 @@ type InterestSelectorProps = {
 };
 
 const InterestSelector = (props: InterestSelectorProps) => {
+  const {showErrorAlert} = useContext(AlertContext)
+
   const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{
     [key: string]: Interest;
   }>(null);
@@ -62,7 +65,7 @@ const InterestSelector = (props: InterestSelectorProps) => {
           showBugReportPopup(error)
         }
         else if (error.shouldDisplay) {
-          displayError(error);
+          showErrorAlert(error);
         }
       });
   };

@@ -61,6 +61,7 @@ import {
 import Hyperlink from "react-native-hyperlink";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 type routeParametersType = {
   eventID: string;
@@ -95,6 +96,9 @@ const EventDetailsScreen = ({ route }) => {
       "eventID was null or undefined when entering event details"
     );
   }
+
+  const {showErrorAlert} = useContext(AlertContext)
+  
 
   const [host, setHost] = useState<User>(undefined);
 
@@ -240,7 +244,7 @@ const EventDetailsScreen = ({ route }) => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else if (error.shouldDisplay) {
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setShowRetry(true);
               }
@@ -259,7 +263,7 @@ const EventDetailsScreen = ({ route }) => {
           if (error.showBugReportDialog) {
             showBugReportPopup(error);
           } else if (error.shouldDisplay) {
-            displayError(error);
+            showErrorAlert(error);
           }
           setShowRetry(true);
         }
@@ -277,7 +281,7 @@ const EventDetailsScreen = ({ route }) => {
           if (error.showBugReportDialog) {
             showBugReportPopup(error);
           } else if (error.shouldDisplay) {
-            displayError(error);
+            showErrorAlert(error);
           }
           setShowRetry(true);
         }

@@ -31,6 +31,7 @@ import SectionProfile from "../Styled/SectionProfile";
 import { FlatList } from "react-native";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { EventContext } from "../../contexts/EventContext";
+import { AlertContext } from "../../contexts/AlertContext";
 
 type EventTogglerProps = {
   selectedUserID: string;
@@ -40,6 +41,7 @@ type EventTogglerProps = {
 };
 
 const EventToggler = (props: EventTogglerProps) => {
+  const {showErrorAlert} = useContext(AlertContext)
   const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
     useContext(UserContext);
 
@@ -266,7 +268,7 @@ const EventToggler = (props: EventTogglerProps) => {
             if (error.showBugReportDialog) {
               showBugReportPopup(error);
             } else if (error.shouldDisplay) {
-              displayError(error);
+              showErrorAlert(error);
             }
           }
           setShowRetry(true);
@@ -292,7 +294,7 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
               } else if (error.shouldDisplay) {
-                displayError(error);
+                showErrorAlert(error);
               }
             }
           })
@@ -312,7 +314,7 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
               } else if (error.shouldDisplay) {
-                displayError(error);
+                showErrorAlert(error);
               }
             }
           });
@@ -330,7 +332,7 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
               } else if (error.shouldDisplay) {
-                displayError(error);
+                showErrorAlert(error);
               }
             }
           })
@@ -347,7 +349,7 @@ const EventToggler = (props: EventTogglerProps) => {
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
               } else if (error.shouldDisplay) {
-                displayError(error);
+                showErrorAlert(error);
               }
             }
           });

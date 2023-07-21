@@ -25,7 +25,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { FONTS, SIZES, COLORS, icons, images, User } from "../../../constants";
+import { FONTS, SIZES, COLORS, icons, User } from "../../../constants";
 import { McText } from "../../../components/Styled";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import "react-native-gesture-handler";

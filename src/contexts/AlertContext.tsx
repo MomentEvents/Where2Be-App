@@ -5,16 +5,25 @@ import React, {
   useRef,
   ReactNode,
 } from "react";
-import { View, StyleSheet, Animated, PanResponder } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Animated,
+  PanResponder,
+  TouchableOpacity,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../constants";
+import { McText } from "../components/Styled";
 
 type AlertContextType = {
   showAlert: (component: ReactNode, seconds: number) => void;
+  showErrorAlert: (error: Error) => void;
   hideAlert: () => void;
 };
 
 const initialState: AlertContextType = {
+    showErrorAlert: () => {},
   showAlert: () => {},
   hideAlert: () => {},
 };
@@ -38,12 +47,21 @@ export const AlertProvider = ({ children }) => {
     }).start();
   }, [alertVisible]);
 
+  const showErrorAlert = (error: Error) => {
+    showAlert(
+      <McText body3 style={{ color: COLORS.white }}>
+        {error.message}
+      </McText>,
+      5
+    );
+  };
+
   const showAlert = (component: ReactNode, seconds: number) => {
     // If there's an existing timeout (i.e., an alert is already showing), clear it
-    if(timeoutId.current){
+    if (timeoutId.current) {
       clearTimeout(timeoutId.current);
       timeoutId.current = null;
-      
+
       // Start an animation to slide the current alert up
       Animated.timing(slideAnimation, {
         toValue: -500,
@@ -60,21 +78,21 @@ export const AlertProvider = ({ children }) => {
       displayNewAlert(component, seconds);
     }
   };
-  
+
   const displayNewAlert = (component: ReactNode, seconds: number) => {
     setAlertVisible(true);
     setAlertComponent(component);
-  
+
     // Reset the position of the alert for slide in
     slideAnimation.setValue(-100);
-  
+
     // Start an animation to slide the new alert down
     Animated.timing(slideAnimation, {
       toValue: 0,
       duration: 200,
       useNativeDriver: false,
     }).start();
-  
+
     timeoutId.current = setTimeout(() => {
       hideAlert();
     }, seconds * 1000);
@@ -123,7 +141,7 @@ export const AlertProvider = ({ children }) => {
   ).current;
 
   return (
-    <AlertContext.Provider value={{ showAlert, hideAlert }}>
+    <AlertContext.Provider value={{ showAlert, hideAlert, showErrorAlert }}>
       {children}
       {alertVisible && (
         <Animated.View

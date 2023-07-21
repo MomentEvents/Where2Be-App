@@ -34,8 +34,11 @@ import {
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { McTextInput } from "../../../../components/Styled/styled";
+import { AlertContext } from "../../../../contexts/AlertContext";
 
 const SignupEmailScreen = () => {
+  const {showErrorAlert} = useContext(AlertContext)
+
   const navigator = useNavigation<any>();
 
   const { signupValues, setSignupValues } = useContext(AuthContext);
@@ -66,7 +69,7 @@ const SignupEmailScreen = () => {
           showBugReportPopup(error)
         }
         else {
-          displayError(error);
+          showErrorAlert(error);
         }
       })
       .finally(() => {

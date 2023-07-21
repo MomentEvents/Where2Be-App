@@ -16,6 +16,7 @@ import { displayError, showBugReportPopup } from "../../helpers/helpers";
 import RetryButton from "../RetryButton";
 import { McText } from "../Styled";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AlertContext } from "../../contexts/AlertContext";
 
 interface FollowListProps {
   followType: string;
@@ -23,6 +24,8 @@ interface FollowListProps {
 }
 const FollowList = (props: FollowListProps) => {
   const { userToken } = useContext(UserContext);
+  const {showErrorAlert} = useContext(AlertContext)
+
   const [users, setUsers] = useState<User[]>(null);
   const [pulledUsers, setPulledUsers] = useState(false);
   const [showRetry, setShowRetry] = useState(false);
@@ -33,7 +36,6 @@ const FollowList = (props: FollowListProps) => {
   const isLoadingRef = useRef(false);
 
   const canLoadMoreData = useRef(true);
-
   useEffect(() => {
     pullData();
   }, []);
@@ -50,7 +52,7 @@ const FollowList = (props: FollowListProps) => {
             showBugReportPopup(error)
           }
           else if (error.shouldDisplay) {
-            displayError(error);
+            showErrorAlert(error);
           }
           setShowRetry(true);
         });
@@ -65,7 +67,7 @@ const FollowList = (props: FollowListProps) => {
             showBugReportPopup(error)
           }
           else if (error.shouldDisplay) {
-            displayError(error);
+            showErrorAlert(error);
           }
           setShowRetry(true);
         });

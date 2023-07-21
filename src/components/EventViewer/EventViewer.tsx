@@ -26,12 +26,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
 import RetryButton from "../RetryButton";
+import { AlertContext } from "../../contexts/AlertContext";
 
 type EventViewerProps = {
   school: School;
   isHoverButtonVisible?: Boolean;
 };
 const EventViewer = (props: EventViewerProps) => {
+  const {showErrorAlert} = useContext(AlertContext)
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   const { isLoggedIn, userToken } = useContext(UserContext);
@@ -60,7 +62,7 @@ const EventViewer = (props: EventViewerProps) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else if (error.shouldDisplay) {
-          displayError(error);
+          showErrorAlert(error);
         }
         setShowRetry(true);
         setIsRefreshing(false);

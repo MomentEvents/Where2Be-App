@@ -26,9 +26,12 @@ import { McText } from "../../../components/Styled";
 import CardsSwipe from "react-native-cards-swipe";
 import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
+  const {showErrorAlert} = useContext(AlertContext)
+
 
   const viewedEventIDs = useRef<{
     [key: string]: boolean;
@@ -243,7 +246,7 @@ const HomeScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else if (error.shouldDisplay) {
-          displayError(error);
+          showErrorAlert(error);
         }
       });
   };

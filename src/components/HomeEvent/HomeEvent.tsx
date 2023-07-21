@@ -60,7 +60,7 @@ const HomeEvent = (props: HomeEventProps) => {
   const handleNotInterested = () => {
     showAlert(
       <>
-        <McText body5 style={{ color: COLORS.white }}>
+        <McText body4 style={{ color: COLORS.white }}>
           You set this event to be hidden
         </McText>
         <TouchableOpacity
@@ -69,7 +69,7 @@ const HomeEvent = (props: HomeEventProps) => {
             hideAlert();
           }}
         >
-          <McText h6 style={{ color: COLORS.white }}>
+          <McText h4 style={{ color: COLORS.white, textDecorationLine: "underline" }}>
             Undo
           </McText>
         </TouchableOpacity>

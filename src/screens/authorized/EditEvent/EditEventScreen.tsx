@@ -45,6 +45,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { CustomError } from "../../../constants/error";
 import { Feather } from "@expo/vector-icons";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -62,6 +63,9 @@ const EditEventScreen = ({ route }) => {
     updateEventIDToInterests,
   } = useContext(EventContext);
   const navigation = useNavigation<any>();
+
+  const {showErrorAlert} = useContext(AlertContext)
+
 
   const [title, setTitle] = useState<string>(eventIDToEvent[eventID].Title);
   const [location, setLocation] = useState<string>(
@@ -106,7 +110,7 @@ const EditEventScreen = ({ route }) => {
 
   const onSubmit = () => {
     if (!date || !start || !end) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "Please fill in all valid fields")
       );
       return;
@@ -137,7 +141,7 @@ const EditEventScreen = ({ route }) => {
     };
 
     if (!checkIfEventIsFormatted(updatedEvent)) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "Check that all of the fields are readable")
       );
       return;
@@ -148,7 +152,7 @@ const EditEventScreen = ({ route }) => {
     if (
       updatedEvent.StartDateTime.getTime() > updatedEvent.EndDateTime.getTime()
     ) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "The start time must be before the end time")
       );
       return;
@@ -156,14 +160,14 @@ const EditEventScreen = ({ route }) => {
 
     console.log(Date.now());
     if (updatedEvent.StartDateTime.getTime() < Date.now()) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "The event must not be in the past")
       );
       return;
     }
 
     if (selectedInterests.size > CONSTRAINTS.Event.Interest.Max) {
-      displayError(
+      showErrorAlert(
         formatError(
           "Input error",
           "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."
@@ -172,7 +176,7 @@ const EditEventScreen = ({ route }) => {
       return;
     }
     if (selectedInterests.size < CONSTRAINTS.Event.Interest.Min) {
-      displayError(
+      showErrorAlert(
         formatError(
           "Input error",
           "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."
@@ -198,7 +202,7 @@ const EditEventScreen = ({ route }) => {
           showBugReportPopup(error)
         }
         else{
-          displayError(error);
+          showErrorAlert(error);
         }
         setLoading(false);
       });

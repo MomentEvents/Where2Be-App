@@ -44,6 +44,7 @@ import EventEditor from "../../../components/EventEditor/EventEditor";
 import { useNavigation } from "@react-navigation/native";
 import { CONSTRAINTS } from "../../../constants/constraints";
 import { Feather } from "@expo/vector-icons";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -65,10 +66,11 @@ const CreateEventScreen = ({ route }) => {
     new Set<Interest>()
   );
   const [doNotifyFollowers, setDoNotifyFollowers] = useState(true);
+  const {showErrorAlert} = useContext(AlertContext)
 
   const onSubmit = () => {
     if (!date || !start || !end) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "Please fill in all valid fields")
       );
       return;
@@ -99,7 +101,7 @@ const CreateEventScreen = ({ route }) => {
     };
 
     if (!checkIfEventIsFormatted(createdEvent)) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "Check that all of the fields are readable")
       );
       return;
@@ -110,21 +112,21 @@ const CreateEventScreen = ({ route }) => {
     if (
       createdEvent.StartDateTime.getTime() > createdEvent.EndDateTime.getTime()
     ) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "The start time must be before the end time")
       );
       return;
     }
 
     if (createdEvent.StartDateTime.getTime() < Date.now()) {
-      displayError(
+      showErrorAlert(
         formatError("Input error", "The event must not be in the past")
       );
       return;
     }
 
     if (selectedInterests.size > CONSTRAINTS.Event.Interest.Max) {
-      displayError(
+      showErrorAlert(
         formatError(
           "Input error",
           "Please select at most " + CONSTRAINTS.Event.Interest.Max + " tag."
@@ -133,7 +135,7 @@ const CreateEventScreen = ({ route }) => {
       return;
     }
     if (selectedInterests.size < CONSTRAINTS.Event.Interest.Min) {
-      displayError(
+      showErrorAlert(
         formatError(
           "Input error",
           "Please select at least " + CONSTRAINTS.Event.Interest.Min + " tag."

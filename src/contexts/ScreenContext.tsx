@@ -17,6 +17,7 @@ import { displayError } from "../helpers/helpers";
 import { appVersionText } from "../constants/texts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { McText } from "../components/Styled";
+import { AlertContext } from "./AlertContext";
 
 type ScreenContextType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ export const ScreenContext = createContext<ScreenContextType>({
 });
 
 export const ScreenProvider = ({ children }) => {
+
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
 
