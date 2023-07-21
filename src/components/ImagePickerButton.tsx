@@ -1,9 +1,7 @@
 import React, { useState, useEffect, Component } from "react";
 import { TouchableOpacity, Button, Image, View, Platform, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { FONTS, SIZES, COLORS, icons, images } from "../constants";
-import { McIcon } from "./Styled";
-import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
+import { FONTS, SIZES, COLORS, icons } from "../constants";
 import { PermissionsAndroid } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 

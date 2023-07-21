@@ -158,13 +158,6 @@ const EventCard = ({
 
   if (isBigCard) {
     return (
-      <View
-        style={{
-          height: cardHeight,
-          width: cardWidth,
-          borderRadius: cardBorderRadius,
-        }}
-      >
         <TouchableHighlight
           onPress={onPressCard}
           style={{
@@ -329,7 +322,6 @@ const EventCard = ({
             </View>
           </View>
         </TouchableHighlight>
-      </View>
     );
   }
 
@@ -342,6 +334,7 @@ const EventCard = ({
         borderRadius: cardBorderRadius,
         height: cardHeight,
         width: cardWidth,
+        overflow: "hidden"
       }}
     >
       <View
@@ -360,6 +353,7 @@ const EventCard = ({
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
+            overflow: "hidden"
           }}
         >
           <LinearGradient

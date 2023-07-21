@@ -106,6 +106,7 @@ const HomeEventCard = ({
             alignItems: "center",
             justifyContent: "center",
             paddingHorizontal: 20,
+            marginRight: 10,
             borderRightWidth: 2,
             borderRightColor: COLORS.gray,
           }}
@@ -121,6 +122,7 @@ const HomeEventCard = ({
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 20,
+          marginRight: 10,
           borderRightWidth: 2,
           borderRightColor: COLORS.gray,
         }}
@@ -172,7 +174,7 @@ const HomeEventCard = ({
           <View
             style={{
               position: "absolute",
-              zIndex: 10,
+              zIndex: 1,
               width: cardWidth,
               paddingVertical: 5,
               paddingHorizontal: 20,
