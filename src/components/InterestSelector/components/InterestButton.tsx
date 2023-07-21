@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SafeAreaView, TouchableOpacity, StyleSheet } from "react-native";
 import { COLORS, Interest } from "../../../constants";
 import { McText } from "../../Styled";
+import React from "react";
 
 type InterestButtonProps = {
   tag: Interest;
@@ -27,10 +28,10 @@ const InterestButton = (props: InterestButtonProps) => {
       onPress={_onPress}
       style={{
         height: 32,
-        borderRadius: 5,
+        borderRadius: 20,
         marginVertical: 4,
         marginHorizontal: 4,
-        paddingHorizontal: 10,
+        paddingHorizontal: 13,
         opacity: 0.9,
         justifyContent: "center",
         alignItems: "center",

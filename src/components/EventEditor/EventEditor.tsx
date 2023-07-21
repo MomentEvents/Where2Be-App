@@ -71,7 +71,7 @@ const EventEditor = (props: EventEditorProps) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <KeyboardAwareScrollView style={{ backgroundColor: COLORS.black }}>
+      <KeyboardAwareScrollView style={{ backgroundColor: COLORS.trueBlack }}>
         <View style={styles.scrollViewContainer}>
           <SectionInputs>
             <View style={styles.titleContainer}>
@@ -291,7 +291,6 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
-    paddingHorzontal: 10,
     paddingBottom: 10,
     paddingTop: 10,
   },
@@ -303,7 +302,6 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
-    paddingHorzontal: 10,
     paddingBottom: 10,
     paddingTop: 10,
     width: "47%",
@@ -316,7 +314,6 @@ const styles = StyleSheet.create({
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
-    paddingHorzontal: 10,
     paddingBottom: 10,
     paddingTop: 10,
     width: "47%",

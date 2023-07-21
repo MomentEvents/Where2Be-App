@@ -49,7 +49,7 @@ export const AlertProvider = ({ children }) => {
 
   const showErrorAlert = (error: Error) => {
     showAlert(
-      <McText body3 style={{ color: COLORS.white }}>
+      <McText body3 style={{ textAlign: "center", color: COLORS.white }}>
         {error.message}
       </McText>,
       5
@@ -150,6 +150,8 @@ export const AlertProvider = ({ children }) => {
             position: "absolute",
             paddingBottom: 20,
             paddingTop: insets.top + 20,
+            width: "100%",
+            paddingHorizontal: 30,
             backgroundColor: COLORS.black,
             alignItems: "center",
             justifyContent: "center",

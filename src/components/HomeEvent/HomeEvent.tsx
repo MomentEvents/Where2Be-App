@@ -176,7 +176,6 @@ const HomeEvent = (props: HomeEventProps) => {
         width={props.width}
         height={props.height - usernameHeight}
         event={props.event}
-        host={props.user}
         reason={props.reason}
       />
     </View>

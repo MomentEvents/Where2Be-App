@@ -27,11 +27,13 @@ import CardsSwipe from "react-native-cards-swipe";
 import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AlertContext } from "../../../contexts/AlertContext";
+import { EventContext } from "../../../contexts/EventContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
 
+  const { newPostedEventHomePageRef } = useContext(EventContext);
 
   const viewedEventIDs = useRef<{
     [key: string]: boolean;
@@ -39,7 +41,7 @@ const HomeScreen = () => {
 
   const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
 
-  const { currentSchool, userToken } = useContext(UserContext);
+  const { currentSchool, userToken, userIDToUser } = useContext(UserContext);
 
   const insets = useSafeAreaInsets();
 
@@ -122,10 +124,25 @@ const HomeScreen = () => {
       const minutesDiff = Math.floor(timeDiff / (1000 * 60));
 
       console.log(minutesDiff + " minutes elapsed since last pull");
-      if (minutesDiff > 10) {
+      if (minutesDiff > 10 && !newPostedEventHomePageRef.current) {
         console.log("Repulling events");
         onRefresh();
         lastPulled.current = new Date();
+      }
+      if (newPostedEventHomePageRef.current) {
+        try {
+          const newHostEvent: { Host: User; Event: Event; Reason: string } = {
+            Host: userIDToUser[userToken.UserID],
+            Event: newPostedEventHomePageRef.current,
+            Reason: undefined,
+          };
+          const newList = eventsAndHosts;
+          eventsAndHosts.unshift(newHostEvent)
+          setEventsAndHosts(newList)
+          newPostedEventHomePageRef.current = null;
+        } catch (e) {
+          console.warn("ERROR PUTTING EVENT ON HOME PAGE: ", e)
+        }
       }
     }
   }, [isFocused]);
@@ -164,16 +181,13 @@ const HomeScreen = () => {
     //     return;
     //   }
     //   const viewedEvent = viewableItems[0].item.Event;
-
     //   console.log(viewedEvent.EventID);
-
     //   if (
     //     !viewedEventIDs.current[viewedEvent.EventID] &&
     //     !viewedEvent.UserViewed
     //   ) {
     //     viewedEventIDs.current[viewedEvent.EventID] = true;
     //     queuedEventIDs.current.push(viewedEvent.EventID);
-
     //     // Update API to say that user viewed the event
     //     console.log(
     //       "user has viewed event " +
@@ -184,7 +198,6 @@ const HomeScreen = () => {
     //     const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
     //     timeoutId.current = newTimeoutId;
     //   }
-
     //   // You can put your logic here.
     //   // viewableItems is an array of objects, each object represents a visible item.
     //   // Each object in viewableItems has an item property that refers to the actual data item in your data array
@@ -348,7 +361,9 @@ const HomeScreen = () => {
         )}
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
-        ListFooterComponent={!isLoading && <CaughtUpCard doPaddingBottom={true}/>}
+        ListFooterComponent={
+          !isLoading && <CaughtUpCard doPaddingBottom={true} />
+        }
       />
       <TouchableOpacity
         style={styles.hoverButtonContainer}

@@ -33,6 +33,7 @@ type EventContextType = {
   clientRemoveUserShoutout: (eventID: string) => void;
   didJoinedEventsChangeRef: React.MutableRefObject<boolean>;
   didHostedEventsChangeRef: React.MutableRefObject<boolean>;
+  newPostedEventHomePageRef: React.MutableRefObject<Event>;
 };
 
 export const EventContext = createContext<EventContextType>({
@@ -46,6 +47,7 @@ export const EventContext = createContext<EventContextType>({
   clientRemoveUserShoutout: null,
   didJoinedEventsChangeRef: null,
   didHostedEventsChangeRef: null,
+  newPostedEventHomePageRef: null,
 });
 
 export const EventProvider = ({ children }) => {
@@ -58,6 +60,7 @@ export const EventProvider = ({ children }) => {
 
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
+  const newPostedEventHomePageRef = useRef(null);
 
   const { userToken } = useContext(UserContext);
 
@@ -207,6 +210,7 @@ export const EventProvider = ({ children }) => {
         clientRemoveUserShoutout,
         didJoinedEventsChangeRef,
         didHostedEventsChangeRef,
+        newPostedEventHomePageRef
       }}
     >
       {children}

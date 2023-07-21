@@ -27,7 +27,6 @@ type EventCardProps = {
   width?: number;
   height?: number;
   showRelativeTime?: boolean;
-  host: User;
   reason: string;
 };
 
@@ -36,7 +35,6 @@ const HomeEventCard = ({
   width,
   height,
   showRelativeTime,
-  host,
   reason,
 }: EventCardProps) => {
   const {
