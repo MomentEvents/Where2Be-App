@@ -39,17 +39,44 @@ export const AlertProvider = ({ children }) => {
   }, [alertVisible]);
 
   const showAlert = (component: ReactNode, seconds: number) => {
+    // If there's an existing timeout (i.e., an alert is already showing), clear it
     if(timeoutId.current){
-        clearTimeout(timeoutId.current);
-        timeoutId.current = null;
+      clearTimeout(timeoutId.current);
+      timeoutId.current = null;
+      
+      // Start an animation to slide the current alert up
+      Animated.timing(slideAnimation, {
+        toValue: -500,
+        duration: 200,
+        useNativeDriver: false,
+      }).start(() => {
+        // Once the animation is complete, hide the current alert
         setAlertVisible(false);
+        // And show the new alert
+        displayNewAlert(component, seconds);
+      });
+    } else {
+      // If there isn't a timeout (i.e., no alert is currently showing), simply show the new alert
+      displayNewAlert(component, seconds);
     }
+  };
+  
+  const displayNewAlert = (component: ReactNode, seconds: number) => {
     setAlertVisible(true);
     setAlertComponent(component);
-
+  
+    // Reset the position of the alert for slide in
+    slideAnimation.setValue(-100);
+  
+    // Start an animation to slide the new alert down
+    Animated.timing(slideAnimation, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  
     timeoutId.current = setTimeout(() => {
-        timeoutId.current = null;
-      setAlertVisible(false);
+      hideAlert();
     }, seconds * 1000);
   };
 
@@ -103,8 +130,8 @@ export const AlertProvider = ({ children }) => {
           {...panResponder.panHandlers}
           style={{
             position: "absolute",
-            paddingBottom: 30,
-            paddingTop: insets.top + 30,
+            paddingBottom: 20,
+            paddingTop: insets.top + 20,
             backgroundColor: COLORS.black,
             alignItems: "center",
             justifyContent: "center",
