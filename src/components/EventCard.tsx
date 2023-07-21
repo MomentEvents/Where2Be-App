@@ -28,7 +28,6 @@ type EventCardProps = {
   isBigCard?: boolean;
   width?: number;
   height?: number;
-  showRelativeTime?: boolean;
 };
 
 const EventCard = ({
@@ -38,7 +37,6 @@ const EventCard = ({
   isBigCard,
   width,
   height,
-  showRelativeTime,
 }: EventCardProps) => {
   const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
   const navigation = useNavigation<any>();
@@ -126,12 +124,13 @@ const EventCard = ({
           style={{
             alignItems: "center",
             justifyContent: "center",
-            paddingHorizontal: 20,
+            paddingHorizontal: 15,
             borderRightWidth: 2,
             borderRightColor: COLORS.gray,
+            marginRight: 5,
           }}
         >
-          <McText h1>{dayName}</McText>
+          <McText h3>{dayName}</McText>
         </View>
       );
     }
@@ -141,13 +140,14 @@ const EventCard = ({
         style={{
           alignItems: "center",
           justifyContent: "center",
-          paddingHorizontal: 20,
+          paddingHorizontal: 15,
+          marginRight: 5,
           borderRightWidth: 2,
           borderRightColor: COLORS.gray,
         }}
       >
-        <McText h3>{monthName}</McText>
-        <McText h1>{dateNumber}</McText>
+        <McText h5>{monthName}</McText>
+        <McText h3>{dateNumber}</McText>
       </View>
     );
   };
@@ -156,172 +156,171 @@ const EventCard = ({
     return <View />;
   }
 
+  function isWithin24hours(dateCheck: Date) {
+    const today = new Date()
+    if (dateCheck > today) {
+      const timeDifference = dateCheck.getTime() - today.getTime();
+      const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+      return timeDifference < millisecondsIn24Hours;
+    }
+    return false;
+  }
+
   if (isBigCard) {
     return (
-        <TouchableHighlight
-          onPress={onPressCard}
+      <TouchableHighlight
+        onPress={onPressCard}
+        style={{
+          borderRadius: cardBorderRadius,
+          height: cardHeight,
+          width: cardWidth,
+          overflow: "hidden",
+        }}
+      >
+        <View
           style={{
             borderRadius: cardBorderRadius,
+            flex: 1,
+            height: cardHeight,
+            width: cardWidth,
           }}
         >
-          <Image
+          <ImageBackground
             source={{ uri: eventIDToEvent[event.EventID].Picture }}
             style={{
-              height: cardHeight,
-              width: cardWidth,
+              flex: 1,
+              width: "100%",
               borderRadius: cardBorderRadius,
               borderWidth: cardBorderWidth,
               borderColor: cardBorderColor,
-            }}
-          />
-          <View
-            style={{
-              flex: 1,
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: cardHeight,
-              width: cardWidth,
-              borderRadius: cardBorderRadius,
-              borderWidth: cardBorderWidth,
-              borderColor: cardBorderColor,
-            }}
-          />
-          <View
-            style={{
-              flex: 1,
-              position: "absolute",
-              top: cardBorderWidth,
-              left: cardBorderWidth,
-              width: cardWidth - cardBorderWidth * 2,
-              height: cardHeight - cardBorderWidth * 2,
+              overflow: "hidden",
             }}
           >
             <LinearGradient
-              colors={[
-                "transparent",
-                COLORS.transparentBlack,
-                COLORS.transparentBlack,
-              ]}
+              colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
               start={{ x: 0, y: 0.4 }}
-              end={{ x: 0, y: 1.3 }}
+              end={{ x: 0, y: 1.6 }}
               style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
             ></LinearGradient>
 
             <View
               style={{
-                flexDirection: "column",
-                justifyContent: "flex-end",
+                flex: 1,
+                alignSelf: "center",
+                flexDirection: "row",
                 position: "absolute",
-                marginHorizontal: 15,
-                marginVertical: 15,
                 bottom: 0,
                 left: 0,
-                width: cardWidth - 30,
+                paddingRight: 10,
+                width: cardWidth - 10,
               }}
             >
-              <McText h1 numberOfLines={2}>
-                {eventIDToEvent[event.EventID].Title}
-              </McText>
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <McText
-                  h3
-                  style={{
-                    color: COLORS.purple,
-                    opacity: 1,
-                    marginTop: 4,
-                    letterSpacing: 0.6,
-                    marginRight: 8,
-                  }}
-                >
-                  {showRelativeTime
-                    ? moment(
-                        eventIDToEvent[event.EventID].StartDateTime
-                      ).fromNow()
-                    : moment(
-                        eventIDToEvent[event.EventID].StartDateTime
-                      ).format("MMM DD")}
-                </McText>
-                <McText
-                  h3
-                  style={{
-                    color: COLORS.lightGray,
-                    opacity: 1,
-                    marginTop: 4,
-                    letterSpacing: 0.6,
-                    marginRight: 4,
-                  }}
-                >
-                  {showRelativeTime ? (
-                    <></>
-                  ) : (
-                    moment(eventIDToEvent[event.EventID].StartDateTime).format(
-                      "h:mm a"
-                    )
-                  )}
-                </McText>
-                <View
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    bottom: 0,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons
-                    name="md-checkmark"
-                    size={21}
-                    color={
-                      eventIDToEvent[event.EventID].UserJoin
-                        ? COLORS.purple
-                        : COLORS.lightGray
-                    }
-                    style={{ marginTop: 1 }}
-                  />
-                  <McText
-                    body3
-                    style={{
-                      marginRight: 12,
-                      marginLeft: 5,
-                      color: eventIDToEvent[event.EventID].UserJoin
-                        ? COLORS.purple
-                        : COLORS.lightGray,
-                    }}
-                  >
-                    {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
+              <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
+                <DateTextComponent
+                  date={eventIDToEvent[event.EventID].StartDateTime}
+                />
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                  <McText h3 numberOfLines={1}>
+                    {eventIDToEvent[event.EventID].Title}
                   </McText>
-                  <AntDesign
-                    name="retweet"
-                    size={15}
-                    color={
-                      eventIDToEvent[event.EventID].UserShoutout
-                        ? COLORS.purple
-                        : COLORS.lightGray
-                    }
-                    style={{ marginTop: 1 }}
-                  />
-                  <McText
-                    body3
-                    style={{
-                      marginRight: 12,
-                      marginLeft: 8,
-                      color: eventIDToEvent[event.EventID].UserShoutout
-                        ? COLORS.purple
-                        : COLORS.lightGray,
-                    }}
-                  >
-                    {truncateNumber(eventIDToEvent[event.EventID].NumShoutouts)}
-                  </McText>
+                  <View style={{ flexDirection: "row", flex: 1 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        flex: 1,
+                        alignItems: "center",
+                      }}
+                    >
+                      <McText body4 color={COLORS.purple} numberOfLines={1}>
+                        {isWithin24hours(eventIDToEvent[event.EventID].StartDateTime) ? moment(
+                          eventIDToEvent[event.EventID].StartDateTime
+                        ).fromNow() : moment(
+                          eventIDToEvent[event.EventID].StartDateTime
+                        ).format("h:mm a")
+                        + " - " +
+                        moment(
+                          eventIDToEvent[event.EventID].EndDateTime
+                        ).format("h:mm a")}
+                      </McText>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginRight: 5,
+                        }}
+                      >
+                        <Ionicons
+                          name="checkmark-sharp"
+                          size={18}
+                          color={
+                            eventIDToEvent[event.EventID].UserJoin
+                              ? COLORS.purple
+                              : COLORS.lightGray
+                          }
+                          style={{ alignSelf: "center" }}
+                        />
+                        <McText
+                          body3
+                          style={{
+                            marginRight: 7,
+                            marginLeft: 5,
+                            color: eventIDToEvent[event.EventID].UserJoin
+                              ? COLORS.purple
+                              : COLORS.lightGray,
+                          }}
+                        >
+                          {truncateNumber(
+                            eventIDToEvent[event.EventID].NumJoins
+                          )}
+                        </McText>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <AntDesign
+                          name="retweet"
+                          size={14}
+                          color={
+                            eventIDToEvent[event.EventID].UserShoutout
+                              ? COLORS.purple
+                              : COLORS.lightGray
+                          }
+                          style={{ alignSelf: "center" }}
+                        />
+                        <McText
+                          body3
+                          style={{
+                            marginRight: 2,
+                            marginLeft: 8,
+                            color: eventIDToEvent[event.EventID].UserShoutout
+                              ? COLORS.purple
+                              : COLORS.lightGray,
+                          }}
+                        >
+                          {truncateNumber(
+                            eventIDToEvent[event.EventID].NumShoutouts
+                          )}
+                        </McText>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </TouchableHighlight>
+          </ImageBackground>
+        </View>
+      </TouchableHighlight>
     );
   }
 
@@ -334,7 +333,7 @@ const EventCard = ({
         borderRadius: cardBorderRadius,
         height: cardHeight,
         width: cardWidth,
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <View
@@ -353,7 +352,7 @@ const EventCard = ({
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <LinearGradient
@@ -375,12 +374,12 @@ const EventCard = ({
               width: cardWidth - 10,
             }}
           >
-            <View style={{ flex: 1, flexDirection: "row" }}>
+            <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
               <DateTextComponent
                 date={eventIDToEvent[event.EventID].StartDateTime}
               />
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <McText h2 numberOfLines={1}>
+                <McText h3 numberOfLines={1}>
                   {eventIDToEvent[event.EventID].Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>
@@ -391,7 +390,7 @@ const EventCard = ({
                       alignItems: "center",
                     }}
                   >
-                    <McText body3 color={COLORS.purple}>
+                    <McText body4 color={COLORS.purple}>
                       {moment(
                         eventIDToEvent[event.EventID].StartDateTime
                       ).format("h:mm a")}
@@ -413,7 +412,7 @@ const EventCard = ({
                     >
                       <Ionicons
                         name="checkmark-sharp"
-                        size={22}
+                        size={18}
                         color={
                           eventIDToEvent[event.EventID].UserJoin
                             ? COLORS.purple
@@ -422,9 +421,9 @@ const EventCard = ({
                         style={{ alignSelf: "center" }}
                       />
                       <McText
-                        h3
+                        body3
                         style={{
-                          marginRight: 12,
+                          marginRight: 7,
                           marginLeft: 5,
                           color: eventIDToEvent[event.EventID].UserJoin
                             ? COLORS.purple
@@ -439,7 +438,7 @@ const EventCard = ({
                     >
                       <AntDesign
                         name="retweet"
-                        size={16}
+                        size={14}
                         color={
                           eventIDToEvent[event.EventID].UserShoutout
                             ? COLORS.purple
@@ -448,9 +447,9 @@ const EventCard = ({
                         style={{ alignSelf: "center" }}
                       />
                       <McText
-                        h3
+                        body3
                         style={{
-                          marginRight: 12,
+                          marginRight: 2,
                           marginLeft: 8,
                           color: eventIDToEvent[event.EventID].UserShoutout
                             ? COLORS.purple

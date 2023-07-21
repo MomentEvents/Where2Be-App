@@ -92,7 +92,8 @@ const EditProfileScreen = ({ route }) => {
       VerifiedOrganization: user.VerifiedOrganization,
       UserFollow: user.UserFollow,
       NumFollowers: user.NumFollowers,
-      NumFollowing: user.NumFollowing
+      NumFollowing: user.NumFollowing,
+      NumEvents: user.NumEvents,
     };
     const createdUserBase64 = { ...createdUser };
     createdUserBase64.Picture = base64Image;
@@ -100,14 +101,13 @@ const EditProfileScreen = ({ route }) => {
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
-        updateUserIDToUser({id: createdUser.UserID, user: createdUser})
+        updateUserIDToUser({ id: createdUser.UserID, user: createdUser });
         navigation.goBack();
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
-        }
-        else{
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
           displayError(error);
         }
         setLoading(false);
