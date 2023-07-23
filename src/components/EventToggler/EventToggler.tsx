@@ -275,9 +275,8 @@ const EventToggler = (props: EventTogglerProps) => {
             errorThrown = true;
             if (error.showBugReportDialog) {
               showBugReportPopup(error);
-            } else if (error.shouldDisplay) {
-              showErrorAlert(error);
             }
+            showErrorAlert(error);
           }
           setShowRetry(true);
         });
@@ -301,9 +300,8 @@ const EventToggler = (props: EventTogglerProps) => {
               errorThrown = true;
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
-              } else if (error.shouldDisplay) {
-                showErrorAlert(error);
               }
+              showErrorAlert(error);
             }
           })
       : getUserHostedFutureEvents(
@@ -321,9 +319,8 @@ const EventToggler = (props: EventTogglerProps) => {
               errorThrown = true;
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
-              } else if (error.shouldDisplay) {
-                showErrorAlert(error);
               }
+              showErrorAlert(error);
             }
           });
     props.eventsToPull === EVENT_TOGGLER.JoinedEvents
@@ -339,9 +336,8 @@ const EventToggler = (props: EventTogglerProps) => {
               errorThrown = true;
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
-              } else if (error.shouldDisplay) {
-                showErrorAlert(error);
               }
+              showErrorAlert(error);
             }
           })
       : getUserHostedPastEvents(userToken.UserAccessToken, props.selectedUserID)
@@ -356,9 +352,8 @@ const EventToggler = (props: EventTogglerProps) => {
               errorThrown = true;
               if (error.showBugReportDialog) {
                 showBugReportPopup(error);
-              } else if (error.shouldDisplay) {
-                showErrorAlert(error);
               }
+              showErrorAlert(error);
             }
           });
   };

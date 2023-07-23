@@ -236,7 +236,9 @@ const EventDetailsScreen = ({ route }) => {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
               setHost(pulledHost);
-              updateUserIDToUser({ id: pulledHost.UserID, user: { ...userIDToUser[pulledHost.UserID], ...pulledHost },
+              updateUserIDToUser({
+                id: pulledHost.UserID,
+                user: { ...userIDToUser[pulledHost.UserID], ...pulledHost },
               });
             })
             .catch((error: CustomError) => {
@@ -244,10 +246,9 @@ const EventDetailsScreen = ({ route }) => {
                 gotError = true;
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
-                } else if (error.shouldDisplay) {
-                  showErrorAlert(error);
                 }
-                setIsHost(false)
+                showErrorAlert(error);
+                setIsHost(false);
                 setShowRetry(true);
               }
             })
@@ -264,10 +265,9 @@ const EventDetailsScreen = ({ route }) => {
           gotError = true;
           if (error.showBugReportDialog) {
             showBugReportPopup(error);
-          } else if (error.shouldDisplay) {
-            showErrorAlert(error);
           }
-          setIsHost(false)
+          showErrorAlert(error);
+          setIsHost(false);
           setShowRetry(true);
         }
       })
@@ -283,10 +283,9 @@ const EventDetailsScreen = ({ route }) => {
           gotError = true;
           if (error.showBugReportDialog) {
             showBugReportPopup(error);
-          } else if (error.shouldDisplay) {
-            showErrorAlert(error);
           }
-          setIsHost(false)
+          showErrorAlert(error);
+          setIsHost(false);
           setShowRetry(true);
         }
       })
@@ -332,7 +331,6 @@ const EventDetailsScreen = ({ route }) => {
     console.log("Current user UserID is " + userToken.UserID);
     setIsHost(host.UserID == userToken.UserID || isAdmin);
   }, [host]);
-
 
   return (
     <View style={styles.container}>
@@ -523,9 +521,7 @@ const EventDetailsScreen = ({ route }) => {
             }}
           />
         }
-        showModeratorFeatures={
-          isHost
-        }
+        showModeratorFeatures={isHost}
       />
     </View>
   );

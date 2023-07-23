@@ -1,6 +1,6 @@
 import { momentAPI, momentAPIVersionless } from "../constants/server";
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   checkIfStringIsEmail,
   checkIfStringIsAlphanumeric,
@@ -14,13 +14,13 @@ const TOKEN_STORAGE = "UserAccessToken";
 const FIRST_TIME_INSTALL = {
   KEY: "FIRST_TIME_INSTALL_KEY",
   YES: "FIRST_TIME_INSTALL_YES",
-  NO: "FIRST_TIME_INSTALL_NO"
-}
+  NO: "FIRST_TIME_INSTALL_NO",
+};
 const FIRST_TIME_LOGIN = {
   KEY: "FIRST_TIME_LOGIN_KEY",
   YES: "FIRST_TIME_LOGIN_YES",
-  NO: "FIRST_TIME_LOGIN_NO"
-}
+  NO: "FIRST_TIME_LOGIN_NO",
+};
 
 /******************************************************
  * login
@@ -39,10 +39,11 @@ export async function login(
   usercred: string,
   password: string
 ): Promise<Token> {
-  if (
-    !usercred || usercred === ""
-  ) {
-    throw formatError("Input error", "Please enter a valid username or password");
+  if (!usercred || usercred === "") {
+    throw formatError(
+      "Input error",
+      "Please enter a valid username or password"
+    );
   }
 
   if (!password || password === "") {
@@ -62,16 +63,22 @@ export async function login(
     return undefined;
   });
 
-  const data = await responseHandler<{"user_id": string, "user_access_token": string}>(response, "Could not login", true)
+  const data = await responseHandler<{
+    user_id: string;
+    user_access_token: string;
+  }>(response, "Could not login", true);
 
-  if(!data["user_id"] || !data["user_access_token"]){
-    throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
+  if (!data["user_id"] || !data["user_access_token"]) {
+    throw formatError(
+      "Error",
+      "User access token or UserID is undefined. Please report this to support"
+    );
   }
   const createdToken: Token = createToken(
     data["user_id"],
     data["user_access_token"]
   );
-  console.log("ABOUT TO WRITE TOKEN")
+  console.log("ABOUT TO WRITE TOKEN");
   writeToken(createdToken);
 
   console.log(createdToken);
@@ -102,18 +109,13 @@ export async function signup(
   displayName: string,
   password: string,
   schoolID: string,
-  email: string,
+  email: string
 ): Promise<Token> {
   if (!checkIfStringIsReadable(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
   }
 
-  if (
-    displayName === "" ||
-    !displayName ||
-    password === "" ||
-    !password
-  ) {
+  if (displayName === "" || !displayName || password === "" || !password) {
     throw formatError(
       "Input error",
       "Please enter non-empty values before signing up"
@@ -123,7 +125,7 @@ export async function signup(
     throw formatError("Input error", "Please enter a valid school");
   }
 
-  if(!checkIfStringIsEmail(email) || email === ""){
+  if (!checkIfStringIsEmail(email) || email === "") {
     throw formatError("Input error", "Please enter a valid email");
   }
 
@@ -137,22 +139,28 @@ export async function signup(
       display_name: displayName,
       password: password,
       school_id: schoolID,
-      email: email
+      email: email,
     }),
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
-  const data = await responseHandler<{"user_id": string, "user_access_token": string}>(response, "Could not signup", true)
+  const data = await responseHandler<{
+    user_id: string;
+    user_access_token: string;
+  }>(response, "Could not signup", true);
 
-  if(!data["user_id"] || !data["user_access_token"]){
-    throw formatError("Error", "User access token or UserID is undefined. Please report this to support")
+  if (!data["user_id"] || !data["user_access_token"]) {
+    throw formatError(
+      "Error",
+      "User access token or UserID is undefined. Please report this to support"
+    );
   }
   const createdToken: Token = createToken(
     data["user_id"],
     data["user_access_token"]
   );
-  console.log("ABOUT TO WRITE TOKEN")
+  console.log("ABOUT TO WRITE TOKEN");
   writeToken(createdToken);
 
   console.log(createdToken);
@@ -173,7 +181,7 @@ export async function signup(
  * None
  */
 export async function logout(): Promise<void> {
-  const token = await getToken()
+  const token = await getToken();
   if (token !== null && token !== undefined) {
     deleteToken();
   }
@@ -192,7 +200,7 @@ export async function logout(): Promise<void> {
  * The token to use
  */
 function createToken(userID: string, userAccessToken: string): Token {
-  const token: Token  = { UserID: userID, UserAccessToken: userAccessToken };
+  const token: Token = { UserID: userID, UserAccessToken: userAccessToken };
   return token;
 }
 
@@ -225,9 +233,9 @@ async function writeToken(newToken: Token): Promise<void> {
 async function getToken(): Promise<Token> {
   console.log("getToken() call.\nUser Access Token:");
   console.log(await SecureStore.getItemAsync(TOKEN_STORAGE));
-  const token: Token = JSON.parse(await SecureStore.getItemAsync(
-    TOKEN_STORAGE
-  ));
+  const token: Token = JSON.parse(
+    await SecureStore.getItemAsync(TOKEN_STORAGE)
+  );
 
   if (!token) {
     return Promise.resolve(null);
@@ -250,8 +258,6 @@ export async function deleteToken(): Promise<void> {
   await SecureStore.deleteItemAsync(TOKEN_STORAGE);
 }
 
-
-
 export async function getStoredToken(): Promise<Token> {
   const storageToken: Token = await getToken();
 
@@ -259,50 +265,52 @@ export async function getStoredToken(): Promise<Token> {
     return Promise.resolve(null);
   }
 
-  if(await checkIfFirstInstall()){
+  if (await checkIfFirstInstall()) {
     await deleteToken();
-    return Promise.resolve(null)
+    return Promise.resolve(null);
   }
 
   return Promise.resolve(storageToken);
 }
 
 export async function checkIfFirstInstall(): Promise<boolean> {
-  const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY)
+  const status = await AsyncStorage.getItem(FIRST_TIME_INSTALL.KEY);
 
-  console.log("CHECKIFFIRSTINSTALL call. " + status)
-  if(status == null || status == undefined || status === FIRST_TIME_INSTALL.YES){
+  console.log("CHECKIFFIRSTINSTALL call. " + status);
+  if (
+    status == null ||
+    status == undefined ||
+    status === FIRST_TIME_INSTALL.YES
+  ) {
     return true;
   }
 
-  return false
+  return false;
 }
 
 export async function updateFirstInstall(status: boolean): Promise<void> {
-  if(status){
-    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.YES)
-  }
-  else {
-    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.NO)
+  if (status) {
+    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.YES);
+  } else {
+    await AsyncStorage.setItem(FIRST_TIME_INSTALL.KEY, FIRST_TIME_INSTALL.NO);
   }
 }
 
 export async function checkIfFirstLogin(): Promise<boolean> {
-  const status = await AsyncStorage.getItem(FIRST_TIME_LOGIN.KEY)
+  const status = await AsyncStorage.getItem(FIRST_TIME_LOGIN.KEY);
 
-  if(status == null || status == undefined || status == FIRST_TIME_LOGIN.YES){
+  if (status == null || status == undefined || status == FIRST_TIME_LOGIN.YES) {
     return true;
   }
 
-  return false
+  return false;
 }
 
 export async function updateFirstLogin(status: boolean): Promise<void> {
-  if(status){
-    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.YES)
-  }
-  else {
-    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.NO)
+  if (status) {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.YES);
+  } else {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN.KEY, FIRST_TIME_LOGIN.NO);
   }
 }
 
@@ -329,10 +337,10 @@ export async function getServerStatus(version: string): Promise<void> {
       app_version: version,
     }),
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
-  await responseHandler<void>(response, "Could not get server status", false)
+  await responseHandler<void>(response, "Could not get server status", false);
 }
 
 export async function checkIfUserAccessTokenIsAdmin(
@@ -347,64 +355,87 @@ export async function checkIfUserAccessTokenIsAdmin(
       user_access_token: userAccessToken,
     }),
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
-  const data = await responseHandler<{"is_admin": boolean}>(response, "Could not check if user is admin", true)
+  const data = await responseHandler<{ is_admin: boolean }>(
+    response,
+    "Could not check if user is admin",
+    true
+  );
 
   return Promise.resolve(data.is_admin);
 }
 
-export async function resetPassword(
-  email: string
-): Promise<void> {
+export async function resetPassword(email: string): Promise<void> {
   const response = await fetch(momentAPI + `/auth/reset_password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: email
+      email: email,
     }),
   }).catch(() => {
-    return undefined
-  })
+    return undefined;
+  });
 
-  await responseHandler<void>(response, "Could not send password reset email", false)
+  await responseHandler<void>(
+    response,
+    "Could not send password reset email",
+    false
+  );
 }
 
-export async function checkEmailAvailability(
-  email: string
-): Promise<void> {
+export async function checkEmailAvailability(email: string): Promise<void> {
   const response = await fetch(momentAPI + `/auth/check_email_availability`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: email
+      email: email,
     }),
   }).catch(() => {
-    return undefined
-  })
+    return undefined;
+  });
 
-  await responseHandler<void>(response, "Could not check email availability", false)
+  await responseHandler<void>(
+    response,
+    "Could not check email availability",
+    false
+  );
 }
 
 export async function checkUsernameAvailability(
   username: string
 ): Promise<void> {
-  const response = await fetch(momentAPI + `/auth/check_username_availability`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username
-    }),
-  }).catch(() => {
-    return undefined
-  })
+  const response = await fetch(
+    momentAPI + `/auth/check_username_availability`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+      }),
+    }
+  ).catch(() => {
+    return undefined;
+  });
 
-  await responseHandler<void>(response, "Could not check username availability", false)
+  await responseHandler<void>(
+    response,
+    "Could not check username availability",
+    false
+  );
 }
+
+// This only removes the event caches. User Access Tokens are stored in SecureStore, which won't be removed with this function
+
+// Putting a token in rewrites the data
+export const clearAllCachedData = async () => {
+  await AsyncStorage.clear();
+  await updateFirstInstall(false)
+};

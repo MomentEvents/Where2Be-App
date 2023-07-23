@@ -495,12 +495,30 @@ export const saveReadEventIDs = async (
   try {
     const existingEvents = await AsyncStorage.getItem(READ_EVENTS);
     const existingEventsParsed = existingEvents ? JSON.parse(existingEvents) : [];
+
     const newEvents = events.map(event => ({
       id: event.eventID,
       timestamp: event.startDateTime.getTime(),
     }));
 
-    const allEvents = [...existingEventsParsed, ...newEvents];
+    // Create a map for faster lookup
+    const newEventsMap = newEvents.reduce((map, event) => {
+      map[event.id] = event;
+      return map;
+    }, {});
+
+    // Update or add new events
+    const allEvents = existingEventsParsed.map(event =>
+      newEventsMap[event.id] ? newEventsMap[event.id] : event
+    );
+
+    // Check for events not yet in AsyncStorage
+    newEvents.forEach(newEvent => {
+      if (!allEvents.some(event => event.id === newEvent.id)) {
+        allEvents.push(newEvent);
+      }
+    });
+
     await AsyncStorage.setItem(READ_EVENTS, JSON.stringify(allEvents));
   } catch (error) {
     console.warn(error);
@@ -538,3 +556,4 @@ export const getAndCleanReadEventIDs = async (): Promise<string[]> => {
     return [];
   }
 };
+

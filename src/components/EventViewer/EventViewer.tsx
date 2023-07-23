@@ -33,7 +33,7 @@ type EventViewerProps = {
   isHoverButtonVisible?: Boolean;
 };
 const EventViewer = (props: EventViewerProps) => {
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   const { isLoggedIn, userToken } = useContext(UserContext);
@@ -61,9 +61,8 @@ const EventViewer = (props: EventViewerProps) => {
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
-        } else if (error.shouldDisplay) {
-          showErrorAlert(error);
         }
+        showErrorAlert(error);
         setShowRetry(true);
         setIsRefreshing(false);
       });
@@ -91,8 +90,12 @@ const EventViewer = (props: EventViewerProps) => {
     return (
       <View style={{ paddingHorizontal: 5, marginLeft: index === 0 ? 15 : 0 }}>
         {isLoggedIn ? (
-          <EventCard event={item} isBigCard={false} width={smallEventCardWidth}
-          height={smallEventCardHeight}/>
+          <EventCard
+            event={item}
+            isBigCard={false}
+            width={smallEventCardWidth}
+            height={smallEventCardHeight}
+          />
         ) : (
           <EventCard
             event={item}
@@ -165,7 +168,8 @@ const EventViewer = (props: EventViewerProps) => {
         )}
       {Object.keys(categoryNameToEventsMap).map((key, index) =>
         key === "Featured" ? (
-          <View key={key + index}><FlatList
+          <View key={key + index}>
+            <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
               data={Object.values(categoryNameToEventsMap[key])}

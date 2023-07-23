@@ -16,15 +16,24 @@ import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
-import * as Updates from "expo-updates"
+import * as Updates from "expo-updates";
 import { CustomError } from "../../../constants/error";
+import { clearAllCachedData } from "../../../services/AuthService";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 const SettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
+  const {userToken} = useContext(UserContext)
   const { setLoading } = useContext(ScreenContext);
+  const { showAlert, showErrorAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
 
   const onChangePasswordClick = () => {};
@@ -52,23 +61,38 @@ const SettingsScreen = () => {
     }
   };
 
+  const onCacheClean = () => {
+    clearAllCachedData()
+      .then(() => {
+        showAlert(
+          <McText style={{ textAlign: "center" }} body4>
+            Successfully deleted cached data
+          </McText>,
+          5
+        );
+      })
+      .catch((error: Error) => {
+        showErrorAlert(error);
+      });
+  };
+
   const onCheckForUpdatesClick = async () => {
-    setLoading(true)
-    console.log("Checking updates")
+    setLoading(true);
+    console.log("Checking updates");
     try {
       const update = await Updates.checkForUpdateAsync();
-      if(update.isAvailable){
-        await Updates.fetchUpdateAsync()
-        await Updates.reloadAsync()
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
       } else {
-        Alert.alert("No update is available")
+        Alert.alert("No update is available");
       }
     } catch (error) {
-      displayError(error)
+      displayError(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onAccountSettingsClick = () => {
     navigation.push(SCREENS.AccountSettings);
@@ -87,16 +111,15 @@ const SettingsScreen = () => {
           text: "Yes",
           onPress: () => {
             console.log("Yes Pressed");
-            setLoading(true)
+            setLoading(true);
             userLogout()
               .then(() => {
                 setLoading(false);
               })
               .catch((error: CustomError) => {
-                if(error.showBugReportDialog){
-                  showBugReportPopup(error)
-                }
-                else {
+                if (error.showBugReportDialog) {
+                  showBugReportPopup(error);
+                } else {
                   displayError(error);
                 }
                 setLoading(false);
@@ -192,6 +215,25 @@ const SettingsScreen = () => {
               />
             </View>
             <McText h3>Check For Updates</McText>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onCacheClean}>
+          <View style={styles.buttonContainer}>
+            <View
+              style={{
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name="cleaning-services"
+                style={styles.iconContainer}
+                size={28}
+                color="white"
+              />
+            </View>
+            <McText h3>Clean Cache</McText>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onLogoutClick}>

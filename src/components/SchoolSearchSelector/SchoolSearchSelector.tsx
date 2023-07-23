@@ -35,10 +35,9 @@ type SchoolSelectorProps = {
 };
 
 const SchoolSearchSelector = (props: SchoolSelectorProps) => {
-  
   const insets = useSafeAreaInsets();
 
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
 
   const [selectionData, setSelectionData] =
     useState<[{ key?: string; label?: string }]>(null);
@@ -81,12 +80,10 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   const handlePopulateSchools = () => {
     populateSchools().catch((error: CustomError) => {
       setShowRetry(true);
-      if(error.showBugReportDialog){
-        showBugReportPopup(error)
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
       }
-      else if (error.shouldDisplay) {
-        showErrorAlert(error);
-      }
+      showErrorAlert(error);
     });
   };
 
@@ -100,7 +97,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
   }, [schoolMap, selectionData]);
 
   return (
-    <View style={{ justifyContent: "center"}}>
+    <View style={{ justifyContent: "center" }}>
       {componentLoaded ? (
         <ModalSelector
           renderItem={(item) => {
@@ -181,16 +178,16 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   EmptytextHeader: {
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
-},
-EmptyMassage: {
-   color:'red',
-    fontWeight: '700',
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  EmptyMassage: {
+    color: "red",
+    fontWeight: "700",
     fontSize: 16,
-    fontStyle: 'normal',
-},
+    fontStyle: "normal",
+  },
 });
 
 export default SchoolSearchSelector;

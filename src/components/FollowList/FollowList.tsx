@@ -24,7 +24,7 @@ interface FollowListProps {
 }
 const FollowList = (props: FollowListProps) => {
   const { userToken } = useContext(UserContext);
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
 
   const [users, setUsers] = useState<User[]>(null);
   const [pulledUsers, setPulledUsers] = useState(false);
@@ -48,12 +48,10 @@ const FollowList = (props: FollowListProps) => {
           setUsers(users);
         })
         .catch((error: CustomError) => {
-          if(error.showBugReportDialog){
-            showBugReportPopup(error)
+          if (error.showBugReportDialog) {
+            showBugReportPopup(error);
           }
-          else if (error.shouldDisplay) {
-            showErrorAlert(error);
-          }
+          showErrorAlert(error);
           setShowRetry(true);
         });
     } else {
@@ -63,12 +61,10 @@ const FollowList = (props: FollowListProps) => {
           setUsers(users);
         })
         .catch((error: CustomError) => {
-          if(error.showBugReportDialog){
-            showBugReportPopup(error)
+          if (error.showBugReportDialog) {
+            showBugReportPopup(error);
           }
-          else if (error.shouldDisplay) {
-            showErrorAlert(error);
-          }
+          showErrorAlert(error);
           setShowRetry(true);
         });
     }
@@ -132,7 +128,7 @@ const FollowList = (props: FollowListProps) => {
     );
   };
 
-  const renderItem = ({item}) => renderUserResult(item);
+  const renderItem = ({ item }) => renderUserResult(item);
 
   return (
     <View style={styles.container}>

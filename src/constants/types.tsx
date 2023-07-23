@@ -17,7 +17,6 @@ export type Event = {
   UserJoin: boolean;
   UserShoutout: boolean;
   HostUserID: string;
-  UserViewed?: boolean;
   UserFollowHost?: boolean;
 };
 

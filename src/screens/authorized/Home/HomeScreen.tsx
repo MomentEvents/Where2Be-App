@@ -19,7 +19,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts, getAndCleanReadEventIDs, saveReadEventIDs } from "../../../services/EventService";
-import { displayError, showBugReportPopup } from "../../../helpers/helpers";
+import { displayError, formatError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
@@ -37,9 +37,7 @@ const HomeScreen = () => {
   const { newPostedEventHomePageRef } = useContext(EventContext);
   const flatListRef = useRef<FlatList>(null);
 
-  const viewedEventIDs = useRef<{
-    [key: string]: boolean;
-  }>({});
+  const viewedEventIDs = useRef<Set<string>>(new Set([]));
 
   const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
 
@@ -184,10 +182,9 @@ const HomeScreen = () => {
       const viewedEvent: Event = viewableItems[0].item.Event;
       console.log(viewedEvent.EventID);
       if (
-        !viewedEventIDs.current[viewedEvent.EventID] &&
-        !viewedEvent.UserViewed
+        !viewedEventIDs.current.has(viewedEvent.EventID)
       ) {
-        viewedEventIDs.current[viewedEvent.EventID] = true;
+        viewedEventIDs.current.add(viewedEvent.EventID)
         queuedEventIDs.current.push({eventID: viewedEvent.EventID, startDateTime: viewedEvent.StartDateTime});
         // Update API to say that user viewed the event
         console.log(
@@ -229,13 +226,15 @@ const HomeScreen = () => {
       Reason: string;
     }[] = [];
 
-    const viewedEventIDs = await getAndCleanReadEventIDs()
+    const storedViewedEventIDs = await getAndCleanReadEventIDs();
+
+    viewedEventIDs.current = new Set(storedViewedEventIDs)
 
     for (var i = 0; i < data.length; i++) {
       if (data[i].Event.UserFollowHost){
         data[i].Reason = "From an account you follow"
       }
-      if (viewedEventIDs.includes(data[i].Event.EventID)) {
+      if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
         if(!data[i].Event.UserFollowHost){
@@ -245,14 +244,15 @@ const HomeScreen = () => {
       }
     }
 
-    console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
-    console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
+    // console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
+    // console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
     const newArray = nonViewedEvents.concat(viewedEvents);
     return newArray
   };
 
   const pullData = async () => {
     lastPulled.current = new Date();
+    viewedEventIDs.current.clear()
     getAllHomePageEventsWithHosts(
       userToken.UserAccessToken,
       currentSchool.SchoolID
@@ -273,16 +273,14 @@ const HomeScreen = () => {
         setIsRefreshing(false);
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
-        } else if (error.shouldDisplay) {
-          showErrorAlert(error);
-        }
+        } 
+        showErrorAlert(error)
       });
   };
   const onRefresh = () => {
     setEventsAndHosts(undefined);
     setIsLoading(true);
     setShowRetry(false);
-    viewedEventIDs.current = {};
     pullData();
   };
 

@@ -28,7 +28,7 @@ type InterestSelectorProps = {
 };
 
 const InterestSelector = (props: InterestSelectorProps) => {
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
 
   const [interestIDToInterestMap, setInterestIDToInterestMap] = useState<{
     [key: string]: Interest;
@@ -57,16 +57,14 @@ const InterestSelector = (props: InterestSelectorProps) => {
 
         props.setSelectedInterests(selectedInterestsTemp);
         setInterestIDToInterestMap(interestIDToInterestMapTemp);
-        console.log(selectedInterestsTemp)
+        console.log(selectedInterestsTemp);
       })
       .catch((error: CustomError) => {
         setShowRetry(true);
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
         }
-        else if (error.shouldDisplay) {
-          showErrorAlert(error);
-        }
+        showErrorAlert(error);
       });
   };
 
@@ -87,13 +85,15 @@ const InterestSelector = (props: InterestSelectorProps) => {
             key={key + index}
           />
         ))
+      ) : // LOAD THIS
+      showRetry ? (
+        <RetryButton
+          setShowRetry={setShowRetry}
+          retryCallBack={pullData}
+          style={{ alignItems: "center", justifyContent: "center" }}
+        />
       ) : (
-        // LOAD THIS
-        showRetry? (
-          <RetryButton setShowRetry={setShowRetry} retryCallBack={pullData} style={{ alignItems: 'center', justifyContent: 'center' }}/>
-        ) : (
-          <ActivityIndicator color={COLORS.white} />
-        )
+        <ActivityIndicator color={COLORS.white} />
       )}
     </View>
   );
