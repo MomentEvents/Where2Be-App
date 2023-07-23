@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { COLORS, icons, SCREENS, SIZES } from "../../../constants";
 import { McText } from "../../../components/Styled";
 import SectionHeader from "../../../components/Styled/SectionHeader";
@@ -35,6 +35,7 @@ const SettingsScreen = () => {
   const { setLoading } = useContext(ScreenContext);
   const { showAlert, showErrorAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
+  const pressedCleanCacheRef = useRef(false);
 
   const onChangePasswordClick = () => {};
 
@@ -62,6 +63,10 @@ const SettingsScreen = () => {
   };
 
   const onCacheClean = () => {
+    if(pressedCleanCacheRef.current){
+      return
+    }
+    pressedCleanCacheRef.current = true
     clearAllCachedData()
       .then(() => {
         showAlert(
@@ -73,6 +78,8 @@ const SettingsScreen = () => {
       })
       .catch((error: Error) => {
         showErrorAlert(error);
+      }).finally(() => {
+        pressedCleanCacheRef.current = false
       });
   };
 
