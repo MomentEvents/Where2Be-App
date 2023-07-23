@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Where2Be",
-    "slug": "Where2Be",
-    "version": "1.0.9",
-    "owner": "Where2Be-app",
+    "slug": "where2be",
+    "version": "1.0.10",
+    "owner": "moment-app",
     "privacy": "public",
-    "description": "Event app",
+    "description": "Find Parties & Events on Campus",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -34,7 +34,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.momentevents.moment"
+      "package": "com.momentevents.moment",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,11 +51,12 @@
         {
           "photosPermission": "Moment accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "sentry-expo"
     ],
     "extra": {
       "eas": {
-        "projectId": "c26d4688-b61a-4d6b-acd1-2d6cbb13ad2f"
+        "projectId": "c3b4292e-42cb-49e1-9176-9bce46e7ed81"
       }
     }
   }

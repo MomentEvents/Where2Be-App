@@ -242,6 +242,7 @@ const HomeEventCard = ({
                         alignItems: "center",
                         justifyContent: "center",
                         marginRight: 5,
+                        marginLeft: 7,
                       }}
                       onPress={
                         eventIDToEvent[event.EventID].UserJoin

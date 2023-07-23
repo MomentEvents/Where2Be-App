@@ -1,6 +1,7 @@
 import React, {
   createContext,
   useContext,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -57,6 +58,9 @@ export const EventProvider = ({ children }) => {
     setInterestsMap,
     {}
   );
+
+  const memoizedEventIDToEvent = useMemo(() => eventIDToEvent, [eventIDToEvent]);
+  const memoizedEventIDToInterests = useMemo(() => eventIDToInterests, [eventIDToInterests]);
 
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
@@ -200,9 +204,9 @@ export const EventProvider = ({ children }) => {
   return (
     <EventContext.Provider
       value={{
-        eventIDToEvent,
+        eventIDToEvent: memoizedEventIDToEvent,
         updateEventIDToEvent,
-        eventIDToInterests,
+        eventIDToInterests: memoizedEventIDToInterests,
         updateEventIDToInterests,
         clientAddUserJoin,
         clientAddUserShoutout,

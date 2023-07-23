@@ -228,6 +228,8 @@ const HomeScreen = () => {
 
     const storedViewedEventIDs = await getAndCleanReadEventIDs();
 
+    console.log(storedViewedEventIDs)
+
     viewedEventIDs.current = new Set(storedViewedEventIDs)
 
     for (var i = 0; i < data.length; i++) {

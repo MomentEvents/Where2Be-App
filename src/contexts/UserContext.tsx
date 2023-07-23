@@ -9,7 +9,7 @@
  * AuthContext.
  */
 
-import React, { useState, useEffect, createContext, useReducer } from "react";
+import React, { useState, useEffect, createContext, useReducer, useContext } from "react";
 import { User, School, Token } from "../constants";
 import {
   checkIfUserAccessTokenIsAdmin,
@@ -35,6 +35,7 @@ import {
   registerPushNotificationToken,
 } from "../services/NotificationService";
 import { CustomError } from "../constants/error";
+import { AlertContext } from "./AlertContext";
 
 type UserContextType = {
   userToken: Token;
@@ -83,6 +84,7 @@ export const UserProvider = ({ children }) => {
   const [serverError, setServerError] = useState<boolean>(false);
 
   const [userIDToUser, updateUserIDToUser] = useReducer(setUserMap, {});
+  const {showErrorAlert} = useContext(AlertContext)
 
   function setUserMap(
     map: { [key: string]: User },
@@ -183,7 +185,7 @@ export const UserProvider = ({ children }) => {
     await setContextVarsBasedOnToken(
       await getStoredToken().catch((error: Error) => {
         setServerError(true);
-        displayError(error);
+        showErrorAlert(error);
         return null;
       })
     ).catch((error: CustomError) => {
@@ -192,7 +194,7 @@ export const UserProvider = ({ children }) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       } else {
-        displayError(error);
+        showErrorAlert(error)
       }
     });
     updateFirstInstall(false);
@@ -207,7 +209,7 @@ export const UserProvider = ({ children }) => {
       })
       .catch((error: Error) => {
         setServerError(true);
-        displayError(error);
+        showErrorAlert(error);
       });
   };
 
@@ -243,7 +245,7 @@ export const UserProvider = ({ children }) => {
             if (error.showBugReportDialog) {
               showBugReportPopup(error);
             } else {
-              displayError(error);
+              showErrorAlert(error);
             }
           });
       });
@@ -264,7 +266,7 @@ export const UserProvider = ({ children }) => {
     // Token has expired.
     const returnedToken: Token = await getStoredToken().catch(
       (error: Error) => {
-        displayError(error);
+        showErrorAlert(error);
         return null;
       }
     );
@@ -286,7 +288,7 @@ export const UserProvider = ({ children }) => {
         setIsAdmin(pulledIsAdmin);
       })
       .catch((error: Error) => {
-        displayError(error);
+        showErrorAlert(error);
       });
 
     const pulledUser: User = await getUserByUserAccessToken(

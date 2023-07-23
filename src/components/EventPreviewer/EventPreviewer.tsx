@@ -29,6 +29,7 @@ import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
 import { UserContext } from "../../contexts/UserContext";
+import { AlertContext } from "../../contexts/AlertContext";
 
 interface EventPreviewerProps {
   event: Event;
@@ -50,7 +51,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
-
+  const {showErrorAlert} = useContext(AlertContext)
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   // For description expansion
@@ -121,7 +122,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else {
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setLoading(false);
               });

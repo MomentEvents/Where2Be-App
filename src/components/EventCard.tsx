@@ -157,7 +157,7 @@ const EventCard = ({
   }
 
   function isWithin24hours(dateCheck: Date) {
-    const today = new Date()
+    const today = new Date();
     if (dateCheck > today) {
       const timeDifference = dateCheck.getTime() - today.getTime();
       const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
@@ -232,15 +232,21 @@ const EventCard = ({
                       }}
                     >
                       <McText body4 color={COLORS.purple} numberOfLines={1}>
-                        {isWithin24hours(eventIDToEvent[event.EventID].StartDateTime) ? moment(
+                        {isWithin24hours(
                           eventIDToEvent[event.EventID].StartDateTime
-                        ).fromNow() : moment(
-                          eventIDToEvent[event.EventID].StartDateTime
-                        ).format("h:mm a")
-                        + " - " +
-                        moment(
-                          eventIDToEvent[event.EventID].EndDateTime
-                        ).format("h:mm a")}
+                        )
+                          ? moment(
+                              eventIDToEvent[event.EventID].StartDateTime
+                            ).fromNow()
+                          : moment(
+                              eventIDToEvent[event.EventID].StartDateTime
+                            ).format("h:mm a")}
+                        {!eventIDToEvent[event.EventID].EndDateTime
+                          ? ""
+                          : " - " +
+                            moment(
+                              eventIDToEvent[event.EventID].EndDateTime
+                            ).format("h:mm a")}
                       </McText>
                     </View>
                     <View
@@ -254,6 +260,7 @@ const EventCard = ({
                           flexDirection: "row",
                           alignItems: "center",
                           justifyContent: "center",
+                          marginLeft: 7,
                           marginRight: 5,
                         }}
                       >
@@ -391,17 +398,23 @@ const EventCard = ({
                     }}
                   >
                     <McText body4 color={COLORS.purple} numberOfLines={1}>
-                    {isBigCard ? (isWithin24hours(eventIDToEvent[event.EventID].StartDateTime) ? moment(
-                          eventIDToEvent[event.EventID].StartDateTime
-                        ).fromNow() : moment(
-                          eventIDToEvent[event.EventID].StartDateTime
-                        ).format("h:mm a")
-                        + " - " +
-                        moment(
-                          eventIDToEvent[event.EventID].EndDateTime
-                        ).format("h:mm a")) : moment(
-                        eventIDToEvent[event.EventID].StartDateTime
-                      ).format("h:mm a")}
+                      {isBigCard
+                        ? isWithin24hours(
+                            eventIDToEvent[event.EventID].StartDateTime
+                          )
+                          ? moment(
+                              eventIDToEvent[event.EventID].StartDateTime
+                            ).fromNow()
+                          : moment(
+                              eventIDToEvent[event.EventID].StartDateTime
+                            ).format("h:mm a") +
+                            " - " +
+                            moment(
+                              eventIDToEvent[event.EventID].EndDateTime
+                            ).format("h:mm a")
+                        : moment(
+                            eventIDToEvent[event.EventID].StartDateTime
+                          ).format("h:mm a")}
                     </McText>
                   </View>
                   <View

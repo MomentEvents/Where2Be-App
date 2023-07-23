@@ -19,7 +19,6 @@ function RenderWithRetry({ onRender, onError }) {
   try {
     return hasError ? onError(handleRetry) : onRender();
   } catch (error) {
-    console.error(error);
     setHasError(true);
     return onError(handleRetry);
   }
