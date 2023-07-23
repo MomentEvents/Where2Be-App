@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Where2Be",
-    "slug": "where2be",
+    "slug": "MomentEvents",
     "version": "1.0.10",
     "owner": "moment-app",
     "privacy": "public",
@@ -34,10 +34,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.momentevents.moment",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "package": "com.momentevents.moment"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,13 +48,23 @@
         {
           "photosPermission": "Moment accesses your photos to let you share them with your friends."
         }
-      ],
-      "sentry-expo"
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "c3b4292e-42cb-49e1-9176-9bce46e7ed81"
+        "projectId": "c26d4688-b61a-4d6b-acd1-2d6cbb13ad2f"
       }
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "sentry org slug, or use the `SENTRY_ORG` environment variable",
+            "project": "sentry project name, or use the `SENTRY_PROJECT` environment variable"
+          }
+        }
+      ]
     }
   }
 }
