@@ -10,8 +10,9 @@ import {
   userResponseToUser,
 } from "../helpers/converters";
 import { Alert } from "react-native";
-// import * as Localization from "expo-localization";
-// import { Calendar } from "expo-localization";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const READ_EVENTS = "ReadEvents"
 
 /******************************************************
  * getEvent
@@ -32,7 +33,7 @@ export async function getEvent(
       user_access_token: userAccessToken,
     }),
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvent: EventResponse = await responseHandler<EventResponse>(
@@ -56,7 +57,7 @@ export async function createEvent(
 
   createdEvent: Event,
   interests: Interest[],
-  doNotifyFollowers: boolean,
+  doNotifyFollowers: boolean
 ): Promise<string> {
   const formData = new FormData();
   formData.append("user_access_token", userAccessToken);
@@ -80,7 +81,7 @@ export async function createEvent(
     },
     body: formData,
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const data = await responseHandler<EventResponse>(
@@ -101,7 +102,7 @@ export async function updateEvent(
   userAccessToken: string,
   updatedEvent: Event,
   updatedInterests: Interest[],
-  doNotifyJoinedUsers: boolean,
+  doNotifyJoinedUsers: boolean
 ): Promise<void> {
   // updatedEvent.Picture is assumed to be base64 string if it exists
   console.log(JSON.stringify(updatedInterests));
@@ -133,7 +134,7 @@ export async function updateEvent(
       body: formData,
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   console.log("UPDATING EVENT");
@@ -167,7 +168,7 @@ export async function deleteEvent(
       user_access_token: userAccessToken,
     }),
   }).catch(() => {
-    return undefined
+    return undefined;
   });
 
   await responseHandler<void>(response, "Could not delete event", false);
@@ -209,7 +210,7 @@ export async function getUserJoinedFutureEvents(
       body: JSON.stringify(body),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
@@ -256,7 +257,7 @@ export async function getUserJoinedPastEvents(
       body: JSON.stringify(body),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
@@ -304,7 +305,7 @@ export async function getUserHostedFutureEvents(
       body: JSON.stringify(body),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
@@ -352,7 +353,7 @@ export async function getUserHostedPastEvents(
       body: JSON.stringify(body),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
@@ -388,7 +389,7 @@ export async function searchSchoolEvents(
       }),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const pulledEvents: EventResponse[] = await responseHandler<EventResponse[]>(
@@ -420,7 +421,7 @@ export async function getAllSchoolEventsCategorized(
       }),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
   const responseJSON = await responseHandler<{}>(
@@ -443,7 +444,7 @@ export async function getAllSchoolEventsCategorized(
 export async function getAllHomePageEventsWithHosts(
   userAccessToken: string,
   schoolID: string
-): Promise<{ Host: User; Event: Event, Reason: string }[]> {
+): Promise<{ Host: User; Event: Event; Reason: string }[]> {
   // Get home events and hosts through API response
   const response = await fetch(
     momentAPI + `/event/school_id/${schoolID}/home`,
@@ -458,15 +459,14 @@ export async function getAllHomePageEventsWithHosts(
       }),
     }
   ).catch(() => {
-    return undefined
+    return undefined;
   });
 
-  const responseJSON: [{ host: UserResponse; event: EventResponse, reason: string }] =
-    await responseHandler<[{ host: UserResponse; event: EventResponse, reason: string }]>(
-      response,
-      "Could not get home page events",
-      true
-    );
+  const responseJSON: [
+    { host: UserResponse; event: EventResponse; reason: string }
+  ] = await responseHandler<
+    [{ host: UserResponse; event: EventResponse; reason: string }]
+  >(response, "Could not get home page events", true);
 
   const returnedData: { Host: User; Event: Event; Reason: string }[] = [];
 
@@ -479,14 +479,62 @@ export async function getAllHomePageEventsWithHosts(
         "Error in getting a home page event when a host for it exists!"
       );
     }
-    returnedData.push(
-      {
-        Host: userResponseToUser(value.host),
-        Event: eventResponseToEvent(value.event),
-        Reason: value.reason,
-      },
-    );
+    returnedData.push({
+      Host: userResponseToUser(value.host),
+      Event: eventResponseToEvent(value.event),
+      Reason: value.reason,
+    });
   });
 
   return returnedData;
 }
+
+export const saveReadEventIDs = async (
+  events: { eventID: string; startDateTime: Date }[]
+) => {
+  try {
+    const existingEvents = await AsyncStorage.getItem(READ_EVENTS);
+    const existingEventsParsed = existingEvents ? JSON.parse(existingEvents) : [];
+    const newEvents = events.map(event => ({
+      id: event.eventID,
+      timestamp: event.startDateTime.getTime(),
+    }));
+
+    const allEvents = [...existingEventsParsed, ...newEvents];
+    await AsyncStorage.setItem(READ_EVENTS, JSON.stringify(allEvents));
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
+export const getAndCleanReadEventIDs = async (): Promise<string[]> => {
+  try {
+    const allEventsString = await AsyncStorage.getItem(READ_EVENTS);
+    if (!allEventsString) {
+      return [];
+    }
+
+    const allEvents = JSON.parse(allEventsString);
+    const validEventIds: string[] = [];
+    const now = new Date().getTime();
+
+    const validEvents = allEvents.filter((event: { id: string; timestamp: number }) => {
+      if (now - event.timestamp < 0) {
+        // startDateTime is in the future
+        validEventIds.push(event.id);
+        return true;
+      } else {
+        // startDateTime is in the past
+        return false;
+      }
+    });
+
+    // Overwrite the event data with the valid events
+    await AsyncStorage.setItem(READ_EVENTS, JSON.stringify(validEvents));
+
+    return validEventIds;
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
+};

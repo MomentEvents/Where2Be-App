@@ -18,7 +18,7 @@ import { COLORS, SCREENS, User, Event, icons, SIZES } from "../../../constants";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
-import { getAllHomePageEventsWithHosts } from "../../../services/EventService";
+import { getAllHomePageEventsWithHosts, getAndCleanReadEventIDs, saveReadEventIDs } from "../../../services/EventService";
 import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
@@ -28,6 +28,7 @@ import InterestSelector from "../../../components/InterestSelector/InterestSelec
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { EventContext } from "../../../contexts/EventContext";
+import { IMAGES } from "../../../constants/images";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -57,9 +58,7 @@ const HomeScreen = () => {
 
   const timeoutId = useRef<NodeJS.Timeout>(null);
 
-  const queuedEventIDs = useRef<string[]>([]);
-
-  const eventViewIndex = useRef<number>();
+  const queuedEventIDs = useRef<{ eventID: string; startDateTime: Date }[]>([]);
 
   const lastPulled = useRef<Date>(new Date());
 
@@ -92,28 +91,26 @@ const HomeScreen = () => {
     );
   };
 
-  // const sendViewedEvents = () => {
-  //   try {
-  //     // To avoid race conditions
-  //     const sentQueuedEventIDs = queuedEventIDs.current;
+  const sendViewedEvents = () => {
+    try {
+      // To avoid race conditions
+      const sentQueuedEventIDs = queuedEventIDs.current;
 
-  //     console.log("Queued EventIDs: ", sentQueuedEventIDs);
+      console.log("Queued EventIDs: ", sentQueuedEventIDs);
 
-  //     setViewedEvents(
-  //       userToken.UserAccessToken,
-  //       userToken.UserID,
-  //       sentQueuedEventIDs
-  //     )
-  //       .then(() => {
-  //         queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
-  //       })
-  //       .catch((error: CustomError) => {
-  //         console.warn(error);
-  //       });
-  //   } catch (e) {
-  //     console.warn(e);
-  //   }
-  // };
+      saveReadEventIDs(
+        sentQueuedEventIDs
+      )
+        .then(() => {
+          queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
+        })
+        .catch((error: CustomError) => {
+          console.warn(error);
+        });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   useEffect(() => {
     if (isFocused) {
@@ -180,82 +177,96 @@ const HomeScreen = () => {
   };
 
   const onViewableItemsChanged = useRef(({ viewableItems }) => {
-    // try {
-    //   if (viewableItems.length === 0) {
-    //     return;
-    //   }
-    //   const viewedEvent = viewableItems[0].item.Event;
-    //   console.log(viewedEvent.EventID);
-    //   if (
-    //     !viewedEventIDs.current[viewedEvent.EventID] &&
-    //     !viewedEvent.UserViewed
-    //   ) {
-    //     viewedEventIDs.current[viewedEvent.EventID] = true;
-    //     queuedEventIDs.current.push(viewedEvent.EventID);
-    //     // Update API to say that user viewed the event
-    //     console.log(
-    //       "user has viewed event " +
-    //         viewedEvent.EventID +
-    //         " for the first time!"
-    //     );
-    //     clearTimeout(timeoutId.current);
-    //     const newTimeoutId = setTimeout(() => sendViewedEvents(), 5000);
-    //     timeoutId.current = newTimeoutId;
-    //   }
-    //   // You can put your logic here.
-    //   // viewableItems is an array of objects, each object represents a visible item.
-    //   // Each object in viewableItems has an item property that refers to the actual data item in your data array
-    // } catch (error) {
-    //   console.warn(error);
-    // }
+    try {
+      if (viewableItems.length === 0) {
+        return;
+      }
+      const viewedEvent: Event = viewableItems[0].item.Event;
+      console.log(viewedEvent.EventID);
+      if (
+        !viewedEventIDs.current[viewedEvent.EventID] &&
+        !viewedEvent.UserViewed
+      ) {
+        viewedEventIDs.current[viewedEvent.EventID] = true;
+        queuedEventIDs.current.push({eventID: viewedEvent.EventID, startDateTime: viewedEvent.StartDateTime});
+        // Update API to say that user viewed the event
+        console.log(
+          "user has viewed event " +
+            viewedEvent.EventID +
+            " for the first time!"
+        );
+        clearTimeout(timeoutId.current);
+        const newTimeoutId = setTimeout(() => sendViewedEvents(), 2000);
+        timeoutId.current = newTimeoutId;
+      }
+      // You can put your logic here.
+      // viewableItems is an array of objects, each object represents a visible item.
+      // Each object in viewableItems has an item property that refers to the actual data item in your data array
+    } catch (error) {
+      console.warn(error);
+    }
   }).current;
 
-  // const formatEvents = (
-  //   data: {
-  //     Host: User;
-  //     Event: Event;
-  //     Reason: string;
-  //   }[]
-  // ) => {
-  //   const viewedEvents: {
-  //     Host: User;
-  //     Event: Event;
-  //     Reason: string;
-  //   }[] = [];
-  //   const nonViewedEvents: {
-  //     Host: User;
-  //     Event: Event;
-  //     Reason: string;
-  //   }[] = [];
+  const getEventsAndHostsWithReasons = async (
+    data: {
+      Host: User;
+      Event: Event;
+      Reason: string;
+    }[]
+  ): Promise<{
+    Host: User;
+    Event: Event;
+    Reason: string;
+}[]> => {
+    const viewedEvents: {
+      Host: User;
+      Event: Event;
+      Reason: string;
+    }[] = [];
+    const nonViewedEvents: {
+      Host: User;
+      Event: Event;
+      Reason: string;
+    }[] = [];
 
-  //   for (var i = 0; i < data.length; i++) {
-  //     if (data[i].Event.UserViewed) {
-  //       viewedEvents.push(data[i]);
-  //     } else {
-  //       nonViewedEvents.push(data[i]);
-  //     }
-  //   }
+    const viewedEventIDs = await getAndCleanReadEventIDs()
 
-  //   eventViewIndex.current = nonViewedEvents.length - 1;
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].Event.UserFollowHost){
+        data[i].Reason = "From an account you follow"
+      }
+      if (viewedEventIDs.includes(data[i].Event.EventID)) {
+        viewedEvents.push(data[i]);
+      } else {
+        if(!data[i].Event.UserFollowHost){
+          data[i].Reason = "An event you have not seen before"
+        }
+        nonViewedEvents.push(data[i]);
+      }
+    }
 
-  //   console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
-  //   console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
-  //   console.log("\n\n\n CURRENTVIEWINDEX: " + eventViewIndex.current);
-  //   const newArray = nonViewedEvents.concat(viewedEvents);
-  //   setEventsAndHosts(newArray);
-  // };
+    console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
+    console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
+    const newArray = nonViewedEvents.concat(viewedEvents);
+    return newArray
+  };
 
   const pullData = async () => {
     lastPulled.current = new Date();
-    eventViewIndex.current = undefined;
     getAllHomePageEventsWithHosts(
       userToken.UserAccessToken,
       currentSchool.SchoolID
     )
       .then((data) => {
-        setIsLoading(false);
-        setIsRefreshing(false);
-        setEventsAndHosts(data);
+        getEventsAndHostsWithReasons(data).then((data) => {
+          setEventsAndHosts(data)
+          setIsLoading(false)
+          setIsRefreshing(false);
+        }).catch((error: Error) => {
+          showErrorAlert(error)
+          setShowRetry(true);
+          setIsRefreshing(false);
+        });
       })
       .catch((error: CustomError) => {
         setShowRetry(true);
@@ -277,20 +288,6 @@ const HomeScreen = () => {
 
   const keyExtractor = (item, index) =>
     "homescreeneventcard" + index + item.Event.EventID;
-
-  const getReasonByEvent = (event: Event, defaultReason: string): string => {
-    // if (event.UserFollowHost && !event.UserViewed) {
-    //   return "A new event from an account you follow";
-    // }
-    if (event.UserFollowHost) {
-      return "From an account you follow";
-    }
-    // if (!event.UserViewed) {
-    //   return "An event you have not seen before";
-    // }
-
-    return defaultReason;
-  };
 
   useEffect(() => {
     pullData();
@@ -323,14 +320,7 @@ const HomeScreen = () => {
         ref={flatListRef}
         pagingEnabled
         showsVerticalScrollIndicator={false}
-        // ListEmptyComponent={
-        //   !isLoading && <CaughtUpCard doPaddingBottom={false} />
-        // }
-        // ListHeaderComponent={
-        //   eventViewIndex.current === -1 && (
-        //     <CaughtUpCard doPaddingBottom={false} />
-        //   )
-        // }
+        
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
@@ -341,6 +331,7 @@ const HomeScreen = () => {
             }}
           />
         }
+        onViewableItemsChanged={onViewableItemsChanged}
         getItemLayout={(data, index) => ({
           length: homeCardHeight,
           offset: homeCardHeight * index,
@@ -357,7 +348,7 @@ const HomeScreen = () => {
           <HomeEvent
             event={item.Event}
             user={item.Host}
-            reason={getReasonByEvent(item.Event, item.Reason)}
+            reason={item.Reason}
             height={homeCardHeight}
             width={homeCardWidth}
             handleNotInterested={handleNotInterested}
@@ -365,7 +356,6 @@ const HomeScreen = () => {
           />
         )}
         viewabilityConfig={viewabilityConfig}
-        onViewableItemsChanged={onViewableItemsChanged}
         ListFooterComponent={
           !isLoading && <CaughtUpCard doPaddingBottom={true} />
         }
