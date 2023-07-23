@@ -498,8 +498,8 @@ const EventDetailsScreen = ({ route }) => {
                       >
                         {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}{" "}
                         {eventIDToEvent[eventID].NumShoutouts === 1
-                          ? "Retweet"
-                          : "Retweets"}
+                          ? "Repost"
+                          : "Reposts"}
                       </McText>
                     </View>
                   </>
