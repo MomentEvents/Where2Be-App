@@ -175,173 +175,6 @@ const EventCard = ({
     return false;
   }
 
-  if (isBigCard) {
-    return (
-      <TouchableHighlight
-        onPress={onPressCard}
-        style={{
-          borderRadius: cardBorderRadius,
-          height: cardHeight,
-          width: cardWidth,
-          overflow: "hidden",
-        }}
-      >
-        <View
-          style={{
-            borderRadius: cardBorderRadius,
-            flex: 1,
-            height: cardHeight,
-            width: cardWidth,
-          }}
-        >
-          <ImageBackground
-            source={{ uri: storedEvent.Picture }}
-            style={{
-              flex: 1,
-              width: "100%",
-              borderRadius: cardBorderRadius,
-              borderWidth: cardBorderWidth,
-              borderColor: cardBorderColor,
-              overflow: "hidden",
-            }}
-          >
-            <LinearGradient
-              colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
-              start={{ x: 0, y: 0.4 }}
-              end={{ x: 0, y: 1.6 }}
-              style={{ borderRadius: cardBorderRadius - 1, height: "100%" }}
-            ></LinearGradient>
-
-            <View
-              style={{
-                flex: 1,
-                alignSelf: "center",
-                flexDirection: "row",
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                paddingRight: 10,
-                width: cardWidth - 10,
-              }}
-            >
-              <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
-                <DateTextComponent
-                  date={storedEvent ? new Date(storedEvent.StartDateTime) : undefined}
-                />
-                <View style={{ flex: 1, marginLeft: 10 }}>
-                  <McText h3 numberOfLines={1}>
-                    {storedEvent?.Title}
-                  </McText>
-                  <View style={{ flexDirection: "row", flex: 1 }}>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flex: 1,
-                        alignItems: "center",
-                      }}
-                    >
-                      <McText body4 color={COLORS.purple} numberOfLines={1}>
-                        {isWithin24hours(
-                          new Date(storedEvent.StartDateTime)
-                        )
-                          ? moment(
-                              new Date(storedEvent.StartDateTime)
-                            ).fromNow()
-                          : moment(
-                              new Date(storedEvent.StartDateTime)
-                            ).format("h:mm a")}
-                        {!storedEvent?.EndDateTime
-                          ? ""
-                          : " - " +
-                            moment(
-                              new Date(storedEvent?.EndDateTime)
-                            ).format("h:mm a")}
-                      </McText>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginLeft: 7,
-                          marginRight: 5,
-                        }}
-                      >
-                        <Ionicons
-                          name="checkmark-sharp"
-                          size={18}
-                          color={
-                            storedEvent?.UserJoin
-                              ? COLORS.purple
-                              : COLORS.lightGray
-                          }
-                          style={{ alignSelf: "center" }}
-                        />
-                        <McText
-                          body3
-                          style={{
-                            marginRight: 7,
-                            marginLeft: 5,
-                            color: storedEvent?.UserJoin
-                              ? COLORS.purple
-                              : COLORS.lightGray,
-                          }}
-                        >
-                          {truncateNumber(
-                            storedEvent?.NumJoins
-                          )}
-                        </McText>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <AntDesign
-                          name="retweet"
-                          size={14}
-                          color={
-                            storedEvent?.UserShoutout
-                              ? COLORS.purple
-                              : COLORS.lightGray
-                          }
-                          style={{ alignSelf: "center" }}
-                        />
-                        <McText
-                          body3
-                          style={{
-                            marginRight: 2,
-                            marginLeft: 8,
-                            color: storedEvent?.UserShoutout
-                              ? COLORS.purple
-                              : COLORS.lightGray,
-                          }}
-                        >
-                          {truncateNumber(
-                            storedEvent?.NumShoutouts
-                          )}
-                        </McText>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ImageBackground>
-        </View>
-      </TouchableHighlight>
-    );
-  }
-
-  // Small card
-
   return (
     <TouchableHighlight
       onPress={onPressCard}
@@ -414,13 +247,13 @@ const EventCard = ({
                           ? moment(
                               new Date(storedEvent.StartDateTime)
                             ).fromNow()
-                          : moment(
+                          : (moment(
                               new Date(storedEvent?.StartDateTime)
                             ).format("h:mm a") +
-                            (storedEvent?.EndDateTime ? (" - " +
+                            (storedEvent.EndDateTime ? (" - " +
                             moment(
                               new Date(storedEvent.EndDateTime)
-                            ).format("h:mm a")) : "")
+                            ).format("h:mm a")) : ""))
                         : moment(
                             new Date(storedEvent.StartDateTime)
                           ).format("h:mm a")}
