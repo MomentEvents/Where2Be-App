@@ -62,9 +62,9 @@ const EventResult = (props: EventResultProps) => {
             >
               <icons.pickdate width={25} height={12} />
               <McText body5 style={{ marginRight: 25 }} numberOfLines={1}>
-                {moment(props.event?.StartDateTime).format("MMM DD[,] YYYY") +
+                {moment(new Date(props.event.StartDateTime)).format("MMM DD[,] YYYY") +
                   " at " +
-                  moment(props.event?.StartDateTime).format("h:mm a")}
+                  moment(new Date(props.event.StartDateTime)).format("h:mm a")}
               </McText>
             </View>
             <View

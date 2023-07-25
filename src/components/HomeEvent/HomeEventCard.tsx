@@ -49,7 +49,9 @@ const HomeEventCard = ({
   } = useContext(EventContext);
 
   const dispatch = useDispatch<AppDispatch>();
-  const storedEvent = useSelector((state: RootState) => selectEventByID(state, event.EventID));
+  const storedEvent = useSelector((state: RootState) =>
+    selectEventByID(state, event.EventID)
+  );
 
   const navigation = useNavigation<any>();
 
@@ -65,7 +67,7 @@ const HomeEventCard = ({
   const minTextBarHeight = 60;
   const cardBorderColor = COLORS.gray2;
 
-  console.log("Rendering " + event.Title + " Home Card\n")
+  console.log("Rendering " + event.Title + " Home Card\n");
 
   const onPressCard = () => {
     navigation.push(SCREENS.EventDetails, {
@@ -223,18 +225,26 @@ const HomeEventCard = ({
           >
             <View style={{ flex: 1, flexDirection: "row" }}>
               <DateTextComponent
-                date={storedEvent?.StartDateTime}
+                date={
+                  storedEvent ? new Date(storedEvent.StartDateTime) : undefined
+                }
               />
-              <View style={{flex: 1, marginLeft: 10}}>
+              <View style={{ flex: 1, marginLeft: 10 }}>
                 <McText h2 numberOfLines={1}>
                   {storedEvent?.Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>
-                  <View style={{ flexDirection: "row", flex: 1, alignItems: "center" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
                     <McText body3 color={COLORS.purple}>
-                      {moment(
-                        storedEvent?.StartDateTime
-                      ).format("h:mm a")}
+                      {moment(new Date(storedEvent.StartDateTime)).format(
+                        "h:mm a"
+                      )}
                     </McText>
                   </View>
                   <View
@@ -308,9 +318,7 @@ const HomeEventCard = ({
                             : COLORS.lightGray,
                         }}
                       >
-                        {truncateNumber(
-                          storedEvent?.NumShoutouts
-                        )}
+                        {truncateNumber(storedEvent?.NumShoutouts)}
                       </McText>
                     </TouchableOpacity>
                   </View>

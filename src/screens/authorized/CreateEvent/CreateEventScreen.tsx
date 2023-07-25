@@ -90,8 +90,8 @@ const CreateEventScreen = ({ route }) => {
       Description: desc,
       Picture: image,
       Location: location,
-      StartDateTime: startDateTime,
-      EndDateTime: endDateTime,
+      StartDateTime: startDateTime.toISOString(),
+      EndDateTime: endDateTime.toISOString(),
       Visibility: "Public",
       NumJoins: 0,
       NumShoutouts: 0,
@@ -108,9 +108,9 @@ const CreateEventScreen = ({ route }) => {
     }
 
     console.log("start time:");
-    console.log(createdEvent.StartDateTime.getTime());
+    console.log(createdEvent.StartDateTime);
     if (
-      createdEvent.StartDateTime.getTime() > createdEvent.EndDateTime.getTime()
+      (new Date(createdEvent.StartDateTime)).getTime() > (new Date(createdEvent.EndDateTime)).getTime()
     ) {
       showErrorAlert(
         formatError("Input error", "The start time must be before the end time")
@@ -118,7 +118,7 @@ const CreateEventScreen = ({ route }) => {
       return;
     }
 
-    if (createdEvent.StartDateTime.getTime() < Date.now()) {
+    if ((new Date(createdEvent.StartDateTime)).getTime() < Date.now()) {
       showErrorAlert(
         formatError("Input error", "The event must not be in the past")
       );

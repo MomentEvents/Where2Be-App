@@ -172,7 +172,7 @@ const EventToggler = (props: EventTogglerProps) => {
     if (!isLoadingRef.current) {
       setIsLoading(true);
       isLoadingRef.current = true;
-      let cursor: { eventID: string; date: Date } = null;
+      let cursor: { eventID: string; date: string } = null;
 
       if (isFutureToggle) {
         if (pulledFutureEvents && pulledFutureEvents.length > 0) {

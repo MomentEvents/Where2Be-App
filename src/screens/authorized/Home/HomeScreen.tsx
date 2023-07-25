@@ -188,7 +188,7 @@ const HomeScreen = () => {
         !viewedEventIDs.current.has(viewedEvent.EventID)
       ) {
         viewedEventIDs.current.add(viewedEvent.EventID)
-        queuedEventIDs.current.push({eventID: viewedEvent.EventID, startDateTime: viewedEvent.StartDateTime});
+        queuedEventIDs.current.push({eventID: viewedEvent.EventID, startDateTime: new Date(viewedEvent.StartDateTime)});
         // Update API to say that user viewed the event
         console.log(
           "user has viewed event " +

@@ -64,8 +64,8 @@ export async function createEvent(
   formData.append("title", createdEvent.Title);
   formData.append("description", createdEvent.Description);
   formData.append("location", createdEvent.Location);
-  formData.append("start_date_time", createdEvent.StartDateTime.toISOString());
-  formData.append("end_date_time", createdEvent.EndDateTime.toISOString());
+  formData.append("start_date_time", createdEvent.StartDateTime);
+  formData.append("end_date_time", createdEvent.EndDateTime);
   formData.append("visibility", createdEvent.Visibility);
   formData.append(
     "interest_ids",
@@ -111,8 +111,8 @@ export async function updateEvent(
   formData.append("title", updatedEvent.Title);
   formData.append("description", updatedEvent.Description);
   formData.append("location", updatedEvent.Location);
-  formData.append("start_date_time", updatedEvent.StartDateTime.toISOString());
-  formData.append("end_date_time", updatedEvent.EndDateTime.toISOString());
+  formData.append("start_date_time", updatedEvent.StartDateTime);
+  formData.append("end_date_time", updatedEvent.EndDateTime);
   formData.append("visibility", updatedEvent.Visibility);
   formData.append(
     "interest_ids",
@@ -187,7 +187,7 @@ export async function deleteEvent(
 export async function getUserJoinedFutureEvents(
   userAccessToken: string,
   userID: string,
-  cursor?: { eventID: string; date: Date }
+  cursor?: { eventID: string; date: string }
 ): Promise<Event[]> {
   const body: {
     user_access_token: string;
@@ -198,7 +198,7 @@ export async function getUserJoinedFutureEvents(
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_start_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date;
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_future`,
@@ -234,7 +234,7 @@ export async function getUserJoinedFutureEvents(
 export async function getUserJoinedPastEvents(
   userAccessToken: string,
   userID: string,
-  cursor?: { eventID: string; date: Date }
+  cursor?: { eventID: string; date: string }
 ): Promise<Event[]> {
   const body: {
     user_access_token: string;
@@ -245,7 +245,7 @@ export async function getUserJoinedPastEvents(
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_start_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date;
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/join_past`,
@@ -282,7 +282,7 @@ export async function getUserJoinedPastEvents(
 export async function getUserHostedFutureEvents(
   userAccessToken: string,
   userID: string,
-  cursor?: { eventID: string; date: Date }
+  cursor?: { eventID: string; date: string }
 ): Promise<Event[]> {
   const body: {
     user_access_token: string;
@@ -293,7 +293,7 @@ export async function getUserHostedFutureEvents(
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_start_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date;
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_future`,
@@ -330,7 +330,7 @@ export async function getUserHostedFutureEvents(
 export async function getUserHostedPastEvents(
   userAccessToken: string,
   userID: string,
-  cursor?: { eventID: string; date: Date }
+  cursor?: { eventID: string; date: string }
 ): Promise<Event[]> {
   const body: {
     user_access_token: string;
@@ -341,7 +341,7 @@ export async function getUserHostedPastEvents(
   };
   if (cursor) {
     body.cursor_event_id = cursor.eventID;
-    body.cursor_start_date_time = cursor.date.toISOString();
+    body.cursor_start_date_time = cursor.date;
   }
   const response = await fetch(
     momentAPI + `/event/user_id/${userID}/host_past`,

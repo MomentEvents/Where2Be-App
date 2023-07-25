@@ -236,7 +236,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                           }}
                         >
                           {props.event
-                            ? moment(props.event.StartDateTime).format(
+                            ? moment(new Date(props.event.StartDateTime)).format(
                                 "MMM DD[,] YYYY"
                               )
                             : null}
@@ -264,14 +264,14 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                           >
                             {props.event
                               ? props.event.EndDateTime
-                                ? moment(props.event.StartDateTime).format(
+                                ? moment(new Date(props.event.StartDateTime)).format(
                                     "h:mm a"
                                   ) +
                                   " - " +
-                                  moment(props.event.EndDateTime).format(
+                                  moment(new Date(props.event.EndDateTime)).format(
                                     "h:mm a"
                                   )
-                                : moment(props.event.StartDateTime).format(
+                                : moment(new Date(props.event.StartDateTime)).format(
                                     "h:mm a"
                                   )
                               : null}

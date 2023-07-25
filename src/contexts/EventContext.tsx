@@ -19,6 +19,7 @@ import { showBugReportPopup } from "../helpers/helpers";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { updateUserJoinEvent, updateUserShoutoutEvent } from "../redux/events/eventSlice";
+import { AlertContext } from "./AlertContext";
 
 type EventContextType = {
   clientAddUserJoin: (eventID: string) => void;
@@ -43,6 +44,8 @@ export const EventContext = createContext<EventContextType>({
 export const EventProvider = ({ children }) => {
   const newPostedEventIDRef = useRef<string>();
 
+  const {showErrorAlert} = useContext(AlertContext)
+
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
   const newPostedEventHomePageRef = useRef(null);
@@ -50,8 +53,6 @@ export const EventProvider = ({ children }) => {
   const { userToken } = useContext(UserContext);
 
   const dispatch = useDispatch<AppDispatch>();
-
-
 
   const clientAddUserJoin = (eventID: string) => {
     dispatch(updateUserJoinEvent({
@@ -66,6 +67,7 @@ export const EventProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
+        showErrorAlert(error)
         dispatch(updateUserJoinEvent({
           eventID: eventID,
           doJoin: false
@@ -86,6 +88,7 @@ export const EventProvider = ({ children }) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       }
+      showErrorAlert(error)
       dispatch(updateUserShoutoutEvent({
         eventID: eventID,
         doShoutout: false
@@ -107,6 +110,7 @@ export const EventProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
+        showErrorAlert(error)
         dispatch(updateUserJoinEvent({
           eventID: eventID,
           doJoin: true
@@ -127,6 +131,7 @@ export const EventProvider = ({ children }) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       }
+      showErrorAlert(error)
       dispatch(updateUserShoutoutEvent({
         eventID: eventID,
         doShoutout: true

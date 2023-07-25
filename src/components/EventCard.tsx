@@ -226,7 +226,7 @@ const EventCard = ({
             >
               <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
                 <DateTextComponent
-                  date={storedEvent?.StartDateTime}
+                  date={storedEvent ? new Date(storedEvent.StartDateTime) : undefined}
                 />
                 <View style={{ flex: 1, marginLeft: 10 }}>
                   <McText h3 numberOfLines={1}>
@@ -242,19 +242,19 @@ const EventCard = ({
                     >
                       <McText body4 color={COLORS.purple} numberOfLines={1}>
                         {isWithin24hours(
-                          storedEvent?.StartDateTime
+                          new Date(storedEvent.StartDateTime)
                         )
                           ? moment(
-                              storedEvent?.StartDateTime
+                              new Date(storedEvent.StartDateTime)
                             ).fromNow()
                           : moment(
-                              storedEvent?.StartDateTime
+                              new Date(storedEvent.StartDateTime)
                             ).format("h:mm a")}
                         {!storedEvent?.EndDateTime
                           ? ""
                           : " - " +
                             moment(
-                              storedEvent?.EndDateTime
+                              new Date(storedEvent?.EndDateTime)
                             ).format("h:mm a")}
                       </McText>
                     </View>
@@ -392,7 +392,7 @@ const EventCard = ({
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
               <DateTextComponent
-                date={storedEvent?.StartDateTime}
+                date={new Date(storedEvent.StartDateTime)}
               />
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <McText h3 numberOfLines={1}>
@@ -409,20 +409,20 @@ const EventCard = ({
                     <McText body4 color={COLORS.purple} numberOfLines={1}>
                       {isBigCard
                         ? isWithin24hours(
-                            storedEvent?.StartDateTime
+                            new Date(storedEvent.StartDateTime)
                           )
                           ? moment(
-                              storedEvent?.StartDateTime
+                              new Date(storedEvent.StartDateTime)
                             ).fromNow()
                           : moment(
-                              storedEvent?.StartDateTime
+                              new Date(storedEvent?.StartDateTime)
                             ).format("h:mm a") +
                             (storedEvent?.EndDateTime ? (" - " +
                             moment(
-                              storedEvent?.EndDateTime
+                              new Date(storedEvent.EndDateTime)
                             ).format("h:mm a")) : "")
                         : moment(
-                            storedEvent?.StartDateTime
+                            new Date(storedEvent.StartDateTime)
                           ).format("h:mm a")}
                     </McText>
                   </View>

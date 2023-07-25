@@ -96,6 +96,7 @@ export const UserProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
+        showErrorAlert(error)
         dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: true }));
       }
     );
@@ -111,6 +112,7 @@ export const UserProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
+        showErrorAlert(error)
         dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: false }));
       }
     );

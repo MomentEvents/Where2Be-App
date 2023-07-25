@@ -29,16 +29,14 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
       "Cannot parse date for eventID " + pulledEvent.event_id
     );
   }
-  var parsedStartDateTime = new Date(timestamp);
+  var parsedStartDateTime = pulledEvent.start_date_time;
 
-  var parsedEndDateTime: Date;
+  var parsedEndDateTime = pulledEvent.end_date_time;
 
   timestamp = Date.parse(pulledEvent.end_date_time);
 
   if (isNaN(timestamp)) {
     parsedEndDateTime = undefined;
-  } else {
-    parsedEndDateTime = new Date(timestamp);
   }
 
   

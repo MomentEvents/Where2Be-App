@@ -75,12 +75,12 @@ const EditEventScreen = ({ route }) => {
   );
   const [image, setImage] = useState<string>(storedEvent?.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
-  const [date, setDate] = useState<Date>(storedEvent?.StartDateTime);
+  const [date, setDate] = useState<Date>(new Date(storedEvent?.StartDateTime));
   const [desc, setDesc] = useState<string>(storedEvent?.Description);
   const [start, setStart] = useState<Date>(
-    storedEvent?.StartDateTime
+    new Date(storedEvent?.StartDateTime)
   );
-  const [end, setEnd] = useState<Date>(storedEvent?.EndDateTime);
+  const [end, setEnd] = useState<Date>(storedEvent?.EndDateTime ? new Date(storedEvent?.EndDateTime) : undefined);
   const [selectedInterests, setSelectedInterests] = useState(
     new Set<Interest>(storedInterests)
   );
@@ -132,8 +132,8 @@ const EditEventScreen = ({ route }) => {
       Description: desc,
       Picture: image,
       Location: location,
-      StartDateTime: startDateTime,
-      EndDateTime: endDateTime,
+      StartDateTime: startDateTime.toISOString(),
+      EndDateTime: endDateTime.toISOString(),
       Visibility: storedEvent?.Visibility,
       NumJoins: storedEvent?.NumJoins,
       NumShoutouts: storedEvent?.NumShoutouts,
@@ -149,10 +149,8 @@ const EditEventScreen = ({ route }) => {
       return;
     }
 
-    console.log("start time:");
-    console.log(updatedEvent.StartDateTime.getTime());
     if (
-      updatedEvent.StartDateTime.getTime() > updatedEvent.EndDateTime.getTime()
+      (new Date(updatedEvent.StartDateTime)).getTime() > (new Date(updatedEvent.EndDateTime)).getTime()
     ) {
       showErrorAlert(
         formatError("Input error", "The start time must be before the end time")
@@ -161,7 +159,7 @@ const EditEventScreen = ({ route }) => {
     }
 
     console.log(Date.now());
-    if (updatedEvent.StartDateTime.getTime() < Date.now()) {
+    if ((new Date(updatedEvent.StartDateTime)).getTime() < Date.now()) {
       showErrorAlert(
         formatError("Input error", "The event must not be in the past")
       );

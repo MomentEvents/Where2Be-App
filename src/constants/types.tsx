@@ -9,8 +9,8 @@ export type Event = {
   Description: string;
   Picture: string;
   Location: string;
-  StartDateTime: Date;
-  EndDateTime: Date | null;
+  StartDateTime: string;
+  EndDateTime: string | null;
   Visibility: string;
   NumJoins: number;
   NumShoutouts: number;
