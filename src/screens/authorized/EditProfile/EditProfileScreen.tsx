@@ -52,6 +52,11 @@ import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
 import { AlertContext } from "../../../contexts/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { selectUserByID } from "../../../redux/users/userSelectors";
+import { updateUserMap } from "../../../redux/users/userSlice";
+import { produceWithPatches } from "immer";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -66,11 +71,12 @@ const EditProfileScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { showErrorAlert } = useContext(AlertContext);
 
-  const { userIDToUser, updateUserIDToUser, userToken } =
+  const { userToken } =
     useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [displayName, setDisplayName] = useState(user.DisplayName);
   const [username, setUsername] = useState(user.Username);
@@ -108,10 +114,7 @@ const EditProfileScreen = ({ route }) => {
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
-        updateUserIDToUser({
-          id: createdUser.UserID,
-          user: { ...userIDToUser[createdUser.UserID], ...createdUser },
-        });
+        dispatch(updateUserMap({id: user.UserID, changes: createdUser}))
         navigation.goBack();
       })
       .catch((error: CustomError) => {

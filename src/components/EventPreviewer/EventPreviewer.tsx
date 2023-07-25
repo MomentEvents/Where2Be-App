@@ -30,6 +30,10 @@ import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
 import { UserContext } from "../../contexts/UserContext";
 import { AlertContext } from "../../contexts/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserByID } from "../../redux/users/userSelectors";
+import { AppDispatch, RootState } from "../../redux/store";
+import { updateUserNumericField } from "../../redux/users/userSlice";
 
 interface EventPreviewerProps {
   event: Event;
@@ -46,7 +50,10 @@ interface EventPreviewerProps {
 const EventPreviewer = (props: EventPreviewerProps) => {
   const { setLoading } = useContext(ScreenContext);
   const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
-  const { userToken, userIDToUser, updateUserIDToUser } =
+  const dispatch = useDispatch<AppDispatch>();
+
+
+  const { userToken } =
     useContext(UserContext);
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
@@ -109,13 +116,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   id: props.event.EventID,
                   event: undefined,
                 });
-                updateUserIDToUser({
-                  id: props.event.HostUserID,
-                  user: {
-                    ...userIDToUser[props.event.HostUserID],
-                    NumEvents: userIDToUser[props.event.HostUserID].NumEvents - 1,
-                  },
-                });
+                dispatch(updateUserNumericField({id: props.event.HostUserID, field: "NumEvents", delta: -1}))
                 navigation.goBack();
               })
               .catch((error: CustomError) => {

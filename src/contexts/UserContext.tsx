@@ -36,6 +36,11 @@ import {
 } from "../services/NotificationService";
 import { CustomError } from "../constants/error";
 import { AlertContext } from "./AlertContext";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from "../redux/store";
+import { selectUserByID } from '../redux/users/userSelectors';
+import { setUserMap, updateUserFollowUser } from "../redux/users/userSlice";
+
 
 type UserContextType = {
   userToken: Token;
@@ -48,11 +53,6 @@ type UserContextType = {
   isAdmin: boolean;
   pullTokenFromServer: () => void;
   serverError: boolean;
-  userIDToUser: { [key: string]: User };
-  updateUserIDToUser: React.Dispatch<{
-    id: string;
-    user: User;
-  }>;
   clientFollowUser: (userID: string) => Promise<void>;
   clientUnfollowUser: (userID: string) => Promise<void>;
 };
@@ -67,8 +67,6 @@ export const UserContext = createContext<UserContextType>({
   isAdmin: null,
   pullTokenFromServer: null,
   serverError: false,
-  userIDToUser: null,
-  updateUserIDToUser: null,
   clientFollowUser: null,
   clientUnfollowUser: null,
 });
@@ -83,57 +81,22 @@ export const UserProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [serverError, setServerError] = useState<boolean>(false);
 
-  const [userIDToUser, updateUserIDToUser] = useReducer(setUserMap, {});
+  const dispatch = useDispatch<AppDispatch>();
+
   const {showErrorAlert} = useContext(AlertContext)
 
-  function setUserMap(
-    map: { [key: string]: User },
-    action: { id: string; user: User }
-  ) {
-    return {
-      ...map,
-      [action.id]: action.user
-    };
-  }
 
   const clientUnfollowUser = async (userID: string): Promise<void> => {
     console.log("Follow user hit");
-    updateUserIDToUser({
-      id: userToken.UserID,
-      user: {
-        ...userIDToUser[userToken.UserID],
-        NumFollowing: userIDToUser[userToken.UserID].NumFollowing - 1,
-      },
-    });
-    updateUserIDToUser({
-      id: userID,
-      user: {
-        ...userIDToUser[userID],
-        UserFollow: false,
-        NumFollowers: userIDToUser[userID].NumFollowers - 1,
-      },
-    });
+
+    dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: false }));
 
     unfollowUser(userToken.UserAccessToken, userToken.UserID, userID).catch(
       (error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        updateUserIDToUser({
-          id: userToken.UserID,
-          user: {
-            ...userIDToUser[userToken.UserID],
-            NumFollowing: userIDToUser[userToken.UserID].NumFollowing + 1,
-          },
-        });
-        updateUserIDToUser({
-          id: userID,
-          user: {
-            ...userIDToUser[userID],
-            UserFollow: true,
-            NumFollowers: userIDToUser[userID].NumFollowers + 1,
-          },
-        });
+        dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: true }));
       }
     );
   };
@@ -141,42 +104,14 @@ export const UserProvider = ({ children }) => {
   const clientFollowUser = async (userID: string): Promise<void> => {
     console.log("Unfollow user hit");
 
-    updateUserIDToUser({
-      id: userToken.UserID,
-      user: {
-        ...userIDToUser[userToken.UserID],
-        NumFollowing: userIDToUser[userToken.UserID].NumFollowing + 1,
-      },
-    });
-    updateUserIDToUser({
-      id: userID,
-      user: {
-        ...userIDToUser[userID],
-        UserFollow: true,
-        NumFollowers: userIDToUser[userID].NumFollowers + 1,
-      },
-    });
+    dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: true }));
 
     followUser(userToken.UserAccessToken, userToken.UserID, userID).catch(
       (error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        updateUserIDToUser({
-          id: userToken.UserID,
-          user: {
-            ...userIDToUser[userToken.UserID],
-            NumFollowing: userIDToUser[userToken.UserID].NumFollowing - 1,
-          },
-        });
-        updateUserIDToUser({
-          id: userID,
-          user: {
-            ...userIDToUser[userID],
-            UserFollow: false,
-            NumFollowers: userIDToUser[userID].NumFollowers - 1,
-          },
-        });
+        dispatch(updateUserFollowUser({ fromID: userToken.UserID, toID: userID, doFollow: false }));
       }
     );
   };
@@ -304,7 +239,7 @@ export const UserProvider = ({ children }) => {
       throw error;
     });
     setUserToken(token);
-    updateUserIDToUser({ id: pulledUser.UserID, user: pulledUser });
+    dispatch(setUserMap({ id: pulledUser.UserID, user: pulledUser }));
     setCurrentSchool(pulledSchool);
     setIsLoggedIn(true);
     console.log("Finished setting context variables");
@@ -323,8 +258,6 @@ export const UserProvider = ({ children }) => {
         isAdmin,
         pullTokenFromServer,
         serverError,
-        userIDToUser,
-        updateUserIDToUser,
         clientFollowUser,
         clientUnfollowUser,
       }}

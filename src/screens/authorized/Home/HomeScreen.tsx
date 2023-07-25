@@ -23,12 +23,14 @@ import { displayError, formatError, showBugReportPopup } from "../../../helpers/
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
-import CardsSwipe from "react-native-cards-swipe";
 import InterestSelector from "../../../components/InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { EventContext } from "../../../contexts/EventContext";
 import { IMAGES } from "../../../constants/images";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
+import { selectUserByID } from "../../../redux/users/userSelectors";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -41,7 +43,8 @@ const HomeScreen = () => {
 
   const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
 
-  const { currentSchool, userToken, userIDToUser } = useContext(UserContext);
+  const { currentSchool, userToken } = useContext(UserContext);
+  const currentUser = useSelector((state: RootState) => selectUserByID(state, userToken.UserID));
 
   const insets = useSafeAreaInsets();
 
@@ -128,7 +131,7 @@ const HomeScreen = () => {
       if (newPostedEventHomePageRef.current) {
         try {
           const newHostEvent: { Host: User; Event: Event; Reason: string } = {
-            Host: userIDToUser[userToken.UserID],
+            Host: currentUser,
             Event: newPostedEventHomePageRef.current,
             Reason: undefined,
           };

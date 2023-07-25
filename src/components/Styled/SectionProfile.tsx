@@ -16,6 +16,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FOLLOW_LIST } from "../../constants/components";
 import { truncateNumber } from "../../helpers/helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { selectUserByID } from "../../redux/users/userSelectors";
 
 type SectionProfileProps = {
   userID: string;
@@ -26,15 +29,16 @@ type SectionProfileProps = {
 
 const SectionProfile = (props: SectionProfileProps) => {
   const {
-    userIDToUser,
-    updateUserIDToUser,
     clientFollowUser,
     clientUnfollowUser,
   } = useContext(UserContext);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => selectUserByID(state, props.userID));
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
 
-  if (!userIDToUser[props.userID]) {
+  if (!user) {
     return <></>;
   }
 
@@ -42,7 +46,7 @@ const SectionProfile = (props: SectionProfileProps) => {
     <View style={styles.profileContainer}>
       <Image
         style={styles.imageContainer}
-        source={{ uri: userIDToUser[props.userID].Picture }}
+        source={{ uri: user?.Picture }}
       />
       <View style={styles.infoContainer}>
         <View
@@ -54,10 +58,10 @@ const SectionProfile = (props: SectionProfileProps) => {
         >
           <TouchableOpacity disabled={true}>
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {truncateNumber(userIDToUser[props.userID].NumEvents)}
+              {truncateNumber(user?.NumEvents)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
-              {userIDToUser[props.userID].NumEvents === 1 ? "Event" : "Events"}
+              {user?.NumEvents === 1 ? "Event" : "Events"}
             </McText>
           </TouchableOpacity>
           <TouchableOpacity
@@ -67,10 +71,10 @@ const SectionProfile = (props: SectionProfileProps) => {
             })}
           >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {truncateNumber(userIDToUser[props.userID].NumFollowers)}
+              {truncateNumber(user?.NumFollowers)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
-              {userIDToUser[props.userID].NumFollowers === 1
+              {user?.NumFollowers === 1
                 ? "Follower"
                 : "Followers"}
             </McText>
@@ -82,10 +86,10 @@ const SectionProfile = (props: SectionProfileProps) => {
             })}
           >
             <McText numberOfLines={1} h4 style={{ textAlign: "center" }}>
-              {truncateNumber(userIDToUser[props.userID].NumFollowing)}
+              {truncateNumber(user?.NumFollowing)}
             </McText>
             <McText numberOfLines={1} body6 style={{ textAlign: "center" }}>
-              {userIDToUser[props.userID].NumFollowing === 1
+              {user?.NumFollowing === 1
                 ? "Following"
                 : "Following"}
             </McText>
@@ -98,9 +102,9 @@ const SectionProfile = (props: SectionProfileProps) => {
             h4
             style={styles.displayNameContainer}
           >
-            {userIDToUser[props.userID].DisplayName}
+            {user?.DisplayName}
           </McText>
-          {userIDToUser[props.userID].VerifiedOrganization && (
+          {user?.VerifiedOrganization && (
             <View style={{ paddingLeft: 5 }}>
               <MaterialIcons name="verified" size={18} color={COLORS.purple} />
             </View>
@@ -109,8 +113,8 @@ const SectionProfile = (props: SectionProfileProps) => {
         <TouchableOpacity
           onPress={() => {
             navigation.push(SCREENS.EditProfile, {
-              user: userIDToUser[props.userID],
-              isSelf: userIDToUser[props.userID].UserID === userToken.UserID,
+              user: user,
+              isSelf: user?.UserID === userToken.UserID,
             });
           }}
         >
@@ -122,26 +126,26 @@ const SectionProfile = (props: SectionProfileProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow
-              ? clientUnfollowUser(userIDToUser[props.userID].UserID)
-              : clientFollowUser(userIDToUser[props.userID].UserID);
+            user?.UserFollow
+              ? clientUnfollowUser(user.UserID)
+              : clientFollowUser(user.UserID);
           }}
           disabled={
-            !userIDToUser[userIDToUser[props.userID].UserID] ||
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow ==
+            !user ||
+            user.UserFollow ==
               null ||
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow ==
+            user.UserFollow ==
               undefined
           }
         >
           {props.canFollow &&
-            (userIDToUser[userIDToUser[props.userID].UserID] &&
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !==
+            (user?.UserID &&
+            user?.UserFollow !==
               undefined &&
-            userIDToUser[userIDToUser[props.userID].UserID].UserFollow !==
-              null ? (
+            user?.UserFollow !==
+              null && (
               <View style={styles.editProfileButtonContainer}>
-                {userIDToUser[userIDToUser[props.userID].UserID].UserFollow ? (
+                {user?.UserFollow ? (
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Ionicons
                       style={{ marginRight: 5 }}
@@ -154,10 +158,6 @@ const SectionProfile = (props: SectionProfileProps) => {
                 ) : (
                   <McText h4>Follow</McText>
                 )}
-              </View>
-            ) : (
-              <View style={styles.loadingFollowButton}>
-                <McText h4>Loading</McText>
               </View>
             ))}
         </TouchableOpacity>

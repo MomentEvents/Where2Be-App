@@ -24,7 +24,9 @@ import { deleteUser } from "../../../services/UserService";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
-import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { selectUserByID } from "../../../redux/users/userSelectors";
 
 type ProfileDetailsRouteParams = {
   userID: string;
@@ -33,15 +35,17 @@ const ProfileDetailsScreen = ({ route }) => {
   const { userID }: ProfileDetailsRouteParams = route.params;
 
   const navigation = useNavigation<any>();
-  const { isAdmin, userToken, userIDToUser, updateUserIDToUser } =
+  const { isAdmin, userToken } =
     useContext(UserContext);
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => selectUserByID(state, userID));
   const { setLoading } = useContext(ScreenContext);
 
   const nukeUser = () => {
     Alert.alert(
       "Nuke user",
       "Are you sure you want to delete " +
-        userIDToUser[userID].DisplayName +
+        user?.DisplayName +
         " and all of their events?",
       [
         {
@@ -81,7 +85,7 @@ const ProfileDetailsScreen = ({ route }) => {
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
         title={
-          userIDToUser[userID] ? userIDToUser[userID].Username : "Loading..."
+          user ? user?.Username : "Loading..."
         }
         hideBottomUnderline={true}
         leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}

@@ -5,34 +5,19 @@ import { McText } from "../Styled";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { UserContext } from "../../contexts/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { selectUserByID } from "../../redux/users/userSelectors";
 
 type UserResultProps = {
   user: User;
 };
 const UserResult = (props: UserResultProps) => {
   const navigation = useNavigation<any>();
-  const { userIDToUser, updateUserIDToUser } = useContext(UserContext);
-  const [fetchedUser, setFetchedUser] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const onUserPress = () => {
     navigation.push(SCREENS.ProfileDetails, { userID: props.user.UserID });
   };
-
-  const pullData = async () => {
-    updateUserIDToUser({
-      id: props.user.UserID,
-      user: { ...userIDToUser[props.user.UserID], ...props.user },
-    });
-    setFetchedUser(true);
-  };
-
-  // First time being loaded and rendered
-  useEffect(() => {
-    pullData();
-  }, []);
-
-  if (!fetchedUser || !userIDToUser[props.user.UserID]) {
-    return <View />;
-  }
 
   return (
     <View
@@ -54,7 +39,7 @@ const UserResult = (props: UserResultProps) => {
               borderWidth: StyleSheet.hairlineWidth,
               borderColor: COLORS.gray2,
             }}
-            source={{ uri: userIDToUser[props.user.UserID].Picture }}
+            source={{ uri: props.user?.Picture }}
           />
           <View
             style={{
@@ -66,9 +51,9 @@ const UserResult = (props: UserResultProps) => {
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <McText h3 numberOfLines={1}>
-                {userIDToUser[props.user.UserID].DisplayName}
+                {props.user?.DisplayName}
               </McText>
-              {userIDToUser[props.user.UserID].VerifiedOrganization && (
+              {props.user?.VerifiedOrganization && (
                 <View style={{ paddingLeft: 3 }}>
                   <MaterialIcons
                     name="verified"
@@ -79,7 +64,7 @@ const UserResult = (props: UserResultProps) => {
               )}
             </View>
             <McText body5 numberOfLines={1} style={{ color: COLORS.gray }}>
-              @{userIDToUser[props.user.UserID].Username}
+              @{props.user?.Username}
             </McText>
           </View>
         </View>

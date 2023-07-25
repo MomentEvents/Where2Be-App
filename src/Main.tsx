@@ -8,8 +8,10 @@ import { StatusBar } from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 import * as Updates from "expo-updates";
-import { AlertContextProvider, AlertProvider } from "./contexts/AlertContext";
+import { AlertProvider } from "./contexts/AlertContext";
+import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { store } from "./redux/store";
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -37,20 +39,22 @@ const Main = () => {
   };
 
   return (
-    <SafeAreaProvider>
-      <AlertProvider>
-        <UserProvider>
-          <EventProvider>
-            <ScreenProvider>
-              <AuthProvider>
-                <StatusBar barStyle="light-content" translucent={true} />
-                <AppNav />
-              </AuthProvider>
-            </ScreenProvider>
-          </EventProvider>
-        </UserProvider>
-      </AlertProvider>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <AlertProvider>
+          <UserProvider>
+            <EventProvider>
+              <ScreenProvider>
+                <AuthProvider>
+                  <StatusBar barStyle="light-content" translucent={true} />
+                  <AppNav />
+                </AuthProvider>
+              </ScreenProvider>
+            </EventProvider>
+          </UserProvider>
+        </AlertProvider>
+      </SafeAreaProvider>
+    </Provider>
   );
 };
 

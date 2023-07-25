@@ -20,7 +20,7 @@ import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 
 const MyCalendarScreen = ({ route }) => {
-  const { userToken, userIDToUser } = useContext(UserContext);
+  const { userToken } = useContext(UserContext);
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>

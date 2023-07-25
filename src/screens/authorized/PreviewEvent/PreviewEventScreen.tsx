@@ -41,6 +41,10 @@ import {
 import Hyperlink from "react-native-hyperlink";
 import { CustomError } from "../../../constants/error";
 import EventPreviewer from "../../../components/EventPreviewer/EventPreviewer";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { selectUserByID } from "../../../redux/users/userSelectors";
+import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -50,7 +54,7 @@ type routeParametersType = {
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { isLoggedIn, userToken, userIDToUser, updateUserIDToUser } =
+  const { isLoggedIn, userToken } =
     useContext(UserContext);
 
   const { didHostedEventsChangeRef, newPostedEventHomePageRef } =
@@ -68,6 +72,8 @@ const EventDetailsScreen = ({ route }) => {
     eventIDToInterests,
     updateEventIDToInterests,
   } = useContext(EventContext);
+  const currentUser = useSelector((state: RootState) => selectUserByID(state, userToken.UserID));
+  const dispatch = useDispatch<AppDispatch>();
 
   const insets = useSafeAreaInsets();
 
@@ -93,13 +99,7 @@ const EventDetailsScreen = ({ route }) => {
       .then((eventID: string) => {
         setLoading(false);
         const eventWithID = { ...createdEvent, EventID: eventID };
-        updateUserIDToUser({
-          id: userToken.UserID,
-          user: {
-            ...userIDToUser[userToken.UserID],
-            NumEvents: userIDToUser[userToken.UserID].NumEvents + 1,
-          },
-        });
+        dispatch(updateUserNumericField({id: userToken.UserID, field: "NumEvents", delta: +1 }))
         newPostedEventHomePageRef.current = eventWithID;
         updateEventIDToEvent({ id: eventID, event: eventWithID });
         didHostedEventsChangeRef.current = true;
@@ -132,7 +132,7 @@ const EventDetailsScreen = ({ route }) => {
       <EventPreviewer
         event={createdEvent}
         interests={interests}
-        host={userIDToUser[userToken.UserID]}
+        host={currentUser}
         backButtonEnabled={false}
         hostClickEnabled={false}
         paddingTopEnabled={false}

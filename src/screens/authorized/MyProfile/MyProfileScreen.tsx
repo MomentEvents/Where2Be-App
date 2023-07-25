@@ -21,17 +21,21 @@ import { useNavigation } from "@react-navigation/native";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { selectUserByID } from "../../../redux/users/userSelectors";
 
 const MyProfileScreen = ({ route }) => {
   const navigation = useNavigation<any>();
-  const { isAdmin, userToken, userIDToUser, updateUserIDToUser } =
+  const { isAdmin, userToken  } =
     useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
+  const currentUser = useSelector((state: RootState) => selectUserByID(state, userToken.UserID));
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
       <SectionHeader
-        title={userIDToUser[userToken.UserID].Username}
+        title={currentUser?.Username}
         hideBottomUnderline={true}
         rightButtonSVG={<icons.settings />}
         rightButtonOnClick={() => {

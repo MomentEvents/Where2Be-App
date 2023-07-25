@@ -63,13 +63,18 @@ import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { AlertContext } from "../../../contexts/AlertContext";
 import EventPreviewer from "../../../components/EventPreviewer/EventPreviewer";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { selectUserByID } from "../../../redux/users/userSelectors";
+import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
 
 type routeParametersType = {
   eventID: string;
 };
 
 const EventDetailsScreen = ({ route }) => {
-  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
+
+  const { userToken, isAdmin } =
     useContext(UserContext);
   const navigation = useNavigation<any>();
 
@@ -90,6 +95,9 @@ const EventDetailsScreen = ({ route }) => {
     clientRemoveUserJoin: removeUserJoin,
     clientRemoveUserShoutout: removeUserShoutout,
   } = useContext(EventContext);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => selectUserByID(state, eventIDToEvent[eventID]?.HostUserID));
 
   if (!eventID) {
     throw formatError(
@@ -128,7 +136,7 @@ const EventDetailsScreen = ({ route }) => {
   let beforeLoadShoutout = useRef<boolean>(undefined);
 
   const onHostPressed = () => {
-    if (host && userIDToUser[host.UserID]) {
+    if (host && user) {
       navigation.push(SCREENS.ProfileDetails, {
         userID: host.UserID,
       });
@@ -162,13 +170,7 @@ const EventDetailsScreen = ({ route }) => {
               .then(() => {
                 setLoading(false);
                 updateEventIDToEvent({ id: eventID, event: undefined });
-                updateUserIDToUser({
-                  id: userToken.UserID,
-                  user: {
-                    ...userIDToUser[userToken.UserID],
-                    NumEvents: userIDToUser[userToken.UserID].NumEvents - 1,
-                  },
-                });
+                dispatch(updateUserNumericField({id: userToken.UserID, field: "NumEvents", delta: -1}))
                 navigation.goBack();
               })
               .catch((error: CustomError) => {
@@ -232,14 +234,11 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
         updateEventIDToEvent({ id: eventID, event: pulledEvent });
-        if (!userIDToUser[pulledEvent.HostUserID] || useRefRefreshing.current) {
+        if (!user|| useRefRefreshing.current) {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
               setHost(pulledHost);
-              updateUserIDToUser({
-                id: pulledHost.UserID,
-                user: { ...userIDToUser[pulledHost.UserID], ...pulledHost },
-              });
+              dispatch(updateUserMap({id: pulledHost.UserID, changes: pulledHost}))
             })
             .catch((error: CustomError) => {
               if (!gotError) {
@@ -256,7 +255,7 @@ const EventDetailsScreen = ({ route }) => {
               setDidFetchHost(true);
             });
         } else {
-          setHost(userIDToUser[pulledEvent.HostUserID]);
+          setHost(user);
           setDidFetchHost(true);
         }
       })
@@ -308,9 +307,6 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    if (eventIDToEvent[eventID]) {
-      setHost(userIDToUser[eventIDToEvent[eventID].HostUserID]);
-    }
     pullData();
   }, []);
 
@@ -338,9 +334,7 @@ const EventDetailsScreen = ({ route }) => {
         event={eventIDToEvent[eventID]}
         interests={eventIDToInterests[eventID]}
         host={
-          eventIDToEvent[eventID] && eventIDToEvent[eventID].HostUserID
-            ? userIDToUser[eventIDToEvent[eventID].HostUserID]
-            : null
+          user
         }
         backButtonEnabled={true}
         hostClickEnabled={true}

@@ -30,6 +30,10 @@ import { showBugReportPopup } from "../../helpers/helpers";
 import InterestSelector from "../InterestSelector/InterestSelector";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AlertContext } from "../../contexts/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { selectUserByID } from "../../redux/users/userSelectors";
+import { updateUserMap } from "../../redux/users/userSlice";
 
 type HomeEventProps = {
   event: Event;
@@ -45,7 +49,10 @@ const HomeEvent = (props: HomeEventProps) => {
   const { showAlert, hideAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
   const usernameHeight = 52;
-  const { userIDToUser, updateUserIDToUser, userToken } =
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => selectUserByID(state, props.user.UserID));
+
+  const { userToken } =
     useContext(UserContext);
   const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
 
@@ -105,11 +112,11 @@ const HomeEvent = (props: HomeEventProps) => {
   };
 
   useEffect(() => {
-    if (!userIDToUser[props.user.UserID]) {
-      updateUserIDToUser({
+    if (!user) {
+      dispatch(updateUserMap({
         id: props.user.UserID,
-        user: { ...userIDToUser[props.user.UserID], ...props.user },
-      });
+        changes: props.user,
+      }));
     }
     if (!eventIDToEvent[props.event.EventID]) {
       updateEventIDToEvent({ id: props.event.EventID, event: props.event });
@@ -145,8 +152,8 @@ const HomeEvent = (props: HomeEventProps) => {
           <Image
             style={styles.hostProfilePic}
             source={{
-              uri: userIDToUser[props.user.UserID]
-                ? userIDToUser[props.user.UserID].Picture
+              uri: user
+                ? user.Picture
                 : props.user.Picture,
             }}
           />
@@ -159,12 +166,11 @@ const HomeEvent = (props: HomeEventProps) => {
               marginRight: 10,
             }}
           >
-            {userIDToUser[props.user.UserID]
-              ? userIDToUser[props.user.UserID].DisplayName
+            {user
+              ? user.DisplayName
               : props.user.DisplayName}
           </McText>
-          {userIDToUser[props.user.UserID] &&
-            userIDToUser[props.user.UserID].VerifiedOrganization && (
+          {user?.VerifiedOrganization && (
               <View style={{ marginRight: 20 }}>
                 <MaterialIcons
                   name="verified"

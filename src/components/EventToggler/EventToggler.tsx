@@ -32,6 +32,10 @@ import { FlatList } from "react-native";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { EventContext } from "../../contexts/EventContext";
 import { AlertContext } from "../../contexts/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { selectUserByID } from "../../redux/users/userSelectors";
+import { updateUserMap } from "../../redux/users/userSlice";
 
 type EventTogglerProps = {
   selectedUserID: string;
@@ -42,9 +46,10 @@ type EventTogglerProps = {
 
 const EventToggler = (props: EventTogglerProps) => {
   const { showErrorAlert } = useContext(AlertContext);
-  const { userToken, isAdmin, userIDToUser, updateUserIDToUser } =
+  const { userToken, isAdmin } =
     useContext(UserContext);
-
+    
+    const dispatch = useDispatch<AppDispatch>();
   const { didHostedEventsChangeRef, didJoinedEventsChangeRef } =
     useContext(EventContext);
 
@@ -265,10 +270,7 @@ const EventToggler = (props: EventTogglerProps) => {
           console.log("GOT USER\n\n");
           console.log(JSON.stringify(pulledUser));
           setUserPulled(true);
-          updateUserIDToUser({
-            id: pulledUser.UserID,
-            user: { ...userIDToUser[pulledUser.UserID], ...pulledUser },
-          });
+          dispatch(updateUserMap({id: props.selectedUserID, changes: pulledUser}))
         })
         .catch((error: CustomError) => {
           if (!errorThrown) {
