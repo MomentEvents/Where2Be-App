@@ -5,31 +5,21 @@ import { McText } from "../Styled";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import { EventContext } from "../../contexts/EventContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { selectEventByID } from "../../redux/events/eventSelectors";
+import { updateEventMap } from "../../redux/events/eventSlice";
 
 type EventResultProps = {
   event: Event;
 };
 const EventResult = (props: EventResultProps) => {
-  const [fetchedEvent, setFetchedEvent] = useState(false);
-  const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
+
   const navigation = useNavigation<any>();
   const onEventPress = () => {
     navigation.push(SCREENS.EventDetails, { eventID: props.event.EventID });
   };
 
-  const pullData = async () => {
-    updateEventIDToEvent({ id: props.event.EventID, event: props.event });
-    setFetchedEvent(true);
-  };
-
-  // First time being loaded and rendered
-  useEffect(() => {
-    pullData();
-  }, []);
-
-  if (!fetchedEvent || !eventIDToEvent[props.event.EventID]) {
-    return <View />;
-  }
   return (
     <View
       style={{
@@ -50,7 +40,7 @@ const EventResult = (props: EventResultProps) => {
               borderWidth: StyleSheet.hairlineWidth,
               borderColor: COLORS.gray2,
             }}
-            source={{ uri: eventIDToEvent[props.event.EventID].Picture }}
+            source={{ uri: props.event?.Picture }}
           />
           <View
             style={{
@@ -61,7 +51,7 @@ const EventResult = (props: EventResultProps) => {
             }}
           >
             <McText h3 numberOfLines={1} style={{ marginLeft: 3 }}>
-              {eventIDToEvent[props.event.EventID].Title}
+              {props.event?.Title}
             </McText>
             <View
               style={{
@@ -72,9 +62,9 @@ const EventResult = (props: EventResultProps) => {
             >
               <icons.pickdate width={25} height={12} />
               <McText body5 style={{ marginRight: 25 }} numberOfLines={1}>
-                {moment(eventIDToEvent[props.event.EventID].StartDateTime).format("MMM DD[,] YYYY") +
+                {moment(props.event?.StartDateTime).format("MMM DD[,] YYYY") +
                   " at " +
-                  moment(eventIDToEvent[props.event.EventID].StartDateTime).format("h:mm a")}
+                  moment(props.event?.StartDateTime).format("h:mm a")}
               </McText>
             </View>
             <View
@@ -94,7 +84,7 @@ const EventResult = (props: EventResultProps) => {
                 numberOfLines={1}
                 style={{ color: COLORS.gray, marginRight: 25 }}
               >
-                {eventIDToEvent[props.event.EventID].Location}
+                {props.event?.Location}
               </McText>
             </View>
           </View>

@@ -20,6 +20,10 @@ import { EventContext } from "../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { selectEventByID } from "../redux/events/eventSelectors";
+import { AppDispatch, RootState } from "../redux/store";
+import { updateEventMap } from "../redux/events/eventSlice";
 
 type EventCardProps = {
   onClick?: () => void;
@@ -38,8 +42,10 @@ const EventCard = ({
   width,
   height,
 }: EventCardProps) => {
-  const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
   const navigation = useNavigation<any>();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const storedEvent = useSelector((state: RootState) => selectEventByID(state, event.EventID));
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -73,8 +79,8 @@ const EventCard = ({
   };
 
   const pullData = async () => {
-    if (!eventIDToEvent[event.EventID]) {
-      updateEventIDToEvent({ id: event.EventID, event: event });
+    if (!storedEvent) {
+      dispatch(updateEventMap({id: event.EventID, changes: event}))
     }
     setFetchedEvent(true);
   };
@@ -152,11 +158,14 @@ const EventCard = ({
     );
   };
 
-  if (!isLoaded || !eventIDToEvent[event.EventID]) {
+  if (!isLoaded || !storedEvent) {
     return <View />;
   }
 
   function isWithin24hours(dateCheck: Date) {
+    if(!dateCheck){
+      return undefined
+    }
     const today = new Date();
     if (dateCheck > today) {
       const timeDifference = dateCheck.getTime() - today.getTime();
@@ -186,7 +195,7 @@ const EventCard = ({
           }}
         >
           <ImageBackground
-            source={{ uri: eventIDToEvent[event.EventID].Picture }}
+            source={{ uri: storedEvent.Picture }}
             style={{
               flex: 1,
               width: "100%",
@@ -217,11 +226,11 @@ const EventCard = ({
             >
               <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
                 <DateTextComponent
-                  date={eventIDToEvent[event.EventID].StartDateTime}
+                  date={storedEvent?.StartDateTime}
                 />
                 <View style={{ flex: 1, marginLeft: 10 }}>
                   <McText h3 numberOfLines={1}>
-                    {eventIDToEvent[event.EventID].Title}
+                    {storedEvent?.Title}
                   </McText>
                   <View style={{ flexDirection: "row", flex: 1 }}>
                     <View
@@ -233,19 +242,19 @@ const EventCard = ({
                     >
                       <McText body4 color={COLORS.purple} numberOfLines={1}>
                         {isWithin24hours(
-                          eventIDToEvent[event.EventID].StartDateTime
+                          storedEvent?.StartDateTime
                         )
                           ? moment(
-                              eventIDToEvent[event.EventID].StartDateTime
+                              storedEvent?.StartDateTime
                             ).fromNow()
                           : moment(
-                              eventIDToEvent[event.EventID].StartDateTime
+                              storedEvent?.StartDateTime
                             ).format("h:mm a")}
-                        {!eventIDToEvent[event.EventID].EndDateTime
+                        {!storedEvent?.EndDateTime
                           ? ""
                           : " - " +
                             moment(
-                              eventIDToEvent[event.EventID].EndDateTime
+                              storedEvent?.EndDateTime
                             ).format("h:mm a")}
                       </McText>
                     </View>
@@ -268,7 +277,7 @@ const EventCard = ({
                           name="checkmark-sharp"
                           size={18}
                           color={
-                            eventIDToEvent[event.EventID].UserJoin
+                            storedEvent?.UserJoin
                               ? COLORS.purple
                               : COLORS.lightGray
                           }
@@ -279,13 +288,13 @@ const EventCard = ({
                           style={{
                             marginRight: 7,
                             marginLeft: 5,
-                            color: eventIDToEvent[event.EventID].UserJoin
+                            color: storedEvent?.UserJoin
                               ? COLORS.purple
                               : COLORS.lightGray,
                           }}
                         >
                           {truncateNumber(
-                            eventIDToEvent[event.EventID].NumJoins
+                            storedEvent?.NumJoins
                           )}
                         </McText>
                       </View>
@@ -299,7 +308,7 @@ const EventCard = ({
                           name="retweet"
                           size={14}
                           color={
-                            eventIDToEvent[event.EventID].UserShoutout
+                            storedEvent?.UserShoutout
                               ? COLORS.purple
                               : COLORS.lightGray
                           }
@@ -310,13 +319,13 @@ const EventCard = ({
                           style={{
                             marginRight: 2,
                             marginLeft: 8,
-                            color: eventIDToEvent[event.EventID].UserShoutout
+                            color: storedEvent?.UserShoutout
                               ? COLORS.purple
                               : COLORS.lightGray,
                           }}
                         >
                           {truncateNumber(
-                            eventIDToEvent[event.EventID].NumShoutouts
+                            storedEvent?.NumShoutouts
                           )}
                         </McText>
                       </View>
@@ -352,7 +361,7 @@ const EventCard = ({
         }}
       >
         <ImageBackground
-          source={{ uri: eventIDToEvent[event.EventID].Picture }}
+          source={{ uri: storedEvent?.Picture }}
           style={{
             flex: 1,
             width: "100%",
@@ -383,11 +392,11 @@ const EventCard = ({
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
               <DateTextComponent
-                date={eventIDToEvent[event.EventID].StartDateTime}
+                date={storedEvent?.StartDateTime}
               />
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <McText h3 numberOfLines={1}>
-                  {eventIDToEvent[event.EventID].Title}
+                  {storedEvent?.Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>
                   <View
@@ -400,20 +409,20 @@ const EventCard = ({
                     <McText body4 color={COLORS.purple} numberOfLines={1}>
                       {isBigCard
                         ? isWithin24hours(
-                            eventIDToEvent[event.EventID].StartDateTime
+                            storedEvent?.StartDateTime
                           )
                           ? moment(
-                              eventIDToEvent[event.EventID].StartDateTime
+                              storedEvent?.StartDateTime
                             ).fromNow()
                           : moment(
-                              eventIDToEvent[event.EventID].StartDateTime
+                              storedEvent?.StartDateTime
                             ).format("h:mm a") +
-                            " - " +
+                            (storedEvent?.EndDateTime ? (" - " +
                             moment(
-                              eventIDToEvent[event.EventID].EndDateTime
-                            ).format("h:mm a")
+                              storedEvent?.EndDateTime
+                            ).format("h:mm a")) : "")
                         : moment(
-                            eventIDToEvent[event.EventID].StartDateTime
+                            storedEvent?.StartDateTime
                           ).format("h:mm a")}
                     </McText>
                   </View>
@@ -435,7 +444,7 @@ const EventCard = ({
                         name="checkmark-sharp"
                         size={18}
                         color={
-                          eventIDToEvent[event.EventID].UserJoin
+                          storedEvent?.UserJoin
                             ? COLORS.purple
                             : COLORS.lightGray
                         }
@@ -446,12 +455,12 @@ const EventCard = ({
                         style={{
                           marginRight: 7,
                           marginLeft: 5,
-                          color: eventIDToEvent[event.EventID].UserJoin
+                          color: storedEvent?.UserJoin
                             ? COLORS.purple
                             : COLORS.lightGray,
                         }}
                       >
-                        {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
+                        {truncateNumber(storedEvent?.NumJoins)}
                       </McText>
                     </View>
                     <View
@@ -461,7 +470,7 @@ const EventCard = ({
                         name="retweet"
                         size={14}
                         color={
-                          eventIDToEvent[event.EventID].UserShoutout
+                          storedEvent?.UserShoutout
                             ? COLORS.purple
                             : COLORS.lightGray
                         }
@@ -472,13 +481,13 @@ const EventCard = ({
                         style={{
                           marginRight: 2,
                           marginLeft: 8,
-                          color: eventIDToEvent[event.EventID].UserShoutout
+                          color: storedEvent?.UserShoutout
                             ? COLORS.purple
                             : COLORS.lightGray,
                         }}
                       >
                         {truncateNumber(
-                          eventIDToEvent[event.EventID].NumShoutouts
+                          storedEvent?.NumShoutouts
                         )}
                       </McText>
                     </View>

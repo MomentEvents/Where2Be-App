@@ -34,6 +34,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectUserByID } from "../../redux/users/userSelectors";
 import { updateUserMap } from "../../redux/users/userSlice";
+import { selectEventByID } from "../../redux/events/eventSelectors";
+import { updateEventMap } from "../../redux/events/eventSlice";
 
 type HomeEventProps = {
   event: Event;
@@ -50,11 +52,11 @@ const HomeEvent = (props: HomeEventProps) => {
   const navigation = useNavigation<any>();
   const usernameHeight = 52;
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((state: RootState) => selectUserByID(state, props.user.UserID));
+  const storedUser = useSelector((state: RootState) => selectUserByID(state, props.user.UserID));
+  const storedEvent = useSelector((state: RootState) => selectEventByID(state, props.event.EventID));
 
   const { userToken } =
     useContext(UserContext);
-  const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
 
   let timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -112,14 +114,14 @@ const HomeEvent = (props: HomeEventProps) => {
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!storedUser) {
       dispatch(updateUserMap({
         id: props.user.UserID,
         changes: props.user,
       }));
     }
-    if (!eventIDToEvent[props.event.EventID]) {
-      updateEventIDToEvent({ id: props.event.EventID, event: props.event });
+    if (!storedEvent) {
+      dispatch(updateEventMap({ id: props.event.EventID, changes: props.event }));
     }
   }, []);
 
@@ -152,8 +154,8 @@ const HomeEvent = (props: HomeEventProps) => {
           <Image
             style={styles.hostProfilePic}
             source={{
-              uri: user
-                ? user.Picture
+              uri: storedUser
+                ? storedUser.Picture
                 : props.user.Picture,
             }}
           />
@@ -166,11 +168,11 @@ const HomeEvent = (props: HomeEventProps) => {
               marginRight: 10,
             }}
           >
-            {user
-              ? user.DisplayName
+            {storedUser
+              ? storedUser.DisplayName
               : props.user.DisplayName}
           </McText>
-          {user?.VerifiedOrganization && (
+          {storedUser?.VerifiedOrganization && (
               <View style={{ marginRight: 20 }}>
                 <MaterialIcons
                   name="verified"

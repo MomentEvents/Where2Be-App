@@ -34,6 +34,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUserByID } from "../../redux/users/userSelectors";
 import { AppDispatch, RootState } from "../../redux/store";
 import { updateUserNumericField } from "../../redux/users/userSlice";
+import { setEventMap, updateEventMap } from "../../redux/events/eventSlice";
 
 interface EventPreviewerProps {
   event: Event;
@@ -49,7 +50,6 @@ interface EventPreviewerProps {
 
 const EventPreviewer = (props: EventPreviewerProps) => {
   const { setLoading } = useContext(ScreenContext);
-  const { eventIDToEvent, updateEventIDToEvent } = useContext(EventContext);
   const dispatch = useDispatch<AppDispatch>();
 
 
@@ -112,10 +112,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             deleteEvent(userToken.UserAccessToken, props.event.EventID)
               .then(() => {
                 setLoading(false);
-                updateEventIDToEvent({
-                  id: props.event.EventID,
-                  event: undefined,
-                });
+                dispatch(setEventMap({id: props.event.EventID, event: undefined}))
                 dispatch(updateUserNumericField({id: props.event.HostUserID, field: "NumEvents", delta: -1}))
                 navigation.goBack();
               })

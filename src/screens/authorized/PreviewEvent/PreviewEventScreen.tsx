@@ -45,6 +45,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { selectUserByID } from "../../../redux/users/userSelectors";
 import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
+import { setEventMap } from "../../../redux/events/eventSlice";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -66,12 +67,6 @@ const EventDetailsScreen = ({ route }) => {
   // Loading context in case we want to disable the screen
   const { setLoading } = useContext(ScreenContext);
 
-  const {
-    eventIDToEvent,
-    updateEventIDToEvent,
-    eventIDToInterests,
-    updateEventIDToInterests,
-  } = useContext(EventContext);
   const currentUser = useSelector((state: RootState) => selectUserByID(state, userToken.UserID));
   const dispatch = useDispatch<AppDispatch>();
 
@@ -101,7 +96,7 @@ const EventDetailsScreen = ({ route }) => {
         const eventWithID = { ...createdEvent, EventID: eventID };
         dispatch(updateUserNumericField({id: userToken.UserID, field: "NumEvents", delta: +1 }))
         newPostedEventHomePageRef.current = eventWithID;
-        updateEventIDToEvent({ id: eventID, event: eventWithID });
+        dispatch(setEventMap({id: eventID, event: eventWithID}))
         didHostedEventsChangeRef.current = true;
         navigation.popToTop();
         navigation.push(SCREENS.EventDetails, { eventID: eventID });

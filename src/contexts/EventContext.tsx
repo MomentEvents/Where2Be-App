@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext,
   useMemo,
@@ -16,18 +16,11 @@ import {
 import { UserContext } from "./UserContext";
 import { CustomError } from "../constants/error";
 import { showBugReportPopup } from "../helpers/helpers";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { updateUserJoinEvent, updateUserShoutoutEvent } from "../redux/events/eventSlice";
 
 type EventContextType = {
-  eventIDToEvent: { [key: string]: Event };
-  updateEventIDToEvent: React.Dispatch<{
-    id: string;
-    event: Event;
-  }>;
-  eventIDToInterests: { [key: string]: Interest[] };
-  updateEventIDToInterests: React.Dispatch<{
-    id: string;
-    interests: Interest[];
-  }>;
   clientAddUserJoin: (eventID: string) => void;
   clientAddUserShoutout: (eventID: string) => void;
   clientRemoveUserJoin: (eventID: string) => void;
@@ -38,10 +31,6 @@ type EventContextType = {
 };
 
 export const EventContext = createContext<EventContextType>({
-  eventIDToEvent: null,
-  updateEventIDToEvent: null,
-  eventIDToInterests: null,
-  updateEventIDToInterests: null,
   clientAddUserJoin: null,
   clientAddUserShoutout: null,
   clientRemoveUserJoin: null,
@@ -53,14 +42,6 @@ export const EventContext = createContext<EventContextType>({
 
 export const EventProvider = ({ children }) => {
   const newPostedEventIDRef = useRef<string>();
-  const [eventIDToEvent, updateEventIDToEvent] = useReducer(setEventMap, {});
-  const [eventIDToInterests, updateEventIDToInterests] = useReducer(
-    setInterestsMap,
-    {}
-  );
-
-  const memoizedEventIDToEvent = useMemo(() => eventIDToEvent, [eventIDToEvent]);
-  const memoizedEventIDToInterests = useMemo(() => eventIDToInterests, [eventIDToInterests]);
 
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
@@ -68,25 +49,15 @@ export const EventProvider = ({ children }) => {
 
   const { userToken } = useContext(UserContext);
 
-  function setEventMap(
-    map: { [key: string]: Event },
-    action: { id: string; event: Event }
-  ) {
-    return {
-      ...map,
-      [action.id]: { ...map[action.id], ...action.event }
-    };
-  }
+  const dispatch = useDispatch<AppDispatch>();
+
+
 
   const clientAddUserJoin = (eventID: string) => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserJoin: true,
-        NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-      },
-    });
+    dispatch(updateUserJoinEvent({
+      eventID: eventID,
+      doJoin: true
+    }))
     addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
         didJoinedEventsChangeRef.current = true;
@@ -95,26 +66,18 @@ export const EventProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserJoin: false,
-            NumJoins: eventIDToEvent[eventID].NumJoins - 1,
-          },
-        });
+        dispatch(updateUserJoinEvent({
+          eventID: eventID,
+          doJoin: false
+        }))
       });
   };
 
   const clientAddUserShoutout = (eventID: string) => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserShoutout: true,
-        NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
-      },
-    });
+    dispatch(updateUserShoutoutEvent({
+      eventID: eventID,
+      doShoutout: true
+    }))
     addUserShoutoutEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -123,26 +86,18 @@ export const EventProvider = ({ children }) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       }
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserShoutout: false,
-          NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
-        },
-      });
+      dispatch(updateUserShoutoutEvent({
+        eventID: eventID,
+        doShoutout: false
+      }))
     });
   };
 
   const clientRemoveUserJoin = (eventID: string) => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserJoin: false,
-        NumJoins: eventIDToEvent[eventID].NumJoins - 1,
-      },
-    });
+    dispatch(updateUserJoinEvent({
+      eventID: eventID,
+      doJoin: false
+    }))
     removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
         // We'll still keep the user's personal calendar the same in case the user is on the calendar screen and wants to keep it on the calendar
@@ -152,26 +107,18 @@ export const EventProvider = ({ children }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        updateEventIDToEvent({
-          id: eventID,
-          event: {
-            ...eventIDToEvent[eventID],
-            UserJoin: false,
-            NumJoins: eventIDToEvent[eventID].NumJoins + 1,
-          },
-        });
+        dispatch(updateUserJoinEvent({
+          eventID: eventID,
+          doJoin: true
+        }))
       });
   };
 
   const clientRemoveUserShoutout = (eventID: string) => {
-    updateEventIDToEvent({
-      id: eventID,
-      event: {
-        ...eventIDToEvent[eventID],
-        UserShoutout: false,
-        NumShoutouts: eventIDToEvent[eventID].NumShoutouts - 1,
-      },
-    });
+    dispatch(updateUserShoutoutEvent({
+      eventID: eventID,
+      doShoutout: false
+    }))
     removeUserShoutoutEvent(
       userToken.UserAccessToken,
       userToken.UserID,
@@ -180,34 +127,16 @@ export const EventProvider = ({ children }) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       }
-      updateEventIDToEvent({
-        id: eventID,
-        event: {
-          ...eventIDToEvent[eventID],
-          UserShoutout: false,
-          NumShoutouts: eventIDToEvent[eventID].NumShoutouts + 1,
-        },
-      });
+      dispatch(updateUserShoutoutEvent({
+        eventID: eventID,
+        doShoutout: true
+      }))
     });
   };
-
-  function setInterestsMap(
-    map: { [key: string]: Interest[] },
-    action: { id: string; interests: Interest[] }
-  ) {
-    return {
-      ...map,
-      [action.id]: action.interests
-    };
-  }
 
   return (
     <EventContext.Provider
       value={{
-        eventIDToEvent: memoizedEventIDToEvent,
-        updateEventIDToEvent,
-        eventIDToInterests: memoizedEventIDToInterests,
-        updateEventIDToInterests,
         clientAddUserJoin,
         clientAddUserShoutout,
         clientRemoveUserJoin,

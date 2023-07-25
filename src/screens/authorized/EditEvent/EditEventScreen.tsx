@@ -46,6 +46,10 @@ import { CONSTRAINTS } from "../../../constants/constraints";
 import { CustomError } from "../../../constants/error";
 import { Feather } from "@expo/vector-icons";
 import { AlertContext } from "../../../contexts/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectEventByID, selectEventInterestsByID } from "../../../redux/events/eventSelectors";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { setEventInterestsMap, setEventMap, updateEventInterestsMap, updateEventMap } from "../../../redux/events/eventSlice";
 
 type EditEventScreenParams = {
   eventID: string;
@@ -54,33 +58,31 @@ type EditEventScreenParams = {
 const EditEventScreen = ({ route }) => {
   const { eventID }: EditEventScreenParams = route.params;
 
+  const dispatch = useDispatch<AppDispatch>();
+  const storedEvent = useSelector((state: RootState) => selectEventByID(state, eventID));
+  const storedInterests = useSelector((state: RootState) => selectEventInterestsByID(state, eventID));
+
   const { setLoading } = useContext(ScreenContext);
   const { userToken } = useContext(UserContext);
-  const {
-    eventIDToEvent,
-    updateEventIDToEvent,
-    eventIDToInterests,
-    updateEventIDToInterests,
-  } = useContext(EventContext);
   const navigation = useNavigation<any>();
 
   const {showErrorAlert} = useContext(AlertContext)
 
 
-  const [title, setTitle] = useState<string>(eventIDToEvent[eventID].Title);
+  const [title, setTitle] = useState<string>(storedEvent?.Title);
   const [location, setLocation] = useState<string>(
-    eventIDToEvent[eventID].Location
+    storedEvent?.Location
   );
-  const [image, setImage] = useState<string>(eventIDToEvent[eventID].Picture);
+  const [image, setImage] = useState<string>(storedEvent?.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
-  const [date, setDate] = useState<Date>(eventIDToEvent[eventID].StartDateTime);
-  const [desc, setDesc] = useState<string>(eventIDToEvent[eventID].Description);
+  const [date, setDate] = useState<Date>(storedEvent?.StartDateTime);
+  const [desc, setDesc] = useState<string>(storedEvent?.Description);
   const [start, setStart] = useState<Date>(
-    eventIDToEvent[eventID].StartDateTime
+    storedEvent?.StartDateTime
   );
-  const [end, setEnd] = useState<Date>(eventIDToEvent[eventID].EndDateTime);
+  const [end, setEnd] = useState<Date>(storedEvent?.EndDateTime);
   const [selectedInterests, setSelectedInterests] = useState(
-    new Set<Interest>(eventIDToInterests[eventID])
+    new Set<Interest>(storedInterests)
   );
 
   const [doNotifyJoinedUsers, setDoNotifyJoinedUsers] = useState(false)
@@ -132,12 +134,12 @@ const EditEventScreen = ({ route }) => {
       Location: location,
       StartDateTime: startDateTime,
       EndDateTime: endDateTime,
-      Visibility: eventIDToEvent[eventID].Visibility,
-      NumJoins: eventIDToEvent[eventID].NumJoins,
-      NumShoutouts: eventIDToEvent[eventID].NumShoutouts,
-      UserJoin: eventIDToEvent[eventID].UserJoin,
-      UserShoutout: eventIDToEvent[eventID].UserShoutout,
-      HostUserID: eventIDToEvent[eventID].HostUserID,
+      Visibility: storedEvent?.Visibility,
+      NumJoins: storedEvent?.NumJoins,
+      NumShoutouts: storedEvent?.NumShoutouts,
+      UserJoin: storedEvent?.UserJoin,
+      UserShoutout: storedEvent?.UserShoutout,
+      HostUserID: storedEvent?.HostUserID,
     };
 
     if (!checkIfEventIsFormatted(updatedEvent)) {
@@ -192,8 +194,8 @@ const EditEventScreen = ({ route }) => {
     updatedEventBase64.Picture = base64Image;
     updateEvent(userToken.UserAccessToken, updatedEventBase64, arrayInterests, doNotifyJoinedUsers)
       .then(() => {
-        updateEventIDToEvent({ id: eventID, event: updatedEvent });
-        updateEventIDToInterests({ id: eventID, interests: arrayInterests });
+        dispatch(updateEventMap({id: eventID, changes: updatedEvent }))
+        dispatch(setEventInterestsMap({id: eventID, interests: arrayInterests}))
         setLoading(false);
         navigation.goBack();
       })

@@ -21,6 +21,10 @@ import { EventContext } from "../../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { selectEventByID } from "../../redux/events/eventSelectors";
+import { AppDispatch, RootState } from "../../redux/store";
+import { updateEventMap } from "../../redux/events/eventSlice";
 
 type EventCardProps = {
   event: Event;
@@ -38,13 +42,14 @@ const HomeEventCard = ({
   reason,
 }: EventCardProps) => {
   const {
-    eventIDToEvent,
-    updateEventIDToEvent,
     clientAddUserJoin: addUserJoin,
     clientAddUserShoutout: addUserShoutout,
     clientRemoveUserJoin: removeUserJoin,
     clientRemoveUserShoutout: removeUserShoutout,
   } = useContext(EventContext);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const storedEvent = useSelector((state: RootState) => selectEventByID(state, event.EventID));
 
   const navigation = useNavigation<any>();
 
@@ -132,8 +137,8 @@ const HomeEventCard = ({
   };
 
   const pullData = async () => {
-    if (!eventIDToEvent[event.EventID]) {
-      updateEventIDToEvent({ id: event.EventID, event: event });
+    if (!storedEvent) {
+      dispatch(updateEventMap({ id: event.EventID, changes: event }));
     }
     setFetchedEvent(true);
   };
@@ -147,7 +152,7 @@ const HomeEventCard = ({
     setIsLoaded(fetchedEvent);
   }, [fetchedEvent]);
 
-  if (!isLoaded || !eventIDToEvent[event.EventID]) {
+  if (!isLoaded || !storedEvent) {
     return <View />;
   }
 
@@ -185,7 +190,7 @@ const HomeEventCard = ({
           </View>
         )}
         <ImageBackground
-          source={{ uri: eventIDToEvent[event.EventID].Picture }}
+          source={{ uri: storedEvent?.Picture }}
           style={{
             flex: 1,
             width: "100%",
@@ -216,17 +221,17 @@ const HomeEventCard = ({
           >
             <View style={{ flex: 1, flexDirection: "row" }}>
               <DateTextComponent
-                date={eventIDToEvent[event.EventID].StartDateTime}
+                date={storedEvent?.StartDateTime}
               />
               <View style={{flex: 1, marginLeft: 10}}>
                 <McText h2 numberOfLines={1}>
-                  {eventIDToEvent[event.EventID].Title}
+                  {storedEvent?.Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>
                   <View style={{ flexDirection: "row", flex: 1, alignItems: "center" }}>
                     <McText body3 color={COLORS.purple}>
                       {moment(
-                        eventIDToEvent[event.EventID].StartDateTime
+                        storedEvent?.StartDateTime
                       ).format("h:mm a")}
                     </McText>
                   </View>
@@ -245,7 +250,7 @@ const HomeEventCard = ({
                         marginLeft: 7,
                       }}
                       onPress={
-                        eventIDToEvent[event.EventID].UserJoin
+                        storedEvent?.UserJoin
                           ? () => removeUserJoin(event.EventID)
                           : () => addUserJoin(event.EventID)
                       }
@@ -254,7 +259,7 @@ const HomeEventCard = ({
                         name="checkmark-sharp"
                         size={22}
                         color={
-                          eventIDToEvent[event.EventID].UserJoin
+                          storedEvent?.UserJoin
                             ? COLORS.purple
                             : COLORS.lightGray
                         }
@@ -265,18 +270,18 @@ const HomeEventCard = ({
                         style={{
                           marginRight: 12,
                           marginLeft: 5,
-                          color: eventIDToEvent[event.EventID].UserJoin
+                          color: storedEvent?.UserJoin
                             ? COLORS.purple
                             : COLORS.lightGray,
                         }}
                       >
-                        {truncateNumber(eventIDToEvent[event.EventID].NumJoins)}
+                        {truncateNumber(storedEvent?.NumJoins)}
                       </McText>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{ flexDirection: "row", justifyContent: "center" }}
                       onPress={
-                        eventIDToEvent[event.EventID].UserShoutout
+                        storedEvent?.UserShoutout
                           ? () => removeUserShoutout(event.EventID)
                           : () => addUserShoutout(event.EventID)
                       }
@@ -285,7 +290,7 @@ const HomeEventCard = ({
                         name="retweet"
                         size={16}
                         color={
-                          eventIDToEvent[event.EventID].UserShoutout
+                          storedEvent?.UserShoutout
                             ? COLORS.purple
                             : COLORS.lightGray
                         }
@@ -296,13 +301,13 @@ const HomeEventCard = ({
                         style={{
                           marginRight: 12,
                           marginLeft: 8,
-                          color: eventIDToEvent[event.EventID].UserShoutout
+                          color: storedEvent?.UserShoutout
                             ? COLORS.purple
                             : COLORS.lightGray,
                         }}
                       >
                         {truncateNumber(
-                          eventIDToEvent[event.EventID].NumShoutouts
+                          storedEvent?.NumShoutouts
                         )}
                       </McText>
                     </TouchableOpacity>
@@ -323,7 +328,7 @@ const HomeEventCard = ({
           {/* <McText body4 numberOfLines={2}>
             {event.Description.length === 0
               ? "N/A"
-              : eventIDToEvent[event.EventID].Description}
+              : storedEvent?.Description}
           </McText> */}
         </View>
       </View>

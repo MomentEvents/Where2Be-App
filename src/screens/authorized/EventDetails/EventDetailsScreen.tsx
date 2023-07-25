@@ -67,6 +67,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { selectUserByID } from "../../../redux/users/userSelectors";
 import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
+import { selectEventByID, selectEventInterestsByID } from "../../../redux/events/eventSelectors";
+import { setEventInterestsMap, setEventMap, updateEventInterestsMap, updateEventMap } from "../../../redux/events/eventSlice";
 
 type routeParametersType = {
   eventID: string;
@@ -86,10 +88,6 @@ const EventDetailsScreen = ({ route }) => {
   const { setLoading } = useContext(ScreenContext);
 
   const {
-    eventIDToEvent,
-    updateEventIDToEvent,
-    eventIDToInterests,
-    updateEventIDToInterests,
     clientAddUserJoin: addUserJoin,
     clientAddUserShoutout: addUserShoutout,
     clientRemoveUserJoin: removeUserJoin,
@@ -97,7 +95,9 @@ const EventDetailsScreen = ({ route }) => {
   } = useContext(EventContext);
 
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((state: RootState) => selectUserByID(state, eventIDToEvent[eventID]?.HostUserID));
+  const storedEvent = useSelector((state: RootState) => selectEventByID(state, eventID));
+  const storedInterests = useSelector((state: RootState) => selectEventInterestsByID(state, eventID))
+  const user = useSelector((state: RootState) => selectUserByID(state, storedEvent?.HostUserID));
 
   if (!eventID) {
     throw formatError(
@@ -144,7 +144,7 @@ const EventDetailsScreen = ({ route }) => {
   };
 
   const onEditEventPressed = () => {
-    if (!eventIDToEvent[eventID]) {
+    if (!storedEvent) {
       return;
     }
     navigation.push(SCREENS.EditEvent, {
@@ -169,7 +169,7 @@ const EventDetailsScreen = ({ route }) => {
             deleteEvent(userToken.UserAccessToken, eventID)
               .then(() => {
                 setLoading(false);
-                updateEventIDToEvent({ id: eventID, event: undefined });
+                dispatch(setEventMap({id: eventID, event: undefined}))
                 dispatch(updateUserNumericField({id: userToken.UserID, field: "NumEvents", delta: -1}))
                 navigation.goBack();
               })
@@ -233,7 +233,7 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.UserShoutout = false;
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
-        updateEventIDToEvent({ id: eventID, event: pulledEvent });
+        dispatch(updateEventMap({id: eventID, changes: pulledEvent}))
         if (!user|| useRefRefreshing.current) {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
@@ -275,7 +275,7 @@ const EventDetailsScreen = ({ route }) => {
       });
     getEventInterestsByEventId(eventID, userToken.UserAccessToken)
       .then((tags: Interest[]) => {
-        updateEventIDToInterests({ id: eventID, interests: tags });
+        dispatch(setEventInterestsMap({id: eventID, interests: tags}))
       })
       .catch((error: CustomError) => {
         if (!gotError) {
@@ -302,7 +302,7 @@ const EventDetailsScreen = ({ route }) => {
     setDidFetchHost(false);
     setDidFetchInterests(false);
     setDidFetchEvent(false);
-    updateEventIDToInterests({ id: eventID, interests: undefined });
+    dispatch(setEventInterestsMap({ id: eventID, interests: undefined }));
     pullData();
   };
 
@@ -331,8 +331,8 @@ const EventDetailsScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <EventPreviewer
-        event={eventIDToEvent[eventID]}
-        interests={eventIDToInterests[eventID]}
+        event={storedEvent}
+        interests={storedInterests}
         host={
           user
         }
@@ -346,7 +346,7 @@ const EventDetailsScreen = ({ route }) => {
               bottom: insets.bottom + 10,
             }}
           >
-            {eventIDToEvent[eventID] ? (
+            {storedEvent ? (
               <UserOptionsSection>
                 {showRetry ? (
                   <RetryButton
@@ -375,7 +375,7 @@ const EventDetailsScreen = ({ route }) => {
                             height: 58,
                             borderRadius: 80,
                             marginBottom: 5,
-                            backgroundColor: eventIDToEvent[eventID].UserJoin
+                            backgroundColor: storedEvent?.UserJoin
                               ? "transparent"
                               : COLORS.white,
                             // borderWidth: StyleSheet.hairlineWidth,
@@ -384,7 +384,7 @@ const EventDetailsScreen = ({ route }) => {
                             alignItems: "center",
                           }}
                           onPress={
-                            eventIDToEvent[eventID].UserJoin
+                            storedEvent?.UserJoin
                               ? () => {
                                   if (!didFetchEvent) {
                                     beforeLoadJoin.current = false;
@@ -399,7 +399,7 @@ const EventDetailsScreen = ({ route }) => {
                                 }
                           }
                         >
-                          {eventIDToEvent[eventID].UserJoin ? (
+                          {storedEvent?.UserJoin ? (
                             <Ionicons
                               name="checkmark-sharp"
                               size={38}
@@ -417,12 +417,12 @@ const EventDetailsScreen = ({ route }) => {
                       <McText
                         body4
                         style={{
-                          color: eventIDToEvent[eventID].UserJoin
+                          color: storedEvent?.UserJoin
                             ? COLORS.darkPurple
                             : COLORS.white,
                         }}
                       >
-                        {truncateNumber(eventIDToEvent[eventID].NumJoins)} Going
+                        {truncateNumber(storedEvent?.NumJoins)} Going
                       </McText>
                     </View>
                     <View
@@ -448,8 +448,7 @@ const EventDetailsScreen = ({ route }) => {
                             width: 58,
                             height: 58,
                             borderRadius: 80,
-                            backgroundColor: eventIDToEvent[eventID]
-                              .UserShoutout
+                            backgroundColor: storedEvent?.UserShoutout
                               ? "transparent"
                               : COLORS.white,
                             // borderWidth: StyleSheet.hairlineWidth,
@@ -458,7 +457,7 @@ const EventDetailsScreen = ({ route }) => {
                             alignItems: "center",
                           }}
                           onPress={
-                            eventIDToEvent[eventID].UserShoutout
+                            storedEvent?.UserShoutout
                               ? () => {
                                   if (!didFetchEvent) {
                                     beforeLoadShoutout.current = false;
@@ -473,7 +472,7 @@ const EventDetailsScreen = ({ route }) => {
                                 }
                           }
                         >
-                          {eventIDToEvent[eventID].UserShoutout ? (
+                          {storedEvent?.UserShoutout ? (
                             <AntDesign name="retweet" size={32} color="white" />
                           ) : (
                             <AntDesign name="retweet" size={32} color="black" />
@@ -483,13 +482,13 @@ const EventDetailsScreen = ({ route }) => {
                       <McText
                         body4
                         style={{
-                          color: eventIDToEvent[eventID].UserShoutout
+                          color: storedEvent?.UserShoutout
                             ? COLORS.darkPurple
                             : COLORS.white,
                         }}
                       >
-                        {truncateNumber(eventIDToEvent[eventID].NumShoutouts)}{" "}
-                        {eventIDToEvent[eventID].NumShoutouts === 1
+                        {truncateNumber(storedEvent?.NumShoutouts)}{" "}
+                        {storedEvent?.NumShoutouts === 1
                           ? "Repost"
                           : "Reposts"}
                       </McText>
