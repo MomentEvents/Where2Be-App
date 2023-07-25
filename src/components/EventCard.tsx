@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectEventByID } from "../redux/events/eventSelectors";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateEventMap } from "../redux/events/eventSlice";
+import { produceWithPatches } from "immer";
 
 type EventCardProps = {
   onClick?: () => void;
@@ -53,8 +54,7 @@ const EventCard = ({
   let cardWidth = width ? width : isBigCard ? 330 : 270;
   let cardHeight = height ? height : isBigCard ? 240 : 250;
 
-  console.log(width);
-  console.log(height);
+  console.log("Rendering " + event.Title + " Card\n")
 
   if (cardWidth < 0) {
     cardWidth = 40;

@@ -65,6 +65,8 @@ const HomeEventCard = ({
   const minTextBarHeight = 60;
   const cardBorderColor = COLORS.gray2;
 
+  console.log("Rendering " + event.Title + " Home Card\n")
+
   const onPressCard = () => {
     navigation.push(SCREENS.EventDetails, {
       eventID: event.EventID,

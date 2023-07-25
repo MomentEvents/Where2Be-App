@@ -79,7 +79,7 @@ const EventToggler = (props: EventTogglerProps) => {
 
   useEffect(() => {
     if (isFocused) {
-      if (props.selectedUserID !== userToken.UserID) {
+      if (!props.doReloadIfChanged) {
         return;
       }
       let doPull = false;

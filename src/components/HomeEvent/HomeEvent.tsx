@@ -125,6 +125,9 @@ const HomeEvent = (props: HomeEventProps) => {
     }
   }, []);
 
+  if(!storedEvent){
+    return <></>
+  }
   return (
     <View
       style={{ height: props.height, width: props.width, overflow: "hidden" }}
