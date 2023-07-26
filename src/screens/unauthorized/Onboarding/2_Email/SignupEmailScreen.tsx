@@ -37,7 +37,7 @@ import { McTextInput } from "../../../../components/Styled/styled";
 import { AlertContext } from "../../../../contexts/AlertContext";
 
 const SignupEmailScreen = () => {
-  const {showErrorAlert} = useContext(AlertContext)
+  const {showErrorAlert, showAlert, showTextAlert} = useContext(AlertContext)
 
   const navigator = useNavigation<any>();
 
@@ -54,15 +54,16 @@ const SignupEmailScreen = () => {
   const onNextClick = () => {
     emailRef.current = emailRef.current.trim();
     if (!checkIfStringIsEmail(emailRef.current)) {
-      Alert.alert("Please enter a valid email");
+      showTextAlert("Please enter an email", 5)
       return;
     }
     setLoading(true);
 
     checkEmailAvailability(emailRef.current)
-      .then(() => {
+      .then((school: School) => {
+        showTextAlert("Welcome to " + school.Name + "!", 5)
         setSignupValues({ ...signupValues, Email: emailRef.current });
-        navigator.navigate(SCREENS.Onboarding.SignupPasswordScreen);
+        navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
       })
       .catch((error: CustomError) => {
         if(error.showBugReportDialog){
@@ -91,19 +92,19 @@ const SignupEmailScreen = () => {
         </View>
         <View style={styles.titleTextContainer}>
           <McText style={styles.titleText} h1>
-            Stay Connected
+            School Email
           </McText>
           <McText style={styles.descriptionText} h4>
-            Provide your email address, which will serve as a way to{" "}
+            Provide your school email address to{" "}
             <McText color={COLORS.purple} h4>
-              recover your account if needed
+              connect with your fellow students
             </McText>
-            .
+            !
           </McText>
         </View>
         <View style={styles.userInputContainer}>
           <McTextInput
-            placeholder={"Email"}
+            placeholder={"School Email"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}
             onChangeText={(newText) => (emailRef.current = newText)}

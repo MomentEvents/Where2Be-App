@@ -21,12 +21,12 @@ import SearchScreen from "../screens/authorized/Search/SearchScreen";
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import AccountFollowListScreen from "../screens/authorized/AccountFollowList/AccountFollowListScreen";
 import SignupWelcomeScreen from "../screens/unauthorized/Onboarding/1_Welcome/SignupWelcomeScreen";
-import SignupSelectSchoolScreen from "../screens/unauthorized/Onboarding/2_School/SignupSelectSchoolScreen";
+import SignupSelectSchoolScreen from "../screens/unauthorized/Onboarding/UNUSED_2_School/SignupSelectSchoolScreen";
 import SignupNameScreen from "../screens/unauthorized/Onboarding/3_Name/SignupNameScreen";
 import SignupUsernameScreen from "../screens/unauthorized/Onboarding/4_Username/SignupUsernameScreen";
-import SignupEmailScreen from "../screens/unauthorized/Onboarding/5_Email/SignupEmailScreen";
-import SignupPasswordScreen from "../screens/unauthorized/Onboarding/6_Password/SignupPasswordScreen";
-import SignupFinalScreen from "../screens/unauthorized/Onboarding/7_Final/SignupFinalScreen";
+import SignupEmailScreen from "../screens/unauthorized/Onboarding/2_Email/SignupEmailScreen";
+import SignupPasswordScreen from "../screens/unauthorized/Onboarding/5_Password/SignupPasswordScreen";
+import SignupFinalScreen from "../screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
 

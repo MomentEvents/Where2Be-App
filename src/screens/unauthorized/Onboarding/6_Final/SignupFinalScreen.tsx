@@ -84,7 +84,6 @@ const SignupFinalScreen = () => {
       signupValues.Username,
       signupValues.Name,
       signupValues.Password,
-      signupValues.SchoolID,
       signupValues.Email
     )
       .then(() => {

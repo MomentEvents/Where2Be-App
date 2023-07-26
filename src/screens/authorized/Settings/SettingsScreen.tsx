@@ -33,7 +33,7 @@ const SettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
   const {userToken} = useContext(UserContext)
   const { setLoading } = useContext(ScreenContext);
-  const { showAlert, showErrorAlert } = useContext(AlertContext);
+  const { showAlert, showErrorAlert, showTextAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
   const pressedCleanCacheRef = useRef(false);
 
@@ -69,10 +69,8 @@ const SettingsScreen = () => {
     pressedCleanCacheRef.current = true
     clearAllCachedData()
       .then(() => {
-        showAlert(
-          <McText style={{ textAlign: "center" }} body4>
-            Successfully deleted cached data
-          </McText>,
+        showTextAlert(
+            "Successfully deleted cached data",
           5
         );
       })

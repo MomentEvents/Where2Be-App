@@ -18,7 +18,7 @@ const SignupWelcomeScreen = () => {
   };
 
   const onNextClick = () => {
-    navigator.push(SCREENS.Onboarding.SignupSchoolScreen);
+    navigator.push(SCREENS.Onboarding.SignupEmailScreen);
   };
   return (
     <MobileSafeView style={styles.container}>

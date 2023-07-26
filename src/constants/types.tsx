@@ -89,7 +89,6 @@ export type UserResponse = {
 };
 
 export type SignupValues = {
-  SchoolID: string;
   Name: string;
   Username: string;
   Email: string;

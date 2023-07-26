@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
   const { setContextVarsBasedOnToken, userToken } = useContext(UserContext);
 
   const [signupValues, setSignupValues] = useState<SignupValues>({
-    SchoolID: undefined,
     Name: undefined,
     Email: undefined,
     Username: undefined,
@@ -47,13 +46,11 @@ export const AuthProvider = ({ children }) => {
     username: string,
     displayName: string,
     password: string,
-    schoolID: string,
     email: string
   ) => {
-    const token: Token = await signup(username, displayName, password, schoolID, email)
+    const token: Token = await signup(username, displayName, password, email)
     await setContextVarsBasedOnToken(token)
     setSignupValues({
-      SchoolID: undefined,
       Name: undefined,
       Email: undefined,
       Username: undefined,

@@ -8,7 +8,9 @@ import {
   checkIfStringIsReadable,
   responseHandler,
 } from "../helpers/helpers";
-import { Token, User } from "../constants";
+import { School, Token, User } from "../constants";
+import { SchoolResponse } from "../constants/types";
+import { schoolResponseToSchool } from "../helpers/converters";
 
 const TOKEN_STORAGE = "UserAccessToken";
 const FIRST_TIME_INSTALL = {
@@ -108,7 +110,6 @@ export async function signup(
   username: string,
   displayName: string,
   password: string,
-  schoolID: string,
   email: string
 ): Promise<Token> {
   if (!checkIfStringIsReadable(displayName)) {
@@ -120,9 +121,6 @@ export async function signup(
       "Input error",
       "Please enter non-empty values before signing up"
     );
-  }
-  if (schoolID === "" || !schoolID) {
-    throw formatError("Input error", "Please enter a valid school");
   }
 
   if (!checkIfStringIsEmail(email) || email === "") {
@@ -138,7 +136,6 @@ export async function signup(
       username: username,
       display_name: displayName,
       password: password,
-      school_id: schoolID,
       email: email,
     }),
   }).catch(() => {
@@ -387,7 +384,7 @@ export async function resetPassword(email: string): Promise<void> {
   );
 }
 
-export async function checkEmailAvailability(email: string): Promise<void> {
+export async function checkEmailAvailability(email: string): Promise<School> {
   const response = await fetch(momentAPI + `/auth/check_email_availability`, {
     method: "POST",
     headers: {
@@ -400,11 +397,16 @@ export async function checkEmailAvailability(email: string): Promise<void> {
     return undefined;
   });
 
-  await responseHandler<void>(
+  const schoolResponse = await responseHandler<SchoolResponse>(
     response,
     "Could not check email availability",
-    false
+    true
   );
+
+  const school = schoolResponseToSchool(schoolResponse)
+
+  console.log(JSON.stringify(school))
+  return school
 }
 
 export async function checkUsernameAvailability(

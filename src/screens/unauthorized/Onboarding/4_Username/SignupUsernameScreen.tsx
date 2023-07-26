@@ -59,7 +59,7 @@ const SignupUsernameScreen = () => {
     checkUsernameAvailability(usernameRef.current)
       .then(() => {
         setSignupValues({ ...signupValues, Username: usernameRef.current });
-        navigator.navigate(SCREENS.Onboarding.SignupEmailScreen);
+        navigator.navigate(SCREENS.Onboarding.SignupPasswordScreen);
       })
       .catch((error: CustomError) => {
         if(error.showBugReportDialog){

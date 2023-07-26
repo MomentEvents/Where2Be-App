@@ -20,12 +20,14 @@ type AlertContextType = {
   showAlert: (component: ReactNode, seconds: number) => void;
   showErrorAlert: (error: Error) => void;
   hideAlert: () => void;
+  showTextAlert: (message: string, seconds: number) => void;
 };
 
 const initialState: AlertContextType = {
     showErrorAlert: () => {},
   showAlert: () => {},
   hideAlert: () => {},
+  showTextAlert: () => {},
 };
 
 export const AlertContext = createContext<AlertContextType>(initialState);
@@ -55,6 +57,15 @@ export const AlertProvider = ({ children }) => {
       5
     );
   };
+
+  const showTextAlert = (message: string, seconds: number) => {
+    showAlert(
+      <McText body3 style={{ textAlign: "center", color: COLORS.white }}>
+        {message}
+      </McText>,
+      5
+    );
+  }
 
   const showAlert = (component: ReactNode, seconds: number) => {
     // If there's an existing timeout (i.e., an alert is already showing), clear it
@@ -141,7 +152,7 @@ export const AlertProvider = ({ children }) => {
   ).current;
 
   return (
-    <AlertContext.Provider value={{ showAlert, hideAlert, showErrorAlert }}>
+    <AlertContext.Provider value={{ showAlert, hideAlert, showErrorAlert, showTextAlert }}>
       {children}
       {alertVisible && (
         <Animated.View
