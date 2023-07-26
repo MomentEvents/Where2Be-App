@@ -161,7 +161,7 @@ const SignupFinalScreen = () => {
           }}
           onPress={onCreateAccountClick}
         >
-          <McText h4>Create Account</McText>
+          <McText h3>Create Account</McText>
         </TouchableOpacity>
       </View>
       <View
