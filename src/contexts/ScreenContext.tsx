@@ -28,18 +28,11 @@ export const ScreenContext = createContext<ScreenContextType>({
 
 export const ScreenProvider = ({ children }) => {
 
-  const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { isUserContextLoaded, pullTokenFromServer, serverError } =
     useContext(UserContext);
 
-  const loadAssets = async () => {
-    console.log("Loading assets");
-    await Font.loadAsync(customFonts)
-      .then(() => setAssetsLoaded(true))
-      .catch((error: Error) => displayError(error));
-  };
 
   const onDiscordClick = () => {
     const supported = Linking.canOpenURL("https://where2be.app/discord");
@@ -53,13 +46,9 @@ export const ScreenProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    loadAssets();
-  }, []);
-
   return (
     <ScreenContext.Provider value={{ setLoading }}>
-      {assetsLoaded && isUserContextLoaded ? (
+      {isUserContextLoaded ? (
         <>
           <ProgressLoader
             visible={loading}

@@ -4,10 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
 import SelectSchoolScreen from "../screens/unauthorized/SelectSchool/SelectSchoolScreen";
 import IntroduceEventsScreen from "../screens/unauthorized/IntroduceEvents/IntroduceEventsScreen";
-import LoginScreen from "../screens/unauthorized/Login/LoginScreen"
+import LoginScreen from "../screens/unauthorized/Login/LoginScreen";
 import TabNavigator from "./TabNavigator";
 import SignupScreen from "../screens/unauthorized/Signup/SignupScreen";
-import { SCREENS } from "../constants";
+import { COLORS, SCREENS } from "../constants";
 import EventDetailsScreen from "../screens/authorized/EventDetails/EventDetailsScreen";
 import EditEventScreen from "../screens/authorized/EditEvent/EditEventScreen";
 import ProfileDetailsScreen from "../screens/authorized/ProfileDetails/ProfileDetailsScreen";
@@ -46,21 +46,51 @@ const AuthStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        cardStyle: {
+          backgroundColor: COLORS.trueBlack,
+        },
         headerShown: false,
       }}
       initialRouteName={SCREENS.SelectSchool}
     >
-      <Stack.Screen name={SCREENS.SelectSchool} component={SelectSchoolScreen} />
-      <Stack.Screen name={SCREENS.IntroduceEvents} component={IntroduceEventsScreen} />
-      <Stack.Screen name={SCREENS.Login} component={LoginScreen}/>
-      <Stack.Screen name={SCREENS.Signup} component={SignupScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupWelcomeScreen} component={SignupWelcomeScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupSchoolScreen} component={SignupSelectSchoolScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupNameScreen} component={SignupNameScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupUsernameScreen} component={SignupUsernameScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupEmailScreen} component={SignupEmailScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupPasswordScreen} component={SignupPasswordScreen}/>
-      <Stack.Screen name={SCREENS.Onboarding.SignupFinalScreen} component={SignupFinalScreen}/>
+      <Stack.Screen
+        name={SCREENS.SelectSchool}
+        component={SelectSchoolScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.IntroduceEvents}
+        component={IntroduceEventsScreen}
+      />
+      <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
+      <Stack.Screen name={SCREENS.Signup} component={SignupScreen} />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupWelcomeScreen}
+        component={SignupWelcomeScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupSchoolScreen}
+        component={SignupSelectSchoolScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupNameScreen}
+        component={SignupNameScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupUsernameScreen}
+        component={SignupUsernameScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupEmailScreen}
+        component={SignupEmailScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupPasswordScreen}
+        component={SignupPasswordScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.Onboarding.SignupFinalScreen}
+        component={SignupFinalScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -70,24 +100,48 @@ const AppStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        cardStyle: {
+          backgroundColor: COLORS.trueBlack,
+        },
       }}
       initialRouteName={SCREENS.TabNavigator}
     >
       <Stack.Screen name={SCREENS.TabNavigator} component={TabNavigator} />
-      <Stack.Screen name={SCREENS.EventDetails} component={EventDetailsScreen}/>
-      <Stack.Screen name={SCREENS.EditEvent} component={EditEventScreen}/>
-      <Stack.Screen name={SCREENS.ProfileDetails} component={ProfileDetailsScreen}/>
-      <Stack.Screen name={SCREENS.CreateEvent} component={CreateEventScreen}/>
-      <Stack.Screen name={SCREENS.PreviewEvent} component={PreviewEventScreen}/>
-      <Stack.Screen name={SCREENS.EditProfile} component={EditProfileScreen}/>
-      <Stack.Screen name={SCREENS.EditMyPassword} component={EditMyPasswordScreen}/>
-      <Stack.Screen name={SCREENS.Settings} component={SettingsScreen}/>
-      <Stack.Screen name={SCREENS.AccountSettings} component={AccountSettingsScreen}/>
-      <Stack.Screen name={SCREENS.Search} component={SearchScreen}/>
-      <Stack.Screen name={SCREENS.Home} component={HomeScreen}/>
-      <Stack.Screen name={SCREENS.AccountFollowList} component={AccountFollowListScreen}/>
-      <Stack.Screen name={SCREENS.NotificationsSettings} component={NotificationsSettingsScreen}/>
-      <Stack.Screen name={SCREENS.EventChat} component={EventChatScreen}/>
+      <Stack.Screen
+        name={SCREENS.EventDetails}
+        component={EventDetailsScreen}
+      />
+      <Stack.Screen name={SCREENS.EditEvent} component={EditEventScreen} />
+      <Stack.Screen
+        name={SCREENS.ProfileDetails}
+        component={ProfileDetailsScreen}
+      />
+      <Stack.Screen name={SCREENS.CreateEvent} component={CreateEventScreen} />
+      <Stack.Screen
+        name={SCREENS.PreviewEvent}
+        component={PreviewEventScreen}
+      />
+      <Stack.Screen name={SCREENS.EditProfile} component={EditProfileScreen} />
+      <Stack.Screen
+        name={SCREENS.EditMyPassword}
+        component={EditMyPasswordScreen}
+      />
+      <Stack.Screen name={SCREENS.Settings} component={SettingsScreen} />
+      <Stack.Screen
+        name={SCREENS.AccountSettings}
+        component={AccountSettingsScreen}
+      />
+      <Stack.Screen name={SCREENS.Search} component={SearchScreen} />
+      <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
+      <Stack.Screen
+        name={SCREENS.AccountFollowList}
+        component={AccountFollowListScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.NotificationsSettings}
+        component={NotificationsSettingsScreen}
+      />
+      <Stack.Screen name={SCREENS.EventChat} component={EventChatScreen} />
     </Stack.Navigator>
   );
 };
