@@ -136,22 +136,24 @@ const Main = () => {
   }
 
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <AlertProvider>
-          <UserProvider>
-            <EventProvider>
-              <ScreenProvider>
-                <AuthProvider>
-                  <StatusBar barStyle="light-content" translucent={true} />
-                  <AppNav />
-                </AuthProvider>
-              </ScreenProvider>
-            </EventProvider>
-          </UserProvider>
-        </AlertProvider>
-      </SafeAreaProvider>
-    </Provider>
+    <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <AlertProvider>
+            <UserProvider>
+              <EventProvider>
+                <ScreenProvider>
+                  <AuthProvider>
+                    <StatusBar barStyle="light-content" translucent={true} />
+                    <AppNav />
+                  </AuthProvider>
+                </ScreenProvider>
+              </EventProvider>
+            </UserProvider>
+          </AlertProvider>
+        </SafeAreaProvider>
+      </Provider>
+    </View>
   );
 };
 
