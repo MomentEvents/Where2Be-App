@@ -29,6 +29,7 @@ import React from "react";
 type SchoolSelectorProps = {
   onSelectSchool: (school: School) => void;
   textStyle: any;
+  initialTextStyle: any;
   buttonStyle: any;
   initialText: string;
   maxLines?: number;
@@ -143,7 +144,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           // Button
           selectStyle={props.buttonStyle}
           // Text style
-          initValueTextStyle={props.textStyle}
+          initValueTextStyle={props.initialTextStyle}
           maxLines={props.maxLines}
         />
       ) : showRetry ? (

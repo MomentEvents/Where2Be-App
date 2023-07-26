@@ -547,7 +547,8 @@ export default class ModalSelector extends React.Component {
           style={initSelectStyle}
           {...this.props.selectTextPassThruProps}
         >
-          {this.state.selected}
+          Select your school
+          {/* {this.state.selected} */}
         </Text>
       </View>
     ) : (

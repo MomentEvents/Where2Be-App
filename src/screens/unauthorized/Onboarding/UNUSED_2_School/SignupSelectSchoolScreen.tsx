@@ -14,7 +14,7 @@ import { IMAGES } from "../../../../constants/images";
 import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import { AuthContext } from "../../../../contexts/AuthContext";
-import { CUSTOMFONT_BOLD } from "../../../../constants/theme";
+import { CUSTOMFONT_BOLD, CUSTOMFONT_SEMIBOLD } from "../../../../constants/theme";
 import { AntDesign } from "@expo/vector-icons";
 
 const SignupSelectSchoolScreen = () => {
@@ -32,10 +32,10 @@ const SignupSelectSchoolScreen = () => {
       Alert.alert("Please select a school");
       return;
     }
-    setSignupValues({
-      ...signupValues,
-      SchoolID: currentSchoolRef.current.SchoolID,
-    });
+    // setSignupValues({
+    //   ...signupValues,
+    //   SchoolID: currentSchoolRef.current.SchoolID,
+    // });
     navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
   };
   return (
@@ -66,7 +66,7 @@ const SignupSelectSchoolScreen = () => {
           }}
           textStyle={{
             color: COLORS.white,
-            fontFamily: CUSTOMFONT_BOLD,
+            fontFamily: CUSTOMFONT_SEMIBOLD,
             paddingHorizontal: 10,
             paddingVertical: 3,
           }}
@@ -76,7 +76,6 @@ const SignupSelectSchoolScreen = () => {
             borderRadius: 5,
             borderWidth: 0,
           }}
-          
           initialText={"Select your school"}
         />
         <McText

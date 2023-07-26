@@ -27,7 +27,7 @@ import GradientBackground from "../../../components/Styled/GradientBackground";
 import { appVersionText } from "../../../constants/texts";
 import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
-import { CUSTOMFONT_BOLD } from "../../../constants/theme";
+import { CUSTOMFONT_BOLD, CUSTOMFONT_SEMIBOLD } from "../../../constants/theme";
 
 const SelectSchoolScreen = ({ route }) => {
   const [school, setSchool] = useState<School>(null);
@@ -89,7 +89,7 @@ const SelectSchoolScreen = ({ route }) => {
             }}
             textStyle={{
               color: COLORS.white,
-              fontFamily: CUSTOMFONT_BOLD,
+              fontFamily: CUSTOMFONT_SEMIBOLD,
               fontSize: 20,
               paddingHorizontal: 10,
               paddingVertical: 3,
@@ -101,6 +101,14 @@ const SelectSchoolScreen = ({ route }) => {
               borderWidth: 0,
             }}
             initialText={"Select your school"}
+            initialTextStyle={{
+              color: COLORS.white,
+              fontFamily: CUSTOMFONT_SEMIBOLD,
+              fontSize: 20,
+              paddingHorizontal: 10,
+              paddingVertical: 3,
+            }}
+            maxLines={2}
           />
         </View>
         <View

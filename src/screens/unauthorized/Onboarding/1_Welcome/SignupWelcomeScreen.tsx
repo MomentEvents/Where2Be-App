@@ -60,7 +60,7 @@ const SignupWelcomeScreen = () => {
           }}
           onPress={onNextClick}
         >
-          <McText h4>Let's go!</McText>
+          <McText h3>Let's go!</McText>
         </TouchableOpacity>
         <TouchableOpacity style={{ marginTop: 20 }} onPress={onNavigateLogin}>
           <McText body4 style={{ textAlign: "center" }}>

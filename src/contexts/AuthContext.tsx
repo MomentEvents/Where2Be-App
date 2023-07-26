@@ -11,7 +11,6 @@ type AuthContextType = {
     username: string,
     displayName: string,
     password: string,
-    schoolID: string,
     email: string
   ) => Promise<void>;
   userLogout: () => Promise<void>;

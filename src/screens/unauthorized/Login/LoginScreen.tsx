@@ -153,7 +153,7 @@ const LoginScreen = () => {
         <TouchableOpacity onPress={onLogin}>
           <View style={styles.submitButton}>
             <McText
-              h4
+              h3
               style={{
                 color: COLORS.white,
               }}
