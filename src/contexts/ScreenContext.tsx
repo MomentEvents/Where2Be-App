@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { UserContext } from "./UserContext";
-import { displayError } from "../helpers/helpers";
 import { appVersionText } from "../constants/texts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { McText } from "../components/Styled";

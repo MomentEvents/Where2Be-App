@@ -67,18 +67,35 @@ const SettingsScreen = () => {
       return
     }
     pressedCleanCacheRef.current = true
-    clearAllCachedData()
-      .then(() => {
-        showTextAlert(
-            "Successfully deleted cached data",
-          5
-        );
-      })
-      .catch((error: Error) => {
-        showErrorAlert(error);
-      }).finally(() => {
-        pressedCleanCacheRef.current = false
-      });
+    Alert.alert(
+      "Clean your cache?",
+      "This will set all of your read events to unread",
+      [
+        {
+          text: "Cancel",
+          onPress: () => pressedCleanCacheRef.current = false,
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log("Yes Pressed");
+            clearAllCachedData()
+              .then(() => {
+                showTextAlert(
+                    "Successfully deleted cached data",
+                  5
+                );
+              })
+              .catch((error: Error) => {
+                showErrorAlert(error);
+              }).finally(() => {
+                pressedCleanCacheRef.current = false
+              });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const onCheckForUpdatesClick = async () => {
@@ -125,7 +142,7 @@ const SettingsScreen = () => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else {
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setLoading(false);
               });

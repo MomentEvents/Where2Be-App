@@ -13,7 +13,7 @@ import {
   getAllInterests,
   getEventInterestsByEventId,
 } from "../../services/InterestService";
-import { displayError, showBugReportPopup } from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import { McText } from "../Styled";
 import { UserContext } from "../../contexts/UserContext";
 import InterestButton from "./components/InterestButton";

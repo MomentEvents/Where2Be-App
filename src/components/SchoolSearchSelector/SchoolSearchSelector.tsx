@@ -11,7 +11,7 @@ import {
 import ModalSelector from "./components";
 import { getAllSchools } from "../../services/SchoolService";
 import { COLORS, FONTS, School } from "../../constants";
-import { displayError, showBugReportPopup } from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,

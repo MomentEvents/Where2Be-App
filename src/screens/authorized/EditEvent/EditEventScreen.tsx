@@ -33,7 +33,6 @@ import {
   checkIfEventIsFormatted,
   convertDateToUTC,
   convertToStartTimeEndTime,
-  displayError,
   formatError,
   showBugReportPopup,
 } from "../../../helpers/helpers";

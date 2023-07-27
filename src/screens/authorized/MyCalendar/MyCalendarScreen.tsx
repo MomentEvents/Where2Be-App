@@ -4,18 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../../constants/theme";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { EVENT_TOGGLER, User, icons } from "../../../constants";
-import { McText } from "../../../components/Styled";
-import { Event } from "../../../constants";
-import EventCard from "../../../components/EventCard";
-import {
-  getUserHostedFutureEvents,
-  getUserHostedPastEvents,
-  getUserJoinedFutureEvents,
-  getUserJoinedPastEvents,
-} from "../../../services/EventService";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError } from "../../../helpers/helpers";
-import { EventContext } from "../../../contexts/EventContext";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 

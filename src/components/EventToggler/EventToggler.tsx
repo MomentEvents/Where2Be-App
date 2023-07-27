@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { User, Event } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
-import { displayError, showBugReportPopup } from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import {
   getUserHostedFutureEvents,
   getUserHostedPastEvents,

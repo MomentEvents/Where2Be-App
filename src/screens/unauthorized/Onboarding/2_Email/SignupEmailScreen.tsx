@@ -29,7 +29,6 @@ import {
 import { CustomError } from "../../../../constants/error";
 import {
   checkIfStringIsEmail,
-  displayError,
   showBugReportPopup,
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";

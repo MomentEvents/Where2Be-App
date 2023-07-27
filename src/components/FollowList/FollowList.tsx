@@ -12,7 +12,7 @@ import { COLORS, User } from "../../constants";
 import { getUserFollowers, getUserFollowing } from "../../services/UserService";
 import { UserContext } from "../../contexts/UserContext";
 import { CustomError } from "../../constants/error";
-import { displayError, showBugReportPopup } from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import RetryButton from "../RetryButton";
 import { McText } from "../Styled";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

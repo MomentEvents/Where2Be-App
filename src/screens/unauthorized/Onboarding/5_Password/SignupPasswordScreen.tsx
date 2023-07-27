@@ -22,15 +22,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CONSTRAINTS } from "../../../../constants/constraints";
 import { ScreenContext } from "../../../../contexts/ScreenContext";
-import {
-  checkEmailAvailability,
-  checkUsernameAvailability,
-} from "../../../../services/AuthService";
-import { CustomError } from "../../../../constants/error";
-import {
-  checkIfStringIsEmail,
-  displayError,
-} from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { McTextInput } from "../../../../components/Styled/styled";
 

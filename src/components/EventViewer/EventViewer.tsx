@@ -21,7 +21,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
-import { displayError, showBugReportPopup } from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";

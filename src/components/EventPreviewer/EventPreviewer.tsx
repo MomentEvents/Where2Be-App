@@ -24,7 +24,7 @@ import ImageView from "react-native-image-viewing";
 import { useLinkProps, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
-import { showBugReportPopup, displayError } from "../../helpers/helpers";
+import { showBugReportPopup} from "../../helpers/helpers";
 import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";

@@ -28,7 +28,7 @@ import {
   removeUserShoutoutEvent,
   unfollowUser,
 } from "../services/UserService";
-import { displayError, showBugReportPopup } from "../helpers/helpers";
+import { showBugReportPopup } from "../helpers/helpers";
 import { appVersion } from "../constants/texts";
 import {
   getPushNotificationToken,

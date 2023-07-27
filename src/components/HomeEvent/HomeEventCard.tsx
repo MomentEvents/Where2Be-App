@@ -16,7 +16,7 @@ import { McText } from "./../Styled";
 import "react-native-gesture-handler";
 import { Event } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
-import { displayError, truncateNumber } from "../../helpers/helpers";
+import { truncateNumber } from "../../helpers/helpers";
 import { EventContext } from "../../contexts/EventContext";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";

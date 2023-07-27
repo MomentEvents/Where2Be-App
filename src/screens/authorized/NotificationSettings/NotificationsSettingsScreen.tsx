@@ -13,12 +13,14 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 import { NotificationPreferences } from "../../../constants/types";
 import { CustomError } from "../../../constants/error";
-import { displayError, showBugReportPopup } from "../../../helpers/helpers";
+import { showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 const NotificationsSettingsScreen = () => {
   const { userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
+  const {showErrorAlert} = useContext(AlertContext)
   const navigation = useNavigation<any>();
   const [followedUsersEnabled, setFollowedUsersEnabled] = useState(false);
 
@@ -39,7 +41,7 @@ const NotificationsSettingsScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error);
+          showErrorAlert(error);
         }
       })
       .finally(() => {
@@ -57,7 +59,7 @@ const NotificationsSettingsScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error);
+          showErrorAlert(error);
         }
         navigation.pop();
       })

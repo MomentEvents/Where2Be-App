@@ -18,14 +18,16 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { deleteUser, getUserEmail } from "../../../services/UserService";
-import { displayError, showBugReportPopup } from "../../../helpers/helpers";
+import { showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { resetPassword } from "../../../services/AuthService";
 import { CustomError } from "../../../constants/error";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 const AccountSettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
   const { userToken } = useContext(UserContext);
+  const { showErrorAlert} = useContext(AlertContext)
   const navigation = useNavigation<any>();
   const { setLoading } = useContext(ScreenContext);
 
@@ -53,7 +55,7 @@ const AccountSettingsScreen = () => {
                       showBugReportPopup(error)
                     }
                     else{
-                      displayError(error);
+                      showErrorAlert(error)
                     }
                     setLoading(false);
                   });
@@ -63,7 +65,7 @@ const AccountSettingsScreen = () => {
                   showBugReportPopup(error)
                 }
                 else{
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setLoading(false);
               });
@@ -102,7 +104,7 @@ const AccountSettingsScreen = () => {
                       showBugReportPopup(error)
                     }
                     else{
-                      displayError(error);
+                      showErrorAlert(error);
                     }
                     setLoading(false);
                   });
@@ -118,7 +120,7 @@ const AccountSettingsScreen = () => {
           showBugReportPopup(error)
         }
         else{
-          displayError(error);
+          showErrorAlert(error);
         }
       });
   };

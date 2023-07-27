@@ -24,7 +24,7 @@ import { CONSTRAINTS } from "../../../../constants/constraints";
 import { ScreenContext } from "../../../../contexts/ScreenContext";
 import { checkUsernameAvailability } from "../../../../services/AuthService";
 import { CustomError } from "../../../../constants/error";
-import { displayError, showBugReportPopup } from "../../../../helpers/helpers";
+import {  showBugReportPopup } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { McTextInput } from "../../../../components/Styled/styled";
 import { AlertContext } from "../../../../contexts/AlertContext";

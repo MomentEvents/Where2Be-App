@@ -34,7 +34,6 @@ import {
   checkIfEventIsFormatted,
   convertDateToUTC,
   convertToStartTimeEndTime,
-  displayError,
   formatError,
 } from "../../../helpers/helpers";
 import { updateEvent } from "../../../services/EventService";

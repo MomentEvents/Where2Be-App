@@ -19,7 +19,7 @@ import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import SectionHeader from "../../../components/Styled/SectionHeader";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError, showBugReportPopup } from "../../../helpers/helpers";
+import { showBugReportPopup } from "../../../helpers/helpers";
 import { deleteUser } from "../../../services/UserService";
 import EventToggler from "../../../components/EventToggler/EventToggler";
 import { Feather } from "@expo/vector-icons";
@@ -27,6 +27,7 @@ import { CustomError } from "../../../constants/error";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { selectUserByID } from "../../../redux/users/userSelectors";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 type ProfileDetailsRouteParams = {
   userID: string;
@@ -37,6 +38,7 @@ const ProfileDetailsScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { isAdmin, userToken } =
     useContext(UserContext);
+    const {showErrorAlert} = useContext(AlertContext)
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => selectUserByID(state, userID));
   const { setLoading } = useContext(ScreenContext);
@@ -67,7 +69,7 @@ const ProfileDetailsScreen = ({ route }) => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else {
-                  displayError(error);
+                  showErrorAlert(error)
                 }
               });
           },

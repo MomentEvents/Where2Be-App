@@ -38,7 +38,6 @@ import ImagePicker from "../../../components/ImagePickerButton";
 import {
   checkIfStringIsAlphanumeric,
   checkIfStringIsReadable,
-  displayError,
   showBugReportPopup,
 } from "../../../helpers/helpers";
 import { updateUser } from "../../../services/UserService";

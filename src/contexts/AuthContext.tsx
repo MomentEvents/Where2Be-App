@@ -1,6 +1,5 @@
 import { createContext, useContext, useRef, useState } from "react";
 import { UserContext } from "./UserContext";
-import { displayError } from "../helpers/helpers";
 import { login, signup, logout } from "../services/AuthService";
 import { getPushNotificationToken, unregisterPushNotificationToken } from "../services/NotificationService";
 import { SignupValues, Token } from "../constants/types";

@@ -24,7 +24,7 @@ import {
 } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import { UserContext } from "../../../contexts/UserContext";
-import { displayError, showBugReportPopup } from "../../../helpers/helpers";
+import { showBugReportPopup } from "../../../helpers/helpers";
 import { EventContext } from "../../../contexts/EventContext";
 import { createEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
@@ -46,6 +46,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { selectUserByID } from "../../../redux/users/userSelectors";
 import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
 import { setEventMap } from "../../../redux/events/eventSlice";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 type routeParametersType = {
   createdEvent: Event;
@@ -58,6 +59,7 @@ const EventDetailsScreen = ({ route }) => {
   const { isLoggedIn, userToken } =
     useContext(UserContext);
 
+    const {showErrorAlert} = useContext(AlertContext)
   const { didHostedEventsChangeRef, newPostedEventHomePageRef } =
     useContext(EventContext);
 
@@ -105,7 +107,7 @@ const EventDetailsScreen = ({ route }) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error);
+          showErrorAlert(error)
         }
         setLoading(false);
       });

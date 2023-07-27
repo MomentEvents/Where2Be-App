@@ -19,7 +19,6 @@ import { COLORS, FONTS, SCREENS, SIZES, icons } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import {
-  displayError,
   openURL,
   showBugReportPopup,
 } from "../../../helpers/helpers";
@@ -31,10 +30,12 @@ import { resetPassword } from "../../../services/AuthService";
 import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
+import { AlertContext } from "../../../contexts/AlertContext";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
   const { setLoading } = useContext(ScreenContext);
+  const {showErrorAlert} = useContext(AlertContext)
   const navigation = useNavigation<any>();
 
   const [usercred, setUsercred] = useState<string>("");
@@ -48,7 +49,7 @@ const LoginScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error);
+          showErrorAlert(error)
         }
         setLoading(false);
       });
@@ -87,7 +88,7 @@ const LoginScreen = () => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else {
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setLoading(false);
               });

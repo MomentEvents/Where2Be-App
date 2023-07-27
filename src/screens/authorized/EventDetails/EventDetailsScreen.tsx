@@ -41,7 +41,6 @@ import {
 } from "../../../services/UserService";
 import { UserContext } from "../../../contexts/UserContext";
 import {
-  displayError,
   formatError,
   showBugReportPopup,
   truncateNumber,
@@ -177,7 +176,7 @@ const EventDetailsScreen = ({ route }) => {
                 if (error.showBugReportDialog) {
                   showBugReportPopup(error);
                 } else {
-                  displayError(error);
+                  showErrorAlert(error);
                 }
                 setLoading(false);
               });

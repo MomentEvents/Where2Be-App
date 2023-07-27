@@ -31,15 +31,16 @@ import {
 import { CustomError } from "../../../../constants/error";
 import {
   checkIfStringIsEmail,
-  displayError,
+  showBugReportPopup,
 } from "../../../../helpers/helpers";
 import { AntDesign } from "@expo/vector-icons";
+import { AlertContext } from "../../../../contexts/AlertContext";
 
 const SignupFinalScreen = () => {
   const navigator = useNavigation<any>();
 
   const { signupValues, setSignupValues, userSignup } = useContext(AuthContext);
-
+  const {showErrorAlert} = useContext(AlertContext)
   const { setLoading } = useContext(ScreenContext);
 
   const onNavigateBack = () => {
@@ -89,8 +90,13 @@ const SignupFinalScreen = () => {
       .then(() => {
         // Do something. Maybe in context for is email verified
       })
-      .catch((error) => {
-        displayError(error);
+      .catch((error: CustomError) => {
+        if(error.showBugReportDialog){
+          showBugReportPopup(error)
+        }
+        else{
+          showErrorAlert(error)
+        }
       })
       .finally(() => {
         setLoading(false);
