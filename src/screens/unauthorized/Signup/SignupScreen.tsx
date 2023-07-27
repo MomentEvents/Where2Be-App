@@ -58,7 +58,7 @@ const SignupScreen = () => {
       return;
     }
     setLoading(true);
-    userSignup(username, displayName, password, selectedSchool.SchoolID, email)
+    userSignup(username, displayName, password, selectedSchool.SchoolID)
       .then(() => {
         setLoading(false);
         setDisplayCheckEmail(true);
@@ -191,23 +191,6 @@ const SignupScreen = () => {
               secureTextEntry={true}
               maxLength={CONSTRAINTS.User.Password.Max}
             />
-            <View style={styles.textInputContainer}>
-              <SchoolSearchSelector
-                onSelectSchool={(school: School) => {
-                  setSelectedSchool(school);
-                }}
-                textStyle={{
-                  color: COLORS.gray,
-                  fontFamily: CUSTOMFONT_REGULAR,
-                }}
-                buttonStyle={{
-                  borderRadius: 5,
-                  borderWidth: 0,
-                }}
-                initialText={"Select your school"}
-                maxLines={1}
-              />
-            </View>
             <View
               style={{
                 marginTop: 40,
