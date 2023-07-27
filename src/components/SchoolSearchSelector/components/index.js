@@ -145,7 +145,7 @@ const defaultProps = {
   overlayStyle: {},
   initValueTextStyle: {},
   cancelText: "cancel",
-  searchText: "search",
+  searchText: "Search",
   disabled: false,
   supportedOrientations: ["portrait", "landscape"],
   keyboardShouldPersistTaps: "always",

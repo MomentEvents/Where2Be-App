@@ -129,8 +129,8 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
             borderColor: COLORS.gray,
           }}
           cancelTextStyle={{
-            color: COLORS.white,
-            fontFamily: CUSTOMFONT_SEMIBOLD,
+            color: COLORS.purple,
+            fontFamily: CUSTOMFONT_REGULAR,
           }}
           cancelStyle={{
             backgroundColor: "rgba(10,10,10,0.85)",
