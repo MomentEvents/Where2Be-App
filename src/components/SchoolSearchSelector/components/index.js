@@ -329,6 +329,7 @@ export default class ModalSelector extends React.Component {
             styles.optionStyle,
             this.props.optionStyle,
             isLastItem && { borderBottomWidth: 0 },
+            !isLastItem && {borderBottomColor: COLORS.gray2, borderBottomWidth: .5}
           ]}
         >
           {component}

@@ -15,6 +15,7 @@ import { showBugReportPopup } from "../../helpers/helpers";
 import {
   CUSTOMFONT_BOLD,
   CUSTOMFONT_REGULAR,
+  CUSTOMFONT_SEMIBOLD,
   SIZES,
 } from "../../constants/theme";
 import { Colors } from "react-native/Libraries/NewAppScreen";
@@ -106,7 +107,7 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           }}
           frozenSearch={true}
           searchStyle={{
-            backgroundColor: "rgba(90,90,90,0.5)",
+            backgroundColor: "rgba(40,40,40,0.5)",
             paddingHorizontal: 10,
             marginTop: 10,
             marginBottom: 20,
@@ -119,20 +120,24 @@ const SchoolSearchSelector = (props: SchoolSelectorProps) => {
           }}
           data={selectionData}
           optionContainerStyle={{
-            backgroundColor: "rgba(60,60,60,0.9)",
+            backgroundColor: "rgba(10,10,10,0.85)",
             marginTop: insets.top + 10,
           }}
           optionTextStyle={{
             color: COLORS.white,
-            fontFamily: CUSTOMFONT_BOLD,
+            fontFamily: CUSTOMFONT_SEMIBOLD,
+            borderColor: COLORS.gray,
           }}
           cancelTextStyle={{
             color: COLORS.white,
-            fontFamily: CUSTOMFONT_BOLD,
+            fontFamily: CUSTOMFONT_SEMIBOLD,
           }}
           cancelStyle={{
-            backgroundColor: "rgba(60,60,60,0.9)",
+            backgroundColor: "rgba(10,10,10,0.85)",
             marginBottom: insets.bottom + 10,
+          }}
+          optionStyle={{
+            borderColor: COLORS.gray
           }}
           onChange={(option) => {
             props.onSelectSchool(schoolMap[option.key]);
