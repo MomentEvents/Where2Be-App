@@ -18,8 +18,13 @@ import { CustomError } from "../constants/error";
 import { showBugReportPopup } from "../helpers/helpers";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
-import { updateUserJoinEvent, updateUserShoutoutEvent } from "../redux/events/eventSlice";
+import {
+  updateEventMap,
+  updateUserJoinEvent,
+  updateUserShoutoutEvent,
+} from "../redux/events/eventSlice";
 import { AlertContext } from "./AlertContext";
+import { updateUserMap } from "../redux/users/userSlice";
 
 type EventContextType = {
   clientAddUserJoin: (eventID: string) => void;
@@ -44,7 +49,7 @@ export const EventContext = createContext<EventContextType>({
 export const EventProvider = ({ children }) => {
   const newPostedEventIDRef = useRef<string>();
 
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
 
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
@@ -55,88 +60,112 @@ export const EventProvider = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const clientAddUserJoin = (eventID: string) => {
-    dispatch(updateUserJoinEvent({
-      eventID: eventID,
-      doJoin: true
-    }))
+    dispatch(
+      updateUserJoinEvent({
+        eventID: eventID,
+        doJoin: true,
+      })
+    );
     addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
         didJoinedEventsChangeRef.current = true;
+        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: true } }));
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        showErrorAlert(error)
-        dispatch(updateUserJoinEvent({
-          eventID: eventID,
-          doJoin: false
-        }))
+        showErrorAlert(error);
+        dispatch(
+          updateUserJoinEvent({
+            eventID: eventID,
+            doJoin: false,
+          })
+        );
       });
   };
 
   const clientAddUserShoutout = (eventID: string) => {
-    dispatch(updateUserShoutoutEvent({
-      eventID: eventID,
-      doShoutout: true
-    }))
-    addUserShoutoutEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
-      eventID
-    ).catch((error: CustomError) => {
-      if (error.showBugReportDialog) {
-        showBugReportPopup(error);
-      }
-      showErrorAlert(error)
-      dispatch(updateUserShoutoutEvent({
+    dispatch(
+      updateUserShoutoutEvent({
         eventID: eventID,
-        doShoutout: false
-      }))
-    });
-  };
-
-  const clientRemoveUserJoin = (eventID: string) => {
-    dispatch(updateUserJoinEvent({
-      eventID: eventID,
-      doJoin: false
-    }))
-    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+        doShoutout: true,
+      })
+    );
+    addUserShoutoutEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
-        // We'll still keep the user's personal calendar the same in case the user is on the calendar screen and wants to keep it on the calendar
-        // didJoinedEventsChangeRef.current = true;
+        dispatch(
+          updateEventMap({ id: eventID, changes: { UserShoutout: true } })
+        );
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
-        showErrorAlert(error)
-        dispatch(updateUserJoinEvent({
-          eventID: eventID,
-          doJoin: true
-        }))
+        showErrorAlert(error);
+        dispatch(
+          updateUserShoutoutEvent({
+            eventID: eventID,
+            doShoutout: false,
+          })
+        );
+      });
+  };
+
+  const clientRemoveUserJoin = (eventID: string) => {
+    dispatch(
+      updateUserJoinEvent({
+        eventID: eventID,
+        doJoin: false,
+      })
+    );
+    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+      .then(() => {
+        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: false } }));
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        }
+        showErrorAlert(error);
+        dispatch(
+          updateUserJoinEvent({
+            eventID: eventID,
+            doJoin: true,
+          })
+        );
       });
   };
 
   const clientRemoveUserShoutout = (eventID: string) => {
-    dispatch(updateUserShoutoutEvent({
-      eventID: eventID,
-      doShoutout: false
-    }))
+    dispatch(
+      updateUserShoutoutEvent({
+        eventID: eventID,
+        doShoutout: false,
+      })
+    );
     removeUserShoutoutEvent(
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    ).catch((error: CustomError) => {
-      if (error.showBugReportDialog) {
-        showBugReportPopup(error);
-      }
-      showErrorAlert(error)
-      dispatch(updateUserShoutoutEvent({
-        eventID: eventID,
-        doShoutout: true
-      }))
-    });
+    )
+      .then(() => {
+        dispatch(
+          updateEventMap({ id: eventID, changes: { UserShoutout: false } })
+        );
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        }
+        showErrorAlert(error);
+        dispatch(
+          updateUserShoutoutEvent({
+            eventID: eventID,
+            doShoutout: true,
+          })
+        );
+      });
   };
 
   return (
@@ -148,7 +177,7 @@ export const EventProvider = ({ children }) => {
         clientRemoveUserShoutout,
         didJoinedEventsChangeRef,
         didHostedEventsChangeRef,
-        newPostedEventHomePageRef
+        newPostedEventHomePageRef,
       }}
     >
       {children}
