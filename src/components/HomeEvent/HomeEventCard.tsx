@@ -141,9 +141,7 @@ const HomeEventCard = ({
   };
 
   const pullData = async () => {
-    if (!storedEvent) {
-      dispatch(updateEventMap({ id: event.EventID, changes: event }));
-    }
+    dispatch(updateEventMap({ id: event.EventID, changes: event }));
     setFetchedEvent(true);
   };
 

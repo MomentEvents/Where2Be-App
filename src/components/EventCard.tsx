@@ -46,7 +46,9 @@ const EventCard = ({
   const navigation = useNavigation<any>();
 
   const dispatch = useDispatch<AppDispatch>();
-  const storedEvent = useSelector((state: RootState) => selectEventByID(state, event.EventID));
+  const storedEvent = useSelector((state: RootState) =>
+    selectEventByID(state, event.EventID)
+  );
 
   const [fetchedEvent, setFetchedEvent] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -54,7 +56,7 @@ const EventCard = ({
   let cardWidth = width ? width : isBigCard ? 330 : 270;
   let cardHeight = height ? height : isBigCard ? 240 : 250;
 
-  console.log("Rendering " + event.Title + " Card\n")
+  console.log("Rendering " + event.Title + " Card\n");
 
   if (cardWidth < 0) {
     cardWidth = 40;
@@ -79,9 +81,7 @@ const EventCard = ({
   };
 
   const pullData = async () => {
-    if (!storedEvent) {
-      dispatch(updateEventMap({id: event.EventID, changes: event}))
-    }
+    dispatch(updateEventMap({ id: event.EventID, changes: event }));
     setFetchedEvent(true);
   };
 
@@ -163,8 +163,8 @@ const EventCard = ({
   }
 
   function isWithin24hours(dateCheck: Date) {
-    if(!dateCheck){
-      return undefined
+    if (!dateCheck) {
+      return undefined;
     }
     const today = new Date();
     if (dateCheck > today) {
@@ -224,9 +224,7 @@ const EventCard = ({
             }}
           >
             <View style={{ flex: 1, flexDirection: "row", marginBottom: 5 }}>
-              <DateTextComponent
-                date={new Date(storedEvent.StartDateTime)}
-              />
+              <DateTextComponent date={new Date(storedEvent.StartDateTime)} />
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <McText h3 numberOfLines={1}>
                   {storedEvent?.Title}
@@ -241,22 +239,22 @@ const EventCard = ({
                   >
                     <McText body4 color={COLORS.purple} numberOfLines={1}>
                       {isBigCard
-                        ? isWithin24hours(
-                            new Date(storedEvent.StartDateTime)
-                          )
+                        ? isWithin24hours(new Date(storedEvent.StartDateTime))
                           ? moment(
                               new Date(storedEvent.StartDateTime)
                             ).fromNow()
-                          : (moment(
-                              new Date(storedEvent?.StartDateTime)
-                            ).format("h:mm a") +
-                            (storedEvent.EndDateTime ? (" - " +
-                            moment(
-                              new Date(storedEvent.EndDateTime)
-                            ).format("h:mm a")) : ""))
-                        : moment(
-                            new Date(storedEvent.StartDateTime)
-                          ).format("h:mm a")}
+                          : moment(new Date(storedEvent?.StartDateTime)).format(
+                              "h:mm a"
+                            ) +
+                            (storedEvent.EndDateTime
+                              ? " - " +
+                                moment(
+                                  new Date(storedEvent.EndDateTime)
+                                ).format("h:mm a")
+                              : "")
+                        : moment(new Date(storedEvent.StartDateTime)).format(
+                            "h:mm a"
+                          )}
                     </McText>
                   </View>
                   <View
@@ -319,9 +317,7 @@ const EventCard = ({
                             : COLORS.lightGray,
                         }}
                       >
-                        {truncateNumber(
-                          storedEvent?.NumShoutouts
-                        )}
+                        {truncateNumber(storedEvent?.NumShoutouts)}
                       </McText>
                     </View>
                   </View>
