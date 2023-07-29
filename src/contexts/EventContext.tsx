@@ -59,6 +59,10 @@ export const EventProvider = ({ children }) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const timeoutsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+
+
+
   const clientAddUserJoin = (eventID: string) => {
     dispatch(
       updateUserJoinEvent({
@@ -80,6 +84,31 @@ export const EventProvider = ({ children }) => {
           updateUserJoinEvent({
             eventID: eventID,
             doJoin: false,
+          })
+        );
+      });
+  };
+
+  const clientRemoveUserJoin = (eventID: string) => {
+    dispatch(
+      updateUserJoinEvent({
+        eventID: eventID,
+        doJoin: false,
+      })
+    );
+    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+      .then(() => {
+        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: false } }));
+      })
+      .catch((error: CustomError) => {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        }
+        showErrorAlert(error);
+        dispatch(
+          updateUserJoinEvent({
+            eventID: eventID,
+            doJoin: true,
           })
         );
       });
@@ -112,30 +141,6 @@ export const EventProvider = ({ children }) => {
       });
   };
 
-  const clientRemoveUserJoin = (eventID: string) => {
-    dispatch(
-      updateUserJoinEvent({
-        eventID: eventID,
-        doJoin: false,
-      })
-    );
-    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
-      .then(() => {
-        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: false } }));
-      })
-      .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
-        }
-        showErrorAlert(error);
-        dispatch(
-          updateUserJoinEvent({
-            eventID: eventID,
-            doJoin: true,
-          })
-        );
-      });
-  };
 
   const clientRemoveUserShoutout = (eventID: string) => {
     dispatch(
