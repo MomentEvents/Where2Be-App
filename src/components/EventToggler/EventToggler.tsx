@@ -46,16 +46,16 @@ type EventTogglerProps = {
 
 const EventToggler = (props: EventTogglerProps) => {
   const { showErrorAlert } = useContext(AlertContext);
-  const { userToken, isAdmin } =
-    useContext(UserContext);
-    
-    const dispatch = useDispatch<AppDispatch>();
+  const { userToken, isAdmin } = useContext(UserContext);
+
+  const dispatch = useDispatch<AppDispatch>();
   const { didHostedEventsChangeRef, didJoinedEventsChangeRef } =
     useContext(EventContext);
 
   const [pulledPastEvents, setPulledPastEvents] = useState<Event[]>(null);
   const [pulledFutureEvents, setPulledFutureEvents] = useState<Event[]>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const isRefreshingRef = useRef(false);
 
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
@@ -215,10 +215,12 @@ const EventToggler = (props: EventTogglerProps) => {
                 cursor
               );
             }
-            setPulledFutureEvents((currentEvents) => [
-              ...currentEvents,
-              ...additionalEvents,
-            ]);
+            if (!isRefreshingRef.current) {
+              setPulledFutureEvents((currentEvents) => [
+                ...currentEvents,
+                ...additionalEvents,
+              ]);
+            }
           } else if (!isFutureToggle && canLoadPastData.current) {
             if (props.eventsToPull === EVENT_TOGGLER.JoinedEvents) {
               additionalEvents = await getUserJoinedPastEvents(
@@ -233,10 +235,12 @@ const EventToggler = (props: EventTogglerProps) => {
                 cursor
               );
             }
-            setPulledPastEvents((currentEvents) => [
-              ...currentEvents,
-              ...additionalEvents,
-            ]);
+            if (!isRefreshingRef.current) {
+              setPulledPastEvents((currentEvents) => [
+                ...currentEvents,
+                ...additionalEvents,
+              ]);
+            }
           }
           console.log(JSON.stringify(additionalEvents));
           if (additionalEvents.length === 0) {
@@ -270,7 +274,9 @@ const EventToggler = (props: EventTogglerProps) => {
           console.log("GOT USER\n\n");
           console.log(JSON.stringify(pulledUser));
           setUserPulled(true);
-          dispatch(updateUserMap({id: props.selectedUserID, changes: pulledUser}))
+          dispatch(
+            updateUserMap({ id: props.selectedUserID, changes: pulledUser })
+          );
         })
         .catch((error: CustomError) => {
           if (!errorThrown) {
@@ -294,9 +300,11 @@ const EventToggler = (props: EventTogglerProps) => {
           .then((events: Event[]) => {
             setPulledFutureEvents(events);
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
           })
           .catch((error: CustomError) => {
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
             setShowRetry(true);
             if (!errorThrown) {
               errorThrown = true;
@@ -313,9 +321,11 @@ const EventToggler = (props: EventTogglerProps) => {
           .then((events: Event[]) => {
             setPulledFutureEvents(events);
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
           })
           .catch((error: CustomError) => {
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
             setShowRetry(true);
             if (!errorThrown) {
               errorThrown = true;
@@ -330,9 +340,11 @@ const EventToggler = (props: EventTogglerProps) => {
           .then((events: Event[]) => {
             setPulledPastEvents(events);
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
           })
           .catch((error: CustomError) => {
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
             setShowRetry(true);
             if (!errorThrown) {
               errorThrown = true;
@@ -346,9 +358,11 @@ const EventToggler = (props: EventTogglerProps) => {
           .then((events: Event[]) => {
             setPulledPastEvents(events);
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
           })
           .catch((error: CustomError) => {
             setIsRefreshing(false);
+            isRefreshingRef.current = false;
             setShowRetry(true);
             if (!errorThrown) {
               errorThrown = true;
@@ -365,6 +379,8 @@ const EventToggler = (props: EventTogglerProps) => {
     setPulledFutureEvents(null);
     setPulledPastEvents(null);
     setIsRefreshing(true);
+    isRefreshingRef.current = true;
+
     canLoadFutureData.current = true;
     canLoadPastData.current = true;
     pullData(true);
@@ -394,6 +410,7 @@ const EventToggler = (props: EventTogglerProps) => {
   useEffect(() => {
     if (isRefreshing) {
       setIsRefreshing(!userPulled);
+      isRefreshingRef.current = !userPulled;
     }
   }, [userPulled]);
 
