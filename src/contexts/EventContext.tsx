@@ -49,7 +49,7 @@ export const EventContext = createContext<EventContextType>({
 export const EventProvider = ({ children }) => {
   const newPostedEventIDRef = useRef<string>();
 
-  const { showErrorAlert } = useContext(AlertContext);
+  const { showTextAlert, showErrorAlert } = useContext(AlertContext);
 
   const didJoinedEventsChangeRef = useRef(false);
   const didHostedEventsChangeRef = useRef(false);
@@ -59,68 +59,84 @@ export const EventProvider = ({ children }) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const timeoutsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const lastJoinedActionEventIDToTime = useRef<{ [key: string]: Date }>({});
+  const lastUnjoinedActionEventIDToTime = useRef<{ [key: string]: Date }>({});
+  const lastShoutedOutActionEventIDToTime = useRef<{ [key: string]: Date }>({});
+  const lastUnshoutedOutActionEventIDToTime = useRef<{ [key: string]: Date }>(
+    {}
+  );
 
+  const rateLimitInSeconds = 1;
 
+  const checkLastAction = (
+    type: "join" | "unjoin" | "shoutout" | "unshoutout",
+    eventID: string
+  ): boolean => {
+    const rightNow = new Date();
+    let checkDate: Date;
+
+    if (type === "join") {
+      checkDate = lastJoinedActionEventIDToTime.current[eventID];
+    } else if (type === "unjoin") {
+      checkDate = lastUnjoinedActionEventIDToTime.current[eventID];
+    } else if (type === "shoutout") {
+      checkDate = lastShoutedOutActionEventIDToTime.current[eventID];
+    } else {
+      //unshoutout
+      checkDate = lastUnshoutedOutActionEventIDToTime.current[eventID];
+    }
+
+    if (!checkDate) {
+      // action performed for the first time
+      if (type === "join") {
+        lastJoinedActionEventIDToTime.current[eventID] = rightNow;
+      } else if (type === "unjoin") {
+        lastUnjoinedActionEventIDToTime.current[eventID] = rightNow;
+      } else if (type === "shoutout") {
+        lastShoutedOutActionEventIDToTime.current[eventID] = rightNow;
+      } else {
+        //unshoutout
+        lastUnshoutedOutActionEventIDToTime.current[eventID] = rightNow;
+      }
+      return true;
+    }
+
+    console.log(rightNow.getTime());
+    console.log(checkDate.getTime());
+
+    console.log(rightNow.getTime() - checkDate.getTime());
+    console.log(rateLimitInSeconds * 1000);
+
+    if(rightNow.getTime() - checkDate.getTime() > rateLimitInSeconds * 1000){
+      if (type === "join") {
+        lastJoinedActionEventIDToTime.current[eventID] = rightNow;
+      } else if (type === "unjoin") {
+        lastUnjoinedActionEventIDToTime.current[eventID] = rightNow;
+      } else if (type === "shoutout") {
+        lastShoutedOutActionEventIDToTime.current[eventID] = rightNow;
+      } else {
+        //unshoutout
+        lastUnshoutedOutActionEventIDToTime.current[eventID] = rightNow;
+      }
+      return true
+    }
+
+    return false
+  };
 
   const clientAddUserJoin = (eventID: string) => {
-    clearTimeout(timeoutsRef.current.get(eventID));
-  
-    const initialState = !didJoinedEventsChangeRef.current; // save the initial state
-  
+    if (!checkLastAction("join", eventID)) {
+      return;
+    }
     dispatch(
       updateUserJoinEvent({
         eventID: eventID,
         doJoin: true,
       })
     );
-  
-    timeoutsRef.current.set(
-      eventID,
-      setTimeout(() => {
-        if (didJoinedEventsChangeRef.current !== initialState) {
-          // state has changed, call removeUserJoin
-          clientRemoveUserJoin(eventID);
-        }
-      }, 500)
-    );
-  };
-  
-  const clientRemoveUserJoin = (eventID: string) => {
-    clearTimeout(timeoutsRef.current.get(eventID));
-  
-    const initialState = didJoinedEventsChangeRef.current; // save the initial state
-  
-    dispatch(
-      updateUserJoinEvent({
-        eventID: eventID,
-        doJoin: false,
-      })
-    );
-  
-    timeoutsRef.current.set(
-      eventID,
-      setTimeout(() => {
-        if (didJoinedEventsChangeRef.current !== initialState) {
-          // state has changed, call addUserJoin
-          clientAddUserJoin(eventID);
-        }
-      }, 500)
-    );
-  };
-
-  const clientAddUserShoutout = (eventID: string) => {
-    dispatch(
-      updateUserShoutoutEvent({
-        eventID: eventID,
-        doShoutout: true,
-      })
-    );
-    addUserShoutoutEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+    addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
-        dispatch(
-          updateEventMap({ id: eventID, changes: { UserShoutout: true } })
-        );
+        didJoinedEventsChangeRef.current = true;
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
@@ -128,16 +144,76 @@ export const EventProvider = ({ children }) => {
         }
         showErrorAlert(error);
         dispatch(
-          updateUserShoutoutEvent({
+          updateUserJoinEvent({
             eventID: eventID,
-            doShoutout: false,
+            doJoin: false,
           })
         );
       });
   };
 
+  const clientAddUserShoutout = (eventID: string) => {
+    if (!checkLastAction("shoutout", eventID)) {
+      return;
+    }
+    dispatch(
+      updateUserShoutoutEvent({
+        eventID: eventID,
+        doShoutout: true,
+      })
+    );
+    addUserShoutoutEvent(
+      userToken.UserAccessToken,
+      userToken.UserID,
+      eventID
+    ).catch((error: CustomError) => {
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
+      }
+      showErrorAlert(error);
+      dispatch(
+        updateUserShoutoutEvent({
+          eventID: eventID,
+          doShoutout: false,
+        })
+      );
+    });
+  };
+
+  const clientRemoveUserJoin = (eventID: string) => {
+    if (!checkLastAction("unjoin", eventID)) {
+      return;
+    }
+
+    dispatch(
+      updateUserJoinEvent({
+        eventID: eventID,
+        doJoin: false,
+      })
+    );
+    removeUserJoinEvent(
+      userToken.UserAccessToken,
+      userToken.UserID,
+      eventID
+    ).catch((error: CustomError) => {
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
+      }
+      showErrorAlert(error);
+      dispatch(
+        updateUserJoinEvent({
+          eventID: eventID,
+          doJoin: true,
+        })
+      );
+    });
+  };
 
   const clientRemoveUserShoutout = (eventID: string) => {
+    if (!checkLastAction("unshoutout", eventID)) {
+      return;
+    }
+
     dispatch(
       updateUserShoutoutEvent({
         eventID: eventID,
@@ -148,24 +224,18 @@ export const EventProvider = ({ children }) => {
       userToken.UserAccessToken,
       userToken.UserID,
       eventID
-    )
-      .then(() => {
-        dispatch(
-          updateEventMap({ id: eventID, changes: { UserShoutout: false } })
-        );
-      })
-      .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
-        }
-        showErrorAlert(error);
-        dispatch(
-          updateUserShoutoutEvent({
-            eventID: eventID,
-            doShoutout: true,
-          })
-        );
-      });
+    ).catch((error: CustomError) => {
+      if (error.showBugReportDialog) {
+        showBugReportPopup(error);
+      }
+      showErrorAlert(error);
+      dispatch(
+        updateUserShoutoutEvent({
+          eventID: eventID,
+          doShoutout: true,
+        })
+      );
+    });
   };
 
   return (

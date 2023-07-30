@@ -59,6 +59,8 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
+  const isFirstTimeLoadingRef = useRef(false)
+
   const insets = useSafeAreaInsets();
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
@@ -69,8 +71,6 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const canLoadPastData = useRef(true);
   const canLoadFutureData = useRef(true);
-
-  const [allowRefreshControl, setAllowRefreshControl] = useState(false)
 
   const isFocused = useIsFocused();
 
@@ -416,13 +416,6 @@ const EventToggler = (props: EventTogglerProps) => {
     }
   }, [userPulled]);
 
-  useEffect(() => {
-    if (pulledFutureEvents && pulledPastEvents && !allowRefreshControl){
-      // Prevents events to be refreshed for the first time when they're not loaded
-      setAllowRefreshControl(true)
-    }
-  }, [pulledFutureEvents, pulledPastEvents])
-
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -435,13 +428,13 @@ const EventToggler = (props: EventTogglerProps) => {
         data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
         ListHeaderComponent={ListHeader}
         renderItem={renderItem}
-        refreshControl={allowRefreshControl ?
+        refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
             refreshing={isRefreshing}
             onRefresh={onRefresh}
             style={{ backgroundColor: COLORS.trueBlack }}
-          /> : undefined
+          />
         }
         style={{ backgroundColor: COLORS.trueBlack }}
         ListEmptyComponent={

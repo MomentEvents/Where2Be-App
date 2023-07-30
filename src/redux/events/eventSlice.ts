@@ -32,6 +32,12 @@ const eventSlice = createSlice({
         ...eventToUpdate,
         ...action.payload.changes,
       };
+      if(eventToUpdate?.UserJoin && eventToUpdate?.NumJoins <= 0){
+        eventToUpdate.NumJoins = 1
+      }
+      if(eventToUpdate?.UserShoutout && eventToUpdate?.NumShoutouts <= 0){
+        eventToUpdate.NumShoutouts = 1
+      }
     },
     updateEventNumericField: (
       state,
@@ -60,6 +66,13 @@ const eventSlice = createSlice({
         event.UserJoin = false;
         event.NumJoins = event.NumJoins - 1;
       }
+
+      if(!action.payload.doJoin && event.NumJoins < 0){
+        event.NumJoins = 1;
+      }
+      else if(action.payload.doJoin && event.NumJoins <= 0){
+        event.NumShoutouts = 0
+      }
     },
     updateUserShoutoutEvent: (
       state,
@@ -76,6 +89,13 @@ const eventSlice = createSlice({
       } else {
         event.UserShoutout = false;
         event.NumShoutouts = event.NumShoutouts - 1;
+      }
+
+      if(!action.payload.doShoutout && event.NumShoutouts < 0){
+        event.NumJoins = 1;
+      }
+      else if(action.payload.doShoutout && event.NumShoutouts <= 0){
+        event.NumShoutouts = 0
       }
     },
     setEventInterestsMap: (

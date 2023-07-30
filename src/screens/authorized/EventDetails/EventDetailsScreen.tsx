@@ -209,6 +209,7 @@ const EventDetailsScreen = ({ route }) => {
     var gotError = false;
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
+        console.log("CURRENT EVENT JOINED CLICK: ", beforeLoadJoin.current)
         if (beforeLoadJoin.current === undefined) {
           // Join button has not been clicked. Do nothing
         } else if (beforeLoadJoin.current && !pulledEvent.UserJoin) {
@@ -221,6 +222,8 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumJoins = pulledEvent.NumJoins - 1;
         }
 
+        console.log("CURRENT EVENT SHOUTOUT CLICK: ", beforeLoadShoutout.current)
+
         if (beforeLoadShoutout.current === undefined) {
           // Join button has not been clicked. Do nothing
         } else if (beforeLoadShoutout.current && !pulledEvent.UserShoutout) {
@@ -232,6 +235,29 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.UserShoutout = false;
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
+
+        console.log("BEFORE SYNCED EVENT\n\n", pulledEvent)
+        console.log("STORED EVENT\n\n", storedEvent)
+        if(beforeLoadShoutout.current === undefined && beforeLoadJoin.current === undefined && storedEvent && !isRefreshing){
+          // In case results differ by the time the user has pulled the event vs interacting with it.
+          pulledEvent.UserJoin = storedEvent.UserJoin
+          pulledEvent.UserShoutout = storedEvent.UserShoutout
+          if(pulledEvent.UserJoin && pulledEvent.NumJoins <= 0){
+            pulledEvent.NumJoins = 1
+          }
+          else if(pulledEvent.NumJoins < 0){
+            pulledEvent.NumJoins = 0
+          }
+          if(pulledEvent.UserShoutout && pulledEvent.NumShoutouts <= 0){
+            pulledEvent.NumShoutouts = 1
+          }
+          else if(pulledEvent.NumShoutouts < 0){
+            pulledEvent.NumShoutouts = 0
+          }
+        }
+
+
+        console.log("AFTER SYNCED EVENT\n\n",pulledEvent)
         dispatch(updateEventMap({id: eventID, changes: pulledEvent}))
         if (!user|| useRefRefreshing.current) {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
