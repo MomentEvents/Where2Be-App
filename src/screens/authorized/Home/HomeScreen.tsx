@@ -19,7 +19,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
 import { getAllHomePageEventsWithHosts, getAndCleanReadEventIDs, saveReadEventIDs } from "../../../services/EventService";
-import { showBugReportPopup } from "../../../helpers/helpers";
+import { displayError, formatError, showBugReportPopup } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";

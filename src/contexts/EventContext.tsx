@@ -64,54 +64,49 @@ export const EventProvider = ({ children }) => {
 
 
   const clientAddUserJoin = (eventID: string) => {
+    clearTimeout(timeoutsRef.current.get(eventID));
+  
+    const initialState = !didJoinedEventsChangeRef.current; // save the initial state
+  
     dispatch(
       updateUserJoinEvent({
         eventID: eventID,
         doJoin: true,
       })
     );
-    addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
-      .then(() => {
-        didJoinedEventsChangeRef.current = true;
-        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: true } }));
-      })
-      .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
+  
+    timeoutsRef.current.set(
+      eventID,
+      setTimeout(() => {
+        if (didJoinedEventsChangeRef.current !== initialState) {
+          // state has changed, call removeUserJoin
+          clientRemoveUserJoin(eventID);
         }
-        showErrorAlert(error);
-        dispatch(
-          updateUserJoinEvent({
-            eventID: eventID,
-            doJoin: false,
-          })
-        );
-      });
+      }, 500)
+    );
   };
-
+  
   const clientRemoveUserJoin = (eventID: string) => {
+    clearTimeout(timeoutsRef.current.get(eventID));
+  
+    const initialState = didJoinedEventsChangeRef.current; // save the initial state
+  
     dispatch(
       updateUserJoinEvent({
         eventID: eventID,
         doJoin: false,
       })
     );
-    removeUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
-      .then(() => {
-        dispatch(updateEventMap({ id: eventID, changes: { UserJoin: false } }));
-      })
-      .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
+  
+    timeoutsRef.current.set(
+      eventID,
+      setTimeout(() => {
+        if (didJoinedEventsChangeRef.current !== initialState) {
+          // state has changed, call addUserJoin
+          clientAddUserJoin(eventID);
         }
-        showErrorAlert(error);
-        dispatch(
-          updateUserJoinEvent({
-            eventID: eventID,
-            doJoin: true,
-          })
-        );
-      });
+      }, 500)
+    );
   };
 
   const clientAddUserShoutout = (eventID: string) => {

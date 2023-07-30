@@ -46,6 +46,8 @@ const EventViewer = (props: EventViewerProps) => {
 
   const [showRetry, setShowRetry] = useState(false);
 
+  const [allowRefreshControl, setAllowRefreshControl] = useState(false)
+
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
   const pullData = async () => {
@@ -119,6 +121,13 @@ const EventViewer = (props: EventViewerProps) => {
   };
 
   useEffect(() => {
+    if(!allowRefreshControl && !isLoadingEvents){
+      // Prevents first time refreshes for double queries
+      setAllowRefreshControl(true)
+    }
+  }, [isLoadingEvents])
+
+  useEffect(() => {
     pullData();
   }, []);
 
@@ -131,11 +140,12 @@ const EventViewer = (props: EventViewerProps) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       refreshControl={
+        allowRefreshControl ? 
         <RefreshControl
           tintColor={COLORS.white}
           refreshing={isRefreshing}
           onRefresh={onRefresh}
-        />
+        /> : undefined
       }
       style={{ backgroundColor: COLORS.trueBlack }}
     >
@@ -151,7 +161,7 @@ const EventViewer = (props: EventViewerProps) => {
         />
       )}
 
-      {!showRetry && isLoadingEvents && !isRefreshing && (
+      {!showRetry && isLoadingEvents && !isRefreshing &&(
         // LOAD THIS
         <ActivityIndicator
           color={COLORS.white}
