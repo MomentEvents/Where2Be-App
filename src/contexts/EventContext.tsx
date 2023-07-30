@@ -134,6 +134,7 @@ export const EventProvider = ({ children }) => {
         doJoin: true,
       })
     );
+    didJoinedEventsChangeRef.current = true;
     addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
       .then(() => {
         didJoinedEventsChangeRef.current = true;
