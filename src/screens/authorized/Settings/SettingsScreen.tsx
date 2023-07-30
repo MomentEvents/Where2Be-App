@@ -134,7 +134,7 @@ const SettingsScreen = () => {
           onPress: () => {
             console.log("Yes Pressed");
             setLoading(true);
-            userLogout()
+            userLogout(true)
               .then(() => {
                 setLoading(false);
               })

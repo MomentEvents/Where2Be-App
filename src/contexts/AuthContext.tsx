@@ -12,7 +12,7 @@ type AuthContextType = {
     password: string,
     email: string
   ) => Promise<void>;
-  userLogout: () => Promise<void>;
+  userLogout: (doUnregisterPushToken: boolean) => Promise<void>;
   signupValues: SignupValues;
   setSignupValues: React.Dispatch<React.SetStateAction<SignupValues>>
 };
@@ -56,9 +56,11 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  const userLogout = async () => {
-    const token = await getPushNotificationToken()
-    await unregisterPushNotificationToken(userToken.UserAccessToken, userToken.UserID, token)
+  const userLogout = async (doUnregisterPushToken: boolean) => {
+    if(doUnregisterPushToken){
+      const token = await getPushNotificationToken()
+      await unregisterPushNotificationToken(userToken.UserAccessToken, userToken.UserID, token)
+    }
     await logout();
     await setContextVarsBasedOnToken(null);
   };

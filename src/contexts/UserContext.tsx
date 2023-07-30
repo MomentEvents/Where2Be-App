@@ -93,7 +93,7 @@ export const UserProvider = ({ children }) => {
 
   const lastFollowedActionEventIDToTime = useRef<{ [key: string]: Date }>({});
   const lastUnfollowedActionEventIDToTime = useRef<{ [key: string]: Date }>({});
-  const rateLimitInSeconds = 3;
+  const rateLimitInSeconds = 1;
 
   const checkLastAction = (
     type: "follow" | "unfollow",

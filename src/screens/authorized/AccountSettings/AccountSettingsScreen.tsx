@@ -46,7 +46,8 @@ const AccountSettingsScreen = () => {
             setLoading(true);
             deleteUser(userToken.UserAccessToken, userToken.UserID)
               .then(() => {
-                userLogout()
+                console.log("Logging out")
+                userLogout(false)
                   .then(() => {
                     setLoading(false);
                   })
