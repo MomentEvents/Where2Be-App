@@ -26,7 +26,7 @@ export async function getUser(
     return undefined
   })
 
-  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not fetch user by user id", true);
+  const pulledUser: UserResponse = await responseHandler<UserResponse>(response, "Could not get user", true);
   const convertedUser: User = userResponseToUser(pulledUser);
 
   return convertedUser;
