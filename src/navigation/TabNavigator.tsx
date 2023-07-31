@@ -7,12 +7,12 @@ import MyCalendarScreen from "../screens/authorized/MyCalendar/MyCalendarScreen"
 import ExploreEventsScreen from "../screens/authorized/ExploreEvents/ExploreEventsScreen";
 import SearchScreen from "../screens/authorized/Search/SearchScreen";
 import MyProfileScreen from "../screens/authorized/MyProfile/MyProfileScreen";
-import { MaterialIcons } from '@expo/vector-icons'; 
-import { Octicons } from '@expo/vector-icons'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator();
 // constants used for rendering images
 const EVENTS = "Events";
 const SEARCH = "Search";
+const EXPLORE = "Explore";
 const FAVORITES = "Favorites";
 const PROFILE = "Profile";
 
@@ -35,13 +36,32 @@ const TabIcon = ({ focused, icon }) => {
           )}
         </View>
       );
+
     case SEARCH:
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
-            <MaterialCommunityIcons name="compass-outline" size={30} color="white" />
+            <MaterialIcons name="search" size={30} color="white" />
           ) : (
-            <MaterialCommunityIcons name="compass-outline" size={30} color="gray" />
+            <MaterialIcons name="search" size={30} color="gray" />
+          )}
+        </View>
+      );
+    case EXPLORE:
+      return (
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {focused ? (
+            <MaterialCommunityIcons
+              name="compass-outline"
+              size={30}
+              color="white"
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="compass-outline"
+              size={30}
+              color="gray"
+            />
           )}
         </View>
       );
@@ -67,35 +87,35 @@ const TabIcon = ({ focused, icon }) => {
       );
   }
   return (
-    <View style={{ alignItems: "center", justifyContent: "center" }}>
-    </View>
+    <View style={{ alignItems: "center", justifyContent: "center" }}></View>
   );
 };
 
 const TabNavigator = ({ params }) => {
-
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
-    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log('Notification received in foreground:', notification);
-    });
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("Notification received in foreground:", notification);
+      });
 
     // This listener is fired whenever a user taps on or interacts with a notification
-    const responseSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-      const { notification } = response;
-      console.log('User interacted with this notification:', notification);
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const { notification } = response;
+        console.log("User interacted with this notification:", notification);
 
-      // The notification's data is where you put your own custom payload
-      const { data } = notification.request.content;
+        // The notification's data is where you put your own custom payload
+        const { data } = notification.request.content;
 
-      if(data.action === "ViewEventDetails"){
-        navigation.push(SCREENS.EventDetails, {eventID: data.event_id})
-      }
+        if (data.action === "ViewEventDetails") {
+          navigation.push(SCREENS.EventDetails, { eventID: data.event_id });
+        }
 
-      console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data))
-    });
+        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
+      });
 
     return () => {
       // Clean up on unmount
@@ -103,7 +123,7 @@ const TabNavigator = ({ params }) => {
       Notifications.removeNotificationSubscription(responseSubscription);
     };
   }, []);
-  
+
   const insets = useSafeAreaInsets();
 
   return (
@@ -139,12 +159,22 @@ const TabNavigator = ({ params }) => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name={SCREENS.Search}
-        component={ExploreEventsScreen}
+        component={SearchScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={SEARCH} />
+          ),
+        }}
+      /> */}
+
+      <Tab.Screen
+        name={SCREENS.ExploreEvents}
+        component={ExploreEventsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon={EXPLORE} />
           ),
         }}
       />

@@ -18,8 +18,16 @@ import { COLORS, SCREENS, User, Event, icons, SIZES } from "../../../constants";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import HomeEvent from "../../../components/HomeEvent/HomeEvent";
 import { UserContext } from "../../../contexts/UserContext";
-import { getAllHomePageEventsWithHosts, getAndCleanReadEventIDs, saveReadEventIDs } from "../../../services/EventService";
-import { displayError, formatError, showBugReportPopup } from "../../../helpers/helpers";
+import {
+  getAllHomePageEventsWithHosts,
+  getAndCleanReadEventIDs,
+  saveReadEventIDs,
+} from "../../../services/EventService";
+import {
+  displayError,
+  formatError,
+  showBugReportPopup,
+} from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
 import { McText } from "../../../components/Styled";
@@ -44,7 +52,9 @@ const HomeScreen = () => {
   const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
 
   const { currentSchool, userToken } = useContext(UserContext);
-  const currentUser = useSelector((state: RootState) => selectUserByID(state, userToken.UserID));
+  const currentUser = useSelector((state: RootState) =>
+    selectUserByID(state, userToken.UserID)
+  );
 
   const insets = useSafeAreaInsets();
 
@@ -99,9 +109,7 @@ const HomeScreen = () => {
 
       console.log("Queued EventIDs: ", sentQueuedEventIDs);
 
-      saveReadEventIDs(
-        sentQueuedEventIDs
-      )
+      saveReadEventIDs(sentQueuedEventIDs)
         .then(() => {
           queuedEventIDs.current.splice(0, sentQueuedEventIDs.length);
         })
@@ -136,14 +144,14 @@ const HomeScreen = () => {
             Reason: undefined,
           };
           const newList = eventsAndHosts;
-          eventsAndHosts.unshift(newHostEvent)
-          setEventsAndHosts(newList)
+          eventsAndHosts.unshift(newHostEvent);
+          setEventsAndHosts(newList);
           newPostedEventHomePageRef.current = null;
           if (flatListRef.current) {
             flatListRef.current.scrollToOffset({ offset: 0, animated: true });
           }
         } catch (e) {
-          console.warn("ERROR PUTTING EVENT ON HOME PAGE: ", e)
+          console.warn("ERROR PUTTING EVENT ON HOME PAGE: ", e);
         }
       }
     }
@@ -184,11 +192,12 @@ const HomeScreen = () => {
       }
       const viewedEvent: Event = viewableItems[0].item.Event;
       console.log(viewedEvent.EventID);
-      if (
-        !viewedEventIDs.current.has(viewedEvent.EventID)
-      ) {
-        viewedEventIDs.current.add(viewedEvent.EventID)
-        queuedEventIDs.current.push({eventID: viewedEvent.EventID, startDateTime: new Date(viewedEvent.StartDateTime)});
+      if (!viewedEventIDs.current.has(viewedEvent.EventID)) {
+        viewedEventIDs.current.add(viewedEvent.EventID);
+        queuedEventIDs.current.push({
+          eventID: viewedEvent.EventID,
+          startDateTime: new Date(viewedEvent.StartDateTime),
+        });
         // Update API to say that user viewed the event
         console.log(
           "user has viewed event " +
@@ -213,11 +222,13 @@ const HomeScreen = () => {
       Event: Event;
       Reason: string;
     }[]
-  ): Promise<{
-    Host: User;
-    Event: Event;
-    Reason: string;
-}[]> => {
+  ): Promise<
+    {
+      Host: User;
+      Event: Event;
+      Reason: string;
+    }[]
+  > => {
     const viewedEvents: {
       Host: User;
       Event: Event;
@@ -231,19 +242,19 @@ const HomeScreen = () => {
 
     const storedViewedEventIDs = await getAndCleanReadEventIDs();
 
-    console.log(storedViewedEventIDs)
+    console.log(storedViewedEventIDs);
 
-    viewedEventIDs.current = new Set(storedViewedEventIDs)
+    viewedEventIDs.current = new Set(storedViewedEventIDs);
 
     for (var i = 0; i < data.length; i++) {
-      if (data[i].Event.UserFollowHost){
-        data[i].Reason = "From an account you follow"
+      if (data[i].Event.UserFollowHost) {
+        data[i].Reason = "From an account you follow";
       }
       if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
-        if(!data[i].Event.UserFollowHost){
-          data[i].Reason = "An event you have not seen before"
+        if (!data[i].Event.UserFollowHost) {
+          data[i].Reason = "An event you have not seen before";
         }
         nonViewedEvents.push(data[i]);
       }
@@ -252,34 +263,36 @@ const HomeScreen = () => {
     // console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
     // console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
     const newArray = nonViewedEvents.concat(viewedEvents);
-    return newArray
+    return newArray;
   };
 
   const pullData = async () => {
     lastPulled.current = new Date();
-    viewedEventIDs.current.clear()
+    viewedEventIDs.current.clear();
     getAllHomePageEventsWithHosts(
       userToken.UserAccessToken,
       currentSchool.SchoolID
     )
       .then((data) => {
-        getEventsAndHostsWithReasons(data).then((data) => {
-          setEventsAndHosts(data)
-          setIsLoading(false)
-          setIsRefreshing(false);
-        }).catch((error: Error) => {
-          showErrorAlert(error)
-          setShowRetry(true);
-          setIsRefreshing(false);
-        });
+        getEventsAndHostsWithReasons(data)
+          .then((data) => {
+            setEventsAndHosts(data);
+            setIsLoading(false);
+            setIsRefreshing(false);
+          })
+          .catch((error: Error) => {
+            showErrorAlert(error);
+            setShowRetry(true);
+            setIsRefreshing(false);
+          });
       })
       .catch((error: CustomError) => {
         setShowRetry(true);
         setIsRefreshing(false);
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
-        } 
-        showErrorAlert(error)
+        }
+        showErrorAlert(error);
       });
   };
   const onRefresh = () => {
@@ -298,7 +311,11 @@ const HomeScreen = () => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Where2Be @ " + currentSchool.Abbreviation} />
+      <SectionHeader
+        title={"Where2Be @ " + currentSchool.Abbreviation}
+        rightButtonOnClick={() => navigation.push(SCREENS.Search)}
+        rightButtonSVG={<MaterialIcons name="search" size={28} color="white" />}
+      />
       {isLoading && !isRefreshing && !showRetry && (
         <ActivityIndicator
           color={COLORS.white}
@@ -323,7 +340,6 @@ const HomeScreen = () => {
         ref={flatListRef}
         pagingEnabled
         showsVerticalScrollIndicator={false}
-        
         refreshControl={
           <RefreshControl
             tintColor={COLORS.white}
