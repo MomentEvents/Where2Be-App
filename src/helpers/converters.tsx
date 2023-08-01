@@ -61,6 +61,10 @@ export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
     formattedEvent.UserFollowHost = pulledEvent.user_follow_host
   }
 
+  if(pulledEvent.signup_link !== undefined && pulledEvent.signup_link !== null){
+    formattedEvent.SignupLink = pulledEvent.signup_link
+  }
+
   // check for null or undefined values in formattedEvent
   const convertedKeys = Object.keys(formattedEvent);
   for (const key of convertedKeys) {

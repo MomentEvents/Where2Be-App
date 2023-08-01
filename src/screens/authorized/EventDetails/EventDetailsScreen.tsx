@@ -42,6 +42,7 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 import {
   formatError,
+  openURL,
   showBugReportPopup,
   truncateNumber,
 } from "../../../helpers/helpers";
@@ -149,6 +150,12 @@ const EventDetailsScreen = ({ route }) => {
   // Please see pullData() logic specifically in the pullEvent logic
   let beforeLoadJoin = useRef<boolean>(undefined);
   let beforeLoadShoutout = useRef<boolean>(undefined);
+
+  const onTicketPressed = () => {
+    if(storedEvent?.SignupLink){
+      openURL(storedEvent.SignupLink)
+    }
+  }
 
   const onHostPressed = () => {
     if (host && user) {
@@ -502,7 +509,7 @@ const EventDetailsScreen = ({ route }) => {
                               justifyContent: "center",
                               alignItems: "center",
                             }}
-                            onPress={() => {}}
+                            onPress={() => {onTicketPressed()}}
                           >
                             <Entypo name="ticket" size={35} color="white" />
                           </TouchableOpacity>
