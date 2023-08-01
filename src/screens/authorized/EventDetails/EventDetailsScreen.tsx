@@ -52,6 +52,7 @@ import GradientButton from "../../../components/Styled/GradientButton";
 import { useNavigation } from "@react-navigation/native";
 import {
   AntDesign,
+  Entypo,
   Feather,
   Ionicons,
   MaterialCommunityIcons,
@@ -65,18 +66,27 @@ import EventPreviewer from "../../../components/EventPreviewer/EventPreviewer";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { selectUserByID } from "../../../redux/users/userSelectors";
-import { updateUserMap, updateUserNumericField } from "../../../redux/users/userSlice";
-import { selectEventByID, selectEventInterestsByID } from "../../../redux/events/eventSelectors";
-import { setEventInterestsMap, setEventMap, updateEventInterestsMap, updateEventMap } from "../../../redux/events/eventSlice";
+import {
+  updateUserMap,
+  updateUserNumericField,
+} from "../../../redux/users/userSlice";
+import {
+  selectEventByID,
+  selectEventInterestsByID,
+} from "../../../redux/events/eventSelectors";
+import {
+  setEventInterestsMap,
+  setEventMap,
+  updateEventInterestsMap,
+  updateEventMap,
+} from "../../../redux/events/eventSlice";
 
 type routeParametersType = {
   eventID: string;
 };
 
 const EventDetailsScreen = ({ route }) => {
-
-  const { userToken, isAdmin } =
-    useContext(UserContext);
+  const { userToken, isAdmin } = useContext(UserContext);
   const navigation = useNavigation<any>();
 
   // Props from previous event card to update
@@ -94,9 +104,15 @@ const EventDetailsScreen = ({ route }) => {
   } = useContext(EventContext);
 
   const dispatch = useDispatch<AppDispatch>();
-  const storedEvent = useSelector((state: RootState) => selectEventByID(state, eventID));
-  const storedInterests = useSelector((state: RootState) => selectEventInterestsByID(state, eventID))
-  const user = useSelector((state: RootState) => selectUserByID(state, storedEvent?.HostUserID));
+  const storedEvent = useSelector((state: RootState) =>
+    selectEventByID(state, eventID)
+  );
+  const storedInterests = useSelector((state: RootState) =>
+    selectEventInterestsByID(state, eventID)
+  );
+  const user = useSelector((state: RootState) =>
+    selectUserByID(state, storedEvent?.HostUserID)
+  );
 
   if (!eventID) {
     throw formatError(
@@ -168,8 +184,14 @@ const EventDetailsScreen = ({ route }) => {
             deleteEvent(userToken.UserAccessToken, eventID)
               .then(() => {
                 setLoading(false);
-                dispatch(setEventMap({id: eventID, event: undefined}))
-                dispatch(updateUserNumericField({id: userToken.UserID, field: "NumEvents", delta: -1}))
+                dispatch(setEventMap({ id: eventID, event: undefined }));
+                dispatch(
+                  updateUserNumericField({
+                    id: userToken.UserID,
+                    field: "NumEvents",
+                    delta: -1,
+                  })
+                );
                 navigation.goBack();
               })
               .catch((error: CustomError) => {
@@ -209,7 +231,7 @@ const EventDetailsScreen = ({ route }) => {
     var gotError = false;
     getEvent(eventID, userToken.UserAccessToken)
       .then((pulledEvent: Event) => {
-        console.log("CURRENT EVENT JOINED CLICK: ", beforeLoadJoin.current)
+        console.log("CURRENT EVENT JOINED CLICK: ", beforeLoadJoin.current);
         if (beforeLoadJoin.current === undefined) {
           // Join button has not been clicked. Do nothing
         } else if (beforeLoadJoin.current && !pulledEvent.UserJoin) {
@@ -222,7 +244,10 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumJoins = pulledEvent.NumJoins - 1;
         }
 
-        console.log("CURRENT EVENT SHOUTOUT CLICK: ", beforeLoadShoutout.current)
+        console.log(
+          "CURRENT EVENT SHOUTOUT CLICK: ",
+          beforeLoadShoutout.current
+        );
 
         if (beforeLoadShoutout.current === undefined) {
           // Join button has not been clicked. Do nothing
@@ -236,34 +261,38 @@ const EventDetailsScreen = ({ route }) => {
           pulledEvent.NumShoutouts = pulledEvent.NumShoutouts - 1;
         }
 
-        console.log("BEFORE SYNCED EVENT\n\n", pulledEvent)
-        console.log("STORED EVENT\n\n", storedEvent)
-        if(beforeLoadShoutout.current === undefined && beforeLoadJoin.current === undefined && storedEvent && !isRefreshing){
+        console.log("BEFORE SYNCED EVENT\n\n", pulledEvent);
+        console.log("STORED EVENT\n\n", storedEvent);
+        if (
+          beforeLoadShoutout.current === undefined &&
+          beforeLoadJoin.current === undefined &&
+          storedEvent &&
+          !isRefreshing
+        ) {
           // In case results differ by the time the user has pulled the event vs interacting with it.
-          pulledEvent.UserJoin = storedEvent.UserJoin
-          pulledEvent.UserShoutout = storedEvent.UserShoutout
-          if(pulledEvent.UserJoin && pulledEvent.NumJoins <= 0){
-            pulledEvent.NumJoins = 1
+          pulledEvent.UserJoin = storedEvent.UserJoin;
+          pulledEvent.UserShoutout = storedEvent.UserShoutout;
+          if (pulledEvent.UserJoin && pulledEvent.NumJoins <= 0) {
+            pulledEvent.NumJoins = 1;
+          } else if (pulledEvent.NumJoins < 0) {
+            pulledEvent.NumJoins = 0;
           }
-          else if(pulledEvent.NumJoins < 0){
-            pulledEvent.NumJoins = 0
-          }
-          if(pulledEvent.UserShoutout && pulledEvent.NumShoutouts <= 0){
-            pulledEvent.NumShoutouts = 1
-          }
-          else if(pulledEvent.NumShoutouts < 0){
-            pulledEvent.NumShoutouts = 0
+          if (pulledEvent.UserShoutout && pulledEvent.NumShoutouts <= 0) {
+            pulledEvent.NumShoutouts = 1;
+          } else if (pulledEvent.NumShoutouts < 0) {
+            pulledEvent.NumShoutouts = 0;
           }
         }
 
-
-        console.log("AFTER SYNCED EVENT\n\n",pulledEvent)
-        dispatch(updateEventMap({id: eventID, changes: pulledEvent}))
-        if (!user|| useRefRefreshing.current) {
+        console.log("AFTER SYNCED EVENT\n\n", pulledEvent);
+        dispatch(updateEventMap({ id: eventID, changes: pulledEvent }));
+        if (!user || useRefRefreshing.current) {
           getEventHostByEventId(userToken.UserAccessToken, eventID)
             .then((pulledHost: User) => {
               setHost(pulledHost);
-              dispatch(updateUserMap({id: pulledHost.UserID, changes: pulledHost}))
+              dispatch(
+                updateUserMap({ id: pulledHost.UserID, changes: pulledHost })
+              );
             })
             .catch((error: CustomError) => {
               if (!gotError) {
@@ -300,7 +329,7 @@ const EventDetailsScreen = ({ route }) => {
       });
     getEventInterestsByEventId(eventID, userToken.UserAccessToken)
       .then((tags: Interest[]) => {
-        dispatch(setEventInterestsMap({id: eventID, interests: tags}))
+        dispatch(setEventInterestsMap({ id: eventID, interests: tags }));
       })
       .catch((error: CustomError) => {
         if (!gotError) {
@@ -358,9 +387,7 @@ const EventDetailsScreen = ({ route }) => {
       <EventPreviewer
         event={storedEvent}
         interests={storedInterests}
-        host={
-          user
-        }
+        host={user}
         backButtonEnabled={true}
         hostClickEnabled={true}
         paddingTopEnabled={true}
@@ -440,7 +467,7 @@ const EventDetailsScreen = ({ route }) => {
                         </TouchableOpacity>
                       </GradientButton>
                       <McText
-                        body4
+                        body6
                         style={{
                           color: storedEvent?.UserJoin
                             ? COLORS.darkPurple
@@ -450,6 +477,46 @@ const EventDetailsScreen = ({ route }) => {
                         {truncateNumber(storedEvent?.NumJoins)} Going
                       </McText>
                     </View>
+                    {storedEvent?.SignupLink && (
+                      <View
+                        style={{
+                          alignItems: "center",
+                          paddingHorizontal: 10,
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 58,
+                            height: 58,
+                            borderRadius: 80,
+                            marginBottom: 5,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{
+                              width: 58,
+                              height: 58,
+                              borderRadius: 80,
+                              marginBottom: 5,
+                              backgroundColor: COLORS.gray1,
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            onPress={() => {}}
+                          >
+                            <Entypo name="ticket" size={35} color="white" />
+                          </TouchableOpacity>
+                        </View>
+                        <McText
+                          body6
+                          style={{
+                            color: COLORS.white,
+                          }}
+                        >
+                          Tickets
+                        </McText>
+                      </View>
+                    )}
                     <View
                       style={{
                         alignItems: "center",
@@ -505,7 +572,7 @@ const EventDetailsScreen = ({ route }) => {
                         </TouchableOpacity>
                       </GradientButton>
                       <McText
-                        body4
+                        body6
                         style={{
                           color: storedEvent?.UserShoutout
                             ? COLORS.darkPurple
@@ -513,9 +580,7 @@ const EventDetailsScreen = ({ route }) => {
                         }}
                       >
                         {truncateNumber(storedEvent?.NumShoutouts)}{" "}
-                        {storedEvent?.NumShoutouts === 1
-                          ? "Repost"
-                          : "Reposts"}
+                        {storedEvent?.NumShoutouts === 1 ? "Repost" : "Reposts"}
                       </McText>
                     </View>
                   </>
