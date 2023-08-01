@@ -41,7 +41,11 @@ export async function getEvent(
     "Could not get event",
     true
   );
+
+  console.log("\n\n\nPULLED EVENT" + JSON.stringify(pulledEvent))
   const convertedEvent: Event = eventResponseToEvent(pulledEvent);
+
+  console.log("\n\n\nCONVERTED EVENT" + JSON.stringify(convertedEvent))
 
   return convertedEvent;
 }

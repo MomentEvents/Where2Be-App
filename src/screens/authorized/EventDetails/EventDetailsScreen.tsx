@@ -154,6 +154,9 @@ const EventDetailsScreen = ({ route }) => {
   const onTicketPressed = () => {
     if(storedEvent?.SignupLink){
       openURL(storedEvent.SignupLink)
+      if(!storedEvent.UserJoin){
+        addUserJoin(eventID);
+      }
     }
   }
 

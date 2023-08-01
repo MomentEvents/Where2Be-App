@@ -154,14 +154,22 @@ export function checkIfEventIsFormatted(event: Event): boolean {
 }
 
 export function openURL(url: string): void {
+  // If URL does not start with 'https://', prepend it
+  if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    url = 'https://' + url;
+  }
+
   const supported = Linking.canOpenURL(url);
 
-  if (supported) {
-    // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-    // by some browser in the mobile
+  if (!supported){
+    Alert.alert(`Open this link in your browser: ${url}`);
+    return;
+  }
+
+  try{
     Linking.openURL(url);
-  } else {
-    Alert.alert(`Unable to open link: ${url}`);
+  } catch (e){
+    Alert.alert("Open this url in your browser: " + url)
   }
 }
 
