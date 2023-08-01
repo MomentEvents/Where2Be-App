@@ -152,13 +152,13 @@ const EventDetailsScreen = ({ route }) => {
   let beforeLoadShoutout = useRef<boolean>(undefined);
 
   const onTicketPressed = () => {
-    if(storedEvent?.SignupLink){
-      openURL(storedEvent.SignupLink)
-      if(!storedEvent.UserJoin){
+    if (storedEvent?.SignupLink) {
+      openURL(storedEvent.SignupLink);
+      if (!storedEvent.UserJoin) {
         addUserJoin(eventID);
       }
     }
-  }
+  };
 
   const onHostPressed = () => {
     if (host && user) {
@@ -408,12 +408,11 @@ const EventDetailsScreen = ({ route }) => {
               bottom: insets.bottom + 10,
             }}
           >
-            {storedEvent ? (
-              <UserOptionsSection>
-                {showRetry ? (
-                  <RetryButton
-                    setShowRetry={setShowRetry}
-                    retryCallBack={onRefresh}
+            <UserOptionsSection>
+              {!showRetry ? (
+                !storedEvent ? (
+                  <ActivityIndicator
+                    color={COLORS.white}
                   />
                 ) : (
                   <>
@@ -512,7 +511,9 @@ const EventDetailsScreen = ({ route }) => {
                               justifyContent: "center",
                               alignItems: "center",
                             }}
-                            onPress={() => {onTicketPressed()}}
+                            onPress={() => {
+                              onTicketPressed();
+                            }}
                           >
                             <Entypo name="ticket" size={35} color="white" />
                           </TouchableOpacity>
@@ -594,14 +595,14 @@ const EventDetailsScreen = ({ route }) => {
                       </McText>
                     </View>
                   </>
-                )}
-              </UserOptionsSection>
-            ) : (
-              <ActivityIndicator
-                color={COLORS.white}
-                style={{ marginTop: 20 }}
-              />
-            )}
+                )
+              ) : (
+                <RetryButton
+                  setShowRetry={setShowRetry}
+                  retryCallBack={onRefresh}
+                />
+              )}
+            </UserOptionsSection>
           </View>
         }
         refreshControl={
