@@ -294,7 +294,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                     marginRight: 10,
                   }}
                 >
-                  {props.event ? props.event.Title : "..."}
+                  {props.event ? props.event.Title : "Loading..."}
                 </McText>
               </View>
             </TitleSection>
@@ -387,7 +387,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                       color: COLORS.white,
                     }}
                   >
-                    {props.host ? props.host.DisplayName : "..."}
+                    {props.host ? props.host.DisplayName : "Loading..."}
                   </McText>
                   {props.host?.VerifiedOrganization && (
                     <View style={{ paddingLeft: 3 }}>
