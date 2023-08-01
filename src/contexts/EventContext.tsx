@@ -27,7 +27,7 @@ import { AlertContext } from "./AlertContext";
 import { updateUserMap } from "../redux/users/userSlice";
 
 type EventContextType = {
-  clientAddUserJoin: (eventID: string) => void;
+  clientAddUserJoin: (eventID: string, shouldDisplayErrors?: boolean) => void;
   clientAddUserShoutout: (eventID: string) => void;
   clientRemoveUserJoin: (eventID: string) => void;
   clientRemoveUserShoutout: (eventID: string) => void;
@@ -124,7 +124,7 @@ export const EventProvider = ({ children }) => {
     return false
   };
 
-  const clientAddUserJoin = (eventID: string) => {
+  const clientAddUserJoin = (eventID: string, shouldDisplayErrors?: boolean) => {
     if (!checkLastAction("join", eventID)) {
       return;
     }
@@ -139,16 +139,22 @@ export const EventProvider = ({ children }) => {
         didJoinedEventsChangeRef.current = true;
       })
       .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
+        if(shouldDisplayErrors){
+          //hotfix when ticketing joins because exiting out of the app immediately causes errors even though request went through
+          if (error.showBugReportDialog) {
+            showBugReportPopup(error);
+          }
+          showErrorAlert(error);
+          dispatch(
+            updateUserJoinEvent({
+              eventID: eventID,
+              doJoin: false,
+            })
+          );
         }
-        showErrorAlert(error);
-        dispatch(
-          updateUserJoinEvent({
-            eventID: eventID,
-            doJoin: false,
-          })
-        );
+        else{
+          console.log("THROWING ERROR")
+        }
       });
   };
 

@@ -155,7 +155,7 @@ const EventDetailsScreen = ({ route }) => {
     if (storedEvent?.SignupLink) {
       openURL(storedEvent.SignupLink);
       if (!storedEvent.UserJoin) {
-        addUserJoin(eventID);
+        addUserJoin(eventID, false);
       }
     }
   };
@@ -279,7 +279,7 @@ const EventDetailsScreen = ({ route }) => {
           storedEvent &&
           !isRefreshing
         ) {
-          // In case results differ by the time the user has pulled the event vs interacting with it.
+          // In case results differ by the time the user has pulled the event vs interacting with it from the home screen
           pulledEvent.UserJoin = storedEvent.UserJoin;
           pulledEvent.UserShoutout = storedEvent.UserShoutout;
           if (pulledEvent.UserJoin && pulledEvent.NumJoins <= 0) {
