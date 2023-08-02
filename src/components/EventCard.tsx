@@ -237,7 +237,7 @@ const EventCard = ({
                       alignItems: "center",
                     }}
                   >
-                    <McText body4 color={COLORS.purple} numberOfLines={1}>
+                    <McText body5 color={COLORS.purple} numberOfLines={1}>
                       {isBigCard
                         ? isWithin24hours(new Date(storedEvent.StartDateTime))
                           ? moment(
@@ -273,7 +273,7 @@ const EventCard = ({
                     >
                       <Ionicons
                         name="checkmark-sharp"
-                        size={18}
+                        size={16}
                         color={
                           storedEvent?.UserJoin
                             ? COLORS.purple
@@ -282,7 +282,7 @@ const EventCard = ({
                         style={{ alignSelf: "center" }}
                       />
                       <McText
-                        body3
+                        body4
                         style={{
                           marginRight: 7,
                           marginLeft: 5,
@@ -299,7 +299,7 @@ const EventCard = ({
                     >
                       <AntDesign
                         name="retweet"
-                        size={14}
+                        size={13}
                         color={
                           storedEvent?.UserShoutout
                             ? COLORS.purple
@@ -308,7 +308,7 @@ const EventCard = ({
                         style={{ alignSelf: "center" }}
                       />
                       <McText
-                        body3
+                        body4
                         style={{
                           marginRight: 2,
                           marginLeft: 8,

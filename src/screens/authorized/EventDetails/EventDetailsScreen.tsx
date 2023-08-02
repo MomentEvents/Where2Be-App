@@ -155,7 +155,24 @@ const EventDetailsScreen = ({ route }) => {
     if (storedEvent?.SignupLink) {
       openURL(storedEvent.SignupLink);
       if (!storedEvent.UserJoin) {
-        addUserJoin(eventID, false);
+        Alert.alert(
+          "Did you get a ticket?",
+          "",
+          [
+            {
+              text: "No",
+              onPress: () => console.log("Cancel Pressed"),
+            },
+            {
+              text: "Yes",
+              onPress: () => {
+                console.log("Yes Pressed");
+                addUserJoin(eventID, false)
+              },
+            },
+          ],
+          { cancelable: false }
+        );
       }
     }
   };
@@ -455,6 +472,9 @@ const EventDetailsScreen = ({ route }) => {
                               : () => {
                                   if (!didFetchEvent) {
                                     beforeLoadJoin.current = true;
+                                  }
+                                  if(storedEvent?.SignupLink){
+                                    Alert.alert("This is a ticketed event", "Make sure to click the ticket button to fully confirm your signup!")
                                   }
                                   addUserJoin(eventID);
                                 }
