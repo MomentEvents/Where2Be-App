@@ -2,15 +2,15 @@ export const CONSTRAINTS = {
     Event: {
         Title: {
             Max: 70,
-            Min: 3,
+            Min: 5,
         },
         Description: {
             Max: 2000,
-            Min: 0,
+            Min: 10,
         },
         Location: {
             Max: 50,
-            Min: 0
+            Min: 5
         },
         Interest: {
             Max: 1,
