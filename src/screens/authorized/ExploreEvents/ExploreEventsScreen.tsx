@@ -27,7 +27,9 @@ const ExploreEvents = ({ route }) => {
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader title={"Explore Events"}/>
+      <SectionHeader title={"Explore Events"} 
+        rightButtonOnClick={() => navigation.push(SCREENS.Search)}
+        rightButtonSVG={<MaterialIcons name="search" size={28} color="white" />}/>
       <EventViewer school={currentSchool}/>
     </MobileSafeView>
   );
