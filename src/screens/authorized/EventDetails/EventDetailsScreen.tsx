@@ -10,6 +10,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Linking,
+  AppState,
 } from "react-native";
 import React, {
   useCallback,
@@ -50,7 +51,7 @@ import { EventContext } from "../../../contexts/EventContext";
 import { deleteEvent, getEvent } from "../../../services/EventService";
 import { getEventInterestsByEventId } from "../../../services/InterestService";
 import GradientButton from "../../../components/Styled/GradientButton";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import {
   AntDesign,
   Entypo,
@@ -151,29 +152,57 @@ const EventDetailsScreen = ({ route }) => {
   let beforeLoadJoin = useRef<boolean>(undefined);
   let beforeLoadShoutout = useRef<boolean>(undefined);
 
+  const didClickTicketRef = useRef<boolean>(false);
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        console.log("IT IS ACTIVE")
+        console.log(didClickTicketRef.current + "DIDCLICKTICKETREF")
+        console.log(!storedEvent.UserJoin)
+        if (didClickTicketRef.current && !storedEvent.UserJoin) {
+          Alert.alert(
+            "Did you complete your registration?",
+            "",
+            [
+              {
+                text: "No",
+                onPress: () => console.log("Cancel Pressed"),
+              },
+              {
+                text: "Yes",
+                onPress: () => {
+                  console.log("Yes Pressed");
+                  addUserJoin(eventID, false)
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+        didClickTicketRef.current = false;
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   const onTicketPressed = () => {
     if (storedEvent?.SignupLink) {
       openURL(storedEvent.SignupLink);
-      if (!storedEvent.UserJoin) {
-        Alert.alert(
-          "Did you get a ticket?",
-          "",
-          [
-            {
-              text: "No",
-              onPress: () => console.log("Cancel Pressed"),
-            },
-            {
-              text: "Yes",
-              onPress: () => {
-                console.log("Yes Pressed");
-                addUserJoin(eventID, false)
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      }
+      didClickTicketRef.current = true;
     }
   };
 
@@ -474,7 +503,7 @@ const EventDetailsScreen = ({ route }) => {
                                     beforeLoadJoin.current = true;
                                   }
                                   if(storedEvent?.SignupLink){
-                                    Alert.alert("This is a ticketed event", "Make sure to click the ticket button to fully confirm your signup!")
+                                    Alert.alert("This is a ticketed event", "Make sure to click the ticket button to confirm your signup!")
                                   }
                                   addUserJoin(eventID);
                                 }
