@@ -166,21 +166,20 @@ const HomeScreen = () => {
     }
   }, [isFocused]);
 
-  const CaughtUpCard = (props: { doPaddingBottom: boolean }) => {
+  const CaughtUpCard = (props: { isAtBottom: boolean }) => {
     return (
       <View
         style={{
-          width: homeCardWidth,
-          height: homeCardHeight,
+          width: props.isAtBottom ? undefined : homeCardWidth,
+          height: props.isAtBottom ? undefined : homeCardHeight,
           backgroundColor: COLORS.trueBlack,
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: props.doPaddingBottom ? 140 : 30,
-          paddingTop: 30,
-          paddingHorizontal: props.doPaddingBottom ? 30 : 60,
+          paddingBottom: 140,
+          paddingTop: props.isAtBottom ? 30 : 30,
+          paddingHorizontal: props.isAtBottom ? 30 : 60,
         }}
       >
-        <McText h2>You're all caught up!</McText>
         <View
           style={{
             flex: 1,
@@ -190,6 +189,7 @@ const HomeScreen = () => {
         >
           <Feather name="aperture" size={homeCardWidth - 200} color="white" />
         </View>
+        <McText h2 style={{marginTop:30}}>You're all caught up!</McText>
       </View>
     );
   };
@@ -260,7 +260,7 @@ const HomeScreen = () => {
     // Add divider to the array
     nonViewedEvents.push({
       type: "divider",
-      component: <CaughtUpCard doPaddingBottom={viewedEvents.length === 0} />,
+      component: <CaughtUpCard isAtBottom={viewedEvents.length === 0} />,
     });
 
     const newArray = nonViewedEvents.concat(viewedEvents);
@@ -393,7 +393,7 @@ const HomeScreen = () => {
         ListFooterComponent={
           !isLoading && !isCaughtupCardAtBottom && <View style={{height: SIZES.height - (homeCardHeight + insets.top + insets.bottom + 
             SIZES.tabBarHeight +
-            SIZES.sectionHeaderHeight)}}><McText h4 color={COLORS.gray2} style={{textAlign: "center", paddingTop: 10}}>More coming soon!</McText></View>
+            SIZES.sectionHeaderHeight)}}><McText h4 color={COLORS.gray2} style={{textAlign: "center", paddingTop: 10, marginHorizontal: 60}}>More coming soon!</McText></View>
         }
       />
       <TouchableOpacity
