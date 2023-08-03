@@ -165,6 +165,7 @@ const EventDetailsScreen = ({ route }) => {
       ) {
         console.log("IT IS ACTIVE")
         console.log(didClickTicketRef.current + "DIDCLICKTICKETREF")
+        console.log(JSON.stringify(storedEvent))
         console.log(!storedEvent.UserJoin)
         if (didClickTicketRef.current && !storedEvent.UserJoin) {
           Alert.alert(
@@ -179,7 +180,7 @@ const EventDetailsScreen = ({ route }) => {
                 text: "Yes",
                 onPress: () => {
                   console.log("Yes Pressed");
-                  addUserJoin(eventID, false)
+                  addUserJoin(eventID)
                 },
               },
             ],
@@ -201,8 +202,9 @@ const EventDetailsScreen = ({ route }) => {
 
   const onTicketPressed = () => {
     if (storedEvent?.SignupLink) {
-      openURL(storedEvent.SignupLink);
       didClickTicketRef.current = true;
+      console.log("Setting didClickTicketRef to be ", didClickTicketRef.current)
+      openURL(storedEvent.SignupLink);    
     }
   };
 

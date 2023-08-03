@@ -59,19 +59,18 @@ const eventSlice = createSlice({
     ) => {
       const event = state.eventIDToEvent[action.payload.eventID];
 
-      if (action.payload.doJoin) {
+      if (action.payload.doJoin && !event.UserJoin) {
         event.UserJoin = true;
         event.NumJoins = event.NumJoins + 1;
-      } else {
+        if(event.NumJoins <= 0){
+          event.NumJoins = 0
+        }
+      } else if (!action.payload.doJoin && event.UserJoin) {
         event.UserJoin = false;
         event.NumJoins = event.NumJoins - 1;
-      }
-
-      if(!action.payload.doJoin && event.NumJoins < 0){
-        event.NumJoins = 1;
-      }
-      else if(action.payload.doJoin && event.NumJoins <= 0){
-        event.NumShoutouts = 0
+        if(event.NumJoins < 0){
+          event.NumJoins = 1;
+        }
       }
     },
     updateUserShoutoutEvent: (
@@ -83,19 +82,18 @@ const eventSlice = createSlice({
     ) => {
       const event = state.eventIDToEvent[action.payload.eventID];
 
-      if (action.payload.doShoutout) {
+      if (action.payload.doShoutout && !event.UserShoutout) {
         event.UserShoutout = true;
         event.NumShoutouts = event.NumShoutouts + 1;
-      } else {
+        if(event.NumJoins <= 0){
+          event.NumJoins = 0
+        }
+      } else if (!action.payload.doShoutout && event.UserShoutout) {
         event.UserShoutout = false;
         event.NumShoutouts = event.NumShoutouts - 1;
-      }
-
-      if(!action.payload.doShoutout && event.NumShoutouts < 0){
-        event.NumJoins = 1;
-      }
-      else if(action.payload.doShoutout && event.NumShoutouts <= 0){
-        event.NumShoutouts = 0
+        if(event.NumShoutouts < 0){
+          event.NumShoutouts = 1;
+        }
       }
     },
     setEventInterestsMap: (

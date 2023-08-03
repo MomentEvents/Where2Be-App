@@ -58,8 +58,7 @@ const HomeScreen = () => {
 
   const insets = useSafeAreaInsets();
 
-  const [eventsAndHosts, setEventsAndHosts] =
-    useState<{ Host: User; Event: Event; Reason: string }[]>();
+  const [eventsAndHosts, setEventsAndHosts] = useState<EventItem[]>();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -74,6 +73,16 @@ const HomeScreen = () => {
   const lastPulled = useRef<Date>(new Date());
 
   const isFocused = useIsFocused();
+
+  const [isCaughtupCardAtBottom, setIsCaughtupCardAtBottom] = useState<boolean>(undefined)
+
+  type EventItem =
+    | {
+        Host: User;
+        Event: Event;
+        Reason: string;
+      }
+    | { type: "divider"; component: JSX.Element };
 
   const homeCardHeight =
     SIZES.height -
@@ -168,7 +177,7 @@ const HomeScreen = () => {
           justifyContent: "center",
           paddingBottom: props.doPaddingBottom ? 140 : 30,
           paddingTop: 30,
-          paddingHorizontal: 30,
+          paddingHorizontal: props.doPaddingBottom ? 30 : 60,
         }}
       >
         <McText h2>You're all caught up!</McText>
@@ -187,7 +196,7 @@ const HomeScreen = () => {
 
   const onViewableItemsChanged = useRef(({ viewableItems }) => {
     try {
-      if (viewableItems.length === 0) {
+      if (viewableItems.length === 0 || ("type" in viewableItems[0].item)) {
         return;
       }
       const viewedEvent: Event = viewableItems[0].item.Event;
@@ -222,23 +231,9 @@ const HomeScreen = () => {
       Event: Event;
       Reason: string;
     }[]
-  ): Promise<
-    {
-      Host: User;
-      Event: Event;
-      Reason: string;
-    }[]
-  > => {
-    const viewedEvents: {
-      Host: User;
-      Event: Event;
-      Reason: string;
-    }[] = [];
-    const nonViewedEvents: {
-      Host: User;
-      Event: Event;
-      Reason: string;
-    }[] = [];
+  ): Promise<EventItem[]> => {
+    const viewedEvents: EventItem[] = [];
+    const nonViewedEvents: EventItem[] = [];
 
     const storedViewedEventIDs = await getAndCleanReadEventIDs();
 
@@ -260,8 +255,14 @@ const HomeScreen = () => {
       }
     }
 
-    // console.log("VIEWED EVENTS: ", viewedEvents, "\n\n\n");
-    // console.log("NONVIEWED EVENTS: ", nonViewedEvents, "\n\n\n");
+    setIsCaughtupCardAtBottom(viewedEvents.length === 0)
+      
+    // Add divider to the array
+    nonViewedEvents.push({
+      type: "divider",
+      component: <CaughtUpCard doPaddingBottom={viewedEvents.length === 0} />,
+    });
+
     const newArray = nonViewedEvents.concat(viewedEvents);
     return newArray;
   };
@@ -297,13 +298,18 @@ const HomeScreen = () => {
   };
   const onRefresh = () => {
     setEventsAndHosts(undefined);
+    setIsCaughtupCardAtBottom(undefined)
     setIsLoading(true);
     setShowRetry(false);
     pullData();
   };
 
-  const keyExtractor = (item, index) =>
-    "homescreeneventcard" + index + item.Event.EventID;
+  const keyExtractor = (item: EventItem, index: number) => {
+    if ("Event" in item) {
+      return "homepageevent" + item.Event.EventID + index;
+    }
+    return "divider" + index
+  }
 
   useEffect(() => {
     pullData();
@@ -357,26 +363,37 @@ const HomeScreen = () => {
           index,
         })}
         windowSize={5}
-        data={eventsAndHosts?.filter(
-          (item) => !hiddenEvents.includes(item.Event.EventID)
-        )}
+        data={eventsAndHosts?.filter((item: EventItem) => {
+          if ("Event" in item) {
+            return !hiddenEvents.includes(item.Event.EventID);
+          }
+          return true;
+        })}
         keyExtractor={keyExtractor}
         snapToInterval={homeCardHeight}
         decelerationRate="fast"
-        renderItem={({ item, index }) => (
-          <HomeEvent
-            event={item.Event}
-            user={item.Host}
-            reason={item.Reason}
-            height={homeCardHeight}
-            width={homeCardWidth}
-            handleNotInterested={handleNotInterested}
-            handleUndoNotInterested={handleUndoNotInterested}
-          />
-        )}
+        renderItem={({ item, index }) => {
+          if ("type" in item && item.type === "divider") {
+            return item.component;
+          } else {
+            return (
+              <HomeEvent
+                event={item.Event}
+                user={item.Host}
+                reason={item.Reason}
+                height={homeCardHeight}
+                width={homeCardWidth}
+                handleNotInterested={handleNotInterested}
+                handleUndoNotInterested={handleUndoNotInterested}
+              />
+            );
+          }
+        }}
         viewabilityConfig={viewabilityConfig}
         ListFooterComponent={
-          !isLoading && <CaughtUpCard doPaddingBottom={true} />
+          !isLoading && !isCaughtupCardAtBottom && <View style={{height: SIZES.height - (homeCardHeight + insets.top + insets.bottom + 
+            SIZES.tabBarHeight +
+            SIZES.sectionHeaderHeight)}}><McText h4 color={COLORS.gray2} style={{textAlign: "center", paddingTop: 10}}>More coming soon!</McText></View>
         }
       />
       <TouchableOpacity

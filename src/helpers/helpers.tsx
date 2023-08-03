@@ -213,7 +213,14 @@ export async function responseHandler<CustomType>(
         }
       throw new ServerError(serverResponseMessage);
     }
-    let userResponseMessage = await response.text();
+
+    let userResponseMessage = undefined;
+    if (response.status === 502){
+      userResponseMessage = "We're upgrading our servers. Come back soon!"
+    }
+    else{
+      userResponseMessage = await response.text();
+    }
     throw new UserError("Error " + response.status, userResponseMessage);
   }
 
