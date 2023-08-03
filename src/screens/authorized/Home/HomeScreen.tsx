@@ -74,7 +74,8 @@ const HomeScreen = () => {
 
   const isFocused = useIsFocused();
 
-  const [isCaughtupCardAtBottom, setIsCaughtupCardAtBottom] = useState<boolean>(undefined)
+  const [isCaughtupCardAtBottom, setIsCaughtupCardAtBottom] =
+    useState<boolean>(undefined);
 
   type EventItem =
     | {
@@ -175,8 +176,8 @@ const HomeScreen = () => {
           backgroundColor: COLORS.trueBlack,
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: 140,
-          paddingTop: props.isAtBottom ? 30 : 30,
+          paddingBottom: props.isAtBottom ? 10 : 0,
+          paddingTop: props.isAtBottom ? 30 : 0,
           paddingHorizontal: props.isAtBottom ? 30 : 60,
         }}
       >
@@ -187,16 +188,19 @@ const HomeScreen = () => {
             justifyContent: "center",
           }}
         >
-          <Feather name="aperture" size={homeCardWidth - 200} color="white" />
+          <Feather name="aperture" size={homeCardWidth - 220} color="white" />
+
+          <McText h2 style={{ marginTop: 50 }}>
+            You're all caught up!
+          </McText>
         </View>
-        <McText h2 style={{marginTop:30}}>You're all caught up!</McText>
       </View>
     );
   };
 
   const onViewableItemsChanged = useRef(({ viewableItems }) => {
     try {
-      if (viewableItems.length === 0 || ("type" in viewableItems[0].item)) {
+      if (viewableItems.length === 0 || "type" in viewableItems[0].item) {
         return;
       }
       const viewedEvent: Event = viewableItems[0].item.Event;
@@ -255,8 +259,8 @@ const HomeScreen = () => {
       }
     }
 
-    setIsCaughtupCardAtBottom(viewedEvents.length === 0)
-      
+    setIsCaughtupCardAtBottom(viewedEvents.length === 0);
+
     // Add divider to the array
     nonViewedEvents.push({
       type: "divider",
@@ -298,7 +302,7 @@ const HomeScreen = () => {
   };
   const onRefresh = () => {
     setEventsAndHosts(undefined);
-    setIsCaughtupCardAtBottom(undefined)
+    setIsCaughtupCardAtBottom(undefined);
     setIsLoading(true);
     setShowRetry(false);
     pullData();
@@ -308,8 +312,8 @@ const HomeScreen = () => {
     if ("Event" in item) {
       return "homepageevent" + item.Event.EventID + index;
     }
-    return "divider" + index
-  }
+    return "divider" + index;
+  };
 
   useEffect(() => {
     pullData();
@@ -391,9 +395,31 @@ const HomeScreen = () => {
         }}
         viewabilityConfig={viewabilityConfig}
         ListFooterComponent={
-          !isLoading && !isCaughtupCardAtBottom && <View style={{height: SIZES.height - (homeCardHeight + insets.top + insets.bottom + 
-            SIZES.tabBarHeight +
-            SIZES.sectionHeaderHeight)}}><McText h4 color={COLORS.gray2} style={{textAlign: "center", paddingTop: 10, marginHorizontal: 60}}>More coming soon!</McText></View>
+          !isLoading && (
+            <View
+              style={{
+                height:
+                  SIZES.height -
+                  (homeCardHeight +
+                    insets.top +
+                    insets.bottom +
+                    SIZES.tabBarHeight +
+                    SIZES.sectionHeaderHeight),
+              }}
+            >
+              <McText
+                h4
+                color={COLORS.gray2}
+                style={{
+                  textAlign: "center",
+                  paddingTop: 10,
+                  marginHorizontal: 60,
+                }}
+              >
+                More coming soon!
+              </McText>
+            </View>
+          )
         }
       />
       <TouchableOpacity
