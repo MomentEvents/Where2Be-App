@@ -74,9 +74,6 @@ const HomeScreen = () => {
 
   const isFocused = useIsFocused();
 
-  const [isCaughtupCardAtBottom, setIsCaughtupCardAtBottom] =
-    useState<boolean>(undefined);
-
   type EventItem =
     | {
         Host: User;
@@ -190,7 +187,7 @@ const HomeScreen = () => {
         >
           <Feather name="aperture" size={homeCardWidth - 220} color="white" />
 
-          <McText h2 style={{ marginTop: 50 }}>
+          <McText h2 color={COLORS.gray} style={{ textAlign: "center", marginTop: 50 }}>
             You're all caught up!
           </McText>
         </View>
@@ -259,8 +256,6 @@ const HomeScreen = () => {
       }
     }
 
-    setIsCaughtupCardAtBottom(viewedEvents.length === 0);
-
     // Add divider to the array
     nonViewedEvents.push({
       type: "divider",
@@ -302,7 +297,6 @@ const HomeScreen = () => {
   };
   const onRefresh = () => {
     setEventsAndHosts(undefined);
-    setIsCaughtupCardAtBottom(undefined);
     setIsLoading(true);
     setShowRetry(false);
     pullData();
@@ -408,7 +402,7 @@ const HomeScreen = () => {
               }}
             >
               <McText
-                h4
+                body4
                 color={COLORS.gray2}
                 style={{
                   textAlign: "center",

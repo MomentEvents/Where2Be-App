@@ -166,8 +166,7 @@ const EventDetailsScreen = ({ route }) => {
         console.log("IT IS ACTIVE")
         console.log(didClickTicketRef.current + "DIDCLICKTICKETREF")
         console.log(JSON.stringify(storedEvent))
-        console.log(!storedEvent.UserJoin)
-        if (didClickTicketRef.current && !storedEvent.UserJoin) {
+        if (didClickTicketRef.current && storedEvent && !storedEvent.UserJoin) {
           Alert.alert(
             "Did you complete your registration?",
             "",
