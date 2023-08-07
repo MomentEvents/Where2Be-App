@@ -9,7 +9,7 @@ platform :ios, '13.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
-target 'MomentEvents' do
+target 'Where2Be' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -30,9 +30,10 @@ target 'MomentEvents' do
   # Note that if you have use_frameworks! enabled, Flipper will not work
   #
   # if !ENV['CI']
-  use_flipper!()
+  #  use_flipper!()
   # end
 
+  use_frameworks! :linkage => :static
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true

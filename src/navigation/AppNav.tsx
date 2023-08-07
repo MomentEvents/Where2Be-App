@@ -29,13 +29,37 @@ import SignupPasswordScreen from "../screens/unauthorized/Onboarding/5_Password/
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
+import analytics from '@react-native-firebase/analytics';
+import { SETTINGS } from "../constants/settings";
+
 
 const Stack = createStackNavigator();
 
 const AppNav = () => {
   const { isLoggedIn } = useContext(UserContext);
+  const routeNameRef = React.useRef<any>();
+  const navigationRef = React.useRef<any>();
   return (
-    <NavigationContainer>
+    <NavigationContainer
+    ref={navigationRef}
+
+    onReady={() => {
+      routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+    }}
+    onStateChange={async () => {
+      const previousRouteName = routeNameRef.current;
+      let currentRouteName = undefined;
+      if(navigationRef.current){
+        currentRouteName = navigationRef.current.getCurrentRoute().name;
+      }
+      if (previousRouteName !== currentRouteName && SETTINGS.firebaseAnalytics) {
+        await analytics().logScreenView({
+          screen_name: currentRouteName,
+          screen_class: currentRouteName,
+        });
+      }
+      routeNameRef.current = currentRouteName;
+    }}>
       {isLoggedIn ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
