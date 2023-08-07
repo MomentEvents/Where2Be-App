@@ -30,8 +30,13 @@ target 'MomentEvents' do
   # Note that if you have use_frameworks! enabled, Flipper will not work
   #
   # if !ENV['CI']
-  #   use_flipper!()
+  use_flipper!()
   # end
+
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  $RNFirebaseAsStaticFramework = true
 
   post_install do |installer|
     react_native_post_install(installer)
