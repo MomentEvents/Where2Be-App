@@ -29,6 +29,7 @@ import SignupPasswordScreen from "../screens/unauthorized/Onboarding/5_Password/
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
+import { AlertContext } from "../contexts/AlertContext";
 
 const Stack = createStackNavigator();
 
