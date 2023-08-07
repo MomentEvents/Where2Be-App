@@ -6,7 +6,7 @@ import { getStoredToken } from "../../../services/AuthService";
 import { COLORS } from "../../../constants";
 
 type NotificationEventDetailsModalProps = {
-  setClose: React.Dispatch<React.SetStateAction<boolean>>;
+  setClose: () => void;
   eventID: string;
 };
 
@@ -49,7 +49,7 @@ const NotificationEventDetailsModal = (
       eventID={props.eventID}
       currentToken={currentToken}
       onBackFunction={() => {
-        props.setClose(false);
+        props.setClose();
       }}
       disableHostClick={true}
     />

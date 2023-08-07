@@ -43,10 +43,11 @@ Notifications.setNotificationHandler({
 
 const Main = () => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [animateOut, setAnimateOut] = useState(false);
 
   const [eventDetailsNotificationVisible, setEventDetailsNotificationVisible] =
     useState(false);
-  const [eventIDNotification, setEventIDNotification] = useState("")
+  const [eventIDNotification, setEventIDNotification] = useState("");
 
   useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
@@ -65,9 +66,9 @@ const Main = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          setEventDetailsNotificationVisible(false)
+          setEventDetailsNotificationVisible(false);
           setEventIDNotification(data.event_id);
-          setEventDetailsNotificationVisible(true)
+          setEventDetailsNotificationVisible(true);
         }
 
         console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
@@ -119,23 +120,34 @@ const Main = () => {
     new Animated.Value(Dimensions.get("window").height)
   ).current; // Initial position is off screen
 
+  const onCloseModal = () => {
+    setAnimateOut(true);
+    setTimeout(() => {
+      setEventDetailsNotificationVisible(false);
+    }, 300);
+  };
+
   useEffect(() => {
-    if (eventDetailsNotificationVisible) {
-      // When we want the modal to show, we animate the value to 0
+    if (eventDetailsNotificationVisible && !animateOut) {
+      // Animate the modal into view
       Animated.timing(modalY, {
         toValue: 0,
-        duration: 300, // 300ms duration for the animation
-        useNativeDriver: true, // Use native driver for better performance
-      }).start();
-    } else {
-      // Otherwise, we animate it off the screen
-      Animated.timing(modalY, {
-        toValue: SIZES.height,
         duration: 300,
         useNativeDriver: true,
       }).start();
     }
-  }, [eventDetailsNotificationVisible]);
+
+    if (animateOut) {
+      // Animate the modal out of view
+      Animated.timing(modalY, {
+        toValue: Dimensions.get("window").height,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        setAnimateOut(false); // Reset the animateOut state
+      });
+    }
+  }, [eventDetailsNotificationVisible, animateOut]);
 
   const renderModal = () => {
     return (
@@ -150,7 +162,7 @@ const Main = () => {
         }}
       >
         <NotificationEventDetailsModal
-          setClose={setEventDetailsNotificationVisible}
+          setClose={onCloseModal}
           eventID={eventIDNotification}
         />
       </Animated.View>
@@ -229,7 +241,9 @@ const Main = () => {
                       {/* Insert a modal here with  <NotificationEventDetailsModal setClose={setEventDetailsNotificationVisible} eventID={eventIDRef.current}/> when eventDetailsNotificationVisible is true*/}
                       <StatusBar barStyle="light-content" translucent={true} />
                       <AppNav />
-                      {eventDetailsNotificationVisible && eventIDNotification && renderModal()}
+                      {eventDetailsNotificationVisible &&
+                        eventIDNotification &&
+                        renderModal()}
                     </AuthProvider>
                   </ScreenProvider>
                 </EventProvider>
