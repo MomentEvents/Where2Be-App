@@ -17,6 +17,7 @@ import { appVersionText } from "../constants/texts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { McText } from "../components/Styled";
 import { AlertContext } from "./AlertContext";
+import { displayError } from "../helpers/helpers";
 
 type ScreenContextType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

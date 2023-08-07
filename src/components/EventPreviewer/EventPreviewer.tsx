@@ -24,7 +24,7 @@ import ImageView from "react-native-image-viewing";
 import { useLinkProps, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
-import { showBugReportPopup} from "../../helpers/helpers";
+import { showBugReportPopup } from "../../helpers/helpers";
 import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
@@ -46,19 +46,18 @@ interface EventPreviewerProps {
   userControlElement: JSX.Element;
   showModeratorFeatures: boolean;
   refreshControl: JSX.Element;
+  backButtonFunction?: () => void;
 }
 
 const EventPreviewer = (props: EventPreviewerProps) => {
   const { setLoading } = useContext(ScreenContext);
   const dispatch = useDispatch<AppDispatch>();
 
-
-  const { userToken } =
-    useContext(UserContext);
+  const { userToken } = useContext(UserContext);
   const [descriptionExpanded, setDescriptionExpanded] =
     useState<boolean>(false); // to expand description box
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   // For description expansion
@@ -83,7 +82,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   };
 
   const onBackPressed = () => {
-    navigation.goBack();
+    if (props.backButtonFunction) {
+      props.backButtonFunction();
+    } else {
+      navigation.goBack();
+    }
   };
 
   const onEditEventPressed = () => {
@@ -112,8 +115,16 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             deleteEvent(userToken.UserAccessToken, props.event.EventID)
               .then(() => {
                 setLoading(false);
-                dispatch(setEventMap({id: props.event.EventID, event: undefined}))
-                dispatch(updateUserNumericField({id: props.event.HostUserID, field: "NumEvents", delta: -1}))
+                dispatch(
+                  setEventMap({ id: props.event.EventID, event: undefined })
+                );
+                dispatch(
+                  updateUserNumericField({
+                    id: props.event.HostUserID,
+                    field: "NumEvents",
+                    delta: -1,
+                  })
+                );
                 navigation.goBack();
               })
               .catch((error: CustomError) => {
@@ -236,9 +247,9 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                           }}
                         >
                           {props.event
-                            ? moment(new Date(props.event.StartDateTime)).format(
-                                "MMM DD[,] YYYY"
-                              )
+                            ? moment(
+                                new Date(props.event.StartDateTime)
+                              ).format("MMM DD[,] YYYY")
                             : null}
                         </McText>
                         <View
@@ -264,16 +275,16 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                           >
                             {props.event
                               ? props.event.EndDateTime
-                                ? moment(new Date(props.event.StartDateTime)).format(
-                                    "h:mm a"
-                                  ) +
+                                ? moment(
+                                    new Date(props.event.StartDateTime)
+                                  ).format("h:mm a") +
                                   " - " +
-                                  moment(new Date(props.event.EndDateTime)).format(
-                                    "h:mm a"
-                                  )
-                                : moment(new Date(props.event.StartDateTime)).format(
-                                    "h:mm a"
-                                  )
+                                  moment(
+                                    new Date(props.event.EndDateTime)
+                                  ).format("h:mm a")
+                                : moment(
+                                    new Date(props.event.StartDateTime)
+                                  ).format("h:mm a")
                               : null}
                           </McText>
                         </View>
@@ -455,38 +466,38 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             </View>
           </View>
           {props.showModeratorFeatures && props.interests && props.event && (
-          <>
-            <EditOrDeleteEventSection>
-              <TouchableOpacity
-                style={styles.edit}
-                onPress={() => {
-                  onEditEventPressed();
+            <>
+              <EditOrDeleteEventSection>
+                <TouchableOpacity
+                  style={styles.edit}
+                  onPress={() => {
+                    onEditEventPressed();
+                  }}
+                >
+                  <McText h5>Edit this Event</McText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.delete}
+                  onPress={() => {
+                    onDeleteEventPressed();
+                  }}
+                >
+                  <McText h5>Delete this Event</McText>
+                </TouchableOpacity>
+              </EditOrDeleteEventSection>
+            </>
+          )}
+          {props.userControlElement ? (
+            <SectionFooter>
+              <View
+                style={{
+                  height: 170 + insets.bottom,
                 }}
-              >
-                <McText h5>Edit this Event</McText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.delete}
-                onPress={() => {
-                  onDeleteEventPressed();
-                }}
-              >
-                <McText h5>Delete this Event</McText>
-              </TouchableOpacity>
-            </EditOrDeleteEventSection>
-          </>
-        )}
-        {props.userControlElement ? (
-          <SectionFooter>
-            <View
-              style={{
-                height: 170 + insets.bottom,
-              }}
-            ></View>
-          </SectionFooter>
-        ) : (
-          <View style={{ height: insets.bottom + 30 }} />
-        )}
+              ></View>
+            </SectionFooter>
+          ) : (
+            <View style={{ height: insets.bottom + 30 }} />
+          )}
         </View>
       </ScrollView>
       {props.userControlElement}

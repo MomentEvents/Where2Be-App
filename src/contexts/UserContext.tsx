@@ -83,7 +83,7 @@ export const UserProvider = ({ children }) => {
   const [currentSchool, setCurrentSchool] = useState<School>(null);
   const [isUserContextLoaded, setIsUserContextLoaded] =
     useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(undefined);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [serverError, setServerError] = useState<boolean>(false);
 

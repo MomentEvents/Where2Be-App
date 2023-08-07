@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Event, Interest } from "../constants";
+import { Event, Interest, Token } from "../constants";
 import {
   addUserJoinEvent,
   addUserShoutoutEvent,
@@ -27,10 +27,10 @@ import { AlertContext } from "./AlertContext";
 import { updateUserMap } from "../redux/users/userSlice";
 
 type EventContextType = {
-  clientAddUserJoin: (eventID: string, shouldDisplayErrors?: boolean) => void;
-  clientAddUserShoutout: (eventID: string) => void;
-  clientRemoveUserJoin: (eventID: string) => void;
-  clientRemoveUserShoutout: (eventID: string) => void;
+  clientAddUserJoin: (eventID: string, shouldDisplayErrors?: boolean, currentToken?: Token) => void;
+  clientAddUserShoutout: (eventID: string, currentToken?: Token) => void;
+  clientRemoveUserJoin: (eventID: string, currentToken?: Token) => void;
+  clientRemoveUserShoutout: (eventID: string, currentToken?: Token) => void;
   didJoinedEventsChangeRef: React.MutableRefObject<boolean>;
   didHostedEventsChangeRef: React.MutableRefObject<boolean>;
   newPostedEventHomePageRef: React.MutableRefObject<Event>;
@@ -124,7 +124,7 @@ export const EventProvider = ({ children }) => {
     return false
   };
 
-  const clientAddUserJoin = (eventID: string, shouldDisplayErrors?: boolean) => {
+  const clientAddUserJoin = (eventID: string, shouldDisplayErrors?: boolean, currentToken?: Token) => {
     if (!checkLastAction("join", eventID)) {
       return;
     }
@@ -134,7 +134,7 @@ export const EventProvider = ({ children }) => {
         doJoin: true,
       })
     );
-    addUserJoinEvent(userToken.UserAccessToken, userToken.UserID, eventID)
+    addUserJoinEvent(currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken, currentToken ? currentToken.UserID : userToken.UserID, eventID)
       .then(() => {
         didJoinedEventsChangeRef.current = true;
       })
@@ -158,7 +158,7 @@ export const EventProvider = ({ children }) => {
       });
   };
 
-  const clientAddUserShoutout = (eventID: string) => {
+  const clientAddUserShoutout = (eventID: string, currentToken?: Token) => {
     if (!checkLastAction("shoutout", eventID)) {
       return;
     }
@@ -169,8 +169,8 @@ export const EventProvider = ({ children }) => {
       })
     );
     addUserShoutoutEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
+      currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken,
+      currentToken ? currentToken.UserID : userToken.UserID,
       eventID
     ).catch((error: CustomError) => {
       if (error.showBugReportDialog) {
@@ -186,7 +186,7 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const clientRemoveUserJoin = (eventID: string) => {
+  const clientRemoveUserJoin = (eventID: string, currentToken?: Token) => {
     if (!checkLastAction("unjoin", eventID)) {
       return;
     }
@@ -198,8 +198,8 @@ export const EventProvider = ({ children }) => {
       })
     );
     removeUserJoinEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
+      currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken,
+      currentToken ? currentToken.UserID : userToken.UserID,
       eventID
     ).catch((error: CustomError) => {
       if (error.showBugReportDialog) {
@@ -215,7 +215,7 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const clientRemoveUserShoutout = (eventID: string) => {
+  const clientRemoveUserShoutout = (eventID: string, currentToken?: Token) => {
     if (!checkLastAction("unshoutout", eventID)) {
       return;
     }
@@ -227,8 +227,8 @@ export const EventProvider = ({ children }) => {
       })
     );
     removeUserShoutoutEvent(
-      userToken.UserAccessToken,
-      userToken.UserID,
+      currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken,
+      currentToken ? currentToken.UserID : userToken.UserID,
       eventID
     ).catch((error: CustomError) => {
       if (error.showBugReportDialog) {

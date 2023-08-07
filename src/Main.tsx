@@ -16,7 +16,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { EventProvider } from "./contexts/EventContext";
 import { StatusBar } from "react-native";
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Updates from "expo-updates";
 import { AlertProvider } from "./contexts/AlertContext";
 import { Provider } from "react-redux";
@@ -28,6 +28,8 @@ import { displayError } from "./helpers/helpers";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { appVersionText } from "./constants/texts";
+import EventDetails from "./components/EventDetails/EventDetails";
+import NotificationEventDetailsModal from "./components/NotificationModals/EventDetails/NotificationEventDetailsModal";
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -40,6 +42,41 @@ Notifications.setNotificationHandler({
 
 const Main = () => {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  const [eventDetailsNotificationVisible, setEventDetailsNotificationVisible] =
+    useState(false);
+  const eventIDRef = useRef(undefined);
+
+  useEffect(() => {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("Notification received in foreground:", notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const { notification } = response;
+        console.log("User interacted with this notification:", notification);
+
+        // The notification's data is where you put your own custom payload
+        const { data } = notification.request.content;
+
+        if (data.action === "ViewEventDetails") {
+          eventIDRef.current = data.event_id;
+          setEventDetailsNotificationVisible(true);
+        }
+
+        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
+      });
+
+    return () => {
+      // Clean up on unmount
+      Notifications.removeNotificationSubscription(foregroundSubscription);
+      Notifications.removeNotificationSubscription(responseSubscription);
+    };
+  }, []);
 
   useEffect(() => {
     reactToUpdates();
@@ -144,6 +181,7 @@ const Main = () => {
               <EventProvider>
                 <ScreenProvider>
                   <AuthProvider>
+                    {/* Insert a modal here with  <NotificationEventDetailsModal setClose={setEventDetailsNotificationVisible} eventID={eventIDRef.current}/> when eventDetailsNotificationVisible is true*/}
                     <StatusBar barStyle="light-content" translucent={true} />
                     <AppNav />
                   </AuthProvider>

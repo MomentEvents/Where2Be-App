@@ -29,7 +29,7 @@ import SignupPasswordScreen from "../screens/unauthorized/Onboarding/5_Password/
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
-import analytics from '@react-native-firebase/analytics';
+// import analytics from '@react-native-firebase/analytics';
 import { SETTINGS } from "../constants/settings";
 
 
@@ -53,10 +53,10 @@ const AppNav = () => {
         currentRouteName = navigationRef.current.getCurrentRoute().name;
       }
       if (previousRouteName !== currentRouteName && SETTINGS.firebaseAnalytics) {
-        await analytics().logScreenView({
-          screen_name: currentRouteName,
-          screen_class: currentRouteName,
-        });
+        // await analytics().logScreenView({
+        //   screen_name: currentRouteName,
+        //   screen_class: currentRouteName,
+        // });
       }
       routeNameRef.current = currentRouteName;
     }}>
