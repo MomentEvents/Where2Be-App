@@ -18,26 +18,39 @@ const NotificationEventDetailsModal = (
   const [currentToken, setCurrentToken] = useState(undefined);
 
   const parseToken = async () => {
-    if (!userToken) {
-      setCurrentToken(await getStoredToken());
-    } else {
-      setCurrentToken(userToken);
-    }
+    const token = await getStoredToken();
+    setCurrentToken(token);
   };
   useEffect(() => {
     parseToken();
   }, []);
 
+  useEffect(() => {
+    console.log(currentToken);
+  }, [currentToken]);
+
   if (!currentToken) {
-    <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
-      <ActivityIndicator color={COLORS.white} />
-    </View>;
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.trueBlack,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator color={COLORS.white} />
+      </View>
+    );
   }
+  console.log(" MY TOKEN BEFORE GOING TO EVENTDETAILS IS ", currentToken);
   return (
     <EventDetails
       eventID={props.eventID}
       currentToken={currentToken}
-      onBackFunction={() => {props.setClose(false)}}
+      onBackFunction={() => {
+        props.setClose(false);
+      }}
       disableHostClick={true}
     />
   );

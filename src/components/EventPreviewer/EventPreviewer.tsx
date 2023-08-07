@@ -21,7 +21,7 @@ import { Interest, Event, User, COLORS, SIZES, SCREENS } from "../../constants";
 import { McText } from "../Styled";
 import styled from "styled-components/native";
 import ImageView from "react-native-image-viewing";
-import { useLinkProps, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
 import { showBugReportPopup } from "../../helpers/helpers";

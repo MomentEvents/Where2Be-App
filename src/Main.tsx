@@ -16,20 +16,21 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { EventProvider } from "./contexts/EventContext";
 import { StatusBar } from "react-native";
 import * as Notifications from "expo-notifications";
-import { useEffect, useRef, useState } from "react";
 import * as Updates from "expo-updates";
 import { AlertProvider } from "./contexts/AlertContext";
 import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { store } from "./redux/store";
 import * as Font from "expo-font";
-import { COLORS, customFonts, icons } from "./constants";
+import { COLORS, SIZES, customFonts, icons } from "./constants";
 import { displayError } from "./helpers/helpers";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { Animated, Dimensions } from "react-native";
 import { appVersionText } from "./constants/texts";
 import EventDetails from "./components/EventDetails/EventDetails";
 import NotificationEventDetailsModal from "./components/NotificationModals/EventDetails/NotificationEventDetailsModal";
+import { NavigationContainer } from "@react-navigation/native";
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -45,7 +46,7 @@ const Main = () => {
 
   const [eventDetailsNotificationVisible, setEventDetailsNotificationVisible] =
     useState(false);
-  const eventIDRef = useRef(undefined);
+  const [eventIDNotification, setEventIDNotification] = useState("")
 
   useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
@@ -64,8 +65,9 @@ const Main = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          eventIDRef.current = data.event_id;
-          setEventDetailsNotificationVisible(true);
+          setEventDetailsNotificationVisible(false)
+          setEventIDNotification(data.event_id);
+          setEventDetailsNotificationVisible(true)
         }
 
         console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
@@ -111,6 +113,48 @@ const Main = () => {
     await Font.loadAsync(customFonts)
       .then(() => setAssetsLoaded(true))
       .catch((error: Error) => displayError(error));
+  };
+
+  const modalY = useRef(
+    new Animated.Value(Dimensions.get("window").height)
+  ).current; // Initial position is off screen
+
+  useEffect(() => {
+    if (eventDetailsNotificationVisible) {
+      // When we want the modal to show, we animate the value to 0
+      Animated.timing(modalY, {
+        toValue: 0,
+        duration: 300, // 300ms duration for the animation
+        useNativeDriver: true, // Use native driver for better performance
+      }).start();
+    } else {
+      // Otherwise, we animate it off the screen
+      Animated.timing(modalY, {
+        toValue: SIZES.height,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [eventDetailsNotificationVisible]);
+
+  const renderModal = () => {
+    return (
+      <Animated.View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          top: 0,
+          transform: [{ translateY: modalY }],
+        }}
+      >
+        <NotificationEventDetailsModal
+          setClose={setEventDetailsNotificationVisible}
+          eventID={eventIDNotification}
+        />
+      </Animated.View>
+    );
   };
 
   useEffect(() => {
@@ -174,23 +218,26 @@ const Main = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <AlertProvider>
-            <UserProvider>
-              <EventProvider>
-                <ScreenProvider>
-                  <AuthProvider>
-                    {/* Insert a modal here with  <NotificationEventDetailsModal setClose={setEventDetailsNotificationVisible} eventID={eventIDRef.current}/> when eventDetailsNotificationVisible is true*/}
-                    <StatusBar barStyle="light-content" translucent={true} />
-                    <AppNav />
-                  </AuthProvider>
-                </ScreenProvider>
-              </EventProvider>
-            </UserProvider>
-          </AlertProvider>
-        </SafeAreaProvider>
-      </Provider>
+      <NavigationContainer independent={true}>
+        <Provider store={store}>
+          <SafeAreaProvider>
+            <AlertProvider>
+              <UserProvider>
+                <EventProvider>
+                  <ScreenProvider>
+                    <AuthProvider>
+                      {/* Insert a modal here with  <NotificationEventDetailsModal setClose={setEventDetailsNotificationVisible} eventID={eventIDRef.current}/> when eventDetailsNotificationVisible is true*/}
+                      <StatusBar barStyle="light-content" translucent={true} />
+                      <AppNav />
+                      {eventDetailsNotificationVisible && eventIDNotification && renderModal()}
+                    </AuthProvider>
+                  </ScreenProvider>
+                </EventProvider>
+              </UserProvider>
+            </AlertProvider>
+          </SafeAreaProvider>
+        </Provider>
+      </NavigationContainer>
     </View>
   );
 };

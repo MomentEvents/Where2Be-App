@@ -51,7 +51,6 @@ import {
   import { deleteEvent, getEvent } from "../../services/EventService";
   import { getEventInterestsByEventId } from "../../services/InterestService";
   import GradientButton from "../../components/Styled/GradientButton";
-  import { useIsFocused, useNavigation } from "@react-navigation/native";
   import {
     AntDesign,
     Entypo,
@@ -92,13 +91,12 @@ import {
 
 const EventDetails = (props: EventDetailsProps) => {
     const { isAdmin } = useContext(UserContext);
-    const navigation = useNavigation<any>();
-
     const eventID = props.eventID;
   
     // Loading context in case we want to disable the screen
     const { setLoading } = useContext(ScreenContext);
   
+    console.log("CURRENT TOKEN THAT WENT INTO EVENTDETAILS IS ", props.currentToken)
     const {
       clientAddUserJoin: addUserJoin,
       clientAddUserShoutout: addUserShoutout,
