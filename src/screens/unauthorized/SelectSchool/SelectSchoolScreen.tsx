@@ -90,7 +90,7 @@ const SelectSchoolScreen = ({ route }) => {
             textStyle={{
               color: COLORS.white,
               fontFamily: CUSTOMFONT_SEMIBOLD,
-              fontSize: 20,
+              fontSize: 18,
               paddingHorizontal: 10,
               paddingVertical: 3,
             }}
@@ -104,7 +104,7 @@ const SelectSchoolScreen = ({ route }) => {
             initialTextStyle={{
               color: COLORS.white,
               fontFamily: CUSTOMFONT_SEMIBOLD,
-              fontSize: 20,
+              fontSize: 18,
               paddingHorizontal: 10,
               paddingVertical: 3,
             }}
@@ -118,13 +118,13 @@ const SelectSchoolScreen = ({ route }) => {
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
-            <McText body4>Sign in</McText>
+            <McText color={COLORS.purple} body4>Sign in</McText>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ alignSelf: "center", marginTop: 20, marginBottom: 20 }}
             onPress={onNavigateSignup}
           >
-            <McText body4>Create an account</McText>
+            <McText color={COLORS.purple} body4>Create an account</McText>
           </TouchableOpacity>
         </View>
       </View>

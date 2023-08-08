@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  ImageBackground,
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
@@ -32,15 +33,20 @@ import { McTextInput } from "../../../components/Styled/styled";
 import { Feather } from "@expo/vector-icons";
 import { CustomError } from "../../../constants/error";
 import { AlertContext } from "../../../contexts/AlertContext";
+import { IMAGES } from "../../../constants/images";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CustomTextInput from "../../../components/Styled/CustomTextInput";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
   const { setLoading } = useContext(ScreenContext);
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
 
   const [usercred, setUsercred] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const insets = useSafeAreaInsets();
 
   const onLogin = () => {
     setLoading(true);
@@ -50,7 +56,7 @@ const LoginScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          displayError(error)
+          displayError(error);
         }
         setLoading(false);
       });
@@ -101,74 +107,108 @@ const LoginScreen = () => {
   };
 
   return (
-    <MobileSafeView style={styles.container}>
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.scrollviewContainer}
-        showsVerticalScrollIndicator={false}
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: "#000000" }}
+      contentContainerStyle={{ backgroundColor: COLORS.trueBlack, flex: 1 }}
+    >
+      <MobileSafeView
+        style={styles.container}
+        isBottomViewable={true}
+        isTopViewable={true}
       >
-        <View style={styles.backarrowContainer}>
-          <TouchableOpacity onPress={onNavigateBack}>
-            <Feather name="arrow-left" size={28} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.welcomeTextContainer}>
-          <McText h1 style={styles.welcomeText}>
-            Welcome back!
-          </McText>
-        </View>
-        <McTextInput
-          placeholder={"Username / Email"}
-          placeholderTextColor={COLORS.gray}
-          style={styles.textInputContainer}
-          onChangeText={(newText) => setUsercred(newText)}
-          maxLength={CONSTRAINTS.User.Username.Max}
-        />
-        <McTextInput
-          placeholder={"Password"}
-          placeholderTextColor={COLORS.gray}
-          style={styles.textInputContainer}
-          onChangeText={(newText) => setPassword(newText)}
-          secureTextEntry={true}
-        />
-
-        <View
+        <ImageBackground
+          source={IMAGES.partyIllustration}
           style={{
-            marginTop: 30,
-            marginBottom: 15,
-            width: "80%",
-            alignItems: "center",
+            flex: 1,
+            width: "100%",
+            height: "100%", // This is to ensure it takes full height
           }}
+          resizeMode="cover" // This scales the image to cover the view
         >
-          <McText
+          <View
             style={{
-              textAlign: "center",
-              width: SIZES.width - 80,
-              textDecorationLine: "underline",
+              paddingTop: insets.top,
+              paddingBottom: insets.bottom,
+              paddingHorizontal: 30,
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.9)",
             }}
-            body6
-            color={COLORS.gray}
-            onPress={onForgotPassword}
           >
-            Forgot your password?
-          </McText>
-        </View>
-        <TouchableOpacity onPress={onLogin}>
-          <View style={styles.submitButton}>
-            <McText
-              h3
+            <View
               style={{
-                color: COLORS.white,
+                marginTop: 30,
+                marginBottom: 30,
               }}
             >
-              Login
-            </McText>
+              <TouchableOpacity
+                style={{
+                  borderRadius: 5,
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                }}
+                onPress={onNavigateBack}
+              >
+                <Feather name="arrow-left" size={28} color="white" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.titleTextContainer}>
+              <McText h1 style={styles.titleText}>
+                Login
+              </McText>
+            </View>
+            <CustomTextInput
+              placeholder={"Username / Email"}
+              style={{ marginTop: 15 }}
+              onChangeText={(newText) => setUsercred(newText)}
+            />
+            <CustomTextInput
+              placeholder={"Password"}
+              style={{ marginTop: 15 }}
+              onChangeText={(newText) => setPassword(newText)}
+              secureTextEntry={true}
+            />
+
+            <View
+              style={{
+                marginTop: 30,
+                marginBottom: 15,
+                alignItems: "center",
+              }}
+            >
+              <McText
+                style={{
+                  textAlign: "center",
+                  textDecorationLine: "underline",
+                }}
+                body6
+                color={COLORS.gray}
+                onPress={onForgotPassword}
+              >
+                Forgot your password?
+              </McText>
+            </View>
+            <TouchableOpacity
+              onPress={onLogin}
+              style={{
+                width: "100%",
+                marginTop: 15,
+                paddingVertical: 10,
+                borderRadius: 8,
+                backgroundColor: COLORS.purple,
+              }}
+            >
+              <McText h4 style={{ textAlign: "center" }}>
+                Next
+              </McText>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onNavigateSignup}
+            style={{width: "100%", marginTop: 50}}>
+              <McText color={COLORS.purple} style={{textAlign: "center"}} body4>I don't have an account</McText>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onNavigateSignup}>
-          <McText body4>Don't have an account?</McText>
-        </TouchableOpacity>
-      </KeyboardAwareScrollView>
-    </MobileSafeView>
+        </ImageBackground>
+      </MobileSafeView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -177,45 +217,50 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
+    backgroundColor: "#000000",
+  },
+  imageContainer: {
+    flex: 3,
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.trueBlack,
-    width: SIZES.width,
+    marginVertical: 10,
   },
-  scrollviewContainer: {
-    justifyContent: "flex-start",
+  userInputContainer: {
+    marginTop: 50,
+    justifyContent: "flex-end",
     alignItems: "center",
-    backgroundColor: COLORS.trueBlack,
-    width: SIZES.width,
+    marginHorizontal: 10,
   },
-  backarrowContainer: {
-    width: SIZES.width - 60,
-    marginVertical: 20,
+  image: {
+    width: "100%",
+    height: "100%",
   },
-  welcomeTextContainer: {
-    marginVertical: 40,
+  titleTextContainer: {
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
-  welcomeText: {
+  titleText: {
     textAlign: "center",
   },
+  descriptionText: {
+    marginTop: 20,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    marginTop: 80,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
   textInputContainer: {
-    width: SIZES.width - 80,
-    borderColor: COLORS.gray,
-    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderWidth: 0.3,
     borderRadius: 5,
     paddingHorizontal: 10,
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
-    color: COLORS.white,
+    color: COLORS.lightGray,
     paddingVertical: 10,
-    marginTop: 20,
-  },
-  submitButton: {
-    borderRadius: 5,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: COLORS.purple,
-    marginTop: 40,
-    marginBottom: 40,
+    width: "90%",
+    backgroundColor: COLORS.black,
   },
 });

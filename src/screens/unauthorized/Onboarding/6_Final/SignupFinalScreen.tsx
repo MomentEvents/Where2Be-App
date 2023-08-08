@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
   Linking,
+  ImageBackground,
 } from "react-native";
 import React, { useContext, useRef } from "react";
 import MobileSafeView from "../../../../components/Styled/MobileSafeView";
@@ -33,15 +34,18 @@ import {
   checkIfStringIsEmail,
   showBugReportPopup,
 } from "../../../../helpers/helpers";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { AlertContext } from "../../../../contexts/AlertContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SignupFinalScreen = () => {
   const navigator = useNavigation<any>();
 
   const { signupValues, setSignupValues, userSignup } = useContext(AuthContext);
-  const {showErrorAlert} = useContext(AlertContext)
+  const { showErrorAlert } = useContext(AlertContext);
   const { setLoading } = useContext(ScreenContext);
+
+  const insets = useSafeAreaInsets();
 
   const onNavigateBack = () => {
     navigator.goBack();
@@ -91,11 +95,10 @@ const SignupFinalScreen = () => {
         // Do something. Maybe in context for is email verified
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
-        }
-        else{
-          showErrorAlert(error)
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
+          showErrorAlert(error);
         }
       })
       .finally(() => {
@@ -103,94 +106,116 @@ const SignupFinalScreen = () => {
       });
   };
   return (
-    <MobileSafeView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={IMAGES.graduation}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.titleTextContainer}>
-        <McText style={styles.titleText} h1>
-          Let the Adventure Begin!
-        </McText>
-        <McText style={styles.descriptionText} h4>
-          You're all set! Start exploring events, connecting with fellow
-          students, and{" "}
-          <McText color={COLORS.purple} h4>
-            making unforgettable memories on your campus
-          </McText>
-          .
-        </McText>
-      </View>
-      <View
+    <MobileSafeView
+      style={styles.container}
+      isBottomViewable={true}
+      isTopViewable={true}
+    >
+      <ImageBackground
+        source={IMAGES.partyIllustration}
         style={{
-          marginTop: 30,
-          alignSelf: "center",
-          width: "80%",
-          alignItems: "center",
+          flex: 1,
+          width: "100%",
+          height: "100%", // This is to ensure it takes full height
         }}
+        resizeMode="cover" // This scales the image to cover the view
       >
-        <McText
-          style={{ textAlign: "center"}}
-          body6
-          color={COLORS.gray}
-        >
-          By creating an account, you agree to our{" "}
-          <McText
-            onPress={onTermsOfServiceClick}
-            body6
-            color={COLORS.gray}
-            style={{ textDecorationLine: "underline" }}
-          >
-            Terms of Service
-          </McText>{" "}
-          and{" "}
-          <McText
-            onPress={onPrivacyPolicyClick}
-            body6
-            color={COLORS.gray}
-            style={{ textDecorationLine: "underline" }}
-          >
-            Privacy Policy
-          </McText>
-        </McText>
-      </View>
-      <View style={styles.userInputContainer}>
-        <TouchableOpacity
+        <View
           style={{
-            borderRadius: 5,
-            backgroundColor: COLORS.purple,
-            paddingVertical: 10,
-            paddingHorizontal: 20,
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingHorizontal: 30,
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
           }}
-          onPress={onCreateAccountClick}
         >
-          <McText h3>Activate Account</McText>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 60,
-          justifyContent: "space-between",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            borderRadius: 5,
-            paddingVertical: 10,
-            paddingHorizontal: 14,
-          }}
-          onPress={onNavigateBack}
-        >
-          <View style={{ flexDirection: "row" }}>
-            <AntDesign name="caretleft" size={24} color="white" />
-            <McText h4>Back</McText>
+          <View
+            style={{
+              marginTop: 30,
+              marginBottom: 30,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                borderRadius: 5,
+                paddingVertical: 10,
+                paddingHorizontal: 14,
+              }}
+              onPress={onNavigateBack}
+            >
+              <Feather name="arrow-left" size={28} color="white" />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
+          {/* <View style={styles.imageContainer}>
+            <Image
+              source={IMAGES.graduation}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          </View> */}
+          <View style={styles.titleTextContainer}>
+            <McText style={styles.titleText} h1>
+              Let the Adventure Begin!
+            </McText>
+            <McText style={styles.descriptionText} color={COLORS.lightGray} body3>
+              You're all set! Start exploring events and make unforgettable
+              memories on your campus.
+            </McText>
+          </View>
+          <View
+            style={{
+              marginTop: 30,
+              alignSelf: "center",
+              width: "80%",
+              alignItems: "center",
+            }}
+          >
+            <McText style={{ textAlign: "center" }} body6 color={COLORS.gray}>
+              By creating an account, you agree to our{" "}
+              <McText
+                onPress={onTermsOfServiceClick}
+                body6
+                color={COLORS.gray}
+                style={{ textDecorationLine: "underline" }}
+              >
+                Terms of Service
+              </McText>{" "}
+              and{" "}
+              <McText
+                onPress={onPrivacyPolicyClick}
+                body6
+                color={COLORS.gray}
+                style={{ textDecorationLine: "underline" }}
+              >
+                Privacy Policy
+              </McText>
+            </McText>
+          </View>
+          <View style={styles.userInputContainer}>
+            <TouchableOpacity
+              onPress={onCreateAccountClick}
+              style={{
+                width: "100%",
+                marginTop: 15,
+                paddingVertical: 10,
+                borderRadius: 8,
+                backgroundColor: COLORS.purple,
+              }}
+            >
+              <McText h4 style={{ textAlign: "center" }}>
+                Activate Account
+              </McText>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 60,
+              justifyContent: "space-between",
+            }}
+          />
+        </View>
+      </ImageBackground>
     </MobileSafeView>
   );
 };
@@ -200,16 +225,19 @@ export default SignupFinalScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.trueBlack,
-    paddingBottom: 30,
-    paddingTop: 20,
-    paddingHorizontal: 30,
+    backgroundColor: "#000000",
   },
   imageContainer: {
     flex: 3,
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 10,
+  },
+  userInputContainer: {
+    marginTop: 50,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginHorizontal: 10,
   },
   image: {
     width: "100%",
@@ -226,21 +254,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
   },
-  userInputContainer: {
-    marginTop: 50,
+  buttonContainer: {
+    marginTop: 80,
     justifyContent: "flex-end",
     alignItems: "center",
   },
   textInputContainer: {
-    borderColor: COLORS.gray,
-    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderWidth: 0.3,
     borderRadius: 5,
     paddingHorizontal: 10,
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
-    color: COLORS.white,
+    color: COLORS.lightGray,
     paddingVertical: 10,
-    marginTop: 20,
     width: "90%",
+    backgroundColor: COLORS.black,
   },
 });

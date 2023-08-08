@@ -26,6 +26,7 @@ import { AuthContext } from "../../../../contexts/AuthContext";
 import { CUSTOMFONT_REGULAR } from "../../../../constants/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CustomTextInput from "../../../../components/Styled/CustomTextInput";
 
 const SignupWelcomeScreen = () => {
   const navigator = useNavigation<any>();
@@ -33,7 +34,7 @@ const SignupWelcomeScreen = () => {
   const { showErrorAlert, showAlert, showTextAlert } = useContext(AlertContext);
   const { setLoading } = useContext(ScreenContext);
   const { signupValues, setSignupValues } = useContext(AuthContext);
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
   const onNavigateLogin = () => {
     navigator.navigate(SCREENS.Login);
@@ -55,7 +56,7 @@ const SignupWelcomeScreen = () => {
       .then((school: School) => {
         showTextAlert("Welcome to " + school.Name + "!", 5);
         setSignupValues({ ...signupValues, Email: emailRef.current });
-        navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
+        navigator.navigate(SCREENS.Onboarding.SignupUsernameScreen);
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
@@ -70,10 +71,14 @@ const SignupWelcomeScreen = () => {
   };
   return (
     <KeyboardAwareScrollView
-      style={{ backgroundColor: '#000000' }}
+      style={{ backgroundColor: "#000000" }}
       contentContainerStyle={{ backgroundColor: COLORS.trueBlack, flex: 1 }}
     >
-      <MobileSafeView style={styles.container} isBottomViewable={true} isTopViewable={true}>
+      <MobileSafeView
+        style={styles.container}
+        isBottomViewable={true}
+        isTopViewable={true}
+      >
         <ImageBackground
           source={IMAGES.partyIllustration}
           style={{
@@ -83,13 +88,19 @@ const SignupWelcomeScreen = () => {
           }}
           resizeMode="cover" // This scales the image to cover the view
         >
-          <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom, paddingHorizontal: 30, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
+          <View
+            style={{
+              paddingTop: insets.top,
+              paddingBottom: insets.bottom,
+              paddingHorizontal: 30,
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.9)",
+            }}
+          >
             <View
               style={{
-                flexDirection: "row",
                 marginTop: 30,
-                marginBottom: 50,
-                justifyContent: "space-between",
+                marginBottom: 30,
               }}
             >
               <TouchableOpacity
@@ -100,45 +111,35 @@ const SignupWelcomeScreen = () => {
                 }}
                 onPress={onNavigateBack}
               >
-                <View style={{ flexDirection: "row" }}>
-                  <AntDesign name="caretleft" size={24} color="white" />
-                  <McText h4>Back</McText>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 5,
-                  paddingVertical: 10,
-                  paddingHorizontal: 14,
-                }}
-                onPress={onNextClick}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  <McText h4>Next</McText>
-
-                  <AntDesign name="caretright" size={24} color="white" />
-                </View>
+                <Feather name="arrow-left" size={28} color="white" />
               </TouchableOpacity>
             </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
-                Welcome to Where2Be!
+                Signup
               </McText>
             </View>
             <View style={styles.userInputContainer}>
-              <McTextInput
-                placeholder={"School Email"}
-                placeholderTextColor={COLORS.lightGray}
-                style={styles.textInputContainer}
+              <CustomTextInput
+                placeholder={"School email"}
                 onChangeText={(newText) => (emailRef.current = newText)}
               />
+              <TouchableOpacity onPress={onNextClick} style={{width: "100%", marginTop: 15, paddingVertical: 10, borderRadius: 8, backgroundColor: COLORS.purple}}>
+                <McText h4 style={{textAlign: "center"}}>
+                  Next
+                </McText>
+              </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={{ marginTop: 20 }}
                 onPress={onNavigateLogin}
               >
-                <McText body4 style={{ textAlign: "center" }}>
+                <McText
+                  body4
+                  color={COLORS.purple}
+                  style={{ textAlign: "center" }}
+                >
                   I already have an account
                 </McText>
               </TouchableOpacity>
@@ -155,7 +156,7 @@ export default SignupWelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: "#000000",
   },
   imageContainer: {
     flex: 3,
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     justifyContent: "flex-end",
     alignItems: "center",
+    marginHorizontal: 10,
   },
   image: {
     width: "100%",
@@ -189,8 +191,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textInputContainer: {
-    borderColor: COLORS.lightGray,
-    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderWidth: 0.3,
     borderRadius: 5,
     paddingHorizontal: 10,
     fontFamily: CUSTOMFONT_REGULAR,
@@ -198,5 +200,6 @@ const styles = StyleSheet.create({
     color: COLORS.lightGray,
     paddingVertical: 10,
     width: "90%",
+    backgroundColor: COLORS.black,
   },
 });
