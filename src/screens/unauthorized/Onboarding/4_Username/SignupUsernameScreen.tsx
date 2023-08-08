@@ -150,7 +150,7 @@ const SignupUsernameScreen = () => {
             </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
-                Create your account
+                Username and password
               </McText>
             </View>
             <View style={styles.userInputContainer}>

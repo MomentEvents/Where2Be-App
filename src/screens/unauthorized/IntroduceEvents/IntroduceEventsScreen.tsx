@@ -40,10 +40,10 @@ const IntroduceEventsScreen = ({ route }) => {
         leftButtonOnClick={() => {
           navigation.goBack();
         }}
-        rightButtonSVG={<McText color={COLORS.purple} body3>Login</McText>}
+        rightButtonSVG={<McText color={COLORS.purple} body3>Sign in</McText>}
         rightButtonOnClick={navigateToLogin}
       />
-      <EventViewer school={school} isHoverButtonVisible={true}></EventViewer>
+      <EventViewer school={school} isHoverButtonVisible={false}></EventViewer>
       {/* <TouchableOpacity
         style={{bottom: insets.bottom + 30, ...styles.hoverButtonContainer}}
         onPressOut={navigateToLogin}

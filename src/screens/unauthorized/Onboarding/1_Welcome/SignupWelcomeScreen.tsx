@@ -116,8 +116,11 @@ const SignupWelcomeScreen = () => {
             </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
-                Signup
+                Welcome to Where2Be!
               </McText>
+              <McText style={styles.descriptionText} body3>
+                Let's create your account
+                </McText>
             </View>
             <View style={styles.userInputContainer}>
               <CustomTextInput
@@ -137,7 +140,7 @@ const SignupWelcomeScreen = () => {
               >
                 <McText
                   body4
-                  color={COLORS.purple}
+                  color={COLORS.lightGray}
                   style={{ textAlign: "center" }}
                 >
                   I already have an account

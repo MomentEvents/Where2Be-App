@@ -207,9 +207,7 @@ const EventViewer = (props: EventViewerProps) => {
           </View>
         )
       )}
-      {props.isHoverButtonVisible && (
-        <View style={{ height: insets.bottom + 90 }} />
-      )}
+        <View style={{ height: insets.bottom + (props.isHoverButtonVisible ? 90 : 20) }} />
       <View style={{ height: 20 }} />
     </ScrollView>
   );

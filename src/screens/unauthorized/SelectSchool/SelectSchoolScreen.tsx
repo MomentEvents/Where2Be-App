@@ -118,13 +118,13 @@ const SelectSchoolScreen = ({ route }) => {
             style={{ alignSelf: "center" }}
             onPress={onNavigateLogin}
           >
-            <McText color={COLORS.purple} body4>Sign in</McText>
+            <McText color={COLORS.lightGray} body4>Sign in</McText>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ alignSelf: "center", marginTop: 20, marginBottom: 20 }}
             onPress={onNavigateSignup}
           >
-            <McText color={COLORS.purple} body4>Create an account</McText>
+            <McText color={COLORS.lightGray} body4>Create an account</McText>
           </TouchableOpacity>
         </View>
       </View>
