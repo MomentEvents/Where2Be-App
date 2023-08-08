@@ -39,6 +39,9 @@ import EventDetailsScreen from "./screens/authorized/EventDetails/EventDetailsSc
 import LoadingComponent from "./components/LoadingComponent/LoadingComponent";
 import * as SplashScreen from 'expo-splash-screen';
 import ProfileDetailsScreen from "./screens/authorized/ProfileDetails/ProfileDetailsScreen";
+import EditProfileScreen from "./screens/authorized/EditProfile/EditProfileScreen";
+import FollowList from "./components/FollowList/FollowList";
+import AccountFollowListScreen from "./screens/authorized/AccountFollowList/AccountFollowListScreen";
 
 
 // Set the handler that's invoked whenever a notification is received when the app is open
@@ -140,6 +143,20 @@ const Main = () => {
                         <Stack.Screen
                           name={SCREENS.ProfileDetails}
                           component={ProfileDetailsScreen}
+                          options={{
+                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
+                          }}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.AccountFollowList}
+                          component={AccountFollowListScreen}
+                          options={{
+                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
+                          }}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.EditProfile}
+                          component={EditProfileScreen}
                           options={{
                             ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
                           }}
