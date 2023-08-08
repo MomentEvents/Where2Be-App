@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
@@ -31,6 +31,8 @@ import NotificationsSettingsScreen from "../screens/authorized/NotificationSetti
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
 // import analytics from '@react-native-firebase/analytics';
 import { SETTINGS } from "../constants/settings";
+import * as Notifications from "expo-notifications";
+
 
 const Stack = createStackNavigator();
 
@@ -38,6 +40,39 @@ const AppNav = () => {
   const { isLoggedIn } = useContext(UserContext);
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
+  const notificationNavigation = useNavigation<any>()
+  useEffect(() => {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("Notification received in foreground:", notification);
+      });
+
+    // This listener is fired whenever a user taps on or interacts with a notification
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const { notification } = response;
+        console.log("User interacted with this notification:", notification);
+
+        // The notification's data is where you put your own custom payload
+        const { data } = notification.request.content;
+
+        if (data.action === "ViewEventDetails") {
+          notificationNavigation.push(SCREENS.EventDetails, {
+            eventID: data.event_id,
+          });
+        }
+
+        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
+      });
+
+    return () => {
+      // Clean up on unmount
+      Notifications.removeNotificationSubscription(foregroundSubscription);
+      Notifications.removeNotificationSubscription(responseSubscription);
+    };
+  }, []);
+  
   return (
     <NavigationContainer
       independent={true}

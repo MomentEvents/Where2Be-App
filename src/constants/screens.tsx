@@ -1,4 +1,5 @@
 export const SCREENS = {
+    AppNav: "AppNavScreen",
     Signup: "SignupScreen",
     Login: "LoginScreen",
     SelectSchool: "SelectSchoolScreen",

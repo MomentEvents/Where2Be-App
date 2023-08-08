@@ -22,7 +22,7 @@ import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { store } from "./redux/store";
 import * as Font from "expo-font";
-import { COLORS, SIZES, customFonts, icons } from "./constants";
+import { COLORS, SCREENS, SIZES, customFonts, icons } from "./constants";
 import { displayError } from "./helpers/helpers";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useRef, useState, useEffect } from "react";
@@ -31,6 +31,11 @@ import { appVersionText } from "./constants/texts";
 import EventDetails from "./components/EventDetails/EventDetails";
 import NotificationEventDetailsModal from "./components/NotificationModals/EventDetails/NotificationEventDetailsModal";
 import { NavigationContainer } from "@react-navigation/native";
+import {
+  TransitionPresets,
+  createStackNavigator,
+} from "@react-navigation/stack";
+import EventDetailsScreen from "./screens/authorized/EventDetails/EventDetailsScreen";
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -48,38 +53,6 @@ const Main = () => {
   const [eventDetailsNotificationVisible, setEventDetailsNotificationVisible] =
     useState(false);
   const [eventIDNotification, setEventIDNotification] = useState("");
-
-  useEffect(() => {
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    const foregroundSubscription =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification received in foreground:", notification);
-      });
-
-    // This listener is fired whenever a user taps on or interacts with a notification
-    const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        const { notification } = response;
-        console.log("User interacted with this notification:", notification);
-
-        // The notification's data is where you put your own custom payload
-        const { data } = notification.request.content;
-
-        if (data.action === "ViewEventDetails") {
-          setEventDetailsNotificationVisible(false);
-          setEventIDNotification(data.event_id);
-          setEventDetailsNotificationVisible(true);
-        }
-
-        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
-      });
-
-    return () => {
-      // Clean up on unmount
-      Notifications.removeNotificationSubscription(foregroundSubscription);
-      Notifications.removeNotificationSubscription(responseSubscription);
-    };
-  }, []);
 
   useEffect(() => {
     reactToUpdates();
@@ -228,30 +201,56 @@ const Main = () => {
     );
   }
 
+  const Stack = createStackNavigator();
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
-      <NavigationContainer independent={true}>
-        <Provider store={store}>
-          <SafeAreaProvider>
-            <AlertProvider>
-              <UserProvider>
-                <EventProvider>
-                  <ScreenProvider>
-                    <AuthProvider>
-                      {/* Insert a modal here with  <NotificationEventDetailsModal setClose={setEventDetailsNotificationVisible} eventID={eventIDRef.current}/> when eventDetailsNotificationVisible is true*/}
-                      <StatusBar barStyle="light-content" translucent={true} />
-                      <AppNav />
-                      {eventDetailsNotificationVisible &&
-                        eventIDNotification &&
-                        renderModal()}
-                    </AuthProvider>
-                  </ScreenProvider>
-                </EventProvider>
-              </UserProvider>
-            </AlertProvider>
-          </SafeAreaProvider>
-        </Provider>
-      </NavigationContainer>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <AlertProvider>
+            <UserProvider>
+              <EventProvider>
+                <ScreenProvider>
+                  <AuthProvider>
+                    <StatusBar barStyle="light-content" translucent={true} />
+                    <NavigationContainer independent={true}>
+                      <Stack.Navigator
+                        screenOptions={{
+                          cardStyle: {
+                            backgroundColor: "rgba(0,0,0,0.5)", // semi-transparent background
+                          },
+                          presentation: "modal",
+                          headerShown: false,
+                          gestureEnabled: true,
+                          gestureDirection: "vertical", // swipe up/down to open/close
+                          cardStyleInterpolator: ({ current }) => ({
+                            cardStyle: {
+                              opacity: current.progress, // controls the opacity based on the transition progress
+                            },
+                          }),
+                        }}
+                        initialRouteName={SCREENS.AppNav}
+                      >
+                        <Stack.Screen
+                          name={SCREENS.AppNav}
+                          component={AppNav}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.EventDetails}
+                          component={EventDetailsScreen}
+                          options={{
+                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
+                          }}
+                        />
+                      </Stack.Navigator>
+                    </NavigationContainer>
+                  </AuthProvider>
+                </ScreenProvider>
+              </EventProvider>
+            </UserProvider>
+          </AlertProvider>
+        </SafeAreaProvider>
+      </Provider>
     </View>
   );
 };
