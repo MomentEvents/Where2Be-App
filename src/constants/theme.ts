@@ -51,8 +51,8 @@ export const SIZES = {
   h5: 14,
   h6: 13,
   h7: 10,
-  body1: 30,
-  body2: 22,
+  body1: 24,
+  body2: 18,
   body3: 16,
   body4: 14,
   body5: 13,
@@ -63,7 +63,7 @@ export const SIZES = {
   // app dimensions
   width,
   height,
-  tabBarHeight: 35,
+  tabBarHeight: 45,
   sectionHeaderHeight: 55,
 };
 export const FONTS = {

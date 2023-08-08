@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15,
     width: SIZES.width - 170,
-    backgroundColor: COLORS.gray1,
+    backgroundColor: COLORS.gray2,
   },
   loadingFollowButton: {
     borderRadius: 5,

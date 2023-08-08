@@ -19,6 +19,7 @@ import { COLORS, FONTS, SCREENS, SIZES, icons } from "../../../constants";
 import { CUSTOMFONT_REGULAR } from "../../../constants/theme";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import {
+  displayError,
   openURL,
   showBugReportPopup,
 } from "../../../helpers/helpers";
@@ -49,7 +50,7 @@ const LoginScreen = () => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
-          showErrorAlert(error)
+          displayError(error)
         }
         setLoading(false);
       });

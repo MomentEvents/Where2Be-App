@@ -1,9 +1,17 @@
 import React, { useState, useEffect, Component } from "react";
-import { TouchableOpacity, Button, Image, View, Platform, Alert } from "react-native";
+import {
+  TouchableOpacity,
+  Button,
+  Image,
+  View,
+  Platform,
+  Alert,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons } from "../constants";
 import { PermissionsAndroid } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 type ImagePickerButtonProps = {
   originalImageURI?: string;
@@ -29,7 +37,10 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      Alert.alert("Permission error", "Where2Be does not have access to your photos. Please enable them in settings.")
+      Alert.alert(
+        "Permission error",
+        "Where2Be does not have access to your photos. Please enable them in settings."
+      );
       return;
     }
     var didPick = false;
@@ -75,15 +86,32 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       onPress={pickImage}
     >
       {currentImageURI ? (
-        <Image
-          source={{ uri: currentImageURI }}
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: 4,
-            ...props.style,
-          }}
-        />
+        <>
+          <Image
+            source={{ uri: currentImageURI }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 4,
+              ...props.style,
+            }}
+          />
+          {/* Pen Icon */}
+          <View
+            style={{
+              backgroundColor: COLORS.gray2,
+              padding: 10,
+              borderRadius: SIZES.height,
+              position: "absolute",
+              alignItems: "center",
+              justifyContent: "center",
+              bottom: -10,
+              right: -10,
+            }}
+          >
+            <FontAwesome5 name="pen" size={15} color="white" />
+          </View>
+        </>
       ) : (
         <View
           style={{

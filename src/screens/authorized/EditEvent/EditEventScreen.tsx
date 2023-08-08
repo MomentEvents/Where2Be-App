@@ -219,7 +219,7 @@ const EditEventScreen = ({ route }) => {
           onSubmit();
         }}
         rightButtonSVG={
-          <McText h3 color={COLORS.purple}>
+          <McText body2 color={COLORS.purple}>
             Save
           </McText>
         }

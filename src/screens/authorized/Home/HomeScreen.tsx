@@ -260,10 +260,12 @@ const HomeScreen = () => {
     }
 
     // Add divider to the array
-    nonViewedEvents.push({
-      type: "divider",
-      component: <CaughtUpCard isVisible={nonViewedEvents.length !== 0} isAtBottom={viewedEvents.length === 0} />,
-    });
+    if(nonViewedEvents.length !== 0){
+      nonViewedEvents.push({
+        type: "divider",
+        component: <CaughtUpCard isVisible={true} isAtBottom={viewedEvents.length === 0} />,
+      });
+    }
 
     const newArray = nonViewedEvents.concat(viewedEvents);
     return newArray;

@@ -121,7 +121,7 @@ const EventDetailsScreen = ({ route }) => {
         leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         rightButtonOnClick={onSubmit}
         rightButtonSVG={
-          <McText h3 color={COLORS.purple}>
+          <McText body2 color={COLORS.purple}>
             Post
           </McText>
         }

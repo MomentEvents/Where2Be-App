@@ -133,7 +133,7 @@ const EditProfileScreen = ({ route }) => {
         leftButtonSVG={<Feather name="arrow-left" size={28} color="white" />}
         leftButtonOnClick={() => navigation.goBack()}
         rightButtonSVG={
-          <McText h3 color={COLORS.purple}>
+          <McText body2 color={COLORS.purple}>
             Save
           </McText>
         }

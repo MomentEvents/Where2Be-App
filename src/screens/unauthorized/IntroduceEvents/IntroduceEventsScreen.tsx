@@ -18,6 +18,7 @@ import EventViewer from "../../../components/EventViewer/EventViewer";
 import MobileSafeView from "../../../components/Styled/MobileSafeView";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { McText } from "../../../components/Styled";
 type RouteParams = {
   school: School;
 };
@@ -39,16 +40,18 @@ const IntroduceEventsScreen = ({ route }) => {
         leftButtonOnClick={() => {
           navigation.goBack();
         }}
+        rightButtonSVG={<McText color={COLORS.purple} body3>Login</McText>}
+        rightButtonOnClick={navigateToLogin}
       />
       <EventViewer school={school} isHoverButtonVisible={true}></EventViewer>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{bottom: insets.bottom + 30, ...styles.hoverButtonContainer}}
         onPressOut={navigateToLogin}
       >
         <GradientButton style={styles.hoverButtonIconContainer}>
           <icons.login height="50%" width="50%"></icons.login>
         </GradientButton>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </MobileSafeView>
   );
 };
