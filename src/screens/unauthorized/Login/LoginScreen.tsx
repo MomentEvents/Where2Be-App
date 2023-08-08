@@ -198,7 +198,7 @@ const LoginScreen = () => {
               }}
             >
               <McText h4 style={{ textAlign: "center" }}>
-                Next
+                Continue
               </McText>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNavigateSignup}
