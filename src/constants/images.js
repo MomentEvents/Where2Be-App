@@ -6,4 +6,5 @@ export const IMAGES = {
   idCard: require("../../assets/images/id-card.png"),
   myAccount: require("../../assets/images/my-account.png"),
   password: require("../../assets/images/password-unlock.png"),
+  partyIllustration: require("../../assets/images/party-and-celebration.png"),
 }

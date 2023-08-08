@@ -55,22 +55,15 @@ const SignupNameScreen = () => {
     >
       <MobileSafeView style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image
+          {/* <Image
             source={IMAGES.idCard}
             style={styles.image}
             resizeMode="contain"
-          />
+          /> */}
         </View>
         <View style={styles.titleTextContainer}>
           <McText style={styles.titleText} h1>
             Introduce Yourself
-          </McText>
-          <McText style={styles.descriptionText} h4>
-            We'd love to know your name to better personalize{" "}
-            <McText color={COLORS.purple} h4>
-              your experience
-            </McText>
-            .
           </McText>
         </View>
         <View style={styles.userInputContainer}>

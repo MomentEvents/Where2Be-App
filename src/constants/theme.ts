@@ -31,7 +31,6 @@ export const COLORS = {
   transparentWhite: 'rgba(255, 255, 255, 0.2)',
   transparentBlack: 'rgba(0, 0, 0, 0.9)',
   linear: ['transparent', '#F687FFE8'],
-  
 };
 export const SIZES = {
   // global sizes
