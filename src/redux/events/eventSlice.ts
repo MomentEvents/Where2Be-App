@@ -59,6 +59,10 @@ const eventSlice = createSlice({
     ) => {
       const event = state.eventIDToEvent[action.payload.eventID];
 
+      if(!event){
+        return
+      }
+      
       if (action.payload.doJoin && !event.UserJoin) {
         event.UserJoin = true;
         event.NumJoins = event.NumJoins + 1;

@@ -46,6 +46,7 @@ interface EventPreviewerProps {
   userControlElement: JSX.Element;
   showModeratorFeatures: boolean;
   refreshControl: JSX.Element;
+  hostClickFunction?: () => void;
   backButtonFunction?: () => void;
 }
 
@@ -75,9 +76,13 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   const onHostPressed = () => {
     if (props.host) {
-      navigation.push(SCREENS.ProfileDetails, {
-        userID: props.host.UserID,
-      });
+      if (props.hostClickFunction) {
+        props.hostClickFunction();
+      } else {
+        navigation.push(SCREENS.ProfileDetails, {
+          userID: props.host.UserID,
+        });
+      }
     }
   };
 

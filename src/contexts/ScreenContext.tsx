@@ -27,12 +27,10 @@ export const ScreenContext = createContext<ScreenContextType>({
 });
 
 export const ScreenProvider = ({ children }) => {
-
   const [loading, setLoading] = useState(false);
 
   const { isUserContextLoaded, pullTokenFromServer, serverError } =
     useContext(UserContext);
-
 
   const onDiscordClick = () => {
     const supported = Linking.canOpenURL("https://where2be.app/discord");
@@ -48,72 +46,17 @@ export const ScreenProvider = ({ children }) => {
 
   return (
     <ScreenContext.Provider value={{ setLoading }}>
-      {isUserContextLoaded ? (
-        <>
-          <ProgressLoader
-            visible={loading}
-            isModal={true}
-            isHUD={true}
-            hudColor={"#000000"}
-            color={"#FFFFFF"}
-          ></ProgressLoader>
+      <>
+        <ProgressLoader
+          visible={loading}
+          isModal={true}
+          isHUD={true}
+          hudColor={"#000000"}
+          color={"#FFFFFF"}
+        ></ProgressLoader>
 
-          {children}
-        </>
-      ) : (
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: COLORS.trueBlack,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <View
-            style={{
-              flex: 2,
-              width: "100%",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <icons.where2be
-              width="70%"
-              style={{ marginBottom: 80 }}
-            ></icons.where2be>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-start",
-            }}
-          >
-            {serverError ? (
-              <TouchableOpacity onPress={pullTokenFromServer}>
-                <MaterialCommunityIcons name="reload" size={24} color="white" />
-              </TouchableOpacity>
-            ) : (
-              <ActivityIndicator color={COLORS.white} size="small" />
-            )}
-          </View>
-          <View style={{ padding: 5 }}>
-            <Text allowFontScaling={false} style={{ fontSize: 12, color: COLORS.gray1 }}>
-              {appVersionText} | Join our{" "}
-              <Text allowFontScaling={false}
-                onPress={onDiscordClick}
-                style={{
-                  fontSize: 12,
-                  color: COLORS.gray1,
-                  textDecorationLine: "underline",
-                }}
-              >
-                Discord server
-              </Text>
-              !
-            </Text>
-          </View>
-        </SafeAreaView>
-      )}
+        {children}
+      </>
     </ScreenContext.Provider>
   );
 };

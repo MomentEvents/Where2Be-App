@@ -32,12 +32,13 @@ import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
 // import analytics from '@react-native-firebase/analytics';
 import { SETTINGS } from "../constants/settings";
 import * as Notifications from "expo-notifications";
+import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 
 
 const Stack = createStackNavigator();
 
 const AppNav = () => {
-  const { isLoggedIn } = useContext(UserContext);
+  const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
   const notificationNavigation = useNavigation<any>()
@@ -72,6 +73,10 @@ const AppNav = () => {
       Notifications.removeNotificationSubscription(responseSubscription);
     };
   }, []);
+
+  if(!isUserContextLoaded){
+    return <LoadingComponent/>
+  }
   
   return (
     <NavigationContainer

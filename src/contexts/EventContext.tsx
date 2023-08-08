@@ -125,6 +125,9 @@ export const EventProvider = ({ children }) => {
   };
 
   const clientAddUserJoin = (eventID: string, shouldDisplayErrors?: boolean, currentToken?: Token) => {
+    if(!currentToken && !userToken){
+      return
+    }
     if (!checkLastAction("join", eventID)) {
       return;
     }
@@ -159,6 +162,9 @@ export const EventProvider = ({ children }) => {
   };
 
   const clientAddUserShoutout = (eventID: string, currentToken?: Token) => {
+    if(!currentToken && !userToken){
+      return
+    }
     if (!checkLastAction("shoutout", eventID)) {
       return;
     }
@@ -187,6 +193,9 @@ export const EventProvider = ({ children }) => {
   };
 
   const clientRemoveUserJoin = (eventID: string, currentToken?: Token) => {
+    if(!currentToken && !userToken){
+      return
+    }
     if (!checkLastAction("unjoin", eventID)) {
       return;
     }
@@ -216,6 +225,9 @@ export const EventProvider = ({ children }) => {
   };
 
   const clientRemoveUserShoutout = (eventID: string, currentToken?: Token) => {
+    if(!currentToken && !userToken){
+      return
+    }
     if (!checkLastAction("unshoutout", eventID)) {
       return;
     }

@@ -45,6 +45,9 @@ const userSlice = createSlice({
       const fromUser = state.userIDToUser[action.payload.fromID];
       const toUser = state.userIDToUser[action.payload.toID];
 
+      if(!fromUser || !toUser){
+        return
+      }
       if (action.payload.doFollow) {
         fromUser.NumFollowing = fromUser.NumFollowing + 1;
         toUser.UserFollow = true;

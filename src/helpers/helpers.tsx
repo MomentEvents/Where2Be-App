@@ -176,17 +176,19 @@ export function openURL(url: string): void {
 export function showCancelablePopup(
   title: string,
   description: string,
+  noText: string,
+  yesText: string,
   onYesFunction: () => {}
 ): void {
   Alert.alert(
-    "Log out",
-    "Are you sure you want to log out?",
+    title,
+    description,
     [
       {
-        text: "Cancel",
+        text: noText,
       },
       {
-        text: "Yes",
+        text: yesText,
         onPress: () => {
           onYesFunction();
         },
