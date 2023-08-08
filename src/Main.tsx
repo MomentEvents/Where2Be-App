@@ -115,19 +115,10 @@ const Main = () => {
                       <Stack.Navigator
                         screenOptions={{
                           cardStyle: {
-                            backgroundColor: "rgba(0,0,0,0.5)", // semi-transparent background
+                            backgroundColor: COLORS.trueBlack,
                           },
-                          presentation: "modal",
                           headerShown: false,
-                          gestureEnabled: true,
-                          gestureDirection: "vertical", // swipe up/down to open/close
-                          cardStyleInterpolator: ({ current }) => ({
-                            cardStyle: {
-                              opacity: current.progress, // controls the opacity based on the transition progress
-                            },
-                          }),
                         }}
-                        initialRouteName={SCREENS.AppNav}
                       >
                         <Stack.Screen
                           name={SCREENS.AppNav}
@@ -136,30 +127,18 @@ const Main = () => {
                         <Stack.Screen
                           name={SCREENS.EventDetails}
                           component={EventDetailsScreen}
-                          options={{
-                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
-                          }}
                         />
                         <Stack.Screen
                           name={SCREENS.ProfileDetails}
                           component={ProfileDetailsScreen}
-                          options={{
-                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
-                          }}
                         />
                         <Stack.Screen
                           name={SCREENS.AccountFollowList}
                           component={AccountFollowListScreen}
-                          options={{
-                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
-                          }}
                         />
                         <Stack.Screen
                           name={SCREENS.EditProfile}
                           component={EditProfileScreen}
-                          options={{
-                            ...TransitionPresets.ModalSlideFromBottomIOS, // Use the iOS style slide from bottom animation
-                          }}
                         />
                       </Stack.Navigator>
                     </NavigationContainer>
