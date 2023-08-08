@@ -1,5 +1,5 @@
 {
-    "env": "dev",
+    "env": "prod",
     "prod": {
         "apiUrl": "https://api.momentevents.app",
         "apiVersion": "/v1.0.1"

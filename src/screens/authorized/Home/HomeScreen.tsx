@@ -164,7 +164,10 @@ const HomeScreen = () => {
     }
   }, [isFocused]);
 
-  const CaughtUpCard = (props: { isAtBottom: boolean }) => {
+  const CaughtUpCard = (props: { isVisible: boolean, isAtBottom: boolean }) => {
+    if(!props.isVisible){
+      return <></>
+    }
     return (
       <View
         style={{
@@ -249,9 +252,9 @@ const HomeScreen = () => {
       if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
-        if (!data[i].Event.UserFollowHost) {
-          data[i].Reason = "An event you have not seen before";
-        }
+        // if (!data[i].Event.UserFollowHost) {
+        //   data[i].Reason = "An event you have not seen before";
+        // }
         nonViewedEvents.push(data[i]);
       }
     }
@@ -259,7 +262,7 @@ const HomeScreen = () => {
     // Add divider to the array
     nonViewedEvents.push({
       type: "divider",
-      component: <CaughtUpCard isAtBottom={viewedEvents.length === 0} />,
+      component: <CaughtUpCard isVisible={nonViewedEvents.length !== 0} isAtBottom={viewedEvents.length === 0} />,
     });
 
     const newArray = nonViewedEvents.concat(viewedEvents);
