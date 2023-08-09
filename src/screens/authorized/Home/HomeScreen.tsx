@@ -39,13 +39,14 @@ import { IMAGES } from "../../../constants/images";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { selectUserByID } from "../../../redux/users/userSelectors";
+import { ScreenContext } from "../../../contexts/ScreenContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
   const { showErrorAlert } = useContext(AlertContext);
 
   const { newPostedEventHomePageRef } = useContext(EventContext);
-  const flatListRef = useRef<FlatList>(null);
+  const { flatListRef } = useContext(ScreenContext);
 
   const viewedEventIDs = useRef<Set<string>>(new Set([]));
 
@@ -164,9 +165,9 @@ const HomeScreen = () => {
     }
   }, [isFocused]);
 
-  const CaughtUpCard = (props: { isVisible: boolean, isAtBottom: boolean }) => {
-    if(!props.isVisible){
-      return <></>
+  const CaughtUpCard = (props: { isVisible: boolean; isAtBottom: boolean }) => {
+    if (!props.isVisible) {
+      return <></>;
     }
     return (
       <View
@@ -190,7 +191,11 @@ const HomeScreen = () => {
         >
           <Feather name="aperture" size={homeCardWidth - 220} color="white" />
 
-          <McText h2 color={COLORS.gray} style={{ textAlign: "center", marginTop: 50 }}>
+          <McText
+            h2
+            color={COLORS.gray}
+            style={{ textAlign: "center", marginTop: 50 }}
+          >
             You're all caught up!
           </McText>
         </View>
@@ -252,16 +257,26 @@ const HomeScreen = () => {
       if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
-        data[i].Reason = data[i].Event.UserFollowHost ? "A new event from an account you follow" : "An event you have not seen before"
+        data[i].Reason = data[i].Event.UserFollowHost
+          ? "A new event from an account you follow"
+          : "An event you have not seen before";
         nonViewedEvents.push(data[i]);
       }
     }
 
     // Add divider to the array
-    if(nonViewedEvents.length !== 0 || (nonViewedEvents.length === 0 && viewedEvents.length === 0)){
+    if (
+      nonViewedEvents.length !== 0 ||
+      (nonViewedEvents.length === 0 && viewedEvents.length === 0)
+    ) {
       nonViewedEvents.push({
         type: "divider",
-        component: <CaughtUpCard isVisible={true} isAtBottom={viewedEvents.length === 0} />,
+        component: (
+          <CaughtUpCard
+            isVisible={true}
+            isAtBottom={viewedEvents.length === 0}
+          />
+        ),
       });
     }
 
@@ -412,7 +427,9 @@ const HomeScreen = () => {
                   paddingTop: 10,
                   marginHorizontal: 60,
                 }}
-                onPress={() => {navigation.navigate(SCREENS.ExploreEvents)}}
+                onPress={() => {
+                  navigation.navigate(SCREENS.ExploreEvents);
+                }}
               >
                 Check out explore events
               </McText>

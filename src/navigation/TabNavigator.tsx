@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import React, { useContext, useEffect, useRef } from "react";
+import { View, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { COLORS, SCREENS, SIZES, icons } from "../constants";
@@ -13,12 +13,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { ScreenContext } from "../contexts/ScreenContext";
 
 const Tab = createBottomTabNavigator();
 
 // constants used for rendering images
-const EVENTS = "Events";
+const HOME = "Home";
 const SEARCH = "Search";
 const EXPLORE = "Explore";
 const FAVORITES = "Favorites";
@@ -26,7 +27,7 @@ const PROFILE = "Profile";
 
 const TabIcon = ({ focused, icon }) => {
   switch (icon) {
-    case EVENTS:
+    case HOME:
       return (
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {focused ? (
@@ -92,8 +93,10 @@ const TabIcon = ({ focused, icon }) => {
 };
 
 const TabNavigator = ({ params }) => {
-
   const insets = useSafeAreaInsets();
+
+  const currentTab = useRef<string>();
+  const { flatListRef } = useContext(ScreenContext);
 
   return (
     <Tab.Navigator
@@ -123,7 +126,26 @@ const TabNavigator = ({ params }) => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={EVENTS} />
+            <TabIcon focused={focused} icon={HOME} />
+          ),
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={(e) => {
+                if (
+                  currentTab.current === SCREENS.Home &&
+                  flatListRef.current
+                ) {
+                  console.log("going up?")
+                  flatListRef.current.scrollToOffset({
+                    offset: 0,
+                    animated: true,
+                  });
+                }
+                currentTab.current = SCREENS.Home;
+                props.onPress(e); // Call the original onPress prop
+              }}
+            />
           ),
         }}
       />
@@ -145,6 +167,15 @@ const TabNavigator = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={EXPLORE} />
           ),
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={(e) => {
+                currentTab.current = SCREENS.ExploreEvents;
+                props.onPress(e); // Call the original onPress prop
+              }}
+            />
+          ),
         }}
       />
 
@@ -155,6 +186,15 @@ const TabNavigator = ({ params }) => {
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={FAVORITES} />
           ),
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={(e) => {
+                currentTab.current = SCREENS.MyCalendar;
+                props.onPress(e); // Call the original onPress prop
+              }}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -163,6 +203,15 @@ const TabNavigator = ({ params }) => {
         options={{
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={PROFILE} />
+          ),
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={(e) => {
+                currentTab.current = SCREENS.MyProfile;
+                props.onPress(e); // Call the original onPress prop
+              }}
+            />
           ),
         }}
       />
