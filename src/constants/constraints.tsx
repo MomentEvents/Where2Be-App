@@ -9,7 +9,7 @@ export const CONSTRAINTS = {
             Min: 10,
         },
         Location: {
-            Max: 50,
+            Max: 130,
             Min: 5
         },
         Interest: {

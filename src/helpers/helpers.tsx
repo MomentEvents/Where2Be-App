@@ -23,7 +23,7 @@ import backendConfig from "../../backendconfig.json"
  */
 
 import moment from "moment";
-import { Alert, Linking } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 
 export function checkIfStringIsEmail(test: string): boolean {
   const expression =
@@ -174,6 +174,30 @@ export async function openURL(url: string): Promise<void> {
     Alert.alert("Open this url in your browser: " + url)
   }
 }
+
+export function openMaps(query: string) {
+  if(!query){
+    return
+  }
+  const isIOS = Platform.OS === 'ios';
+  let url;
+
+  if (isIOS) {
+      url = `http://maps.apple.com/?q=${query}`;
+  } else {
+      // try to open Google Maps, if not installed it will default to browser map version
+      url = `geo:0,0?q=${query}`;
+  }
+
+  Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+          Linking.openURL(url);
+      } else {
+          console.error("Can't handle URL: " + url);
+      }
+  });
+}
+
 
 export function showCancelablePopup(
   title: string,

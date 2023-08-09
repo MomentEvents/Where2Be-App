@@ -24,7 +24,7 @@ import ImageView from "react-native-image-viewing";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
-import { showBugReportPopup } from "../../helpers/helpers";
+import { openMaps, showBugReportPopup } from "../../helpers/helpers";
 import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
@@ -316,24 +316,26 @@ const EventPreviewer = (props: EventPreviewerProps) => {
               </View>
             </TitleSection>
 
-            <LocationSection>
-              <Ionicons
-                name="location-outline"
-                size={16}
-                style={{ marginRight: 5 }}
-                color={COLORS.lightGray}
-              />
-              <McText
-                h5
-                style={{
-                  letterSpacing: 0.5,
-                  marginTop: -1,
-                  color: COLORS.lightGray,
-                }}
-              >
-                {props.event?.Location}
-              </McText>
-            </LocationSection>
+            <TouchableOpacity onPress={() => openMaps(props.event?.Location)}>
+              <LocationSection>
+                <Ionicons
+                  name="location-outline"
+                  size={16}
+                  style={{ marginRight: 5 }}
+                  color={COLORS.lightGray}
+                />
+                <McText
+                  h5
+                  style={{
+                    letterSpacing: 0.5,
+                    marginTop: -1,
+                    color: COLORS.lightGray,
+                  }}
+                >
+                  {props.event?.Location}
+                </McText>
+              </LocationSection>
+            </TouchableOpacity>
 
             <View>
               <DescriptionSection>
@@ -493,7 +495,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
               </EditOrDeleteEventSection>
             </>
           )}
-          {props.postEventFunction &&             <TouchableOpacity
+          {props.postEventFunction && (
+            <TouchableOpacity
               onPress={props.postEventFunction}
               style={{
                 marginTop: 15,
@@ -506,7 +509,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
               <McText h4 style={{ textAlign: "center" }}>
                 Post Event
               </McText>
-            </TouchableOpacity>}
+            </TouchableOpacity>
+          )}
           {props.userControlElement ? (
             <SectionFooter>
               <View
