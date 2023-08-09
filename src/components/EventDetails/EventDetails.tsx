@@ -168,49 +168,34 @@ const EventDetails = (props: EventDetailsProps) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        console.log("IT IS ACTIVE");
-        console.log(didClickTicketRef.current + "DIDCLICKTICKETREF");
-        console.log(JSON.stringify(storedEvent));
-        if (didClickTicketRef.current && storedEvent && !storedEvent.UserJoin) {
-          Alert.alert(
-            "Did you complete your registration?",
-            "",
-            [
-              {
-                text: "No",
-                onPress: () => console.log("Cancel Pressed"),
-              },
-              {
-                text: "Yes",
-                onPress: () => {
-                  console.log("Yes Pressed");
-                  addUserJoin(eventID, undefined, props.currentToken);
-                },
-              },
-            ],
-            { cancelable: false }
-          );
-        }
-        didClickTicketRef.current = false;
-      }
+  const checkTicketJoin = () => {
+    console.log("IT IS ACTIVE");
+    console.log(didClickTicketRef.current + "DIDCLICKTICKETREF");
+    console.log(JSON.stringify(storedEvent));
+    if (didClickTicketRef.current && storedEvent && !storedEvent.UserJoin) {
+      Alert.alert(
+        "Did you complete your registration?",
+        "",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("Cancel Pressed"),
+          },
+          {
+            text: "Yes",
+            onPress: () => {
+              console.log("Yes Pressed");
+              addUserJoin(eventID, undefined, props.currentToken);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+    didClickTicketRef.current = false;
+  };
 
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  const onTicketPressed = () => {
+  const onTicketPressed = async () => {
     if (!props.currentToken) {
       promptLogin();
     }
@@ -220,7 +205,8 @@ const EventDetails = (props: EventDetailsProps) => {
         "Setting didClickTicketRef to be ",
         didClickTicketRef.current
       );
-      openURL(storedEvent.SignupLink);
+      await openURL(storedEvent.SignupLink);
+      checkTicketJoin();
     }
   };
 
@@ -435,9 +421,9 @@ const EventDetails = (props: EventDetailsProps) => {
                                   if (!didFetchEvent) {
                                     beforeLoadJoin.current = false;
                                   }
-                                  if(!props.currentToken){
-                                    promptLogin()
-                                    return
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
                                   }
                                   removeUserJoin(eventID, props.currentToken);
                                 }
@@ -568,9 +554,9 @@ const EventDetails = (props: EventDetailsProps) => {
                                   if (!didFetchEvent) {
                                     beforeLoadShoutout.current = false;
                                   }
-                                  if(!props.currentToken){
-                                    promptLogin()
-                                    return
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
                                   }
                                   removeUserShoutout(
                                     eventID,
@@ -581,9 +567,9 @@ const EventDetails = (props: EventDetailsProps) => {
                                   if (!didFetchEvent) {
                                     beforeLoadShoutout.current = true;
                                   }
-                                  if(!props.currentToken){
-                                    promptLogin()
-                                    return
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
                                   }
                                   addUserShoutout(eventID, props.currentToken);
                                 }

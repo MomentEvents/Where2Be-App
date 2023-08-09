@@ -155,7 +155,7 @@ export function checkIfEventIsFormatted(event: Event): boolean {
   );
 }
 
-export function openURL(url: string): void {
+export async function openURL(url: string): Promise<void> {
   // If URL does not start with 'https://', prepend it
   if (!url.startsWith('https://') && !url.startsWith('http://')) {
     url = 'https://' + url;
@@ -169,7 +169,7 @@ export function openURL(url: string): void {
   }
 
   try{
-    WebBrowser.openBrowserAsync(url);
+    await WebBrowser.openBrowserAsync(url);
   } catch (e){
     Alert.alert("Open this url in your browser: " + url)
   }
