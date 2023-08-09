@@ -44,8 +44,11 @@ const AppNav = () => {
   const notificationNavigation = useNavigation<any>()
 
   useEffect(() => {
-    async function handleInitialNotification() {
-      const response = await Notifications.getLastNotificationResponseAsync();
+    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+      if(!response){
+        console.log("Notification response is null")
+        return
+      }
       const { notification } = response;
       console.log("User interacted with this notification:", notification);
 
@@ -59,10 +62,11 @@ const AppNav = () => {
       }
 
       console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
-    }
+    });
   
-    handleInitialNotification();
+    return () => subscription.remove();
   }, []);
+  
 
   if(!isUserContextLoaded){
     return <LoadingComponent/>
