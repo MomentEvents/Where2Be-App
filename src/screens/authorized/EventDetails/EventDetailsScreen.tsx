@@ -83,6 +83,7 @@ import {
   updateEventMap,
 } from "../../../redux/events/eventSlice";
 import EventDetails from "../../../components/EventDetails/EventDetails";
+import { getStoredToken } from "../../../services/AuthService";
 
 type routeParametersType = {
   eventID: string;
@@ -91,7 +92,43 @@ type routeParametersType = {
 const EventDetailsScreen = ({ route }) => {
   const propsFromEventCard: routeParametersType = route.params;
   const { eventID } = propsFromEventCard;
-  const {userToken} = useContext(UserContext)
+
+  const { userToken, isLoggedIn } = useContext(UserContext);
+
+  const [currentToken, setCurrentToken] = useState(undefined);
+
+  const parseToken = async () => {
+    if(!userToken){
+      const token = await getStoredToken();
+      setCurrentToken(token);
+    } else {
+      setCurrentToken(userToken)
+    }
+
+  };
+  useEffect(() => {
+    parseToken();
+  }, []);
+
+  useEffect(() => {
+    console.log(currentToken);
+  }, [currentToken]);
+
+  if (!currentToken) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.trueBlack,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator color={COLORS.white} />
+      </View>
+    );
+  }
+  console.log(" MY TOKEN BEFORE GOING TO EVENTDETAILS IS ", currentToken);
 
   return <EventDetails eventID={eventID} currentToken={userToken}/>;
 };
