@@ -239,7 +239,7 @@ const EventCard = ({
                   >
                     <McText body5 color={COLORS.purple} numberOfLines={1}>
                       {isBigCard
-                        ? isWithin24hours(new Date(storedEvent.StartDateTime))
+                        ? false //isWithin24hours(new Date(storedEvent.StartDateTime))
                           ? moment(
                               new Date(storedEvent.StartDateTime)
                             ).fromNow()
