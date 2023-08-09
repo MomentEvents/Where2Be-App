@@ -29,7 +29,6 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import { Animated, Dimensions } from "react-native";
 import { appVersionText } from "./constants/texts";
 import EventDetails from "./components/EventDetails/EventDetails";
-import NotificationEventDetailsModal from "./components/NotificationModals/EventDetails/NotificationEventDetailsModal";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   TransitionPresets,
@@ -42,6 +41,7 @@ import ProfileDetailsScreen from "./screens/authorized/ProfileDetails/ProfileDet
 import EditProfileScreen from "./screens/authorized/EditProfile/EditProfileScreen";
 import FollowList from "./components/FollowList/FollowList";
 import AccountFollowListScreen from "./screens/authorized/AccountFollowList/AccountFollowListScreen";
+import EditEventScreen from "./screens/authorized/EditEvent/EditEventScreen";
 
 
 // Set the handler that's invoked whenever a notification is received when the app is open
@@ -139,6 +139,10 @@ const Main = () => {
                         <Stack.Screen
                           name={SCREENS.EditProfile}
                           component={EditProfileScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.EditEvent}
+                          component={EditEventScreen}
                         />
                       </Stack.Navigator>
                     </NavigationContainer>

@@ -115,6 +115,7 @@ const EventDetailsScreen = ({ route }) => {
   }, [currentToken]);
 
   if (!currentToken) {
+    console.log("GOT UNDEFINED IN CURRENTTOKEN BUT HANDLED IT")
     return (
       <View
         style={{
