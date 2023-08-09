@@ -42,36 +42,26 @@ const AppNav = () => {
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
   const notificationNavigation = useNavigation<any>()
+
   useEffect(() => {
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    const foregroundSubscription =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification received in foreground:", notification);
-      });
+    async function handleInitialNotification() {
+      const response = await Notifications.getLastNotificationResponseAsync();
+      const { notification } = response;
+      console.log("User interacted with this notification:", notification);
 
-    // This listener is fired whenever a user taps on or interacts with a notification
-    const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        const { notification } = response;
-        console.log("User interacted with this notification:", notification);
+      // The notification's data is where you put your own custom payload
+      const { data } = notification.request.content;
 
-        // The notification's data is where you put your own custom payload
-        const { data } = notification.request.content;
+      if (data.action === "ViewEventDetails") {
+        notificationNavigation.push(SCREENS.EventDetails, {
+          eventID: data.event_id,
+        });
+      }
 
-        if (data.action === "ViewEventDetails") {
-          notificationNavigation.push(SCREENS.EventDetails, {
-            eventID: data.event_id,
-          });
-        }
-
-        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
-      });
-
-    return () => {
-      // Clean up on unmount
-      Notifications.removeNotificationSubscription(foregroundSubscription);
-      Notifications.removeNotificationSubscription(responseSubscription);
-    };
+      console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
+    }
+  
+    handleInitialNotification();
   }, []);
 
   if(!isUserContextLoaded){
