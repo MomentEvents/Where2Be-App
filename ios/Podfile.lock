@@ -116,6 +116,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - ExpoSystemUI (2.2.1):
     - ExpoModulesCore
+  - ExpoWebBrowser (12.1.1):
+    - ExpoModulesCore
   - EXSecureStore (12.1.1):
     - ExpoModulesCore
   - EXSplashScreen (0.18.2):
@@ -646,6 +648,7 @@ DEPENDENCIES:
   - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
+  - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXSecureStore (from `../node_modules/expo-secure-store/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXStructuredHeaders (from `../node_modules/expo-structured-headers/ios`)
@@ -773,6 +776,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
+  ExpoWebBrowser:
+    :path: "../node_modules/expo-web-browser/ios"
   EXSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
   EXSplashScreen:
@@ -906,6 +911,7 @@ SPEC CHECKSUMS:
   ExpoLocalization: f26cd431ad9ea3533c5b08c4fabd879176a794bb
   ExpoModulesCore: 653958063a301098b541ae4dfed1ac0b98db607b
   ExpoSystemUI: 0be5173ee2a7c01e9abc44f56d879a1eaaa16527
+  ExpoWebBrowser: 033d34c478d9986da2f1679729041423837626e0
   EXSecureStore: e8923258361cc406d0401af380f12bd05b2b720f
   EXSplashScreen: 0e0a9ba0cf7553094e93213099bd7b42e6e237e9
   EXStructuredHeaders: b1a48d732562e2cc81f11771bcfd29534f5d9254
