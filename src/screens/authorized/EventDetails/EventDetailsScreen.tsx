@@ -21,7 +21,7 @@ import React, {
 } from "react";
 import { ScreenContext } from "../../../contexts/ScreenContext";
 import { COLORS, SCREENS, SIZES, icons } from "../../../constants";
-import { Event } from "../../../constants/types";
+import { Event, Token } from "../../../constants/types";
 import { User } from "../../../constants/types";
 import { Interest } from "../../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
@@ -95,7 +95,8 @@ const EventDetailsScreen = ({ route }) => {
 
   const { userToken, isLoggedIn } = useContext(UserContext);
 
-  const [currentToken, setCurrentToken] = useState(undefined);
+  const [currentToken, setCurrentToken] = useState<Token>(undefined);
+  const [didLoadToken, setDidLoadToken] = useState(false)
 
   const parseToken = async () => {
     if(!userToken){
@@ -104,18 +105,13 @@ const EventDetailsScreen = ({ route }) => {
     } else {
       setCurrentToken(userToken)
     }
-
+    setDidLoadToken(true)
   };
   useEffect(() => {
     parseToken();
   }, []);
 
-  useEffect(() => {
-    console.log(currentToken);
-  }, [currentToken]);
-
-  if (!currentToken) {
-    console.log("GOT UNDEFINED IN CURRENTTOKEN BUT HANDLED IT")
+  if (!didLoadToken) {
     return (
       <View
         style={{
@@ -131,7 +127,7 @@ const EventDetailsScreen = ({ route }) => {
   }
   console.log(" MY TOKEN BEFORE GOING TO EVENTDETAILS IS ", currentToken);
 
-  return <EventDetails eventID={eventID} currentToken={userToken}/>;
+  return <EventDetails eventID={eventID} currentToken={currentToken}/>;
 };
 
 export default EventDetailsScreen;
