@@ -165,7 +165,7 @@ const SearchToggler = () => {
           style={{
             flex: 1,
             backgroundColor: "rgba(80,80,80,.90)",
-            borderRadius: 30,
+            borderRadius: 10,
             paddingHorizontal: 15,
             paddingVertical: 10,
             marginHorizontal: 20,

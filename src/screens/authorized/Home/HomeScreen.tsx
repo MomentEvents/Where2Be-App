@@ -252,15 +252,13 @@ const HomeScreen = () => {
       if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
-        // if (!data[i].Event.UserFollowHost) {
-        //   data[i].Reason = "An event you have not seen before";
-        // }
+        data[i].Reason = data[i].Event.UserFollowHost ? "A new event from an account you follow" : "An event you have not seen before"
         nonViewedEvents.push(data[i]);
       }
     }
 
     // Add divider to the array
-    if(nonViewedEvents.length !== 0){
+    if(nonViewedEvents.length !== 0 || (nonViewedEvents.length === 0 && viewedEvents.length === 0)){
       nonViewedEvents.push({
         type: "divider",
         component: <CaughtUpCard isVisible={true} isAtBottom={viewedEvents.length === 0} />,
@@ -414,8 +412,9 @@ const HomeScreen = () => {
                   paddingTop: 10,
                   marginHorizontal: 60,
                 }}
+                onPress={() => {navigation.navigate(SCREENS.ExploreEvents)}}
               >
-                More coming soon!
+                Check out explore events
               </McText>
             </View>
           )
