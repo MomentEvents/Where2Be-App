@@ -422,10 +422,12 @@ const HomeScreen = () => {
               <McText
                 body4
                 color={COLORS.gray2}
+                
                 style={{
                   textAlign: "center",
                   paddingTop: 10,
                   marginHorizontal: 60,
+                  textDecorationLine: "underline"
                 }}
                 onPress={() => {
                   navigation.navigate(SCREENS.ExploreEvents);

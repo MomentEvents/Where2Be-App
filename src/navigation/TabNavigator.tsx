@@ -95,7 +95,7 @@ const TabIcon = ({ focused, icon }) => {
 const TabNavigator = ({ params }) => {
   const insets = useSafeAreaInsets();
 
-  const currentTab = useRef<string>();
+  const currentTab = useRef<string>(SCREENS.Home);
   const { flatListRef } = useContext(ScreenContext);
 
   return (
