@@ -28,6 +28,8 @@ import * as Updates from "expo-updates";
 import { CustomError } from "../../../constants/error";
 import { clearAllCachedData } from "../../../services/AuthService";
 import { AlertContext } from "../../../contexts/AlertContext";
+import * as WebBrowser from 'expo-web-browser';
+
 
 const SettingsScreen = () => {
   const { userLogout } = useContext(AuthContext);
@@ -44,7 +46,7 @@ const SettingsScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app");
+      WebBrowser.openBrowserAsync("https://where2be.app");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app"}`);
     }
@@ -56,7 +58,7 @@ const SettingsScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/discord");
+      WebBrowser.openBrowserAsync("https://where2be.app/discord");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
     }

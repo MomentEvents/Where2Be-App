@@ -2,6 +2,8 @@ import { ActivityIndicator, Alert, Linking, SafeAreaView, StyleSheet, Text, View
 import React from 'react'
 import { COLORS, icons } from '../../constants';
 import { appVersionText } from '../../constants/texts';
+import * as WebBrowser from 'expo-web-browser';
+
 
 const LoadingComponent = () => {
   const onDiscordClick = () => {
@@ -10,7 +12,7 @@ const LoadingComponent = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/discord");
+      WebBrowser.openBrowserAsync("https://where2be.app/discord");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
     }

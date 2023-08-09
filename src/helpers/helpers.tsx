@@ -5,6 +5,8 @@ import {
   NetworkError,
   UserError,
 } from "../constants/error";
+import * as WebBrowser from 'expo-web-browser';
+
 
 import backendConfig from "../../backendconfig.json"
 
@@ -167,7 +169,7 @@ export function openURL(url: string): void {
   }
 
   try{
-    Linking.openURL(url);
+    WebBrowser.openBrowserAsync(url);
   } catch (e){
     Alert.alert("Open this url in your browser: " + url)
   }
@@ -238,7 +240,7 @@ export function showBugReportPopup(error: ServerError) {
   Alert.alert(error.name, error.message, [
     {
       text: "Send bug report",
-      onPress: () => Linking.openURL("https://where2be.app/discord"),
+      onPress: () => WebBrowser.openBrowserAsync("https://where2be.app/discord"),
     },
     {
       text: "Not now",
@@ -254,7 +256,7 @@ export function showAppFeedbackPopup() {
     [
       {
         text: "Send feedback",
-        onPress: () => Linking.openURL("https://where2be.app/feedback"),
+        onPress: () => WebBrowser.openBrowserAsync("https://where2be.app/feedback"),
       },
       {
         text: "Not now",
@@ -271,7 +273,7 @@ export function discordInvitePopup() {
     [
       {
         text: "Join our Discord",
-        onPress: () => Linking.openURL("https://where2be.app/discord"),
+        onPress: () => WebBrowser.openBrowserAsync("https://where2be.app/discord"),
       },
       {
         text: "Not now",

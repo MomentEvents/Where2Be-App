@@ -28,6 +28,8 @@ import { appVersionText } from "../../../constants/texts";
 import { useNavigation } from "@react-navigation/native";
 import SchoolSearchSelector from "../../../components/SchoolSearchSelector/SchoolSearchSelector";
 import { CUSTOMFONT_BOLD, CUSTOMFONT_SEMIBOLD } from "../../../constants/theme";
+import * as WebBrowser from 'expo-web-browser';
+
 
 const SelectSchoolScreen = ({ route }) => {
   const [school, setSchool] = useState<School>(null);
@@ -47,7 +49,7 @@ const SelectSchoolScreen = ({ route }) => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/discord");
+      WebBrowser.openBrowserAsync("https://where2be.app/discord");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
     }

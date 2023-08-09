@@ -37,6 +37,8 @@ import {
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { AlertContext } from "../../../../contexts/AlertContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as WebBrowser from 'expo-web-browser';
+
 
 const SignupFinalScreen = () => {
   const navigator = useNavigation<any>();
@@ -57,7 +59,7 @@ const SignupFinalScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/terms");
+      WebBrowser.openBrowserAsync("https://where2be.app/terms");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/terms"}`);
     }
@@ -69,7 +71,7 @@ const SignupFinalScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/privacy");
+      WebBrowser.openBrowserAsync("https://where2be.app/privacy");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/privacy"}`);
     }

@@ -44,6 +44,7 @@
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",
+    "expo-web-browser": "~12.1.1",
     "express": "^4.18.1",
     "fuse.js": "^6.6.2",
     "immer": "^9.0.15",

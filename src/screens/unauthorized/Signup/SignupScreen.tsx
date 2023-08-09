@@ -33,6 +33,8 @@ import { CONSTRAINTS } from "../../../constants/constraints";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { McTextInput } from "../../../components/Styled/styled";
+import * as WebBrowser from 'expo-web-browser';
+
 
 const SignupScreen = () => {
   const { userSignup } = useContext(AuthContext);
@@ -79,7 +81,7 @@ const SignupScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/terms");
+      WebBrowser.openBrowserAsync("https://where2be.app/terms");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/terms"}`);
     }
@@ -91,7 +93,7 @@ const SignupScreen = () => {
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      Linking.openURL("https://where2be.app/privacy");
+      WebBrowser.openBrowserAsync("https://where2be.app/privacy");
     } else {
       Alert.alert(`Unable to open link: ${"https://where2be.app/privacy"}`);
     }
