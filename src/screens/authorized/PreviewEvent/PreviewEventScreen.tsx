@@ -136,6 +136,7 @@ const EventDetailsScreen = ({ route }) => {
         userControlElement={undefined}
         showModeratorFeatures={false}
         refreshControl={undefined}
+        postEventFunction={onSubmit}
       />
     </MobileSafeView>
   );

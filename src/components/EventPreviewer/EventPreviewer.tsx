@@ -48,6 +48,7 @@ interface EventPreviewerProps {
   refreshControl: JSX.Element;
   hostClickFunction?: () => void;
   backButtonFunction?: () => void;
+  postEventFunction?: () => void;
 }
 
 const EventPreviewer = (props: EventPreviewerProps) => {
@@ -492,6 +493,20 @@ const EventPreviewer = (props: EventPreviewerProps) => {
               </EditOrDeleteEventSection>
             </>
           )}
+          {props.postEventFunction &&             <TouchableOpacity
+              onPress={props.postEventFunction}
+              style={{
+                marginTop: 15,
+                marginHorizontal: 30,
+                paddingVertical: 10,
+                borderRadius: 8,
+                backgroundColor: COLORS.purple,
+              }}
+            >
+              <McText h4 style={{ textAlign: "center" }}>
+                Post Event
+              </McText>
+            </TouchableOpacity>}
           {props.userControlElement ? (
             <SectionFooter>
               <View
