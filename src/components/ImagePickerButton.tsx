@@ -6,6 +6,7 @@ import {
   View,
   Platform,
   Alert,
+  Linking,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons } from "../constants";
@@ -37,10 +38,17 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      Alert.alert(
-        "Permission error",
-        "Where2Be does not have access to your photos. Please enable them in settings."
-      );
+      Alert.alert("Permission error", "Where2Be does not have access to your photos. Please enable them in settings.", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Go to Settings",
+          onPress: () => Linking.openURL("app-settings:"),
+        },
+      ]);
       return;
     }
     var didPick = false;

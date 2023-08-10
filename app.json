@@ -46,7 +46,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Moment accesses your photos to let you share them with your friends."
+          "photosPermission": "You can share your photos with your friends."
         }
       ]
     ],
