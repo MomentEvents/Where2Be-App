@@ -88,7 +88,7 @@
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
     "rn-progress-loader": "^1.0.8",
-    "sentry-expo": "~6.2.0",
+    "sentry-expo": "~7.0.0",
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
