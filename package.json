@@ -25,7 +25,7 @@
     "carousel": "^0.0.3",
     "eas-cli": "^0.60.0",
     "ejs": "^3.1.8",
-    "expo": "~48.0.18",
+    "expo": "~49.0.7",
     "expo-app-loading": "^2.1.1",
     "expo-application": "~5.1.1",
     "expo-constants": "~14.2.1",
