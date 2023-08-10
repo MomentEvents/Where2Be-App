@@ -55,16 +55,6 @@
       "eas": {
         "projectId": "c26d4688-b61a-4d6b-acd1-2d6cbb13ad2f"
       }
-    },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "where2be",
-            "project": "4505580927123456"          }
-        }
-      ]
     }
   }
 }

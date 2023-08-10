@@ -127,7 +127,6 @@ const EventDetailsScreen = ({ route }) => {
   }
   console.log(" MY TOKEN BEFORE GOING TO EVENTDETAILS IS ", currentToken);
 
-  throw formatError("SUPERFX TEXT 2", "numba 2?")
   return <EventDetails eventID={eventID} currentToken={currentToken}/>;
 };
 
