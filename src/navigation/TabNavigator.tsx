@@ -14,6 +14,7 @@ import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ScreenContext } from "../contexts/ScreenContext";
 
 const Tab = createBottomTabNavigator();
