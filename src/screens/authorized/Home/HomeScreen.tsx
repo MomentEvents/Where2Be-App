@@ -378,7 +378,7 @@ const HomeScreen = () => {
           offset: homeCardHeight * index,
           index,
         })}
-        windowSize={5}
+        windowSize={6}
         data={eventsAndHosts?.filter((item: EventItem) => {
           if ("Event" in item) {
             return !hiddenEvents.includes(item.Event.EventID);

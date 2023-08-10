@@ -422,7 +422,7 @@ const EventToggler = (props: EventTogglerProps) => {
           offset: cardHeight * index,
           index,
         })}
-        windowSize={5}
+        windowSize={8}
         data={isFutureToggle ? pulledFutureEvents : pulledPastEvents}
         ListHeaderComponent={ListHeader}
         renderItem={renderItem}
