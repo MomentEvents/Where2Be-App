@@ -114,7 +114,6 @@ const EventViewer = (props: EventViewerProps) => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setCategoryNameToEventsMap({});
     setIsLoadingEvents(true);
     pullData();
     setShowRetry(false);

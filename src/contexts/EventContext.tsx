@@ -210,7 +210,9 @@ export const EventProvider = ({ children }) => {
       currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken,
       currentToken ? currentToken.UserID : userToken.UserID,
       eventID
-    ).catch((error: CustomError) => {
+    ).then(() => {
+      didJoinedEventsChangeRef.current = true;
+    }).catch((error: CustomError) => {
       if (error.showBugReportDialog) {
         showBugReportPopup(error);
       }

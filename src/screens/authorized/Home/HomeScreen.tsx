@@ -141,6 +141,7 @@ const HomeScreen = () => {
       console.log(minutesDiff + " minutes elapsed since last pull");
       if (minutesDiff > 10 && !newPostedEventHomePageRef.current) {
         console.log("Repulling events");
+        setEventsAndHosts(undefined);
         onRefresh();
         lastPulled.current = new Date();
       }
@@ -314,7 +315,6 @@ const HomeScreen = () => {
       });
   };
   const onRefresh = () => {
-    setEventsAndHosts(undefined);
     setIsLoading(true);
     setShowRetry(false);
     pullData();

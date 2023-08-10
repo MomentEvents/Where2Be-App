@@ -100,9 +100,7 @@ const EventToggler = (props: EventTogglerProps) => {
       }
       if (doPull) {
         setShowRetry(false);
-        setPulledFutureEvents(null);
         canLoadFutureData.current = true;
-        setPulledPastEvents(null);
         canLoadPastData.current = true;
         pullData(false);
       }
@@ -378,8 +376,8 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const onRefresh = async () => {
     setShowRetry(false);
-    setPulledFutureEvents(null);
-    setPulledPastEvents(null);
+    // setPulledFutureEvents(null);
+    // setPulledPastEvents(null);
     setIsRefreshing(true);
     isRefreshingRef.current = true;
 
