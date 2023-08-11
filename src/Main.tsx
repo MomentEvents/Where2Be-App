@@ -30,6 +30,7 @@ import { Animated, Dimensions } from "react-native";
 import { appVersionText } from "./constants/texts";
 import EventDetails from "./components/EventDetails/EventDetails";
 import { NavigationContainer } from "@react-navigation/native";
+import analytics from '@react-native-firebase/analytics';
 import {
   TransitionPresets,
   createStackNavigator,
@@ -42,6 +43,7 @@ import EditProfileScreen from "./screens/authorized/EditProfile/EditProfileScree
 import FollowList from "./components/FollowList/FollowList";
 import AccountFollowListScreen from "./screens/authorized/AccountFollowList/AccountFollowListScreen";
 import EditEventScreen from "./screens/authorized/EditEvent/EditEventScreen";
+import { SETTINGS } from "./constants/settings";
 
 
 // Set the handler that's invoked whenever a notification is received when the app is open
@@ -54,6 +56,9 @@ Notifications.setNotificationHandler({
 });
 
 const Main = () => {
+
+  const routeNameRef = React.useRef<any>();
+  const navigationRef = React.useRef<any>();
 
   useEffect(() => {
     reactToUpdates();
@@ -111,7 +116,30 @@ const Main = () => {
                 <ScreenProvider>
                   <AuthProvider>
                     <StatusBar barStyle="light-content" translucent={true} />
-                    <NavigationContainer independent={true}>
+                    <NavigationContainer
+      independent={true}
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        let currentRouteName = undefined;
+        if (navigationRef.current) {
+          currentRouteName = navigationRef.current.getCurrentRoute().name;
+        }
+        if (
+          previousRouteName !== currentRouteName &&
+          SETTINGS.firebaseAnalytics
+        ) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}
+    >
                       <Stack.Navigator
                         screenOptions={{
                           cardStyle: {
