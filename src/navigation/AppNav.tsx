@@ -33,6 +33,8 @@ import analytics from '@react-native-firebase/analytics';
 import { SETTINGS } from "../constants/settings";
 import * as Notifications from "expo-notifications";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+
 
 
 const Stack = createStackNavigator();
@@ -42,6 +44,25 @@ const AppNav = () => {
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
   const notificationNavigation = useNavigation<any>()
+
+  const handleDynamicLink = link => {
+    console.log(JSON.stringify(link) + " FXDEBUG1 IS THE LINK PAYLOAD FOR THE LINK")
+  };
+
+  useEffect(() => {
+    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+    // When the component is unmounted, remove the listener
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    dynamicLinks()
+      .getInitialLink()
+      .then(link => {
+
+        console.log(JSON.stringify(link) + " FXDEBUG2 IS THE LINK PAYLOAD")
+      });
+  }, []);
 
   useEffect(() => {
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
