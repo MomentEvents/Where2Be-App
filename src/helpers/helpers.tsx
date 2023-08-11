@@ -6,6 +6,7 @@ import {
   UserError,
 } from "../constants/error";
 import * as WebBrowser from 'expo-web-browser';
+import branch from 'react-native-branch'
 
 
 import backendConfig from "../../backendconfig.json"
@@ -163,38 +164,38 @@ export async function openURL(url: string): Promise<void> {
 
   const supported = Linking.canOpenURL(url);
 
-  if (!supported){
+  if (!supported) {
     Alert.alert(`Open this link in your browser: ${url}`);
     return;
   }
 
-  try{
+  try {
     await WebBrowser.openBrowserAsync(url);
-  } catch (e){
+  } catch (e) {
     Alert.alert("Open this url in your browser: " + url)
   }
 }
 
 export function openMaps(query: string) {
-  if(!query){
+  if (!query) {
     return
   }
   const isIOS = Platform.OS === 'ios';
   let url;
 
   if (isIOS) {
-      url = `http://maps.apple.com/?q=${query}`;
+    url = `http://maps.apple.com/?q=${query}`;
   } else {
-      // try to open Google Maps, if not installed it will default to browser map version
-      url = `geo:0,0?q=${query}`;
+    // try to open Google Maps, if not installed it will default to browser map version
+    url = `geo:0,0?q=${query}`;
   }
 
   Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-          Linking.openURL(url);
-      } else {
-          console.error("Can't handle URL: " + url);
-      }
+    if (supported) {
+      Linking.openURL(url);
+    } else {
+      console.error("Can't handle URL: " + url);
+    }
   });
 }
 
@@ -236,17 +237,17 @@ export async function responseHandler<CustomType>(
     if (response.status === 500) {
       let serverResponseMessage =
         message + "\n\nPlease send a bug report :) We'll fix it ASAP!";
-      if(backendConfig["env"] === "dev"){
+      if (backendConfig["env"] === "dev") {
         serverResponseMessage += await response.text()
-        }
+      }
       throw new ServerError(serverResponseMessage);
     }
 
     let userResponseMessage = undefined;
-    if (response.status === 502){
+    if (response.status === 502) {
       userResponseMessage = "We're upgrading our servers. Come back soon!"
     }
-    else{
+    else {
       userResponseMessage = await response.text();
     }
     throw new UserError("Error " + response.status, userResponseMessage);
@@ -321,4 +322,58 @@ export function truncateNumber(num: number): string {
     return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   }
   return num.toString();
+}
+
+export async function createEventLink(eventID: string, title: string, description: string) {
+  let buo = await branch.createBranchUniversalObject('event', {
+    title: title,
+    contentDescription: description,
+    contentMetadata: {
+      customMetadata: {
+        event_id: eventID
+      }
+    }
+  })
+
+  let { url } = await buo.generateShortUrl({
+    feature: 'sharing',
+    channel: 'where2be',
+    campaign: 'University event'
+  }, {
+    $fallback_url: 'https://where2be.app/event/' + eventID,
+    $desktop_url: 'https://where2be.app/event/' + eventID,
+
+  })
+
+  return url
+}
+
+export async function showShareEventLink(eventID: string, title: string, description: string) {
+
+  let buo = await branch.createBranchUniversalObject('event', {
+    title: title,
+    contentDescription: description,
+    contentMetadata: {
+      customMetadata: {
+        event_id: eventID
+      }
+    }
+  })
+
+  let shareOptions = {
+    messageHeader: title,
+  }
+
+  let linkProperties = {
+    feature: 'sharing',
+    channel: 'where2be'
+  }
+
+  let controlParams = {
+    $fallback_url: 'https://where2be.app/event/' + eventID,
+    $desktop_url: 'https://where2be.app/event/' + eventID,
+  }
+
+  let { channel, completed, error } = await buo.showShareSheet(shareOptions, linkProperties, controlParams)
+
 }

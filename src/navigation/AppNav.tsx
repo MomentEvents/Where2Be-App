@@ -33,7 +33,7 @@ import analytics from '@react-native-firebase/analytics';
 import { SETTINGS } from "../constants/settings";
 import * as Notifications from "expo-notifications";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+import branch from 'react-native-branch'
 
 
 
@@ -49,24 +49,24 @@ const AppNav = () => {
     console.log(JSON.stringify(link) + " FXDEBUG1 IS THE LINK PAYLOAD FOR THE LINK")
   };
 
-  useEffect(() => {
-    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-    // When the component is unmounted, remove the listener
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+  //   // When the component is unmounted, remove the listener
+  //   return () => unsubscribe();
+  // }, []);
 
-  useEffect(() => {
-    dynamicLinks()
-      .getInitialLink()
-      .then(link => {
+  // useEffect(() => {
+  //   dynamicLinks()
+  //     .getInitialLink()
+  //     .then(link => {
 
-        console.log(JSON.stringify(link) + " FXDEBUG2 IS THE LINK PAYLOAD")
-      });
-  }, []);
+  //       console.log(JSON.stringify(link) + " FXDEBUG2 IS THE LINK PAYLOAD")
+  //     });
+  // }, []);
 
   useEffect(() => {
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      if(!response){
+      if (!response) {
         console.log("Notification response is null")
         return
       }
@@ -84,15 +84,15 @@ const AppNav = () => {
 
       console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
     });
-  
+
     return () => subscription.remove();
   }, []);
-  
 
-  if(!isUserContextLoaded){
-    return <LoadingComponent/>
+
+  if (!isUserContextLoaded) {
+    return <LoadingComponent />
   }
-  
+
   return (
     <NavigationContainer
       independent={true}

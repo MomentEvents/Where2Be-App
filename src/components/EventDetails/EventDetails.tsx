@@ -292,7 +292,7 @@ const EventDetails = (props: EventDetailsProps) => {
                 setShowRetry(true);
               }
             })
-            .finally(() => {});
+            .finally(() => { });
         } else {
           setHost(user);
         }
@@ -373,6 +373,7 @@ const EventDetails = (props: EventDetailsProps) => {
         hostClickEnabled={!props.disableHostClick}
         backButtonFunction={props.onBackFunction}
         paddingTopEnabled={true}
+        showShareButton={true}
         hostClickFunction={props.currentToken ? undefined : promptLogin}
         userControlElement={
           <View
@@ -418,35 +419,35 @@ const EventDetails = (props: EventDetailsProps) => {
                           onPress={
                             storedEvent?.UserJoin
                               ? () => {
-                                  if (!didFetchEvent) {
-                                    beforeLoadJoin.current = false;
-                                  }
-                                  if (!props.currentToken) {
-                                    promptLogin();
-                                    return;
-                                  }
-                                  removeUserJoin(eventID, props.currentToken);
+                                if (!didFetchEvent) {
+                                  beforeLoadJoin.current = false;
                                 }
+                                if (!props.currentToken) {
+                                  promptLogin();
+                                  return;
+                                }
+                                removeUserJoin(eventID, props.currentToken);
+                              }
                               : () => {
-                                  if (!didFetchEvent) {
-                                    beforeLoadJoin.current = true;
-                                  }
-                                  if (storedEvent?.SignupLink) {
-                                    Alert.alert(
-                                      "This is a ticketed event",
-                                      "Make sure to click the ticket button to confirm your signup!"
-                                    );
-                                  }
-                                  if (!props.currentToken) {
-                                    promptLogin();
-                                  } else {
-                                    addUserJoin(
-                                      eventID,
-                                      undefined,
-                                      props.currentToken
-                                    );
-                                  }
+                                if (!didFetchEvent) {
+                                  beforeLoadJoin.current = true;
                                 }
+                                if (storedEvent?.SignupLink) {
+                                  Alert.alert(
+                                    "This is a ticketed event",
+                                    "Make sure to click the ticket button to confirm your signup!"
+                                  );
+                                }
+                                if (!props.currentToken) {
+                                  promptLogin();
+                                } else {
+                                  addUserJoin(
+                                    eventID,
+                                    undefined,
+                                    props.currentToken
+                                  );
+                                }
+                              }
                           }
                         >
                           {storedEvent?.UserJoin ? (
@@ -551,28 +552,28 @@ const EventDetails = (props: EventDetailsProps) => {
                           onPress={
                             storedEvent?.UserShoutout
                               ? () => {
-                                  if (!didFetchEvent) {
-                                    beforeLoadShoutout.current = false;
-                                  }
-                                  if (!props.currentToken) {
-                                    promptLogin();
-                                    return;
-                                  }
-                                  removeUserShoutout(
-                                    eventID,
-                                    props.currentToken
-                                  );
+                                if (!didFetchEvent) {
+                                  beforeLoadShoutout.current = false;
                                 }
+                                if (!props.currentToken) {
+                                  promptLogin();
+                                  return;
+                                }
+                                removeUserShoutout(
+                                  eventID,
+                                  props.currentToken
+                                );
+                              }
                               : () => {
-                                  if (!didFetchEvent) {
-                                    beforeLoadShoutout.current = true;
-                                  }
-                                  if (!props.currentToken) {
-                                    promptLogin();
-                                    return;
-                                  }
-                                  addUserShoutout(eventID, props.currentToken);
+                                if (!didFetchEvent) {
+                                  beforeLoadShoutout.current = true;
                                 }
+                                if (!props.currentToken) {
+                                  promptLogin();
+                                  return;
+                                }
+                                addUserShoutout(eventID, props.currentToken);
+                              }
                           }
                         >
                           {storedEvent?.UserShoutout ? (

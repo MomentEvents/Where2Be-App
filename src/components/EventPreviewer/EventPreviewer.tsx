@@ -24,7 +24,7 @@ import ImageView from "react-native-image-viewing";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
-import { openMaps, showBugReportPopup } from "../../helpers/helpers";
+import { openMaps, showBugReportPopup, showShareEventLink } from "../../helpers/helpers";
 import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
@@ -49,6 +49,7 @@ interface EventPreviewerProps {
   hostClickFunction?: () => void;
   backButtonFunction?: () => void;
   postEventFunction?: () => void;
+  showShareButton?: boolean;
 }
 
 const EventPreviewer = (props: EventPreviewerProps) => {
@@ -61,6 +62,10 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   const [lengthMoreText, setLengthMoreText] = useState<boolean>(false); // to show the "Read more..." & "Read Less"
   const { showErrorAlert } = useContext(AlertContext);
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
+
+  const onSharePress = () => {
+    showShareEventLink(props.event.EventID, props.event.Title, props.event.Description)
+  }
 
   // For description expansion
   const descriptionOnExpand = useCallback((e) => {
@@ -254,8 +259,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                         >
                           {props.event
                             ? moment(
-                                new Date(props.event.StartDateTime)
-                              ).format("MMM DD[,] YYYY")
+                              new Date(props.event.StartDateTime)
+                            ).format("MMM DD[,] YYYY")
                             : null}
                         </McText>
                         <View
@@ -282,15 +287,15 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                             {props.event
                               ? props.event.EndDateTime
                                 ? moment(
-                                    new Date(props.event.StartDateTime)
-                                  ).format("h:mm a") +
-                                  " - " +
-                                  moment(
-                                    new Date(props.event.EndDateTime)
-                                  ).format("h:mm a")
+                                  new Date(props.event.StartDateTime)
+                                ).format("h:mm a") +
+                                " - " +
+                                moment(
+                                  new Date(props.event.EndDateTime)
+                                ).format("h:mm a")
                                 : moment(
-                                    new Date(props.event.StartDateTime)
-                                  ).format("h:mm a")
+                                  new Date(props.event.StartDateTime)
+                                ).format("h:mm a")
                               : null}
                           </McText>
                         </View>
@@ -303,16 +308,21 @@ const EventPreviewer = (props: EventPreviewerProps) => {
           </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, flexDirection: "row" }}>
                 <McText
                   h1
                   style={{
+                    flex: 1,
                     marginTop: 10,
                     marginRight: 10,
                   }}
                 >
                   {props.event ? props.event.Title : "Loading..."}
                 </McText>
+                {props.showShareButton && <TouchableOpacity onPress={onSharePress}>
+                  <Feather style={{ marginLeft: 10, marginTop: 10, marginRight: 10 }} name="share" size={30} color="white" />
+                </TouchableOpacity>}
+
               </View>
             </TitleSection>
 

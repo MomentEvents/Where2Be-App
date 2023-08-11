@@ -49,7 +49,14 @@
           "photosPermission": "You can share your photos with your friends."
         }
       ],
-      "sentry-expo"
+      "sentry-expo",
+      [
+        "@config-plugins/react-native-branch",
+        {
+          "apiKey": "key_live_hwee4HGlrxgcV5MfrIpFQebaqxnzZf3R",
+          "iosAppDomain": "where2be.app.link"
+        }
+      ]
     ],
     "extra": {
       "eas": {
