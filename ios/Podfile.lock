@@ -626,6 +626,7 @@ PODS:
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
+  - BranchSDK
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EASClient (from `../node_modules/expo-eas-client/ios`)
@@ -993,6 +994,6 @@ SPEC CHECKSUMS:
   Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   Yoga: 065f0b74dba4832d6e328238de46eb72c5de9556
 
-PODFILE CHECKSUM: df6574cf505ddaf913fa889eed16074449f63834
+PODFILE CHECKSUM: 6c4a7591adbde0c21a0e4e6144bbb2a7a64dfa26
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

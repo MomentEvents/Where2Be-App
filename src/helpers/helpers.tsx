@@ -325,6 +325,7 @@ export function truncateNumber(num: number): string {
 }
 
 export async function createEventLink(eventID: string, title: string, description: string) {
+  console.log("fee")
   let buo = await branch.createBranchUniversalObject('event', {
     title: title,
     contentDescription: description,
@@ -335,6 +336,8 @@ export async function createEventLink(eventID: string, title: string, descriptio
     }
   })
 
+  console.log("fi")
+
   let { url } = await buo.generateShortUrl({
     feature: 'sharing',
     channel: 'where2be',
@@ -344,6 +347,8 @@ export async function createEventLink(eventID: string, title: string, descriptio
     $desktop_url: 'https://where2be.app/event/' + eventID,
 
   })
+
+  console.log(url)
 
   return url
 }
@@ -370,10 +375,13 @@ export async function showShareEventLink(eventID: string, title: string, descrip
   }
 
   let controlParams = {
-    $fallback_url: 'https://where2be.app/event/' + eventID,
     $desktop_url: 'https://where2be.app/event/' + eventID,
   }
 
-  let { channel, completed, error } = await buo.showShareSheet(shareOptions, linkProperties, controlParams)
+  let { channel, completed, error} = await buo.showShareSheet(shareOptions, linkProperties, controlParams)
+
+  console.log("Channel is " + channel)
+  console.log("completed is " + completed)
+  console.log("error is " + error)
 
 }
