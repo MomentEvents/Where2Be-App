@@ -30,21 +30,20 @@ import { Animated, Dimensions } from "react-native";
 import { appVersionText } from "./constants/texts";
 import EventDetails from "./components/EventDetails/EventDetails";
 import { NavigationContainer } from "@react-navigation/native";
-import analytics from '@react-native-firebase/analytics';
+import analytics from "@react-native-firebase/analytics";
 import {
   TransitionPresets,
   createStackNavigator,
 } from "@react-navigation/stack";
 import EventDetailsScreen from "./screens/authorized/EventDetails/EventDetailsScreen";
 import LoadingComponent from "./components/LoadingComponent/LoadingComponent";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import ProfileDetailsScreen from "./screens/authorized/ProfileDetails/ProfileDetailsScreen";
 import EditProfileScreen from "./screens/authorized/EditProfile/EditProfileScreen";
 import FollowList from "./components/FollowList/FollowList";
 import AccountFollowListScreen from "./screens/authorized/AccountFollowList/AccountFollowListScreen";
 import EditEventScreen from "./screens/authorized/EditEvent/EditEventScreen";
 import { SETTINGS } from "./constants/settings";
-
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -55,8 +54,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Main = () => {
+SplashScreen.preventAutoHideAsync();
 
+const Main = () => {
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
 
@@ -106,6 +106,10 @@ const Main = () => {
 
   const Stack = createStackNavigator();
 
+  if (!isAppReady) {
+    return <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}/>;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}>
       <Provider store={store}>
@@ -117,29 +121,31 @@ const Main = () => {
                   <AuthProvider>
                     <StatusBar barStyle="light-content" translucent={true} />
                     <NavigationContainer
-      independent={true}
-      ref={navigationRef}
-      onReady={() => {
-        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-      }}
-      onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        let currentRouteName = undefined;
-        if (navigationRef.current) {
-          currentRouteName = navigationRef.current.getCurrentRoute().name;
-        }
-        if (
-          previousRouteName !== currentRouteName &&
-          SETTINGS.firebaseAnalytics
-        ) {
-          await analytics().logScreenView({
-            screen_name: currentRouteName,
-            screen_class: currentRouteName,
-          });
-        }
-        routeNameRef.current = currentRouteName;
-      }}
-    >
+                      independent={true}
+                      ref={navigationRef}
+                      onReady={() => {
+                        routeNameRef.current =
+                          navigationRef.current.getCurrentRoute().name;
+                      }}
+                      onStateChange={async () => {
+                        const previousRouteName = routeNameRef.current;
+                        let currentRouteName = undefined;
+                        if (navigationRef.current) {
+                          currentRouteName =
+                            navigationRef.current.getCurrentRoute().name;
+                        }
+                        if (
+                          previousRouteName !== currentRouteName &&
+                          SETTINGS.firebaseAnalytics
+                        ) {
+                          await analytics().logScreenView({
+                            screen_name: currentRouteName,
+                            screen_class: currentRouteName,
+                          });
+                        }
+                        routeNameRef.current = currentRouteName;
+                      }}
+                    >
                       <Stack.Navigator
                         screenOptions={{
                           cardStyle: {
