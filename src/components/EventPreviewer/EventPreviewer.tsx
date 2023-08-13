@@ -24,7 +24,11 @@ import ImageView from "react-native-image-viewing";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
-import { openMaps, showBugReportPopup, showShareEventLink } from "../../helpers/helpers";
+import {
+  openMaps,
+  showBugReportPopup,
+  showShareEventLink,
+} from "../../helpers/helpers";
 import { deleteEvent } from "../../services/EventService";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { EventContext } from "../../contexts/EventContext";
@@ -64,8 +68,12 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   const onSharePress = () => {
-    showShareEventLink(props.event.EventID, props.event.Title, props.event.Description)
-  }
+    showShareEventLink(
+      props.event.EventID,
+      props.event.Title,
+      props.event.Description
+    );
+  };
 
   // For description expansion
   const descriptionOnExpand = useCallback((e) => {
@@ -259,8 +267,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                         >
                           {props.event
                             ? moment(
-                              new Date(props.event.StartDateTime)
-                            ).format("MMM DD[,] YYYY")
+                                new Date(props.event.StartDateTime)
+                              ).format("MMM DD[,] YYYY")
                             : null}
                         </McText>
                         <View
@@ -287,15 +295,15 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                             {props.event
                               ? props.event.EndDateTime
                                 ? moment(
-                                  new Date(props.event.StartDateTime)
-                                ).format("h:mm a") +
-                                " - " +
-                                moment(
-                                  new Date(props.event.EndDateTime)
-                                ).format("h:mm a")
+                                    new Date(props.event.StartDateTime)
+                                  ).format("h:mm a") +
+                                  " - " +
+                                  moment(
+                                    new Date(props.event.EndDateTime)
+                                  ).format("h:mm a")
                                 : moment(
-                                  new Date(props.event.StartDateTime)
-                                ).format("h:mm a")
+                                    new Date(props.event.StartDateTime)
+                                  ).format("h:mm a")
                               : null}
                           </McText>
                         </View>
@@ -319,10 +327,16 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 >
                   {props.event ? props.event.Title : "Loading..."}
                 </McText>
-                {props.showShareButton && <TouchableOpacity onPress={onSharePress}>
-                  <Feather style={{ marginLeft: 10, marginTop: 10, marginRight: 10 }} name="share" size={30} color="white" />
-                </TouchableOpacity>}
-
+                {props.showShareButton && (
+                  <TouchableOpacity onPress={onSharePress}>
+                    <Feather
+                      style={{ marginLeft: 10, marginTop: 15, marginRight: 10 }}
+                      name="share"
+                      size={24}
+                      color={COLORS.lightGray}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
             </TitleSection>
 
