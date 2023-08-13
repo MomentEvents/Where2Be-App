@@ -107,7 +107,7 @@ const Main = () => {
   const Stack = createStackNavigator();
 
   if (!isAppReady) {
-    return <View style={{ flex: 1, backgroundColor: COLORS.trueBlack }}/>;
+    return <LoadingComponent/>
   }
 
   return (
