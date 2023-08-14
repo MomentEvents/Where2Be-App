@@ -495,7 +495,7 @@ PODS:
   - react-native-branch (5.9.0):
     - BranchSDK (= 2.2.0)
     - React-Core
-  - react-native-date-picker (4.2.14):
+  - react-native-date-picker (4.2.13):
     - React-Core
   - react-native-document-picker (8.2.1):
     - React-Core
@@ -995,7 +995,7 @@ SPEC CHECKSUMS:
   React-logger: 342f358b8decfbf8f272367f4eacf4b6154061be
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-branch: 43f1c46d9a971cae0eeb337313991ce72b467351
-  react-native-date-picker: 8847cb359cf259ddae5ed165217e15573a654519
+  react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886

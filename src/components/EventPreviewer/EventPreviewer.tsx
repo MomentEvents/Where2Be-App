@@ -15,6 +15,7 @@ import {
   StyleSheet,
   Image,
   Alert,
+  Modal,
 } from "react-native";
 import Hyperlink from "react-native-hyperlink";
 import { Interest, Event, User, COLORS, SIZES, SCREENS } from "../../constants";
@@ -25,6 +26,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
 import {
+  createEventLink,
   openMaps,
   showBugReportPopup,
   showShareEventLink,
@@ -44,6 +46,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import QRCode from "react-native-qrcode-svg";
 
 interface EventPreviewerProps {
   event: Event;
@@ -73,6 +76,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const qrSize = SIZES.width * 0.8; // 80% of screen width, adjust as needed
 
   const onShareLinkPressed = () => {
     showShareEventLink(
@@ -83,7 +87,19 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     );
   };
 
-  const onQRCodePressed = () => {};
+  const [isQRModalVisible, setQRModalVisible] = React.useState(false);
+  const [qrUrl, setQrUrl] = React.useState("");
+
+  const onQRCodePressed = async () => {
+    const url = await createEventLink(
+      props.event.EventID,
+      props.event.Title,
+      props.event.Picture,
+      props.event.Description
+    );
+    setQrUrl(url);
+    setQRModalVisible(true);
+  };
 
   // For description expansion
   const descriptionOnExpand = useCallback((e) => {
@@ -565,6 +581,31 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             <View style={{ height: insets.bottom + 30 }} />
           )}
         </View>
+        {isQRModalVisible && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isQRModalVisible}
+            onRequestClose={() => {
+              setQRModalVisible(!isQRModalVisible);
+            }}
+          >
+            <TouchableOpacity
+              style={styles.centeredView}
+              activeOpacity={1}
+              onPressOut={() => setQRModalVisible(false)}
+            >
+              <View style={styles.qrContainer}>
+                <QRCode
+                  value={qrUrl}
+                  size={qrSize}
+                  logoSize={30} // Adjust accordingly
+                  logoBackgroundColor="transparent"
+                />
+              </View>
+            </TouchableOpacity>
+          </Modal>
+        )}
         <BottomSheetModal
           ref={bottomSheetModalRef}
           snapPoints={["30%"]}
@@ -618,7 +659,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 closeBottomModal();
                 onQRCodePressed();
               }}
-              style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}
+              style={{
+                marginTop: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
               <MaterialIcons
                 name="qr-code-2"
@@ -694,6 +739,20 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     flex: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)", // This will make background a bit dark for better visibility of popup
+  },
+  qrContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: "white",
+    elevation: 5
   },
 });
 
