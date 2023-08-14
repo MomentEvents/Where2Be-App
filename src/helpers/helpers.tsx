@@ -353,11 +353,12 @@ export async function createEventLink(eventID: string, title: string, descriptio
   return url
 }
 
-export async function showShareEventLink(eventID: string, title: string, description: string) {
+export async function showShareEventLink(eventID: string, title: string, picture: string, description: string) {
 
   let buo = await branch.createBranchUniversalObject('event', {
     title: title,
     contentDescription: description,
+    contentImageUrl: picture,
     contentMetadata: {
       customMetadata: {
         event_id: eventID
