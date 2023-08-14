@@ -71,6 +71,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     showShareEventLink(
       props.event.EventID,
       props.event.Title,
+      props.event.Picture,
       props.event.Description
     );
   };

@@ -29,13 +29,11 @@ import SignupPasswordScreen from "../screens/unauthorized/Onboarding/5_Password/
 import SignupFinalScreen from "../screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
 import NotificationsSettingsScreen from "../screens/authorized/NotificationSettings/NotificationsSettingsScreen";
 import EventChatScreen from "../screens/authorized/EventChat/EventChatScreen";
-import analytics from '@react-native-firebase/analytics';
+import analytics from "@react-native-firebase/analytics";
 import { SETTINGS } from "../constants/settings";
 import * as Notifications from "expo-notifications";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
-import branch from 'react-native-branch'
-
-
+import branch, { BranchEvent } from "react-native-branch";
 
 const Stack = createStackNavigator();
 
@@ -43,54 +41,75 @@ const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
   const routeNameRef = React.useRef<any>();
   const navigationRef = React.useRef<any>();
-  const notificationNavigation = useNavigation<any>()
+  const notificationNavigation = useNavigation<any>();
 
-  const handleDynamicLink = link => {
-    console.log(JSON.stringify(link) + " FXDEBUG1 IS THE LINK PAYLOAD FOR THE LINK")
+  const handleDynamicLink = (link) => {
+    console.log(
+      JSON.stringify(link) + " FXDEBUG1 IS THE LINK PAYLOAD FOR THE LINK"
+    );
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-  //   // When the component is unmounted, remove the listener
-  //   return () => unsubscribe();
-  // }, []);
-
-  // useEffect(() => {
-  //   dynamicLinks()
-  //     .getInitialLink()
-  //     .then(link => {
-
-  //       console.log(JSON.stringify(link) + " FXDEBUG2 IS THE LINK PAYLOAD")
-  //     });
-  // }, []);
-
   useEffect(() => {
-    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      if (!response) {
-        console.log("Notification response is null")
-        return
+    // Subscribe to incoming links
+    const unsubscribe = branch.subscribe(({ error, params }) => {
+      if (error) {
+        console.error("Error from Branch: " + error);
+        return;
       }
-      const { notification } = response;
-      console.log("User interacted with this notification:", notification);
 
-      // The notification's data is where you put your own custom payload
-      const { data } = notification.request.content;
+      // log deep link data
+      console.log(params);
 
-      if (data.action === "ViewEventDetails") {
-        notificationNavigation.push(SCREENS.EventDetails, {
-          eventID: data.event_id,
+      if (!params["+clicked_branch_link"]) {
+        // Indicates the link was not a Branch link
+        return;
+      }
+
+      // Now you can process params to determine what screen or action you need
+      if (params.event_id) {
+        // Handle event detailsF
+        const eventID = params.event_id;
+
+        navigationRef.current.navigate(SCREENS.EventDetails, {
+          eventID: eventID,
         });
       }
-
-      console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
     });
+
+    return () => {
+      // Cleanup
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        if (!response) {
+          console.log("Notification response is null");
+          return;
+        }
+        const { notification } = response;
+        console.log("User interacted with this notification:", notification);
+
+        // The notification's data is where you put your own custom payload
+        const { data } = notification.request.content;
+
+        if (data.action === "ViewEventDetails") {
+          notificationNavigation.push(SCREENS.EventDetails, {
+            eventID: data.event_id,
+          });
+        }
+
+        console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
+      }
+    );
 
     return () => subscription.remove();
   }, []);
 
-
   if (!isUserContextLoaded) {
-    return <LoadingComponent />
+    return <LoadingComponent />;
   }
 
   return (

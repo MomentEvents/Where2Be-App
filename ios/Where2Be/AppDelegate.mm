@@ -9,6 +9,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+  //   // Use `setUseTestBranchKey(true)` only if you are using your test key
+  // [Branch setUseTestBranchKey:YES];
   
   [FIRApp configure];
   [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];

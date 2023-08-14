@@ -376,6 +376,7 @@ export async function showShareEventLink(eventID: string, title: string, descrip
 
   let controlParams = {
     $desktop_url: 'https://where2be.app/event/' + eventID,
+    $deeplink_path: 'eventdetails/' + eventID,
   }
 
   let { channel, completed, error} = await buo.showShareSheet(shareOptions, linkProperties, controlParams)
