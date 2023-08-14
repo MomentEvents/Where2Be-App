@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
@@ -34,20 +34,14 @@ import { SETTINGS } from "../constants/settings";
 import * as Notifications from "expo-notifications";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import branch, { BranchEvent } from "react-native-branch";
+import { ScreenContext } from "../contexts/ScreenContext";
 
 const Stack = createStackNavigator();
 
 const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
-  const routeNameRef = React.useRef<any>();
-  const navigationRef = React.useRef<any>();
-  const notificationNavigation = useNavigation<any>();
-
-  const handleDynamicLink = (link) => {
-    console.log(
-      JSON.stringify(link) + " FXDEBUG1 IS THE LINK PAYLOAD FOR THE LINK"
-    );
-  };
+  const routeNameRef = useRef<any>();
+  const {navigationRef, notificationNavigationRef}  = useContext(ScreenContext)
 
   useEffect(() => {
     // Subscribe to incoming links
@@ -70,7 +64,9 @@ const AppNav = () => {
         // Handle event detailsF
         const eventID = params.event_id;
 
-        navigationRef.current.navigate(SCREENS.EventDetails, {
+        console.log("EVENT ID THAT'S DEEP LINKED IS " + eventID)
+
+        notificationNavigationRef.current.navigate(SCREENS.EventDetails, {
           eventID: eventID,
         });
       }
@@ -96,7 +92,7 @@ const AppNav = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          notificationNavigation.push(SCREENS.EventDetails, {
+          notificationNavigationRef.current.push(SCREENS.EventDetails, {
             eventID: data.event_id,
           });
         }

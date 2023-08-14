@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import AppNav from "./navigation/AppNav";
 import { UserContext, UserProvider } from "./contexts/UserContext";
-import { ScreenProvider } from "./contexts/ScreenContext";
+import { ScreenContext, ScreenProvider } from "./contexts/ScreenContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EventProvider } from "./contexts/EventContext";
 import { StatusBar } from "react-native";
@@ -58,7 +58,8 @@ SplashScreen.preventAutoHideAsync();
 
 const Main = () => {
   const routeNameRef = React.useRef<any>();
-  const navigationRef = React.useRef<any>();
+  const { notificationNavigationRef } = useContext(ScreenContext);
+
 
   useEffect(() => {
     reactToUpdates();
@@ -107,7 +108,7 @@ const Main = () => {
   const Stack = createStackNavigator();
 
   if (!isAppReady) {
-    return <LoadingComponent/>
+    return <LoadingComponent />;
   }
 
   return (
@@ -122,17 +123,18 @@ const Main = () => {
                     <StatusBar barStyle="light-content" translucent={true} />
                     <NavigationContainer
                       independent={true}
-                      ref={navigationRef}
+                      ref={notificationNavigationRef}
                       onReady={() => {
                         routeNameRef.current =
-                          navigationRef.current.getCurrentRoute().name;
+                          notificationNavigationRef.current.getCurrentRoute().name;
                       }}
                       onStateChange={async () => {
                         const previousRouteName = routeNameRef.current;
                         let currentRouteName = undefined;
-                        if (navigationRef.current) {
+                        if (notificationNavigationRef.current) {
                           currentRouteName =
-                            navigationRef.current.getCurrentRoute().name;
+                            notificationNavigationRef.current.getCurrentRoute()
+                              .name;
                         }
                         if (
                           previousRouteName !== currentRouteName &&
