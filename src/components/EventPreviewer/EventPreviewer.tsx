@@ -164,6 +164,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   return (
     <>
+    <BottomSheetModalProvider>
       <ImageView
         images={[
           {
