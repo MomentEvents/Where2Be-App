@@ -6,7 +6,7 @@ import {
 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import {
   ScrollView,
   View,
@@ -39,6 +39,11 @@ import { selectUserByID } from "../../redux/users/userSelectors";
 import { AppDispatch, RootState } from "../../redux/store";
 import { updateUserNumericField } from "../../redux/users/userSlice";
 import { setEventMap, updateEventMap } from "../../redux/events/eventSlice";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView
+} from '@gorhom/bottom-sheet';
 
 interface EventPreviewerProps {
   event: Event;
@@ -67,7 +72,10 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   const { showErrorAlert } = useContext(AlertContext);
   const [imageViewVisible, setImageViewVisible] = useState<boolean>(false);
 
-  const onSharePress = () => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+
+  const onShareLinkPressed = () => {
     showShareEventLink(
       props.event.EventID,
       props.event.Title,
@@ -75,6 +83,10 @@ const EventPreviewer = (props: EventPreviewerProps) => {
       props.event.Description
     );
   };
+
+  const onQRCodePressed = () => {
+
+  }
 
   // For description expansion
   const descriptionOnExpand = useCallback((e) => {
@@ -163,7 +175,6 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   };
 
   return (
-    <>
     <BottomSheetModalProvider>
       <ImageView
         images={[
@@ -330,7 +341,9 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   {props.event ? props.event.Title : "Loading..."}
                 </McText>
                 {props.showShareButton && (
-                  <TouchableOpacity onPress={onSharePress}>
+                  <TouchableOpacity onPress={() => {
+                    bottomSheetModalRef.current?.present();
+                  }}>
                     <Feather
                       style={{ marginLeft: 10, marginTop: 15, marginRight: 10 }}
                       name="share"
@@ -549,9 +562,31 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             <View style={{ height: insets.bottom + 30 }} />
           )}
         </View>
+        <BottomSheetModal
+        ref={bottomSheetModalRef}
+        snapPoints={["50%"]}
+        stackBehavior={"replace"}
+        enableContentPanningGesture={false}
+        onChange={i => {
+          console.log(`${name} ${i}`);
+        }}
+        onDismiss={() => {
+          console.log(`${name} dismissed`);
+        }}>
+        <BottomSheetView style={styles.bottomView}>
+          <TouchableOpacity>
+          <McText>Share link</McText>
+
+          </TouchableOpacity>
+          <TouchableOpacity>
+          <McText>Share QR code</McText>
+
+          </TouchableOpacity>
+        </BottomSheetView>
+      </BottomSheetModal>
       </ScrollView>
       {props.userControlElement}
-    </>
+      </BottomSheetModalProvider>
   );
 };
 
@@ -609,6 +644,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  bottomView: {
+
+  }
 });
 
 const ImageHeaderSection = styled.View`
