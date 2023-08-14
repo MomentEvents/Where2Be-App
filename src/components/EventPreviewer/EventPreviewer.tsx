@@ -42,6 +42,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { updateUserNumericField } from "../../redux/users/userSlice";
 import { setEventMap, updateEventMap } from "../../redux/events/eventSlice";
 import {
+  BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
@@ -147,6 +148,19 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     });
   };
 
+    // renders
+    const renderBackdrop = useCallback(
+      props => (
+        <BottomSheetBackdrop
+          {...props}
+          disappearsOnIndex={0}
+          appearsOnIndex={0}
+          onPress={closeBottomModal}
+        />
+      ),
+      []
+    );
+    
   const onDeleteEventPressed = () => {
     Alert.alert(
       "Delete event",
@@ -607,6 +621,9 @@ const EventPreviewer = (props: EventPreviewerProps) => {
           </Modal>
         )}
         <BottomSheetModal
+        backdropComponent={renderBackdrop}
+        index={0}
+
           ref={bottomSheetModalRef}
           snapPoints={["30%"]}
           backgroundComponent={({ style }) => (
@@ -636,48 +653,49 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             />
           )} // Use your custom handle component here
         >
-          <BottomSheetView style={styles.bottomView}>
-            <TouchableOpacity
-              onPress={() => {
-                closeBottomModal();
-                onShareLinkPressed();
-              }}
-              style={{ flexDirection: "row", alignItems: "center" }}
-            >
-              <MaterialIcons
-                name="link"
-                style={{ marginHorizontal: 20 }}
-                size={32}
-                color="white"
-              />
-              <McText body2 color={COLORS.white}>
-                Share link
-              </McText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                closeBottomModal();
-                onQRCodePressed();
-              }}
-              style={{
-                marginTop: 10,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <MaterialIcons
-                name="qr-code-2"
-                style={{ marginHorizontal: 20 }}
-                size={32}
-                color="white"
-              />
-              <McText body2 color={COLORS.white}>
-                Share QR code
-              </McText>
-            </TouchableOpacity>
-          </BottomSheetView>
+            <BottomSheetView style={styles.bottomView}>
+              <TouchableOpacity
+                onPress={() => {
+                  closeBottomModal();
+                  onShareLinkPressed();
+                }}
+                style={{ flexDirection: "row", alignItems: "center" }}
+              >
+                <MaterialIcons
+                  name="link"
+                  style={{ marginHorizontal: 20 }}
+                  size={32}
+                  color="white"
+                />
+                <McText body2 color={COLORS.white}>
+                  Share link
+                </McText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  closeBottomModal();
+                  onQRCodePressed();
+                }}
+                style={{
+                  marginTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialIcons
+                  name="qr-code-2"
+                  style={{ marginHorizontal: 20 }}
+                  size={32}
+                  color="white"
+                />
+                <McText body2 color={COLORS.white}>
+                  Share QR code
+                </McText>
+              </TouchableOpacity>
+            </BottomSheetView>
         </BottomSheetModal>
       </ScrollView>
+      
       {props.userControlElement}
     </BottomSheetModalProvider>
   );
@@ -747,12 +765,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)", // This will make background a bit dark for better visibility of popup
   },
   qrContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
     borderRadius: 10,
     backgroundColor: "white",
-    elevation: 5
+    elevation: 5,
   },
 });
 
