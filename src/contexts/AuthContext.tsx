@@ -5,13 +5,13 @@ import { getPushNotificationToken, unregisterPushNotificationToken } from "../se
 import { SignupValues, Token } from "../constants/types";
 
 type AuthContextType = {
-  userLogin: (usercred: string, password: string) => Promise<void>;
+  userLogin: (usercred: string, password: string) => Promise<Token>;
   userSignup: (
     username: string,
     displayName: string,
     password: string,
     email: string
-  ) => Promise<void>;
+  ) => Promise<Token>;
   userLogout: (doUnregisterPushToken: boolean) => Promise<void>;
   signupValues: SignupValues;
   setSignupValues: React.Dispatch<React.SetStateAction<SignupValues>>
@@ -38,6 +38,8 @@ export const AuthProvider = ({ children }) => {
   const userLogin = async (usercred: string, password: string) => {
     const token: Token = await login(usercred, password);
     await setContextVarsBasedOnToken(token)
+
+    return token
   };
 
   const userSignup = async (
@@ -54,6 +56,8 @@ export const AuthProvider = ({ children }) => {
       Username: undefined,
       Password: undefined,
     });
+
+    return token
   };
 
   const userLogout = async (doUnregisterPushToken: boolean) => {

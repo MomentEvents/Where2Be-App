@@ -39,7 +39,8 @@ import CustomTextInput from "../../../components/Styled/CustomTextInput";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
-  const { setLoading } = useContext(ScreenContext);
+  const {showTextAlert } = useContext(AlertContext)
+  const { setLoading, signupActionEventID } = useContext(ScreenContext);
   const { showErrorAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
 
@@ -51,13 +52,24 @@ const LoginScreen = () => {
   const onLogin = () => {
     setLoading(true);
     userLogin(usercred, password)
-      .then(() => setLoading(false))
+      .then((token) => {
+        console.log(signupActionEventID.current + " IS THE ACTION EVENT ID");
+
+        if (signupActionEventID.current) {
+          navigation.navigate(SCREENS.EventDetails, {
+            eventID: signupActionEventID.current,
+          });
+          showTextAlert("Successfully logged in", 5)
+          signupActionEventID.current = null;
+        }
+      })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
           displayError(error);
         }
+      }).finally(() => {
         setLoading(false);
       });
   };

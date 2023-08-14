@@ -96,20 +96,24 @@ const EventDetailsScreen = ({ route }) => {
   const { userToken, isLoggedIn } = useContext(UserContext);
 
   const [currentToken, setCurrentToken] = useState<Token>(undefined);
-  const [didLoadToken, setDidLoadToken] = useState(false)
+  const [didLoadToken, setDidLoadToken] = useState(false);
 
   const parseToken = async () => {
-    if(!userToken){
+    if (!userToken) {
       const token = await getStoredToken();
       setCurrentToken(token);
     } else {
-      setCurrentToken(userToken)
+      setCurrentToken(userToken);
     }
-    setDidLoadToken(true)
+    setDidLoadToken(true);
   };
   useEffect(() => {
     parseToken();
   }, []);
+
+  useEffect(() => {
+    parseToken();
+  }, [userToken]);
 
   if (!didLoadToken) {
     return (
@@ -127,7 +131,7 @@ const EventDetailsScreen = ({ route }) => {
   }
   console.log(" MY TOKEN BEFORE GOING TO EVENTDETAILS IS ", currentToken);
 
-  return <EventDetails eventID={eventID} currentToken={currentToken}/>;
+  return <EventDetails eventID={eventID} currentToken={currentToken} />;
 };
 
 export default EventDetailsScreen;

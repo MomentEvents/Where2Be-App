@@ -92,7 +92,8 @@ type EventDetailsProps = {
 };
 
 const EventDetails = (props: EventDetailsProps) => {
-  const { isAdmin } = useContext(UserContext);
+  const { isAdmin, isLoggedIn } = useContext(UserContext);
+  const { signupActionEventID } = useContext(ScreenContext);
   const eventID = props.eventID;
 
   // Loading context in case we want to disable the screen
@@ -101,13 +102,10 @@ const EventDetails = (props: EventDetailsProps) => {
   const navigation = useNavigation<any>();
 
   const promptLogin = () => {
-    showCancelablePopup(
-      "Sign in to continue",
-      "Please sign up or create an account",
-      "Cancel",
-      "Ok",
-      () => navigation.popToTop()
-    );
+    if (!isLoggedIn) {
+      signupActionEventID.current = eventID;
+      navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
+    }
   };
 
   console.log(
@@ -198,6 +196,7 @@ const EventDetails = (props: EventDetailsProps) => {
   const onTicketPressed = async () => {
     if (!props.currentToken) {
       promptLogin();
+      return;
     }
     if (storedEvent?.SignupLink) {
       didClickTicketRef.current = true;
@@ -292,7 +291,7 @@ const EventDetails = (props: EventDetailsProps) => {
                 setShowRetry(true);
               }
             })
-            .finally(() => { });
+            .finally(() => {});
         } else {
           setHost(user);
         }
@@ -419,35 +418,36 @@ const EventDetails = (props: EventDetailsProps) => {
                           onPress={
                             storedEvent?.UserJoin
                               ? () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadJoin.current = false;
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
+                                  }
+                                  if (!didFetchEvent) {
+                                    beforeLoadJoin.current = false;
+                                  }
+                                  removeUserJoin(eventID, props.currentToken);
                                 }
-                                if (!props.currentToken) {
-                                  promptLogin();
-                                  return;
-                                }
-                                removeUserJoin(eventID, props.currentToken);
-                              }
                               : () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadJoin.current = true;
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
+                                  }
+                                  if (!didFetchEvent) {
+                                    beforeLoadJoin.current = true;
+                                  }
+                                  if (storedEvent?.SignupLink) {
+                                    Alert.alert(
+                                      "This is a ticketed event",
+                                      "Make sure to click the ticket button to confirm your signup!"
+                                    );
+                                  } else {
+                                    addUserJoin(
+                                      eventID,
+                                      undefined,
+                                      props.currentToken
+                                    );
+                                  }
                                 }
-                                if (storedEvent?.SignupLink) {
-                                  Alert.alert(
-                                    "This is a ticketed event",
-                                    "Make sure to click the ticket button to confirm your signup!"
-                                  );
-                                }
-                                if (!props.currentToken) {
-                                  promptLogin();
-                                } else {
-                                  addUserJoin(
-                                    eventID,
-                                    undefined,
-                                    props.currentToken
-                                  );
-                                }
-                              }
                           }
                         >
                           {storedEvent?.UserJoin ? (
@@ -552,28 +552,28 @@ const EventDetails = (props: EventDetailsProps) => {
                           onPress={
                             storedEvent?.UserShoutout
                               ? () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadShoutout.current = false;
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
+                                  }
+                                  if (!didFetchEvent) {
+                                    beforeLoadShoutout.current = false;
+                                  }
+                                  removeUserShoutout(
+                                    eventID,
+                                    props.currentToken
+                                  );
                                 }
-                                if (!props.currentToken) {
-                                  promptLogin();
-                                  return;
-                                }
-                                removeUserShoutout(
-                                  eventID,
-                                  props.currentToken
-                                );
-                              }
                               : () => {
-                                if (!didFetchEvent) {
-                                  beforeLoadShoutout.current = true;
+                                  if (!props.currentToken) {
+                                    promptLogin();
+                                    return;
+                                  }
+                                  if (!didFetchEvent) {
+                                    beforeLoadShoutout.current = true;
+                                  }
+                                  addUserShoutout(eventID, props.currentToken);
                                 }
-                                if (!props.currentToken) {
-                                  promptLogin();
-                                  return;
-                                }
-                                addUserShoutout(eventID, props.currentToken);
-                              }
                           }
                         >
                           {storedEvent?.UserShoutout ? (

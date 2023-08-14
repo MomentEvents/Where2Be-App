@@ -37,15 +37,14 @@ import {
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { AlertContext } from "../../../../contexts/AlertContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as WebBrowser from 'expo-web-browser';
-
+import * as WebBrowser from "expo-web-browser";
 
 const SignupFinalScreen = () => {
   const navigator = useNavigation<any>();
 
   const { signupValues, setSignupValues, userSignup } = useContext(AuthContext);
-  const { showErrorAlert } = useContext(AlertContext);
-  const { setLoading } = useContext(ScreenContext);
+  const { showErrorAlert, showTextAlert } = useContext(AlertContext);
+  const { setLoading, signupActionEventID } = useContext(ScreenContext);
 
   const insets = useSafeAreaInsets();
 
@@ -93,8 +92,18 @@ const SignupFinalScreen = () => {
       signupValues.Password,
       signupValues.Email
     )
-      .then(() => {
+      .then((token) => {
         // Do something. Maybe in context for is email verified
+        console.log(signupActionEventID.current + " IS THE ACTION EVENT ID");
+
+        if (signupActionEventID.current) {
+          navigator.navigate(SCREENS.EventDetails, {
+            eventID: signupActionEventID.current,
+          });
+          showTextAlert("Welcome to Where2Be!", 5)
+
+          signupActionEventID.current = null;
+        }
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
@@ -159,7 +168,11 @@ const SignupFinalScreen = () => {
             <McText style={styles.titleText} h1>
               Let the Adventure Begin!
             </McText>
-            <McText style={styles.descriptionText} color={COLORS.lightGray} body3>
+            <McText
+              style={styles.descriptionText}
+              color={COLORS.lightGray}
+              body3
+            >
               You're all set! Start exploring events and make unforgettable
               memories on your campus.
             </McText>
