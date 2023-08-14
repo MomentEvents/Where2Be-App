@@ -45,6 +45,8 @@ target 'Where2Be' do
   use_frameworks! :linkage => :static # Firebase integration
   $RNFirebaseAsStaticFramework = true
 
+  pod 'react-native-branch', path: '../node_modules/react-native-branch'
+
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
   pod 'BranchSDK'

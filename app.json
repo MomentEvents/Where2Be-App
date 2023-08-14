@@ -5,7 +5,7 @@
     "version": "1.0.12",
     "owner": "moment-app",
     "privacy": "public",
-    "description": "Find Parties & Events on Campus",
+    "description": "Find Events on Campus",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,7 +15,7 @@
       "backgroundColor": "#000000"
     },
     "updates": {
-      "fallbackToCacheTimeout": 120000,
+      "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/795a8d15-64b5-4442-918f-40a0b90fbd14"
     },
     "assetBundlePatterns": [
@@ -49,14 +49,7 @@
           "photosPermission": "You can share your photos with your friends."
         }
       ],
-      "sentry-expo",
-      [
-        "@config-plugins/react-native-branch",
-        {
-          "apiKey": "key_live_hwee4HGlrxgcV5MfrIpFQebaqxnzZf3R",
-          "iosAppDomain": "where2be.app.link"
-        }
-      ]
+      "sentry-expo"
     ],
     "extra": {
       "eas": {

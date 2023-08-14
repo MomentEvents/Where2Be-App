@@ -7,7 +7,7 @@
     <key>EXUpdatesEnabled</key>
     <true/>
     <key>EXUpdatesLaunchWaitMs</key>
-    <integer>120000</integer>
+    <integer>0</integer>
     <key>EXUpdatesRuntimeVersion</key>
     <string>exposdk:49.0.0</string>
     <key>EXUpdatesURL</key>
