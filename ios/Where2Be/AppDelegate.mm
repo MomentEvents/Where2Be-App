@@ -39,26 +39,26 @@
 }
 
 // Linking API
-// - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-//   return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options] || [RNBranch application:application openURL:url options:options];
-// }
-
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  [[Branch getInstance] application:app openURL:url options:options];
-  return YES;
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options] || [RNBranch application:application openURL:url options:options];
 }
 
-// // Universal Links
-// - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
-//   BOOL result = [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
-//   return [super application:application continueUserActivity:userActivity restorationHandler:restorationHandler] || result || [RNBranch continueUserActivity:userActivity];
+// - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//   [[Branch getInstance] application:app openURL:url options:options];
+//   return YES;
 // }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
-  // Handler for Universal Links
-  [[Branch getInstance] continueUserActivity:userActivity];
-  return YES;
+// Universal Links
+- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+  BOOL result = [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+  return [super application:application continueUserActivity:userActivity restorationHandler:restorationHandler] || result || [RNBranch continueUserActivity:userActivity];
 }
+
+// - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+//   // Handler for Universal Links
+//   [[Branch getInstance] continueUserActivity:userActivity];
+//   return YES;
+// }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -73,15 +73,15 @@
 }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
-// - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-// {
-//   [[Branch getInstance] handlePushNotification:userInfo];
-//   return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-// }
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-  // Handler for Push Notifications
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
   [[Branch getInstance] handlePushNotification:userInfo];
+  return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
+
+// - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//   // Handler for Push Notifications
+//   [[Branch getInstance] handlePushNotification:userInfo];
+// }
 
 @end
