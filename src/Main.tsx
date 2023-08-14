@@ -44,6 +44,11 @@ import FollowList from "./components/FollowList/FollowList";
 import AccountFollowListScreen from "./screens/authorized/AccountFollowList/AccountFollowListScreen";
 import EditEventScreen from "./screens/authorized/EditEvent/EditEventScreen";
 import { SETTINGS } from "./constants/settings";
+import LoginScreen from "./screens/unauthorized/Login/LoginScreen";
+import SignupWelcomeScreen from "./screens/unauthorized/Onboarding/1_Welcome/SignupWelcomeScreen";
+import SignupUsernameScreen from "./screens/unauthorized/Onboarding/4_Username/SignupUsernameScreen";
+import SignupFinalScreen from "./screens/unauthorized/Onboarding/6_Final/SignupFinalScreen";
+import SignupScreen from "./screens/unauthorized/Signup/SignupScreen";
 
 // Set the handler that's invoked whenever a notification is received when the app is open
 Notifications.setNotificationHandler({
@@ -57,9 +62,9 @@ Notifications.setNotificationHandler({
 SplashScreen.preventAutoHideAsync();
 
 const Main = () => {
-  const routeNameRef = React.useRef<any>();
-  const { notificationNavigationRef } = useContext(ScreenContext);
+  const routeNameRef = useRef<any>();
 
+  const navigationRef = useRef<any>()
 
   useEffect(() => {
     reactToUpdates();
@@ -123,17 +128,17 @@ const Main = () => {
                     <StatusBar barStyle="light-content" translucent={true} />
                     <NavigationContainer
                       independent={true}
-                      ref={notificationNavigationRef}
+                      ref={navigationRef}
                       onReady={() => {
                         routeNameRef.current =
-                          notificationNavigationRef.current.getCurrentRoute().name;
+                        navigationRef.current.getCurrentRoute().name;
                       }}
                       onStateChange={async () => {
                         const previousRouteName = routeNameRef.current;
                         let currentRouteName = undefined;
-                        if (notificationNavigationRef.current) {
+                        if (navigationRef.current) {
                           currentRouteName =
-                            notificationNavigationRef.current.getCurrentRoute()
+                          navigationRef.current.getCurrentRoute()
                               .name;
                         }
                         if (
@@ -179,6 +184,26 @@ const Main = () => {
                         <Stack.Screen
                           name={SCREENS.EditEvent}
                           component={EditEventScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.Login}
+                          component={LoginScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.Signup}
+                          component={SignupScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.Onboarding.SignupWelcomeScreen}
+                          component={SignupWelcomeScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.Onboarding.SignupUsernameScreen}
+                          component={SignupUsernameScreen}
+                        />
+                        <Stack.Screen
+                          name={SCREENS.Onboarding.SignupFinalScreen}
+                          component={SignupFinalScreen}
                         />
                       </Stack.Navigator>
                     </NavigationContainer>

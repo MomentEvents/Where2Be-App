@@ -41,7 +41,8 @@ const Stack = createStackNavigator();
 const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
   const routeNameRef = useRef<any>();
-  const {navigationRef, notificationNavigationRef}  = useContext(ScreenContext)
+  const navigationRef = useRef<any>()
+  const notificationNavigation = useNavigation<any>()
 
   useEffect(() => {
     // Subscribe to incoming links
@@ -66,7 +67,7 @@ const AppNav = () => {
 
         console.log("EVENT ID THAT'S DEEP LINKED IS " + eventID)
 
-        notificationNavigationRef.current.navigate(SCREENS.EventDetails, {
+        notificationNavigation.navigate(SCREENS.EventDetails, {
           eventID: eventID,
         });
       }
@@ -92,7 +93,7 @@ const AppNav = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          notificationNavigationRef.current.push(SCREENS.EventDetails, {
+          notificationNavigation.push(SCREENS.EventDetails, {
             eventID: data.event_id,
           });
         }
@@ -165,24 +166,8 @@ const AuthStack = () => {
         component={SignupWelcomeScreen}
       />
       <Stack.Screen
-        name={SCREENS.Onboarding.SignupSchoolScreen}
-        component={SignupSelectSchoolScreen}
-      />
-      <Stack.Screen
-        name={SCREENS.Onboarding.SignupNameScreen}
-        component={SignupNameScreen}
-      />
-      <Stack.Screen
         name={SCREENS.Onboarding.SignupUsernameScreen}
         component={SignupUsernameScreen}
-      />
-      <Stack.Screen
-        name={SCREENS.Onboarding.SignupEmailScreen}
-        component={SignupEmailScreen}
-      />
-      <Stack.Screen
-        name={SCREENS.Onboarding.SignupPasswordScreen}
-        component={SignupPasswordScreen}
       />
       <Stack.Screen
         name={SCREENS.Onboarding.SignupFinalScreen}
