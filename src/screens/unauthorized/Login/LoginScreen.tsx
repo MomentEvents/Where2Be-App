@@ -204,10 +204,20 @@ const LoginScreen = () => {
                 Continue
               </McText>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onNavigateSignup}
-            style={{width: "100%", marginTop: 50}}>
-              <McText color={COLORS.lightGray} style={{textAlign: "center"}} body4>I don't have an account</McText>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={{ marginTop: 20 }}
+                onPress={onNavigateSignup}
+              >
+                <McText
+                  body4
+                  color={COLORS.lightGray}
+                  style={{ textAlign: "center" }}
+                >
+                  I don't have an account
+                </McText>
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </MobileSafeView>

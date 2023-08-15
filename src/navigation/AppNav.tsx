@@ -43,7 +43,7 @@ const navigationRef = createRef<any>();
 
 const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
-  const { setSignupActionEventID, signupActionEventID } = useContext(ScreenContext);
+  const { signupActionEventID } = useContext(ScreenContext);
   const routeNameRef = useRef<any>();
   const [isNavigationReady, setNavigationReady] = useState(false);
 
@@ -77,8 +77,7 @@ const AppNav = () => {
         if (typeof eventID === "string") {
           getStoredToken().then((token) => {
             if (!token) {
-              console.warn(eventID)
-              setSignupActionEventID(eventID);
+              signupActionEventID.current = eventID;
               navigationRef.current.navigate(
                 SCREENS.Onboarding.SignupWelcomeScreen
               );
@@ -101,10 +100,6 @@ const AppNav = () => {
   }, [isNavigationReady]);
 
   useEffect(() => {
-    console.warn("RAN APPNAV USE EFFECT: " + signupActionEventID)
-  }, [signupActionEventID])
-
-  useEffect(() => {
     if(!isNavigationReady){
       return
     }
@@ -123,7 +118,7 @@ const AppNav = () => {
         if (data.action === "ViewEventDetails") {
           getStoredToken().then((token) => {
             if (!token) {
-              setSignupActionEventID(data.event_id);
+              signupActionEventID.current = data.event_id;
               navigationRef.current.navigate(
                 SCREENS.Onboarding.SignupWelcomeScreen
               );

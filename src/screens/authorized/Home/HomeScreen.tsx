@@ -27,6 +27,7 @@ import {
   displayError,
   formatError,
   showBugReportPopup,
+  showCancelablePopup,
 } from "../../../helpers/helpers";
 import RetryButton from "../../../components/RetryButton";
 import { CustomError } from "../../../constants/error";
@@ -46,7 +47,7 @@ const HomeScreen = () => {
   const { showErrorAlert } = useContext(AlertContext);
 
   const { newPostedEventHomePageRef } = useContext(EventContext);
-  const { flatListRef, signupActionEventID, setSignupActionEventID } = useContext(ScreenContext);
+  const { flatListRef, signupActionEventID } = useContext(ScreenContext);
 
   const viewedEventIDs = useRef<Set<string>>(new Set([]));
 
@@ -328,21 +329,17 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
+    if (signupActionEventID.current) {
+      const eventID = signupActionEventID.current + "";
+      signupActionEventID.current = null;
+      showCancelablePopup("Do you want to continue to your event?", "", "Cancel", "Yes", () =>
+        navigation.navigate(SCREENS.EventDetails, {
+          eventID: eventID,
+        })
+      );
+    }
     pullData();
   }, []);
-
-  useEffect(() => {
-    console.warn("RUNNING signupActionEventID useEffect")
-    console.warn(signupActionEventID)
-    if (signupActionEventID) {
-      console.log("OMG NAVIGATION?")
-      navigation.navigate(SCREENS.EventDetails, {
-        eventID: signupActionEventID,
-      });
-  
-      setSignupActionEventID(null);
-    }
-  }, [signupActionEventID])
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>
@@ -435,12 +432,11 @@ const HomeScreen = () => {
               <McText
                 body4
                 color={COLORS.gray2}
-                
                 style={{
                   textAlign: "center",
                   paddingTop: 10,
                   marginHorizontal: 60,
-                  textDecorationLine: "underline"
+                  textDecorationLine: "underline",
                 }}
                 onPress={() => {
                   navigation.navigate(SCREENS.ExploreEvents);
