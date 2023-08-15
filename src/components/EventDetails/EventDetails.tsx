@@ -347,7 +347,7 @@ const EventDetails = (props: EventDetailsProps) => {
   useEffect(() => {
     pullData();
     if(SETTINGS.firebaseAnalytics){
-      analytics().logEvent("EventDetailsView", {eventID: eventID}).then(() => {
+      analytics().logEvent("EventDetailsView", {eventID: eventID, userID: props.currentToken.UserID}).then(() => {
         console.log("Logged EventDetailsView for " + eventID)
       })
     }
