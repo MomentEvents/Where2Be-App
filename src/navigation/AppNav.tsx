@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
@@ -35,16 +35,22 @@ import * as Notifications from "expo-notifications";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import branch, { BranchEvent } from "react-native-branch";
 import { ScreenContext } from "../contexts/ScreenContext";
+import { getStoredToken } from "../services/AuthService";
 
 const Stack = createStackNavigator();
 
 const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
+  const { signupActionEventID } = useContext(ScreenContext);
   const routeNameRef = useRef<any>();
-  const navigationRef = useRef<any>()
-  const notificationNavigation = useNavigation<any>()
+  const navigationRef = useRef<any>();
+  const [isNavigationReady, setNavigationReady] = useState(false);
 
   useEffect(() => {
+    if(!isNavigationReady){
+      return
+    } 
+    
     // Subscribe to incoming links
     const unsubscribe = branch.subscribe(({ error, params }) => {
       if (error) {
@@ -65,11 +71,22 @@ const AppNav = () => {
         // Handle event detailsF
         const eventID = params.event_id;
 
-        console.log("EVENT ID THAT'S DEEP LINKED IS " + eventID)
+        console.log("EVENT ID THAT'S DEEP LINKED IS " + eventID);
 
-        notificationNavigation.navigate(SCREENS.EventDetails, {
-          eventID: eventID,
-        });
+        if (typeof eventID === "string") {
+          if (!isLoggedIn) {
+            signupActionEventID.current = eventID;
+            navigationRef.current.navigate(
+              SCREENS.Onboarding.SignupWelcomeScreen
+            );
+            return;
+          } else {
+            navigationRef.current.navigate(SCREENS.EventDetails, {
+              eventID: eventID,
+            });
+            return;
+          }
+        }
       }
     });
 
@@ -77,9 +94,12 @@ const AppNav = () => {
       // Cleanup
       unsubscribe();
     };
-  }, []);
+  }, [isNavigationReady]);
 
   useEffect(() => {
+    if(!isNavigationReady){
+      return
+    }
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
         if (!response) {
@@ -93,9 +113,18 @@ const AppNav = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          notificationNavigation.push(SCREENS.EventDetails, {
-            eventID: data.event_id,
-          });
+          if (!isLoggedIn) {
+            signupActionEventID.current = data.event_id;
+            navigationRef.current.navigate(
+              SCREENS.Onboarding.SignupWelcomeScreen
+            );
+            return;
+          } else {
+            navigationRef.current.navigate(SCREENS.EventDetails, {
+              eventID: data.event_id,
+            });
+            return;
+          }
         }
 
         console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
@@ -103,7 +132,7 @@ const AppNav = () => {
     );
 
     return () => subscription.remove();
-  }, []);
+  }, [isNavigationReady]);
 
   if (!isUserContextLoaded) {
     return <LoadingComponent />;
@@ -115,6 +144,7 @@ const AppNav = () => {
       ref={navigationRef}
       onReady={() => {
         routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        setNavigationReady(true); // Set navigation as ready here
       }}
       onStateChange={async () => {
         const previousRouteName = routeNameRef.current;

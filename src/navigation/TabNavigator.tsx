@@ -97,7 +97,19 @@ const TabNavigator = ({ params }) => {
   const insets = useSafeAreaInsets();
 
   const currentTab = useRef<string>(SCREENS.Home);
-  const { flatListRef } = useContext(ScreenContext);
+  const { flatListRef, signupActionEventID } = useContext(ScreenContext);
+
+  const navigator = useNavigation<any>()
+
+  useEffect(() => {
+    if (signupActionEventID.current) {
+      navigator.navigate(SCREENS.EventDetails, {
+        eventID: signupActionEventID.current,
+      });
+  
+      signupActionEventID.current = null;
+    }
+  },[])
 
   return (
     <Tab.Navigator

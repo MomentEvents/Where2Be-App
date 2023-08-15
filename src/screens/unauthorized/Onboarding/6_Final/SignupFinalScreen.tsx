@@ -94,16 +94,6 @@ const SignupFinalScreen = () => {
     )
       .then((token) => {
         // Do something. Maybe in context for is email verified
-        console.log(signupActionEventID.current + " IS THE ACTION EVENT ID");
-
-        if (signupActionEventID.current) {
-          navigator.navigate(SCREENS.EventDetails, {
-            eventID: signupActionEventID.current,
-          });
-          showTextAlert("Welcome to Where2Be!", 5)
-
-          signupActionEventID.current = null;
-        }
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
