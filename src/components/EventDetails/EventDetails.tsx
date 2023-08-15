@@ -83,6 +83,8 @@ import {
   updateEventMap,
 } from "../../redux/events/eventSlice";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
+import analytics from "@react-native-firebase/analytics";
+import { SETTINGS } from "../../constants/settings";
 
 type EventDetailsProps = {
   eventID: string;
@@ -344,6 +346,11 @@ const EventDetails = (props: EventDetailsProps) => {
 
   useEffect(() => {
     pullData();
+    if(SETTINGS.firebaseAnalytics){
+      analytics().logEvent("EventDetailsView", {eventID: eventID}).then(() => {
+        console.log("Logged EventDetailsView for " + eventID)
+      })
+    }
   }, []);
 
   useEffect(() => {
