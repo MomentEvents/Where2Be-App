@@ -16,6 +16,7 @@ import {
   Image,
   Alert,
   Modal,
+  Pressable,
 } from "react-native";
 import Hyperlink from "react-native-hyperlink";
 import { Interest, Event, User, COLORS, SIZES, SCREENS } from "../../constants";
@@ -48,6 +49,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface EventPreviewerProps {
   event: Event;
@@ -78,6 +80,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const qrSize = SIZES.width * 0.8; // 80% of screen width, adjust as needed
+  const [isBottomModalOpen, setIsBottomModalOpen] = useState(false)
 
   const onShareLinkPressed = () => {
     showShareEventLink(
@@ -115,9 +118,21 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   const insets = useSafeAreaInsets();
 
+
   const closeBottomModal = () => {
     bottomSheetModalRef.current?.close();
+    setIsBottomModalOpen(false)
   };
+
+  const openBottomModal = () => {
+    bottomSheetModalRef.current?.present();
+    setIsBottomModalOpen(true)
+  }
+
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop onPress={closeBottomModal} {...props} />,
+    []
+  );
 
   const onHostPressed = () => {
     if (props.host) {
@@ -148,19 +163,6 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     });
   };
 
-    // renders
-    const renderBackdrop = useCallback(
-      props => (
-        <BottomSheetBackdrop
-          {...props}
-          disappearsOnIndex={0}
-          appearsOnIndex={0}
-          onPress={closeBottomModal}
-        />
-      ),
-      []
-    );
-    
   const onDeleteEventPressed = () => {
     Alert.alert(
       "Delete event",
@@ -222,7 +224,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
         showsVerticalScrollIndicator={false}
         refreshControl={props.refreshControl}
       >
-        <View style={{ height: "100%", position: "relative" }}>
+        <Pressable onPressIn={closeBottomModal} style={{ height: "100%", position: "relative" }}>
           <TouchableOpacity onPress={() => setImageViewVisible(true)}>
             <ImageBackground
               resizeMode="cover"
@@ -374,7 +376,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 {props.showShareButton && (
                   <TouchableOpacity
                     onPress={() => {
-                      bottomSheetModalRef.current?.present();
+                      openBottomModal()
                     }}
                   >
                     <Feather
@@ -387,9 +389,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 )}
               </View>
             </TitleSection>
-
-            <TouchableOpacity onPress={() => openMaps(props.event?.Location)}>
               <LocationSection>
+              <TouchableOpacity style={{flexDirection: "row", marginRight: 10}} onPress={() => openMaps(props.event?.Location)}>
                 <Ionicons
                   name="location-outline"
                   size={16}
@@ -406,8 +407,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 >
                   {props.event?.Location}
                 </McText>
+                </TouchableOpacity>
               </LocationSection>
-            </TouchableOpacity>
 
             <View>
               <DescriptionSection>
@@ -594,7 +595,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
           ) : (
             <View style={{ height: insets.bottom + 30 }} />
           )}
-        </View>
+        </Pressable>
         {isQRModalVisible && (
           <Modal
             animationType="slide"
@@ -621,11 +622,9 @@ const EventPreviewer = (props: EventPreviewerProps) => {
           </Modal>
         )}
         <BottomSheetModal
-        backdropComponent={renderBackdrop}
-        index={0}
-
           ref={bottomSheetModalRef}
           snapPoints={["30%"]}
+          
           backgroundComponent={({ style }) => (
             <View
               style={[
@@ -639,6 +638,8 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             />
           )}
           stackBehavior={"replace"}
+          index={0}
+          backdropComponent={renderBackdrop}
           handleComponent={() => (
             <View
               style={{
@@ -653,49 +654,49 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             />
           )} // Use your custom handle component here
         >
-            <BottomSheetView style={styles.bottomView}>
-              <TouchableOpacity
-                onPress={() => {
-                  closeBottomModal();
-                  onShareLinkPressed();
-                }}
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                <MaterialIcons
-                  name="link"
-                  style={{ marginHorizontal: 20 }}
-                  size={32}
-                  color="white"
-                />
-                <McText body2 color={COLORS.white}>
-                  Share link
-                </McText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  closeBottomModal();
-                  onQRCodePressed();
-                }}
-                style={{
-                  marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons
-                  name="qr-code-2"
-                  style={{ marginHorizontal: 20 }}
-                  size={32}
-                  color="white"
-                />
-                <McText body2 color={COLORS.white}>
-                  Share QR code
-                </McText>
-              </TouchableOpacity>
-            </BottomSheetView>
+          <BottomSheetView style={styles.bottomView}>
+            <TouchableOpacity
+              onPress={() => {
+                closeBottomModal();
+                onShareLinkPressed();
+              }}
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
+              <MaterialIcons
+                name="link"
+                style={{ marginHorizontal: 20 }}
+                size={32}
+                color="white"
+              />
+              <McText body2 color={COLORS.white}>
+                Share link
+              </McText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                closeBottomModal();
+                onQRCodePressed();
+              }}
+              style={{
+                marginTop: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name="qr-code-2"
+                style={{ marginHorizontal: 20 }}
+                size={32}
+                color="white"
+              />
+              <McText body2 color={COLORS.white}>
+                Share QR code
+              </McText>
+            </TouchableOpacity>
+          </BottomSheetView>
         </BottomSheetModal>
       </ScrollView>
-      
+
       {props.userControlElement}
     </BottomSheetModalProvider>
   );
