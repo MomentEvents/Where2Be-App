@@ -14,7 +14,7 @@ import HomeScreen from "../screens/authorized/Home/HomeScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ScreenContext } from "../contexts/ScreenContext";
 
 const Tab = createBottomTabNavigator();
@@ -99,18 +99,6 @@ const TabNavigator = ({ params }) => {
   const currentTab = useRef<string>(SCREENS.Home);
   const { flatListRef, signupActionEventID } = useContext(ScreenContext);
 
-  const navigator = useNavigation<any>()
-
-  useEffect(() => {
-    if (signupActionEventID.current) {
-      navigator.navigate(SCREENS.EventDetails, {
-        eventID: signupActionEventID.current,
-      });
-  
-      signupActionEventID.current = null;
-    }
-  },[])
-
   return (
     <Tab.Navigator
       //tabBarOptions={{ showLabel: false }}
@@ -149,7 +137,7 @@ const TabNavigator = ({ params }) => {
                   currentTab.current === SCREENS.Home &&
                   flatListRef.current
                 ) {
-                  console.log("going up?")
+                  console.log("going up?");
                   flatListRef.current.scrollToOffset({
                     offset: 0,
                     animated: true,

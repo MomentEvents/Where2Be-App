@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { createRef, useContext, useEffect, useRef, useState } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../contexts/UserContext";
@@ -38,19 +38,20 @@ import { ScreenContext } from "../contexts/ScreenContext";
 import { getStoredToken } from "../services/AuthService";
 
 const Stack = createStackNavigator();
+const navigationRef = createRef<any>();
+
 
 const AppNav = () => {
   const { isLoggedIn, isUserContextLoaded } = useContext(UserContext);
-  const { signupActionEventID } = useContext(ScreenContext);
+  const { setSignupActionEventID, signupActionEventID } = useContext(ScreenContext);
   const routeNameRef = useRef<any>();
-  const navigationRef = useRef<any>();
   const [isNavigationReady, setNavigationReady] = useState(false);
 
   useEffect(() => {
     if(!isNavigationReady){
       return
     } 
-    
+
     // Subscribe to incoming links
     const unsubscribe = branch.subscribe(({ error, params }) => {
       if (error) {
@@ -74,18 +75,21 @@ const AppNav = () => {
         console.log("EVENT ID THAT'S DEEP LINKED IS " + eventID);
 
         if (typeof eventID === "string") {
-          if (!isLoggedIn) {
-            signupActionEventID.current = eventID;
-            navigationRef.current.navigate(
-              SCREENS.Onboarding.SignupWelcomeScreen
-            );
-            return;
-          } else {
-            navigationRef.current.navigate(SCREENS.EventDetails, {
-              eventID: eventID,
-            });
-            return;
-          }
+          getStoredToken().then((token) => {
+            if (!token) {
+              console.warn(eventID)
+              setSignupActionEventID(eventID);
+              navigationRef.current.navigate(
+                SCREENS.Onboarding.SignupWelcomeScreen
+              );
+              return;
+            } else {
+              navigationRef.current.navigate(SCREENS.EventDetails, {
+                eventID: eventID,
+              });
+              return;
+            }
+          })
         }
       }
     });
@@ -95,6 +99,10 @@ const AppNav = () => {
       unsubscribe();
     };
   }, [isNavigationReady]);
+
+  useEffect(() => {
+    console.warn("RAN APPNAV USE EFFECT: " + signupActionEventID)
+  }, [signupActionEventID])
 
   useEffect(() => {
     if(!isNavigationReady){
@@ -113,18 +121,20 @@ const AppNav = () => {
         const { data } = notification.request.content;
 
         if (data.action === "ViewEventDetails") {
-          if (!isLoggedIn) {
-            signupActionEventID.current = data.event_id;
-            navigationRef.current.navigate(
-              SCREENS.Onboarding.SignupWelcomeScreen
-            );
-            return;
-          } else {
-            navigationRef.current.navigate(SCREENS.EventDetails, {
-              eventID: data.event_id,
-            });
-            return;
-          }
+          getStoredToken().then((token) => {
+            if (!token) {
+              setSignupActionEventID(data.event_id);
+              navigationRef.current.navigate(
+                SCREENS.Onboarding.SignupWelcomeScreen
+              );
+              return;
+            } else {
+              navigationRef.current.navigate(SCREENS.EventDetails, {
+                eventID: data.event_id,
+              });
+              return;
+            }
+          })
         }
 
         console.log("\n\n NOTIFICATION DATA: " + JSON.stringify(data));
@@ -170,7 +180,6 @@ const AppNav = () => {
 };
 
 const AuthStack = () => {
-  console.log("Loading AuthStack");
   return (
     <Stack.Navigator
       screenOptions={{
@@ -208,6 +217,7 @@ const AuthStack = () => {
 };
 
 const AppStack = () => {
+  const navigation = useNavigation<any>()
   return (
     <Stack.Navigator
       screenOptions={{

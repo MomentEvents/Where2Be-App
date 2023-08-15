@@ -126,7 +126,8 @@ const Main = () => {
                 <ScreenProvider>
                   <AuthProvider>
                     <StatusBar barStyle="light-content" translucent={true} />
-                    <NavigationContainer
+                    <AppNav/>
+                    {/* <NavigationContainer
                       independent={true}
                       ref={navigationRef}
                       onReady={() => {
@@ -206,7 +207,7 @@ const Main = () => {
                           component={SignupFinalScreen}
                         />
                       </Stack.Navigator>
-                    </NavigationContainer>
+                    </NavigationContainer> */}
                   </AuthProvider>
                 </ScreenProvider>
               </EventProvider>

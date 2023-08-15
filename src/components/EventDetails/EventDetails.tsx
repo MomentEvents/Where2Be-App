@@ -93,7 +93,7 @@ type EventDetailsProps = {
 
 const EventDetails = (props: EventDetailsProps) => {
   const { isAdmin, isLoggedIn } = useContext(UserContext);
-  const { signupActionEventID } = useContext(ScreenContext);
+  const { setSignupActionEventID } = useContext(ScreenContext);
   const eventID = props.eventID;
 
   // Loading context in case we want to disable the screen
@@ -103,7 +103,7 @@ const EventDetails = (props: EventDetailsProps) => {
 
   const promptLogin = () => {
     if (!isLoggedIn) {
-      signupActionEventID.current = eventID;
+      setSignupActionEventID(eventID);
       navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
     }
   };

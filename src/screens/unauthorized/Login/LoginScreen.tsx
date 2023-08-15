@@ -10,7 +10,7 @@ import {
   Touchable,
   View,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/UserContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import GradientBackground from "../../../components/Styled/GradientBackground";
@@ -53,15 +53,6 @@ const LoginScreen = () => {
     setLoading(true);
     userLogin(usercred, password)
       .then((token) => {
-        console.log(signupActionEventID.current + " IS THE ACTION EVENT ID");
-
-        if (signupActionEventID.current) {
-          navigation.navigate(SCREENS.EventDetails, {
-            eventID: signupActionEventID.current,
-          });
-          showTextAlert("Successfully logged in", 5)
-          signupActionEventID.current = null;
-        }
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {

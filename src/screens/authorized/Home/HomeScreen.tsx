@@ -46,7 +46,7 @@ const HomeScreen = () => {
   const { showErrorAlert } = useContext(AlertContext);
 
   const { newPostedEventHomePageRef } = useContext(EventContext);
-  const { flatListRef } = useContext(ScreenContext);
+  const { flatListRef, signupActionEventID, setSignupActionEventID } = useContext(ScreenContext);
 
   const viewedEventIDs = useRef<Set<string>>(new Set([]));
 
@@ -330,6 +330,19 @@ const HomeScreen = () => {
   useEffect(() => {
     pullData();
   }, []);
+
+  useEffect(() => {
+    console.warn("RUNNING signupActionEventID useEffect")
+    console.warn(signupActionEventID)
+    if (signupActionEventID) {
+      console.log("OMG NAVIGATION?")
+      navigation.navigate(SCREENS.EventDetails, {
+        eventID: signupActionEventID,
+      });
+  
+      setSignupActionEventID(null);
+    }
+  }, [signupActionEventID])
 
   return (
     <MobileSafeView style={styles.container} isBottomViewable={true}>

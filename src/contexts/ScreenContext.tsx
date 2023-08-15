@@ -23,21 +23,23 @@ import { displayError } from "../helpers/helpers";
 type ScreenContextType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   flatListRef: React.MutableRefObject<FlatList<any>>;
-  signupActionEventID: React.MutableRefObject<string>;
+  signupActionEventID: string;
+  setSignupActionEventID: React.Dispatch<React.SetStateAction<string>>
 };
 export const ScreenContext = createContext<ScreenContextType>({
   setLoading: null,
   flatListRef: null,
   signupActionEventID: null,
+  setSignupActionEventID: null,
 });
 
 export const ScreenProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const signupActionEventID = useRef<string>(null);
+  const [signupActionEventID, setSignupActionEventID] = useState<string>()
   const flatListRef = useRef<FlatList>(null);
 
   return (
-    <ScreenContext.Provider value={{ setLoading, flatListRef, signupActionEventID }}>
+    <ScreenContext.Provider value={{ setLoading, flatListRef, signupActionEventID, setSignupActionEventID }}>
       <>
         <ProgressLoader
           visible={loading}
