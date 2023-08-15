@@ -25,6 +25,7 @@ import backendConfig from "../../backendconfig.json"
 
 import moment from "moment";
 import { Alert, Linking, Platform } from "react-native";
+import { SETTINGS } from "../constants/settings";
 
 export function checkIfStringIsEmail(test: string): boolean {
   const expression =
@@ -325,6 +326,11 @@ export function truncateNumber(num: number): string {
 }
 
 export async function createEventLink(eventID: string, title: string, picture:string, description: string) {
+
+  if(!SETTINGS.universalLinks){
+    return "https://kylewade.dev"
+  }
+
   let buo = await branch.createBranchUniversalObject('event', {
     title: title,
     contentDescription: description,
@@ -348,6 +354,10 @@ export async function createEventLink(eventID: string, title: string, picture:st
 }
 
 export async function showShareEventLink(eventID: string, title: string, picture: string, description: string) {
+
+  if(!SETTINGS.universalLinks){
+    return
+  }
 
   let buo = await branch.createBranchUniversalObject('event', {
     title: title,

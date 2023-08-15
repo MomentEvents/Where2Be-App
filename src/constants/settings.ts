@@ -1,3 +1,4 @@
 export const SETTINGS = {
-    firebaseAnalytics: false // You need to run natively to see analytics
+    firebaseAnalytics: false, // Firebase analytics to see user activity
+    universalLinks: false     // Universal links so people can share links with one another
 }

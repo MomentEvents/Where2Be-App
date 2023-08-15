@@ -7,12 +7,20 @@ Remove `node_modules`
 `cd ios`
 `pod deintegrate`
 
-# How to run the app
+# How to run the app from scratch
 
+- Remove `node_modules`
+- Run `cd ios`
+- Run `pod deintegrate`
 - Create a `.env` file in the format of `.env-example` with those fields filled in
 - Run `npm i` if you do not have `node_modules` folder
 - If you're running using native modules with iOS, `cd ios` and `pod install`
 - Run `npx expo run:ios --device` or `npx expo run:android --device`
+
+# Reminder for development!
+
+- Go to `constants/settings.ts` and turn `firebaseAnalytics` to `false`
+- Go to `backendconfig.json` and turn `"env"` to `"dev"` (with the appropriate API url)
 
 # Reminder before production deployment!
 
