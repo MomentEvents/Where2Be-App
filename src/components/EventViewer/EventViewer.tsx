@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useRef, useState } from "react";
 import {
   SIZES,
   School,
@@ -22,7 +22,7 @@ import { getAllInterests } from "../../services/InterestService";
 import EventCard from "../EventCard";
 import { getAllSchoolEventsCategorized } from "../../services/EventService";
 import { showBugReportPopup } from "../../helpers/helpers";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CustomError } from "../../constants/error";
 import RetryButton from "../RetryButton";
@@ -50,7 +50,35 @@ const EventViewer = (props: EventViewerProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(true);
+
+  const lastPulled = useRef<Date>(new Date());
+  const isFocused = useIsFocused()
+
+  const didFirstTimePulled = useRef(false)
+
+  useEffect(() => {
+    if (isFocused && didFirstTimePulled.current) {
+      const timeDiff = Math.abs(
+        new Date().getTime() - lastPulled.current.getTime()
+      );
+
+      // Calculate the difference in minutes
+      const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+
+      console.log(minutesDiff + " minutes elapsed since last pull");
+      if (minutesDiff >= 5) {
+        console.log("Repulling events");
+        setIsLoadingEvents(true);
+        onRefresh();
+        lastPulled.current = new Date();
+      }
+    }
+  }, [isFocused]);
+
+
   const pullData = async () => {
+    didFirstTimePulled.current = true
+    lastPulled.current = new Date();
     getAllSchoolEventsCategorized(
       isLoggedIn ? userToken.UserAccessToken : undefined,
       props.school.SchoolID

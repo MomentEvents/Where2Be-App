@@ -222,7 +222,7 @@ const SettingsScreen = () => {
             <McText h3>Join Discord</McText>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onCheckForUpdatesClick}>
+        {/* <TouchableOpacity onPress={onCheckForUpdatesClick}>
           <View style={styles.buttonContainer}>
             <View
               style={{
@@ -240,7 +240,7 @@ const SettingsScreen = () => {
             </View>
             <McText h3>Check For Updates</McText>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={onCacheClean}>
           <View style={styles.buttonContainer}>
             <View

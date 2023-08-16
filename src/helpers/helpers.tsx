@@ -263,16 +263,17 @@ export async function responseHandler<CustomType>(
 }
 
 export function showBugReportPopup(error: ServerError) {
-  Alert.alert(error.name, error.message, [
-    {
-      text: "Send bug report",
-      onPress: () => WebBrowser.openBrowserAsync("https://where2be.app/discord"),
-    },
-    {
-      text: "Not now",
-      style: "cancel",
-    },
-  ]);
+  Alert.alert("An error occurred", "Please try again later")
+  // Alert.alert(error.name, error.message, [
+  //   {
+  //     text: "Send bug report",
+  //     onPress: () => WebBrowser.openBrowserAsync("https://where2be.app/discord"),
+  //   },
+  //   {
+  //     text: "Not now",
+  //     style: "cancel",
+  //   },
+  // ]);
 }
 
 export function showAppFeedbackPopup() {
