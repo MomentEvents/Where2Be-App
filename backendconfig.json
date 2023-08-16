@@ -1,5 +1,5 @@
 {
-    "env": "dev",
+    "env": "prod",
     "prod": {
         "apiUrl": "https://api.where2be.app",
         "apiVersion": "/v1.0.1"
