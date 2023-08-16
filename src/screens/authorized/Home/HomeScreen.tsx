@@ -332,7 +332,7 @@ const HomeScreen = () => {
     if (signupActionEventID.current) {
       const eventID = signupActionEventID.current + "";
       signupActionEventID.current = null;
-      showCancelablePopup("Do you want to continue to your event?", "", "Cancel", "Yes", () =>
+      showCancelablePopup("Check out your first event!", "", "Cancel", "Ok", () =>
         navigation.navigate(SCREENS.EventDetails, {
           eventID: eventID,
         })
