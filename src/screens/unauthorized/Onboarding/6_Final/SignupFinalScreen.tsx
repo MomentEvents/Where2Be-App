@@ -26,6 +26,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { CONSTRAINTS } from "../../../../constants/constraints";
 import { ScreenContext } from "../../../../contexts/ScreenContext";
 import {
+  NeedVerification,
   checkEmailAvailability,
   checkUsernameAvailability,
 } from "../../../../services/AuthService";
@@ -86,6 +87,7 @@ const SignupFinalScreen = () => {
       }
     }
     setLoading(true);
+    const signupEmail = signupValues.Email
     userSignup(
       signupValues.Username,
       signupValues.Name,
@@ -93,7 +95,10 @@ const SignupFinalScreen = () => {
       signupValues.Email
     )
       .then((token) => {
-        // Do something. Maybe in context for is email verified
+        const needVerifyCheck = token as NeedVerification
+        if(needVerifyCheck.need_verify){
+          Alert.alert("Account verification needed", "Please check your email inbox at " + signupEmail + " for a verification link")
+        }
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {

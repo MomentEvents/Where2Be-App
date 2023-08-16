@@ -106,12 +106,17 @@ export async function login(
  * Return -
  * a token which contains the UserAccessToken and valid expiration
  */
+
+export type NeedVerification = {
+  need_verify: boolean
+}
+
 export async function signup(
   username: string,
   displayName: string,
   password: string,
   email: string
-): Promise<Token> {
+): Promise<Token | NeedVerification> {
   if (!checkIfStringIsReadable(displayName)) {
     throw formatError("Input error", "Please enter a readable display name");
   }
@@ -145,7 +150,13 @@ export async function signup(
   const data = await responseHandler<{
     user_id: string;
     user_access_token: string;
-  }>(response, "Could not signup", true);
+  } | NeedVerification>(response, "Could not signup", true);
+
+  if(data["need_verify"]){
+    return {
+      need_verify: true
+    }
+  }
 
   if (!data["user_id"] || !data["user_access_token"]) {
     throw formatError(
