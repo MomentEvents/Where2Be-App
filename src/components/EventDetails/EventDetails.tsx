@@ -346,10 +346,15 @@ const EventDetails = (props: EventDetailsProps) => {
 
   useEffect(() => {
     pullData();
-    if(SETTINGS.firebaseAnalytics){
-      analytics().logEvent("EventDetailsView", {eventID: eventID, userID: props.currentToken.UserID}).then(() => {
-        console.log("Logged EventDetailsView for " + eventID)
-      })
+    if (SETTINGS.firebaseAnalytics) {
+      analytics()
+        .logEvent("EventDetailsView", {
+          eventID: eventID,
+          userID: props.currentToken.UserID,
+        })
+        .then(() => {
+          console.log("Logged EventDetailsView for " + eventID);
+        });
     }
   }, []);
 
@@ -447,13 +452,12 @@ const EventDetails = (props: EventDetailsProps) => {
                                       "This is a ticketed event",
                                       "Make sure to click the ticket button to confirm your signup!"
                                     );
-                                  } else {
-                                    addUserJoin(
-                                      eventID,
-                                      undefined,
-                                      props.currentToken
-                                    );
                                   }
+                                  addUserJoin(
+                                    eventID,
+                                    undefined,
+                                    props.currentToken
+                                  );
                                 }
                           }
                         >
