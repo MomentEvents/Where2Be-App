@@ -227,9 +227,12 @@ const EventPreviewer = (props: EventPreviewerProps) => {
       >
         <Pressable
           onPressIn={closeBottomModal}
-          style={{ zIndex: 1000, height: "100%", position: "relative" }}
+          style={{ height: "100%", position: "relative" }}
         >
-          <TouchableOpacity onPress={() => setImageViewVisible(true)}>
+          <TouchableOpacity
+            disabled={isBottomModalOpen}
+            onPress={() => setImageViewVisible(true)}
+          >
             <ImageBackground
               resizeMode="cover"
               source={{
@@ -258,7 +261,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                       opacity: props.backButtonEnabled ? 1 : 0,
                     }}
                     onPress={onBackPressed}
-                    disabled={!props.backButtonEnabled}
+                    disabled={isBottomModalOpen || !props.backButtonEnabled}
                   >
                     <Feather name="arrow-left" size={28} color="white" />
                   </TouchableOpacity>
@@ -269,7 +272,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                         openBottomModal();
                       }
                     }}
-                    disabled={!props.showShareButton}
+                    disabled={isBottomModalOpen || !props.showShareButton}
                     style={{
                       opacity: props.showShareButton ? 1 : 0,
                       height: 40,
@@ -381,6 +384,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             </TitleSection>
             <LocationSection>
               <TouchableOpacity
+                disabled={isBottomModalOpen}
                 style={{ flexDirection: "row", marginRight: 10 }}
                 onPress={() => openMaps(props.event?.Location)}
               >
@@ -458,7 +462,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                     alignItems: "center",
                   }}
                   onPress={onHostPressed}
-                  disabled={!props.hostClickEnabled}
+                  disabled={isBottomModalOpen || !props.hostClickEnabled}
                 >
                   <Image
                     style={styles.hostProfilePic}
@@ -545,6 +549,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             <>
               <EditOrDeleteEventSection>
                 <TouchableOpacity
+                  disabled={isBottomModalOpen}
                   style={styles.edit}
                   onPress={() => {
                     onEditEventPressed();
@@ -553,6 +558,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   <McText h5>Edit this Event</McText>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  disabled={isBottomModalOpen}
                   style={styles.delete}
                   onPress={() => {
                     onDeleteEventPressed();
@@ -757,7 +763,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.8)", // This will make background a bit dark for better visibility of popup
+    backgroundColor: "rgba(0,0,0,.8)", // This will make background a bit dark for better visibility of popup
   },
   qrContainer: {
     justifyContent: "center",
