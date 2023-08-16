@@ -1,7 +1,7 @@
 {
     "env": "dev",
     "prod": {
-        "apiUrl": "https://api.momentevents.app",
+        "apiUrl": "https://api.where2be.app",
         "apiVersion": "/v1.0.1"
     },
     "dev":{

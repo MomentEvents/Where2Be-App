@@ -141,7 +141,7 @@ const SignupUsernameScreen = () => {
                 style={{
                   borderRadius: 5,
                   paddingVertical: 10,
-                  paddingHorizontal: 14,
+                  paddingHorizontal: 0,
                 }}
                 onPress={onNavigateBack}
               >

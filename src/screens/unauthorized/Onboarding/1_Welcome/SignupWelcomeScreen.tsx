@@ -107,7 +107,7 @@ const SignupWelcomeScreen = () => {
                 style={{
                   borderRadius: 5,
                   paddingVertical: 10,
-                  paddingHorizontal: 14,
+                  paddingHorizontal: 0,
                 }}
                 onPress={onNavigateBack}
               >
@@ -116,7 +116,7 @@ const SignupWelcomeScreen = () => {
             </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
-                Welcome to Where2Be!
+                Welcome to Where<McText h1 color={COLORS.purple}>2</McText>Be!
               </McText>
               <McText style={styles.descriptionText} body3>
                 Let's create your account

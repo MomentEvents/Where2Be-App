@@ -3,6 +3,8 @@ import {
   MaterialCommunityIcons,
   Ionicons,
   MaterialIcons,
+  EvilIcons,
+  Octicons,
 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
@@ -80,7 +82,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const qrSize = SIZES.width * 0.8; // 80% of screen width, adjust as needed
-  const [isBottomModalOpen, setIsBottomModalOpen] = useState(false)
+  const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
 
   const onShareLinkPressed = () => {
     showShareEventLink(
@@ -118,16 +120,15 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
   const insets = useSafeAreaInsets();
 
-
   const closeBottomModal = () => {
     bottomSheetModalRef.current?.close();
-    setIsBottomModalOpen(false)
+    setIsBottomModalOpen(false);
   };
 
   const openBottomModal = () => {
     bottomSheetModalRef.current?.present();
-    setIsBottomModalOpen(true)
-  }
+    setIsBottomModalOpen(true);
+  };
 
   const renderBackdrop = useCallback(
     (props) => <BottomSheetBackdrop onPress={closeBottomModal} {...props} />,
@@ -224,7 +225,10 @@ const EventPreviewer = (props: EventPreviewerProps) => {
         showsVerticalScrollIndicator={false}
         refreshControl={props.refreshControl}
       >
-        <Pressable onPressIn={closeBottomModal} style={{ height: "100%", position: "relative" }}>
+        <Pressable
+          onPressIn={closeBottomModal}
+          style={{ zIndex: 1000, height: "100%", position: "relative" }}
+        >
           <TouchableOpacity onPress={() => setImageViewVisible(true)}>
             <ImageBackground
               resizeMode="cover"
@@ -261,9 +265,13 @@ const EventPreviewer = (props: EventPreviewerProps) => {
 
                   <TouchableOpacity
                     onPress={() => {
-                      setImageViewVisible(true);
+                      if (props.showShareButton) {
+                        openBottomModal();
+                      }
                     }}
+                    disabled={!props.showShareButton}
                     style={{
+                      opacity: props.showShareButton ? 1 : 0,
                       height: 40,
                       width: 40,
                       backgroundColor: "rgba(0,0,0,0.5)",
@@ -272,11 +280,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                       borderRadius: 13,
                     }}
                   >
-                    <MaterialCommunityIcons
-                      name="arrow-expand"
-                      size={23}
-                      color="white"
-                    />
+                    <Octicons name="share" size={22} color="white" />
                   </TouchableOpacity>
                 </ImageHeaderSection>
                 <ImageFooterSection>
@@ -373,42 +377,33 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 >
                   {props.event ? props.event.Title : "Loading..."}
                 </McText>
-                {props.showShareButton && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      openBottomModal()
-                    }}
-                  >
-                    <Feather
-                      style={{ marginLeft: 10, marginTop: 15, marginRight: 10 }}
-                      name="share"
-                      size={24}
-                      color={COLORS.lightGray}
-                    />
-                  </TouchableOpacity>
-                )}
               </View>
             </TitleSection>
-              <LocationSection>
-              <TouchableOpacity style={{flexDirection: "row", marginRight: 10}} onPress={() => openMaps(props.event?.Location)}>
+            <LocationSection>
+              <TouchableOpacity
+                style={{ flexDirection: "row", marginRight: 10 }}
+                onPress={() => openMaps(props.event?.Location)}
+              >
                 <Ionicons
                   name="location-outline"
                   size={16}
                   style={{ marginRight: 5 }}
-                  color={COLORS.lightGray}
+                  color={COLORS.gray}
                 />
                 <McText
                   h5
+                  numberOfLines={2}
                   style={{
                     letterSpacing: 0.5,
                     marginTop: -1,
-                    color: COLORS.lightGray,
+                    color: COLORS.gray,
+                    marginRight: 10,
                   }}
                 >
                   {props.event?.Location}
                 </McText>
-                </TouchableOpacity>
-              </LocationSection>
+              </TouchableOpacity>
+            </LocationSection>
 
             <View>
               <DescriptionSection>
@@ -624,13 +619,12 @@ const EventPreviewer = (props: EventPreviewerProps) => {
         <BottomSheetModal
           ref={bottomSheetModalRef}
           snapPoints={["30%"]}
-          
           backgroundComponent={({ style }) => (
             <View
               style={[
                 style,
                 {
-                  backgroundColor: "rgba(20,20,20,.90)",
+                  backgroundColor: "rgba(20,20,20,1)",
                   borderTopLeftRadius: 20,
                   borderTopRightRadius: 20,
                 },

@@ -59,8 +59,6 @@ const EventToggler = (props: EventTogglerProps) => {
 
   const [isFutureToggle, setIsFutureToggle] = useState<boolean>(true);
 
-  const isFirstTimeLoadingRef = useRef(false)
-
   const insets = useSafeAreaInsets();
   const [showRetry, setShowRetry] = useState<boolean>(false);
 
@@ -452,7 +450,7 @@ const EventToggler = (props: EventTogglerProps) => {
             {!showRetry &&
               isFutureToggle &&
               (pulledFutureEvents ? (
-                <McText h3>No events to display!</McText>
+                <McText h3>{userToken.UserID === props.selectedUserID ? props.eventsToPull === EVENT_TOGGLER.HostedEvents ? "Host some events!" : "Join some events!" : "No events to display!"}</McText>
               ) : (
                 <ActivityIndicator color={COLORS.white} size={"small"} />
               ))}
