@@ -4,6 +4,7 @@ import { Text, View, Button, Platform, Alert, Linking } from "react-native";
 import { momentAPI } from "../constants/server";
 import { formatError, responseHandler } from "../helpers/helpers";
 import { NotificationPreferences } from "../constants/types";
+import Constants from "expo-constants";
 
 export async function getPushNotificationToken(): Promise<string> {
   let token: string = null;
@@ -29,7 +30,11 @@ export async function getPushNotificationToken(): Promise<string> {
       ]);
       return null;
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("PROJECT ID IS " + Constants.expoConfig.extra.eas.projectId)
+    token = (await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId
+    }
+    )).data;
     console.log(token);
   } else {
     alert("You must use a physical device to receive push notifications.");
