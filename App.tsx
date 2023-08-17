@@ -2,6 +2,7 @@ import React from "react";
 import Main from "./src/Main";
 import * as Sentry from 'sentry-expo';
 import { SETTINGS } from "./src/constants/settings";
+import { View } from "react-native";
 
 Sentry.init({
   dsn: 'https://4ec821edf22c4d9fb0a9241f1d40480d@o4505576552333312.ingest.sentry.io/4505580927123456',
