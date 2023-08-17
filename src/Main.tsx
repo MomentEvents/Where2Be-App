@@ -16,7 +16,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { EventProvider } from "./contexts/EventContext";
 import { StatusBar } from "react-native";
 import * as Notifications from "expo-notifications";
-import * as Updates from "expo-updates";
 import { AlertProvider } from "./contexts/AlertContext";
 import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -71,15 +70,15 @@ const Main = () => {
   });
 
   const reactToUpdates = () => {
-    Updates.addListener((event) => {
-      if (event.type === Updates.UpdateEventType.ERROR) {
-        console.log("UPDATE ERROR: COULD NOT FETCH LATEST EXPO UPDATE");
-      }
-      if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
-        Alert.alert("New update available", "Restarting the app...");
-        Updates.reloadAsync();
-      }
-    });
+    // Updates.addListener((event) => {
+    //   if (event.type === Updates.UpdateEventType.ERROR) {
+    //     console.log("UPDATE ERROR: COULD NOT FETCH LATEST EXPO UPDATE");
+    //   }
+    //   if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+    //     Alert.alert("New update available", "Restarting the app...");
+    //     Updates.reloadAsync();
+    //   }
+    // });
   };
 
   const [isAppReady, setIsAppReady] = useState(false);

@@ -24,7 +24,7 @@ import {
 } from "@expo/vector-icons";
 import { displayError, showBugReportPopup } from "../../../helpers/helpers";
 import { ScreenContext } from "../../../contexts/ScreenContext";
-import * as Updates from "expo-updates";
+// import * as Updates from "expo-updates";
 import { CustomError } from "../../../constants/error";
 import { clearAllCachedData } from "../../../services/AuthService";
 import { AlertContext } from "../../../contexts/AlertContext";
@@ -100,23 +100,23 @@ const SettingsScreen = () => {
     );
   };
 
-  const onCheckForUpdatesClick = async () => {
-    setLoading(true);
-    console.log("Checking updates");
-    try {
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
-      } else {
-        Alert.alert("No update is available");
-      }
-    } catch (error) {
-      displayError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const onCheckForUpdatesClick = async () => {
+  //   setLoading(true);
+  //   console.log("Checking updates");
+  //   try {
+  //     const update = await Updates.checkForUpdateAsync();
+  //     if (update.isAvailable) {
+  //       await Updates.fetchUpdateAsync();
+  //       await Updates.reloadAsync();
+  //     } else {
+  //       Alert.alert("No update is available");
+  //     }
+  //   } catch (error) {
+  //     displayError(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const onAccountSettingsClick = () => {
     navigation.push(SCREENS.AccountSettings);
