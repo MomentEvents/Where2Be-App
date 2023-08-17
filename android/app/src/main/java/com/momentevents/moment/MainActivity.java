@@ -2,6 +2,22 @@ package com.momentevents.moment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.content.Intent;
+import android.util.Log;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+
+import org.json.JSONObject;
+
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -18,7 +34,51 @@ public class MainActivity extends ReactActivity {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
+
+    // setContentView(R.layout.);
   }
+
+      @Override
+    protected void onStart() {
+        super.onStart();
+        Branch.sessionBuilder(this).withCallback(new Branch.BranchUniversalReferralInitListener() {
+            @Override
+            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
+                if (error != null) {
+                    Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.getMessage());
+                } else {
+                    Log.i("BranchSDK_Tester", "branch init complete!");
+                    if (branchUniversalObject != null) {
+                        Log.i("BranchSDK_Tester", "title " + branchUniversalObject.getTitle());
+                        Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.getCanonicalIdentifier());
+                        Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.getContentMetadata().convertToJson());
+                    }
+
+                    if (linkProperties != null) {
+                        Log.i("BranchSDK_Tester", "Channel " + linkProperties.getChannel());
+                        Log.i("BranchSDK_Tester", "control params " + linkProperties.getControlParams());
+                    }
+                }
+            }
+        }).withData(this.getIntent().getData()).init();
+
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        this.setIntent(intent);
+        Branch.sessionBuilder(this).withCallback(new Branch.BranchUniversalReferralInitListener() {
+            @Override
+            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
+                if (error != null) {
+                    Log.e("BranchSDK_Tester", error.getMessage());
+                } else if (linkProperties != null) {
+                    Log.i("BranchSDK_Tester", linkProperties.toString());
+                }
+            }
+        }).reInit();
+    }
 
   /**
    * Returns the name of the main component registered from JavaScript.

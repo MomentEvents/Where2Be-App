@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100617550208",
+    "project_id": "moment-auth-28de9",
+    "storage_bucket": "moment-auth-28de9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100617550208:android:917bd09b6336b12bc72965",
+        "android_client_info": {
+          "package_name": "com.momentevents.moment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmyJ-UYw2-ecRMGGWxpi2Rap8kmgQIp84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

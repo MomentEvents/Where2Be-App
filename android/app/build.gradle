@@ -1,5 +1,8 @@
 apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.android.application'
+
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
@@ -82,6 +85,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace 'com.momentevents.moment'
+
+    
     defaultConfig {
         applicationId 'com.momentevents.moment'
         minSdkVersion rootProject.ext.minSdkVersion
@@ -135,8 +140,24 @@ android {
 }
 
 dependencies {
+    // required for all Android apps
+    implementation 'io.branch.sdk.android:library:5.+'
+    // required if your app is in the Google Play Store (tip: avoid using bundled play services libs)
+    implementation 'com.google.android.gms:play-services-ads-identifier:17.1.0+'
+    // alternatively, use the following lib for getting the AAID
+    // implementation 'com.google.android.gms:play-services-ads:17.2.0'
+    // optional
+    // Chrome Tab matching (enables 100% guaranteed matching based on cookies)
+    implementation 'androidx.browser:browser:1.0.0'
+
+    // Replace above with the line below if you do not support androidx
+    // implementation 'com.android.support:customtabs:28.0.0'
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
+    implementation("com.google.android.material:material:latest_version")
+
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";

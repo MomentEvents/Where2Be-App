@@ -3,6 +3,7 @@ package com.momentevents.moment;
 import android.app.Application;
 import android.content.res.Configuration;
 import androidx.annotation.NonNull;
+import io.branch.referral.Branch;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -60,6 +61,13 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+
+    // Branch logging for debugging
+    Branch.enableLogging();
+
+    // Branch object initialization
+    Branch.getAutoInstance(this);
+
     SoLoader.init(this, /* native exopackage */ false);
     if (!BuildConfig.REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS) {
       ReactFeatureFlags.unstable_useRuntimeSchedulerAlways = false;
