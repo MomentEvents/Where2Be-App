@@ -7,15 +7,26 @@ import { NotificationPreferences } from "../constants/types";
 import Constants from "expo-constants";
 
 export async function getPushNotificationToken(): Promise<string> {
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
   let token: string = null;
   if (Device.isDevice) {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
+    console.log(finalStatus + " INITIAL STATUS FOR PUSH NOTIFICATIONS")
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+    console.log(finalStatus + " FINAL STATUS FOR PUSH NOTIFICATIONS")
     if (finalStatus !== "granted") {
       Alert.alert("Please enable push notifications", "This allows you to better connect with your campus! You can disable specific notifications if needed in settings.", [
         {
@@ -38,15 +49,6 @@ export async function getPushNotificationToken(): Promise<string> {
     console.log(token);
   } else {
     alert("You must use a physical device to receive push notifications.");
-  }
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
   }
 
   return token;
