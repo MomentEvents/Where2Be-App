@@ -23,3 +23,7 @@ This contains the codebase for the frontend application of Where2Be
 - Go to `constants/settings.ts` and turn `universalLinks` to `true`
 - Go to `constants/settings.ts` and turn `sentryEnabled` to `true`
 - Go to `backendconfig.json` and turn `"env"` to `"prod"` (with the appropriate API url)
+
+# IMPORTANT NOTE:
+
+Do NOT run `npx expo prebuild`. Where2Be uses native modules, and running this command causes issues.

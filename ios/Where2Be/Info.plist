@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.12</string>
+    <string>1.0.14</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -33,6 +33,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>exp+momentevents</string>
           <string>exp+where2be</string>
         </array>
       </dict>
@@ -101,7 +102,8 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>where2be</string>
+					<string>momentevents</string>
+          <string>where2be</string>
 				</array>
 				<key>CFBundleURLName</key>
 				<string>com.momentevents.moment</string>
