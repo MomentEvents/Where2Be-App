@@ -23,6 +23,8 @@ This contains the codebase for the frontend application of Where2Be
 - Go to `constants/settings.ts` and turn `universalLinks` to `true`
 - Go to `constants/settings.ts` and turn `sentryEnabled` to `true`
 - Go to `backendconfig.json` and turn `"env"` to `"prod"` (with the appropriate API url)
+- Go to `android/app/build.gradle` and increase the `versionName` to what the new android version will be.
+- Go to `ios/Where2Be/Info.plist` and increase the version for the key `<key>CFBundleShortVersionString</key>`
 
 # IMPORTANT NOTE:
 

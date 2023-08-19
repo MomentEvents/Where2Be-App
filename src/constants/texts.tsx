@@ -1,2 +1,4 @@
-export const appVersion = "1.1.0" 
+import * as Application from 'expo-application';
+
+export const appVersion = Application.nativeApplicationVersion
 export const appVersionText = "Where2Be " + appVersion
