@@ -40,7 +40,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.momentevents.moment"/>
-        <data android:scheme="exp+momentevents"/>
+        <data android:scheme="exp+where2be"/>
       </intent-filter>
       <intent-filter>
         <data android:scheme="where2be" android:host="open"/>

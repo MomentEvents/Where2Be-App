@@ -534,7 +534,7 @@ PODS:
     - React-Core
   - react-native-document-picker (8.2.1):
     - React-Core
-  - react-native-image-picker (5.6.1):
+  - react-native-image-picker (5.0.2):
     - React-Core
   - react-native-maps (1.7.1):
     - React-Core
@@ -1078,7 +1078,7 @@ SPEC CHECKSUMS:
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-branch: 43f1c46d9a971cae0eeb337313991ce72b467351
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
-  react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
+  react-native-image-picker: a5dddebb4d2955ac4712a4ed66b00a85f62a63ac
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   React-NativeModulesApple: 37a536d46a35dc0e56e597de8cf1b805ea27f792
