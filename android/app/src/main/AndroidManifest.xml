@@ -22,12 +22,14 @@
     </intent>
   </queries>
   <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="true" android:theme="@style/AppTheme">
-    <meta-data android:name="expo.modules.updates.ENABLED" android:value="false"/>
-    <meta-data android:name="expo.modules.updates.EXPO_RUNTIME_VERSION" android:value="@string/expo_runtime_version"/>
+    <meta-data android:name="expo.modules.updates.ENABLED" android:value="true"/>
+    <meta-data android:name="expo.modules.updates.EXPO_RUNTIME_VERSION" android:value="exposdk:49.0.0"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0"/>
+    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_hwee4HGlrxgcV5MfrIpFQebaqxnzZf3R"/>
     <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_gynp9PNhxFlnMXHisQlzNllcqAkE9f43"/>
     <meta-data android:name="io.branch.sdk.TestMode" android:value="false"/>
+    <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://exp.host/@moment-app/MomentEvents"/>
     <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen" android:exported="true" android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -39,11 +41,9 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.momentevents.moment"/>
         <data android:scheme="exp+where2be"/>
-        <data android:scheme="exp+momentevents"/>
       </intent-filter>
       <intent-filter>
         <data android:scheme="where2be" android:host="open"/>
-        <data android:scheme="momentevents" android:host="open"/>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>

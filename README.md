@@ -8,8 +8,10 @@ This contains the codebase for the frontend application of Where2Be
 - Run `pod deintegrate`
 - Create a `.env` file in the format of `.env-example` with those fields filled in
 - Run `npm i` if you do not have `node_modules` folder
-- Run `pod install` in `ios` directory
+- Run `pod install` in `ios` directory (if you're going to run iOS)
 - Run `npx expo run:ios --device` or `npx expo run:android --device`
+
+You'll need cocoapods to run the application on iOS. Follow a tutorial online on how to get them. It's recommended to use a macbook to develop Where2Be.
 
 # Reminder for development!
 
