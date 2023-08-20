@@ -100,7 +100,7 @@ const EventEditor = (props: EventEditorProps) => {
               style={styles.textInputContainer}
               value={props.title}
               onChangeText={props.setTitle}
-              multiline={false}
+              multiline={true}
               maxLength={CONSTRAINTS.Event.Title.Max}
             />
 
@@ -185,6 +185,7 @@ const EventEditor = (props: EventEditorProps) => {
             </View>
 
             <McTextInput
+              autoCorrect={false}
               placeholder={"Enter your event's location"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}
@@ -214,7 +215,9 @@ const EventEditor = (props: EventEditorProps) => {
                 style={{
                   borderRadius: 5,
                   marginLeft: 3,
-                  backgroundColor: props.doNotify ? COLORS.purple : COLORS.gray2,
+                  backgroundColor: props.doNotify
+                    ? COLORS.purple
+                    : COLORS.gray2,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -225,7 +228,9 @@ const EventEditor = (props: EventEditorProps) => {
                   color={props.doNotify ? COLORS.white : COLORS.gray2}
                 />
               </TouchableOpacity>
-              <McText h3 style={{ marginLeft: 16 }}>{props.notifyText}</McText>
+              <McText h3 style={{ marginLeft: 16 }}>
+                {props.notifyText}
+              </McText>
             </View>
           </SectionInputs>
         </View>

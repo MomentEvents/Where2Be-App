@@ -39,7 +39,7 @@ import CustomTextInput from "../../../components/Styled/CustomTextInput";
 
 const LoginScreen = () => {
   const { userLogin } = useContext(AuthContext);
-  const {showTextAlert } = useContext(AlertContext)
+  const { showTextAlert } = useContext(AlertContext);
   const { setLoading, signupActionEventID } = useContext(ScreenContext);
   const { showErrorAlert } = useContext(AlertContext);
   const navigation = useNavigation<any>();
@@ -52,15 +52,15 @@ const LoginScreen = () => {
   const onLogin = () => {
     setLoading(true);
     userLogin(usercred, password)
-      .then((token) => {
-      })
+      .then((token) => {})
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         } else {
           displayError(error);
         }
-      }).finally(() => {
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -159,16 +159,22 @@ const LoginScreen = () => {
                 Login
               </McText>
             </View>
-            <CustomTextInput
+            <McTextInput
+              autoCorrect={false}
               placeholder={"Username / Email"}
-              style={{ marginTop: 15 }}
+              autoCapitalize={"none"}
+              placeholderTextColor={COLORS.gray}
+              style={styles.textInputContainer}
               onChangeText={(newText) => setUsercred(newText)}
             />
-            <CustomTextInput
+            <McTextInput
+              autoCorrect={false}
               placeholder={"Password"}
-              style={{ marginTop: 15 }}
-              onChangeText={(newText) => setPassword(newText)}
+              autoCapitalize={"none"}
+              placeholderTextColor={COLORS.gray}
+              style={styles.textInputContainer}
               secureTextEntry={true}
+              onChangeText={(newText) => setPassword(newText)}
             />
 
             <View
@@ -266,6 +272,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     borderColor: COLORS.gray2,
+    marginTop: 15,
     borderWidth: 0.3,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -273,7 +280,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.lightGray,
     paddingVertical: 10,
-    width: "90%",
     backgroundColor: COLORS.black,
   },
 });

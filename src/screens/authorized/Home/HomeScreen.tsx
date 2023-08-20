@@ -259,9 +259,9 @@ const HomeScreen = () => {
       if (viewedEventIDs.current.has(data[i].Event.EventID)) {
         viewedEvents.push(data[i]);
       } else {
-        data[i].Reason = data[i].Event.UserFollowHost
-          ? "A new event from an account you follow"
-          : "An event you have not seen before";
+        if(data[i].Event.UserFollowHost){
+          data[i].Reason = "A new event from an account you follow";
+        }
         nonViewedEvents.push(data[i]);
       }
     }

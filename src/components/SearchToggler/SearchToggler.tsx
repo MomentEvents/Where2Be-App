@@ -93,8 +93,8 @@ const SearchToggler = () => {
         setPulledEvents(events);
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
         }
         setShowRetry(true);
         console.log(error);
@@ -116,8 +116,8 @@ const SearchToggler = () => {
         setPulledUsers(users);
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
         }
         setShowRetry(true);
         console.log(error);
@@ -174,6 +174,8 @@ const SearchToggler = () => {
           }}
         >
           <McTextInput
+            autoCapitalize="none"
+            autoCorrect={false}
             placeholder="Search"
             onChangeText={onSearchTextChanged}
             style={{

@@ -83,6 +83,7 @@ const SignupPasswordScreen = () => {
         <View style={styles.userInputContainer}>
           <McTextInput
             placeholder={"Password"}
+            autoCapitalize={"none"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}
             secureTextEntry={true}

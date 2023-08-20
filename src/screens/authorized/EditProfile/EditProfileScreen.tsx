@@ -70,8 +70,7 @@ const EditProfileScreen = ({ route }) => {
   const navigation = useNavigation<any>();
   const { showErrorAlert } = useContext(AlertContext);
 
-  const { userToken } =
-    useContext(UserContext);
+  const { userToken } = useContext(UserContext);
   const { setLoading } = useContext(ScreenContext);
   const [image, setImage] = useState(user.Picture);
   const [base64Image, setBase64Image] = useState<string>(null);
@@ -113,7 +112,7 @@ const EditProfileScreen = ({ route }) => {
     updateUser(userToken.UserAccessToken, createdUserBase64)
       .then(() => {
         setLoading(false);
-        dispatch(updateUserMap({id: user.UserID, changes: createdUser}))
+        dispatch(updateUserMap({ id: user.UserID, changes: createdUser }));
         navigation.goBack();
       })
       .catch((error: CustomError) => {
@@ -164,6 +163,7 @@ const EditProfileScreen = ({ route }) => {
               </McText>
             </View>
             <McTextInput
+              autoCorrect={false}
               value={displayName}
               placeholder={"Enter your display name"}
               placeholderTextColor={COLORS.gray}
@@ -185,7 +185,9 @@ const EditProfileScreen = ({ route }) => {
               </McText>
             </View>
             <McTextInput
+              autoCorrect={false}
               value={username}
+              autoCapitalize="none"
               placeholder={"Enter your username"}
               placeholderTextColor={COLORS.gray}
               style={styles.textInputContainer}

@@ -19,14 +19,22 @@ You'll need cocoapods to run the application on iOS. Follow a tutorial online on
 - Go to `backendconfig.json` and turn `"env"` to `"dev"` with the URL as your localhost (if you're running the server locally)
 - If you want to test shareable links, you'll need access to `branch.io` and use the `test` url. Set `universalLinks` in `constants/settings.ts` to `true` and follow instructions on how to run using `where2be.test.app.link` online. Account credentials are on Lastpass. Contact either Kyle or Chirag to get access.
 
-# Reminder before production deployment!
+# Production deployment steps
 
-- Go to `constants/settings.ts` and turn `firebaseAnalytics` to `true`
-- Go to `constants/settings.ts` and turn `universalLinks` to `true`
-- Go to `constants/settings.ts` and turn `sentryEnabled` to `true`
+- Go to `constants/settings.ts` and turn `firebaseAnalytics`, `universalLinks`, and `sentryEnabled` to `true`
 - Go to `backendconfig.json` and turn `"env"` to `"prod"` (with the appropriate API url)
-- Go to `android/app/build.gradle` and increase the `versionName` to what the new android version will be.
+- Verify you have a `.env` in the format of `.env-example`
+
+# Building on iOS
 - Go to `ios/Where2Be/Info.plist` and increase the version for the key `<key>CFBundleShortVersionString</key>`
+- `npx eas build --local` then select iOS
+- .ipa file will be in root directory
+
+# Building on Android
+- Go to `android/app/build.gradle` and increase the `versionName` to what the new android version will be.
+- Download `kks.jks` (Where2Be's keystore) and put it in `android/app`
+- `./android/gradlew bundleRelease`
+- .aab file will be in `android/app/build/outputs/bundle/release` as app-release.aab
 
 # IMPORTANT NOTE:
 

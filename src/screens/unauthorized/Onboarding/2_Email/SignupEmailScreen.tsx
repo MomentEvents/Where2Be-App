@@ -36,7 +36,7 @@ import { McTextInput } from "../../../../components/Styled/styled";
 import { AlertContext } from "../../../../contexts/AlertContext";
 
 const SignupEmailScreen = () => {
-  const {showErrorAlert, showAlert, showTextAlert} = useContext(AlertContext)
+  const { showErrorAlert, showAlert, showTextAlert } = useContext(AlertContext);
 
   const navigator = useNavigation<any>();
 
@@ -53,22 +53,21 @@ const SignupEmailScreen = () => {
   const onNextClick = () => {
     emailRef.current = emailRef.current.trim();
     if (!checkIfStringIsEmail(emailRef.current)) {
-      showTextAlert("Please enter an email", 5)
+      showTextAlert("Please enter an email", 5);
       return;
     }
     setLoading(true);
 
     checkEmailAvailability(emailRef.current)
       .then((school: School) => {
-        showTextAlert("Welcome to " + school.Name + "!", 5)
+        showTextAlert("Welcome to " + school.Name + "!", 5);
         setSignupValues({ ...signupValues, Email: emailRef.current });
         navigator.navigate(SCREENS.Onboarding.SignupNameScreen);
       })
       .catch((error: CustomError) => {
-        if(error.showBugReportDialog){
-          showBugReportPopup(error)
-        }
-        else {
+        if (error.showBugReportDialog) {
+          showBugReportPopup(error);
+        } else {
           showErrorAlert(error);
         }
       })
@@ -103,6 +102,8 @@ const SignupEmailScreen = () => {
         </View>
         <View style={styles.userInputContainer}>
           <McTextInput
+            autoCorrect={false}
+            autoCapitalize={"none"}
             placeholder={"School Email"}
             placeholderTextColor={COLORS.gray}
             style={styles.textInputContainer}
