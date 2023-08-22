@@ -14,6 +14,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "scheme": "where2be",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -23,7 +24,19 @@
       },
       "supportsTablet": false,
       "bundleIdentifier": "com.momentevents.moment",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleURLTypes": [{
+          "CFBundleTypeRole": "Editor",
+          "CFBundleURLSchemes": ["where2be"],
+          "CFBundleURLName": "com.momentevents.moment"
+        }]
+      },
+      "associatedDomains": [
+        "applinks:where2be.app.link",
+        "applinks:where2be-alternate.app.link",
+        "applinks:where2be.test.app.link"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +44,15 @@
         "backgroundColor": "#000000"
       },
       "package": "com.momentevents.moment",
-      "googleServicesFile": "./android/app/google-services.json"
+      "googleServicesFile": "./android/app/google-services.json",
+      "manifest": {
+        "<application>": {
+          "meta-data": [{
+            "android:name": "io.branch.sdk.BranchKey",
+            "android:value": "key_live_hwee4HGlrxgcV5MfrIpFQebaqxnzZf3R"
+          }]
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
