@@ -28,7 +28,7 @@ export async function getPushNotificationToken(): Promise<string> {
     }
     console.log(finalStatus + " FINAL STATUS FOR PUSH NOTIFICATIONS")
     if (finalStatus !== "granted") {
-      Alert.alert("Please enable push notifications", "This allows you to better connect with your campus! You can disable specific notifications if needed in settings.", [
+      Alert.alert("Stay in the Loop", "Enable push notifications to receive instant updates on school events, schedule changes, and special announcements.", [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
