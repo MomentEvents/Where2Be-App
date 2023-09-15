@@ -9,6 +9,8 @@ import {
   Text,
   Alert,
   Image,
+  Pressable,
+  ScrollView
 } from "react-native";
 import { User, Event, COLORS, SCREENS, SIZES } from "../../constants";
 import { McText } from "../Styled";
@@ -179,92 +181,99 @@ const HomeEvent = (props: HomeEventProps) => {
     return <></>
   }
   return (
-    <BottomSheetModalProvider>
-    <View
-      style={{ height: props.height, width: props.width, overflow: "hidden" }}
-    >
-      <View
-        style={{
-          height: usernameHeight,
-          paddingTop: 10,
-          paddingBottom: 10,
-          flex: 1,
-          flexDirection: "row",
-          alignItems: "center",
-          paddingHorizontal: 20,
-        }}
+    <>
+      <Pressable
+        onPressIn={closeBottomModal}
+        style={{ position: "relative" }}
       >
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-            marginRight: 80,
-          }}
-          onPress={() => {
-            onHostUsernamePressed();
-          }}
+        <View
+          style={{ height: props.height, width: props.width, overflow: "hidden" }}
         >
-          <Image
-            style={styles.hostProfilePic}
-            source={{
-              uri: storedUser
-                ? storedUser.Picture
-                : props.user.Picture,
-            }}
-          />
-          <McText
-            h4
-            numberOfLines={1}
+          <View
             style={{
-              letterSpacing: 1,
-              color: COLORS.white,
-              marginRight: 10,
+              height: usernameHeight,
+              paddingTop: 10,
+              paddingBottom: 10,
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              paddingHorizontal: 20,
             }}
           >
-            {storedUser
-              ? storedUser.DisplayName
-              : props.user.DisplayName}
-          </McText>
-          {storedUser?.VerifiedOrganization && (
-              <View style={{ marginRight: 20 }}>
-                <MaterialIcons
-                  name="verified"
-                  size={18}
-                  color={COLORS.purple}
-                />
-              </View>
-            )}
-        </TouchableOpacity>
-        <TouchableOpacity 
-          // onPress={handleNotInterested}
-          onPress={() => {
-            if (props.showPullUpMenuButton) {
-              openBottomModal();
-            }
-          }}
-          disabled={isBottomModalOpen || !props.showPullUpMenuButton}
-          style={{
-            opacity: props.showPullUpMenuButton ? 1 : 0,
-            height: 40,
-            width: 40,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 13,
-          }}
-        >
-          <Ionicons name="ellipsis-vertical" size={20} color="gray" />
-        </TouchableOpacity>
-      </View>
-      <HomeEventCard
-        width={props.width}
-        height={props.height - usernameHeight}
-        event={props.event}
-        reason={props.reason}
-      />
-    </View>
-    {isQRModalVisible && (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                flex: 1,
+                marginRight: 80,
+              }}
+              onPress={() => {
+                onHostUsernamePressed();
+              }}
+              disabled={isBottomModalOpen}
+            >
+              <Image
+                style={styles.hostProfilePic}
+                source={{
+                  uri: storedUser
+                    ? storedUser.Picture
+                    : props.user.Picture,
+                }}
+              />
+              <McText
+                h4
+                numberOfLines={1}
+                style={{
+                  letterSpacing: 1,
+                  color: COLORS.white,
+                  marginRight: 10,
+                }}
+              >
+                {storedUser
+                  ? storedUser.DisplayName
+                  : props.user.DisplayName}
+              </McText>
+              {storedUser?.VerifiedOrganization && (
+                  <View style={{ marginRight: 20 }}>
+                    <MaterialIcons
+                      name="verified"
+                      size={18}
+                      color={COLORS.purple}
+                    />
+                  </View>
+                )}
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => {
+                if (props.showPullUpMenuButton) {
+                  openBottomModal();
+                }
+              }}
+              disabled={isBottomModalOpen || !props.showPullUpMenuButton}
+              style={{
+                opacity: props.showPullUpMenuButton ? 1 : 0,
+                height: 40,
+                width: 40,
+                backgroundColor: "rgba(0,0,0,0.5)",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 13,
+              }}
+            >
+              <Ionicons name="ellipsis-vertical" size={20} color="gray" />
+            </TouchableOpacity>
+          </View>
+          <HomeEventCard
+            width={props.width}
+            height={props.height - usernameHeight}
+            event={props.event}
+            reason={props.reason}
+            isBottomModalOpen={isBottomModalOpen}
+          />
+        </View>
+      </Pressable>
+    
+      {isQRModalVisible && (
           <Modal
             animationType="slide"
             transparent={true}
@@ -383,7 +392,7 @@ const HomeEvent = (props: HomeEventProps) => {
             </TouchableOpacity>
           </BottomSheetView>
         </BottomSheetModal>
-    </BottomSheetModalProvider>
+    </>
   );
 };
 
