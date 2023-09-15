@@ -411,6 +411,7 @@ const HomeScreen = () => {
                 width={homeCardWidth}
                 handleNotInterested={handleNotInterested}
                 handleUndoNotInterested={handleUndoNotInterested}
+                showPullUpMenuButton={true}
               />
             );
           }
