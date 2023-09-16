@@ -252,15 +252,13 @@ const HomeEvent = (props: HomeEventProps) => {
               disabled={isBottomModalOpen || !props.showPullUpMenuButton}
               style={{
                 opacity: props.showPullUpMenuButton ? 1 : 0,
-                height: 40,
-                width: 40,
                 backgroundColor: "rgba(0,0,0,0.5)",
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 13,
               }}
             >
-              <Ionicons name="ellipsis-vertical" size={20} color="gray" />
+              <Ionicons name="ellipsis-horizontal-sharp" size={20} color="gray" />
             </TouchableOpacity>
           </View>
           <HomeEventCard
