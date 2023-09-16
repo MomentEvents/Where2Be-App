@@ -28,7 +28,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomTextInput from "../../../../components/Styled/CustomTextInput";
 
-const SignupWelcomeScreen = () => {
+const SignupWelcomeScreen = ({ route }) => {
+  const { showBackArrow = true, backToScreen = null } = route.params || {};
+
   const navigator = useNavigation<any>();
   const emailRef = useRef("");
   const { showErrorAlert, showAlert, showTextAlert } = useContext(AlertContext);
@@ -41,7 +43,19 @@ const SignupWelcomeScreen = () => {
   };
 
   const onNavigateBack = () => {
-    navigator.goBack();
+    if (backToScreen) {
+      navigator.navigate(backToScreen);
+    } else {
+      navigator.goBack();
+    }
+  };
+
+  const gotoSelectSchool = () => {
+    navigator.navigate(SCREENS.SelectSchool);
+  };
+
+  const gotoIntroduceEvents = () => {
+    navigator.navigate(SCREENS.IntroduceEvents);
   };
 
   const onNextClick = () => {
@@ -103,16 +117,28 @@ const SignupWelcomeScreen = () => {
                 marginBottom: 30,
               }}
             >
-              <TouchableOpacity
-                style={{
-                  borderRadius: 5,
-                  paddingVertical: 10,
-                  paddingHorizontal: 0,
-                }}
-                onPress={onNavigateBack}
-              >
-                <Feather name="arrow-left" size={28} color="white" />
-              </TouchableOpacity>
+              { showBackArrow ? (
+                <TouchableOpacity
+                  style={{
+                    borderRadius: 5,
+                    paddingVertical: 10,
+                    paddingHorizontal: 0,
+                  }}
+                  onPress={onNavigateBack}
+                >
+                  <Feather name="arrow-left" size={28} color="white" />
+                </TouchableOpacity> 
+              ) : (
+                <View
+                  style={{
+                    borderRadius: 5,
+                    paddingVertical: 10,
+                    paddingHorizontal: 0,
+                    height: 48, 
+                  }}
+                >
+                </View> 
+              )}
             </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
