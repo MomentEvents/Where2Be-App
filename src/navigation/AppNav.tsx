@@ -183,22 +183,21 @@ const AuthStack = () => {
         },
         headerShown: false,
       }}
-      initialRouteName={SCREENS.Onboarding.SignupWelcomeScreen}
+      initialRouteName={SCREENS.SelectSchool}
     >
-      {/* <Stack.Screen
+      <Stack.Screen
         name={SCREENS.SelectSchool}
         component={SelectSchoolScreen}
       />
       <Stack.Screen
         name={SCREENS.IntroduceEvents}
         component={IntroduceEventsScreen}
-      /> */}
+      />
       <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
       <Stack.Screen name={SCREENS.Signup} component={SignupScreen} />
       <Stack.Screen
         name={SCREENS.Onboarding.SignupWelcomeScreen}
         component={SignupWelcomeScreen}
-        initialParams={{ showBackArrow: false }}
       />
       <Stack.Screen
         name={SCREENS.Onboarding.SignupUsernameScreen}

@@ -66,7 +66,7 @@ const LoginScreen = () => {
   };
 
   const onNavigateSignup = () => {
-    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen, { showBackArrow: true, backToScreen: SCREENS.Login });
+    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
   };
 
   const onNavigateBack = () => {

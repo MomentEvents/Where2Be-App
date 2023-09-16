@@ -40,7 +40,7 @@ const SelectSchoolScreen = ({ route }) => {
   };
 
   const onNavigateSignup = () => {
-    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen, { showBackArrow: true, backToScreen: SCREENS.SelectSchool });
+    navigation.navigate(SCREENS.Onboarding.SignupWelcomeScreen);
   };
 
   const onDiscordClick = () => {
