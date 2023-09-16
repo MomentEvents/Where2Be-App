@@ -228,7 +228,7 @@ const HomeEventCard = ({
                 }
               />
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <McText h2 numberOfLines={1}>
+                <McText body1 numberOfLines={1}>
                   {storedEvent?.Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>
