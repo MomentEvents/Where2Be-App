@@ -32,6 +32,7 @@ type EventCardProps = {
   height?: number;
   showRelativeTime?: boolean;
   reason: string;
+  isBottomModalOpen: boolean;
 };
 
 const HomeEventCard = ({
@@ -40,6 +41,7 @@ const HomeEventCard = ({
   height,
   showRelativeTime,
   reason,
+  isBottomModalOpen,
 }: EventCardProps) => {
   const {
     clientAddUserJoin: addUserJoin,
@@ -166,6 +168,7 @@ const HomeEventCard = ({
         height: cardHeight,
         width: cardWidth,
       }}
+      disabled={isBottomModalOpen}
     >
       <View
         style={{

@@ -5,7 +5,7 @@
         "apiVersion": "/v1.0.1"
     },
     "dev":{
-        "apiUrl": "http://192.168.1.207:8080",
+        "apiUrl": "http://0.0.0.0:8080",
         "apiVersion": "/v1.0.1"
     }
 

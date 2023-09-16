@@ -41,6 +41,12 @@ import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { selectUserByID } from "../../../redux/users/userSelectors";
 import { ScreenContext } from "../../../contexts/ScreenContext";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -341,124 +347,132 @@ const HomeScreen = () => {
     pullData();
   }, []);
 
+
+  const closeBottomModal = () => {
+    console.log("clicked")
+  };
+
   return (
-    <MobileSafeView style={styles.container} isBottomViewable={true}>
-      <SectionHeader
-        title={"Where2Be @ " + currentSchool.Abbreviation}
-        rightButtonOnClick={() => navigation.push(SCREENS.Search)}
-        rightButtonSVG={<MaterialIcons name="search" size={28} color="white" />}
-      />
-      {isLoading && !isRefreshing && !showRetry && (
-        <ActivityIndicator
-          color={COLORS.white}
-          style={{ marginTop: 20 }}
-          size={"small"}
+    <BottomSheetModalProvider>
+      <MobileSafeView style={styles.container} isBottomViewable={true}>
+        <SectionHeader
+          title={"Where2Be @ " + currentSchool.Abbreviation}
+          rightButtonOnClick={() => navigation.push(SCREENS.Search)}
+          rightButtonSVG={<MaterialIcons name="search" size={28} color="white" />}
         />
-      )}
+        {isLoading && !isRefreshing && !showRetry && (
+          <ActivityIndicator
+            color={COLORS.white}
+            style={{ marginTop: 20 }}
+            size={"small"}
+          />
+        )}
 
-      {showRetry && (
-        <RetryButton
-          setShowRetry={setShowRetry}
-          retryCallBack={pullData}
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        />
-      )}
-
-      <FlatList
-        ref={flatListRef}
-        pagingEnabled
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            tintColor={COLORS.white}
-            refreshing={isRefreshing}
-            onRefresh={() => {
-              setIsRefreshing(true);
-              onRefresh();
+        {showRetry && (
+          <RetryButton
+            setShowRetry={setShowRetry}
+            retryCallBack={pullData}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
             }}
           />
-        }
-        onViewableItemsChanged={onViewableItemsChanged}
-        getItemLayout={(data, index) => ({
-          length: homeCardHeight,
-          offset: homeCardHeight * index,
-          index,
-        })}
-        windowSize={6}
-        data={eventsAndHosts?.filter((item: EventItem) => {
-          if ("Event" in item) {
-            return !hiddenEvents.includes(item.Event.EventID);
-          }
-          return true;
-        })}
-        keyExtractor={keyExtractor}
-        snapToInterval={homeCardHeight}
-        decelerationRate="fast"
-        renderItem={({ item, index }) => {
-          if ("type" in item && item.type === "divider") {
-            return item.component;
-          } else {
-            return (
-              <HomeEvent
-                event={item.Event}
-                user={item.Host}
-                reason={item.Reason}
-                height={homeCardHeight}
-                width={homeCardWidth}
-                handleNotInterested={handleNotInterested}
-                handleUndoNotInterested={handleUndoNotInterested}
-              />
-            );
-          }
-        }}
-        viewabilityConfig={viewabilityConfig}
-        ListFooterComponent={
-          !isLoading && (
-            <View
-              style={{
-                height:
-                  SIZES.height -
-                  (homeCardHeight +
-                    insets.top +
-                    insets.bottom +
-                    SIZES.tabBarHeight +
-                    SIZES.sectionHeaderHeight),
+        )}
+
+        <FlatList
+          ref={flatListRef}
+          pagingEnabled
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              tintColor={COLORS.white}
+              refreshing={isRefreshing}
+              onRefresh={() => {
+                setIsRefreshing(true);
+                onRefresh();
               }}
-            >
-              <McText
-                body4
-                color={COLORS.gray2}
+            />
+          }
+          onViewableItemsChanged={onViewableItemsChanged}
+          getItemLayout={(data, index) => ({
+            length: homeCardHeight,
+            offset: homeCardHeight * index,
+            index,
+          })}
+          windowSize={6}
+          data={eventsAndHosts?.filter((item: EventItem) => {
+            if ("Event" in item) {
+              return !hiddenEvents.includes(item.Event.EventID);
+            }
+            return true;
+          })}
+          keyExtractor={keyExtractor}
+          snapToInterval={homeCardHeight}
+          decelerationRate="fast"
+          renderItem={({ item, index }) => {
+            if ("type" in item && item.type === "divider") {
+              return item.component;
+            } else {
+              return (
+                <HomeEvent
+                  event={item.Event}
+                  user={item.Host}
+                  reason={item.Reason}
+                  height={homeCardHeight}
+                  width={homeCardWidth}
+                  handleNotInterested={handleNotInterested}
+                  handleUndoNotInterested={handleUndoNotInterested}
+                  showPullUpMenuButton={true}
+                />
+              );
+            }
+          }}
+          viewabilityConfig={viewabilityConfig}
+          ListFooterComponent={
+            !isLoading && (
+              <View
                 style={{
-                  textAlign: "center",
-                  paddingTop: 10,
-                  marginHorizontal: 60,
-                  textDecorationLine: "underline",
-                }}
-                onPress={() => {
-                  navigation.navigate(SCREENS.ExploreEvents);
+                  height:
+                    SIZES.height -
+                    (homeCardHeight +
+                      insets.top +
+                      insets.bottom +
+                      SIZES.tabBarHeight +
+                      SIZES.sectionHeaderHeight),
                 }}
               >
-                Check out explore events
-              </McText>
-            </View>
-          )
-        }
-      />
-      <TouchableOpacity
-        style={styles.hoverButtonContainer}
-        onPressOut={() => {
-          navigation.push(SCREENS.CreateEvent);
-        }}
-      >
-        <GradientButton style={styles.hoverButtonIconContainer}>
-          <icons.plus height="50%" width="50%"></icons.plus>
-        </GradientButton>
-      </TouchableOpacity>
-    </MobileSafeView>
+                <McText
+                  body4
+                  color={COLORS.gray2}
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 10,
+                    marginHorizontal: 60,
+                    textDecorationLine: "underline",
+                  }}
+                  onPress={() => {
+                    navigation.navigate(SCREENS.ExploreEvents);
+                  }}
+                >
+                  Check out explore events
+                </McText>
+              </View>
+            )
+          }
+        />
+        <TouchableOpacity
+          style={styles.hoverButtonContainer}
+          onPressOut={() => {
+            navigation.push(SCREENS.CreateEvent);
+          }}
+        >
+          <GradientButton style={styles.hoverButtonIconContainer}>
+            <icons.plus height="50%" width="50%"></icons.plus>
+          </GradientButton>
+        </TouchableOpacity>
+      </MobileSafeView>
+    </BottomSheetModalProvider>
   );
 };
 
