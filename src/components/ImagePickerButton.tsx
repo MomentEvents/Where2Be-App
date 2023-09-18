@@ -7,6 +7,7 @@ import {
   Platform,
   Alert,
   Linking,
+  ActivityIndicator
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons } from "../constants";
@@ -27,6 +28,12 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const [currentImageURI, setCurrentImageURI] = useState<string>(
     props.originalImageURI
   );
+
+  const [isImageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
 
   const defaultWidthHeight =
     SIZES.width < SIZES.height ? SIZES.width - 80 : SIZES.height - 80;
@@ -103,7 +110,11 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
               borderRadius: 4,
               ...props.style,
             }}
+            onLoad={handleImageLoad}
           />
+          {!isImageLoaded && (
+            <ActivityIndicator size="small" color={COLORS.white} style={{position: 'absolute', width: "100%", height: "100%", borderRadius: 4, ...props.style,}}/>
+          )}
           {/* Pen Icon */}
           <View
             style={{
