@@ -259,6 +259,7 @@ const HomeScreen = () => {
     viewedEventIDs.current = new Set(storedViewedEventIDs);
 
     for (var i = 0; i < data.length; i++) {
+      const hasReasonFromAPI = data[i].Reason;
       if (data[i].Event.UserFollowHost) {
         data[i].Reason = "From an account you follow";
       }
@@ -269,6 +270,9 @@ const HomeScreen = () => {
           data[i].Reason = "A new event from an account you follow";
         }
         nonViewedEvents.push(data[i]);
+      }
+      if (hasReasonFromAPI) {
+        data[i].Reason = hasReasonFromAPI;
       }
     }
 
@@ -313,8 +317,11 @@ const HomeScreen = () => {
           });
       })
       .catch((error: CustomError) => {
-        setShowRetry(true);
+        if (eventsAndHosts.length == 0){
+          setShowRetry(true);
+        }
         setIsRefreshing(false);
+        setIsLoading(false);
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
