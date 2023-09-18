@@ -7,6 +7,8 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
+  Text
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -74,6 +76,12 @@ const HomeEventCard = ({
       eventID: event.EventID,
     });
     // Navigate to event details page
+  };
+
+  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
+
+  const handleEventImageLoad = () => {
+    setEventImageLoaded(true);
   };
 
   const DateTextComponent = (props: { date: Date }) => {
@@ -200,7 +208,11 @@ const HomeEventCard = ({
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
           }}
+          onLoad={handleEventImageLoad}
         >
+          {!isEventImageLoaded && (
+            <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: SIZES.height * 0.225}}/>
+          )}
           <LinearGradient
             colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
             start={{ x: 0, y: 0.4 }}

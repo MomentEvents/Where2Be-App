@@ -9,6 +9,7 @@ import {
   Text,
   Alert,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { User, Event, COLORS, SCREENS } from "../../constants";
 import { McText } from "../Styled";
@@ -64,6 +65,12 @@ const HomeEvent = (props: HomeEventProps) => {
     navigation.push(SCREENS.ProfileDetails, {
       userID: props.user.UserID,
     });
+  };
+
+  const [isHostImageLoaded, setHostImageLoaded] = useState(false);
+
+  const handleHostImageLoad = () => {
+    setHostImageLoaded(true);
   };
 
   const handleNotInterested = () => {
@@ -161,7 +168,11 @@ const HomeEvent = (props: HomeEventProps) => {
                 ? storedUser.Picture
                 : props.user.Picture,
             }}
+            onLoad={handleHostImageLoad}
           />
+          {!isHostImageLoaded && (
+            <ActivityIndicator size="small" color={COLORS.white} style={[styles.hostProfilePic, {position: 'absolute'}]}/>
+          )}
           <McText
             h4
             numberOfLines={1}

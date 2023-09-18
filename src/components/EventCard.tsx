@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   Image,
+  ActivityIndicator
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -78,6 +79,12 @@ const EventCard = ({
       eventID: event.EventID,
     });
     // Navigate to event details page
+  };
+
+  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
+
+  const handleEventImageLoad = () => {
+    setEventImageLoaded(true);
   };
 
   const pullData = async () => {
@@ -203,7 +210,11 @@ const EventCard = ({
             borderColor: cardBorderColor,
             overflow: "hidden",
           }}
+          onLoad={handleEventImageLoad}
         >
+          {!isEventImageLoaded && (
+            <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: cardHeight * 0.4}}/>
+          )}
           <LinearGradient
             colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
             start={{ x: 0, y: 0.4 }}

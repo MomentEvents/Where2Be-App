@@ -19,6 +19,8 @@ import {
   Alert,
   Modal,
   Pressable,
+  Text,
+  ActivityIndicator
 } from "react-native";
 import Hyperlink from "react-native-hyperlink";
 import { Interest, Event, User, COLORS, SIZES, SCREENS } from "../../constants";
@@ -105,6 +107,17 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     );
     setQrUrl(url);
     setQRModalVisible(true);
+  };
+
+  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
+  const [isHostImageLoaded, setHostImageLoaded] = useState(false);
+
+  const handleEventImageLoad = () => {
+    setEventImageLoaded(true);
+  };
+
+  const handleHostImageLoad = () => {
+    setHostImageLoaded(true);
   };
 
   // For description expansion
@@ -242,7 +255,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                 width: "100%",
                 height: SIZES.height * 0.45,
               }}
+              onLoad={handleEventImageLoad}
             >
+              {!isEventImageLoaded && (
+                <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: SIZES.height * 0.225}}/>
+              )}
               <View
                 style={{
                   flex: 1,
@@ -469,7 +486,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                     source={{
                       uri: props.host?.Picture,
                     }}
+                    onLoad={handleHostImageLoad}
                   ></Image>
+                  {!isHostImageLoaded && (
+                    <ActivityIndicator size="small" color={COLORS.white} style={[styles.hostProfilePic, {position: 'absolute'}]}/>
+                  )}
                   <McText
                     h4
                     numberOfLines={1}

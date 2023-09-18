@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Touchable,
   Alert,
+  ActivityIndicator
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
@@ -38,6 +39,12 @@ const SectionProfile = (props: SectionProfileProps) => {
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
 
+  const [isProfileImageLoaded, setProfileImageLoaded] = useState(false);
+
+  const handleProfileImageLoad = () => {
+    setProfileImageLoaded(true);
+  };
+
   if (!user) {
     return <></>;
   }
@@ -47,7 +54,11 @@ const SectionProfile = (props: SectionProfileProps) => {
       <Image
         style={styles.imageContainer}
         source={{ uri: user?.Picture }}
+        onLoad={handleProfileImageLoad}
       />
+      {!isProfileImageLoaded && (
+        <ActivityIndicator size="small" color={COLORS.white} style={[styles.imageContainer, {position: 'absolute'}]}/>
+      )}
       <View style={styles.infoContainer}>
         <View
           style={{

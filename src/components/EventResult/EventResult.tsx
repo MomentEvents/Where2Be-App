@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, Event, icons, SIZES } from "../../constants";
 import { McText } from "../Styled";
@@ -20,6 +20,12 @@ const EventResult = (props: EventResultProps) => {
     navigation.push(SCREENS.EventDetails, { eventID: props.event.EventID });
   };
 
+  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
+
+  const handleEventImageLoad = () => {
+    setEventImageLoaded(true);
+  };
+
   return (
     <View
       style={{
@@ -33,15 +39,13 @@ const EventResult = (props: EventResultProps) => {
       <TouchableOpacity onPress={onEventPress}>
         <View style={{ flexDirection: "row" }}>
           <Image
-            style={{
-              height: 70,
-              width: 70,
-              borderRadius: 10,
-              borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.gray2,
-            }}
+            style={styles.eventPic}
             source={{ uri: props.event?.Picture }}
+            onLoad={handleEventImageLoad}
           />
+          {!isEventImageLoaded && (
+            <ActivityIndicator size="small" color={COLORS.white} style={[styles.eventPic, {position: 'absolute'}]}/>
+          )}
           <View
             style={{
               marginRight: 30,
@@ -96,4 +100,12 @@ const EventResult = (props: EventResultProps) => {
 
 export default EventResult;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  eventPic: {
+    height: 70,
+    width: 70,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.gray2,
+  }
+});

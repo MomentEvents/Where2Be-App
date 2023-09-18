@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, User } from "../../constants";
 import { McText } from "../Styled";
@@ -19,6 +19,12 @@ const UserResult = (props: UserResultProps) => {
     navigation.push(SCREENS.ProfileDetails, { userID: props.user.UserID });
   };
 
+  const [isUserImageLoaded, setUserImageLoaded] = useState(false);
+
+  const handleUserImageLoad = () => {
+    setUserImageLoaded(true);
+  };
+
   return (
     <View
       style={{
@@ -32,15 +38,13 @@ const UserResult = (props: UserResultProps) => {
       <TouchableOpacity onPress={onUserPress}>
         <View style={{ flexDirection: "row" }}>
           <Image
-            style={{
-              height: 70,
-              width: 70,
-              borderRadius: 50,
-              borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.gray2,
-            }}
+            style={styles.userProfilePic}
             source={{ uri: props.user?.Picture }}
+            onLoad={handleUserImageLoad}
           />
+          {!isUserImageLoaded && (
+            <ActivityIndicator size="small" color={COLORS.white} style={[styles.userProfilePic, {position: 'absolute'}]}/>
+          )}
           <View
             style={{
               marginRight: 30,
@@ -75,4 +79,12 @@ const UserResult = (props: UserResultProps) => {
 
 export default UserResult;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  userProfilePic: {
+    height: 70,
+    width: 70,
+    borderRadius: 50,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.gray2,
+  }
+});
