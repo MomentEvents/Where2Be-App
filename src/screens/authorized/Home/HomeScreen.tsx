@@ -311,8 +311,11 @@ const HomeScreen = () => {
           });
       })
       .catch((error: CustomError) => {
-        setShowRetry(true);
+        if (eventsAndHosts.length == 0){
+          setShowRetry(true);
+        }
         setIsRefreshing(false);
+        setIsLoading(false);
         if (error.showBugReportDialog) {
           showBugReportPopup(error);
         }
