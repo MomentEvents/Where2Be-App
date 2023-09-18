@@ -34,6 +34,7 @@ type EventCardProps = {
   height?: number;
   showRelativeTime?: boolean;
   reason: string;
+  isBottomModalOpen: boolean;
 };
 
 const HomeEventCard = ({
@@ -42,6 +43,7 @@ const HomeEventCard = ({
   height,
   showRelativeTime,
   reason,
+  isBottomModalOpen,
 }: EventCardProps) => {
   const {
     clientAddUserJoin: addUserJoin,
@@ -174,6 +176,7 @@ const HomeEventCard = ({
         height: cardHeight,
         width: cardWidth,
       }}
+      disabled={isBottomModalOpen}
     >
       <View
         style={{
@@ -240,7 +243,7 @@ const HomeEventCard = ({
                 }
               />
               <View style={{ flex: 1, marginLeft: 10 }}>
-                <McText h2 numberOfLines={1}>
+                <McText body1 numberOfLines={1}>
                   {storedEvent?.Title}
                 </McText>
                 <View style={{ flexDirection: "row", flex: 1 }}>

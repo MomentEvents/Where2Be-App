@@ -108,9 +108,9 @@ const SectionProfile = (props: SectionProfileProps) => {
         </View>
         <View style={{ marginRight: 50, flexDirection: "row" }}>
           <McText
-            numberOfLines={1}
+            numberOfLines={2}
             ellipsizeMode="tail"
-            h4
+            body3
             style={styles.displayNameContainer}
           >
             {user?.DisplayName}

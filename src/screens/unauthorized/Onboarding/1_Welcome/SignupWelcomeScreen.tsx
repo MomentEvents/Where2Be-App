@@ -5,6 +5,8 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Linking,
+  Alert,
 } from "react-native";
 import React, { useContext, useRef } from "react";
 import MobileSafeView from "../../../../components/Styled/MobileSafeView";
@@ -27,8 +29,11 @@ import { CUSTOMFONT_REGULAR } from "../../../../constants/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomTextInput from "../../../../components/Styled/CustomTextInput";
+import { appVersionText } from "../../../../constants/texts";
+import * as WebBrowser from 'expo-web-browser';
 
 const SignupWelcomeScreen = () => {
+
   const navigator = useNavigation<any>();
   const emailRef = useRef("");
   const { showErrorAlert, showAlert, showTextAlert } = useContext(AlertContext);
@@ -40,8 +45,16 @@ const SignupWelcomeScreen = () => {
     navigator.navigate(SCREENS.Login);
   };
 
-  const onNavigateBack = () => {
-    navigator.goBack();
+  const onDiscordClick = () => {
+    const supported = Linking.canOpenURL("https://where2be.app/discord");
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      WebBrowser.openBrowserAsync("https://where2be.app/discord");
+    } else {
+      Alert.alert(`Unable to open link: ${"https://where2be.app/discord"}`);
+    }
   };
 
   const onNextClick = () => {
@@ -97,23 +110,6 @@ const SignupWelcomeScreen = () => {
               backgroundColor: "rgba(0, 0, 0, 0.9)",
             }}
           >
-            <View
-              style={{
-                marginTop: 30,
-                marginBottom: 30,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  borderRadius: 5,
-                  paddingVertical: 10,
-                  paddingHorizontal: 0,
-                }}
-                onPress={onNavigateBack}
-              >
-                <Feather name="arrow-left" size={28} color="white" />
-              </TouchableOpacity>
-            </View>
             <View style={styles.titleTextContainer}>
               <McText style={styles.titleText} h1>
                 Welcome to Where<McText h1 color={COLORS.purple}>2</McText>Be!
@@ -147,7 +143,28 @@ const SignupWelcomeScreen = () => {
                 </McText>
               </TouchableOpacity>
             </View>
+            <View style={{ padding: 5, alignItems: 'center', justifyContent: 'flex-end', flexGrow: 1}}>
+              <Text
+                allowFontScaling={false}
+                style={{ fontSize: 12, color: COLORS.gray1 }}
+              >
+                {appVersionText} | Join our{" "}
+                <Text
+                  allowFontScaling={false}
+                  onPress={onDiscordClick}
+                  style={{
+                    fontSize: 12,
+                    color: COLORS.gray1,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Discord server
+                </Text>
+                !
+              </Text>
+            </View>
           </View>
+          
         </ImageBackground>
       </MobileSafeView>
     </KeyboardAwareScrollView>
@@ -180,6 +197,7 @@ const styles = StyleSheet.create({
   titleTextContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
+    paddingTop: 108,
   },
   titleText: {
     textAlign: "center",
