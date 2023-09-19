@@ -46,6 +46,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
+import LoadImage from "../LoadImage/LoadImage";
 
 type HomeEventProps = {
   event: Event;
@@ -117,12 +118,6 @@ const HomeEvent = (props: HomeEventProps) => {
     navigation.push(SCREENS.ProfileDetails, {
       userID: props.user.UserID,
     });
-  };
-
-  const [isHostImageLoaded, setHostImageLoaded] = useState(false);
-
-  const handleHostImageLoad = () => {
-    setHostImageLoaded(true);
   };
 
   const handleNotInterested = () => {
@@ -219,18 +214,12 @@ const HomeEvent = (props: HomeEventProps) => {
               }}
               disabled={isBottomModalOpen}
             >
-              <Image
-                style={styles.hostProfilePic}
-                source={{
-                  uri: storedUser
-                    ? storedUser.Picture
-                    : props.user.Picture,
-                }}
-                onLoad={handleHostImageLoad}
+              <LoadImage
+                imageStyle={styles.hostProfilePic}
+                imageSource={storedUser
+                  ? storedUser.Picture
+                  : props.user.Picture}
               />
-              {!isHostImageLoaded && (
-                <ActivityIndicator size="small" color={COLORS.white} style={[styles.hostProfilePic, {position: 'absolute'}]}/>
-              )}
               <McText
                 h4
                 numberOfLines={1}

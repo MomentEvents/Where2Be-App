@@ -53,7 +53,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import LoadImage from "../LoadImage/LoadImage"
 
 interface EventPreviewerProps {
   event: Event;
@@ -110,14 +110,9 @@ const EventPreviewer = (props: EventPreviewerProps) => {
   };
 
   const [isEventImageLoaded, setEventImageLoaded] = useState(false);
-  const [isHostImageLoaded, setHostImageLoaded] = useState(false);
 
   const handleEventImageLoad = () => {
     setEventImageLoaded(true);
-  };
-
-  const handleHostImageLoad = () => {
-    setHostImageLoaded(true);
   };
 
   // For description expansion
@@ -481,16 +476,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   onPress={onHostPressed}
                   disabled={isBottomModalOpen || !props.hostClickEnabled}
                 >
-                  <Image
-                    style={styles.hostProfilePic}
-                    source={{
-                      uri: props.host?.Picture,
-                    }}
-                    onLoad={handleHostImageLoad}
-                  ></Image>
-                  {!isHostImageLoaded && (
-                    <ActivityIndicator size="small" color={COLORS.white} style={[styles.hostProfilePic, {position: 'absolute'}]}/>
-                  )}
+                  <LoadImage
+                    imageStyle={styles.hostProfilePic}
+                    imageSource={props.host?.Picture}
+                  />
+
                   <McText
                     h4
                     numberOfLines={1}

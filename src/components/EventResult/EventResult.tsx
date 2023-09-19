@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectEventByID } from "../../redux/events/eventSelectors";
 import { updateEventMap } from "../../redux/events/eventSlice";
+import LoadImage from "../LoadImage/LoadImage"
 
 type EventResultProps = {
   event: Event;
@@ -18,12 +19,6 @@ const EventResult = (props: EventResultProps) => {
   const navigation = useNavigation<any>();
   const onEventPress = () => {
     navigation.push(SCREENS.EventDetails, { eventID: props.event.EventID });
-  };
-
-  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
-
-  const handleEventImageLoad = () => {
-    setEventImageLoaded(true);
   };
 
   return (
@@ -38,14 +33,10 @@ const EventResult = (props: EventResultProps) => {
     >
       <TouchableOpacity onPress={onEventPress}>
         <View style={{ flexDirection: "row" }}>
-          <Image
-            style={styles.eventPic}
-            source={{ uri: props.event?.Picture }}
-            onLoad={handleEventImageLoad}
+          <LoadImage
+            imageStyle={styles.eventPic}
+            imageSource={props.event?.Picture}
           />
-          {!isEventImageLoaded && (
-            <ActivityIndicator size="small" color={COLORS.white} style={[styles.eventPic, {position: 'absolute'}]}/>
-          )}
           <View
             style={{
               marginRight: 30,

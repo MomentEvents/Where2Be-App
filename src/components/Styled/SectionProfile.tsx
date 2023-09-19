@@ -20,6 +20,7 @@ import { truncateNumber } from "../../helpers/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectUserByID } from "../../redux/users/userSelectors";
+import LoadImage from "../LoadImage/LoadImage"
 
 type SectionProfileProps = {
   userID: string;
@@ -51,14 +52,10 @@ const SectionProfile = (props: SectionProfileProps) => {
 
   return (
     <View style={styles.profileContainer}>
-      <Image
-        style={styles.imageContainer}
-        source={{ uri: user?.Picture }}
-        onLoad={handleProfileImageLoad}
+      <LoadImage
+        imageStyle={styles.imageContainer}
+        imageSource={user?.Picture}
       />
-      {!isProfileImageLoaded && (
-        <ActivityIndicator size="small" color={COLORS.white} style={[styles.imageContainer, {position: 'absolute'}]}/>
-      )}
       <View style={styles.infoContainer}>
         <View
           style={{

@@ -8,6 +8,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectUserByID } from "../../redux/users/userSelectors";
+import LoadImage from "../LoadImage/LoadImage"
 
 type UserResultProps = {
   user: User;
@@ -17,12 +18,6 @@ const UserResult = (props: UserResultProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const onUserPress = () => {
     navigation.push(SCREENS.ProfileDetails, { userID: props.user.UserID });
-  };
-
-  const [isUserImageLoaded, setUserImageLoaded] = useState(false);
-
-  const handleUserImageLoad = () => {
-    setUserImageLoaded(true);
   };
 
   return (
@@ -37,14 +32,10 @@ const UserResult = (props: UserResultProps) => {
     >
       <TouchableOpacity onPress={onUserPress}>
         <View style={{ flexDirection: "row" }}>
-          <Image
-            style={styles.userProfilePic}
-            source={{ uri: props.user?.Picture }}
-            onLoad={handleUserImageLoad}
+          <LoadImage
+            imageStyle={styles.userProfilePic}
+            imageSource={props.user?.Picture}
           />
-          {!isUserImageLoaded && (
-            <ActivityIndicator size="small" color={COLORS.white} style={[styles.userProfilePic, {position: 'absolute'}]}/>
-          )}
           <View
             style={{
               marginRight: 30,

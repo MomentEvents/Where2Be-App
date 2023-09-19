@@ -14,6 +14,7 @@ import { FONTS, SIZES, COLORS, icons } from "../constants";
 import { PermissionsAndroid } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import LoadImage from "../components/LoadImage/LoadImage"
 
 type ImagePickerButtonProps = {
   originalImageURI?: string;
@@ -102,19 +103,15 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
     >
       {currentImageURI ? (
         <>
-          <Image
-            source={{ uri: currentImageURI }}
-            style={{
+          <LoadImage
+            imageStyle={{
               width: "100%",
               height: "100%",
               borderRadius: 4,
               ...props.style,
             }}
-            onLoad={handleImageLoad}
+            imageSource={currentImageURI}
           />
-          {!isImageLoaded && (
-            <ActivityIndicator size="small" color={COLORS.white} style={{position: 'absolute', width: "100%", height: "100%", borderRadius: 4, ...props.style,}}/>
-          )}
           {/* Pen Icon */}
           <View
             style={{
