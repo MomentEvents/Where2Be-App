@@ -26,6 +26,7 @@ import { selectEventByID } from "../redux/events/eventSelectors";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateEventMap } from "../redux/events/eventSlice";
 import { produceWithPatches } from "immer";
+import LoadImageBackground from "../components/LoadImageBackground/LoadImageBackground"
 
 type EventCardProps = {
   onClick?: () => void;
@@ -200,9 +201,8 @@ const EventCard = ({
           width: cardWidth,
         }}
       >
-        <ImageBackground
-          source={{ uri: storedEvent?.Picture }}
-          style={{
+        <LoadImageBackground
+          imageStyle={{
             flex: 1,
             width: "100%",
             borderRadius: cardBorderRadius,
@@ -210,11 +210,8 @@ const EventCard = ({
             borderColor: cardBorderColor,
             overflow: "hidden",
           }}
-          onLoad={handleEventImageLoad}
+          imageSource={storedEvent?.Picture}
         >
-          {!isEventImageLoaded && (
-            <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: cardHeight * 0.4}}/>
-          )}
           <LinearGradient
             colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
             start={{ x: 0, y: 0.4 }}
@@ -336,7 +333,7 @@ const EventCard = ({
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </LoadImageBackground>
       </View>
     </TouchableHighlight>
   );

@@ -54,6 +54,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
 import LoadImage from "../LoadImage/LoadImage"
+import LoadImageBackground from "../LoadImageBackground/LoadImageBackground"
 
 interface EventPreviewerProps {
   event: Event;
@@ -241,20 +242,14 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             disabled={isBottomModalOpen}
             onPress={() => setImageViewVisible(true)}
           >
-            <ImageBackground
+            <LoadImageBackground
               resizeMode="cover"
-              source={{
-                uri: props.event?.Picture,
-              }}
-              style={{
+              imageSource={props.event?.Picture}
+              imageStyle={{
                 width: "100%",
                 height: SIZES.height * 0.45,
               }}
-              onLoad={handleEventImageLoad}
             >
-              {!isEventImageLoaded && (
-                <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: SIZES.height * 0.225}}/>
-              )}
               <View
                 style={{
                   flex: 1,
@@ -377,7 +372,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   </LinearGradient>
                 </ImageFooterSection>
               </View>
-            </ImageBackground>
+            </LoadImageBackground>
           </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>

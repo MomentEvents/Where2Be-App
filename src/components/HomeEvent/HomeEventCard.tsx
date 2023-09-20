@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectEventByID } from "../../redux/events/eventSelectors";
 import { AppDispatch, RootState } from "../../redux/store";
 import { updateEventMap } from "../../redux/events/eventSlice";
+import LoadImageBackground from "../LoadImageBackground/LoadImageBackground"
 
 type EventCardProps = {
   event: Event;
@@ -202,20 +203,16 @@ const HomeEventCard = ({
             </McText>
           </View>
         )}
-        <ImageBackground
-          source={{ uri: storedEvent?.Picture }}
-          style={{
+        <LoadImageBackground
+          imageSource={storedEvent?.Picture}
+          imageStyle={{
             flex: 1,
             width: "100%",
             borderRadius: cardBorderRadius,
             borderWidth: cardBorderWidth,
             borderColor: cardBorderColor,
           }}
-          onLoad={handleEventImageLoad}
         >
-          {!isEventImageLoaded && (
-            <ActivityIndicator size="large" color={COLORS.white} style={{width: "100%", top: SIZES.height * 0.225}}/>
-          )}
           <LinearGradient
             colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
             start={{ x: 0, y: 0.4 }}
@@ -339,7 +336,7 @@ const HomeEventCard = ({
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </LoadImageBackground>
 
         <View
           style={{

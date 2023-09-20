@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import {
   Animated,
   StyleSheet,
-  Image,
   StyleProp,
-  ImageStyle
+  ImageStyle,
+  ImageBackground,
+  ImageResizeMode,
 } from "react-native";
 
 type LoadImageProps = {
+    children;
     imageStyle: StyleProp<ImageStyle>;
     imageSource: string;
+    resizeMode?: ImageResizeMode;
 };
 
-const LoadImage = (props: LoadImageProps) => {
+const LoadImageBackground = (props: LoadImageProps) => {
     const opacity = useState(new Animated.Value(0.4))[0];
 
     useEffect(() => {
@@ -46,19 +49,20 @@ const LoadImage = (props: LoadImageProps) => {
     };
 
     return (
-        <>
-            <Image
-                style={props.imageStyle}
-                source={{uri: props.imageSource}}
-                onLoad={handleImageLoad}
-            />
+        <ImageBackground
+            style={props.imageStyle}
+            source={{uri: props.imageSource}}
+            onLoad={handleImageLoad}
+            resizeMode={props.resizeMode}
+        >
             {!isImageLoaded && (
-                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: 'gray', opacity}]} />
+                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: 'gray', opacity, height: '100%'}]} />
             )}
-        </>
+            {props.children}
+        </ImageBackground>
     );
 };
 
-export default LoadImage;
+export default LoadImageBackground;
 
 const styles = StyleSheet.create({});
