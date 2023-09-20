@@ -4,9 +4,6 @@ import {
   TouchableHighlight,
   View,
   StyleSheet,
-  ImageBackground,
-  Image,
-  ActivityIndicator
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -80,12 +77,6 @@ const EventCard = ({
       eventID: event.EventID,
     });
     // Navigate to event details page
-  };
-
-  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
-
-  const handleEventImageLoad = () => {
-    setEventImageLoaded(true);
   };
 
   const pullData = async () => {

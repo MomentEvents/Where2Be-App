@@ -7,7 +7,6 @@ import {
   Platform,
   Alert,
   Linking,
-  ActivityIndicator
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FONTS, SIZES, COLORS, icons } from "../constants";
@@ -29,12 +28,6 @@ const ImagePickerButton = (props: ImagePickerButtonProps) => {
   const [currentImageURI, setCurrentImageURI] = useState<string>(
     props.originalImageURI
   );
-
-  const [isImageLoaded, setImageLoaded] = useState(false);
-
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
 
   const defaultWidthHeight =
     SIZES.width < SIZES.height ? SIZES.width - 80 : SIZES.height - 80;

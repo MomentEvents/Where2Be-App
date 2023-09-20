@@ -7,6 +7,7 @@ import {
   ImageBackground,
   ImageResizeMode,
 } from "react-native";
+import { COLORS } from "../../constants";
 
 type LoadImageProps = {
     children;
@@ -56,7 +57,7 @@ const LoadImageBackground = (props: LoadImageProps) => {
             resizeMode={props.resizeMode}
         >
             {!isImageLoaded && (
-                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: 'gray', opacity, height: '100%'}]} />
+                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: COLORS.gray, opacity, height: '100%'}]} />
             )}
             {props.children}
         </ImageBackground>

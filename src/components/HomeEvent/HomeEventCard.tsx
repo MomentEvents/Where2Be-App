@@ -4,11 +4,7 @@ import {
   TouchableHighlight,
   View,
   StyleSheet,
-  ImageBackground,
-  Image,
   TouchableOpacity,
-  ActivityIndicator,
-  Text
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -79,12 +75,6 @@ const HomeEventCard = ({
       eventID: event.EventID,
     });
     // Navigate to event details page
-  };
-
-  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
-
-  const handleEventImageLoad = () => {
-    setEventImageLoaded(true);
   };
 
   const DateTextComponent = (props: { date: Date }) => {

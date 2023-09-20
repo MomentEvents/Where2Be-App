@@ -19,8 +19,6 @@ import {
   Alert,
   Modal,
   Pressable,
-  Text,
-  ActivityIndicator
 } from "react-native";
 import Hyperlink from "react-native-hyperlink";
 import { Interest, Event, User, COLORS, SIZES, SCREENS } from "../../constants";
@@ -108,12 +106,6 @@ const EventPreviewer = (props: EventPreviewerProps) => {
     );
     setQrUrl(url);
     setQRModalVisible(true);
-  };
-
-  const [isEventImageLoaded, setEventImageLoaded] = useState(false);
-
-  const handleEventImageLoad = () => {
-    setEventImageLoaded(true);
   };
 
   // For description expansion

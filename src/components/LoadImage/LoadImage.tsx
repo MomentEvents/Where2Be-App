@@ -6,6 +6,7 @@ import {
   StyleProp,
   ImageStyle
 } from "react-native";
+import { COLORS } from "../../constants";
 
 type LoadImageProps = {
     imageStyle: StyleProp<ImageStyle>;
@@ -53,7 +54,7 @@ const LoadImage = (props: LoadImageProps) => {
                 onLoad={handleImageLoad}
             />
             {!isImageLoaded && (
-                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: 'gray', opacity}]} />
+                <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: COLORS.gray, opacity}]} />
             )}
         </>
     );

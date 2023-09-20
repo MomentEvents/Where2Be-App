@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Touchable,
   Alert,
-  ActivityIndicator
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, SIZES, User } from "../../constants";
@@ -39,12 +38,6 @@ const SectionProfile = (props: SectionProfileProps) => {
   const user = useSelector((state: RootState) => selectUserByID(state, props.userID));
   const navigation = useNavigation<any>();
   const { userToken } = useContext(UserContext);
-
-  const [isProfileImageLoaded, setProfileImageLoaded] = useState(false);
-
-  const handleProfileImageLoad = () => {
-    setProfileImageLoaded(true);
-  };
 
   if (!user) {
     return <></>;
