@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
   Linking,
   AppState,
+  Text,
+  Modal
 } from "react-native";
 import React, {
   useCallback,
@@ -85,6 +87,15 @@ import {
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import analytics from "@react-native-firebase/analytics";
 import { SETTINGS } from "../../constants/settings";
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { McTextInput } from "../Styled/styled";
+import { CUSTOMFONT_REGULAR } from "../../constants/theme";
+import { CONSTRAINTS } from "../../constants/constraints";
 
 type EventDetailsProps = {
   eventID: string;
@@ -156,6 +167,17 @@ const EventDetails = (props: EventDetailsProps) => {
   const [showRetry, setShowRetry] = useState(false);
 
   const insets = useSafeAreaInsets();
+
+
+  const [isPrefilledFormVisible, setPrefilledFormVisible] = useState(false);
+  
+  const onGoingPressed = () => {
+    setPrefilledFormVisible(true);
+  }
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
   // This updates the event counter and the boolean in case there is a discrepency.
@@ -458,6 +480,7 @@ const EventDetails = (props: EventDetailsProps) => {
                                     undefined,
                                     props.currentToken
                                   );
+                                  onGoingPressed();
                                 }
                           }
                         >
@@ -629,6 +652,65 @@ const EventDetails = (props: EventDetailsProps) => {
         }
         showModeratorFeatures={isHost}
       />
+    
+    {isPrefilledFormVisible && (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isPrefilledFormVisible}
+        onRequestClose={() => {
+          setPrefilledFormVisible(!isPrefilledFormVisible);
+        }}
+      >
+        <TouchableOpacity
+          style={styles.centeredView}
+          activeOpacity={1}
+          onPressOut={() => setPrefilledFormVisible(false)}
+        >
+          <View style={styles.formContainer}>
+            <View style={styles.titleContainer}>
+              <icons.activeprofile style={styles.iconsContainer} width={30} />
+              <McText h3>Name</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter name"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={name}
+              onChangeText={setName}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <icons.email style={styles.iconsContainer} width={30} />
+              <McText h3>Email</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter email"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={email}
+              onChangeText={setEmail}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <Feather name="smartphone" size={30} color="white" style={styles.iconsContainer}/>
+              <McText h3>Phone number</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter phone number"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    )}
     </View>
   );
 };
@@ -686,6 +768,46 @@ const styles = StyleSheet.create({
     height: 35,
     alignItems: "center",
     justifyContent: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,.8)", // This will make background a bit dark for better visibility of popup
+  },
+  formContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: '80%',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'white',
+    backgroundColor: "gray",
+    elevation: 5,
+  },
+  textInputContainer: {
+    borderColor: COLORS.white,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingBottom: 10,
+    paddingTop: 10,
+    width: '100%',
+  },
+  titleContainer: {
+    marginTop: 20,
+    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    width: '100%',
+  },
+  iconsContainer: {
+    marginRight: 10,
   },
 });
 
