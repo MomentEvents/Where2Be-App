@@ -169,15 +169,39 @@ const EventDetails = (props: EventDetailsProps) => {
   const insets = useSafeAreaInsets();
 
 
-  const [isPrefilledFormVisible, setPrefilledFormVisible] = useState(false);
+  const [isFormVisible, setFormVisible] = useState(false);
   
   const onGoingPressed = () => {
-    setPrefilledFormVisible(true);
+    // get user data from api
+    setFormVisible(true);
   }
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [saveFormInfo, setSaveFormInfo] = useState(false);
+  const [isFormIncomplete, setIsFormIncomplete] = useState(false);
+
+  const joinEvent = () => {
+    // validate fields
+    if (name == "" || email == "" || phoneNumber == ""){
+      setIsFormIncomplete(true);
+    } else {
+      setIsFormIncomplete(false);
+      // use api to save user data and update going
+      addUserJoin(
+        eventID,
+        undefined,
+        props.currentToken
+      );
+      setFormVisible(false);
+    }
+  }
+
+  useEffect(() => {
+    setIsFormIncomplete(false);
+  }, [name, email, phoneNumber]);
+
 
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
   // This updates the event counter and the boolean in case there is a discrepency.
@@ -475,11 +499,11 @@ const EventDetails = (props: EventDetailsProps) => {
                                       "Make sure to click the ticket button to confirm your signup!"
                                     );
                                   }
-                                  addUserJoin(
-                                    eventID,
-                                    undefined,
-                                    props.currentToken
-                                  );
+                                  // addUserJoin(
+                                  //   eventID,
+                                  //   undefined,
+                                  //   props.currentToken
+                                  // );
                                   onGoingPressed();
                                 }
                           }
@@ -653,23 +677,35 @@ const EventDetails = (props: EventDetailsProps) => {
         showModeratorFeatures={isHost}
       />
     
-    {isPrefilledFormVisible && (
+    {isFormVisible && (
       <Modal
         animationType="slide"
         transparent={true}
-        visible={isPrefilledFormVisible}
+        visible={isFormVisible}
         onRequestClose={() => {
-          setPrefilledFormVisible(!isPrefilledFormVisible);
+          setFormVisible(!isFormVisible);
         }}
       >
         <TouchableOpacity
           style={styles.centeredView}
           activeOpacity={1}
-          onPressOut={() => setPrefilledFormVisible(false)}
+          // onPressOut={() => setFormVisible(false)}
         >
           <View style={styles.formContainer}>
+            <TouchableOpacity
+              style={{position: 'absolute', right: 10, top: 10 }}
+              onPress={() => setFormVisible(false)}
+            >
+              <Ionicons name="close" size={26} color="white" />
+            </TouchableOpacity>
+            <ScrollView
+              style={{width: '100%', paddingHorizontal: 2, marginTop: 20}}
+              showsVerticalScrollIndicator={true}
+              showsHorizontalScrollIndicator={true}
+              indicatorStyle={'white'}
+            >
             <View style={styles.titleContainer}>
-              <icons.activeprofile style={styles.iconsContainer} width={30} />
+              <Ionicons name="person-outline" size={24} color="white" style={styles.iconsContainer}/>
               <McText h3>Name</McText>
             </View>
             <McTextInput
@@ -682,7 +718,7 @@ const EventDetails = (props: EventDetailsProps) => {
               maxLength={CONSTRAINTS.Event.Title.Max}
             />
             <View style={styles.titleContainer}>
-              <icons.email style={styles.iconsContainer} width={30} />
+              <MaterialCommunityIcons name="email-outline" size={24} color="white" style={styles.iconsContainer}/>
               <McText h3>Email</McText>
             </View>
             <McTextInput
@@ -695,7 +731,7 @@ const EventDetails = (props: EventDetailsProps) => {
               maxLength={CONSTRAINTS.Event.Title.Max}
             />
             <View style={styles.titleContainer}>
-              <Feather name="smartphone" size={30} color="white" style={styles.iconsContainer}/>
+              <Feather name="smartphone" size={24} color="white" style={styles.iconsContainer}/>
               <McText h3>Phone number</McText>
             </View>
             <McTextInput
@@ -707,6 +743,53 @@ const EventDetails = (props: EventDetailsProps) => {
               multiline={true}
               maxLength={CONSTRAINTS.Event.Title.Max}
             />
+            </ScrollView>
+            <View style={styles.checkboxContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  setSaveFormInfo((save) => {
+                    return !save;
+                  })
+                }
+                style={{
+                  borderRadius: 5,
+                  marginLeft: 3,
+                  backgroundColor: saveFormInfo
+                    ? COLORS.purple
+                    : COLORS.gray2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name={"checkmark-sharp"}
+                  size={22}
+                  color={saveFormInfo ? COLORS.white : COLORS.gray2}
+                />
+              </TouchableOpacity>
+              <McText h3 style={{ marginLeft: 10 }}>
+                {"Save for future events"}
+              </McText>
+            </View>
+            <TouchableOpacity
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                borderRadius: 20,
+                backgroundColor: 'white'
+              }}
+              onPress={joinEvent}
+            >
+              <McText h3 style={{color: "rgba(40,40,40,.95)"}}>
+                {"Join"}
+              </McText>
+            </TouchableOpacity>
+            {
+              isFormIncomplete && 
+              <McText h3 style={{color: 'red', marginTop: 10,}}>
+                {"Please enter all fields"}
+              </McText>
+            }
           </View>
         </TouchableOpacity>
       </Modal>
@@ -779,18 +862,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: '80%',
+    maxHeight: '70%',
     paddingVertical: 20,
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
     borderRadius: 10,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'white',
-    backgroundColor: "gray",
+    backgroundColor: "rgba(40,40,40,.95)",
     elevation: 5,
   },
   textInputContainer: {
     borderColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 5,
+    marginBottom: 20,
     paddingHorizontal: 10,
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
@@ -800,7 +883,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   titleContainer: {
-    marginTop: 20,
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -808,6 +890,12 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     marginRight: 10,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    width: '100%'
   },
 });
 
