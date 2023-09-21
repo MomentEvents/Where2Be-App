@@ -4,8 +4,6 @@ import {
   TouchableHighlight,
   View,
   StyleSheet,
-  ImageBackground,
-  Image,
 } from "react-native";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,6 +23,7 @@ import { selectEventByID } from "../redux/events/eventSelectors";
 import { AppDispatch, RootState } from "../redux/store";
 import { updateEventMap } from "../redux/events/eventSlice";
 import { produceWithPatches } from "immer";
+import LoadImageBackground from "../components/LoadImageBackground/LoadImageBackground"
 
 type EventCardProps = {
   onClick?: () => void;
@@ -193,9 +192,8 @@ const EventCard = ({
           width: cardWidth,
         }}
       >
-        <ImageBackground
-          source={{ uri: storedEvent?.Picture }}
-          style={{
+        <LoadImageBackground
+          imageStyle={{
             flex: 1,
             width: "100%",
             borderRadius: cardBorderRadius,
@@ -203,6 +201,7 @@ const EventCard = ({
             borderColor: cardBorderColor,
             overflow: "hidden",
           }}
+          imageSource={storedEvent?.Picture}
         >
           <LinearGradient
             colors={["transparent", COLORS.trueBlack, COLORS.trueBlack]}
@@ -325,7 +324,7 @@ const EventCard = ({
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </LoadImageBackground>
       </View>
     </TouchableHighlight>
   );

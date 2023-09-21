@@ -9,8 +9,9 @@ import {
   Text,
   Alert,
   Image,
+  ActivityIndicator,
   Pressable,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { User, Event, COLORS, SCREENS, SIZES } from "../../constants";
 import { McText } from "../Styled";
@@ -45,6 +46,7 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
+import LoadImage from "../LoadImage/LoadImage";
 
 type HomeEventProps = {
   event: Event;
@@ -212,13 +214,11 @@ const HomeEvent = (props: HomeEventProps) => {
               }}
               disabled={isBottomModalOpen}
             >
-              <Image
-                style={styles.hostProfilePic}
-                source={{
-                  uri: storedUser
-                    ? storedUser.Picture
-                    : props.user.Picture,
-                }}
+              <LoadImage
+                imageStyle={styles.hostProfilePic}
+                imageSource={storedUser
+                  ? storedUser.Picture
+                  : props.user.Picture}
               />
               <McText
                 h4

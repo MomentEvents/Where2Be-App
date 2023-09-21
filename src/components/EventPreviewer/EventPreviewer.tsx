@@ -51,7 +51,8 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import QRCode from "react-native-qrcode-svg";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import LoadImage from "../LoadImage/LoadImage"
+import LoadImageBackground from "../LoadImageBackground/LoadImageBackground"
 
 interface EventPreviewerProps {
   event: Event;
@@ -233,12 +234,10 @@ const EventPreviewer = (props: EventPreviewerProps) => {
             disabled={isBottomModalOpen}
             onPress={() => setImageViewVisible(true)}
           >
-            <ImageBackground
+            <LoadImageBackground
               resizeMode="cover"
-              source={{
-                uri: props.event?.Picture,
-              }}
-              style={{
+              imageSource={props.event?.Picture}
+              imageStyle={{
                 width: "100%",
                 height: SIZES.height * 0.45,
               }}
@@ -365,7 +364,7 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   </LinearGradient>
                 </ImageFooterSection>
               </View>
-            </ImageBackground>
+            </LoadImageBackground>
           </TouchableOpacity>
           <View style={styles.scrollcontainer}>
             <TitleSection>
@@ -464,12 +463,11 @@ const EventPreviewer = (props: EventPreviewerProps) => {
                   onPress={onHostPressed}
                   disabled={isBottomModalOpen || !props.hostClickEnabled}
                 >
-                  <Image
-                    style={styles.hostProfilePic}
-                    source={{
-                      uri: props.host?.Picture,
-                    }}
-                  ></Image>
+                  <LoadImage
+                    imageStyle={styles.hostProfilePic}
+                    imageSource={props.host?.Picture}
+                  />
+
                   <McText
                     h4
                     numberOfLines={1}

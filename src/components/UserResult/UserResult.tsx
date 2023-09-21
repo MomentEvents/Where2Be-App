@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, User } from "../../constants";
 import { McText } from "../Styled";
@@ -8,6 +8,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectUserByID } from "../../redux/users/userSelectors";
+import LoadImage from "../LoadImage/LoadImage"
 
 type UserResultProps = {
   user: User;
@@ -31,15 +32,9 @@ const UserResult = (props: UserResultProps) => {
     >
       <TouchableOpacity onPress={onUserPress}>
         <View style={{ flexDirection: "row" }}>
-          <Image
-            style={{
-              height: 70,
-              width: 70,
-              borderRadius: 50,
-              borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.gray2,
-            }}
-            source={{ uri: props.user?.Picture }}
+          <LoadImage
+            imageStyle={styles.userProfilePic}
+            imageSource={props.user?.Picture}
           />
           <View
             style={{
@@ -75,4 +70,12 @@ const UserResult = (props: UserResultProps) => {
 
 export default UserResult;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  userProfilePic: {
+    height: 70,
+    width: 70,
+    borderRadius: 50,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.gray2,
+  }
+});

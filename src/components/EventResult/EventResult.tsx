@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { COLORS, SCREENS, Event, icons, SIZES } from "../../constants";
 import { McText } from "../Styled";
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { selectEventByID } from "../../redux/events/eventSelectors";
 import { updateEventMap } from "../../redux/events/eventSlice";
+import LoadImage from "../LoadImage/LoadImage"
 
 type EventResultProps = {
   event: Event;
@@ -32,15 +33,9 @@ const EventResult = (props: EventResultProps) => {
     >
       <TouchableOpacity onPress={onEventPress}>
         <View style={{ flexDirection: "row" }}>
-          <Image
-            style={{
-              height: 70,
-              width: 70,
-              borderRadius: 10,
-              borderWidth: StyleSheet.hairlineWidth,
-              borderColor: COLORS.gray2,
-            }}
-            source={{ uri: props.event?.Picture }}
+          <LoadImage
+            imageStyle={styles.eventPic}
+            imageSource={props.event?.Picture}
           />
           <View
             style={{
@@ -96,4 +91,12 @@ const EventResult = (props: EventResultProps) => {
 
 export default EventResult;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  eventPic: {
+    height: 70,
+    width: 70,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.gray2,
+  }
+});
