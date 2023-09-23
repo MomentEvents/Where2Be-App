@@ -237,7 +237,7 @@ export const prefilledFormResponseToPrefilledForm = (
 ): UserPrefilledForm => {
   const formattedUserPrefilledForm: UserPrefilledForm = {
     UserID: pulledUserPrefilledForm.user_id,
-    DisplayName: pulledUserPrefilledForm.display_name,
+    Name: pulledUserPrefilledForm.name,
     Email: pulledUserPrefilledForm.email,
     PhoneNumber: pulledUserPrefilledForm.phone_number,
   };

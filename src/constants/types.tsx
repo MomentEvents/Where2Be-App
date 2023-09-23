@@ -108,14 +108,14 @@ export type FirebaseEventMessage = {
 
 export type UserPrefilledForm = {
   UserID: string;
-  DisplayName: string;
+  Name: string;
   Email: string;
   PhoneNumber: string;
 }
 
 export type UserPrefilledFormResponse = {
   user_id: string;
-  display_name: string;
+  name: string;
   email: string;
   phone_number: string;
 }

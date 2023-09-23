@@ -177,12 +177,11 @@ const EventDetails = (props: EventDetailsProps) => {
   
   const onGoingPressed = () => {
     getUserPrefilledForm(props.currentToken.UserID)
-    // getUserPrefilledForm("L_IYdlxHznvc9tzQLoIFYE3KkMDaB-DFzrc7VkP3kdo")
       .then((pulledUserPrefilledForm: UserPrefilledForm) => {
         setUserPrefilledForm(pulledUserPrefilledForm)
-        setName(pulledUserPrefilledForm.DisplayName);
+        setName(pulledUserPrefilledForm.Name);
         setEmail(pulledUserPrefilledForm.Email);
-        setPhoneNumber(pulledUserPrefilledForm.PhoneNumber || "+1");
+        setPhoneNumber(pulledUserPrefilledForm.PhoneNumber);
         setFormVisible(true);
       })
   }
@@ -191,11 +190,10 @@ const EventDetails = (props: EventDetailsProps) => {
     if (name == "" || email == "" || phoneNumber == ""){
       setIsFormIncomplete(true);
     } else {
-      if (saveFormInfo && (userPrefilledForm.DisplayName != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber)) {
+      if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber)) {
         const newUserPrefilledForm: UserPrefilledForm = {
           UserID: props.currentToken.UserID,
-          // UserID: "L_IYdlxHznvc9tzQLoIFYE3KkMDaB-DFzrc7VkP3kdo",
-          DisplayName: name,
+          Name: name,
           Email: email,
           PhoneNumber: phoneNumber,
         };

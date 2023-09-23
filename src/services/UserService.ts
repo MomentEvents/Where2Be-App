@@ -503,7 +503,7 @@ export async function getUserFollowing(
 ): Promise<void> {
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
-  formData.append("display_name", updatedUserPrefilledForm.DisplayName);
+  formData.append("name", updatedUserPrefilledForm.Name);
   formData.append("email", updatedUserPrefilledForm.Email);
   formData.append("phone_number", updatedUserPrefilledForm.PhoneNumber);
 
