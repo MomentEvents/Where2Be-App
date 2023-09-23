@@ -240,6 +240,8 @@ export const prefilledFormResponseToPrefilledForm = (
     Name: pulledUserPrefilledForm.name,
     Email: pulledUserPrefilledForm.email,
     PhoneNumber: pulledUserPrefilledForm.phone_number,
+    Major: pulledUserPrefilledForm.major,
+    Year: pulledUserPrefilledForm.year, 
   };
   return formattedUserPrefilledForm;
 };

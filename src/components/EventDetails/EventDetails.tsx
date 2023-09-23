@@ -170,6 +170,8 @@ const EventDetails = (props: EventDetailsProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [major, setMajor] = useState("");
+  const [year, setYear] = useState("");
   const [saveFormInfo, setSaveFormInfo] = useState(true);
   const [isFormIncomplete, setIsFormIncomplete] = useState(false);
 
@@ -182,20 +184,24 @@ const EventDetails = (props: EventDetailsProps) => {
         setName(pulledUserPrefilledForm.Name);
         setEmail(pulledUserPrefilledForm.Email);
         setPhoneNumber(pulledUserPrefilledForm.PhoneNumber);
+        setMajor(pulledUserPrefilledForm.Major);
+        setYear(pulledUserPrefilledForm.Year);
         setFormVisible(true);
       })
   }
 
   const joinEvent = () => {
-    if (name == "" || email == "" || phoneNumber == ""){
+    if (name.trim() == "" || email.trim() == "" || phoneNumber.trim() == "" || major.trim() == "" || year.trim() == ""){
       setIsFormIncomplete(true);
     } else {
-      if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber)) {
+      if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber || userPrefilledForm.Major != major || userPrefilledForm.Year != year)) {
         const newUserPrefilledForm: UserPrefilledForm = {
           UserID: props.currentToken.UserID,
           Name: name,
           Email: email,
           PhoneNumber: phoneNumber,
+          Major: major,
+          Year: year,
         };
         updateUserPrefilledForm(newUserPrefilledForm);
       }
@@ -211,7 +217,7 @@ const EventDetails = (props: EventDetailsProps) => {
 
   useEffect(() => {
     setIsFormIncomplete(false);
-  }, [name, email, phoneNumber]);
+  }, [name, email, phoneNumber, major, year]);
 
 
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
@@ -700,7 +706,6 @@ const EventDetails = (props: EventDetailsProps) => {
         <TouchableOpacity
           style={styles.centeredView}
           activeOpacity={1}
-          // onPressOut={() => setFormVisible(false)}
         >
           <View style={styles.formContainer}>
             <TouchableOpacity
@@ -710,7 +715,7 @@ const EventDetails = (props: EventDetailsProps) => {
               <Ionicons name="close" size={26} color="white" />
             </TouchableOpacity>
             <ScrollView
-              style={{width: '100%', paddingHorizontal: 2, marginTop: 20}}
+              style={{width: '100%', paddingRight: 10, marginTop: 20, marginBottom: 15}}
               showsVerticalScrollIndicator={true}
               showsHorizontalScrollIndicator={true}
               indicatorStyle={'white'}
@@ -754,7 +759,34 @@ const EventDetails = (props: EventDetailsProps) => {
               multiline={true}
               maxLength={CONSTRAINTS.Event.Title.Max}
             />
+            <View style={styles.titleContainer}>
+              <Ionicons name="book-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Major</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter major"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={major}
+              onChangeText={setMajor}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <Ionicons name="school-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Year</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter year"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={year}
+              onChangeText={setYear}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
             </ScrollView>
+
             <View style={styles.checkboxContainer}>
               <TouchableOpacity
                 onPress={() =>
@@ -873,30 +905,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: '80%',
-    maxHeight: '70%',
+    maxHeight: '60%',
     paddingVertical: 20,
     paddingHorizontal: 30,
     borderRadius: 10,
     backgroundColor: "rgba(40,40,40,.95)",
     elevation: 5,
   },
+  titleContainer: {
+    marginVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    width: '100%',
+  },
   textInputContainer: {
     borderColor: COLORS.white,
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingHorizontal: 10,
     fontFamily: CUSTOMFONT_REGULAR,
     fontSize: 16,
     color: COLORS.white,
     paddingBottom: 10,
     paddingTop: 10,
-    width: '100%',
-  },
-  titleContainer: {
-    marginBottom: 10,
-    flexDirection: "row",
-    alignItems: "center",
     width: '100%',
   },
   iconsContainer: {

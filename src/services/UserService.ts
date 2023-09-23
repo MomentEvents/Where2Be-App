@@ -506,6 +506,8 @@ export async function getUserFollowing(
   formData.append("name", updatedUserPrefilledForm.Name);
   formData.append("email", updatedUserPrefilledForm.Email);
   formData.append("phone_number", updatedUserPrefilledForm.PhoneNumber);
+  formData.append("major", updatedUserPrefilledForm.Major);
+  formData.append("year", updatedUserPrefilledForm.Year);
 
   const response = await fetch(
     momentAPI + `/user/user_id/${updatedUserPrefilledForm.UserID}/prefilled_form`,
