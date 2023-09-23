@@ -4,8 +4,8 @@ import { momentAPI } from "../constants/server";
 import { CustomError, NetworkError } from "../constants/error";
 import { formatError, responseHandler } from "../helpers/helpers";
 import { User } from "../constants";
-import { UserResponse } from "../constants/types";
-import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
+import { UserResponse, UserPrefilledForm, UserPrefilledFormResponse } from "../constants/types";
+import { prefilledFormResponseToPrefilledForm, userResponseToUser, userResponseToUsers } from "../helpers/converters";
 
 /******************************************************
  * getUser
@@ -471,4 +471,56 @@ export async function getUserFollowing(
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);
 
   return convertedUsers;
+}
+
+/******************************************************
+ * getUserPrefilledForm
+ *
+ * Gets a user's prefilled form by its id
+ */
+ export async function getUserPrefilledForm(
+  userID: string
+): Promise<UserPrefilledForm> {
+  const response = await fetch(momentAPI + `/user/user_id/${userID}/prefilled_form`, {
+    method: "GET",
+  }).catch(() => {
+    return undefined
+  })
+
+  const userPrefilledForm: UserPrefilledFormResponse = await responseHandler<UserPrefilledFormResponse>(response, "Could not get user", true);
+  const convertedUsersPrefilledForm: UserPrefilledForm = prefilledFormResponseToPrefilledForm(userPrefilledForm);
+
+  return convertedUsersPrefilledForm;
+}
+
+/******************************************************
+ * updateUserPrefilledForm
+ *
+ * Updates the current user
+ */
+ export async function updateUserPrefilledForm(
+  updatedUserPrefilledForm: UserPrefilledForm
+): Promise<void> {
+  //updatedUser.Picture is assumed to be base64
+  const formData: FormData = new FormData();
+  formData.append("display_name", updatedUserPrefilledForm.DisplayName);
+  formData.append("email", updatedUserPrefilledForm.Email);
+  formData.append("phone_number", updatedUserPrefilledForm.PhoneNumber);
+
+  const response = await fetch(
+    momentAPI + `/user/user_id/${updatedUserPrefilledForm.UserID}/prefilled_form`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    }
+  ).catch(() => {
+    return undefined
+  })
+
+  await responseHandler<void>(response, "Could not update user", false);
+
+  return Promise.resolve()
 }

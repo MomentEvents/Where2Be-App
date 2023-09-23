@@ -23,7 +23,7 @@ import React, {
 } from "react";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { COLORS, SCREENS, SIZES, icons } from "../../constants";
-import { Event, Token } from "../../constants/types";
+import { Event, Token, UserPrefilledForm } from "../../constants/types";
 import { User } from "../../constants/types";
 import { Interest } from "../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
@@ -41,6 +41,8 @@ import {
   getEventHostByEventId,
   removeUserJoinEvent,
   removeUserShoutoutEvent,
+  getUserPrefilledForm,
+  updateUserPrefilledForm,
 } from "../../services/UserService";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -87,12 +89,6 @@ import {
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import analytics from "@react-native-firebase/analytics";
 import { SETTINGS } from "../../constants/settings";
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
 import { McTextInput } from "../Styled/styled";
 import { CUSTOMFONT_REGULAR } from "../../constants/theme";
 import { CONSTRAINTS } from "../../constants/constraints";
@@ -170,25 +166,42 @@ const EventDetails = (props: EventDetailsProps) => {
 
 
   const [isFormVisible, setFormVisible] = useState(false);
-  
-  const onGoingPressed = () => {
-    // get user data from api
-    setFormVisible(true);
-  }
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [saveFormInfo, setSaveFormInfo] = useState(false);
+  const [saveFormInfo, setSaveFormInfo] = useState(true);
   const [isFormIncomplete, setIsFormIncomplete] = useState(false);
 
+  const [userPrefilledForm, setUserPrefilledForm] = useState<UserPrefilledForm>(undefined);
+  
+  const onGoingPressed = () => {
+    getUserPrefilledForm(props.currentToken.UserID)
+    // getUserPrefilledForm("L_IYdlxHznvc9tzQLoIFYE3KkMDaB-DFzrc7VkP3kdo")
+      .then((pulledUserPrefilledForm: UserPrefilledForm) => {
+        setUserPrefilledForm(pulledUserPrefilledForm)
+        setName(pulledUserPrefilledForm.DisplayName);
+        setEmail(pulledUserPrefilledForm.Email);
+        setPhoneNumber(pulledUserPrefilledForm.PhoneNumber || "+1");
+        setFormVisible(true);
+      })
+  }
+
   const joinEvent = () => {
-    // validate fields
     if (name == "" || email == "" || phoneNumber == ""){
       setIsFormIncomplete(true);
     } else {
+      if (saveFormInfo && (userPrefilledForm.DisplayName != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber)) {
+        const newUserPrefilledForm: UserPrefilledForm = {
+          UserID: props.currentToken.UserID,
+          // UserID: "L_IYdlxHznvc9tzQLoIFYE3KkMDaB-DFzrc7VkP3kdo",
+          DisplayName: name,
+          Email: email,
+          PhoneNumber: phoneNumber,
+        };
+        updateUserPrefilledForm(newUserPrefilledForm);
+      }
       setIsFormIncomplete(false);
-      // use api to save user data and update going
       addUserJoin(
         eventID,
         undefined,

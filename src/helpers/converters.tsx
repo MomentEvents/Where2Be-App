@@ -7,6 +7,8 @@ import {
   InterestResponse,
   School,
   SchoolResponse,
+  UserPrefilledFormResponse,
+  UserPrefilledForm,
 } from "../constants/types";
 import { formatError } from "./helpers";
 
@@ -227,4 +229,17 @@ export const schoolResponseToSchools = (
   });
 
   return schoolArray;
+};
+
+
+export const prefilledFormResponseToPrefilledForm = (
+  pulledUserPrefilledForm: UserPrefilledFormResponse
+): UserPrefilledForm => {
+  const formattedUserPrefilledForm: UserPrefilledForm = {
+    UserID: pulledUserPrefilledForm.user_id,
+    DisplayName: pulledUserPrefilledForm.display_name,
+    Email: pulledUserPrefilledForm.email,
+    PhoneNumber: pulledUserPrefilledForm.phone_number,
+  };
+  return formattedUserPrefilledForm;
 };
