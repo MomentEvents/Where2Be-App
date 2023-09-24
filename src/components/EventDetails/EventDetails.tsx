@@ -219,6 +219,27 @@ const EventDetails = (props: EventDetailsProps) => {
     setIsFormIncomplete(false);
   }, [name, email, phoneNumber, major, year]);
 
+  const formatPhoneNumber = (value: string) => {
+    if (value.length <= 14){
+      const numericValue = value.replace(/[^0-9]/g, '');
+
+      let formattedValue = '';
+
+      if (numericValue.length >= 1) {
+        formattedValue = `(${numericValue}`;
+      }
+
+      if (numericValue.length >= 4) {
+        formattedValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3)}`;
+      }
+
+      if (numericValue.length >= 7) {
+        formattedValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3, 6)}-${numericValue.slice(6)}`;
+      }
+
+      setPhoneNumber(formattedValue);
+    }
+  };
 
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
   // This updates the event counter and the boolean in case there is a discrepency.
@@ -516,11 +537,6 @@ const EventDetails = (props: EventDetailsProps) => {
                                       "Make sure to click the ticket button to confirm your signup!"
                                     );
                                   }
-                                  // addUserJoin(
-                                  //   eventID,
-                                  //   undefined,
-                                  //   props.currentToken
-                                  // );
                                   onGoingPressed();
                                 }
                           }
@@ -693,7 +709,6 @@ const EventDetails = (props: EventDetailsProps) => {
         }
         showModeratorFeatures={isHost}
       />
-    
     {isFormVisible && (
       <Modal
         animationType="slide"
@@ -755,7 +770,7 @@ const EventDetails = (props: EventDetailsProps) => {
               placeholderTextColor={COLORS.white}
               style={styles.textInputContainer}
               value={phoneNumber}
-              onChangeText={setPhoneNumber}
+              onChangeText={formatPhoneNumber}
               multiline={true}
               maxLength={CONSTRAINTS.Event.Title.Max}
             />

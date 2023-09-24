@@ -77,6 +77,12 @@ const HomeEventCard = ({
     // Navigate to event details page
   };
 
+  const onPressJoin = () => {
+    navigation.push(SCREENS.EventDetails, {
+      eventID: event.EventID,
+    });
+  };
+
   const DateTextComponent = (props: { date: Date }) => {
     if (!props.date) {
       return <View />;
@@ -253,7 +259,16 @@ const HomeEventCard = ({
                       alignItems: "center",
                     }}
                   >
-                    <TouchableOpacity
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginRight: 5,
+                        marginLeft: 7,
+                      }}
+                    >
+                    {/* <TouchableOpacity
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
@@ -264,9 +279,9 @@ const HomeEventCard = ({
                       onPress={
                         storedEvent?.UserJoin
                           ? () => removeUserJoin(event.EventID)
-                          : () => addUserJoin(event.EventID)
+                          : () => onPressJoin()
                       }
-                    >
+                    > */}
                       <Ionicons
                         name="checkmark-sharp"
                         size={22}
@@ -289,7 +304,7 @@ const HomeEventCard = ({
                       >
                         {truncateNumber(storedEvent?.NumJoins)}
                       </McText>
-                    </TouchableOpacity>
+                    </View>
                     <TouchableOpacity
                       style={{ flexDirection: "row", justifyContent: "center" }}
                       onPress={
