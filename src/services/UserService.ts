@@ -138,8 +138,12 @@ export async function getEventHostByEventId(
 export async function addUserJoinEvent(
   userAccessToken: string,
   userID: string,
-
-  eventID: string
+  eventID: string,
+  name: string, 
+  email: string, 
+  phoneNumber: string, 
+  major: string, 
+  year: string
 ): Promise<void> {
   const response = await fetch(
     momentAPI + `/user/user_id/${userID}/event_id/${eventID}/join`,
@@ -151,6 +155,11 @@ export async function addUserJoinEvent(
       body: JSON.stringify({
         user_access_token: userAccessToken,
         did_join: true,
+        name: name,
+        email: email,
+        phone_number: phoneNumber,
+        major: major,
+        year: year,
       }),
     }
   ).catch(() => {

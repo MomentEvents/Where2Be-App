@@ -173,7 +173,8 @@ const EventDetails = (props: EventDetailsProps) => {
   const [major, setMajor] = useState("");
   const [year, setYear] = useState("");
   const [saveFormInfo, setSaveFormInfo] = useState(true);
-  const [isFormIncomplete, setIsFormIncomplete] = useState(false);
+  const [isFormInvalid, setIsFormInvalid] = useState(false);
+  const [formErrorMessage, setFormErrorMessage] = useState("");
 
   const [userPrefilledForm, setUserPrefilledForm] = useState<UserPrefilledForm>(undefined);
   
@@ -190,9 +191,15 @@ const EventDetails = (props: EventDetailsProps) => {
       })
   }
 
+  const emailPattern = /^[^@]+@[^@]+$/;
+
   const joinEvent = () => {
     if (name.trim() == "" || email.trim() == "" || phoneNumber.trim() == "" || major.trim() == "" || year.trim() == ""){
-      setIsFormIncomplete(true);
+      setIsFormInvalid(true);
+      setFormErrorMessage("Please enter all fields");
+    } else if (!emailPattern.test(email)) {
+      setIsFormInvalid(true);
+      setFormErrorMessage("Invalid email");
     } else {
       if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber || userPrefilledForm.Major != major || userPrefilledForm.Year != year)) {
         const newUserPrefilledForm: UserPrefilledForm = {
@@ -205,9 +212,13 @@ const EventDetails = (props: EventDetailsProps) => {
         };
         updateUserPrefilledForm(newUserPrefilledForm);
       }
-      setIsFormIncomplete(false);
       addUserJoin(
         eventID,
+        name,
+        email,
+        phoneNumber,
+        major,
+        year,
         undefined,
         props.currentToken
       );
@@ -216,7 +227,7 @@ const EventDetails = (props: EventDetailsProps) => {
   }
 
   useEffect(() => {
-    setIsFormIncomplete(false);
+    setIsFormInvalid(false);
   }, [name, email, phoneNumber, major, year]);
 
   const formatPhoneNumber = (value: string) => {
@@ -269,7 +280,7 @@ const EventDetails = (props: EventDetailsProps) => {
             text: "Yes",
             onPress: () => {
               console.log("Yes Pressed");
-              addUserJoin(eventID, undefined, props.currentToken);
+              addUserJoin(eventID, "", "", "", "", "", undefined, props.currentToken);
             },
           },
         ],
@@ -843,9 +854,9 @@ const EventDetails = (props: EventDetailsProps) => {
               </McText>
             </TouchableOpacity>
             {
-              isFormIncomplete && 
+              isFormInvalid && 
               <McText h3 style={{color: 'red', marginTop: 10,}}>
-                {"Please enter all fields"}
+                {formErrorMessage}
               </McText>
             }
           </View>
