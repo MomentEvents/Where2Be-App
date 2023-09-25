@@ -192,6 +192,7 @@ const EventDetails = (props: EventDetailsProps) => {
   }
 
   const emailPattern = /^[^@]+@[^@]+$/;
+  const phoneNumberPattern = /\(\d{3}\) \d{3}-\d{4}/;
 
   const joinEvent = () => {
     if (name.trim() == "" || email.trim() == "" || phoneNumber.trim() == "" || major.trim() == "" || year.trim() == ""){
@@ -200,6 +201,9 @@ const EventDetails = (props: EventDetailsProps) => {
     } else if (!emailPattern.test(email)) {
       setIsFormInvalid(true);
       setFormErrorMessage("Invalid email");
+    } else if (!phoneNumberPattern.test(phoneNumber)) {
+      setIsFormInvalid(true);
+      setFormErrorMessage("Invalid phone number");
     } else {
       if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber || userPrefilledForm.Major != major || userPrefilledForm.Year != year)) {
         const newUserPrefilledForm: UserPrefilledForm = {
