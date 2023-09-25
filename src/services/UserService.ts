@@ -488,10 +488,18 @@ export async function getUserFollowing(
  * Gets a user's prefilled form by its id
  */
  export async function getUserPrefilledForm(
+  userAccessToken: string,
   userID: string
 ): Promise<UserPrefilledForm> {
-  const response = await fetch(momentAPI + `/user/user_id/${userID}/prefilled_form`, {
-    method: "GET",
+  const response = await fetch(momentAPI + `/user/user_id/${userID}/prefilled_form`, 
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    }),
   }).catch(() => {
     return undefined
   })
@@ -508,10 +516,12 @@ export async function getUserFollowing(
  * Updates the current user
  */
  export async function updateUserPrefilledForm(
+  userAccessToken: string,
   updatedUserPrefilledForm: UserPrefilledForm
 ): Promise<void> {
   //updatedUser.Picture is assumed to be base64
   const formData: FormData = new FormData();
+  formData.append("user_access_token", userAccessToken)
   formData.append("name", updatedUserPrefilledForm.Name);
   formData.append("email", updatedUserPrefilledForm.Email);
   formData.append("phone_number", updatedUserPrefilledForm.PhoneNumber);

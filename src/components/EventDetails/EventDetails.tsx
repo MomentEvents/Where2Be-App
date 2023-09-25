@@ -179,7 +179,7 @@ const EventDetails = (props: EventDetailsProps) => {
   const [userPrefilledForm, setUserPrefilledForm] = useState<UserPrefilledForm>(undefined);
   
   const onGoingPressed = () => {
-    getUserPrefilledForm(props.currentToken.UserID)
+    getUserPrefilledForm(props.currentToken.UserAccessToken, props.currentToken.UserID)
       .then((pulledUserPrefilledForm: UserPrefilledForm) => {
         setUserPrefilledForm(pulledUserPrefilledForm)
         setName(pulledUserPrefilledForm.Name);
