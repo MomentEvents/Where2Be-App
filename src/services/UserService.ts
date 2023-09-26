@@ -4,8 +4,8 @@ import { momentAPI } from "../constants/server";
 import { CustomError, NetworkError } from "../constants/error";
 import { formatError, responseHandler } from "../helpers/helpers";
 import { User } from "../constants";
-import { UserResponse } from "../constants/types";
-import { userResponseToUser, userResponseToUsers } from "../helpers/converters";
+import { UserResponse, UserPrefilledForm, UserPrefilledFormResponse } from "../constants/types";
+import { prefilledFormResponseToPrefilledForm, userResponseToUser, userResponseToUsers } from "../helpers/converters";
 
 /******************************************************
  * getUser
@@ -138,8 +138,12 @@ export async function getEventHostByEventId(
 export async function addUserJoinEvent(
   userAccessToken: string,
   userID: string,
-
-  eventID: string
+  eventID: string,
+  name: string, 
+  email: string, 
+  phoneNumber: string, 
+  major: string, 
+  year: string
 ): Promise<void> {
   const response = await fetch(
     momentAPI + `/user/user_id/${userID}/event_id/${eventID}/join`,
@@ -151,6 +155,11 @@ export async function addUserJoinEvent(
       body: JSON.stringify({
         user_access_token: userAccessToken,
         did_join: true,
+        name: name,
+        email: email,
+        phone_number: phoneNumber,
+        major: major,
+        year: year,
       }),
     }
   ).catch(() => {
@@ -471,4 +480,68 @@ export async function getUserFollowing(
   const convertedUsers: User[] = userResponseToUsers(pulledUsers);
 
   return convertedUsers;
+}
+
+/******************************************************
+ * getUserPrefilledForm
+ *
+ * Gets a user's prefilled form by its id
+ */
+ export async function getUserPrefilledForm(
+  userAccessToken: string,
+  userID: string
+): Promise<UserPrefilledForm> {
+  const response = await fetch(momentAPI + `/user/user_id/${userID}/prefilled_form`, 
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_access_token: userAccessToken,
+    }),
+  }).catch(() => {
+    return undefined
+  })
+
+  const userPrefilledForm: UserPrefilledFormResponse = await responseHandler<UserPrefilledFormResponse>(response, "Could not get user", true);
+  const convertedUsersPrefilledForm: UserPrefilledForm = prefilledFormResponseToPrefilledForm(userPrefilledForm);
+
+  return convertedUsersPrefilledForm;
+}
+
+/******************************************************
+ * updateUserPrefilledForm
+ *
+ * Updates the current user
+ */
+ export async function updateUserPrefilledForm(
+  userAccessToken: string,
+  updatedUserPrefilledForm: UserPrefilledForm
+): Promise<void> {
+  //updatedUser.Picture is assumed to be base64
+  const formData: FormData = new FormData();
+  formData.append("user_access_token", userAccessToken)
+  formData.append("name", updatedUserPrefilledForm.Name);
+  formData.append("email", updatedUserPrefilledForm.Email);
+  formData.append("phone_number", updatedUserPrefilledForm.PhoneNumber);
+  formData.append("major", updatedUserPrefilledForm.Major);
+  formData.append("year", updatedUserPrefilledForm.Year);
+
+  const response = await fetch(
+    momentAPI + `/user/user_id/${updatedUserPrefilledForm.UserID}/prefilled_form`,
+    {
+      method: "UPDATE",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    }
+  ).catch(() => {
+    return undefined
+  })
+
+  await responseHandler<void>(response, "Could not update user", false);
+
+  return Promise.resolve()
 }

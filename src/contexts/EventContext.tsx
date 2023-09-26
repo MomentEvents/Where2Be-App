@@ -27,7 +27,7 @@ import { AlertContext } from "./AlertContext";
 import { updateUserMap } from "../redux/users/userSlice";
 
 type EventContextType = {
-  clientAddUserJoin: (eventID: string, shouldDisplayErrors?: boolean, currentToken?: Token) => void;
+  clientAddUserJoin: (eventID: string, name: string, email: string, phoneNumber: string, major: string, year: string, shouldDisplayErrors?: boolean, currentToken?: Token) => void;
   clientAddUserShoutout: (eventID: string, currentToken?: Token) => void;
   clientRemoveUserJoin: (eventID: string, currentToken?: Token) => void;
   clientRemoveUserShoutout: (eventID: string, currentToken?: Token) => void;
@@ -124,7 +124,7 @@ export const EventProvider = ({ children }) => {
     return false
   };
 
-  const clientAddUserJoin = (eventID: string, shouldDisplayErrors?: boolean, currentToken?: Token) => {
+  const clientAddUserJoin = (eventID: string, name: string, email: string, phoneNumber: string, major: string, year: string, shouldDisplayErrors?: boolean, currentToken?: Token) => {
     if(!currentToken && !userToken){
       return
     }
@@ -137,7 +137,7 @@ export const EventProvider = ({ children }) => {
         doJoin: true,
       })
     );
-    addUserJoinEvent(currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken, currentToken ? currentToken.UserID : userToken.UserID, eventID)
+    addUserJoinEvent(currentToken ? currentToken.UserAccessToken : userToken.UserAccessToken, currentToken ? currentToken.UserID : userToken.UserID, eventID, name, email, phoneNumber, major, year)
       .then(() => {
         didJoinedEventsChangeRef.current = true;
       })

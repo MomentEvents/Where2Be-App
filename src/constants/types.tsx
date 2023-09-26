@@ -105,3 +105,21 @@ export type FirebaseEventMessage = {
   message: string,
   timestamp: string,
 }
+
+export type UserPrefilledForm = {
+  UserID: string;
+  Name?: string;
+  Email?: string;
+  PhoneNumber?: string;
+  Major?: string;
+  Year?: string;
+}
+
+export type UserPrefilledFormResponse = {
+  user_id: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  major: string;
+  year: string;
+}

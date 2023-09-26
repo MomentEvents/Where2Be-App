@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
   Linking,
   AppState,
+  Text,
+  Modal
 } from "react-native";
 import React, {
   useCallback,
@@ -21,7 +23,7 @@ import React, {
 } from "react";
 import { ScreenContext } from "../../contexts/ScreenContext";
 import { COLORS, SCREENS, SIZES, icons } from "../../constants";
-import { Event, Token } from "../../constants/types";
+import { Event, Token, UserPrefilledForm } from "../../constants/types";
 import { User } from "../../constants/types";
 import { Interest } from "../../constants/types";
 import { LinearGradient } from "expo-linear-gradient";
@@ -39,6 +41,8 @@ import {
   getEventHostByEventId,
   removeUserJoinEvent,
   removeUserShoutoutEvent,
+  getUserPrefilledForm,
+  updateUserPrefilledForm,
 } from "../../services/UserService";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -85,6 +89,9 @@ import {
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import analytics from "@react-native-firebase/analytics";
 import { SETTINGS } from "../../constants/settings";
+import { McTextInput } from "../Styled/styled";
+import { CUSTOMFONT_REGULAR } from "../../constants/theme";
+import { CONSTRAINTS } from "../../constants/constraints";
 
 type EventDetailsProps = {
   eventID: string;
@@ -157,6 +164,98 @@ const EventDetails = (props: EventDetailsProps) => {
 
   const insets = useSafeAreaInsets();
 
+
+  const [isFormVisible, setFormVisible] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [major, setMajor] = useState("");
+  const [year, setYear] = useState("");
+  const [saveFormInfo, setSaveFormInfo] = useState(true);
+  const [isFormInvalid, setIsFormInvalid] = useState(false);
+  const [formErrorMessage, setFormErrorMessage] = useState("");
+
+  const [userPrefilledForm, setUserPrefilledForm] = useState<UserPrefilledForm>(undefined);
+  
+  const onGoingPressed = () => {
+    getUserPrefilledForm(props.currentToken.UserAccessToken, props.currentToken.UserID)
+      .then((pulledUserPrefilledForm: UserPrefilledForm) => {
+        setUserPrefilledForm(pulledUserPrefilledForm)
+        setName(pulledUserPrefilledForm.Name);
+        setEmail(pulledUserPrefilledForm.Email);
+        setPhoneNumber(pulledUserPrefilledForm.PhoneNumber);
+        setMajor(pulledUserPrefilledForm.Major);
+        setYear(pulledUserPrefilledForm.Year);
+        setFormVisible(true);
+      })
+  }
+
+  const emailPattern = /^[^@]+@[^@]+$/;
+  const phoneNumberPattern = /\(\d{3}\) \d{3}-\d{4}/;
+
+  const joinEvent = () => {
+    if (name.trim() == "" || email.trim() == "" || phoneNumber.trim() == "" || major.trim() == "" || year.trim() == ""){
+      setIsFormInvalid(true);
+      setFormErrorMessage("Please enter all fields");
+    } else if (!emailPattern.test(email)) {
+      setIsFormInvalid(true);
+      setFormErrorMessage("Invalid email");
+    } else if (!phoneNumberPattern.test(phoneNumber)) {
+      setIsFormInvalid(true);
+      setFormErrorMessage("Invalid phone number");
+    } else {
+      if (saveFormInfo && (userPrefilledForm.Name != name || userPrefilledForm.Email != email || userPrefilledForm.PhoneNumber != phoneNumber || userPrefilledForm.Major != major || userPrefilledForm.Year != year)) {
+        const newUserPrefilledForm: UserPrefilledForm = {
+          UserID: props.currentToken.UserID,
+          Name: name,
+          Email: email,
+          PhoneNumber: phoneNumber,
+          Major: major,
+          Year: year,
+        };
+        updateUserPrefilledForm(newUserPrefilledForm);
+      }
+      addUserJoin(
+        eventID,
+        name,
+        email,
+        phoneNumber,
+        major,
+        year,
+        undefined,
+        props.currentToken
+      );
+      setFormVisible(false);
+    }
+  }
+
+  useEffect(() => {
+    setIsFormInvalid(false);
+  }, [name, email, phoneNumber, major, year]);
+
+  const formatPhoneNumber = (value: string) => {
+    if (value.length <= 14){
+      const numericValue = value.replace(/[^0-9]/g, '');
+
+      let formattedValue = '';
+
+      if (numericValue.length >= 1) {
+        formattedValue = `(${numericValue}`;
+      }
+
+      if (numericValue.length >= 4) {
+        formattedValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3)}`;
+      }
+
+      if (numericValue.length >= 7) {
+        formattedValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3, 6)}-${numericValue.slice(6)}`;
+      }
+
+      setPhoneNumber(formattedValue);
+    }
+  };
+
   // These are local variables to determine if the user has tapped join or shouout before the event has been fetched.
   // This updates the event counter and the boolean in case there is a discrepency.
   // Please see pullData() logic specifically in the pullEvent logic
@@ -185,7 +284,7 @@ const EventDetails = (props: EventDetailsProps) => {
             text: "Yes",
             onPress: () => {
               console.log("Yes Pressed");
-              addUserJoin(eventID, undefined, props.currentToken);
+              addUserJoin(eventID, "", "", "", "", "", undefined, props.currentToken);
             },
           },
         ],
@@ -453,11 +552,7 @@ const EventDetails = (props: EventDetailsProps) => {
                                       "Make sure to click the ticket button to confirm your signup!"
                                     );
                                   }
-                                  addUserJoin(
-                                    eventID,
-                                    undefined,
-                                    props.currentToken
-                                  );
+                                  onGoingPressed();
                                 }
                           }
                         >
@@ -629,6 +724,149 @@ const EventDetails = (props: EventDetailsProps) => {
         }
         showModeratorFeatures={isHost}
       />
+    {isFormVisible && (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isFormVisible}
+        onRequestClose={() => {
+          setFormVisible(!isFormVisible);
+        }}
+      >
+        <TouchableOpacity
+          style={styles.centeredView}
+          activeOpacity={1}
+        >
+          <View style={styles.formContainer}>
+            <TouchableOpacity
+              style={{position: 'absolute', right: 10, top: 10 }}
+              onPress={() => setFormVisible(false)}
+            >
+              <Ionicons name="close" size={26} color="white" />
+            </TouchableOpacity>
+            <ScrollView
+              style={{width: '100%', paddingRight: 10, marginTop: 20, marginBottom: 15}}
+              showsVerticalScrollIndicator={true}
+              showsHorizontalScrollIndicator={true}
+              indicatorStyle={'white'}
+            >
+            <View style={styles.titleContainer}>
+              <Ionicons name="person-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Name</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter name"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={name}
+              onChangeText={setName}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <MaterialCommunityIcons name="email-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Email</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter email"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={email}
+              onChangeText={setEmail}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <Feather name="smartphone" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Phone number</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter phone number"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={phoneNumber}
+              onChangeText={formatPhoneNumber}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <Ionicons name="book-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Major</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter major"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={major}
+              onChangeText={setMajor}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            <View style={styles.titleContainer}>
+              <Ionicons name="school-outline" size={24} color="white" style={styles.iconsContainer}/>
+              <McText h3>Year</McText>
+            </View>
+            <McTextInput
+              placeholder={"Enter year"}
+              placeholderTextColor={COLORS.white}
+              style={styles.textInputContainer}
+              value={year}
+              onChangeText={setYear}
+              multiline={true}
+              maxLength={CONSTRAINTS.Event.Title.Max}
+            />
+            </ScrollView>
+
+            <View style={styles.checkboxContainer}>
+              <TouchableOpacity
+                onPress={() =>
+                  setSaveFormInfo((save) => {
+                    return !save;
+                  })
+                }
+                style={{
+                  borderRadius: 5,
+                  marginLeft: 3,
+                  backgroundColor: saveFormInfo
+                    ? COLORS.purple
+                    : COLORS.gray2,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name={"checkmark-sharp"}
+                  size={22}
+                  color={saveFormInfo ? COLORS.white : COLORS.gray2}
+                />
+              </TouchableOpacity>
+              <McText h3 style={{ marginLeft: 10 }}>
+                {"Save for future events"}
+              </McText>
+            </View>
+            <TouchableOpacity
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                borderRadius: 20,
+                backgroundColor: 'white'
+              }}
+              onPress={joinEvent}
+            >
+              <McText h3 style={{color: "rgba(40,40,40,.95)"}}>
+                {"Join"}
+              </McText>
+            </TouchableOpacity>
+            {
+              isFormInvalid && 
+              <McText h3 style={{color: 'red', marginTop: 10,}}>
+                {formErrorMessage}
+              </McText>
+            }
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    )}
     </View>
   );
 };
@@ -686,6 +924,51 @@ const styles = StyleSheet.create({
     height: 35,
     alignItems: "center",
     justifyContent: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,.8)", // This will make background a bit dark for better visibility of popup
+  },
+  formContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: '80%',
+    maxHeight: '60%',
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    backgroundColor: "rgba(40,40,40,.95)",
+    elevation: 5,
+  },
+  titleContainer: {
+    marginVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    width: '100%',
+  },
+  textInputContainer: {
+    borderColor: COLORS.white,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    fontFamily: CUSTOMFONT_REGULAR,
+    fontSize: 16,
+    color: COLORS.white,
+    paddingBottom: 10,
+    paddingTop: 10,
+    width: '100%',
+  },
+  iconsContainer: {
+    marginRight: 10,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    width: '100%'
   },
 });
 
