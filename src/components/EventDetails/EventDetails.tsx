@@ -214,7 +214,7 @@ const EventDetails = (props: EventDetailsProps) => {
           Major: major,
           Year: year,
         };
-        updateUserPrefilledForm(newUserPrefilledForm);
+        updateUserPrefilledForm(props.currentToken.UserAccessToken, newUserPrefilledForm);
       }
       addUserJoin(
         eventID,
