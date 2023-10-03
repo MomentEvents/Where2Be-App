@@ -9,10 +9,12 @@ import {
   SchoolResponse,
   UserPrefilledFormResponse,
   UserPrefilledForm,
+  SearchResponse,
+  SearchResult,
 } from "../constants/types";
 import { formatError } from "./helpers";
 
-export const eventResponseToEvent = (pulledEvent: EventResponse): Event => {
+export const eventResponseToEvent = (pulledEvent: EventResponse | SearchResponse): Event => {
 
   // check for null or undefined values in pulledEvent
   const keys = Object.keys(pulledEvent);
@@ -92,7 +94,7 @@ export const eventResponseToEvents = (
   return eventArray;
 };
 
-export const userResponseToUser = (pulledUser: UserResponse): User => {
+export const userResponseToUser = (pulledUser: UserResponse | SearchResponse): User => {
 
   // check for null or undefined values in pulledUser
   const keys = Object.keys(pulledUser);
@@ -244,4 +246,42 @@ export const prefilledFormResponseToPrefilledForm = (
     Year: pulledUserPrefilledForm.year, 
   };
   return formattedUserPrefilledForm;
+};
+
+export const eventToSearchResult = (
+  event: Event,
+): SearchResult => {
+  const searchResult: SearchResult = {
+    Type: 'event',
+    Event: event,
+  }
+
+  return searchResult;
+}
+
+export const userToSearchResult = (
+  user: User,
+): SearchResult => {
+  const searchResult: SearchResult = {
+    Type: 'user',
+    User: user,
+  }
+
+  return searchResult;
+}
+
+export const searchResponseToSearchResults = (
+  pulledSearchResults: SearchResponse[]
+): SearchResult[] => {
+  const resultArray: SearchResult[] = [];
+
+  pulledSearchResults.forEach((result: SearchResponse) => {
+    if (result['type'] == 'event'){
+      resultArray.push(eventToSearchResult(eventResponseToEvent(result)));
+    } else if (result['type'] == 'user'){
+      resultArray.push(userToSearchResult(userResponseToUser(result)));
+    }
+  });
+
+  return resultArray;
 };

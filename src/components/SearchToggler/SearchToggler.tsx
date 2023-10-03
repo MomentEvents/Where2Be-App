@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { User, Event } from "../../constants/types";
+import { User, Event, SearchResult } from "../../constants/types";
 import { SIZES, COLORS, EVENT_TOGGLER } from "../../constants";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -35,15 +35,14 @@ import RetryButton from "../RetryButton";
 import { McTextInput } from "../Styled/styled";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { showBugReportPopup } from "../../helpers/helpers";
+import { searchSchoolEventsAndUsers } from "../../services/SchoolService";
 
 const SearchToggler = () => {
   const { userToken, currentSchool } = useContext(UserContext);
 
-  const [pulledUsers, setPulledUsers] = useState<User[]>(null);
-  const [pulledEvents, setPulledEvents] = useState<Event[]>(null);
+  const [pulledResults, setPulledResults] = useState<SearchResult[]>(null);
 
   const [showRetry, setShowRetry] = useState(false);
-  const [isEventsToggle, setIsEventsToggle] = useState<boolean>(true);
 
   const searchTextRef = useRef<string>("");
   const newTextRef = useRef<string>("");
@@ -59,8 +58,7 @@ const SearchToggler = () => {
     }
 
     newText = newText.trim();
-    setPulledEvents(newText === "" ? [] : null);
-    setPulledUsers(newText === "" ? [] : null);
+    setPulledResults(newText === "" ? [] : null);
     searchTextRef.current = newText;
     clearTimeout(timeoutId.current);
     if (newText === "") {
@@ -77,43 +75,20 @@ const SearchToggler = () => {
   const pullData = async () => {
     newTextRef.current = searchTextRef.current;
     const newText = newTextRef.current;
-    // getting events
-    searchSchoolEvents(
-      userToken.UserAccessToken,
-      currentSchool.SchoolID,
-      newText
-    )
-      .then((events: Event[]) => {
-        console.log(
-          "newText: " + newText + " searchText: " + searchTextRef.current
-        );
-        if (newText !== searchTextRef.current) {
-          return;
-        }
-        setPulledEvents(events);
-      })
-      .catch((error: CustomError) => {
-        if (error.showBugReportDialog) {
-          showBugReportPopup(error);
-        }
-        setShowRetry(true);
-        console.log(error);
-      });
 
-    // getting users
-    searchSchoolUsers(
+    searchSchoolEventsAndUsers(
       userToken.UserAccessToken,
       currentSchool.SchoolID,
       newText
     )
-      .then((users: User[]) => {
+      .then((results: SearchResult[]) => {
         console.log(
           "newText: " + newText + " searchText: " + searchTextRef.current
         );
         if (newText !== searchTextRef.current) {
           return;
         }
-        setPulledUsers(users);
+        setPulledResults(results);
       })
       .catch((error: CustomError) => {
         if (error.showBugReportDialog) {
@@ -123,6 +98,14 @@ const SearchToggler = () => {
         console.log(error);
       });
   };
+
+  const renderResult = (result: SearchResult) => {
+    if (result['Type'] == 'event'){
+      return renderEventResult(result['Event']);
+    } else if (result['Type'] == 'user'){
+      return renderUserResult(result['User'])
+    }
+  }
 
   const renderEventResult = (event: Event) => {
     return (
@@ -187,53 +170,6 @@ const SearchToggler = () => {
           />
         </View>
       </View>
-      <View
-        style={{
-          backgroundColor: COLORS.trueBlack,
-          ...styles.buttonToggleContainer,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: 1,
-            borderColor: "transparent",
-            borderBottomColor: isEventsToggle
-              ? COLORS.purple
-              : COLORS.trueBlack,
-            backgroundColor: COLORS.trueBlack,
-            ...styles.toggleButton,
-          }}
-          onPress={() => {
-            setIsEventsToggle(true);
-          }}
-        >
-          <McText h3 color={isEventsToggle ? COLORS.purple : COLORS.white}>
-            Events
-          </McText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: 1,
-            borderColor: "transparent",
-            borderBottomColor: !isEventsToggle
-              ? COLORS.purple
-              : COLORS.trueBlack,
-            backgroundColor: COLORS.trueBlack,
-            ...styles.toggleButton,
-          }}
-          onPress={() => {
-            setIsEventsToggle(false);
-          }}
-        >
-          <McText h3 color={!isEventsToggle ? COLORS.purple : COLORS.white}>
-            Users
-          </McText>
-        </TouchableOpacity>
-      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps={"always"}
@@ -252,9 +188,9 @@ const SearchToggler = () => {
         )}
         {!showRetry && (
           <View style={{ flex: 1, marginTop: 10 }}>
-            {isEventsToggle ? (
-              pulledEvents ? (
-                pulledEvents.map((event: Event) => renderEventResult(event))
+            {
+              pulledResults ? (
+                pulledResults.map((result: SearchResult) => renderResult(result))
               ) : (
                 <ActivityIndicator
                   style={{ marginTop: 10 }}
@@ -262,15 +198,7 @@ const SearchToggler = () => {
                   size="small"
                 />
               )
-            ) : pulledUsers ? (
-              pulledUsers.map((user: User) => renderUserResult(user))
-            ) : (
-              <ActivityIndicator
-                style={{ marginTop: 10 }}
-                color={COLORS.white}
-                size="small"
-              />
-            )}
+            }
             <View style={{ height: 20 }} />
           </View>
         )}
