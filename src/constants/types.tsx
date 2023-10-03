@@ -123,3 +123,35 @@ export type UserPrefilledFormResponse = {
   major: string;
   year: string;
 }
+
+export type SearchResponse = {
+  user_id?: string;
+  display_name?: string;
+  username?: string;
+  picture?: string;
+  verified_organization?: boolean;
+  user_follow?: boolean;
+  num_followers?: number;
+  num_following?: number;
+  num_events?: number;
+  event_id?: string;
+  title?: string;
+  description?: string;
+  location?: string;
+  start_date_time?: string;
+  end_date_time?: string;
+  visibility?: string;
+  num_joins?: number;
+  num_shoutouts?: number;
+  user_join?: boolean;
+  user_shoutout?: boolean;
+  host_user_id?: string;
+  user_follow_host?: boolean;
+  signup_link?: string;
+};
+
+export type SearchResult = {
+  Type: string;
+  User?: User;
+  Event?: Event;
+}
