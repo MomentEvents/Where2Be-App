@@ -95,7 +95,8 @@
     "redux-thunk": "^2.4.2",
     "rn-progress-loader": "^1.0.8",
     "sentry-expo": "~7.0.0",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "expo-av": "~13.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",

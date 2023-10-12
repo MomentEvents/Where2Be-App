@@ -47,6 +47,8 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import MomentsList from "../../../components/Moments/MomentsList";
+import Moments from "../../../components/Moments/Moments";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -386,6 +388,8 @@ const HomeScreen = () => {
             }}
           />
         )}
+
+        <MomentsList />
 
         <FlatList
           ref={flatListRef}

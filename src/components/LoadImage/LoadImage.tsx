@@ -11,6 +11,7 @@ import { COLORS } from "../../constants";
 type LoadImageProps = {
     imageStyle: StyleProp<ImageStyle>;
     imageSource: string;
+    onLoadEnd?: ()=>void;
 };
 
 const LoadImage = (props: LoadImageProps) => {
@@ -46,12 +47,17 @@ const LoadImage = (props: LoadImageProps) => {
         setImageLoaded(true);
     };
 
+    const handleOnLoadEnd = () => {
+        props.onLoadEnd;
+    }
+
     return (
         <>
             <Image
                 style={props.imageStyle}
                 source={{uri: props.imageSource}}
                 onLoad={handleImageLoad}
+                onLoadEnd={handleOnLoadEnd}
             />
             {!isImageLoaded && (
                 <Animated.View style={[props.imageStyle, {position: 'absolute', backgroundColor: COLORS.gray, opacity}]} />
