@@ -9,6 +9,12 @@ import {
   SchoolResponse,
   UserPrefilledFormResponse,
   UserPrefilledForm,
+  MomentResponse, 
+  EventMomentResponse,
+  MomentHomeResponse,
+  Moment,
+  EventMoment,
+  MomentHome,
 } from "../constants/types";
 import { formatError } from "./helpers";
 
@@ -244,4 +250,36 @@ export const prefilledFormResponseToPrefilledForm = (
     Year: pulledUserPrefilledForm.year, 
   };
   return formattedUserPrefilledForm;
+};
+
+
+export const momentHomeResponseToMomentHome = (
+  pulledMomentHome: MomentHomeResponse
+): MomentHome => {
+  let formattedMomentHome: MomentHome = {
+    EventIDs: pulledMomentHome.event_ids,
+    Events: {}
+  }
+
+  for (const event_id of pulledMomentHome.event_ids){
+    const event = pulledMomentHome.events[event_id]
+    let moments: Moment[] = []
+    for (const moment of event.moments){
+      const formattedMoment: Moment = {
+        MomentID: moment.moment_id,
+        MomentPicture: moment.moment_picture,
+        Type: moment.type,
+        PostedDateTime: moment.posted_date_time,
+        Finish: 0
+      };
+      moments.push(formattedMoment);
+    }
+    const formattedEventMoments: EventMoment = {
+      HostDisplayName: event.host_display_name,
+      HostPicture: event.host_picture,
+      Moments: moments
+    }
+    formattedMomentHome.Events[event_id] = formattedEventMoments;
+  }
+  return formattedMomentHome;
 };

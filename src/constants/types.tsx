@@ -123,3 +123,50 @@ export type UserPrefilledFormResponse = {
   major: string;
   year: string;
 }
+
+// export type MomentResponse = {
+//   event_id: string;
+//   host_display_name: string;
+//   host_picture: string;
+//   moment_id: string;
+//   moment_picture: string;
+//   type: string;
+//   posted_date_time: string;
+// }
+
+export type Moment = {
+  MomentID: string;
+  MomentPicture: string;
+  Type: string;
+  PostedDateTime: string;
+  Finish: number;
+}
+
+export type EventMoment = {
+  HostDisplayName: string;
+  HostPicture: string;
+  Moments: Moment[];
+}
+
+export type MomentHome = {
+  EventIDs: string[];
+  Events: Record<string, EventMoment>;
+}
+
+export type MomentResponse = {
+  moment_id: string;
+  moment_picture: string;
+  type: string;
+  posted_date_time: string;
+};
+
+export type EventMomentResponse = {
+  host_display_name: string;
+  host_picture: string;
+  moments: MomentResponse[];
+};
+
+export type MomentHomeResponse = {
+  event_ids: string[];
+  events: Record<string, EventMomentResponse>;
+}
