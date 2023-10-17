@@ -11,7 +11,8 @@ import { COLORS } from "../../constants";
 type LoadImageProps = {
     imageStyle: StyleProp<ImageStyle>;
     imageSource: string;
-    onLoadEnd?: ()=>void;
+    imageKey?: string;
+    onLoadEndFunc?: ()=>void;
 };
 
 const LoadImage = (props: LoadImageProps) => {
@@ -48,12 +49,15 @@ const LoadImage = (props: LoadImageProps) => {
     };
 
     const handleOnLoadEnd = () => {
-        props.onLoadEnd;
+        if (props.onLoadEndFunc) {
+            props.onLoadEndFunc();
+        }
     }
 
     return (
         <>
             <Image
+                key={props.imageKey}
                 style={props.imageStyle}
                 source={{uri: props.imageSource}}
                 onLoad={handleImageLoad}

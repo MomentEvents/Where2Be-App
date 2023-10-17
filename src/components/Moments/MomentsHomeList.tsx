@@ -15,20 +15,21 @@ import {
 } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import Constants from 'expo-constants';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 const { width, height } = Dimensions.get('window');
 const screenRatio = height / width;
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { McText } from "../Styled";
-import { COLORS } from '../../constants';
+import { COLORS, icons } from '../../constants';
 import LoadImage from '../LoadImage/LoadImage';
 import { getMomentsHome } from "../../services/MomentService";
 import { UserContext } from '../../contexts/UserContext';
 import { EventMoment, Moment, MomentHome } from "../../constants/types";
-import moment from 'moment';
+import GradientButton from '../Styled/GradientButton';
 
 const MomentsHomeList = () => {
+    const [showModal, setShowModal] = useState<boolean>(false);
     const [eventIDs, setEventIDs] = useState<string[]>(null);
     const [currentEventID, setCurrentEventID] = useState<string>(null);
     const [currentEventIndex, setCurrentEventIndex] = useState<number>(null);
@@ -44,8 +45,8 @@ const MomentsHomeList = () => {
     // progress is the animation value of the bars content playing the current state
     const progress = useRef(new Animated.Value(0)).current;
 
-    // start() is for starting the animation bars at the top
-    function start() {
+    // start() is for starting the animatiron bars at the top
+    const start = () => {
         // checking if the content type is video or not
         if (events[currentEventID].Moments[currentMomentIndex].Type == 'video') {
             // type video
@@ -74,25 +75,14 @@ const MomentsHomeList = () => {
         }
     }
 
-    // handle playing the animation
-    function play() {
-        start();
-    }
-
     // next() is for changing the content of the current content to +1
-    function next() {
+    const next = () => {
         // check if the next content is not empty
         if (currentMomentIndex !== events[currentEventID].Moments.length - 1) {
             let data = events;
             data[currentEventID].Moments[currentMomentIndex].Finish = 1;
             setEvents(data);
             setCurrentMomentIndex(currentMomentIndex + 1);
-            progress.setValue(0);
-            setLoad(false);
-        } else if (currentEventIndex < eventIDs.length -1) {
-            setCurrentEventID(eventIDs[currentEventIndex+1]);
-            setCurrentEventIndex(currentEventIndex+1);
-            setCurrentMomentIndex(0);
             progress.setValue(0);
             setLoad(false);
         } else {
@@ -102,7 +92,7 @@ const MomentsHomeList = () => {
     }
 
     // previous() is for changing the content of the current content to -1
-    function previous() {
+    const previous = () => {
         // checking if the previous content is not empty
         if (currentMomentIndex - 1 >= 0) {
             let data = events;
@@ -118,33 +108,55 @@ const MomentsHomeList = () => {
     }
 
     // closing the modal set the animation progress to 0
-    function close(reset = false) {
+    const close = (reset = false) => {
+        setShowModal(false);
         progress.setValue(0);
         setLoad(false);
-        setCurrentEventID(null);
-        setCurrentEventIndex(null);
         if (reset || currentMomentIndex >= events[currentEventID].Moments.length - 1) {
+            resetFinishes();
             setCurrentMomentIndex(0);
+            setCurrentEventID(null);
+            setCurrentEventIndex(null);
         } else {
+            let data = events;
+            data[currentEventID].Moments[currentMomentIndex].Finish = 1;
+            setEvents(data);
             setCurrentMomentIndex(currentMomentIndex+1);
         }
+        setShowModal(false);
+    }
+
+    const resetFinishes = () => {
+        let data = events;
+        const len =  data[currentEventID].Moments.length;
+        for (let i = 0; i < len; i++) {
+            data[currentEventID].Moments[i].Finish = 0;
+        }
+        setEvents(data);
     }
 
     const MomentPreview = ({ eventID, eventIndex }) => {
-        console.log(eventIndex)
-        console.log(eventID)
         return (
             <TouchableOpacity 
                 style={styles.momentPreview}
                 onPress={() => {
+                    if (eventID != currentEventID){
+                        setCurrentMomentIndex(0);
+                    }
                     setCurrentEventID(eventID);
                     setCurrentEventIndex(eventIndex);
+                    setShowModal(true);
                 }}
             >
-                <LoadImage
-                    imageSource={events[eventID].HostPicture}
-                    imageStyle={styles.profile}
-                />
+                    <LoadImage
+                        // imageSource={events[eventID].HostPicture}
+                        imageSource={events[eventID].Moments[0].MomentPicture}
+                        imageStyle={styles.profile}
+                    />
+                    <LoadImage
+                        imageSource={events[eventID].HostPicture}
+                        imageStyle={styles.smallButtonContainer}
+                    />
             </TouchableOpacity>
         )
     }
@@ -167,13 +179,27 @@ const MomentsHomeList = () => {
                 showsHorizontalScrollIndicator={false}
             >
                 <View style={styles.momentsContainer}>
+                    <TouchableOpacity 
+                        style={styles.momentPreview}
+                        onPress={() => {
+                            //open upload
+                        }}
+                    >
+                        <LoadImage
+                            imageSource={events[eventIDs[0]].HostPicture}
+                            imageStyle={styles.profile}
+                        />
+                        <GradientButton style={styles.smallButtonContainer}>
+                            <icons.plus height="50%" width="50%"></icons.plus>
+                        </GradientButton>
+                    </TouchableOpacity>
                     {Object.keys(events).map((event_id, index) => (
-                        <MomentPreview eventID={event_id} eventIndex={index} />
+                        <MomentPreview key={event_id} eventID={event_id} eventIndex={index} />
                     ))}
                 </View>
             </ScrollView>
         }
-        { currentEventID != null &&
+        { showModal && events &&
             <Modal presentationStyle={'pageSheet'} >
                 <View style={styles.backgroundContainer}>
                     {/* check the content type is video or an image */}
@@ -186,7 +212,7 @@ const MomentsHomeList = () => {
                             // shouldPlay={true}
                             // positionMillis={0}
                             // paused={false}
-                            onReadyForDisplay={() => play()}
+                            onReadyForDisplay={() => start()}
                             onLoad={x => {
                                 setLoad(true);
                                 start();
@@ -199,21 +225,14 @@ const MomentsHomeList = () => {
                             // }}
                             style={{ height: height, width: width }}
                         /> ) : (
-                            // <LoadImage
-                            //     imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
-                            //     imageSource={events[currentEventID].moments[currentMomentIndex].momentPicture}
-                            //     onLoadEnd={() => {
-                            //         progress.setValue(0);
-                            //         play();
-                            //     }}
-                            // />
-                            <Image
-                                onLoadEnd={() => {
+                            <LoadImage
+                                imageKey={events[currentEventID].Moments[currentMomentIndex].MomentID}
+                                imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
+                                imageSource={events[currentEventID].Moments[currentMomentIndex].MomentPicture}
+                                onLoadEndFunc={() => {
                                     progress.setValue(0);
-                                    play();
+                                    start();
                                 }}
-                                source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
-                                style={{ width: width, height: height, resizeMode: 'cover' }}
                             />
                         )
                     }
@@ -313,7 +332,7 @@ const styles = StyleSheet.create({
     momentPreview: {
         width: 80,
         height: 80,
-        borderRadius: 25,
+        borderRadius: 40,
         borderWidth: 3,
         borderColor: 'white',
         marginRight: 15,
@@ -323,7 +342,7 @@ const styles = StyleSheet.create({
     profile: {
         width: '100%',
         height: '100%',
-        borderRadius: 25,
+        borderRadius: 40,
     },
     backgroundContainer: {
         position: 'absolute',
@@ -341,5 +360,17 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray,
         justifyContent: "center",
         alignItems: "center",
+    },
+    smallButtonContainer: {
+        position: "absolute",
+        bottom: -10,
+        right: -10,
+        height: 35,
+        width: 35,
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: COLORS.white,
+        alignItems: "center",
+        justifyContent: "center",
     },
 })
