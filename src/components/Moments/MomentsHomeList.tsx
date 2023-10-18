@@ -25,8 +25,11 @@ import { COLORS, icons } from '../../constants';
 import LoadImage from '../LoadImage/LoadImage';
 import { getMomentsHome } from "../../services/MomentService";
 import { UserContext } from '../../contexts/UserContext';
-import { EventMoment, Moment, MomentHome } from "../../constants/types";
+import { EventMoment, Moment, MomentHome, User } from "../../constants/types";
 import GradientButton from '../Styled/GradientButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { selectUserByID } from '../../redux/users/userSelectors';
 
 const MomentsHomeList = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -135,6 +138,30 @@ const MomentsHomeList = () => {
         setEvents(data);
     }
 
+    const getTimeDifferenceString = (posted_date_time) => {
+        const postedDate = new Date(posted_date_time);
+        const currentDate = new Date();
+        const timeDifferenceInMilliseconds = Number(currentDate) - Number(postedDate);
+
+        if (timeDifferenceInMilliseconds >= 24 * 60 * 60 * 1000) {
+            // If the difference is 24 hours or more
+            const days = Math.floor(timeDifferenceInMilliseconds / (24 * 60 * 60 * 1000));
+            return `${days}d`;
+        } else if (timeDifferenceInMilliseconds >= 60 * 60 * 1000) {
+            // If the difference is 1 hour or more
+            const hours = Math.floor(timeDifferenceInMilliseconds / (60 * 60 * 1000));
+            return `${hours}h`;
+        } else if (timeDifferenceInMilliseconds >= 60 * 1000) {
+            // If the difference is between 1 hour and 1 minute
+            const minutes = Math.floor(timeDifferenceInMilliseconds / (60 * 1000));
+            return `${minutes}m`;
+        } else {
+            // If the difference is less than 1 minute
+            const seconds = Math.floor(timeDifferenceInMilliseconds / 1000);
+            return `${seconds}s`;
+        }
+    }
+
     const MomentPreview = ({ eventID, eventIndex }) => {
         return (
             <TouchableOpacity 
@@ -149,8 +176,7 @@ const MomentsHomeList = () => {
                 }}
             >
                     <LoadImage
-                        // imageSource={events[eventID].HostPicture}
-                        imageSource={events[eventID].Moments[0].MomentPicture}
+                        imageSource={events[eventID].EventPicture}
                         imageStyle={styles.profile}
                     />
                     <LoadImage
@@ -160,7 +186,11 @@ const MomentsHomeList = () => {
             </TouchableOpacity>
         )
     }
+
     const { userToken, isAdmin } = useContext(UserContext);
+    const currentUser = useSelector((state: RootState) =>
+        selectUserByID(state, userToken.UserID)
+    );
 
     useEffect(() => {
         getMomentsHome(userToken.UserID, userToken.UserAccessToken).then((momentData: MomentHome) => {
@@ -172,7 +202,7 @@ const MomentsHomeList = () => {
     return (
         <>
         {
-            events != null &&
+            currentUser && events != null &&
             <ScrollView 
                 horizontal
                 style={styles.scrollViewContainer}
@@ -186,7 +216,7 @@ const MomentsHomeList = () => {
                         }}
                     >
                         <LoadImage
-                            imageSource={events[eventIDs[0]].HostPicture}
+                            imageSource={currentUser.Picture}
                             imageStyle={styles.profile}
                         />
                         <GradientButton style={styles.smallButtonContainer}>
@@ -281,15 +311,22 @@ const MomentsHomeList = () => {
                         {/* THE AVATAR AND USERNAME  */}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <LoadImage
-                                imageStyle={styles.hostProfilePic}
-                                imageSource={events[currentEventID].HostPicture}
+                                imageStyle={styles.uploaderProfilePic}
+                                imageSource={events[currentEventID].Moments[currentMomentIndex].UploaderPicture}
                             />
                             <McText
                                 h4
                                 numberOfLines={1}
-                                style={{ letterSpacing: 1, color: COLORS.white }}
+                                style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
                             >
-                                {events[currentEventID].HostDisplayName}
+                                {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
+                            </McText>
+                            <McText
+                                body4
+                                numberOfLines={1}
+                                style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
+                            >
+                                {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
                             </McText>
                         </View>
                         {/* END OF THE AVATAR AND USERNAME */}
@@ -351,7 +388,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
     },
-    hostProfilePic: {
+    uploaderProfilePic: {
         height: 35,
         width: 35,
         borderRadius: 30,

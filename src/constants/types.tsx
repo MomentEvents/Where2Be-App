@@ -135,6 +135,8 @@ export type UserPrefilledFormResponse = {
 // }
 
 export type Moment = {
+  UploaderDisplayName: string;
+  UploaderPicture: string;
   MomentID: string;
   MomentPicture: string;
   Type: string;
@@ -143,7 +145,7 @@ export type Moment = {
 }
 
 export type EventMoment = {
-  HostDisplayName: string;
+  EventPicture: string;
   HostPicture: string;
   Moments: Moment[];
 }
@@ -154,6 +156,8 @@ export type MomentHome = {
 }
 
 export type MomentResponse = {
+  uploader_display_name: string;
+  uploader_picture: string;
   moment_id: string;
   moment_picture: string;
   type: string;
@@ -161,7 +165,7 @@ export type MomentResponse = {
 };
 
 export type EventMomentResponse = {
-  host_display_name: string;
+  event_picture: string;
   host_picture: string;
   moments: MomentResponse[];
 };

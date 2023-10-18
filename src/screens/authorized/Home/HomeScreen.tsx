@@ -48,7 +48,6 @@ import {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import MomentsHomeList from "../../../components/Moments/MomentsHomeList";
-import Moments from "../../../components/Moments/Moments";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();

@@ -266,6 +266,8 @@ export const momentHomeResponseToMomentHome = (
     let moments: Moment[] = []
     for (const moment of event.moments){
       const formattedMoment: Moment = {
+        UploaderDisplayName: moment.uploader_display_name,
+        UploaderPicture: moment.uploader_picture,
         MomentID: moment.moment_id,
         MomentPicture: moment.moment_picture,
         Type: moment.type,
@@ -275,7 +277,7 @@ export const momentHomeResponseToMomentHome = (
       moments.push(formattedMoment);
     }
     const formattedEventMoments: EventMoment = {
-      HostDisplayName: event.host_display_name,
+      EventPicture: event.event_picture,
       HostPicture: event.host_picture,
       Moments: moments
     }
