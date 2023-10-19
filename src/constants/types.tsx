@@ -148,6 +148,7 @@ export type EventMoment = {
   EventPicture: string;
   HostPicture: string;
   Moments: Moment[];
+  Visible: boolean;
 }
 
 export type MomentHome = {
@@ -168,6 +169,7 @@ export type EventMomentResponse = {
   event_picture: string;
   host_picture: string;
   moments: MomentResponse[];
+  visible: boolean;
 };
 
 export type MomentHomeResponse = {

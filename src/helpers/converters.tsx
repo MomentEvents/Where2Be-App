@@ -279,7 +279,8 @@ export const momentHomeResponseToMomentHome = (
     const formattedEventMoments: EventMoment = {
       EventPicture: event.event_picture,
       HostPicture: event.host_picture,
-      Moments: moments
+      Moments: moments,
+      Visible: event.visible,
     }
     formattedMomentHome.Events[event_id] = formattedEventMoments;
   }

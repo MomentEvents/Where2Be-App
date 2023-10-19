@@ -83,6 +83,8 @@ const HomeScreen = () => {
 
   const isFocused = useIsFocused();
 
+  const [headerKey, setHeaderKey] = useState(true);
+
   type EventItem =
     | {
         Host: User;
@@ -330,6 +332,7 @@ const HomeScreen = () => {
       });
   };
   const onRefresh = () => {
+    setHeaderKey(!headerKey);
     setIsLoading(true);
     setShowRetry(false);
     pullData();
@@ -388,7 +391,6 @@ const HomeScreen = () => {
           />
         )}
 
-        <MomentsHomeList />
 
         <FlatList
           ref={flatListRef}
@@ -439,6 +441,7 @@ const HomeScreen = () => {
             }
           }}
           viewabilityConfig={viewabilityConfig}
+          ListHeaderComponent={<MomentsHomeList key={Number(headerKey)}/>}
           ListFooterComponent={
             !isLoading && (
               <View

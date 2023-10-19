@@ -11,7 +11,8 @@ import {
   Button,
   TouchableOpacity,
   BackHandler,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import Constants from 'expo-constants';
@@ -78,14 +79,39 @@ const MomentsHomeList = () => {
         }
     }
 
+    const pauseAnimation = () => {
+        progress.stopAnimation(value => {});
+    }
+    
+    const resumeAnimation = () => {
+        const p = (progress as any)._value
+        Animated.timing(progress, {
+            toValue: 1,
+            duration: 5000 * (1 - p),
+            useNativeDriver: false,
+        }).start(({ finished }) => {
+            if (finished) {
+                next();
+            }
+        });
+    }
+
     // next() is for changing the content of the current content to +1
     const next = () => {
         // check if the next content is not empty
-        if (currentMomentIndex !== events[currentEventID].Moments.length - 1) {
+        if (currentMomentIndex != events[currentEventID].Moments.length - 1) {
             let data = events;
             data[currentEventID].Moments[currentMomentIndex].Finish = 1;
             setEvents(data);
             setCurrentMomentIndex(currentMomentIndex + 1);
+            progress.setValue(0);
+            setLoad(false);
+        } else if (currentEventIndex != eventIDs.length -1) {
+            // next event
+            resetFinishes();
+            setCurrentEventID(eventIDs[currentEventIndex + 1]);
+            setCurrentEventIndex(currentEventIndex + 1);
+            setCurrentMomentIndex(0);
             progress.setValue(0);
             setLoad(false);
         } else {
@@ -97,16 +123,13 @@ const MomentsHomeList = () => {
     // previous() is for changing the content of the current content to -1
     const previous = () => {
         // checking if the previous content is not empty
-        if (currentMomentIndex - 1 >= 0) {
+        if (currentMomentIndex > 0) {
             let data = events;
             data[currentEventID].Moments[currentMomentIndex].Finish = 0;
             setEvents(data);
             setCurrentMomentIndex(currentMomentIndex - 1);
             progress.setValue(0);
             setLoad(false);
-        } else {
-            // the previous content is empty
-            close();
         }
     }
 
@@ -115,7 +138,7 @@ const MomentsHomeList = () => {
         setShowModal(false);
         progress.setValue(0);
         setLoad(false);
-        if (reset || currentMomentIndex >= events[currentEventID].Moments.length - 1) {
+        if (reset) {
             resetFinishes();
             setCurrentMomentIndex(0);
             setCurrentEventID(null);
@@ -129,11 +152,14 @@ const MomentsHomeList = () => {
         setShowModal(false);
     }
 
-    const resetFinishes = () => {
+    const resetFinishes = (toValue = 0, exceptLast = false) => {
         let data = events;
-        const len =  data[currentEventID].Moments.length;
+        let len =  data[currentEventID].Moments.length;
+        if (exceptLast){
+            len = len-1;
+        }
         for (let i = 0; i < len; i++) {
-            data[currentEventID].Moments[i].Finish = 0;
+            data[currentEventID].Moments[i].Finish = toValue;
         }
         setEvents(data);
     }
@@ -194,8 +220,8 @@ const MomentsHomeList = () => {
 
     useEffect(() => {
         getMomentsHome(userToken.UserID, userToken.UserAccessToken).then((momentData: MomentHome) => {
-            setEventIDs(momentData.EventIDs)
-            setEvents(momentData.Events)
+            setEventIDs(momentData.EventIDs);
+            setEvents(momentData.Events);
         })
     }, []);
 
@@ -231,124 +257,149 @@ const MomentsHomeList = () => {
         }
         { showModal && events &&
             <Modal presentationStyle={'pageSheet'} >
-                <View style={styles.backgroundContainer}>
-                    {/* check the content type is video or an image */}
-                    {events[currentEventID].Moments[currentMomentIndex].Type == 'video' ? (
-                        <Video
-                            source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
-                            // rate={1.0}
-                            // volume={1.0}
-                            resizeMode={ResizeMode.COVER}
-                            // shouldPlay={true}
-                            // positionMillis={0}
-                            // paused={false}
-                            onReadyForDisplay={() => start()}
-                            onLoad={x => {
-                                setLoad(true);
-                                start();
-                            }}
-                            // onPlaybackStatusUpdate={AVPlaybackStatus => {
-                            //     console.log(AVPlaybackStatus);
-                            //     setLoad(AVPlaybackStatus.isLoaded);
-                            //     // setEnd(AVPlaybackStatus.durationMillis || 10000);
-                            //     setEnd(5000);
-                            // }}
-                            style={{ height: height, width: width }}
-                        /> ) : (
-                            <LoadImage
-                                imageKey={events[currentEventID].Moments[currentMomentIndex].MomentID}
-                                imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
-                                imageSource={events[currentEventID].Moments[currentMomentIndex].MomentPicture}
-                                onLoadEndFunc={() => {
-                                    progress.setValue(0);
-                                    start();
-                                }}
-                            />
+                <ScrollView
+                    pagingEnabled
+                    horizontal
+                    decelerationRate={0} // Disable deceleration
+                    snapToInterval={width} // Calculate the size for a card including marginLeft and marginRight
+                    snapToAlignment='center' // Snap to the center
+                    contentInset={{ // iOS ONLY
+                        top: 0,
+                        left: 0, // Left spacing for the very first card
+                        bottom: 0,
+                        right: 0 // Right spacing for the very last card
+                    }}
+                    onScrollBeginDrag={pauseAnimation}
+                    onScrollEndDrag={resumeAnimation}
+                >
+                {
+                    eventIDs.map(eventID => {
+                        return (
+                            <View key={eventID} style={{ width: width, height: height }}>
+                                <View style={styles.backgroundContainer}>
+                                    {/* check the content type is video or an image */}
+                                    {events[currentEventID].Moments[currentMomentIndex].Type == 'video' ? (
+                                        <Video
+                                            source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
+                                            // rate={1.0}
+                                            // volume={1.0}
+                                            resizeMode={ResizeMode.COVER}
+                                            // shouldPlay={true}
+                                            // positionMillis={0}
+                                            // paused={false}
+                                            onReadyForDisplay={() => start()}
+                                            onLoad={x => {
+                                                setLoad(true);
+                                                start();
+                                            }}
+                                            // onPlaybackStatusUpdate={AVPlaybackStatus => {
+                                            //     console.log(AVPlaybackStatus);
+                                            //     setLoad(AVPlaybackStatus.isLoaded);
+                                            //     // setEnd(AVPlaybackStatus.durationMillis || 10000);
+                                            //     setEnd(5000);
+                                            // }}
+                                            style={{ height: height, width: width }}
+                                        /> ) : (
+                                            <LoadImage
+                                                imageKey={events[currentEventID].Moments[currentMomentIndex].MomentID}
+                                                imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
+                                                imageSource={events[currentEventID].Moments[currentMomentIndex].MomentPicture}
+                                                onLoadEndFunc={() => {
+                                                    progress.setValue(0);
+                                                    start();
+                                                }}
+                                                imageBlurRadius={events[currentEventID].Visible? 0 : 15}
+                                            />
+                                        )
+                                    }
+                                </View>
+                                <View
+                                    style={{ flexDirection: 'column', flex: 1 }}>
+                                    <LinearGradient
+                                        colors={['rgba(0,0,0,1)', 'transparent']}
+                                        style={{
+                                            position: 'absolute',
+                                            left: 0,
+                                            right: 0,
+                                            top: 0,
+                                            height: 100,
+                                        }}
+                                    />
+                                    {/* ANIMATION BARS */}
+                                    <View style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 10 }} >
+                                        {events[currentEventID].Moments.map((index, key) => {
+                                            return (
+                                            // THE BACKGROUND
+                                            <View
+                                                key={key}
+                                                style={{
+                                                    height: 2,
+                                                    flex: 1,
+                                                    flexDirection: 'row',
+                                                    backgroundColor: 'rgba(117, 117, 117, 0.5)',
+                                                    marginHorizontal: 2,
+                                                }}>
+                                                {/* THE ANIMATION OF THE BAR*/}
+                                                <Animated.View
+                                                    style={{
+                                                        flex: currentMomentIndex == key ? progress : events[currentEventID].Moments[key].Finish,
+                                                        height: 2,
+                                                        backgroundColor: 'rgba(255, 255, 255, 1)',
+                                                    }}
+                                                />
+                                            </View>
+                                            );
+                                        })}
+                                    </View>
+                                    {/* END OF ANIMATION BARS */}
+                            
+                                    <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
+                                        {/* THE AVATAR AND USERNAME  */}
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <LoadImage
+                                                imageStyle={styles.uploaderProfilePic}
+                                                imageSource={events[currentEventID].Moments[currentMomentIndex].UploaderPicture}
+                                            />
+                                            <McText
+                                                h4
+                                                numberOfLines={1}
+                                                style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
+                                            >
+                                                {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
+                                            </McText>
+                                            <McText
+                                                body4
+                                                numberOfLines={1}
+                                                style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
+                                            >
+                                                {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
+                                            </McText>
+                                        </View>
+                                        {/* END OF THE AVATAR AND USERNAME */}
+                                        {/* THE CLOSE BUTTON */}
+                                        <TouchableOpacity onPress={() => close()} >
+                                            <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, paddingHorizontal: 15 }}>
+                                                <Ionicons name="ios-close" size={28} color="white" />
+                                            </View>
+                                        </TouchableOpacity>
+                                        {/* END OF CLOSE BUTTON */}
+                                    </View>
+                                    {/* HERE IS THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <TouchableWithoutFeedback onPress={() => previous()}>
+                                            <View style={{ flex: 1 }} />
+                                        </TouchableWithoutFeedback>
+                                        <TouchableWithoutFeedback onPress={() => next()}>
+                                            <View style={{ flex: 1 }} />
+                                        </TouchableWithoutFeedback>
+                                    </View>
+                                    {/* END OF THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
+                                </View>
+                            </View>
                         )
-                    }
-                </View>
-                <View
-                    style={{ flexDirection: 'column', flex: 1 }}>
-                    <LinearGradient
-                        colors={['rgba(0,0,0,1)', 'transparent']}
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            height: 100,
-                        }}
-                    />
-                    {/* ANIMATION BARS */}
-                    <View style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 10 }} >
-                        {events[currentEventID].Moments.map((index, key) => {
-                            return (
-                            // THE BACKGROUND
-                            <View
-                                key={key}
-                                style={{
-                                    height: 2,
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    backgroundColor: 'rgba(117, 117, 117, 0.5)',
-                                    marginHorizontal: 2,
-                                }}>
-                                {/* THE ANIMATION OF THE BAR*/}
-                                <Animated.View
-                                    style={{
-                                        flex: currentMomentIndex == key ? progress : events[currentEventID].Moments[key].Finish,
-                                        height: 2,
-                                        backgroundColor: 'rgba(255, 255, 255, 1)',
-                                    }}
-                                />
-                            </View>
-                            );
-                        })}
-                    </View>
-                    {/* END OF ANIMATION BARS */}
-            
-                    <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
-                        {/* THE AVATAR AND USERNAME  */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <LoadImage
-                                imageStyle={styles.uploaderProfilePic}
-                                imageSource={events[currentEventID].Moments[currentMomentIndex].UploaderPicture}
-                            />
-                            <McText
-                                h4
-                                numberOfLines={1}
-                                style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
-                            >
-                                {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
-                            </McText>
-                            <McText
-                                body4
-                                numberOfLines={1}
-                                style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
-                            >
-                                {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
-                            </McText>
-                        </View>
-                        {/* END OF THE AVATAR AND USERNAME */}
-                        {/* THE CLOSE BUTTON */}
-                        <TouchableOpacity onPress={() => close()} >
-                            <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, paddingHorizontal: 15 }}>
-                                <Ionicons name="ios-close" size={28} color="white" />
-                            </View>
-                        </TouchableOpacity>
-                        {/* END OF CLOSE BUTTON */}
-                    </View>
-                    {/* HERE IS THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <TouchableWithoutFeedback onPress={() => previous()}>
-                            <View style={{ flex: 1 }} />
-                        </TouchableWithoutFeedback>
-                        <TouchableWithoutFeedback onPress={() => next()}>
-                            <View style={{ flex: 1 }} />
-                        </TouchableWithoutFeedback>
-                    </View>
-                    {/* END OF THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
-                </View>
+                    })
+                }
+                </ScrollView>
             </Modal>
         }
         </>
