@@ -1,3 +1,4 @@
+import { Animated } from "react-native";
 import {
   Event,
   EventResponse,
@@ -272,7 +273,7 @@ export const momentHomeResponseToMomentHome = (
         MomentPicture: moment.moment_picture,
         Type: moment.type,
         PostedDateTime: moment.posted_date_time,
-        Finish: 0
+        Finish: new Animated.Value(0)
       };
       moments.push(formattedMoment);
     }

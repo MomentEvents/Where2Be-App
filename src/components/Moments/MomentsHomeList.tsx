@@ -33,6 +33,7 @@ import { RootState } from '../../redux/store';
 import { selectUserByID } from '../../redux/users/userSelectors';
 
 const MomentsHomeList = () => {
+    const flatListRef = useRef<FlatList>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [eventIDs, setEventIDs] = useState<string[]>(null);
     const [currentEventID, setCurrentEventID] = useState<string>(null);
@@ -46,74 +47,84 @@ const MomentsHomeList = () => {
     const [currentMomentIndex, setCurrentMomentIndex] = useState(0);
     // if load true then start the animation of the bars at the top
     const [load, setLoad] = useState(false);
-    // progress is the animation value of the bars content playing the current state
-    const progress = useRef(new Animated.Value(0)).current;
+    // // progress is the animation value of the bars content playing the current state
+    // const progress = useRef(new Animated.Value(0)).current;
 
     // start() is for starting the animatiron bars at the top
-    const start = () => {
+    const start = (eventID: string, momentIndex: number) => {
+        const progress = (events[eventID].Moments[momentIndex].Finish as any)._value
+        console.log("starting eventID: " + eventID + ", momentIndex: " + momentIndex + ", progress: " + progress)
         // checking if the content type is video or not
-        if (events[currentEventID].Moments[currentMomentIndex].Type == 'video') {
+        if (events[eventID].Moments[momentIndex].Type == 'video') {
             // type video
             if (load) {
-                Animated.timing(progress, {
+                Animated.timing(events[eventID].Moments[momentIndex].Finish, {
                     toValue: 1,
-                    duration: 5000,
+                    duration: 5000 * (1 - progress),
                     useNativeDriver: false,
                 }).start(({ finished }) => {
                     if (finished) {
-                        next();
+                        next(eventID, momentIndex);
                     }
                 });
             }
         } else {
             // type image
-            Animated.timing(progress, {
+            Animated.timing(events[eventID].Moments[momentIndex].Finish, {
                 toValue: 1,
-                duration: 5000,
+                duration: 5000 * (1 - progress),
                 useNativeDriver: false,
             }).start(({ finished }) => {
                 if (finished) {
-                    next();
+                    next(eventID, momentIndex);
                 }
             });
         }
     }
 
     const pauseAnimation = () => {
-        progress.stopAnimation(value => {});
+        events[currentEventID].Moments[currentMomentIndex].Finish.stopAnimation(value => {});
     }
     
-    const resumeAnimation = () => {
-        const p = (progress as any)._value
-        Animated.timing(progress, {
-            toValue: 1,
-            duration: 5000 * (1 - p),
-            useNativeDriver: false,
-        }).start(({ finished }) => {
-            if (finished) {
-                next();
+    const handleScroll = (event) => {
+        const offsetX = event.nativeEvent.contentOffset.x;
+        const newEventIndex = Math.floor(offsetX / width);
+        if (newEventIndex >= 0 && newEventIndex < eventIDs.length){
+            const newEventID = eventIDs[newEventIndex]
+            if (newEventID != currentEventID){
+                events[currentEventID].Moments[currentMomentIndex].Finish.setValue(0);
+                setCurrentEventID(newEventID);
+                for (var i = 0; i < events[newEventID].Moments.length; i++){
+                    if ((events[newEventID].Moments[i].Finish as any)._value == 0){
+                        start(newEventID, i);
+                        return
+                    }
+                }
+                start(newEventID, events[newEventID].Moments.length-1);
             }
-        });
+        }
     }
 
     // next() is for changing the content of the current content to +1
-    const next = () => {
+    const next = (eventID: string, momentIndex: number) => {
+        const eventIndex = eventIDs.indexOf(eventID)
         // check if the next content is not empty
-        if (currentMomentIndex != events[currentEventID].Moments.length - 1) {
-            let data = events;
-            data[currentEventID].Moments[currentMomentIndex].Finish = 1;
-            setEvents(data);
-            setCurrentMomentIndex(currentMomentIndex + 1);
-            progress.setValue(0);
+        if (momentIndex < events[eventID].Moments.length - 1) {
+            events[eventID].Moments[momentIndex].Finish.setValue(1);
+            setCurrentMomentIndex(momentIndex + 1);
             setLoad(false);
-        } else if (currentEventIndex != eventIDs.length -1) {
+        } else if (eventIndex != eventIDs.length -1) {
             // next event
-            resetFinishes();
-            setCurrentEventID(eventIDs[currentEventIndex + 1]);
-            setCurrentEventIndex(currentEventIndex + 1);
+            // resetFinishes();
+            const newEventIndex = eventIndex + 1;
+            events[eventID].Moments[momentIndex].Finish.setValue(0);
+            setCurrentEventID(eventIDs[newEventIndex]);
+            setCurrentEventIndex(newEventIndex);
             setCurrentMomentIndex(0);
-            progress.setValue(0);
             setLoad(false);
+            if (flatListRef.current) {
+                flatListRef.current.scrollToIndex({ index: newEventIndex, animated: true });
+            }
         } else {
             // the next content is empty
             close(true);
@@ -122,21 +133,36 @@ const MomentsHomeList = () => {
 
     // previous() is for changing the content of the current content to -1
     const previous = () => {
+        events[currentEventID].Moments[currentMomentIndex].Finish.setValue(0);
         // checking if the previous content is not empty
         if (currentMomentIndex > 0) {
-            let data = events;
-            data[currentEventID].Moments[currentMomentIndex].Finish = 0;
-            setEvents(data);
+            events[currentEventID].Moments[currentMomentIndex - 1].Finish.setValue(0);
             setCurrentMomentIndex(currentMomentIndex - 1);
-            progress.setValue(0);
             setLoad(false);
+        } else if (currentEventIndex > 0) {
+            const newEventID = eventIDs[currentEventIndex - 1];
+            setCurrentEventID(newEventID);
+            setCurrentEventIndex(currentEventIndex - 1);
+            for (var i = 0; i < events[newEventID].Moments.length; i++){
+                if ((events[newEventID].Moments[i].Finish as any)._value == 0){
+                    start(newEventID, i);
+                    return
+                }
+            }
+            if (flatListRef.current) {
+                const offset = 0 - width
+                console.log(offset)
+                flatListRef.current.scrollToIndex({index: currentEventIndex-1, animated: true});
+            }
+            setLoad(false);
+        } else {
+            start(eventIDs[0], 0);
         }
     }
 
     // closing the modal set the animation progress to 0
     const close = (reset = false) => {
         setShowModal(false);
-        progress.setValue(0);
         setLoad(false);
         if (reset) {
             resetFinishes();
@@ -144,15 +170,12 @@ const MomentsHomeList = () => {
             setCurrentEventID(null);
             setCurrentEventIndex(null);
         } else {
-            let data = events;
-            data[currentEventID].Moments[currentMomentIndex].Finish = 1;
-            setEvents(data);
-            setCurrentMomentIndex(currentMomentIndex+1);
+            events[currentEventID].Moments[currentMomentIndex].Finish.setValue(0);
         }
         setShowModal(false);
     }
 
-    const resetFinishes = (toValue = 0, exceptLast = false) => {
+    const resetFinishes = (toValue = new Animated.Value(0), exceptLast = false) => {
         let data = events;
         let len =  data[currentEventID].Moments.length;
         if (exceptLast){
@@ -193,9 +216,6 @@ const MomentsHomeList = () => {
             <TouchableOpacity 
                 style={styles.momentPreview}
                 onPress={() => {
-                    if (eventID != currentEventID){
-                        setCurrentMomentIndex(0);
-                    }
                     setCurrentEventID(eventID);
                     setCurrentEventIndex(eventIndex);
                     setShowModal(true);
@@ -257,7 +277,8 @@ const MomentsHomeList = () => {
         }
         { showModal && events &&
             <Modal presentationStyle={'pageSheet'} >
-                <ScrollView
+                <FlatList
+                    ref={flatListRef}
                     pagingEnabled
                     horizontal
                     decelerationRate={0} // Disable deceleration
@@ -270,136 +291,129 @@ const MomentsHomeList = () => {
                         right: 0 // Right spacing for the very last card
                     }}
                     onScrollBeginDrag={pauseAnimation}
-                    onScrollEndDrag={resumeAnimation}
-                >
-                {
-                    eventIDs.map(eventID => {
-                        return (
-                            <View key={eventID} style={{ width: width, height: height }}>
-                                <View style={styles.backgroundContainer}>
-                                    {/* check the content type is video or an image */}
-                                    {events[currentEventID].Moments[currentMomentIndex].Type == 'video' ? (
-                                        <Video
-                                            source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
-                                            // rate={1.0}
-                                            // volume={1.0}
-                                            resizeMode={ResizeMode.COVER}
-                                            // shouldPlay={true}
-                                            // positionMillis={0}
-                                            // paused={false}
-                                            onReadyForDisplay={() => start()}
-                                            onLoad={x => {
-                                                setLoad(true);
-                                                start();
-                                            }}
-                                            // onPlaybackStatusUpdate={AVPlaybackStatus => {
-                                            //     console.log(AVPlaybackStatus);
-                                            //     setLoad(AVPlaybackStatus.isLoaded);
-                                            //     // setEnd(AVPlaybackStatus.durationMillis || 10000);
-                                            //     setEnd(5000);
-                                            // }}
-                                            style={{ height: height, width: width }}
-                                        /> ) : (
-                                            <LoadImage
-                                                imageKey={events[currentEventID].Moments[currentMomentIndex].MomentID}
-                                                imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
-                                                imageSource={events[currentEventID].Moments[currentMomentIndex].MomentPicture}
-                                                onLoadEndFunc={() => {
-                                                    progress.setValue(0);
-                                                    start();
-                                                }}
-                                                imageBlurRadius={events[currentEventID].Visible? 0 : 15}
-                                            />
-                                        )
-                                    }
-                                </View>
-                                <View
-                                    style={{ flexDirection: 'column', flex: 1 }}>
-                                    <LinearGradient
-                                        colors={['rgba(0,0,0,1)', 'transparent']}
-                                        style={{
-                                            position: 'absolute',
-                                            left: 0,
-                                            right: 0,
-                                            top: 0,
-                                            height: 100,
+                    // onScrollEndDrag={resumeAnimation}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                    data={eventIDs}
+                    renderItem={({item, index}) => (
+                        <View key={item} style={{ width: width, height: height }}>
+                            <View style={styles.backgroundContainer}>
+                                {/* check the content type is video or an image */}
+                                {currentMomentIndex == 0 || events[currentEventID].Moments[currentMomentIndex].Type == 'video' ? (
+                                    <Video
+                                        // source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
+                                        source={require('./video.mp4')}
+                                        resizeMode={ResizeMode.COVER}
+                                        shouldPlay={true}
+                                        onReadyForDisplay={() => start(currentEventID, currentMomentIndex)}
+                                        onLoad={x => {
+                                            setLoad(true);
+                                            start(currentEventID, currentMomentIndex);
                                         }}
+                                        // onPlaybackStatusUpdate={AVPlaybackStatusSuccess => {
+                                        //     console.log(AVPlaybackStatusSuccess);
+                                        //     setLoad(AVPlaybackStatusSuccess.isLoaded);
+                                        //     setEnd(5000);
+                                        // }}
+                                        style={{ height: height, width: width }}
+                                    /> ) : (
+                                    <LoadImage
+                                        imageKey={events[currentEventID].Moments[currentMomentIndex].MomentID}
+                                        imageStyle={{ width: width, height: height, resizeMode: 'cover' }}
+                                        imageSource={events[currentEventID].Moments[currentMomentIndex].MomentPicture}
+                                        onLoadEndFunc={() => {
+                                            events[currentEventID].Moments[currentMomentIndex].Finish.setValue(0);
+                                            start(currentEventID, currentMomentIndex);
+                                        }}
+                                        imageBlurRadius={events[currentEventID].Visible? 0 : 15}
                                     />
-                                    {/* ANIMATION BARS */}
-                                    <View style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 10 }} >
-                                        {events[currentEventID].Moments.map((index, key) => {
-                                            return (
-                                            // THE BACKGROUND
-                                            <View
-                                                key={key}
-                                                style={{
-                                                    height: 2,
-                                                    flex: 1,
-                                                    flexDirection: 'row',
-                                                    backgroundColor: 'rgba(117, 117, 117, 0.5)',
-                                                    marginHorizontal: 2,
-                                                }}>
-                                                {/* THE ANIMATION OF THE BAR*/}
-                                                <Animated.View
-                                                    style={{
-                                                        flex: currentMomentIndex == key ? progress : events[currentEventID].Moments[key].Finish,
-                                                        height: 2,
-                                                        backgroundColor: 'rgba(255, 255, 255, 1)',
-                                                    }}
-                                                />
-                                            </View>
-                                            );
-                                        })}
-                                    </View>
-                                    {/* END OF ANIMATION BARS */}
-                            
-                                    <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
-                                        {/* THE AVATAR AND USERNAME  */}
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <LoadImage
-                                                imageStyle={styles.uploaderProfilePic}
-                                                imageSource={events[currentEventID].Moments[currentMomentIndex].UploaderPicture}
-                                            />
-                                            <McText
-                                                h4
-                                                numberOfLines={1}
-                                                style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
-                                            >
-                                                {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
-                                            </McText>
-                                            <McText
-                                                body4
-                                                numberOfLines={1}
-                                                style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
-                                            >
-                                                {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
-                                            </McText>
-                                        </View>
-                                        {/* END OF THE AVATAR AND USERNAME */}
-                                        {/* THE CLOSE BUTTON */}
-                                        <TouchableOpacity onPress={() => close()} >
-                                            <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, paddingHorizontal: 15 }}>
-                                                <Ionicons name="ios-close" size={28} color="white" />
-                                            </View>
-                                        </TouchableOpacity>
-                                        {/* END OF CLOSE BUTTON */}
-                                    </View>
-                                    {/* HERE IS THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
-                                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                                        <TouchableWithoutFeedback onPress={() => previous()}>
-                                            <View style={{ flex: 1 }} />
-                                        </TouchableWithoutFeedback>
-                                        <TouchableWithoutFeedback onPress={() => next()}>
-                                            <View style={{ flex: 1 }} />
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                    {/* END OF THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
-                                </View>
+                                )}
                             </View>
-                        )
-                    })
-                }
-                </ScrollView>
+                            <View
+                                style={{ flexDirection: 'column', flex: 1 }}>
+                                <LinearGradient
+                                    colors={['rgba(0,0,0,1)', 'transparent']}
+                                    style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        right: 0,
+                                        top: 0,
+                                        height: 100,
+                                    }}
+                                />
+                                {/* ANIMATION BARS */}
+                                <View style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 10 }} >
+                                    {events[currentEventID].Moments.map((index, key) => {
+                                        return (
+                                        // THE BACKGROUND
+                                        <View
+                                            key={key}
+                                            style={{
+                                                height: 2,
+                                                flex: 1,
+                                                flexDirection: 'row',
+                                                backgroundColor: 'rgba(117, 117, 117, 0.5)',
+                                                marginHorizontal: 2,
+                                            }}>
+                                            {/* THE ANIMATION OF THE BAR*/}
+                                            <Animated.View
+                                                style={{
+                                                    flex: events[currentEventID].Moments[key].Finish,
+                                                    height: 2,
+                                                    backgroundColor: 'rgba(255, 255, 255, 1)',
+                                                }}
+                                            />
+                                        </View>
+                                        );
+                                    })}
+                                </View>
+                                {/* END OF ANIMATION BARS */}
+                        
+                                <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
+                                    {/* THE AVATAR AND USERNAME  */}
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <LoadImage
+                                            imageStyle={styles.uploaderProfilePic}
+                                            imageSource={events[item].Moments[currentMomentIndex].UploaderPicture}
+                                        />
+                                        <McText
+                                            h4
+                                            numberOfLines={1}
+                                            style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
+                                        >
+                                            {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
+                                        </McText>
+                                        <McText
+                                            body4
+                                            numberOfLines={1}
+                                            style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
+                                        >
+                                            {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
+                                        </McText>
+                                    </View>
+                                    {/* END OF THE AVATAR AND USERNAME */}
+                                    {/* THE CLOSE BUTTON */}
+                                    <TouchableOpacity onPress={() => close()} >
+                                        <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, paddingHorizontal: 15 }}>
+                                            <Ionicons name="ios-close" size={28} color="white" />
+                                        </View>
+                                    </TouchableOpacity>
+                                    {/* END OF CLOSE BUTTON */}
+                                </View>
+                                {/* HERE IS THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <TouchableWithoutFeedback onPress={() => previous()}>
+                                        <View style={{ flex: 1 }} />
+                                    </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={() => next(currentEventID, currentMomentIndex)}>
+                                        <View style={{ flex: 1 }} />
+                                    </TouchableWithoutFeedback>
+                                </View>
+                                {/* END OF THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
+                            </View>
+                        </View>
+                    )}
+                />
             </Modal>
         }
         </>

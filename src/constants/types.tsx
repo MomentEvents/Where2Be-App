@@ -1,3 +1,5 @@
+import { Animated } from "react-native";
+
 export type Token = {
   UserID: string;
   UserAccessToken: string;
@@ -141,7 +143,7 @@ export type Moment = {
   MomentPicture: string;
   Type: string;
   PostedDateTime: string;
-  Finish: number;
+  Finish: Animated.Value;
 }
 
 export type EventMoment = {
