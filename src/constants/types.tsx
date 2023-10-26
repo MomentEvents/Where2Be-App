@@ -137,6 +137,7 @@ export type UserPrefilledFormResponse = {
 // }
 
 export type Moment = {
+  UploaderID: string;
   UploaderDisplayName: string;
   UploaderPicture: string;
   MomentID: string;
@@ -159,6 +160,7 @@ export type MomentHome = {
 }
 
 export type MomentResponse = {
+  uploader_id: string;
   uploader_display_name: string;
   uploader_picture: string;
   moment_id: string;

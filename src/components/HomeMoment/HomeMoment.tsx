@@ -22,7 +22,7 @@ const { width, height } = Dimensions.get('window');
 const screenRatio = height / width;
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { McText } from "../Styled";
-import { COLORS, icons } from '../../constants';
+import { COLORS, SCREENS, icons } from '../../constants';
 import LoadImage from '../LoadImage/LoadImage';
 import { getMomentsHome } from "../../services/MomentService";
 import { UserContext } from '../../contexts/UserContext';
@@ -31,8 +31,9 @@ import GradientButton from '../Styled/GradientButton';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { selectUserByID } from '../../redux/users/userSelectors';
+import { useNavigation } from '@react-navigation/native';
 
-const MomentsHomeList = () => {
+const HomeMoment = () => {
     const flatListRef = useRef<FlatList>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [eventIDs, setEventIDs] = useState<string[]>(null);
@@ -113,19 +114,19 @@ const MomentsHomeList = () => {
             events[eventID].Moments[momentIndex].Finish.setValue(1);
             setCurrentMomentIndex(momentIndex + 1);
             setLoad(false);
-        } else if (eventIndex != eventIDs.length -1) {
-            // next event
-            // resetFinishes();
-            const newEventIndex = eventIndex + 1;
-            events[eventID].Moments[momentIndex].Finish.setValue(0);
-            setCurrentEventID(eventIDs[newEventIndex]);
-            setCurrentEventIndex(newEventIndex);
-            setCurrentMomentIndex(0);
-            setLoad(false);
-            if (flatListRef.current) {
-                flatListRef.current.scrollToIndex({ index: newEventIndex, animated: true });
-            }
-        } else {
+        } 
+        // else if (eventIndex != eventIDs.length -1) {
+        //     const newEventIndex = eventIndex + 1;
+        //     events[eventID].Moments[momentIndex].Finish.setValue(0);
+        //     setCurrentEventID(eventIDs[newEventIndex]);
+        //     setCurrentEventIndex(newEventIndex);
+        //     setCurrentMomentIndex(0);
+        //     setLoad(false);
+        //     if (flatListRef.current) {
+        //         flatListRef.current.scrollToIndex({ index: newEventIndex, animated: true });
+        //     }
+        // } 
+        else {
             // the next content is empty
             close(true);
         }
@@ -211,6 +212,24 @@ const MomentsHomeList = () => {
         }
     }
 
+    const navigation = useNavigation<any>();
+    const goToUploaderProfile = (user_id: string) => {
+        events[currentEventID].Moments[currentMomentIndex].Finish.setValue(0);
+        setShowModal(false);
+        navigation.push(SCREENS.ProfileDetails, { userID: user_id });
+    }
+
+    const findMomentIndex = (eventID: string) => {
+        let i = 0
+        for (const moment of events[eventID].Moments){
+            if ((moment.Finish as any)._value < 1) {
+                setCurrentMomentIndex(i);
+                break;
+            }
+            i++;
+        }
+    }
+
     const MomentPreview = ({ eventID, eventIndex }) => {
         return (
             <TouchableOpacity 
@@ -219,6 +238,7 @@ const MomentsHomeList = () => {
                     setCurrentEventID(eventID);
                     setCurrentEventIndex(eventIndex);
                     setShowModal(true);
+                    findMomentIndex(eventID);
                 }}
             >
                     <LoadImage
@@ -245,6 +265,11 @@ const MomentsHomeList = () => {
         })
     }, []);
 
+    useEffect(() => {
+        console.log("currentEventID: " + currentEventID);
+        console.log("currentMomentIndex: " + currentMomentIndex);
+    }, [currentEventID, currentMomentIndex]);
+
     return (
         <>
         {
@@ -258,7 +283,7 @@ const MomentsHomeList = () => {
                     <TouchableOpacity 
                         style={styles.momentPreview}
                         onPress={() => {
-                            //open upload
+                            navigation.push(SCREENS.MomentUpload)
                         }}
                     >
                         <LoadImage
@@ -298,7 +323,6 @@ const MomentsHomeList = () => {
                     renderItem={({item, index}) => (
                         <View key={item} style={{ width: width, height: height }}>
                             <View style={styles.backgroundContainer}>
-                                {/* check the content type is video or an image */}
                                 {currentMomentIndex == 0 || events[currentEventID].Moments[currentMomentIndex].Type == 'video' ? (
                                     <Video
                                         // source={{ uri: events[currentEventID].Moments[currentMomentIndex].MomentPicture }}
@@ -329,8 +353,7 @@ const MomentsHomeList = () => {
                                     />
                                 )}
                             </View>
-                            <View
-                                style={{ flexDirection: 'column', flex: 1 }}>
+                            <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <LinearGradient
                                     colors={['rgba(0,0,0,1)', 'transparent']}
                                     style={{
@@ -341,66 +364,66 @@ const MomentsHomeList = () => {
                                         height: 100,
                                     }}
                                 />
-                                {/* ANIMATION BARS */}
+
                                 <View style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 10 }} >
                                     {events[currentEventID].Moments.map((index, key) => {
                                         return (
-                                        // THE BACKGROUND
-                                        <View
-                                            key={key}
-                                            style={{
-                                                height: 2,
-                                                flex: 1,
-                                                flexDirection: 'row',
-                                                backgroundColor: 'rgba(117, 117, 117, 0.5)',
-                                                marginHorizontal: 2,
-                                            }}>
-                                            {/* THE ANIMATION OF THE BAR*/}
-                                            <Animated.View
+                                            <View
+                                                key={key}
                                                 style={{
-                                                    flex: events[currentEventID].Moments[key].Finish,
                                                     height: 2,
-                                                    backgroundColor: 'rgba(255, 255, 255, 1)',
+                                                    flex: 1,
+                                                    flexDirection: 'row',
+                                                    backgroundColor: 'rgba(117, 117, 117, 0.5)',
+                                                    marginHorizontal: 2,
                                                 }}
-                                            />
-                                        </View>
+                                            >
+                                                <Animated.View
+                                                    style={{
+                                                        flex: events[currentEventID].Moments[key].Finish,
+                                                        height: 2,
+                                                        backgroundColor: 'rgba(255, 255, 255, 1)',
+                                                    }}
+                                                />
+                                            </View>
                                         );
                                     })}
                                 </View>
-                                {/* END OF ANIMATION BARS */}
                         
-                                <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15 }}>
-                                    {/* THE AVATAR AND USERNAME  */}
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <View style={{ height: 50, width: '100%', flexDirection: 'row', paddingHorizontal: 15 }}>
+                                    <TouchableOpacity 
+                                        style={{ flexDirection: 'row', alignItems: 'center', maxWidth: '75%'}}
+                                        onPress={() => goToUploaderProfile(events[currentEventID].Moments[currentMomentIndex].UploaderID)}
+                                    >
                                         <LoadImage
                                             imageStyle={styles.uploaderProfilePic}
-                                            imageSource={events[item].Moments[currentMomentIndex].UploaderPicture}
+                                            imageSource={events[currentEventID].Moments[currentMomentIndex].UploaderPicture}
                                         />
                                         <McText
                                             h4
                                             numberOfLines={1}
-                                            style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '70%' }}
+                                            style={{ letterSpacing: 1, color: COLORS.white, maxWidth: '85%' }}
                                         >
-                                            {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName}
+                                            {events[currentEventID].Moments[currentMomentIndex].UploaderDisplayName} 
                                         </McText>
+                                    </TouchableOpacity>
+                                    <View style={{ justifyContent: 'center', height: 50, paddingLeft: 10 }}>
                                         <McText
                                             body4
                                             numberOfLines={1}
-                                            style={{ letterSpacing: 1, color: COLORS.white, marginLeft: 10 }}
+                                            style={{ letterSpacing: 1, color: COLORS.white }}
                                         >
                                             {getTimeDifferenceString(events[currentEventID].Moments[currentMomentIndex].PostedDateTime)}
                                         </McText>
                                     </View>
-                                    {/* END OF THE AVATAR AND USERNAME */}
-                                    {/* THE CLOSE BUTTON */}
-                                    <TouchableOpacity onPress={() => close()} >
-                                        <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, paddingHorizontal: 15 }}>
-                                            <Ionicons name="ios-close" size={28} color="white" />
-                                        </View>
+                                    <TouchableOpacity 
+                                        onPress={() => close()} 
+                                        style={{ justifyContent: 'center', height: 50, marginLeft: 'auto' }}
+                                    >
+                                        <Ionicons name="ios-close" size={28} color="white" />
                                     </TouchableOpacity>
-                                    {/* END OF CLOSE BUTTON */}
                                 </View>
-                                {/* HERE IS THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
+
                                 <View style={{ flex: 1, flexDirection: 'row' }}>
                                     <TouchableWithoutFeedback onPress={() => previous()}>
                                         <View style={{ flex: 1 }} />
@@ -409,7 +432,6 @@ const MomentsHomeList = () => {
                                         <View style={{ flex: 1 }} />
                                     </TouchableWithoutFeedback>
                                 </View>
-                                {/* END OF THE HANDLE FOR PREVIOUS AND NEXT PRESS */}
                             </View>
                         </View>
                     )}
@@ -420,7 +442,7 @@ const MomentsHomeList = () => {
     )
 }
 
-export default MomentsHomeList
+export default HomeMoment
 
 const styles = StyleSheet.create({
     scrollViewContainer: {

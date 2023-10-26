@@ -31,4 +31,5 @@ export const SCREENS = {
     },
     NotificationsSettings: "NotificationSettings",
     EventChat: "EventChat",
+    MomentUpload: "MomentUploadScreen",
 }

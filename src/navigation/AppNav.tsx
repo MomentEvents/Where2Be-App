@@ -36,6 +36,7 @@ import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
 import branch, { BranchEvent } from "react-native-branch";
 import { ScreenContext } from "../contexts/ScreenContext";
 import { getStoredToken } from "../services/AuthService";
+import MomentUploadScreen from "../screens/authorized/MomentUpload/MomentUploadScreen"
 
 const Stack = createStackNavigator();
 const navigationRef = createRef<any>();
@@ -251,6 +252,7 @@ const AppStack = () => {
         component={NotificationsSettingsScreen}
       />
       <Stack.Screen name={SCREENS.EventChat} component={EventChatScreen} />
+      <Stack.Screen name={SCREENS.MomentUpload} component={MomentUploadScreen} />
     </Stack.Navigator>
   );
 };

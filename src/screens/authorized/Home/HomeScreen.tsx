@@ -47,7 +47,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import MomentsHomeList from "../../../components/Moments/MomentsHomeList";
+import HomeMoment from "../../../components/HomeMoment/HomeMoment";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -441,7 +441,7 @@ const HomeScreen = () => {
             }
           }}
           viewabilityConfig={viewabilityConfig}
-          ListHeaderComponent={<MomentsHomeList key={Number(headerKey)}/>}
+          ListHeaderComponent={<HomeMoment key={Number(headerKey)}/>}
           ListFooterComponent={
             !isLoading && (
               <View
