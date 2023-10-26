@@ -1,3 +1,5 @@
+import { Animated } from "react-native";
+
 export type Token = {
   UserID: string;
   UserAccessToken: string;
@@ -122,4 +124,59 @@ export type UserPrefilledFormResponse = {
   phone_number: string;
   major: string;
   year: string;
+}
+
+// export type MomentResponse = {
+//   event_id: string;
+//   host_display_name: string;
+//   host_picture: string;
+//   moment_id: string;
+//   moment_picture: string;
+//   type: string;
+//   posted_date_time: string;
+// }
+
+export type Moment = {
+  UploaderID: string;
+  UploaderDisplayName: string;
+  UploaderPicture: string;
+  MomentID: string;
+  MomentPicture: string;
+  Type: string;
+  PostedDateTime: string;
+  Finish: Animated.Value;
+}
+
+export type EventMoment = {
+  EventPicture: string;
+  HostPicture: string;
+  Moments: Moment[];
+  Visible: boolean;
+}
+
+export type MomentHome = {
+  EventIDs: string[];
+  Events: Record<string, EventMoment>;
+}
+
+export type MomentResponse = {
+  uploader_id: string;
+  uploader_display_name: string;
+  uploader_picture: string;
+  moment_id: string;
+  moment_picture: string;
+  type: string;
+  posted_date_time: string;
+};
+
+export type EventMomentResponse = {
+  event_picture: string;
+  host_picture: string;
+  moments: MomentResponse[];
+  visible: boolean;
+};
+
+export type MomentHomeResponse = {
+  event_ids: string[];
+  events: Record<string, EventMomentResponse>;
 }

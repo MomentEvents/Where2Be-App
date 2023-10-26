@@ -47,6 +47,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import HomeMoment from "../../../components/HomeMoment/HomeMoment";
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -81,6 +82,8 @@ const HomeScreen = () => {
   const lastPulled = useRef<Date>(new Date());
 
   const isFocused = useIsFocused();
+
+  const [headerKey, setHeaderKey] = useState(true);
 
   type EventItem =
     | {
@@ -329,6 +332,7 @@ const HomeScreen = () => {
       });
   };
   const onRefresh = () => {
+    setHeaderKey(!headerKey);
     setIsLoading(true);
     setShowRetry(false);
     pullData();
@@ -387,6 +391,7 @@ const HomeScreen = () => {
           />
         )}
 
+
         <FlatList
           ref={flatListRef}
           pagingEnabled
@@ -436,6 +441,7 @@ const HomeScreen = () => {
             }
           }}
           viewabilityConfig={viewabilityConfig}
+          ListHeaderComponent={<HomeMoment key={Number(headerKey)}/>}
           ListFooterComponent={
             !isLoading && (
               <View

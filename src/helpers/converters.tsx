@@ -1,3 +1,4 @@
+import { Animated } from "react-native";
 import {
   Event,
   EventResponse,
@@ -9,6 +10,12 @@ import {
   SchoolResponse,
   UserPrefilledFormResponse,
   UserPrefilledForm,
+  MomentResponse, 
+  EventMomentResponse,
+  MomentHomeResponse,
+  Moment,
+  EventMoment,
+  MomentHome,
 } from "../constants/types";
 import { formatError } from "./helpers";
 
@@ -244,4 +251,40 @@ export const prefilledFormResponseToPrefilledForm = (
     Year: pulledUserPrefilledForm.year, 
   };
   return formattedUserPrefilledForm;
+};
+
+
+export const momentHomeResponseToMomentHome = (
+  pulledMomentHome: MomentHomeResponse
+): MomentHome => {
+  let formattedMomentHome: MomentHome = {
+    EventIDs: pulledMomentHome.event_ids,
+    Events: {}
+  }
+
+  for (const event_id of pulledMomentHome.event_ids){
+    const event = pulledMomentHome.events[event_id]
+    let moments: Moment[] = []
+    for (const moment of event.moments){
+      const formattedMoment: Moment = {
+        UploaderID: moment.uploader_id,
+        UploaderDisplayName: moment.uploader_display_name,
+        UploaderPicture: moment.uploader_picture,
+        MomentID: moment.moment_id,
+        MomentPicture: moment.moment_picture,
+        Type: moment.type,
+        PostedDateTime: moment.posted_date_time,
+        Finish: new Animated.Value(0)
+      };
+      moments.push(formattedMoment);
+    }
+    const formattedEventMoments: EventMoment = {
+      EventPicture: event.event_picture,
+      HostPicture: event.host_picture,
+      Moments: moments,
+      Visible: event.visible,
+    }
+    formattedMomentHome.Events[event_id] = formattedEventMoments;
+  }
+  return formattedMomentHome;
 };
