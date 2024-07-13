@@ -1,3 +1,5 @@
+https://github.com/user-attachments/assets/44b19bc8-6d6a-437e-b144-a20df46351de
+
 # Where2Be-App
 This contains the codebase for the frontend application of Where2Be
 
