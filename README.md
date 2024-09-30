@@ -1,7 +1,8 @@
+![image](https://github.com/user-attachments/assets/86602d5e-c444-44c3-853c-60ff5880abca)
 https://github.com/user-attachments/assets/af624584-add8-4099-92da-ca03caf3a0ad
 
 # Where2Be-App
-This contains the codebase for the frontend application of Where2Be
+This contains the codebase for Where2Be's React Native Mobile Application
 
 # How to run the app from scratch
 
